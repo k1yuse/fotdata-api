@@ -58,22 +58,23 @@ def predict_match(req: MatchRequest):
 
     home_advantage = 0.45  # 데이터 기반 홈 어드밴티지
 
-    input_data = pd.DataFrame([{
-        'home_attack':    h['attack_strength'],
-        'away_attack':    a['attack_strength'],
-        'home_defense':   h['defense_strength'],
-        'away_defense':   a['defense_strength'],
-        'home_form':      h['win_rate'] * 15,
-        'away_form':      a['win_rate'] * 15,
-        'form_diff':      (h['win_rate'] - a['win_rate']) * 15,
-        'home_win_rate':  h['win_rate'],
-        'away_win_rate':  a['win_rate'],
-        'win_rate_diff':  h['win_rate'] - a['win_rate'],
-        'home_goal_diff': h['goal_diff'],
-        'away_goal_diff': a['goal_diff'],
-        'attack_diff':    h['attack_strength'] - a['attack_strength'],
-        'home_advantage': home_advantage,
-    }])
+input_data = pd.DataFrame([{
+    'home_attack':    h['attack_strength'],
+    'away_attack':    a['attack_strength'],
+    'home_defense':   h['defense_strength'],
+    'away_defense':   a['defense_strength'],
+    'home_form':      h['win_rate'] * 15,
+    'away_form':      a['win_rate'] * 15,
+    'form_diff':      (h['win_rate'] - a['win_rate']) * 15,
+    'home_win_rate':  h['win_rate'],
+    'away_win_rate':  a['win_rate'],
+    'win_rate_diff':  h['win_rate'] - a['win_rate'],
+    'home_goal_diff': h['goal_diff'],
+    'away_goal_diff': a['goal_diff'],
+    'attack_diff':    h['attack_strength'] - a['attack_strength'],
+    'defense_diff':   h['defense_strength'] - a['defense_strength'],
+    'home_advantage': 0.43,
+}])
 
     input_scaled = scaler.transform(input_data)
     proba = lr_model.predict_proba(input_scaled)[0]
