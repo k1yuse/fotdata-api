@@ -18,10 +18,9 @@
     .team-logo-wrap { width: 90px; height: 90px; border-radius: 50%; background: #21262d; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 8px; }
     .team-logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
     .team-logo-wrap span { font-size: 32px; }
-    .league-badge { font-size: 11px; color: #8b949e; height: 16px; }
+    .league-badge { font-size: 11px; color: #8b949e; height: 16px; display: flex; align-items: center; gap: 4px; }
+    .league-badge img { width: 14px; height: 14px; object-fit: contain; }
     .vs { font-size: 24px; font-weight: 700; color: #8b949e; margin-top: 60px; }
-
-    /* 커스텀 드롭다운 */
     .custom-select { position: relative; width: 100%; }
     .custom-select-trigger { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #21262d; border: 1px solid #30363d; border-radius: 8px; cursor: pointer; font-size: 14px; color: #e6edf3; transition: border-color 0.2s; user-select: none; }
     .custom-select-trigger:hover { border-color: #58a6ff; }
@@ -30,24 +29,20 @@
     .custom-select-trigger .arrow { margin-left: auto; font-size: 10px; color: #8b949e; transition: transform 0.2s; }
     .custom-select.open .arrow { transform: rotate(180deg); }
     .custom-select.open .custom-select-trigger { border-color: #58a6ff; }
-
     .dropdown { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: #21262d; border: 1px solid #30363d; border-radius: 8px; z-index: 100; max-height: 300px; overflow-y: auto; display: none; }
     .custom-select.open .dropdown { display: block; }
-
     .dropdown::-webkit-scrollbar { width: 6px; }
     .dropdown::-webkit-scrollbar-track { background: #21262d; }
     .dropdown::-webkit-scrollbar-thumb { background: #30363d; border-radius: 3px; }
-
-    .dropdown-group-label { padding: 8px 12px; font-size: 11px; color: #8b949e; background: #161b22; border-bottom: 1px solid #30363d; letter-spacing: 1px; }
+    .dropdown-group-label { padding: 8px 12px; font-size: 11px; color: #8b949e; background: #161b22; border-bottom: 1px solid #30363d; letter-spacing: 1px; display: flex; align-items: center; gap: 6px; }
+    .dropdown-group-label img { width: 16px; height: 16px; object-fit: contain; }
     .dropdown-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; cursor: pointer; font-size: 13px; transition: background 0.15s; }
     .dropdown-item:hover { background: #30363d; }
     .dropdown-item.selected { background: #1f4e8c; color: #58a6ff; }
     .dropdown-item img { width: 24px; height: 24px; object-fit: contain; border-radius: 50%; background: #161b22; }
-
     .predict-btn { width: 100%; padding: 14px; background: #238636; border: none; border-radius: 10px; color: white; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-top: 8px; }
     .predict-btn:hover { background: #2ea043; }
     .predict-btn:disabled { background: #30363d; cursor: not-allowed; }
-
     .result-card { background: #161b22; border: 1px solid #30363d; border-radius: 16px; padding: 32px; display: none; }
     .result-card.show { display: block; }
     .result-teams { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
@@ -88,8 +83,6 @@
 <div class="container">
   <div class="match-card">
     <div class="team-selector">
-
-      <!-- 홈팀 -->
       <div class="team-box">
         <label>홈팀</label>
         <div class="team-logo-wrap" id="home-logo"><span>⚽</span></div>
@@ -105,7 +98,6 @@
 
       <div class="vs">VS</div>
 
-      <!-- 원정팀 -->
       <div class="team-box">
         <label>원정팀</label>
         <div class="team-logo-wrap" id="away-logo"><span>⚽</span></div>
@@ -183,16 +175,61 @@
   let logos = {};
   let selectedTeams = { home: '', away: '' };
 
-  const EPL_TEAMS = [
-    "Arsenal FC","Aston Villa FC","AFC Bournemouth","Brentford FC",
-    "Brighton & Hove Albion FC","Burnley FC","Chelsea FC","Crystal Palace FC",
-    "Everton FC","Fulham FC","Liverpool FC","Luton Town FC",
-    "Manchester City FC","Manchester United FC","Newcastle United FC",
-    "Nottingham Forest FC","Sheffield United FC","Tottenham Hotspur FC",
-    "West Ham United FC","Wolverhampton Wanderers FC"
-  ];
+  const LEAGUES = {
+    "EPL (잉글랜드)": {
+      logo: "https://crests.football-data.org/PL.png",
+      teams: [
+        "Arsenal FC","Aston Villa FC","AFC Bournemouth","Brentford FC",
+        "Brighton & Hove Albion FC","Burnley FC","Chelsea FC","Crystal Palace FC",
+        "Everton FC","Fulham FC","Liverpool FC","Luton Town FC",
+        "Manchester City FC","Manchester United FC","Newcastle United FC",
+        "Nottingham Forest FC","Sheffield United FC","Tottenham Hotspur FC",
+        "West Ham United FC","Wolverhampton Wanderers FC"
+      ]
+    },
+    "라리가 (스페인)": {
+      logo: "https://crests.football-data.org/laliga.png",
+      teams: [
+        "Athletic Club","CA Osasuna","Cádiz CF","Club Atlético de Madrid",
+        "Deportivo Alavés","Elche CF","FC Barcelona","Getafe CF","Girona FC",
+        "Granada CF","Levante UD","RC Celta de Vigo","RCD Mallorca",
+        "Rayo Vallecano de Madrid","Real Betis Balompié","Real Madrid CF",
+        "Real Oviedo","Real Sociedad de Fútbol","Sevilla FC","UD Almería",
+        "UD Las Palmas","Valencia CF","Villarreal CF"
+      ]
+    },
+    "분데스리가 (독일)": {
+      logo: "https://crests.football-data.org/BL1.png",
+      teams: [
+        "Bayer 04 Leverkusen","Bayern München","Borussia Dortmund",
+        "Borussia Mönchengladbach","Darmstadt 98","Eintracht Frankfurt",
+        "FC Augsburg","FC Heidenheim 1846","FC Union Berlin",
+        "RB Leipzig","SC Freiburg","TSG 1899 Hoffenheim",
+        "VfB Stuttgart","VfL Bochum 1848","VfL Wolfsburg","Werder Bremen",
+        "1. FC Köln","1. FSV Mainz 05"
+      ]
+    },
+    "세리에A (이탈리아)": {
+      logo: "https://crests.football-data.org/c111.png",
+      teams: [
+        "AC Milan","ACF Fiorentina","AS Roma","Atalanta BC","Bologna FC 1909",
+        "Cagliari Calcio","Empoli FC","Frosinone Calcio","Genoa CFC",
+        "Hellas Verona FC","Inter Milan","Juventus FC","SS Lazio","SSC Napoli",
+        "Torino FC","Udinese Calcio","US Lecce","US Sassuolo Calcio"
+      ]
+    },
+    "리그앙 (프랑스)": {
+      logo: "https://crests.football-data.org/FL1.png",
+      teams: [
+        "AJ Auxerre","AS Monaco FC","Angers SCO","FC Lorient","FC Metz",
+        "FC Nantes","Le Havre AC","Lille OSC","OGC Nice","Olympique Lyonnais",
+        "Olympique de Marseille","Paris FC","Paris Saint-Germain FC",
+        "RC Strasbourg Alsace","Racing Club de Lens","Stade Brestois 29",
+        "Stade Rennais FC 1901","Toulouse FC"
+      ]
+    }
+  };
 
-  // 드롭다운 토글
   function toggleDropdown(side) {
     const el = document.getElementById(`${side}-select`);
     const other = side === 'home' ? 'away' : 'home';
@@ -200,36 +237,43 @@
     el.classList.toggle('open');
   }
 
-  // 외부 클릭시 닫기
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.custom-select')) {
       document.querySelectorAll('.custom-select').forEach(el => el.classList.remove('open'));
     }
   });
 
-  // 팀 선택
+  function getLeague(team) {
+    for (const [league, data] of Object.entries(LEAGUES)) {
+      if (data.teams.includes(team)) return { name: league, logo: data.logo };
+    }
+    return null;
+  }
+
   function selectTeam(side, team) {
     selectedTeams[side] = team;
     const trigger = document.querySelector(`#${side}-select .custom-select-trigger`);
     const logoUrl = logos[team] || '';
 
     trigger.innerHTML = `
-      <img src="${logoUrl}" alt="${team}" onerror="this.src=''">
+      <img src="${logoUrl}" alt="${team}" onerror="this.style.display='none'">
       <span>${team}</span>
       <span class="arrow">▼</span>
     `;
 
-    // 큰 로고 업데이트
     const logoDiv = document.getElementById(`${side}-logo`);
     logoDiv.innerHTML = logoUrl
       ? `<img src="${logoUrl}" alt="${team}" onerror="this.parentNode.innerHTML='<span>⚽</span>'">`
       : '<span>⚽</span>';
 
-    // 리그 배지
-    document.getElementById(`${side}-league`).textContent =
-      EPL_TEAMS.includes(team) ? '🏴󠁧󠁢󠁥󠁮󠁧󠁿 EPL' : '🇪🇸 라리가';
+    const leagueInfo = getLeague(team);
+    const leagueDiv = document.getElementById(`${side}-league`);
+    if (leagueInfo) {
+      leagueDiv.innerHTML = `<img src="${leagueInfo.logo}" onerror="this.style.display='none'"> ${leagueInfo.name}`;
+    } else {
+      leagueDiv.innerHTML = '';
+    }
 
-    // 선택 표시 업데이트
     document.querySelectorAll(`#${side}-dropdown .dropdown-item`).forEach(item => {
       item.classList.toggle('selected', item.dataset.team === team);
     });
@@ -237,23 +281,17 @@
     document.getElementById(`${side}-select`).classList.remove('open');
   }
 
-  // 드롭다운 빌드
-  function buildDropdown(side, teams) {
+  function buildDropdown(side) {
     const dropdown = document.getElementById(`${side}-dropdown`);
     dropdown.innerHTML = '';
 
-    const groups = [
-      { label: '🏴󠁧󠁢󠁥󠁮󠁧󠁿 EPL (잉글랜드)', teams: teams.filter(t => EPL_TEAMS.includes(t)).sort() },
-      { label: '🇪🇸 라리가 (스페인)', teams: teams.filter(t => !EPL_TEAMS.includes(t)).sort() },
-    ];
-
-    groups.forEach(group => {
+    for (const [leagueName, leagueData] of Object.entries(LEAGUES)) {
       const label = document.createElement('div');
       label.className = 'dropdown-group-label';
-      label.textContent = group.label;
+      label.innerHTML = `<img src="${leagueData.logo}" onerror="this.style.display='none'"> ${leagueName}`;
       dropdown.appendChild(label);
 
-      group.teams.forEach(team => {
+      leagueData.teams.sort().forEach(team => {
         const item = document.createElement('div');
         item.className = 'dropdown-item';
         item.dataset.team = team;
@@ -264,23 +302,18 @@
         item.onclick = () => selectTeam(side, team);
         dropdown.appendChild(item);
       });
-    });
+    }
   }
 
   async function loadTeams() {
     try {
-      const [teamsRes, logosRes] = await Promise.all([
-        fetch(`${API}/teams`),
-        fetch(`${API}/logos`)
-      ]);
-      const teamsData = await teamsRes.json();
+      const logosRes = await fetch(`${API}/logos`);
       logos = await logosRes.json();
-
-      buildDropdown('home', teamsData.teams);
-      buildDropdown('away', teamsData.teams);
     } catch(e) {
-      console.error('팀 로드 실패:', e);
+      console.error('로고 로드 실패:', e);
     }
+    buildDropdown('home');
+    buildDropdown('away');
   }
 
   async function predict() {
@@ -313,7 +346,7 @@
       const data = await res.json();
       showResult(data, home, away);
     } catch(e) {
-      errorMsg.textContent = '❌ 서버 연결 오류. API 서버가 실행 중인지 확인해주세요.';
+      errorMsg.textContent = '❌ 서버 연결 오류. 잠시 후 다시 시도해주세요.';
       errorMsg.style.display = 'block';
     } finally {
       document.getElementById('loading').style.display = 'none';
