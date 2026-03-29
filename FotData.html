@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FotData - 경기 예측</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: #0d1117; color: #e6edf3; min-height: 100vh; }
+    header { background: #161b22; border-bottom: 1px solid #30363d; padding: 16px 24px; display: flex; align-items: center; gap: 12px; }
+    header h1 { font-size: 22px; font-weight: 700; color: #58a6ff; }
+    header span { font-size: 13px; color: #8b949e; }
+    .container { max-width: 900px; margin: 40px auto; padding: 0 24px; }
+    .match-card { background: #161b22; border: 1px solid #30363d; border-radius: 16px; padding: 32px; margin-bottom: 24px; }
+    .team-selector { display: grid; grid-template-columns: 1fr auto 1fr; align-items: start; gap: 24px; margin-bottom: 32px; }
+    .team-box { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .team-box label { font-size: 12px; color: #8b949e; text-transform: uppercase; letter-spacing: 1px; }
+    .team-logo-wrap { width: 90px; height: 90px; border-radius: 50%; background: #21262d; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 8px; }
+    .team-logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
+    .team-logo-wrap span { font-size: 32px; }
+    .league-badge { font-size: 11px; color: #8b949e; height: 16px; }
+    .vs { font-size: 24px; font-weight: 700; color: #8b949e; margin-top: 60px; }
+
+    /* 커스텀 드롭다운 */
+    .custom-select { position: relative; width: 100%; }
+    .custom-select-trigger { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #21262d; border: 1px solid #30363d; border-radius: 8px; cursor: pointer; font-size: 14px; color: #e6edf3; transition: border-color 0.2s; user-select: none; }
+    .custom-select-trigger:hover { border-color: #58a6ff; }
+    .custom-select-trigger img { width: 24px; height: 24px; object-fit: contain; border-radius: 50%; }
+    .custom-select-trigger .placeholder { color: #8b949e; }
+    .custom-select-trigger .arrow { margin-left: auto; font-size: 10px; color: #8b949e; transition: transform 0.2s; }
+    .custom-select.open .arrow { transform: rotate(180deg); }
+    .custom-select.open .custom-select-trigger { border-color: #58a6ff; }
+
+    .dropdown { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: #21262d; border: 1px solid #30363d; border-radius: 8px; z-index: 100; max-height: 300px; overflow-y: auto; display: none; }
+    .custom-select.open .dropdown { display: block; }
+
+    .dropdown::-webkit-scrollbar { width: 6px; }
+    .dropdown::-webkit-scrollbar-track { background: #21262d; }
+    .dropdown::-webkit-scrollbar-thumb { background: #30363d; border-radius: 3px; }
+
+    .dropdown-group-label { padding: 8px 12px; font-size: 11px; color: #8b949e; background: #161b22; border-bottom: 1px solid #30363d; letter-spacing: 1px; }
+    .dropdown-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; cursor: pointer; font-size: 13px; transition: background 0.15s; }
+    .dropdown-item:hover { background: #30363d; }
+    .dropdown-item.selected { background: #1f4e8c; color: #58a6ff; }
+    .dropdown-item img { width: 24px; height: 24px; object-fit: contain; border-radius: 50%; background: #161b22; }
+
+    .predict-btn { width: 100%; padding: 14px; background: #238636; border: none; border-radius: 10px; color: white; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-top: 8px; }
+    .predict-btn:hover { background: #2ea043; }
+    .predict-btn:disabled { background: #30363d; cursor: not-allowed; }
+
+    .result-card { background: #161b22; border: 1px solid #30363d; border-radius: 16px; padding: 32px; display: none; }
+    .result-card.show { display: block; }
+    .result-teams { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; }
+    .result-team { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .result-logo { width: 72px; height: 72px; object-fit: contain; }
+    .result-team-name { font-size: 14px; font-weight: 600; text-align: center; max-width: 150px; }
+    .result-vs { font-size: 20px; color: #8b949e; font-weight: 700; }
+    .prediction-badge { text-align: center; margin-bottom: 28px; }
+    .badge { display: inline-block; padding: 8px 20px; border-radius: 20px; font-size: 15px; font-weight: 600; }
+    .badge.home { background: #1f4e8c; color: #58a6ff; }
+    .badge.draw { background: #3d2e00; color: #d29922; }
+    .badge.away { background: #4c1d1d; color: #f85149; }
+    .prob-bars { display: flex; flex-direction: column; gap: 14px; }
+    .prob-row { display: grid; grid-template-columns: 80px 1fr 50px; align-items: center; gap: 12px; }
+    .prob-label { font-size: 13px; color: #8b949e; }
+    .prob-bar-bg { background: #21262d; border-radius: 6px; height: 10px; overflow: hidden; }
+    .prob-bar { height: 100%; border-radius: 6px; transition: width 0.8s ease; }
+    .prob-bar.home { background: #58a6ff; }
+    .prob-bar.draw { background: #d29922; }
+    .prob-bar.away { background: #f85149; }
+    .prob-value { font-size: 14px; font-weight: 600; text-align: right; }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 28px; }
+    .stat-box { background: #21262d; border-radius: 10px; padding: 16px; }
+    .stat-box h4 { font-size: 12px; color: #8b949e; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+    .stat-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
+    .stat-row span:last-child { color: #58a6ff; font-weight: 600; }
+    .loading { text-align: center; padding: 20px; color: #8b949e; display: none; }
+    .error-msg { background: #4c1d1d; border: 1px solid #f85149; border-radius: 8px; padding: 12px 16px; color: #f85149; font-size: 14px; margin-top: 12px; display: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>⚽ FotData</h1>
+  <span>AI 경기 예측 시스템</span>
+</header>
+
+<div class="container">
+  <div class="match-card">
+    <div class="team-selector">
+
+      <!-- 홈팀 -->
+      <div class="team-box">
+        <label>홈팀</label>
+        <div class="team-logo-wrap" id="home-logo"><span>⚽</span></div>
+        <div class="league-badge" id="home-league"></div>
+        <div class="custom-select" id="home-select">
+          <div class="custom-select-trigger" onclick="toggleDropdown('home')">
+            <span class="placeholder">팀 선택</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="dropdown" id="home-dropdown"></div>
+        </div>
+      </div>
+
+      <div class="vs">VS</div>
+
+      <!-- 원정팀 -->
+      <div class="team-box">
+        <label>원정팀</label>
+        <div class="team-logo-wrap" id="away-logo"><span>⚽</span></div>
+        <div class="league-badge" id="away-league"></div>
+        <div class="custom-select" id="away-select">
+          <div class="custom-select-trigger" onclick="toggleDropdown('away')">
+            <span class="placeholder">팀 선택</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="dropdown" id="away-dropdown"></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="predict-btn" onclick="predict()">🔮 경기 예측하기</button>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+
+  <div class="loading" id="loading">⏳ AI 예측 중...</div>
+
+  <div class="result-card" id="result-card">
+    <div class="result-teams">
+      <div class="result-team">
+        <img class="result-logo" id="result-home-logo" src="" alt="">
+        <div class="result-team-name" id="result-home-name"></div>
+      </div>
+      <div class="result-vs">VS</div>
+      <div class="result-team">
+        <img class="result-logo" id="result-away-logo" src="" alt="">
+        <div class="result-team-name" id="result-away-name"></div>
+      </div>
+    </div>
+
+    <div class="prediction-badge">
+      <span class="badge" id="pred-badge"></span>
+    </div>
+
+    <div class="prob-bars">
+      <div class="prob-row">
+        <span class="prob-label">🏠 홈승</span>
+        <div class="prob-bar-bg"><div class="prob-bar home" id="bar-home" style="width:0%"></div></div>
+        <span class="prob-value" id="val-home"></span>
+      </div>
+      <div class="prob-row">
+        <span class="prob-label">🤝 무승부</span>
+        <div class="prob-bar-bg"><div class="prob-bar draw" id="bar-draw" style="width:0%"></div></div>
+        <span class="prob-value" id="val-draw"></span>
+      </div>
+      <div class="prob-row">
+        <span class="prob-label">✈️ 원정승</span>
+        <div class="prob-bar-bg"><div class="prob-bar away" id="bar-away" style="width:0%"></div></div>
+        <span class="prob-value" id="val-away"></span>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-box">
+        <h4 id="home-stat-title">홈팀 스탯</h4>
+        <div class="stat-row"><span>공격력</span><span id="s-home-atk"></span></div>
+        <div class="stat-row"><span>수비력</span><span id="s-home-def"></span></div>
+        <div class="stat-row"><span>승률</span><span id="s-home-wr"></span></div>
+      </div>
+      <div class="stat-box">
+        <h4 id="away-stat-title">원정팀 스탯</h4>
+        <div class="stat-row"><span>공격력</span><span id="s-away-atk"></span></div>
+        <div class="stat-row"><span>수비력</span><span id="s-away-def"></span></div>
+        <div class="stat-row"><span>승률</span><span id="s-away-wr"></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const API = "http://127.0.0.1:8000";
+  let logos = {};
+  let selectedTeams = { home: '', away: '' };
+
+  const EPL_TEAMS = [
+    "Arsenal FC","Aston Villa FC","AFC Bournemouth","Brentford FC",
+    "Brighton & Hove Albion FC","Burnley FC","Chelsea FC","Crystal Palace FC",
+    "Everton FC","Fulham FC","Liverpool FC","Luton Town FC",
+    "Manchester City FC","Manchester United FC","Newcastle United FC",
+    "Nottingham Forest FC","Sheffield United FC","Tottenham Hotspur FC",
+    "West Ham United FC","Wolverhampton Wanderers FC"
+  ];
+
+  // 드롭다운 토글
+  function toggleDropdown(side) {
+    const el = document.getElementById(`${side}-select`);
+    const other = side === 'home' ? 'away' : 'home';
+    document.getElementById(`${other}-select`).classList.remove('open');
+    el.classList.toggle('open');
+  }
+
+  // 외부 클릭시 닫기
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.custom-select')) {
+      document.querySelectorAll('.custom-select').forEach(el => el.classList.remove('open'));
+    }
+  });
+
+  // 팀 선택
+  function selectTeam(side, team) {
+    selectedTeams[side] = team;
+    const trigger = document.querySelector(`#${side}-select .custom-select-trigger`);
+    const logoUrl = logos[team] || '';
+
+    trigger.innerHTML = `
+      <img src="${logoUrl}" alt="${team}" onerror="this.src=''">
+      <span>${team}</span>
+      <span class="arrow">▼</span>
+    `;
+
+    // 큰 로고 업데이트
+    const logoDiv = document.getElementById(`${side}-logo`);
+    logoDiv.innerHTML = logoUrl
+      ? `<img src="${logoUrl}" alt="${team}" onerror="this.parentNode.innerHTML='<span>⚽</span>'">`
+      : '<span>⚽</span>';
+
+    // 리그 배지
+    document.getElementById(`${side}-league`).textContent =
+      EPL_TEAMS.includes(team) ? '🏴󠁧󠁢󠁥󠁮󠁧󠁿 EPL' : '🇪🇸 라리가';
+
+    // 선택 표시 업데이트
+    document.querySelectorAll(`#${side}-dropdown .dropdown-item`).forEach(item => {
+      item.classList.toggle('selected', item.dataset.team === team);
+    });
+
+    document.getElementById(`${side}-select`).classList.remove('open');
+  }
+
+  // 드롭다운 빌드
+  function buildDropdown(side, teams) {
+    const dropdown = document.getElementById(`${side}-dropdown`);
+    dropdown.innerHTML = '';
+
+    const groups = [
+      { label: '🏴󠁧󠁢󠁥󠁮󠁧󠁿 EPL (잉글랜드)', teams: teams.filter(t => EPL_TEAMS.includes(t)).sort() },
+      { label: '🇪🇸 라리가 (스페인)', teams: teams.filter(t => !EPL_TEAMS.includes(t)).sort() },
+    ];
+
+    groups.forEach(group => {
+      const label = document.createElement('div');
+      label.className = 'dropdown-group-label';
+      label.textContent = group.label;
+      dropdown.appendChild(label);
+
+      group.teams.forEach(team => {
+        const item = document.createElement('div');
+        item.className = 'dropdown-item';
+        item.dataset.team = team;
+        item.innerHTML = `
+          <img src="${logos[team] || ''}" alt="${team}" onerror="this.style.display='none'">
+          <span>${team}</span>
+        `;
+        item.onclick = () => selectTeam(side, team);
+        dropdown.appendChild(item);
+      });
+    });
+  }
+
+  async function loadTeams() {
+    try {
+      const [teamsRes, logosRes] = await Promise.all([
+        fetch(`${API}/teams`),
+        fetch(`${API}/logos`)
+      ]);
+      const teamsData = await teamsRes.json();
+      logos = await logosRes.json();
+
+      buildDropdown('home', teamsData.teams);
+      buildDropdown('away', teamsData.teams);
+    } catch(e) {
+      console.error('팀 로드 실패:', e);
+    }
+  }
+
+  async function predict() {
+    const home = selectedTeams.home;
+    const away = selectedTeams.away;
+    const errorMsg = document.getElementById('error-msg');
+    errorMsg.style.display = 'none';
+
+    if (!home || !away) {
+      errorMsg.textContent = '❌ 홈팀과 원정팀을 모두 선택해주세요';
+      errorMsg.style.display = 'block';
+      return;
+    }
+    if (home === away) {
+      errorMsg.textContent = '❌ 같은 팀은 선택할 수 없습니다';
+      errorMsg.style.display = 'block';
+      return;
+    }
+
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('result-card').classList.remove('show');
+    document.querySelector('.predict-btn').disabled = true;
+
+    try {
+      const res = await fetch(`${API}/predict`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ home_team: home, away_team: away })
+      });
+      const data = await res.json();
+      showResult(data, home, away);
+    } catch(e) {
+      errorMsg.textContent = '❌ 서버 연결 오류. API 서버가 실행 중인지 확인해주세요.';
+      errorMsg.style.display = 'block';
+    } finally {
+      document.getElementById('loading').style.display = 'none';
+      document.querySelector('.predict-btn').disabled = false;
+    }
+  }
+
+  function showResult(data, home, away) {
+    const prob = data.probabilities;
+
+    document.getElementById('result-home-logo').src = logos[home] || '';
+    document.getElementById('result-away-logo').src = logos[away] || '';
+    document.getElementById('result-home-name').textContent = home;
+    document.getElementById('result-away-name').textContent = away;
+
+    const badge = document.getElementById('pred-badge');
+    if (data.prediction === 'home_win') {
+      badge.textContent = `🏠 ${home} 승리 예측`;
+      badge.className = 'badge home';
+    } else if (data.prediction === 'away_win') {
+      badge.textContent = `✈️ ${away} 승리 예측`;
+      badge.className = 'badge away';
+    } else {
+      badge.textContent = '🤝 무승부 예측';
+      badge.className = 'badge draw';
+    }
+
+    const hw = Math.round(prob.home_win * 100);
+    const dw = Math.round(prob.draw * 100);
+    const aw = Math.round(prob.away_win * 100);
+
+    document.getElementById('bar-home').style.width = hw + '%';
+    document.getElementById('bar-draw').style.width = dw + '%';
+    document.getElementById('bar-away').style.width = aw + '%';
+    document.getElementById('val-home').textContent = hw + '%';
+    document.getElementById('val-draw').textContent = dw + '%';
+    document.getElementById('val-away').textContent = aw + '%';
+
+    document.getElementById('home-stat-title').textContent = home.split(' ')[0] + ' 스탯';
+    document.getElementById('away-stat-title').textContent = away.split(' ')[0] + ' 스탯';
+    document.getElementById('s-home-atk').textContent = data.home_stats.attack;
+    document.getElementById('s-home-def').textContent = data.home_stats.defense;
+    document.getElementById('s-home-wr').textContent = (data.home_stats.win_rate * 100).toFixed(1) + '%';
+    document.getElementById('s-away-atk').textContent = data.away_stats.attack;
+    document.getElementById('s-away-def').textContent = data.away_stats.defense;
+    document.getElementById('s-away-wr').textContent = (data.away_stats.win_rate * 100).toFixed(1) + '%';
+
+    document.getElementById('result-card').classList.add('show');
+  }
+
+  loadTeams();
+</script>
+</body>
+</html>
