@@ -1,1 +1,22 @@
-{}
+{
+  "PL": {
+    "name": "EPL (잉글랜드)",
+    "logo": "https://crests.football-data.org/PL.png"
+  },
+  "PD": {
+    "name": "라리가 (스페인)",
+    "logo": "https://crests.football-data.org/laliga.png"
+  },
+  "BL1": {
+    "name": "분데스리가 (독일)",
+    "logo": "https://crests.football-data.org/BL1.png"
+  },
+  "SA": {
+    "name": "세리에A (이탈리아)",
+    "logo": "https://crests.football-data.org/c111.png"
+  },
+  "FL1": {
+    "name": "리그앙 (프랑스)",
+    "logo": "https://crests.football-data.org/FL1.png"
+  }
+}
