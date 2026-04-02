@@ -3,691 +3,452 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FotData - AI 축구 분석</title>
+  <title>FotData - AI 축구 분석 플랫폼</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Segoe UI', sans-serif; background: #0d1117; color: #e6edf3; min-height: 100vh; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #0d1117;
+      --bg2: #161b22;
+      --bg3: #21262d;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --blue: #58a6ff;
+      --green: #238636;
+      --yellow: #d29922;
+      --red: #f85149;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
 
-    /* 네비게이션 */
-    .nav { background: #161b22; border-bottom: 0.5px solid #30363d; padding: 0 24px; display: flex; align-items: center; gap: 0; position: sticky; top: 0; z-index: 100; }
-    .nav-logo { font-size: 18px; font-weight: 700; color: #58a6ff; padding: 14px 0; margin-right: 24px; display: flex; align-items: center; gap: 8px; }
-    .nav-tab { padding: 16px 16px; font-size: 14px; color: #8b949e; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; white-space: nowrap; }
-    .nav-tab:hover { color: #e6edf3; }
-    .nav-tab.active { color: #58a6ff; border-bottom-color: #58a6ff; }
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(13,17,23,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 0.5px solid var(--border);
+      padding: 0 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 60px;
+    }
+    .nav-logo { font-size: 18px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo span { color: var(--blue); }
+    .nav-links { display: flex; gap: 28px; }
+    .nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color .2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta { padding: 8px 18px; background: var(--blue); border: none; border-radius: 6px; color: #0d1117; font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; transition: opacity .2s; }
+    .nav-cta:hover { opacity: .85; }
 
-    /* 레이아웃 */
-    .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
-    .page { display: none; }
-    .page.active { display: block; }
+    /* HERO */
+    .hero {
+      padding: 120px 48px 100px;
+      text-align: center;
+      border-bottom: 0.5px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -200px; left: 50%; transform: translateX(-50%);
+      width: 800px; height: 600px;
+      background: radial-gradient(ellipse at center, rgba(88,166,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 14px;
+      background: rgba(88,166,255,0.1);
+      border: 0.5px solid rgba(88,166,255,0.3);
+      border-radius: 20px;
+      font-size: 12px; color: var(--blue);
+      margin-bottom: 28px;
+      animation: fadeUp .6s ease both;
+    }
+    .hero-badge-dot { width: 6px; height: 6px; background: var(--blue); border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+    .hero h1 {
+      font-size: 60px; font-weight: 800; line-height: 1.1;
+      letter-spacing: -1.5px;
+      margin-bottom: 20px;
+      animation: fadeUp .6s .1s ease both;
+    }
+    .hero h1 em { color: var(--blue); font-style: normal; }
+    .hero p {
+      font-size: 17px; color: var(--muted);
+      max-width: 520px; margin: 0 auto 40px;
+      animation: fadeUp .6s .2s ease both;
+    }
+    .hero-btns {
+      display: flex; gap: 12px; justify-content: center;
+      margin-bottom: 72px;
+      animation: fadeUp .6s .3s ease both;
+    }
+    .btn-primary { padding: 14px 32px; background: var(--blue); border: none; border-radius: 8px; color: #0d1117; font-size: 15px; font-weight: 700; cursor: pointer; transition: opacity .2s; text-decoration: none; display: inline-block; }
+    .btn-primary:hover { opacity: .85; }
+    .btn-secondary { padding: 14px 32px; background: transparent; border: 0.5px solid var(--border); border-radius: 8px; color: var(--text); font-size: 15px; cursor: pointer; transition: border-color .2s, background .2s; text-decoration: none; display: inline-block; }
+    .btn-secondary:hover { border-color: var(--blue); background: rgba(88,166,255,0.05); }
+    .stats-row {
+      display: inline-flex;
+      border: 0.5px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      animation: fadeUp .6s .4s ease both;
+    }
+    .stat-item { padding: 20px 44px; border-right: 0.5px solid var(--border); }
+    .stat-item:last-child { border-right: none; }
+    .stat-num { font-size: 28px; font-weight: 800; color: var(--blue); }
+    .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
-    /* 카드 */
-    .card { background: #161b22; border: 0.5px solid #30363d; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
-    .card-title { font-size: 13px; color: #8b949e; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
+    /* PREVIEW */
+    .preview {
+      padding: 80px 48px;
+      background: var(--bg2);
+      border-bottom: 0.5px solid var(--border);
+    }
+    .preview-inner {
+      max-width: 1000px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
+    }
+    .preview-label { font-size: 12px; color: var(--blue); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; }
+    .preview h2 { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 14px; }
+    .preview p { font-size: 14px; color: var(--muted); line-height: 1.8; margin-bottom: 24px; }
+    .check-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .check-list li { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--muted); }
+    .check-list li::before { content: '✓'; color: var(--green); font-weight: 700; font-size: 14px; }
+    .mock-card {
+      background: var(--bg);
+      border: 0.5px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .mock-topbar { padding: 12px 16px; border-bottom: 0.5px solid var(--border); display: flex; align-items: center; gap: 6px; }
+    .mock-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .mock-topbar-title { font-size: 12px; color: var(--muted); margin-left: auto; }
+    .mock-body { padding: 20px; }
+    .mock-teams-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .mock-team { text-align: center; }
+    .mock-team-logo { width: 48px; height: 48px; border-radius: 50%; background: var(--bg3); margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; overflow: hidden; }
+    .mock-team-logo img { width: 100%; height: 100%; object-fit: contain; padding: 6px; }
+    .mock-team-name { font-size: 12px; font-weight: 600; }
+    .mock-team-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .mock-vs-center { text-align: center; }
+    .mock-vs { font-size: 20px; font-weight: 700; color: var(--muted); margin-bottom: 10px; }
+    .mock-badge { display: inline-block; padding: 4px 14px; background: rgba(88,166,255,0.15); color: var(--blue); border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .mock-bars { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+    .mock-bar-row { display: grid; grid-template-columns: 52px 1fr 38px; align-items: center; gap: 8px; }
+    .mock-bar-label { font-size: 11px; color: var(--muted); }
+    .mock-bar-bg { background: var(--bg3); border-radius: 3px; height: 6px; overflow: hidden; }
+    .mock-bar-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
+    .mock-bar-val { font-size: 11px; font-weight: 600; text-align: right; }
 
-    /* 리그 탭 */
-    .league-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-    .league-tab { padding: 8px 16px; border-radius: 20px; font-size: 13px; cursor: pointer; border: 0.5px solid #30363d; background: #21262d; color: #8b949e; display: flex; align-items: center; gap: 6px; transition: all 0.2s; }
-    .league-tab img { width: 16px; height: 16px; object-fit: contain; }
-    .league-tab:hover { border-color: #58a6ff; color: #e6edf3; }
-    .league-tab.active { background: #1f4e8c; border-color: #58a6ff; color: #58a6ff; }
+    /* FEATURES */
+    .features { padding: 80px 48px; border-bottom: 0.5px solid var(--border); }
+    .features-inner { max-width: 1000px; margin: 0 auto; }
+    .section-header { margin-bottom: 48px; }
+    .section-label { font-size: 12px; color: var(--blue); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; }
+    .section-title { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; }
+    .feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .feat-card {
+      background: var(--bg2);
+      border: 0.5px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      transition: border-color .2s, transform .2s;
+    }
+    .feat-card:hover { border-color: rgba(88,166,255,0.4); transform: translateY(-2px); }
+    .feat-icon {
+      width: 44px; height: 44px;
+      background: rgba(88,166,255,0.1);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      margin-bottom: 18px;
+    }
+    .feat-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+    .feat-card p { font-size: 13px; color: var(--muted); line-height: 1.7; }
 
-    /* 순위표 */
-    .standings-table { width: 100%; border-collapse: collapse; }
-    .standings-table th { font-size: 11px; color: #8b949e; text-align: left; padding: 8px 12px; border-bottom: 0.5px solid #30363d; }
-    .standings-table th.center { text-align: center; }
-    .standings-table td { padding: 10px 12px; border-bottom: 0.5px solid #21262d; font-size: 13px; }
-    .standings-table td.center { text-align: center; }
-    .standings-table tr:hover { background: #21262d; }
-    .team-cell { display: flex; align-items: center; gap: 10px; }
-    .team-cell img { width: 24px; height: 24px; object-fit: contain; }
-    .rank-num { font-size: 13px; color: #8b949e; width: 20px; text-align: center; }
-    .rank-1 { color: #FFD700; }
-    .rank-2 { color: #C0C0C0; }
-    .rank-3 { color: #CD7F32; }
-    .pts { font-weight: 700; color: #58a6ff; }
-    .form-badges { display: flex; gap: 3px; }
-    .form-badge { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
-    .form-badge.W { background: #238636; color: #fff; }
-    .form-badge.D { background: #6e7681; color: #fff; }
-    .form-badge.L { background: #da3633; color: #fff; }
-    .zone-cl { border-left: 3px solid #58a6ff; }
-    .zone-el { border-left: 3px solid #f0883e; }
-    .zone-rel { border-left: 3px solid #da3633; }
+    /* LEAGUES */
+    .leagues { padding: 56px 48px; border-bottom: 0.5px solid var(--border); background: var(--bg2); }
+    .leagues-inner { max-width: 1000px; margin: 0 auto; text-align: center; }
+    .leagues h3 { font-size: 14px; color: var(--muted); margin-bottom: 24px; font-weight: 500; }
+    .league-pills { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+    .league-pill {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 20px;
+      background: var(--bg);
+      border: 0.5px solid var(--border);
+      border-radius: 24px;
+      font-size: 13px; color: var(--text);
+      transition: border-color .2s;
+    }
+    .league-pill:hover { border-color: var(--blue); }
+    .league-pill img { width: 18px; height: 18px; object-fit: contain; }
 
-    /* 예측 페이지 */
-    .predict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .team-selector { display: grid; grid-template-columns: 1fr auto 1fr; align-items: start; gap: 24px; margin-bottom: 24px; }
-    .team-box { display: flex; flex-direction: column; align-items: center; gap: 10px; }
-    .team-box label { font-size: 12px; color: #8b949e; text-transform: uppercase; letter-spacing: 1px; }
-    .team-logo-wrap { width: 80px; height: 80px; border-radius: 50%; background: #21262d; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 8px; }
-    .team-logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
-    .team-logo-wrap span { font-size: 28px; }
-    .league-badge-sm { font-size: 11px; color: #8b949e; display: flex; align-items: center; gap: 4px; }
-    .league-badge-sm img { width: 12px; height: 12px; object-fit: contain; }
-    .vs-center { font-size: 22px; font-weight: 700; color: #8b949e; margin-top: 50px; }
-    .custom-select { position: relative; width: 100%; }
-    .custom-select-trigger { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: #21262d; border: 0.5px solid #30363d; border-radius: 8px; cursor: pointer; font-size: 13px; color: #e6edf3; user-select: none; }
-    .custom-select-trigger:hover { border-color: #58a6ff; }
-    .custom-select-trigger img { width: 20px; height: 20px; object-fit: contain; border-radius: 50%; }
-    .custom-select-trigger .arrow { margin-left: auto; font-size: 10px; color: #8b949e; }
-    .custom-select.open .custom-select-trigger { border-color: #58a6ff; }
-    .custom-select.open .arrow { transform: rotate(180deg); }
-    .dropdown { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: #21262d; border: 0.5px solid #30363d; border-radius: 8px; z-index: 200; max-height: 280px; overflow-y: auto; display: none; }
-    .custom-select.open .dropdown { display: block; }
-    .dropdown::-webkit-scrollbar { width: 4px; }
-    .dropdown::-webkit-scrollbar-thumb { background: #30363d; border-radius: 2px; }
-    .dropdown-group-label { padding: 8px 12px; font-size: 11px; color: #8b949e; background: #161b22; display: flex; align-items: center; gap: 6px; }
-    .dropdown-group-label img { width: 14px; height: 14px; object-fit: contain; }
-    .dropdown-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; cursor: pointer; font-size: 13px; }
-    .dropdown-item:hover { background: #30363d; }
-    .dropdown-item.selected { background: #1f4e8c; color: #58a6ff; }
-    .dropdown-item img { width: 20px; height: 20px; object-fit: contain; border-radius: 50%; }
+    /* STANDINGS PREVIEW */
+    .standings-preview { padding: 80px 48px; border-bottom: 0.5px solid var(--border); }
+    .standings-inner { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .standings-mock {
+      background: var(--bg2);
+      border: 0.5px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .standings-mock-header { padding: 14px 18px; border-bottom: 0.5px solid var(--border); display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; }
+    .standings-mock-header img { width: 18px; height: 18px; object-fit: contain; }
+    .standings-row { display: grid; grid-template-columns: 28px 1fr auto auto; gap: 8px; align-items: center; padding: 10px 18px; border-bottom: 0.5px solid rgba(48,54,61,0.5); font-size: 13px; }
+    .standings-row:last-child { border-bottom: none; }
+    .standings-rank { color: var(--muted); font-size: 12px; text-align: center; }
+    .standings-team { display: flex; align-items: center; gap: 8px; }
+    .standings-team img { width: 20px; height: 20px; object-fit: contain; }
+    .standings-pts { font-weight: 700; color: var(--blue); min-width: 28px; text-align: right; }
+    .form-dots { display: flex; gap: 3px; }
+    .form-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .form-dot.W { background: var(--green); }
+    .form-dot.D { background: #6e7681; }
+    .form-dot.L { background: var(--red); }
 
-    /* 예측 버튼 */
-    .predict-btn { width: 100%; padding: 14px; background: #238636; border: none; border-radius: 10px; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-    .predict-btn:hover { background: #2ea043; }
-    .predict-btn:disabled { background: #30363d; cursor: not-allowed; }
+    /* CTA */
+    .cta-section { padding: 100px 48px; text-align: center; }
+    .cta-section h2 { font-size: 40px; font-weight: 800; letter-spacing: -1px; margin-bottom: 14px; }
+    .cta-section h2 em { color: var(--blue); font-style: normal; }
+    .cta-section p { font-size: 16px; color: var(--muted); margin-bottom: 32px; }
 
-    /* 예측 결과 */
-    .result-section { display: none; }
-    .result-section.show { display: block; }
-    .result-teams { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .result-team { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-    .result-team img { width: 56px; height: 56px; object-fit: contain; }
-    .result-team-name { font-size: 13px; font-weight: 600; text-align: center; max-width: 130px; }
-    .result-vs { font-size: 18px; color: #8b949e; font-weight: 700; }
-    .prediction-badge { text-align: center; margin-bottom: 20px; }
-    .badge { display: inline-block; padding: 8px 20px; border-radius: 20px; font-size: 14px; font-weight: 600; }
-    .badge.home { background: #1f4e8c; color: #58a6ff; }
-    .badge.draw { background: #3d2e00; color: #d29922; }
-    .badge.away { background: #4c1d1d; color: #f85149; }
-    .prob-bars { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
-    .prob-row { display: grid; grid-template-columns: 70px 1fr 45px; align-items: center; gap: 10px; }
-    .prob-label { font-size: 12px; color: #8b949e; }
-    .prob-bar-bg { background: #21262d; border-radius: 4px; height: 8px; overflow: hidden; }
-    .prob-bar { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
-    .prob-bar.home { background: #58a6ff; }
-    .prob-bar.draw { background: #d29922; }
-    .prob-bar.away { background: #f85149; }
-    .prob-value { font-size: 13px; font-weight: 600; text-align: right; }
+    /* FOOTER */
+    footer { padding: 28px 48px; border-top: 0.5px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    .footer-logo { font-size: 14px; font-weight: 700; color: var(--muted); }
+    .footer-logo span { color: var(--blue); }
+    .footer-text { font-size: 12px; color: var(--muted); }
 
-    /* H2H */
-    .h2h-summary { display: flex; justify-content: space-around; align-items: center; padding: 16px 0; margin-bottom: 16px; border-bottom: 0.5px solid #30363d; }
-    .h2h-stat { text-align: center; }
-    .h2h-num { font-size: 28px; font-weight: 700; }
-    .h2h-num.wins { color: #238636; }
-    .h2h-num.draws { color: #8b949e; }
-    .h2h-num.losses { color: #da3633; }
-    .h2h-label { font-size: 11px; color: #8b949e; margin-top: 4px; }
-    .h2h-match { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 0.5px solid #21262d; font-size: 13px; }
-    .h2h-date { color: #8b949e; font-size: 11px; }
-    .h2h-score { font-weight: 600; }
-    .h2h-score.W { color: #238636; }
-    .h2h-score.D { color: #8b949e; }
-    .h2h-score.L { color: #da3633; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-    /* 팀 스탯 */
-    .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; }
-    .stat-box { background: #21262d; border-radius: 8px; padding: 12px; text-align: center; }
-    .stat-val { font-size: 18px; font-weight: 700; }
-    .stat-label { font-size: 11px; color: #8b949e; margin-top: 4px; }
-
-    /* 로딩 */
-    .loading { text-align: center; padding: 40px; color: #8b949e; }
-    .error-msg { background: #4c1d1d; border: 0.5px solid #f85149; border-radius: 8px; padding: 10px 14px; color: #f85149; font-size: 13px; margin-top: 10px; display: none; }
-
-    /* 반응형 */
     @media (max-width: 768px) {
-      .predict-grid { grid-template-columns: 1fr; }
-      .stats-grid { grid-template-columns: 1fr 1fr; }
-      .nav-tab { padding: 14px 10px; font-size: 13px; }
-      .container { padding: 16px; }
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hero { padding: 80px 24px 60px; }
+      .hero h1 { font-size: 36px; }
+      .stats-row { flex-wrap: wrap; }
+      .preview-inner, .standings-inner { grid-template-columns: 1fr; gap: 32px; }
+      .feat-grid { grid-template-columns: 1fr; }
+      .features, .preview, .standings-preview, .cta-section { padding: 60px 24px; }
+      footer { flex-direction: column; gap: 8px; text-align: center; }
     }
   </style>
 </head>
 <body>
 
-<nav class="nav">
-  <div class="nav-logo">⚽ FotData</div>
-  <div class="nav-tab active" onclick="showPage('predict')">경기 예측</div>
-  <div class="nav-tab" onclick="showPage('standings')">순위표</div>
+<nav>
+  <a href="#" class="nav-logo">⚽ Fot<span>Data</span></a>
+  <div class="nav-links">
+    <a href="FotData.html">경기 예측</a>
+    <a href="FotData.html">순위표</a>
+    <a href="FotData.html">팀 분석</a>
+  </div>
+  <a href="FotData.html" class="nav-cta">시작하기 →</a>
 </nav>
 
-<div class="container">
-
-  <!-- 순위표 페이지 -->
-  <div class="page" id="page-standings">
-    <div class="league-tabs" id="league-tabs">
-      <div class="league-tab active" onclick="loadStandings('PL')" data-league="PL">
-        <img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'"> EPL
-      </div>
-      <div class="league-tab" onclick="loadStandings('PD')" data-league="PD">
-        <img src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'"> 라리가
-      </div>
-      <div class="league-tab" onclick="loadStandings('BL1')" data-league="BL1">
-        <img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'"> 분데스리가
-      </div>
-      <div class="league-tab" onclick="loadStandings('SA')" data-league="SA">
-        <img src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'"> 세리에A
-      </div>
-      <div class="league-tab" onclick="loadStandings('FL1')" data-league="FL1">
-        <img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'"> 리그앙
-      </div>
-    </div>
-
-    <div class="card">
-      <div id="standings-content">
-        <div class="loading">순위표 불러오는 중...</div>
-      </div>
-    </div>
+<section class="hero">
+  <div class="hero-badge">
+    <span class="hero-badge-dot"></span>
+    AI 기반 축구 분석 플랫폼
   </div>
+  <h1>축구를 데이터로<br><em>예측하다</em></h1>
+  <p>5개 유럽 리그 실시간 순위, AI 경기 예측, 역대 맞대 기록. 전문가 수준의 축구 인사이트를 무료로.</p>
+  <div class="hero-btns">
+    <a href="FotData.html" class="btn-primary">경기 예측하기</a>
+    <a href="FotData.html" class="btn-secondary">순위표 보기</a>
+  </div>
+  <div class="stats-row">
+    <div class="stat-item"><div class="stat-num">3,697</div><div class="stat-label">경기 데이터</div></div>
+    <div class="stat-item"><div class="stat-num">96</div><div class="stat-label">팀 분석</div></div>
+    <div class="stat-item"><div class="stat-num">60%</div><div class="stat-label">예측 정확도</div></div>
+    <div class="stat-item"><div class="stat-num">5</div><div class="stat-label">지원 리그</div></div>
+  </div>
+</section>
 
-  <!-- 경기 예측 페이지 -->
-  <div class="page active" id="page-predict">
-    <div class="card">
-      <div class="team-selector">
-        <div class="team-box">
-          <label>홈팀</label>
-          <div class="team-logo-wrap" id="home-logo"><span>⚽</span></div>
-          <div class="league-badge-sm" id="home-league"></div>
-          <div class="custom-select" id="home-select">
-            <div class="custom-select-trigger" onclick="toggleDropdown('home')">
-              <span style="color:#8b949e">팀 선택</span>
-              <span class="arrow">▼</span>
-            </div>
-            <div class="dropdown" id="home-dropdown"></div>
-          </div>
-        </div>
-        <div class="vs-center">VS</div>
-        <div class="team-box">
-          <label>원정팀</label>
-          <div class="team-logo-wrap" id="away-logo"><span>⚽</span></div>
-          <div class="league-badge-sm" id="away-league"></div>
-          <div class="custom-select" id="away-select">
-            <div class="custom-select-trigger" onclick="toggleDropdown('away')">
-              <span style="color:#8b949e">팀 선택</span>
-              <span class="arrow">▼</span>
-            </div>
-            <div class="dropdown" id="away-dropdown"></div>
-          </div>
-        </div>
-      </div>
-      <button class="predict-btn" onclick="predict()">🔮 경기 예측하기</button>
-      <div class="error-msg" id="error-msg"></div>
+<section class="preview">
+  <div class="preview-inner">
+    <div>
+      <div class="preview-label">경기 예측</div>
+      <h2>AI가 분석하는<br>경기 결과</h2>
+      <p>머신러닝 모델이 팀 공격력, 수비력, 최근 폼, 홈 어드밴티지를 종합 분석해 승/무/패 확률을 예측합니다.</p>
+      <ul class="check-list">
+        <li>팀별 공격력 · 수비력 실시간 분석</li>
+        <li>최근 5경기 폼 자동 반영</li>
+        <li>최근 3시즌 H2H 맞대 기록</li>
+        <li>홈 어드밴티지 자동 계산</li>
+      </ul>
     </div>
-
-    <div class="result-section" id="result-section">
-      <div class="predict-grid">
-        <!-- 예측 결과 -->
-        <div class="card">
-          <div class="card-title">🎯 예측 결과</div>
-          <div class="result-teams">
-            <div class="result-team">
-              <img id="result-home-logo" src="" alt="">
-              <div class="result-team-name" id="result-home-name"></div>
+    <div class="mock-card">
+      <div class="mock-topbar">
+        <div class="mock-dot" style="background:#f85149"></div>
+        <div class="mock-dot" style="background:#d29922"></div>
+        <div class="mock-dot" style="background:#238636"></div>
+        <span class="mock-topbar-title">FotData · 경기 예측</span>
+      </div>
+      <div class="mock-body">
+        <div class="mock-teams-row">
+          <div class="mock-team">
+            <div class="mock-team-logo">
+              <img src="https://crests.football-data.org/57.png" onerror="this.innerHTML='🔴'">
             </div>
-            <div class="result-vs">VS</div>
-            <div class="result-team">
-              <img id="result-away-logo" src="" alt="">
-              <div class="result-team-name" id="result-away-name"></div>
-            </div>
+            <div class="mock-team-name">Arsenal FC</div>
+            <div class="mock-team-sub">홈 · EPL</div>
           </div>
-          <div class="prediction-badge">
-            <span class="badge" id="pred-badge"></span>
+          <div class="mock-vs-center">
+            <div class="mock-vs">VS</div>
+            <div class="mock-badge">홈팀 승리 예측</div>
           </div>
-          <div class="prob-bars">
-            <div class="prob-row">
-              <span class="prob-label">🏠 홈승</span>
-              <div class="prob-bar-bg"><div class="prob-bar home" id="bar-home" style="width:0%"></div></div>
-              <span class="prob-value" id="val-home"></span>
+          <div class="mock-team">
+            <div class="mock-team-logo">
+              <img src="https://crests.football-data.org/61.png" onerror="this.innerHTML='🔵'">
             </div>
-            <div class="prob-row">
-              <span class="prob-label">🤝 무승부</span>
-              <div class="prob-bar-bg"><div class="prob-bar draw" id="bar-draw" style="width:0%"></div></div>
-              <span class="prob-value" id="val-draw"></span>
-            </div>
-            <div class="prob-row">
-              <span class="prob-label">✈️ 원정승</span>
-              <div class="prob-bar-bg"><div class="prob-bar away" id="bar-away" style="width:0%"></div></div>
-              <span class="prob-value" id="val-away"></span>
-            </div>
-          </div>
-          <div class="stats-grid">
-            <div class="stat-box">
-              <div class="stat-val" id="s-home-atk">-</div>
-              <div class="stat-label">홈 공격력</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-val" id="s-home-def">-</div>
-              <div class="stat-label">홈 수비력</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-val" id="s-away-atk">-</div>
-              <div class="stat-label">원정 공격력</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-val" id="s-away-def">-</div>
-              <div class="stat-label">원정 수비력</div>
-            </div>
+            <div class="mock-team-name">Chelsea FC</div>
+            <div class="mock-team-sub">원정 · EPL</div>
           </div>
         </div>
-
-        <!-- H2H -->
-        <div class="card">
-          <div class="card-title">⚔️ 최근 3시즌 맞대 기록</div>
-          <div class="h2h-summary">
-            <div class="h2h-stat">
-              <div class="h2h-num wins" id="h2h-home-wins">-</div>
-              <div class="h2h-label" id="h2h-home-label">홈팀 승</div>
-            </div>
-            <div class="h2h-stat">
-              <div class="h2h-num draws" id="h2h-draws">-</div>
-              <div class="h2h-label">무승부</div>
-            </div>
-            <div class="h2h-stat">
-              <div class="h2h-num losses" id="h2h-away-wins">-</div>
-              <div class="h2h-label" id="h2h-away-label">원정팀 승</div>
-            </div>
+        <div class="mock-bars">
+          <div class="mock-bar-row">
+            <span class="mock-bar-label">홈승</span>
+            <div class="mock-bar-bg"><div class="mock-bar-fill" style="width:52%;background:#58a6ff"></div></div>
+            <span class="mock-bar-val" style="color:#58a6ff">52%</span>
           </div>
-          <div id="h2h-matches"></div>
-        </div>
-
-        <!-- 홈팀 폼 -->
-        <div class="card">
-          <div class="card-title">📊 <span id="home-form-title">홈팀</span> 최근 경기</div>
-          <div id="home-form-list"></div>
-        </div>
-
-        <!-- 원정팀 폼 -->
-        <div class="card">
-          <div class="card-title">📊 <span id="away-form-title">원정팀</span> 최근 경기</div>
-          <div id="away-form-list"></div>
+          <div class="mock-bar-row">
+            <span class="mock-bar-label">무승부</span>
+            <div class="mock-bar-bg"><div class="mock-bar-fill" style="width:24%;background:#d29922"></div></div>
+            <span class="mock-bar-val" style="color:#d29922">24%</span>
+          </div>
+          <div class="mock-bar-row">
+            <span class="mock-bar-label">원정승</span>
+            <div class="mock-bar-bg"><div class="mock-bar-fill" style="width:24%;background:#f85149"></div></div>
+            <span class="mock-bar-val" style="color:#f85149">24%</span>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<script>
-const API = "https://fotdata-api.onrender.com";
-let logos = {};
-let selectedTeams = { home: '', away: '' };
-
-const LEAGUES = {
-  "EPL (잉글랜드)": {
-    logo: "https://crests.football-data.org/PL.png",
-    teams: [
-      "Arsenal FC","Aston Villa FC","AFC Bournemouth","Brentford FC",
-      "Brighton & Hove Albion FC","Burnley FC","Chelsea FC","Crystal Palace FC",
-      "Everton FC","Fulham FC","Leeds United FC","Liverpool FC",
-      "Manchester City FC","Manchester United FC","Newcastle United FC",
-      "Nottingham Forest FC","Sunderland AFC","Tottenham Hotspur FC",
-      "West Ham United FC","Wolverhampton Wanderers FC"
-    ]
-  },
-  "라리가 (스페인)": {
-    logo: "https://crests.football-data.org/laliga.png",
-    teams: [
-      "Athletic Club","CA Osasuna","Club Atlético de Madrid",
-      "Deportivo Alavés","Elche CF","FC Barcelona","Getafe CF","Girona FC",
-      "Levante UD","RC Celta de Vigo","RCD Espanyol","RCD Mallorca",
-      "Rayo Vallecano de Madrid","Real Betis Balompié","Real Madrid CF",
-      "Real Oviedo","Real Sociedad de Fútbol","Sevilla FC","Valencia CF","Villarreal CF"
-    ]
-  },
-  "분데스리가 (독일)": {
-    logo: "https://crests.football-data.org/BL1.png",
-    teams: [
-      "Bayer 04 Leverkusen","Bayern München","Borussia Dortmund",
-      "Borussia Mönchengladbach","Eintracht Frankfurt","FC Augsburg",
-      "FC St. Pauli","FC Union Berlin","Hamburger SV",
-      "RB Leipzig","SC Freiburg","TSG 1899 Hoffenheim","VfB Stuttgart",
-      "VfL Bochum 1848","VfL Wolfsburg","Werder Bremen","1. FC Köln","1. FSV Mainz 05"
-    ]
-  },
-  "세리에A (이탈리아)": {
-    logo: "https://crests.football-data.org/c111.png",
-    teams: [
-      "AC Milan","ACF Fiorentina","AS Roma","Atalanta BC","Bologna FC 1909",
-      "Cagliari Calcio","Cremonese","Empoli FC","Genoa CFC","Hellas Verona FC",
-      "Inter Milan","Juventus FC","Pisa SC","SS Lazio","SSC Napoli",
-      "Torino FC","US Lecce","US Sassuolo Calcio","Udinese Calcio","Venezia FC"
-    ]
-  },
-  "리그앙 (프랑스)": {
-    logo: "https://crests.football-data.org/FL1.png",
-    teams: [
-      "AJ Auxerre","AS Monaco FC","Angers SCO","FC Lorient","FC Metz",
-      "FC Nantes","Le Havre AC","Lille OSC","OGC Nice","Olympique Lyonnais",
-      "Olympique de Marseille","Paris FC","Paris Saint-Germain FC",
-      "RC Strasbourg Alsace","Racing Club de Lens","Stade Brestois 29",
-      "Stade Rennais FC 1901","Toulouse FC"
-    ]
-  }
-};
-
-// 페이지 전환
-function showPage(page) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('page-' + page).classList.add('active');
-  event.target.classList.add('active');
-}
-
-// 순위표
-async function loadStandings(leagueCode) {
-  document.querySelectorAll('.league-tab').forEach(t => t.classList.remove('active'));
-  document.querySelector(`[data-league="${leagueCode}"]`).classList.add('active');
-
-  const content = document.getElementById('standings-content');
-  content.innerHTML = '<div class="loading">순위표 불러오는 중...</div>';
-
-  try {
-    const res = await fetch(`${API}/standings/${leagueCode}`);
-    const data = await res.json();
-    renderStandings(data, leagueCode);
-  } catch(e) {
-    content.innerHTML = '<div class="loading">데이터를 불러올 수 없어요. 서버를 확인해주세요.</div>';
-  }
-}
-
-function renderStandings(data, leagueCode) {
-  const totalTeams = data.standings.length;
-  const content = document.getElementById('standings-content');
-
-  let html = `
-    <table class="standings-table">
-      <thead>
-        <tr>
-          <th style="width:30px">#</th>
-          <th>팀</th>
-          <th class="center">경기</th>
-          <th class="center">승</th>
-          <th class="center">무</th>
-          <th class="center">패</th>
-          <th class="center">득점</th>
-          <th class="center">실점</th>
-          <th class="center">득실</th>
-          <th class="center">폼</th>
-          <th class="center">승점</th>
-        </tr>
-      </thead>
-      <tbody>
-  `;
-
-  data.standings.forEach((team, i) => {
-    let zoneClass = '';
-    if (leagueCode === 'PL') {
-      if (i < 4) zoneClass = 'zone-cl';
-      else if (i < 6) zoneClass = 'zone-el';
-      else if (i >= totalTeams - 3) zoneClass = 'zone-rel';
-    } else {
-      if (i < 4) zoneClass = 'zone-cl';
-      else if (i >= totalTeams - 3) zoneClass = 'zone-rel';
-    }
-
-    const rankClass = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : '';
-    const formBadges = team.form.map(f =>
-      `<div class="form-badge ${f}">${f}</div>`
-    ).join('');
-
-    html += `
-      <tr class="${zoneClass}">
-        <td><span class="rank-num ${rankClass}">${team.rank}</span></td>
-        <td>
-          <div class="team-cell">
-            <img src="${team.logo}" width="24" height="24" style="object-fit:contain" onerror="this.style.display='none'">
-            <span>${team.team}</span>
-          </div>
-        </td>
-        <td class="center">${team.played}</td>
-        <td class="center">${team.wins}</td>
-        <td class="center">${team.draws}</td>
-        <td class="center">${team.losses}</td>
-        <td class="center">${team.gf}</td>
-        <td class="center">${team.ga}</td>
-        <td class="center" style="color:${team.gd > 0 ? '#238636' : team.gd < 0 ? '#da3633' : '#8b949e'}">${team.gd > 0 ? '+' : ''}${team.gd}</td>
-        <td class="center"><div class="form-badges">${formBadges}</div></td>
-        <td class="center pts">${team.points}</td>
-      </tr>
-    `;
-  });
-
-  html += '</tbody></table>';
-
-  // 범례
-  html += `
-    <div style="display:flex;gap:16px;margin-top:12px;font-size:11px;color:#8b949e">
-      <span><span style="display:inline-block;width:10px;height:10px;background:#58a6ff;border-radius:1px;margin-right:4px"></span>챔피언스리그</span>
-      <span><span style="display:inline-block;width:10px;height:10px;background:#f0883e;border-radius:1px;margin-right:4px"></span>유로파/컨퍼런스</span>
-      <span><span style="display:inline-block;width:10px;height:10px;background:#da3633;border-radius:1px;margin-right:4px"></span>강등권</span>
-    </div>
-  `;
-
-  content.innerHTML = html;
-}
-
-// 팀 드롭다운
-function toggleDropdown(side) {
-  const el = document.getElementById(`${side}-select`);
-  const other = side === 'home' ? 'away' : 'home';
-  document.getElementById(`${other}-select`).classList.remove('open');
-  el.classList.toggle('open');
-}
-
-document.addEventListener('click', (e) => {
-  if (!e.target.closest('.custom-select')) {
-    document.querySelectorAll('.custom-select').forEach(el => el.classList.remove('open'));
-  }
-});
-
-function getLeague(team) {
-  for (const [league, data] of Object.entries(LEAGUES)) {
-    if (data.teams.includes(team)) return { name: league, logo: data.logo };
-  }
-  return null;
-}
-
-function selectTeam(side, team) {
-  selectedTeams[side] = team;
-  const trigger = document.querySelector(`#${side}-select .custom-select-trigger`);
-  const logoUrl = logos[team] || '';
-
-  trigger.innerHTML = `
-    <img src="${logoUrl}" onerror="this.style.display='none'">
-    <span>${team}</span>
-    <span class="arrow">▼</span>
-  `;
-
-  const logoDiv = document.getElementById(`${side}-logo`);
-  logoDiv.innerHTML = logoUrl
-    ? `<img src="${logoUrl}" style="width:100%;height:100%;object-fit:contain" onerror="this.parentNode.innerHTML='<span>⚽</span>'">`
-    : '<span>⚽</span>';
-
-  const leagueInfo = getLeague(team);
-  const leagueDiv = document.getElementById(`${side}-league`);
-  if (leagueInfo) {
-    leagueDiv.innerHTML = `<img src="${leagueInfo.logo}" onerror="this.style.display='none'"> ${leagueInfo.name}`;
-  }
-
-  document.querySelectorAll(`#${side}-dropdown .dropdown-item`).forEach(item => {
-    item.classList.toggle('selected', item.dataset.team === team);
-  });
-
-  document.getElementById(`${side}-select`).classList.remove('open');
-}
-
-function buildDropdown(side) {
-  const dropdown = document.getElementById(`${side}-dropdown`);
-  dropdown.innerHTML = '';
-
-  for (const [leagueName, leagueData] of Object.entries(LEAGUES)) {
-    const label = document.createElement('div');
-    label.className = 'dropdown-group-label';
-    label.innerHTML = `<img src="${leagueData.logo}" onerror="this.style.display='none'"> ${leagueName}`;
-    dropdown.appendChild(label);
-
-    leagueData.teams.sort().forEach(team => {
-      const item = document.createElement('div');
-      item.className = 'dropdown-item';
-      item.dataset.team = team;
-      item.innerHTML = `
-        <img src="${logos[team] || ''}" onerror="this.style.display='none'">
-        <span>${team}</span>
-      `;
-      item.onclick = () => selectTeam(side, team);
-      dropdown.appendChild(item);
-    });
-  }
-}
-
-async function loadLogos() {
-  try {
-    const res = await fetch(`${API}/logos`);
-    logos = await res.json();
-  } catch(e) {
-    console.error('로고 로드 실패');
-  }
-  buildDropdown('home');
-  buildDropdown('away');
-}
-
-// 예측
-async function predict() {
-  const home = selectedTeams.home;
-  const away = selectedTeams.away;
-  const errorMsg = document.getElementById('error-msg');
-  errorMsg.style.display = 'none';
-
-  if (!home || !away) {
-    errorMsg.textContent = '❌ 홈팀과 원정팀을 모두 선택해주세요';
-    errorMsg.style.display = 'block';
-    return;
-  }
-  if (home === away) {
-    errorMsg.textContent = '❌ 같은 팀은 선택할 수 없습니다';
-    errorMsg.style.display = 'block';
-    return;
-  }
-
-  document.querySelector('.predict-btn').disabled = true;
-  document.querySelector('.predict-btn').textContent = '⏳ 예측 중...';
-
-  try {
-    const [predictRes, h2hRes, homeFormRes, awayFormRes] = await Promise.all([
-      fetch(`${API}/predict`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ home_team: home, away_team: away })
-      }),
-      fetch(`${API}/h2h?home_team=${encodeURIComponent(home)}&away_team=${encodeURIComponent(away)}`),
-      fetch(`${API}/form/${encodeURIComponent(home)}`),
-      fetch(`${API}/form/${encodeURIComponent(away)}`)
-    ]);
-
-    const [predictData, h2hData, homeFormData, awayFormData] = await Promise.all([
-      predictRes.json(), h2hRes.json(), homeFormRes.json(), awayFormRes.json()
-    ]);
-
-    showResult(predictData, h2hData, homeFormData, awayFormData, home, away);
-  } catch(e) {
-    errorMsg.textContent = '❌ 서버 연결 오류. 잠시 후 다시 시도해주세요.';
-    errorMsg.style.display = 'block';
-  } finally {
-    document.querySelector('.predict-btn').disabled = false;
-    document.querySelector('.predict-btn').textContent = '🔮 경기 예측하기';
-  }
-}
-
-function showResult(data, h2h, homeForm, awayForm, home, away) {
-  const prob = data.probabilities;
-
-  document.getElementById('result-home-logo').src = logos[home] || '';
-  document.getElementById('result-away-logo').src = logos[away] || '';
-  document.getElementById('result-home-name').textContent = home;
-  document.getElementById('result-away-name').textContent = away;
-
-  const badge = document.getElementById('pred-badge');
-  if (data.prediction === 'home_win') {
-    badge.textContent = `🏠 ${home} 승리 예측`;
-    badge.className = 'badge home';
-  } else if (data.prediction === 'away_win') {
-    badge.textContent = `✈️ ${away} 승리 예측`;
-    badge.className = 'badge away';
-  } else {
-    badge.textContent = '🤝 무승부 예측';
-    badge.className = 'badge draw';
-  }
-
-  const hw = Math.round(prob.home_win * 100);
-  const dw = Math.round(prob.draw * 100);
-  const aw = Math.round(prob.away_win * 100);
-
-  document.getElementById('bar-home').style.width = hw + '%';
-  document.getElementById('bar-draw').style.width = dw + '%';
-  document.getElementById('bar-away').style.width = aw + '%';
-  document.getElementById('val-home').textContent = hw + '%';
-  document.getElementById('val-draw').textContent = dw + '%';
-  document.getElementById('val-away').textContent = aw + '%';
-
-  document.getElementById('s-home-atk').textContent = data.home_stats.attack;
-  document.getElementById('s-home-def').textContent = data.home_stats.defense;
-  document.getElementById('s-away-atk').textContent = data.away_stats.attack;
-  document.getElementById('s-away-def').textContent = data.away_stats.defense;
-
-  // H2H
-  document.getElementById('h2h-home-wins').textContent = h2h.summary.home_wins;
-  document.getElementById('h2h-draws').textContent = h2h.summary.draws;
-  document.getElementById('h2h-away-wins').textContent = h2h.summary.away_wins;
-  document.getElementById('h2h-home-label').textContent = home.split(' ')[0] + ' 승';
-  document.getElementById('h2h-away-label').textContent = away.split(' ')[0] + ' 승';
-
-  let h2hHtml = '';
-  h2h.matches.forEach(m => {
-    const score = `${m.home_team.split(' ')[0]} ${m.home_goals} - ${m.away_goals} ${m.away_team.split(' ')[0]}`;
-    h2hHtml += `
-      <div class="h2h-match">
-        <span class="h2h-date">${m.date}</span>
-        <span class="h2h-score ${m.result}">${score}</span>
+<section class="standings-preview">
+  <div class="standings-inner">
+    <div class="standings-mock">
+      <div class="standings-mock-header">
+        <img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'">
+        EPL 2025-26 순위표
       </div>
-    `;
-  });
-  document.getElementById('h2h-matches').innerHTML = h2hHtml || '<div style="color:#8b949e;font-size:13px;padding:8px 0">맞대 기록 없음</div>';
+      <div class="standings-row">
+        <span class="standings-rank" style="color:#FFD700">1</span>
+        <div class="standings-team"><img src="https://crests.football-data.org/57.png" onerror="this.style.display='none'">Arsenal FC</div>
+        <div class="form-dots"><div class="form-dot W"></div><div class="form-dot W"></div><div class="form-dot W"></div><div class="form-dot D"></div><div class="form-dot W"></div></div>
+        <span class="standings-pts">70</span>
+      </div>
+      <div class="standings-row">
+        <span class="standings-rank" style="color:#C0C0C0">2</span>
+        <div class="standings-team"><img src="https://crests.football-data.org/65.png" onerror="this.style.display='none'">Manchester City FC</div>
+        <div class="form-dots"><div class="form-dot W"></div><div class="form-dot D"></div><div class="form-dot W"></div><div class="form-dot W"></div><div class="form-dot D"></div></div>
+        <span class="standings-pts">61</span>
+      </div>
+      <div class="standings-row">
+        <span class="standings-rank" style="color:#CD7F32">3</span>
+        <div class="standings-team"><img src="https://crests.football-data.org/66.png" onerror="this.style.display='none'">Manchester United FC</div>
+        <div class="form-dots"><div class="form-dot W"></div><div class="form-dot L"></div><div class="form-dot W"></div><div class="form-dot W"></div><div class="form-dot D"></div></div>
+        <span class="standings-pts">55</span>
+      </div>
+      <div class="standings-row">
+        <span class="standings-rank">4</span>
+        <div class="standings-team"><img src="https://crests.football-data.org/58.png" onerror="this.style.display='none'">Aston Villa FC</div>
+        <div class="form-dots"><div class="form-dot D"></div><div class="form-dot W"></div><div class="form-dot L"></div><div class="form-dot W"></div><div class="form-dot W"></div></div>
+        <span class="standings-pts">54</span>
+      </div>
+      <div class="standings-row">
+        <span class="standings-rank">5</span>
+        <div class="standings-team"><img src="https://crests.football-data.org/64.png" onerror="this.style.display='none'">Liverpool FC</div>
+        <div class="form-dots"><div class="form-dot L"></div><div class="form-dot W"></div><div class="form-dot W"></div><div class="form-dot D"></div><div class="form-dot L"></div></div>
+        <span class="standings-pts">49</span>
+      </div>
+    </div>
+    <div>
+      <div class="preview-label">실시간 순위표</div>
+      <h2>5개 리그<br>최신 순위 한눈에</h2>
+      <p style="font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:24px">EPL, 라리가, 분데스리가, 세리에A, 리그앙의 최신 순위를 확인하세요. 매 경기 결과가 자동으로 반영됩니다.</p>
+      <ul class="check-list">
+        <li>챔피언스리그 · 강등권 구분 표시</li>
+        <li>팀별 최근 5경기 폼 시각화</li>
+        <li>득점 · 실점 · 득실차 전체 제공</li>
+        <li>매일 새벽 자동 업데이트</li>
+      </ul>
+    </div>
+  </div>
+</section>
 
-  // 폼
-  function renderForm(formData, containerId, titleId) {
-    document.getElementById(titleId).textContent = formData.team.split(' ')[0];
-    let html = '';
-    formData.form.forEach(m => {
-      const isHome = m.home_team === formData.team;
-      const opponent = isHome ? m.away_team : m.home_team;
-      const score = `${m.home_goals} - ${m.away_goals}`;
-      html += `
-        <div class="h2h-match">
-          <div>
-            <div style="font-size:12px;color:#8b949e">${m.date}</div>
-            <div style="font-size:12px">${isHome ? '홈' : '원정'} vs ${opponent.split(' ')[0]}</div>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px">
-            <span style="font-size:13px">${score}</span>
-            <div class="form-badge ${m.result}">${m.result}</div>
-          </div>
-        </div>
-      `;
-    });
-    document.getElementById(containerId).innerHTML = html;
-  }
+<section class="features">
+  <div class="features-inner">
+    <div class="section-header">
+      <div class="section-label">주요 기능</div>
+      <div class="section-title">필요한 모든 축구 데이터</div>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card">
+        <div class="feat-icon">🏆</div>
+        <h3>실시간 순위표</h3>
+        <p>5개 리그 최신 순위, 폼, 득실 현황을 한눈에 확인하세요.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🔮</div>
+        <h3>AI 경기 예측</h3>
+        <p>머신러닝이 분석한 승/무/패 확률로 경기를 더 재미있게.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">⚔️</div>
+        <h3>H2H 맞대 기록</h3>
+        <p>두 팀의 최근 3시즌 맞대 기록과 상세 경기 결과.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📊</div>
+        <h3>팀 스탯 분석</h3>
+        <p>공격력, 수비력, 승률 등 팀별 상세 퍼포먼스 지표.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📈</div>
+        <h3>최근 폼 추적</h3>
+        <p>각 팀의 최근 5경기 W/D/L 폼을 시각적으로 확인.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🔄</div>
+        <h3>자동 업데이트</h3>
+        <p>매일 새벽 최신 경기 결과가 자동으로 반영됩니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-  renderForm(homeForm, 'home-form-list', 'home-form-title');
-  renderForm(awayForm, 'away-form-list', 'away-form-title');
+<section class="leagues">
+  <div class="leagues-inner">
+    <h3>지원하는 리그</h3>
+    <div class="league-pills">
+      <div class="league-pill"><img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'"> EPL (잉글랜드)</div>
+      <div class="league-pill"><img src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'"> 라리가 (스페인)</div>
+      <div class="league-pill"><img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'"> 분데스리가 (독일)</div>
+      <div class="league-pill"><img src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'"> 세리에A (이탈리아)</div>
+      <div class="league-pill"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'"> 리그앙 (프랑스)</div>
+    </div>
+  </div>
+</section>
 
-  document.getElementById('result-section').classList.add('show');
-  document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
-}
+<section class="cta-section">
+  <h2>지금 바로<br><em>시작하세요</em></h2>
+  <p>무료로 모든 기능을 이용할 수 있어요</p>
+  <a href="FotData.html" class="btn-primary" style="font-size:16px;padding:16px 40px">FotData 시작하기 →</a>
+</section>
 
-// 초기화
-loadLogos();
-loadStandings('PL');
-</script>
+<footer>
+  <div class="footer-logo">⚽ Fot<span>Data</span></div>
+  <div class="footer-text">© 2026 FotData · AI 축구 분석 플랫폼</div>
+</footer>
+
 </body>
 </html>
