@@ -149,14 +149,14 @@
 
 <nav class="nav">
   <div class="nav-logo">⚽ FotData</div>
-  <div class="nav-tab active" onclick="showPage('standings')">순위표</div>
-  <div class="nav-tab" onclick="showPage('predict')">경기 예측</div>
+  <div class="nav-tab" onclick="showPage('standings')">순위표</div>
+  <div class="nav-tab active" onclick="showPage('predict')">경기 예측</div>
 </nav>
 
 <div class="container">
 
   <!-- 순위표 페이지 -->
-  <div class="page active" id="page-standings">
+  <div class="page" id="page-standings">
     <div class="league-tabs" id="league-tabs">
       <div class="league-tab active" onclick="loadStandings('PL')" data-league="PL">
         <img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'"> EPL
@@ -183,7 +183,7 @@
   </div>
 
   <!-- 경기 예측 페이지 -->
-  <div class="page" id="page-predict">
+  <div class="page active" id="page-predict">
     <div class="card">
       <div class="team-selector">
         <div class="team-box">
