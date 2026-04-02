@@ -691,3 +691,12 @@ loadStandings('PL');
 </script>
 </body>
 </html>
+
+if(location.hash === '#standings') showPageDirect('standings');
+
+function showPageDirect(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.querySelector(`[onclick="showPage('${page}')"]`).classList.add('active');
+}
