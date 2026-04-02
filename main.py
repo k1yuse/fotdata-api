@@ -141,3 +141,216 @@ def get_logos():
     with open(logo_path, 'r', encoding='utf-8') as f:
         logos = json.load(f)
     return logos
+
+# ── 전체 경기 데이터 로드 (H2H, 폼, 순위 계산용) ──
+import json
+from datetime import datetime
+
+df_matches_all = pd.read_csv(os.path.join(MODEL_DIR, "all_matches.csv"))
+df_matches_all['date'] = pd.to_datetime(df_matches_all['date'])
+
+print(f"✅ 전체 경기 데이터 로드: {len(df_matches_all)}경기")
+
+# ── 리그 코드 매핑 ──
+LEAGUE_MAP = {
+    "PL":  "Premier League",
+    "PD":  "LaLiga",
+    "BL1": "Bundesliga",
+    "SA":  "Serie A",
+    "FL1": "Ligue 1",
+}
+
+# ── 순위표 API ──
+@app.get("/standings/{league_code}")
+def get_standings(league_code: str):
+    league_name = LEAGUE_MAP.get(league_code.upper())
+    if not league_name:
+        raise HTTPException(status_code=404, detail="리그를 찾을 수 없습니다")
+
+    league_df = df_matches_all[
+        (df_matches_all['league'] == league_code.upper()) &
+        (df_matches_all['date'] >= '2025-08-01')
+    ].copy()
+
+    if league_df.empty:
+        raise HTTPException(status_code=404, detail="데이터 없음")
+
+    # 로고 불러오기
+    logo_path = os.path.join(MODEL_DIR, "team_logos.json")
+    logos = {}
+    if os.path.exists(logo_path):
+        with open(logo_path, 'r', encoding='utf-8') as f:
+            logos = json.load(f)
+
+    # 홈 스탯
+    home_stats = league_df.groupby('home_team').agg(
+        home_games=('result', 'count'),
+        home_wins=('result', lambda x: (x=='H').sum()),
+        home_draws=('result', lambda x: (x=='D').sum()),
+        home_gf=('home_goals', 'sum'),
+        home_ga=('away_goals', 'sum'),
+    ).reset_index().rename(columns={'home_team': 'team'})
+
+    # 원정 스탯
+    away_stats = league_df.groupby('away_team').agg(
+        away_games=('result', 'count'),
+        away_wins=('result', lambda x: (x=='A').sum()),
+        away_draws=('result', lambda x: (x=='D').sum()),
+        away_gf=('away_goals', 'sum'),
+        away_ga=('home_goals', 'sum'),
+    ).reset_index().rename(columns={'away_team': 'team'})
+
+    # 합치기
+    merged = pd.merge(home_stats, away_stats, on='team', how='outer').fillna(0)
+    merged['games']  = merged['home_games'] + merged['away_games']
+    merged['wins']   = merged['home_wins'] + merged['away_wins']
+    merged['draws']  = merged['home_draws'] + merged['away_draws']
+    merged['losses'] = merged['games'] - merged['wins'] - merged['draws']
+    merged['points'] = merged['wins'] * 3 + merged['draws']
+    merged['gf']     = merged['home_gf'] + merged['away_gf']
+    merged['ga']     = merged['home_ga'] + merged['away_ga']
+    merged['gd']     = merged['gf'] - merged['ga']
+    merged = merged.sort_values(['points','gd','gf'], ascending=False).reset_index(drop=True)
+
+    rows = []
+    for i, row in merged.iterrows():
+        team = row['team']
+
+        # 최근 5경기 폼
+        team_matches = league_df[
+            (league_df['home_team']==team) | (league_df['away_team']==team)
+        ].sort_values('date').tail(5)
+
+        form = []
+        for _, m in team_matches.iterrows():
+            if m['home_team'] == team:
+                form.append('W' if m['result']=='H' else ('D' if m['result']=='D' else 'L'))
+            else:
+                form.append('W' if m['result']=='A' else ('D' if m['result']=='D' else 'L'))
+
+        rows.append({
+            "rank":   int(i + 1),
+            "team":   team,
+            "logo":   logos.get(team, ''),
+            "played": int(row['games']),
+            "wins":   int(row['wins']),
+            "draws":  int(row['draws']),
+            "losses": int(row['losses']),
+            "points": int(row['points']),
+            "gf":     int(row['gf']),
+            "ga":     int(row['ga']),
+            "gd":     int(row['gd']),
+            "form":   form,
+        })
+
+    return {"league": league_name, "standings": rows}
+    # team_logos.json에서 로고 가져오기
+    logo_path = os.path.join(MODEL_DIR, "team_logos.json")
+    if os.path.exists(logo_path):
+        with open(logo_path, 'r', encoding='utf-8') as f:
+            logos = json.load(f)
+        logo_url = logos.get(team, '')
+
+        rows.append({
+            "team":   team,
+            "logo":   str(logo_url) if logo_url else '',
+            "played": int(games),
+            "wins":   int(wins),
+            "draws":  int(draws),
+            "losses": int(losses),
+            "points": int(points),
+            "gf":     int(gf),
+            "ga":     int(ga),
+            "gd":     int(gf - ga),
+            "form":   form,
+        })
+
+    rows.sort(key=lambda x: (-x['points'], -x['gd'], -x['gf']))
+    for i, row in enumerate(rows):
+        row['rank'] = i + 1
+
+    return {"league": league_name, "standings": rows}
+
+
+# ── H2H API ──
+@app.get("/h2h")
+def get_h2h(home_team: str, away_team: str, limit: int = 10):
+    df_h2h = df_matches_all[
+        ((df_matches_all['home_team']==home_team) & (df_matches_all['away_team']==away_team)) |
+        ((df_matches_all['home_team']==away_team) & (df_matches_all['away_team']==home_team))
+    ].sort_values('date', ascending=False).head(limit)
+
+    if df_h2h.empty:
+        return {"home_team": home_team, "away_team": away_team, "matches": [], "summary": {"home_wins":0,"draws":0,"away_wins":0}}
+
+    home_wins = away_wins = draws = 0
+    matches = []
+
+    for _, row in df_h2h.iterrows():
+        is_home = row['home_team'] == home_team
+        result = row['result']
+
+        if result == 'D':
+            draws += 1
+            outcome = 'D'
+        elif (result == 'H' and is_home) or (result == 'A' and not is_home):
+            home_wins += 1
+            outcome = 'W'
+        else:
+            away_wins += 1
+            outcome = 'L'
+
+        matches.append({
+            "date":       str(row['date'].date()),
+            "home_team":  row['home_team'],
+            "away_team":  row['away_team'],
+            "home_goals": int(row['home_goals']) if pd.notna(row['home_goals']) else 0,
+            "away_goals": int(row['away_goals']) if pd.notna(row['away_goals']) else 0,
+            "result":     outcome,
+        })
+
+    return {
+        "home_team": home_team,
+        "away_team": away_team,
+        "summary": {
+            "home_wins": home_wins,
+            "draws":     draws,
+            "away_wins": away_wins,
+        },
+        "matches": matches
+    }
+
+
+# ── 팀 폼 API ──
+@app.get("/form/{team_name}")
+def get_team_form(team_name: str, n: int = 5):
+    team_matches = df_matches_all[
+        (df_matches_all['home_team']==team_name) |
+        (df_matches_all['away_team']==team_name)
+    ].sort_values('date', ascending=False).head(n)
+
+    if team_matches.empty:
+        raise HTTPException(status_code=404, detail=f"팀을 찾을 수 없습니다: {team_name}")
+
+    form = []
+    for _, row in team_matches.iterrows():
+        is_home = row['home_team'] == team_name
+        result = row['result']
+
+        if result == 'D':
+            outcome = 'D'
+        elif (result == 'H' and is_home) or (result == 'A' and not is_home):
+            outcome = 'W'
+        else:
+            outcome = 'L'
+
+        form.append({
+            "date":      str(row['date'].date()),
+            "home_team": row['home_team'],
+            "away_team": row['away_team'],
+            "home_goals": int(row['home_goals']) if pd.notna(row['home_goals']) else 0,
+            "away_goals": int(row['away_goals']) if pd.notna(row['away_goals']) else 0,
+            "result":    outcome,
+        })
+
+    return {"team": team_name, "form": form}
