@@ -685,6 +685,13 @@ function showResult(data, h2h, homeForm, awayForm, home, away) {
   document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
 }
 
+if(location.hash === '#standings') {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-standings').classList.add('active');
+  document.querySelector('[onclick="showPage(\'standings\')"]').classList.add('active');
+}
+
 // 초기화
 loadLogos();
 loadStandings('PL');
