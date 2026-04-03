@@ -21,6 +21,20 @@ TEAM_NAME_MAP = {
     "Hamburger SV": "Hamburger SV",
 }
 
+# 로고 딕셔너리에 HTML 팀 이름으로도 추가
+def get_logos_with_mapping():
+    try:
+        with open(os.path.join(MODEL_DIR, "team_logos.json"), 'r', encoding='utf-8') as f:
+            logos = json.load(f)
+        for html_name, api_name in TEAM_NAME_MAP.items():
+            if api_name in logos:
+                logos[html_name] = logos[api_name]
+        return logos
+    except:
+        return {}
+
+team_logos_cache = get_logos_with_mapping()
+
 app = FastAPI(title="FotData API", version="1.0.0")
 
 # CORS 설정 (나중에 웹/앱에서 호출 가능하게)
@@ -152,13 +166,10 @@ def get_team_stats(team_name: str):
         "win_rate":         round(float(t['win_rate']), 3),
     }
 # ── 로고 API 추가 ──
+# ── 로고 API 추가 ──
 @app.get("/logos")
 def get_logos():
-    import json
-    logo_path = os.path.join(MODEL_DIR, "team_logos.json")
-    with open(logo_path, 'r', encoding='utf-8') as f:
-        logos = json.load(f)
-    return logos
+    return team_logos_cache
 
 # ── 전체 경기 데이터 로드 (H2H, 폼, 순위 계산용) ──
 import json
