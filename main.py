@@ -6,34 +6,7 @@ import joblib
 import pandas as pd
 import numpy as np
 import os
-
-# 팀 이름 매핑 (HTML → API)
-TEAM_NAME_MAP = {
-    "Inter Milan": "FC Internazionale Milano",
-    "Bayern München": "FC Bayern München",
-    "Werder Bremen": "SV Werder Bremen",
-    "RCD Espanyol": "RCD Espanyol de Barcelona",
-    "FC St. Pauli": "FC St. Pauli 1910",
-    "Pisa SC": "AC Pisa 1909",
-    "Cremonese": "US Cremonese",
-    "FC Union Berlin": "1. FC Union Berlin",
-    "Holstein Kiel": "Holstein Kiel",
-    "Hamburger SV": "Hamburger SV",
-}
-
-# 로고 딕셔너리에 HTML 팀 이름으로도 추가
-def get_logos_with_mapping():
-    try:
-        with open(os.path.join(MODEL_DIR, "team_logos.json"), 'r', encoding='utf-8') as f:
-            logos = json.load(f)
-        for html_name, api_name in TEAM_NAME_MAP.items():
-            if api_name in logos:
-                logos[html_name] = logos[api_name]
-        return logos
-    except:
-        return {}
-
-team_logos_cache = get_logos_with_mapping()
+import json
 
 app = FastAPI(title="FotData API", version="1.0.0")
 
@@ -53,7 +26,39 @@ lr_model  = joblib.load(os.path.join(MODEL_DIR, "logistic_regression.pkl"))
 scaler    = joblib.load(os.path.join(MODEL_DIR, "scaler.pkl"))
 df_stats  = pd.read_csv(os.path.join(MODEL_DIR, "team_stats.csv"))
 
+# 팀 이름 매핑 (HTML → API)
+TEAM_NAME_MAP = {
+    "Inter Milan": "FC Internazionale Milano",
+    "Bayern München": "FC Bayern München",
+    "Werder Bremen": "SV Werder Bremen",
+    "RCD Espanyol": "RCD Espanyol de Barcelona",
+    "FC St. Pauli": "FC St. Pauli 1910",
+    "Pisa SC": "AC Pisa 1909",
+    "Cremonese": "US Cremonese",
+    "FC Union Berlin": "1. FC Union Berlin",
+    "Holstein Kiel": "Holstein Kiel",
+    "Hamburger SV": "Hamburger SV",
+}
+
+# 로고 딕셔너리에 HTML 팀 이름으로도 추가
+def get_logos_with_mapping():
+    logo_path = os.path.join(MODEL_DIR, "team_logos.json")
+    print(f"로고 파일 경로: {logo_path}")
+    print(f"파일 존재: {os.path.exists(logo_path)}")
+    try:
+        with open(logo_path, 'r', encoding='utf-8') as f:
+            logos = json.load(f)
+        print(f"로고 수: {len(logos)}")
+        for html_name, api_name in TEAM_NAME_MAP.items():
+            if api_name in logos:
+                logos[html_name] = logos[api_name]
+        return logos
+    except Exception as e:
+        print(f"로고 로드 오류: {e}")
+        return {}
+
 print(f"✅ 모델 로드 완료 | 팀 수: {len(df_stats)}")
+team_logos_cache = get_logos_with_mapping()
 
 # ── 요청 형식 ──
 class MatchRequest(BaseModel):
