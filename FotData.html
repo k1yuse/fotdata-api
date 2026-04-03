@@ -693,8 +693,19 @@ if(location.hash === '#standings') {
 }
 
 // 초기화
+// 초기화
 loadLogos();
 loadStandings('PL');
+
+if(window.location.hash === '#standings') {
+  setTimeout(() => {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('page-standings').classList.add('active');
+    document.querySelector('[onclick="showPage(\'standings\')"]').classList.add('active');
+  }, 100);
+}
+
 </script>
 </body>
 </html>
