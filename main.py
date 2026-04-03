@@ -7,6 +7,20 @@ import pandas as pd
 import numpy as np
 import os
 
+# 팀 이름 매핑 (HTML → API)
+TEAM_NAME_MAP = {
+    "Inter Milan": "FC Internazionale Milano",
+    "Bayern München": "FC Bayern München",
+    "Werder Bremen": "SV Werder Bremen",
+    "RCD Espanyol": "RCD Espanyol de Barcelona",
+    "FC St. Pauli": "FC St. Pauli 1910",
+    "Pisa SC": "AC Pisa 1909",
+    "Cremonese": "US Cremonese",
+    "FC Union Berlin": "1. FC Union Berlin",
+    "Holstein Kiel": "Holstein Kiel",
+    "Hamburger SV": "Hamburger SV",
+}
+
 app = FastAPI(title="FotData API", version="1.0.0")
 
 # CORS 설정 (나중에 웹/앱에서 호출 가능하게)
@@ -46,13 +60,17 @@ def get_teams():
 @app.post("/predict")
 def predict_match(req: MatchRequest):
     """경기 결과 예측"""
-    h = df_stats[df_stats['team'] == req.home_team]
-    a = df_stats[df_stats['team'] == req.away_team]
+    # 팀 이름 매핑
+    home_team = TEAM_NAME_MAP.get(req.home_team, req.home_team)
+    away_team = TEAM_NAME_MAP.get(req.away_team, req.away_team)
+    
+    h = df_stats[df_stats['team'] == home_team]
+    a = df_stats[df_stats['team'] == away_team]
 
     if h.empty:
-        raise HTTPException(status_code=404, detail=f"팀을 찾을 수 없습니다: {req.home_team}")
+        raise HTTPException(status_code=404, detail=f"팀을 찾을 수 없습니다: {home_team}")
     if a.empty:
-        raise HTTPException(status_code=404, detail=f"팀을 찾을 수 없습니다: {req.away_team}")
+        raise HTTPException(status_code=404, detail=f"팀을 찾을 수 없습니다: {away_team}")
 
     h, a = h.iloc[0], a.iloc[0]
 
