@@ -161,6 +161,18 @@ def main():
     print(f"\n✅ 전체 데이터: {len(df_total)}경기")
 
     # 2. 전체 경기 저장 (H2H, 폼용)
+    # 기존 데이터 불러오기
+    existing_path = f"{MODEL_DIR}/all_matches.csv"
+    if os.path.exists(existing_path):
+        df_existing = pd.read_csv(existing_path)
+        df_existing['date'] = pd.to_datetime(df_existing['date'])
+        # 25-26 이전 데이터는 기존 것 유지, 25-26만 새로 교체
+        df_old = df_existing[df_existing['date'] < '2025-08-01']
+        df_new_2526 = df_total[df_total['date'] >= '2025-08-01']
+        df_total = pd.concat([df_old, df_new_2526], ignore_index=True)
+        df_total = df_total.drop_duplicates(subset=['date','home_team','away_team']).sort_values('date').reset_index(drop=True)
+        print(f"✅ 기존 데이터 유지 + 25-26 업데이트: {len(df_total)}경기")
+
     df_total.to_csv(f"{MODEL_DIR}/all_matches.csv", index=False, encoding='utf-8-sig')
 
     # 3. 25-26 시즌 스탯 (예측용)
