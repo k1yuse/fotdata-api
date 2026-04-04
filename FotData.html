@@ -442,8 +442,24 @@ function renderStandings(data, leagueCode) {
       if (i < 4) zoneClass = 'zone-cl';
       else if (i < 6) zoneClass = 'zone-el';
       else if (i >= totalTeams - 3) zoneClass = 'zone-rel';
-    } else {
+    } else if (leagueCode === 'PD') {
       if (i < 4) zoneClass = 'zone-cl';
+      else if (i === 4) zoneClass = 'zone-el';
+      else if (i === 5 || i === 6) zoneClass = 'zone-el';
+      else if (i >= totalTeams - 3) zoneClass = 'zone-rel';
+    } else if (leagueCode === 'BL1') {
+      if (i < 4) zoneClass = 'zone-cl';
+      else if (i === 4) zoneClass = 'zone-el';
+      else if (i === 5) zoneClass = 'zone-el';
+      else if (i >= totalTeams - 3) zoneClass = 'zone-rel';
+    } else if (leagueCode === 'SA') {
+      if (i < 4) zoneClass = 'zone-cl';
+      else if (i === 4 || i === 5) zoneClass = 'zone-el';
+      else if (i === 6) zoneClass = 'zone-el';
+      else if (i >= totalTeams - 3) zoneClass = 'zone-rel';
+    } else if (leagueCode === 'FL1') {
+      if (i < 3) zoneClass = 'zone-cl';
+      else if (i === 3 || i === 4) zoneClass = 'zone-el';
       else if (i >= totalTeams - 3) zoneClass = 'zone-rel';
     }
 
