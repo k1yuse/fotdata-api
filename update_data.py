@@ -1,5 +1,6 @@
 # ── 자동 데이터 업데이트 스크립트 ──
 import requests
+import time
 import pandas as pd
 import numpy as np
 import joblib
@@ -151,6 +152,7 @@ def main():
             if not df_s.empty:
                 df_s['season'] = season
                 all_dfs.append(df_s)
+            time.sleep(6)
 
     df_total = pd.concat(all_dfs, ignore_index=True)
     df_total = df_total.drop_duplicates(
