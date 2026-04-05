@@ -194,6 +194,7 @@ LEAGUE_MAP = {
     "BL1": "Bundesliga",
     "SA":  "Serie A",
     "FL1": "Ligue 1",
+    "CL":  "Champions League",
 }
 
 # ── 순위표 API ──
