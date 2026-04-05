@@ -35,7 +35,9 @@ TEAM_NAME_MAP = {
     "FC St. Pauli": "FC St. Pauli 1910",
     "Pisa SC": "AC Pisa 1909",
     "Cremonese": "US Cremonese",
+    "FC Heidenheim 1846": "1. FC Heidenheim 1846",
     "FC Union Berlin": "1. FC Union Berlin",
+    "FSV Mainz 05": "1. FSV Mainz 05",
     "Holstein Kiel": "Holstein Kiel",
     "Hamburger SV": "Hamburger SV",
 }
