@@ -32,8 +32,9 @@
     .league-tab img { width: 16px; height: 16px; object-fit: contain; }
     .league-tab:hover { border-color: #58a6ff; color: #e6edf3; }
     .league-tab.active { background: #1f4e8c; border-color: #58a6ff; color: #58a6ff; }
-    .league-tab.ucl-tab { border-color: #f0c040; color: #f0c040; background: #2a2000; }
-    .league-tab.ucl-tab.active { background: #3a2e00; border-color: #f0c040; color: #f0c040; }
+    .league-tab.ucl-tab { border-color: #4a90d9; color: #fff; background: #1a3a6e; }
+    .league-tab.ucl-tab.active { background: #0d2a5a; border-color: #4a90d9; color: #fff; }
+    
 
     .standings-table { width: 100%; border-collapse: collapse; }
     .standings-table th { font-size: 11px; color: #8b949e; text-align: left; padding: 8px 12px; border-bottom: 0.5px solid #30363d; }
@@ -90,8 +91,8 @@
     .pltab:hover { color: #e6edf3; }
     .pltab.active { color: #58a6ff; border-bottom-color: #58a6ff; }
     .pltab img { width: 14px; height: 14px; object-fit: contain; }
-    .pltab.ucl { color: #f0c040; }
-    .pltab.ucl.active { color: #f0c040; border-bottom-color: #f0c040; }
+    .pltab.ucl { color: #4a90d9; }
+    .pltab.ucl.active { color: #fff; border-bottom-color: #4a90d9; }
     .popup-team-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; padding: 12px; max-height: 220px; overflow-y: auto; }
     .popup-team-grid::-webkit-scrollbar { width: 4px; }
     .popup-team-grid::-webkit-scrollbar-thumb { background: #30363d; border-radius: 2px; }
@@ -238,7 +239,7 @@
                 <div class="pltab" onclick="selectLeagueTab('home','Bundesliga',this)"><img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'"> 분데스</div>
                 <div class="pltab" onclick="selectLeagueTab('home','SerieA',this)"><img src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'"> 세리에A</div>
                 <div class="pltab" onclick="selectLeagueTab('home','Ligue1',this)"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'"> 리그앙</div>
-                <div class="pltab ucl" onclick="selectLeagueTab('home','UCL',this)">🏆 UCL</div>
+                <div class="pltab" onclick="selectLeagueTab('home','UCL',this)"><img src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'"> UCL</div>
               </div>
               <div class="popup-team-grid" id="home-team-grid"></div>
             </div>
@@ -266,7 +267,7 @@
                 <div class="pltab" onclick="selectLeagueTab('away','Bundesliga',this)"><img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'"> 분데스</div>
                 <div class="pltab" onclick="selectLeagueTab('away','SerieA',this)"><img src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'"> 세리에A</div>
                 <div class="pltab" onclick="selectLeagueTab('away','Ligue1',this)"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'"> 리그앙</div>
-                <div class="pltab ucl" onclick="selectLeagueTab('away','UCL',this)">🏆 UCL</div>
+                <div class="pltab" onclick="selectLeagueTab('away','UCL',this)"><img src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'"> UCL</div>
               </div>
               <div class="popup-team-grid" id="away-team-grid"></div>
             </div>
@@ -432,7 +433,7 @@ function selectTeamFromPopup(side, team) {
   if (leagueInfo) {
     leagueDiv.innerHTML = `<img src="${leagueInfo.logo}" onerror="this.style.display='none'"> ${leagueInfo.name}`;
   } else {
-    leagueDiv.innerHTML = `🏆 UEFA 챔피언스리그`;
+    leagueDiv.innerHTML = `<img src="https://crests.football-data.org/CL.png" style="width:12px;height:12px;object-fit:contain"> UEFA 챔피언스리그`;
   }
 
   closePopup(side);
