@@ -204,9 +204,10 @@ def get_standings(league_code: str):
     if not league_name:
         raise HTTPException(status_code=404, detail="리그를 찾을 수 없습니다")
 
+    cutoff = pd.Timestamp('2025-08-01')
     league_df = df_matches_all[
         (df_matches_all['league'] == league_code.upper()) &
-        (df_matches_all['date'] >= '2025-08-01')
+        (df_matches_all['date'] >= cutoff)
     ].copy()
 
     if league_df.empty:
