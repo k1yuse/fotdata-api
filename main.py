@@ -285,6 +285,53 @@ def get_standings(league_code: str):
         })
 
     return {"league": league_name, "standings": rows}
+
+# ── UCL 토너먼트 API ──
+@app.get("/ucl/tournament")
+def get_ucl_tournament():
+    import requests as req
+    
+    API_KEY = os.environ.get('FOOTBALL_API_KEY', '')
+    headers = {"X-Auth-Token": API_KEY}
+    
+    res = req.get("https://api.football-data.org/v4/competitions/CL/matches", 
+                  headers=headers, 
+                  params={"season": 2025})
+    
+    if res.status_code != 200:
+        raise HTTPException(status_code=500, detail="데이터 로드 실패")
+    
+    matches = res.json().get("matches", [])
+    
+    result = {
+        "PLAYOFFS": [],
+        "LAST_16": [],
+        "QUARTER_FINALS": [],
+        "SEMI_FINALS": [],
+        "FINAL": []
+    }
+    
+    for m in matches:
+        stage = m.get("stage", "")
+        if stage not in result:
+            continue
+        
+        ft = m["score"]["fullTime"]
+        agg = m["score"].get("aggregates", {})
+        
+        result[stage].append({
+            "home_team": m["homeTeam"]["name"],
+            "away_team": m["awayTeam"]["name"],
+            "home_goals": ft.get("home"),
+            "away_goals": ft.get("away"),
+            "home_logo": next((v for k,v in logos_cache.items() if k == m["homeTeam"]["name"]), ""),
+            "away_logo": next((v for k,v in logos_cache.items() if k == m["awayTeam"]["name"]), ""),
+            "status": m["status"],
+            "leg": m.get("matchday"),
+        })
+    
+    return result
+    
     # team_logos.json에서 로고 가져오기
     logo_path = os.path.join(MODEL_DIR, "team_logos.json")
     if os.path.exists(logo_path):
