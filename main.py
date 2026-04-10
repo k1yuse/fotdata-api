@@ -210,6 +210,9 @@ def get_standings(league_code: str):
         (df_matches_all['date'] >= cutoff)
     ].copy()
 
+    print(f"🔍 {league_code} 데이터: {len(league_df)}경기")
+    print(f"🔍 전체 리그: {df_matches_all['league'].unique()}")
+
     if league_df.empty:
         raise HTTPException(status_code=404, detail="데이터 없음")
 
