@@ -331,35 +331,7 @@ def get_ucl_tournament():
         })
     
     return result
-    
-    # team_logos.json에서 로고 가져오기
-    logo_path = os.path.join(MODEL_DIR, "team_logos.json")
-    if os.path.exists(logo_path):
-        with open(logo_path, 'r', encoding='utf-8') as f:
-            logos = json.load(f)
-        logo_url = logos.get(team, '')
-
-        rows.append({
-            "team":   team,
-            "logo":   str(logo_url) if logo_url else '',
-            "played": int(games),
-            "wins":   int(wins),
-            "draws":  int(draws),
-            "losses": int(losses),
-            "points": int(points),
-            "gf":     int(gf),
-            "ga":     int(ga),
-            "gd":     int(gf - ga),
-            "form":   form,
-        })
-
-    rows.sort(key=lambda x: (-x['points'], -x['gd'], -x['gf']))
-    for i, row in enumerate(rows):
-        row['rank'] = i + 1
-
-    return {"league": league_name, "standings": rows}
-
-
+   
 # ── H2H API ──
 @app.get("/h2h")
 def get_h2h(home_team: str, away_team: str, limit: int = 10):
