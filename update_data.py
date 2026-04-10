@@ -23,6 +23,7 @@ LEAGUES_V2 = {
     "BL1": "분데스리가 (독일)",
     "SA":  "세리에A (이탈리아)",
     "FL1": "리그앙 (프랑스)",
+    "CL":  "챔피언스리그",
 }
 
 def fetch_matches(league_code, season):
