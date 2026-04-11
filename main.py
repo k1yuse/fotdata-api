@@ -1,5 +1,6 @@
 # ── [API] FotData FastAPI 서버 ──
 from fastapi import FastAPI, HTTPException
+import requests
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import joblib
@@ -289,48 +290,92 @@ def get_standings(league_code: str):
 # ── UCL 토너먼트 API ──
 @app.get("/ucl/tournament")
 def get_ucl_tournament():
-    import requests as req
-    
-    API_KEY = os.environ.get('FOOTBALL_API_KEY', '')
-    headers = {"X-Auth-Token": API_KEY}
-    
-    res = req.get("https://api.football-data.org/v4/competitions/CL/matches", 
-                  headers=headers, 
-                  params={"season": 2025})
-    
+    API_KEY_CL = os.environ.get('FOOTBALL_API_KEY', '')
+    cl_headers = {"X-Auth-Token": API_KEY_CL}
+
+    res = requests.get(
+        "https://api.football-data.org/v4/competitions/CL/matches",
+        headers=cl_headers,
+        params={"season": 2025}
+    )
+
     if res.status_code != 200:
-        raise HTTPException(status_code=500, detail="데이터 로드 실패")
-    
+        raise HTTPException(status_code=500, detail="UCL 데이터 로드 실패")
+
     matches = res.json().get("matches", [])
-    
-    result = {
+
+    stages = {
         "PLAYOFFS": [],
         "LAST_16": [],
         "QUARTER_FINALS": [],
         "SEMI_FINALS": [],
         "FINAL": []
     }
-    
+
+    # 합산 계산용
+    agg = {}
     for m in matches:
         stage = m.get("stage", "")
-        if stage not in result:
+        if stage not in stages:
             continue
-        
+
+        home = m["homeTeam"]["name"]
+        away = m["awayTeam"]["name"]
         ft = m["score"]["fullTime"]
-        agg = m["score"].get("aggregates", {})
-        
-        result[stage].append({
-            "home_team": m["homeTeam"]["name"],
-            "away_team": m["awayTeam"]["name"],
-            "home_goals": ft.get("home"),
-            "away_goals": ft.get("away"),
-            "home_logo": next((v for k,v in logos_cache.items() if k == m["homeTeam"]["name"]), ""),
-            "away_logo": next((v for k,v in logos_cache.items() if k == m["awayTeam"]["name"]), ""),
-            "status": m["status"],
-            "leg": m.get("matchday"),
+        status = m["status"]
+
+        key = tuple(sorted([home, away]))
+        if key not in agg:
+            agg[key] = {
+                "stage": stage,
+                "team1": home,
+                "team2": away,
+                "team1_goals": 0,
+                "team2_goals": 0,
+                "legs": [],
+                "status": "FINISHED"
+            }
+
+        if ft.get("home") is not None:
+            hg = ft["home"]
+            ag = ft["away"]
+            if agg[key]["team1"] == home:
+                agg[key]["team1_goals"] += hg
+                agg[key]["team2_goals"] += ag
+            else:
+                agg[key]["team1_goals"] += ag
+                agg[key]["team2_goals"] += hg
+
+            agg[key]["legs"].append({
+                "home_team": home,
+                "away_team": away,
+                "home_goals": hg,
+                "away_goals": ag,
+            })
+
+        if status in ["SCHEDULED", "TIMED"]:
+            agg[key]["status"] = "UPCOMING"
+
+    for key, v in agg.items():
+        t1 = v["team1"]
+        t2 = v["team2"]
+        t1g = v["team1_goals"]
+        t2g = v["team2_goals"]
+        winner = t1 if t1g > t2g else (t2 if t2g > t1g else None)
+
+        stages[v["stage"]].append({
+            "team1": t1,
+            "team2": t2,
+            "team1_goals": t1g,
+            "team2_goals": t2g,
+            "team1_logo": team_logos_cache.get(t1, ""),
+            "team2_logo": team_logos_cache.get(t2, ""),
+            "winner": winner,
+            "status": v["status"],
+            "legs": v["legs"]
         })
-    
-    return result
+
+    return stages
    
 # ── H2H API ──
 @app.get("/h2h")
