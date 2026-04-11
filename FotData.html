@@ -35,6 +35,11 @@
     .league-tab.ucl-tab { border-color: #30363d; color: #8b949e; background: #21262d; }
     .league-tab.ucl-tab.active { background: #1f4e8c; border-color: #58a6ff; color: #58a6ff; }
 
+    .ucl-subtabs { display: flex; gap: 8px; margin-bottom: 16px; }
+    .ucl-subtab { padding: 7px 18px; border-radius: 20px; font-size: 13px; cursor: pointer; border: 0.5px solid #30363d; background: #21262d; color: #8b949e; transition: all 0.2s; }
+    .ucl-subtab:hover { border-color: #58a6ff; color: #e6edf3; }
+    .ucl-subtab.active { background: #1f4e8c; border-color: #58a6ff; color: #58a6ff; }
+
     .standings-table { width: 100%; border-collapse: collapse; }
     .standings-table th { font-size: 11px; color: #8b949e; text-align: left; padding: 8px 12px; border-bottom: 0.5px solid #30363d; }
     .standings-table th.center { text-align: center; }
@@ -59,7 +64,68 @@
     .zone-ucl-ko { border-left: 3px solid #f0c040; }
     .zone-ucl-po { border-left: 3px solid #f0883e; }
 
-    /* 예측 페이지 */
+    /* 토너먼트 */
+    .bracket-wrap { overflow-x: auto; padding-bottom: 8px; }
+    .bracket { display: flex; align-items: stretch; min-width: 1100px; }
+    .b-col { display: flex; flex-direction: column; justify-content: space-around; flex-shrink: 0; }
+    .b-col.po { height: 500px; }
+    .b-col.r16 { height: 500px; }
+    .b-col.qf { height: 500px; }
+    .b-col.sf { height: 500px; justify-content: center; }
+    .b-final { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 12px; flex-shrink: 0; height: 500px; gap: 8px; min-width: 120px; }
+    .final-label { font-size: 10px; color: #f0c040; text-transform: uppercase; letter-spacing: 1px; text-align: center; }
+    .final-match { background: #161b22; border: 0.5px solid #f0c04060; border-radius: 8px; overflow: hidden; width: 130px; }
+    .final-team { display: flex; align-items: center; gap: 6px; padding: 7px 10px; border-bottom: 0.5px solid #21262d; font-size: 11px; color: #30363d; font-style: italic; }
+    .final-team:last-child { border-bottom: none; }
+    .final-team.decided { color: #e6edf3; font-style: normal; }
+    .mc { background: #161b22; border: 0.5px solid #30363d; border-radius: 8px; overflow: hidden; cursor: pointer; width: 138px; flex-shrink: 0; transition: border-color .15s; }
+    .mc:hover { border-color: #58a6ff; }
+    .mc.live { border-color: #d29922; }
+    .mc-inner { padding: 7px 9px; }
+    .t-row { display: flex; align-items: center; gap: 5px; padding: 2px 0; }
+    .t-logo { width: 16px; height: 16px; object-fit: contain; flex-shrink: 0; }
+    .t-short { font-size: 11px; font-weight: 600; flex: 1; color: #c9d1d9; }
+    .t-short.w { color: #58a6ff; }
+    .t-score { font-size: 11px; font-weight: 700; color: #8b949e; }
+    .t-score.w { color: #58a6ff; }
+    .mc-div { height: 0.5px; background: #21262d; margin: 1px 0; }
+    .mc-badge { font-size: 9px; padding: 1px 8px; text-align: center; }
+    .mc-badge.live { background: #1a1400; color: #d29922; }
+    .mc-badge.done { background: #0a1a0a; color: #238636; }
+    .mc-badge.tbd { background: #161b22; color: #30363d; }
+
+    /* 모달 */
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 1000; align-items: center; justify-content: center; }
+    .modal-overlay.show { display: flex; }
+    .modal { background: #161b22; border: 0.5px solid #30363d; border-radius: 14px; width: 320px; overflow: hidden; }
+    .modal-header { padding: 14px 16px; border-bottom: 0.5px solid #30363d; display: flex; align-items: center; justify-content: space-between; }
+    .modal-title { font-size: 14px; font-weight: 600; color: #e6edf3; }
+    .modal-close { color: #8b949e; cursor: pointer; font-size: 18px; }
+    .modal-close:hover { color: #e6edf3; }
+    .modal-teams { display: flex; align-items: center; justify-content: space-between; padding: 20px 16px; border-bottom: 0.5px solid #30363d; }
+    .modal-team { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; }
+    .modal-logo { width: 40px; height: 40px; object-fit: contain; }
+    .modal-team-name { font-size: 12px; color: #e6edf3; text-align: center; font-weight: 600; }
+    .modal-team-name.w { color: #58a6ff; }
+    .modal-vs { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 0 12px; }
+    .modal-score { font-size: 24px; font-weight: 700; display: flex; gap: 8px; align-items: center; }
+    .modal-score .w { color: #58a6ff; }
+    .modal-agg { font-size: 10px; color: #8b949e; }
+    .modal-legs { padding: 12px 16px; }
+    .leg-item { margin-bottom: 12px; }
+    .leg-item:last-child { margin-bottom: 0; }
+    .leg-ttl { font-size: 10px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .leg-row { display: flex; align-items: center; justify-content: space-between; background: #21262d; border-radius: 6px; padding: 8px 10px; }
+    .leg-t { font-size: 12px; color: #e6edf3; flex: 1; }
+    .leg-t.w { color: #238636; font-weight: 600; }
+    .leg-s { font-size: 13px; font-weight: 700; color: #8b949e; padding: 0 8px; }
+    .leg-s.w { color: #238636; }
+    .leg-tbd { text-align: center; font-size: 11px; color: #30363d; font-style: italic; padding: 8px; background: #21262d; border-radius: 6px; }
+    .modal-badge { margin: 0 16px 14px; text-align: center; padding: 6px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+    .modal-badge.live { background: #2a1e00; color: #d29922; border: 0.5px solid #d2992260; }
+    .modal-badge.done { background: #0a1a0a; color: #238636; border: 0.5px solid #23863660; }
+
+    /* 예측 */
     .predict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .team-selector { display: grid; grid-template-columns: 1fr auto 1fr; align-items: start; gap: 24px; margin-bottom: 16px; }
     .team-box { display: flex; flex-direction: column; align-items: center; gap: 8px; padding-top: 8px; }
@@ -70,8 +136,6 @@
     .league-badge-sm { font-size: 11px; color: #8b949e; display: flex; align-items: center; gap: 4px; min-height: 16px; }
     .league-badge-sm img { width: 12px; height: 12px; object-fit: contain; }
     .vs-center { font-size: 22px; font-weight: 700; color: #8b949e; margin-top: 50px; }
-
-    /* 새 팀 선택 팝업 */
     .popup-relative { position: relative; width: 100%; }
     .select-trigger { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: #21262d; border: 0.5px solid #30363d; border-radius: 8px; cursor: pointer; font-size: 13px; color: #e6edf3; user-select: none; }
     .select-trigger:hover { border-color: #58a6ff; }
@@ -90,8 +154,6 @@
     .pltab:hover { color: #e6edf3; }
     .pltab.active { color: #58a6ff; border-bottom-color: #58a6ff; }
     .pltab img { width: 14px; height: 14px; object-fit: contain; }
-    .pltab.ucl { color: #4a90d9; }
-    .pltab.ucl.active { color: #fff; border-bottom-color: #4a90d9; }
     .popup-team-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; padding: 12px; max-height: 220px; overflow-y: auto; }
     .popup-team-grid::-webkit-scrollbar { width: 4px; }
     .popup-team-grid::-webkit-scrollbar-thumb { background: #30363d; border-radius: 2px; }
@@ -99,11 +161,9 @@
     .popup-team-item:hover { border-color: #58a6ff; background: #1a2a3a; }
     .popup-team-item.selected { background: #1f4e8c; border-color: #58a6ff; color: #58a6ff; }
     .popup-team-item img { width: 18px; height: 18px; object-fit: contain; border-radius: 50%; flex-shrink: 0; }
-
     .predict-btn { width: 100%; padding: 14px; background: #238636; border: none; border-radius: 10px; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
     .predict-btn:hover { background: #2ea043; }
     .predict-btn:disabled { background: #30363d; cursor: not-allowed; }
-
     .result-section { display: none; }
     .result-section.show { display: block; }
     .result-teams { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -125,7 +185,6 @@
     .prob-bar.draw { background: #d29922; }
     .prob-bar.away { background: #f85149; }
     .prob-value { font-size: 13px; font-weight: 600; text-align: right; }
-
     .h2h-summary { display: flex; justify-content: space-around; align-items: center; padding: 16px 0; margin-bottom: 16px; border-bottom: 0.5px solid #30363d; }
     .h2h-stat { text-align: center; }
     .h2h-num { font-size: 28px; font-weight: 700; }
@@ -139,12 +198,10 @@
     .h2h-score.W { color: #238636; }
     .h2h-score.D { color: #8b949e; }
     .h2h-score.L { color: #da3633; }
-
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; }
     .stat-box { background: #21262d; border-radius: 8px; padding: 12px; text-align: center; }
     .stat-val { font-size: 18px; font-weight: 700; }
     .stat-label { font-size: 11px; color: #8b949e; margin-top: 4px; }
-
     .loading { text-align: center; padding: 40px; color: #8b949e; }
     .error-msg { background: #4c1d1d; border: 0.5px solid #f85149; border-radius: 8px; padding: 10px 14px; color: #f85149; font-size: 13px; margin-top: 10px; display: none; }
 
@@ -183,37 +240,33 @@
 </nav>
 
 <div class="container">
-
-  <!-- 순위표 페이지 -->
   <div class="page" id="page-standings">
     <div class="league-tabs" id="league-tabs">
-      <div class="league-tab active" onclick="loadStandings('PL')" data-league="PL">
-        <img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> EPL
-      </div>
-      <div class="league-tab" onclick="loadStandings('PD')" data-league="PD">
-        <img src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'"> 라리가
-      </div>
-      <div class="league-tab" onclick="loadStandings('BL1')" data-league="BL1">
-        <img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'"> 분데스리가
-      </div>
-      <div class="league-tab" onclick="loadStandings('SA')" data-league="SA">
-        <img src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'"> 세리에A
-      </div>
-      <div class="league-tab" onclick="loadStandings('FL1')" data-league="FL1">
-        <img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'"> 리그앙
-      </div>
-      <div class="league-tab ucl-tab" onclick="loadStandings('CL')" data-league="CL">
-        <img src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> 챔피언스리그
-      </div>
+      <div class="league-tab active" onclick="loadStandings('PL')" data-league="PL"><img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> EPL</div>
+      <div class="league-tab" onclick="loadStandings('PD')" data-league="PD"><img src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'"> 라리가</div>
+      <div class="league-tab" onclick="loadStandings('BL1')" data-league="BL1"><img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'"> 분데스리가</div>
+      <div class="league-tab" onclick="loadStandings('SA')" data-league="SA"><img src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'"> 세리에A</div>
+      <div class="league-tab" onclick="loadStandings('FL1')" data-league="FL1"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'"> 리그앙</div>
+      <div class="league-tab ucl-tab" onclick="loadCL()" data-league="CL"><img src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> 챔피언스리그</div>
     </div>
-    <div class="card">
-      <div id="standings-content">
-        <div class="loading">순위표 불러오는 중...</div>
+
+    <div id="ucl-subtabs" style="display:none" class="ucl-subtabs">
+      <div class="ucl-subtab active" onclick="showUCLTab('standings',this)">리그 스테이지</div>
+      <div class="ucl-subtab" onclick="showUCLTab('tournament',this)">토너먼트</div>
+    </div>
+
+    <div id="standings-card" class="card">
+      <div id="standings-content"><div class="loading">순위표 불러오는 중...</div></div>
+    </div>
+
+    <div id="ucl-tournament-content" style="display:none">
+      <div class="loading" id="tournament-loading">토너먼트 불러오는 중...</div>
+      <div id="tournament-bracket" style="display:none">
+        <div class="bracket-wrap"><div class="bracket" id="bracket-inner"></div></div>
       </div>
     </div>
   </div>
 
-  <!-- 경기 예측 페이지 -->
   <div class="page active" id="page-predict">
     <div class="card">
       <div class="team-selector">
@@ -282,35 +335,15 @@
         <div class="card">
           <div class="card-title">🎯 예측 결과</div>
           <div class="result-teams">
-            <div class="result-team">
-              <img id="result-home-logo" src="" alt="">
-              <div class="result-team-name" id="result-home-name"></div>
-            </div>
+            <div class="result-team"><img id="result-home-logo" src="" alt=""><div class="result-team-name" id="result-home-name"></div></div>
             <div class="result-vs">VS</div>
-            <div class="result-team">
-              <img id="result-away-logo" src="" alt="">
-              <div class="result-team-name" id="result-away-name"></div>
-            </div>
+            <div class="result-team"><img id="result-away-logo" src="" alt=""><div class="result-team-name" id="result-away-name"></div></div>
           </div>
-          <div class="prediction-badge">
-            <span class="badge" id="pred-badge"></span>
-          </div>
+          <div class="prediction-badge"><span class="badge" id="pred-badge"></span></div>
           <div class="prob-bars">
-            <div class="prob-row">
-              <span class="prob-label">🏠 홈승</span>
-              <div class="prob-bar-bg"><div class="prob-bar home" id="bar-home" style="width:0%"></div></div>
-              <span class="prob-value" id="val-home"></span>
-            </div>
-            <div class="prob-row">
-              <span class="prob-label">🤝 무승부</span>
-              <div class="prob-bar-bg"><div class="prob-bar draw" id="bar-draw" style="width:0%"></div></div>
-              <span class="prob-value" id="val-draw"></span>
-            </div>
-            <div class="prob-row">
-              <span class="prob-label">✈️ 원정승</span>
-              <div class="prob-bar-bg"><div class="prob-bar away" id="bar-away" style="width:0%"></div></div>
-              <span class="prob-value" id="val-away"></span>
-            </div>
+            <div class="prob-row"><span class="prob-label">🏠 홈승</span><div class="prob-bar-bg"><div class="prob-bar home" id="bar-home" style="width:0%"></div></div><span class="prob-value" id="val-home"></span></div>
+            <div class="prob-row"><span class="prob-label">🤝 무승부</span><div class="prob-bar-bg"><div class="prob-bar draw" id="bar-draw" style="width:0%"></div></div><span class="prob-value" id="val-draw"></span></div>
+            <div class="prob-row"><span class="prob-label">✈️ 원정승</span><div class="prob-bar-bg"><div class="prob-bar away" id="bar-away" style="width:0%"></div></div><span class="prob-value" id="val-away"></span></div>
           </div>
           <div class="stats-grid">
             <div class="stat-box"><div class="stat-val" id="s-home-atk">-</div><div class="stat-label">홈 공격력</div></div>
@@ -341,11 +374,27 @@
   </div>
 </div>
 
+<!-- 토너먼트 모달 -->
+<div class="modal-overlay" id="t-modal" onclick="closeTModal(event)">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title" id="t-modal-title"></span><span class="modal-close" onclick="closeTModal()">✕</span></div>
+    <div class="modal-teams">
+      <div class="modal-team"><img class="modal-logo" id="t-logo1" src="" onerror="this.style.display='none'"><span class="modal-team-name" id="t-name1"></span></div>
+      <div class="modal-vs"><div class="modal-score"><span id="t-s1"></span><span style="color:#8b949e">-</span><span id="t-s2"></span></div><span class="modal-agg">합산</span></div>
+      <div class="modal-team"><img class="modal-logo" id="t-logo2" src="" onerror="this.style.display='none'"><span class="modal-team-name" id="t-name2"></span></div>
+    </div>
+    <div class="modal-legs" id="t-legs"></div>
+    <div class="modal-badge" id="t-badge"></div>
+  </div>
+</div>
+
 <script>
 const API = "https://fotdata-api.onrender.com";
 let logos = {};
 let selectedTeams = { home: '', away: '' };
 let currentLeagueTab = { home: 'all', away: 'all' };
+let tournamentData = null;
+let flatMatches = [];
 
 const LEAGUE_DATA = {
   EPL: { name: "EPL (잉글랜드)", logo: "https://crests.football-data.org/PL.png", teams: ["AFC Bournemouth","Arsenal FC","Aston Villa FC","Brentford FC","Brighton & Hove Albion FC","Burnley FC","Chelsea FC","Crystal Palace FC","Everton FC","Fulham FC","Leeds United FC","Liverpool FC","Manchester City FC","Manchester United FC","Newcastle United FC","Nottingham Forest FC","Sunderland AFC","Tottenham Hotspur FC","West Ham United FC","Wolverhampton Wanderers FC"] },
@@ -356,320 +405,273 @@ const LEAGUE_DATA = {
   UCL: { name: "UEFA 챔피언스리그", logo: "https://crests.football-data.org/CL.png", teams: ["AS Monaco FC","Arsenal FC","Atalanta BC","Athletic Club","Bayer 04 Leverkusen","Borussia Dortmund","Chelsea FC","Club Atlético de Madrid","Eintracht Frankfurt","FC Barcelona","FC Bayern München","FC Internazionale Milano","Juventus FC","Liverpool FC","Manchester City FC","Newcastle United FC","Olympique de Marseille","Paris Saint-Germain FC","Real Madrid CF","SSC Napoli","Tottenham Hotspur FC","Villarreal CF"] }
 };
 
-function getTeamLeague(team) {
-  for (const [key, data] of Object.entries(LEAGUE_DATA)) {
-    if (key !== 'UCL' && data.teams.includes(team)) return data;
-  }
-  return null;
+function loadCL() {
+  document.querySelectorAll('.league-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector('[data-league="CL"]').classList.add('active');
+  document.getElementById('ucl-subtabs').style.display = 'flex';
+  const firstTab = document.querySelector('.ucl-subtab');
+  document.querySelectorAll('.ucl-subtab').forEach(t => t.classList.remove('active'));
+  firstTab.classList.add('active');
+  document.getElementById('standings-card').style.display = 'block';
+  document.getElementById('ucl-tournament-content').style.display = 'none';
+  loadStandings('CL');
 }
 
+function showUCLTab(tab, el) {
+  document.querySelectorAll('.ucl-subtab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  if (tab === 'standings') {
+    document.getElementById('standings-card').style.display = 'block';
+    document.getElementById('ucl-tournament-content').style.display = 'none';
+    loadStandings('CL');
+  } else {
+    document.getElementById('standings-card').style.display = 'none';
+    document.getElementById('ucl-tournament-content').style.display = 'block';
+    loadTournament();
+  }
+}
+
+async function loadTournament() {
+  if (tournamentData) { renderTournament(tournamentData); return; }
+  document.getElementById('tournament-loading').style.display = 'block';
+  document.getElementById('tournament-bracket').style.display = 'none';
+  try {
+    const res = await fetch(`${API}/ucl/tournament`);
+    tournamentData = await res.json();
+    renderTournament(tournamentData);
+  } catch(e) {
+    document.getElementById('tournament-loading').textContent = '데이터를 불러올 수 없어요.';
+  }
+}
+
+function shortName(name) {
+  const parts = name.replace(/\bFC\b|\bCF\b|\bBC\b|\bSC\b|\bAC\b|\bUS\b/g,'').trim().split(' ');
+  return parts[parts.length-1] || parts[0];
+}
+
+function mcHtml(m, idx) {
+  const isW1 = m.team1_goals > m.team2_goals;
+  const isW2 = m.team2_goals > m.team1_goals;
+  const isLive = m.status === 'UPCOMING';
+  const badgeClass = isLive ? 'live' : 'done';
+  const badgeText = isLive ? '진행 중' : (m.winner ? shortName(m.winner) + ' 진출' : '완료');
+  return `<div class="mc ${isLive?'live':''}" onclick="openTModal(${idx})">
+    <div class="mc-inner">
+      <div class="t-row"><img class="t-logo" src="${m.team1_logo}" onerror="this.style.display='none'"><span class="t-short ${isW1?'w':''}">${shortName(m.team1)}</span><span class="t-score ${isW1?'w':''}">${m.team1_goals}</span></div>
+      <div class="mc-div"></div>
+      <div class="t-row"><img class="t-logo" src="${m.team2_logo}" onerror="this.style.display='none'"><span class="t-short ${isW2?'w':''}">${shortName(m.team2)}</span><span class="t-score ${isW2?'w':''}">${m.team2_goals}</span></div>
+    </div>
+    <div class="mc-badge ${badgeClass}">${badgeText}</div>
+  </div>`;
+}
+
+function emptyMc() {
+  return `<div class="mc"><div class="mc-inner"><div class="t-row"><span class="t-short" style="color:#30363d;font-style:italic">미정</span></div><div class="mc-div"></div><div class="t-row"><span class="t-short" style="color:#30363d;font-style:italic">미정</span></div></div><div class="mc-badge tbd">미진행</div></div>`;
+}
+
+function connSvg(h, lines, flip) {
+  let svg = `<svg width="20" height="${h}" style="flex-shrink:0">`;
+  lines.forEach(([x1,y1,x2,y2]) => { svg += `<line x1="${flip?20-x1:x1}" y1="${y1}" x2="${flip?20-x2:x2}" y2="${y2}" stroke="#30363d" stroke-width="1"/>`; });
+  return svg + '</svg>';
+}
+
+function renderTournament(data) {
+  flatMatches = [];
+  const PO = data.PLAYOFFS||[], R16 = data.LAST_16||[], QF = data.QUARTER_FINALS||[], SF = data.SEMI_FINALS||[], FIN = data.FINAL||[];
+  const L_PO=PO.slice(0,4), R_PO=PO.slice(4,8);
+  const L_R16=R16.slice(0,4), R_R16=R16.slice(4,8);
+  const L_QF=QF.slice(0,2), R_QF=QF.slice(2,4);
+  const L_SF=SF.slice(0,1), R_SF=SF.slice(1,2);
+
+  let idx = 0;
+  function col(matches, cls) {
+    let html = `<div class="b-col ${cls}">`;
+    matches.forEach(m => { flatMatches.push(m); html += mcHtml(m, idx++); });
+    html += '</div>';
+    return html;
+  }
+  function sfCol(arr) {
+    flatMatches.push(arr[0]||null);
+    const html = `<div class="b-col sf">${arr[0] ? mcHtml(arr[0], idx++) : emptyMc()}</div>`;
+    return html;
+  }
+
+  const H = 500;
+  const poR16 = [[0,62,20,62],[0,187,20,187],[0,312,20,312],[0,437,20,437]];
+  const r16Qf = [[0,62,10,62],[10,62,10,187],[0,187,10,187],[10,125,20,125],[0,312,10,312],[10,312,10,437],[0,437,10,437],[10,375,20,375]];
+  const qfSf = [[0,125,10,125],[10,125,10,375],[0,375,10,375],[10,250,20,250]];
+  const sfFin = [[0,250,20,250]];
+
+  const fin = FIN[0];
+  const finalHtml = `<div class="b-final">
+    <div class="final-label">결승</div>
+    <div style="font-size:34px;text-align:center">🏆</div>
+    <div class="final-match">
+      <div class="final-team ${fin?'decided':''}">${fin?shortName(fin.team1):'미정'}</div>
+      <div class="final-team ${fin?'decided':''}">${fin?shortName(fin.team2):'미정'}</div>
+    </div>
+    <div style="font-size:9px;color:#8b949e;text-align:center">2026.05.31</div>
+  </div>`;
+
+  document.getElementById('bracket-inner').innerHTML =
+    col(L_PO,'po') + connSvg(H,poR16,false) +
+    col(L_R16,'r16') + connSvg(H,r16Qf,false) +
+    col(L_QF,'qf') + connSvg(H,qfSf,false) +
+    sfCol(L_SF) + connSvg(H,sfFin,false) +
+    finalHtml +
+    connSvg(H,sfFin,true) + sfCol(R_SF) +
+    connSvg(H,qfSf,true) + col(R_QF,'qf') +
+    connSvg(H,r16Qf,true) + col(R_R16,'r16') +
+    connSvg(H,poR16,true) + col(R_PO,'po');
+
+  document.getElementById('tournament-loading').style.display = 'none';
+  document.getElementById('tournament-bracket').style.display = 'block';
+}
+
+function openTModal(idx) {
+  const m = flatMatches[idx];
+  if (!m) return;
+  const isW1=m.team1_goals>m.team2_goals, isW2=m.team2_goals>m.team1_goals;
+  document.getElementById('t-modal-title').textContent = m.team1+' vs '+m.team2;
+  document.getElementById('t-logo1').src = m.team1_logo;
+  document.getElementById('t-logo2').src = m.team2_logo;
+  document.getElementById('t-name1').textContent = m.team1;
+  document.getElementById('t-name1').className = 'modal-team-name'+(isW1?' w':'');
+  document.getElementById('t-name2').textContent = m.team2;
+  document.getElementById('t-name2').className = 'modal-team-name'+(isW2?' w':'');
+  document.getElementById('t-s1').textContent = m.team1_goals;
+  document.getElementById('t-s1').className = isW1?'w':'';
+  document.getElementById('t-s2').textContent = m.team2_goals;
+  document.getElementById('t-s2').className = isW2?'w':'';
+  let legsHtml = '';
+  m.legs.forEach((leg,i) => {
+    const hw=leg.home_goals>leg.away_goals, aw=leg.away_goals>leg.home_goals;
+    legsHtml += `<div class="leg-item"><div class="leg-ttl">${i+1}차전 (${leg.home_team.split(' ')[0]} 홈)</div><div class="leg-row"><span class="leg-t ${hw?'w':''}">${leg.home_team}</span><span class="leg-s ${hw?'w':''}">${leg.home_goals} - ${leg.away_goals}</span><span class="leg-t ${aw?'w':''}">${leg.away_team}</span></div></div>`;
+  });
+  if (m.status==='UPCOMING' && m.legs.length<2) legsHtml += `<div class="leg-item"><div class="leg-ttl">${m.legs.length+1}차전</div><div class="leg-tbd">미진행</div></div>`;
+  document.getElementById('t-legs').innerHTML = legsHtml;
+  const badge = document.getElementById('t-badge');
+  badge.textContent = m.status==='UPCOMING' ? '진행 중' : (m.winner?m.winner+' 진출':'완료');
+  badge.className = 'modal-badge '+(m.status==='UPCOMING'?'live':'done');
+  document.getElementById('t-modal').classList.add('show');
+}
+function closeTModal(e) { if(!e||e.target===document.getElementById('t-modal')) document.getElementById('t-modal').classList.remove('show'); }
+
+function getTeamLeague(team) { for (const [key,data] of Object.entries(LEAGUE_DATA)) { if (key!=='UCL'&&data.teams.includes(team)) return data; } return null; }
 function renderTeamGrid(side, leagueKey, search='') {
   const grid = document.getElementById(`${side}-team-grid`);
   let teams = [];
-  if (leagueKey === 'all') {
-    const seen = new Set();
-    Object.entries(LEAGUE_DATA).forEach(([k, d]) => {
-      if (k === 'UCL') return;
-      d.teams.forEach(t => { if (!seen.has(t)) { seen.add(t); teams.push(t); } });
-    });
-    teams.sort();
-  } else {
-    teams = [...(LEAGUE_DATA[leagueKey]?.teams || [])].sort();
-  }
-  if (search) teams = teams.filter(t => t.toLowerCase().includes(search.toLowerCase()));
-
-  grid.innerHTML = teams.map(t => `
-    <div class="popup-team-item ${selectedTeams[side]===t?'selected':''}" onclick="selectTeamFromPopup('${side}','${t.replace(/'/g,"\\'")}')">
-      <img src="${logos[t]||''}" onerror="this.style.display='none'" style="width:18px;height:18px;object-fit:contain;border-radius:50%;flex-shrink:0">
-      <span style="line-height:1.3;overflow:hidden;text-overflow:ellipsis">${t.replace(' FC','').replace(' CF','').replace(' BC','')}</span>
-    </div>
-  `).join('');
+  if (leagueKey==='all') { const seen=new Set(); Object.entries(LEAGUE_DATA).forEach(([k,d])=>{if(k==='UCL')return;d.teams.forEach(t=>{if(!seen.has(t)){seen.add(t);teams.push(t);}});}); teams.sort(); }
+  else { teams=[...(LEAGUE_DATA[leagueKey]?.teams||[])].sort(); }
+  if (search) teams=teams.filter(t=>t.toLowerCase().includes(search.toLowerCase()));
+  grid.innerHTML=teams.map(t=>`<div class="popup-team-item ${selectedTeams[side]===t?'selected':''}" onclick="selectTeamFromPopup('${side}','${t.replace(/'/g,"\\'")}')"><img src="${logos[t]||''}" onerror="this.style.display='none'" style="width:18px;height:18px;object-fit:contain;border-radius:50%;flex-shrink:0"><span style="line-height:1.3;overflow:hidden;text-overflow:ellipsis">${t.replace(' FC','').replace(' CF','').replace(' BC','')}</span></div>`).join('');
 }
-
 function togglePopup(side) {
-  const popup = document.getElementById(`${side}-popup`);
-  const other = side === 'home' ? 'away' : 'home';
-  document.getElementById(`${other}-popup`).classList.remove('show');
-  document.getElementById(`${other}-trigger`).classList.remove('active');
-  popup.classList.toggle('show');
-  document.getElementById(`${side}-trigger`).classList.toggle('active');
-  if (popup.classList.contains('show')) {
-    renderTeamGrid(side, currentLeagueTab[side]);
-    document.getElementById(`${side}-search`).focus();
-  }
+  const popup=document.getElementById(`${side}-popup`), other=side==='home'?'away':'home';
+  document.getElementById(`${other}-popup`).classList.remove('show'); document.getElementById(`${other}-trigger`).classList.remove('active');
+  popup.classList.toggle('show'); document.getElementById(`${side}-trigger`).classList.toggle('active');
+  if(popup.classList.contains('show')){renderTeamGrid(side,currentLeagueTab[side]);document.getElementById(`${side}-search`).focus();}
 }
-
-function closePopup(side) {
-  document.getElementById(`${side}-popup`).classList.remove('show');
-  document.getElementById(`${side}-trigger`).classList.remove('active');
+function closePopup(side){document.getElementById(`${side}-popup`).classList.remove('show');document.getElementById(`${side}-trigger`).classList.remove('active');}
+function selectLeagueTab(side,leagueKey,el){currentLeagueTab[side]=leagueKey;el.closest('.popup-league-tabs').querySelectorAll('.pltab').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.getElementById(`${side}-search`).value='';renderTeamGrid(side,leagueKey);}
+function filterTeams(side,val){renderTeamGrid(side,currentLeagueTab[side],val);}
+function selectTeamFromPopup(side,team){
+  selectedTeams[side]=team; document.getElementById(`${side}-selected-text`).textContent=team; document.getElementById(`${side}-selected-text`).style.color='#e6edf3';
+  const logoUrl=logos[team]||''; const logoDiv=document.getElementById(`${side}-logo`);
+  logoDiv.innerHTML=logoUrl?`<img src="${logoUrl}" style="width:100%;height:100%;object-fit:contain" onerror="this.parentNode.innerHTML='<span>⚽</span>'">`:'<span>⚽</span>';
+  const leagueInfo=getTeamLeague(team); const leagueDiv=document.getElementById(`${side}-league`);
+  if(leagueInfo){leagueDiv.innerHTML=`<img src="${leagueInfo.logo}" onerror="this.style.display='none'"> ${leagueInfo.name}`;}
+  else{leagueDiv.innerHTML=`<img src="https://crests.football-data.org/CL.png" style="width:12px;height:12px;object-fit:contain"> UEFA 챔피언스리그`;}
+  closePopup(side); renderTeamGrid(side,currentLeagueTab[side]);
 }
-
-function selectLeagueTab(side, leagueKey, el) {
-  currentLeagueTab[side] = leagueKey;
-  el.closest('.popup-league-tabs').querySelectorAll('.pltab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById(`${side}-search`).value = '';
-  renderTeamGrid(side, leagueKey);
-}
-
-function filterTeams(side, val) {
-  renderTeamGrid(side, currentLeagueTab[side], val);
-}
-
-function selectTeamFromPopup(side, team) {
-  selectedTeams[side] = team;
-  const logoUrl = logos[team] || '';
-  document.getElementById(`${side}-selected-text`).textContent = team;
-  document.getElementById(`${side}-selected-text`).style.color = '#e6edf3';
-
-  const logoDiv = document.getElementById(`${side}-logo`);
-  logoDiv.innerHTML = logoUrl
-    ? `<img src="${logoUrl}" style="width:100%;height:100%;object-fit:contain" onerror="this.parentNode.innerHTML='<span>⚽</span>'">`
-    : '<span>⚽</span>';
-
-  const leagueInfo = getTeamLeague(team);
-  const leagueDiv = document.getElementById(`${side}-league`);
-  if (leagueInfo) {
-    leagueDiv.innerHTML = `<img src="${leagueInfo.logo}" onerror="this.style.display='none'"> ${leagueInfo.name}`;
-  } else {
-    leagueDiv.innerHTML = `<img src="https://crests.football-data.org/CL.png" style="width:12px;height:12px;object-fit:contain"> UEFA 챔피언스리그`;
-  }
-
-  closePopup(side);
-  renderTeamGrid(side, currentLeagueTab[side]);
-}
-
-document.addEventListener('click', e => {
-  ['home','away'].forEach(side => {
-    if (!e.target.closest(`#${side}-popup`) && !e.target.closest(`#${side}-trigger`)) closePopup(side);
-  });
-});
+document.addEventListener('click',e=>{['home','away'].forEach(side=>{if(!e.target.closest(`#${side}-popup`)&&!e.target.closest(`#${side}-trigger`))closePopup(side);});});
 
 function showPage(page) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('page-' + page).classList.add('active');
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
   event.target.classList.add('active');
+  if(page!=='standings'){document.getElementById('ucl-subtabs').style.display='none';}
 }
 
 async function loadStandings(leagueCode) {
-  document.querySelectorAll('.league-tab').forEach(t => t.classList.remove('active'));
-  document.querySelector(`[data-league="${leagueCode}"]`).classList.add('active');
-  const content = document.getElementById('standings-content');
-  content.innerHTML = '<div class="loading">순위표 불러오는 중...</div>';
-  try {
-    const res = await fetch(`${API}/standings/${leagueCode}`);
-    const data = await res.json();
-    renderStandings(data, leagueCode);
-  } catch(e) {
-    content.innerHTML = '<div class="loading">데이터를 불러올 수 없어요.</div>';
+  if(leagueCode!=='CL'){
+    document.querySelectorAll('.league-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelector(`[data-league="${leagueCode}"]`).classList.add('active');
+    document.getElementById('ucl-subtabs').style.display='none';
+    document.getElementById('ucl-tournament-content').style.display='none';
+    document.getElementById('standings-card').style.display='block';
   }
+  const content=document.getElementById('standings-content');
+  content.innerHTML='<div class="loading">순위표 불러오는 중...</div>';
+  try{const res=await fetch(`${API}/standings/${leagueCode}`);const data=await res.json();renderStandings(data,leagueCode);}
+  catch(e){content.innerHTML='<div class="loading">데이터를 불러올 수 없어요.</div>';}
 }
 
-function renderStandings(data, leagueCode) {
-  const totalTeams = data.standings.length;
-  const content = document.getElementById('standings-content');
-  const isCL = leagueCode === 'CL';
-
-  let html = `
-    <table class="standings-table">
-      <thead><tr>
-        <th style="width:30px">#</th>
-        <th>팀</th>
-        <th class="center hide-mobile">경기</th>
-        <th class="center">승</th>
-        <th class="center">무</th>
-        <th class="center">패</th>
-        <th class="center hide-mobile">득점</th>
-        <th class="center hide-mobile">실점</th>
-        <th class="center">득실</th>
-        <th class="center">최근 5경기</th>
-        <th class="center">승점</th>
-      </tr></thead><tbody>
-  `;
-
-  data.standings.forEach((team, i) => {
-    let zoneClass = '';
-    if (isCL) {
-      if (i < 8) zoneClass = 'zone-ucl-ko';
-      else if (i < 24) zoneClass = 'zone-ucl-po';
-    } else if (leagueCode === 'PL') {
-      if (i < 4) zoneClass = 'zone-cl';
-      else if (i < 6) zoneClass = 'zone-el';
-      else if (i >= totalTeams - 3) zoneClass = 'zone-rel';
-    } else if (leagueCode === 'PD') {
-      if (i < 4) zoneClass = 'zone-cl';
-      else if (i < 7) zoneClass = 'zone-el';
-      else if (i >= totalTeams - 3) zoneClass = 'zone-rel';
-    } else if (leagueCode === 'BL1') {
-      if (i < 4) zoneClass = 'zone-cl';
-      else if (i < 6) zoneClass = 'zone-el';
-      else if (i >= totalTeams - 3) zoneClass = 'zone-rel';
-    } else if (leagueCode === 'SA') {
-      if (i < 4) zoneClass = 'zone-cl';
-      else if (i < 7) zoneClass = 'zone-el';
-      else if (i >= totalTeams - 3) zoneClass = 'zone-rel';
-    } else if (leagueCode === 'FL1') {
-      if (i < 3) zoneClass = 'zone-cl';
-      else if (i < 5) zoneClass = 'zone-el';
-      else if (i >= totalTeams - 3) zoneClass = 'zone-rel';
-    }
-
-    const rankClass = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : '';
-    const formBadges = team.form.map(f => `<div class="form-badge ${f}">${f}</div>`).join('');
-
-    html += `
-      <tr class="${zoneClass}">
-        <td><span class="rank-num ${rankClass}">${team.rank}</span></td>
-        <td><div class="team-cell">
-          <img src="${team.logo}" width="24" height="24" style="object-fit:contain" onerror="this.style.display='none'">
-          <span>${team.team}</span>
-        </div></td>
-        <td class="center hide-mobile">${team.played}</td>
-        <td class="center">${team.wins}</td>
-        <td class="center">${team.draws}</td>
-        <td class="center">${team.losses}</td>
-        <td class="center hide-mobile">${team.gf}</td>
-        <td class="center hide-mobile">${team.ga}</td>
-        <td class="center" style="color:${team.gd>0?'#238636':team.gd<0?'#da3633':'#8b949e'}">${team.gd>0?'+':''}${team.gd}</td>
-        <td class="center"><div class="form-badges">${formBadges}</div></td>
-        <td class="center pts">${team.points}</td>
-      </tr>
-    `;
+function renderStandings(data,leagueCode){
+  const totalTeams=data.standings.length, content=document.getElementById('standings-content'), isCL=leagueCode==='CL';
+  let html=`<table class="standings-table"><thead><tr><th style="width:30px">#</th><th>팀</th><th class="center hide-mobile">경기</th><th class="center">승</th><th class="center">무</th><th class="center">패</th><th class="center hide-mobile">득점</th><th class="center hide-mobile">실점</th><th class="center">득실</th><th class="center">최근 5경기</th><th class="center">승점</th></tr></thead><tbody>`;
+  data.standings.forEach((team,i)=>{
+    let zc='';
+    if(isCL){if(i<8)zc='zone-ucl-ko';else if(i<24)zc='zone-ucl-po';}
+    else if(leagueCode==='PL'){if(i<4)zc='zone-cl';else if(i<6)zc='zone-el';else if(i>=totalTeams-3)zc='zone-rel';}
+    else if(leagueCode==='PD'){if(i<4)zc='zone-cl';else if(i<7)zc='zone-el';else if(i>=totalTeams-3)zc='zone-rel';}
+    else if(leagueCode==='BL1'){if(i<4)zc='zone-cl';else if(i<6)zc='zone-el';else if(i>=totalTeams-3)zc='zone-rel';}
+    else if(leagueCode==='SA'){if(i<4)zc='zone-cl';else if(i<7)zc='zone-el';else if(i>=totalTeams-3)zc='zone-rel';}
+    else if(leagueCode==='FL1'){if(i<3)zc='zone-cl';else if(i<5)zc='zone-el';else if(i>=totalTeams-3)zc='zone-rel';}
+    const rc=i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'';
+    const fb=team.form.map(f=>`<div class="form-badge ${f}">${f}</div>`).join('');
+    html+=`<tr class="${zc}"><td><span class="rank-num ${rc}">${team.rank}</span></td><td><div class="team-cell"><img src="${team.logo}" width="24" height="24" style="object-fit:contain" onerror="this.style.display='none'"><span>${team.team}</span></div></td><td class="center hide-mobile">${team.played}</td><td class="center">${team.wins}</td><td class="center">${team.draws}</td><td class="center">${team.losses}</td><td class="center hide-mobile">${team.gf}</td><td class="center hide-mobile">${team.ga}</td><td class="center" style="color:${team.gd>0?'#238636':team.gd<0?'#da3633':'#8b949e'}">${team.gd>0?'+':''}${team.gd}</td><td class="center"><div class="form-badges">${fb}</div></td><td class="center pts">${team.points}</td></tr>`;
   });
-
-  html += '</tbody></table>';
-  html += `<div style="display:flex;gap:16px;margin-top:12px;font-size:11px;color:#8b949e;flex-wrap:wrap">`;
-  if (isCL) {
-    html += `
-      <span><span style="display:inline-block;width:10px;height:10px;background:#f0c040;border-radius:1px;margin-right:4px"></span>16강 직행 (1-8위)</span>
-      <span><span style="display:inline-block;width:10px;height:10px;background:#f0883e;border-radius:1px;margin-right:4px"></span>플레이오프 (9-24위)</span>
-      <span><span style="display:inline-block;width:10px;height:10px;background:#da3633;border-radius:1px;margin-right:4px"></span>탈락 (25-36위)</span>
-    `;
-  } else {
-    html += `
-      <span><span style="display:inline-block;width:10px;height:10px;background:#58a6ff;border-radius:1px;margin-right:4px"></span>챔피언스리그</span>
-      <span><span style="display:inline-block;width:10px;height:10px;background:#f0883e;border-radius:1px;margin-right:4px"></span>유로파/컨퍼런스</span>
-      <span><span style="display:inline-block;width:10px;height:10px;background:#da3633;border-radius:1px;margin-right:4px"></span>강등</span>
-    `;
-  }
-  html += `</div>`;
-  content.innerHTML = html;
+  html+='</tbody></table><div style="display:flex;gap:16px;margin-top:12px;font-size:11px;color:#8b949e;flex-wrap:wrap">';
+  if(isCL){html+=`<span><span style="display:inline-block;width:10px;height:10px;background:#f0c040;border-radius:1px;margin-right:4px"></span>16강 직행</span><span><span style="display:inline-block;width:10px;height:10px;background:#f0883e;border-radius:1px;margin-right:4px"></span>플레이오프</span><span><span style="display:inline-block;width:10px;height:10px;background:#da3633;border-radius:1px;margin-right:4px"></span>탈락</span>`;}
+  else{html+=`<span><span style="display:inline-block;width:10px;height:10px;background:#58a6ff;border-radius:1px;margin-right:4px"></span>챔피언스리그</span><span><span style="display:inline-block;width:10px;height:10px;background:#f0883e;border-radius:1px;margin-right:4px"></span>유로파/컨퍼런스</span><span><span style="display:inline-block;width:10px;height:10px;background:#da3633;border-radius:1px;margin-right:4px"></span>강등</span>`;}
+  html+='</div>'; content.innerHTML=html;
 }
 
-async function loadLogos() {
-  try {
-    const res = await fetch(`${API}/logos`);
-    logos = await res.json();
-  } catch(e) { console.error('로고 로드 실패'); }
-  renderTeamGrid('home', 'all');
-  renderTeamGrid('away', 'all');
+async function loadLogos(){try{const res=await fetch(`${API}/logos`);logos=await res.json();}catch(e){console.error('로고 로드 실패');}renderTeamGrid('home','all');renderTeamGrid('away','all');}
+
+async function predict(){
+  const home=selectedTeams.home,away=selectedTeams.away,errorMsg=document.getElementById('error-msg');
+  errorMsg.style.display='none';
+  if(!home||!away){errorMsg.textContent='❌ 홈팀과 원정팀을 모두 선택해주세요';errorMsg.style.display='block';return;}
+  if(home===away){errorMsg.textContent='❌ 같은 팀은 선택할 수 없습니다';errorMsg.style.display='block';return;}
+  document.querySelector('.predict-btn').disabled=true; document.querySelector('.predict-btn').textContent='⏳ 예측 중...';
+  try{
+    const[pR,hR,hfR,afR]=await Promise.all([fetch(`${API}/predict`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({home_team:home,away_team:away})}),fetch(`${API}/h2h?home_team=${encodeURIComponent(home)}&away_team=${encodeURIComponent(away)}`),fetch(`${API}/form/${encodeURIComponent(home)}`),fetch(`${API}/form/${encodeURIComponent(away)}`)]);
+    const[pD,hD,hfD,afD]=await Promise.all([pR.json(),hR.json(),hfR.json(),afR.json()]);
+    showResult(pD,hD,hfD,afD,home,away);
+  }catch(e){errorMsg.textContent='❌ 서버 연결 오류. 잠시 후 다시 시도해주세요.';errorMsg.style.display='block';}
+  finally{document.querySelector('.predict-btn').disabled=false;document.querySelector('.predict-btn').textContent='🔮 경기 예측하기';}
 }
 
-async function predict() {
-  const home = selectedTeams.home;
-  const away = selectedTeams.away;
-  const errorMsg = document.getElementById('error-msg');
-  errorMsg.style.display = 'none';
-
-  if (!home || !away) { errorMsg.textContent = '❌ 홈팀과 원정팀을 모두 선택해주세요'; errorMsg.style.display = 'block'; return; }
-  if (home === away) { errorMsg.textContent = '❌ 같은 팀은 선택할 수 없습니다'; errorMsg.style.display = 'block'; return; }
-
-  document.querySelector('.predict-btn').disabled = true;
-  document.querySelector('.predict-btn').textContent = '⏳ 예측 중...';
-
-  try {
-    const [predictRes, h2hRes, homeFormRes, awayFormRes] = await Promise.all([
-      fetch(`${API}/predict`, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({home_team:home,away_team:away}) }),
-      fetch(`${API}/h2h?home_team=${encodeURIComponent(home)}&away_team=${encodeURIComponent(away)}`),
-      fetch(`${API}/form/${encodeURIComponent(home)}`),
-      fetch(`${API}/form/${encodeURIComponent(away)}`)
-    ]);
-    const [predictData, h2hData, homeFormData, awayFormData] = await Promise.all([predictRes.json(), h2hRes.json(), homeFormRes.json(), awayFormRes.json()]);
-    showResult(predictData, h2hData, homeFormData, awayFormData, home, away);
-  } catch(e) {
-    errorMsg.textContent = '❌ 서버 연결 오류. 잠시 후 다시 시도해주세요.';
-    errorMsg.style.display = 'block';
-  } finally {
-    document.querySelector('.predict-btn').disabled = false;
-    document.querySelector('.predict-btn').textContent = '🔮 경기 예측하기';
-  }
+function showResult(data,h2h,homeForm,awayForm,home,away){
+  const prob=data.probabilities;
+  document.getElementById('result-home-logo').src=logos[home]||''; document.getElementById('result-away-logo').src=logos[away]||'';
+  document.getElementById('result-home-name').textContent=home; document.getElementById('result-away-name').textContent=away;
+  const badge=document.getElementById('pred-badge');
+  if(data.prediction==='home_win'){badge.textContent=`🏠 ${home} 승리 예측`;badge.className='badge home';}
+  else if(data.prediction==='away_win'){badge.textContent=`✈️ ${away} 승리 예측`;badge.className='badge away';}
+  else{badge.textContent='🤝 무승부 예측';badge.className='badge draw';}
+  const hw=Math.round(prob.home_win*100),dw=Math.round(prob.draw*100),aw=Math.round(prob.away_win*100);
+  document.getElementById('bar-home').style.width=hw+'%';document.getElementById('bar-draw').style.width=dw+'%';document.getElementById('bar-away').style.width=aw+'%';
+  document.getElementById('val-home').textContent=hw+'%';document.getElementById('val-draw').textContent=dw+'%';document.getElementById('val-away').textContent=aw+'%';
+  document.getElementById('s-home-atk').textContent=data.home_stats.attack;document.getElementById('s-home-def').textContent=data.home_stats.defense;
+  document.getElementById('s-away-atk').textContent=data.away_stats.attack;document.getElementById('s-away-def').textContent=data.away_stats.defense;
+  document.getElementById('h2h-home-wins').textContent=h2h.summary.home_wins;document.getElementById('h2h-draws').textContent=h2h.summary.draws;document.getElementById('h2h-away-wins').textContent=h2h.summary.away_wins;
+  document.getElementById('h2h-home-label').textContent=home.split(' ')[0]+' 승';document.getElementById('h2h-away-label').textContent=away.split(' ')[0]+' 승';
+  let h2hHtml='';h2h.matches.forEach(m=>{h2hHtml+=`<div class="h2h-match"><span class="h2h-date">${m.date}</span><span class="h2h-score ${m.result}">${m.home_team.split(' ')[0]} ${m.home_goals} - ${m.away_goals} ${m.away_team.split(' ')[0]}</span></div>`;});
+  document.getElementById('h2h-matches').innerHTML=h2hHtml||'<div style="color:#8b949e;font-size:13px;padding:8px 0">맞대 기록 없음</div>';
+  function renderForm(fd,cid,tid){document.getElementById(tid).textContent=fd.team.split(' ')[0];let html='';fd.form.forEach(m=>{const isH=m.home_team===fd.team;const opp=isH?m.away_team:m.home_team;html+=`<div class="h2h-match"><div><div style="font-size:12px;color:#8b949e">${m.date}</div><div style="font-size:12px">${isH?'홈':'원정'} vs ${opp.split(' ')[0]}</div></div><div style="display:flex;align-items:center;gap:8px"><span style="font-size:13px">${m.home_goals} - ${m.away_goals}</span><div class="form-badge ${m.result}">${m.result}</div></div></div>`;});document.getElementById(cid).innerHTML=html;}
+  renderForm(homeForm,'home-form-list','home-form-title');renderForm(awayForm,'away-form-list','away-form-title');
+  document.getElementById('result-section').classList.add('show');document.getElementById('result-section').scrollIntoView({behavior:'smooth'});
 }
 
-function showResult(data, h2h, homeForm, awayForm, home, away) {
-  const prob = data.probabilities;
-  document.getElementById('result-home-logo').src = logos[home] || '';
-  document.getElementById('result-away-logo').src = logos[away] || '';
-  document.getElementById('result-home-name').textContent = home;
-  document.getElementById('result-away-name').textContent = away;
+if(location.hash==='#standings'){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.getElementById('page-standings').classList.add('active');document.querySelector('[onclick="showPage(\'standings\')"]').classList.add('active');}
 
-  const badge = document.getElementById('pred-badge');
-  if (data.prediction === 'home_win') { badge.textContent = `🏠 ${home} 승리 예측`; badge.className = 'badge home'; }
-  else if (data.prediction === 'away_win') { badge.textContent = `✈️ ${away} 승리 예측`; badge.className = 'badge away'; }
-  else { badge.textContent = '🤝 무승부 예측'; badge.className = 'badge draw'; }
+loadLogos();loadStandings('PL');
 
-  const hw = Math.round(prob.home_win * 100);
-  const dw = Math.round(prob.draw * 100);
-  const aw = Math.round(prob.away_win * 100);
-  document.getElementById('bar-home').style.width = hw + '%';
-  document.getElementById('bar-draw').style.width = dw + '%';
-  document.getElementById('bar-away').style.width = aw + '%';
-  document.getElementById('val-home').textContent = hw + '%';
-  document.getElementById('val-draw').textContent = dw + '%';
-  document.getElementById('val-away').textContent = aw + '%';
-  document.getElementById('s-home-atk').textContent = data.home_stats.attack;
-  document.getElementById('s-home-def').textContent = data.home_stats.defense;
-  document.getElementById('s-away-atk').textContent = data.away_stats.attack;
-  document.getElementById('s-away-def').textContent = data.away_stats.defense;
-
-  document.getElementById('h2h-home-wins').textContent = h2h.summary.home_wins;
-  document.getElementById('h2h-draws').textContent = h2h.summary.draws;
-  document.getElementById('h2h-away-wins').textContent = h2h.summary.away_wins;
-  document.getElementById('h2h-home-label').textContent = home.split(' ')[0] + ' 승';
-  document.getElementById('h2h-away-label').textContent = away.split(' ')[0] + ' 승';
-
-  let h2hHtml = '';
-  h2h.matches.forEach(m => {
-    const score = `${m.home_team.split(' ')[0]} ${m.home_goals} - ${m.away_goals} ${m.away_team.split(' ')[0]}`;
-    h2hHtml += `<div class="h2h-match"><span class="h2h-date">${m.date}</span><span class="h2h-score ${m.result}">${score}</span></div>`;
-  });
-  document.getElementById('h2h-matches').innerHTML = h2hHtml || '<div style="color:#8b949e;font-size:13px;padding:8px 0">맞대 기록 없음</div>';
-
-  function renderForm(formData, containerId, titleId) {
-    document.getElementById(titleId).textContent = formData.team.split(' ')[0];
-    let html = '';
-    formData.form.forEach(m => {
-      const isHome = m.home_team === formData.team;
-      const opponent = isHome ? m.away_team : m.home_team;
-      html += `<div class="h2h-match"><div><div style="font-size:12px;color:#8b949e">${m.date}</div><div style="font-size:12px">${isHome?'홈':'원정'} vs ${opponent.split(' ')[0]}</div></div><div style="display:flex;align-items:center;gap:8px"><span style="font-size:13px">${m.home_goals} - ${m.away_goals}</span><div class="form-badge ${m.result}">${m.result}</div></div></div>`;
-    });
-    document.getElementById(containerId).innerHTML = html;
-  }
-
-  renderForm(homeForm, 'home-form-list', 'home-form-title');
-  renderForm(awayForm, 'away-form-list', 'away-form-title');
-  document.getElementById('result-section').classList.add('show');
-  document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
-}
-
-if(location.hash === '#standings') {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('page-standings').classList.add('active');
-  document.querySelector('[onclick="showPage(\'standings\')"]').classList.add('active');
-}
-
-loadLogos();
-loadStandings('PL');
-
-if(window.location.hash === '#standings') {
-  setTimeout(() => {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById('page-standings').classList.add('active');
-    document.querySelector('[onclick="showPage(\'standings\')"]').classList.add('active');
-  }, 100);
-}
+if(window.location.hash==='#standings'){setTimeout(()=>{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.getElementById('page-standings').classList.add('active');document.querySelector('[onclick="showPage(\'standings\')"]').classList.add('active');},100);}
 </script>
 
 <footer style="padding:20px 24px;border-top:0.5px solid #30363d;display:flex;align-items:center;justify-content:space-between;background:#161b22">
