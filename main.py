@@ -290,92 +290,11 @@ def get_standings(league_code: str):
 # ── UCL 토너먼트 API ──
 @app.get("/ucl/tournament")
 def get_ucl_tournament():
-    API_KEY_CL = os.environ.get('FOOTBALL_API_KEY', '')
-    cl_headers = {"X-Auth-Token": API_KEY_CL}
-
-    res = requests.get(
-        "https://api.football-data.org/v4/competitions/CL/matches",
-        headers=cl_headers,
-        params={"season": 2025}
-    )
-
-    if res.status_code != 200:
-        raise HTTPException(status_code=500, detail="UCL 데이터 로드 실패")
-
-    matches = res.json().get("matches", [])
-
-    stages = {
-        "PLAYOFFS": [],
-        "LAST_16": [],
-        "QUARTER_FINALS": [],
-        "SEMI_FINALS": [],
-        "FINAL": []
-    }
-
-    # 합산 계산용
-    agg = {}
-    for m in matches:
-        stage = m.get("stage", "")
-        if stage not in stages:
-            continue
-
-        home = m["homeTeam"]["name"]
-        away = m["awayTeam"]["name"]
-        ft = m["score"]["fullTime"]
-        status = m["status"]
-
-        key = tuple(sorted([home, away]))
-        if key not in agg:
-            agg[key] = {
-                "stage": stage,
-                "team1": home,
-                "team2": away,
-                "team1_goals": 0,
-                "team2_goals": 0,
-                "legs": [],
-                "status": "FINISHED"
-            }
-
-        if ft.get("home") is not None:
-            hg = ft["home"]
-            ag = ft["away"]
-            if agg[key]["team1"] == home:
-                agg[key]["team1_goals"] += hg
-                agg[key]["team2_goals"] += ag
-            else:
-                agg[key]["team1_goals"] += ag
-                agg[key]["team2_goals"] += hg
-
-            agg[key]["legs"].append({
-                "home_team": home,
-                "away_team": away,
-                "home_goals": hg,
-                "away_goals": ag,
-            })
-
-        if status in ["SCHEDULED", "TIMED"]:
-            agg[key]["status"] = "UPCOMING"
-
-    for key, v in agg.items():
-        t1 = v["team1"]
-        t2 = v["team2"]
-        t1g = v["team1_goals"]
-        t2g = v["team2_goals"]
-        winner = t1 if t1g > t2g else (t2 if t2g > t1g else None)
-
-        stages[v["stage"]].append({
-            "team1": t1,
-            "team2": t2,
-            "team1_goals": t1g,
-            "team2_goals": t2g,
-            "team1_logo": team_logos_cache.get(t1, ""),
-            "team2_logo": team_logos_cache.get(t2, ""),
-            "winner": winner,
-            "status": v["status"],
-            "legs": v["legs"]
-        })
-
-    return stages
+    tournament_path = os.path.join(MODEL_DIR, "ucl_tournament.json")
+    if not os.path.exists(tournament_path):
+        raise HTTPException(status_code=404, detail="UCL 토너먼트 데이터 없음")
+    with open(tournament_path, 'r', encoding='utf-8') as f:
+        return json.load(f)
    
 # ── H2H API ──
 @app.get("/h2h")
