@@ -610,7 +610,7 @@ async function loadStandings(leagueCode) {
 
 function renderStandings(data,leagueCode){
   const totalTeams=data.standings.length, content=document.getElementById('standings-content'), isCL=leagueCode==='CL';
-  let html=`<table class="standings-table"><thead><tr><th style="width:30px">#</th><th>팀</th><th class="center hide-mobile">경기</th><th class="center">승</th><th class="center">무</th><th class="center">패</th><th class="center hide-mobile">득점</th><th class="center hide-mobile">실점</th><th class="center">득실</th><th class="center">최근 5경기</th><th class="center">승점</th></tr></thead><tbody>`;
+  let html=`<table class="standings-table"><thead><tr><th style="width:30px">#</th><th>팀</th><th class="center">경기</th><th class="center">승</th><th class="center">무</th><th class="center">패</th><th class="center hide-mobile">득점</th><th class="center hide-mobile">실점</th><th class="center">득실</th><th class="center">최근 5경기</th><th class="center">승점</th></tr></thead><tbody>`;
   data.standings.forEach((team,i)=>{
     let zc='';
     if(isCL){if(i<8)zc='zone-ucl-ko';else if(i<24)zc='zone-ucl-po';}
@@ -621,7 +621,7 @@ function renderStandings(data,leagueCode){
     else if(leagueCode==='FL1'){if(i<3)zc='zone-cl';else if(i<5)zc='zone-el';else if(i>=totalTeams-3)zc='zone-rel';}
     const rc=i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'';
     const fb=team.form.map(f=>`<div class="form-badge ${f}">${f}</div>`).join('');
-    html+=`<tr class="${zc}"><td><span class="rank-num ${rc}">${team.rank}</span></td><td><div class="team-cell"><img src="${team.logo}" width="24" height="24" style="object-fit:contain" onerror="this.style.display='none'"><span>${team.team}</span></div></td><td class="center hide-mobile">${team.played}</td><td class="center">${team.wins}</td><td class="center">${team.draws}</td><td class="center">${team.losses}</td><td class="center hide-mobile">${team.gf}</td><td class="center hide-mobile">${team.ga}</td><td class="center" style="color:${team.gd>0?'#238636':team.gd<0?'#da3633':'#8b949e'}">${team.gd>0?'+':''}${team.gd}</td><td class="center"><div class="form-badges">${fb}</div></td><td class="center pts">${team.points}</td></tr>`;
+    html+=`<tr class="${zc}"><td><span class="rank-num ${rc}">${team.rank}</span></td><td><div class="team-cell"><img src="${team.logo}" width="24" height="24" style="object-fit:contain" onerror="this.style.display='none'"><span>${team.team}</span></div></td><td class="center">${team.played}</td><td class="center">${team.wins}</td><td class="center">${team.draws}</td><td class="center">${team.losses}</td><td class="center hide-mobile">${team.gf}</td><td class="center hide-mobile">${team.ga}</td><td class="center" style="color:${team.gd>0?'#238636':team.gd<0?'#da3633':'#8b949e'}">${team.gd>0?'+':''}${team.gd}</td><td class="center"><div class="form-badges">${fb}</div></td><td class="center pts">${team.points}</td></tr>`;
   });
   html+='</tbody></table><div style="display:flex;gap:16px;margin-top:12px;font-size:11px;color:#8b949e;flex-wrap:wrap">';
   if(isCL){html+=`<span><span style="display:inline-block;width:10px;height:10px;background:#f0c040;border-radius:1px;margin-right:4px"></span>16강 직행</span><span><span style="display:inline-block;width:10px;height:10px;background:#f0883e;border-radius:1px;margin-right:4px"></span>플레이오프</span><span><span style="display:inline-block;width:10px;height:10px;background:#da3633;border-radius:1px;margin-right:4px"></span>탈락</span>`;}
