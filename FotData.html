@@ -453,7 +453,7 @@ function mcHtml(m, idx) {
   if (!m) return emptyMc();
   const isW1 = m.team1_goals > m.team2_goals;
   const isW2 = m.team2_goals > m.team1_goals;
-  const isLive = m.status === 'UPCOMING';
+  const isLive = m.status === 'UPCOMING' || (m.legs && m.legs.length === 1);
   const badgeClass = isLive ? 'live' : 'done';
   const badgeText = isLive ? '진행 중' : (m.winner ? shortName(m.winner) + ' 진출' : '완료');
   const t1esc = m.team1.replace(/'/g,"\\'"), t2esc = m.team2.replace(/'/g,"\\'");
@@ -545,13 +545,14 @@ function openTModal(t1, t2) {
   document.getElementById('t-logo1').src = m.team1_logo;
   document.getElementById('t-logo2').src = m.team2_logo;
   document.getElementById('t-name1').textContent = m.team1;
-  document.getElementById('t-name1').className = 'modal-team-name'+(isW1?' w':'');
+  document.getElementById('t-name1').className = 'modal-team-name';
+  document.getElementById('t-name1').style.color = isW1?'#58a6ff':'#8b949e';
   document.getElementById('t-name2').textContent = m.team2;
-  document.getElementById('t-name2').className = 'modal-team-name'+(isW2?' w':'');
-  document.getElementById('t-s1').textContent = m.team1_goals;
-  document.getElementById('t-s1').className = isW1?'w':'';
+  document.getElementById('t-name2').className = 'modal-team-name';
+  document.getElementById('t-name2').style.color = isW2?'#58a6ff':'#8b949e';  document.getElementById('t-s1').textContent = m.team1_goals;
+  document.getElementById('t-s1').style.color = isW1?'#58a6ff':'#8b949e';
   document.getElementById('t-s2').textContent = m.team2_goals;
-  document.getElementById('t-s2').className = isW2?'w':'';
+  document.getElementById('t-s2').style.color = isW2?'#58a6ff':'#8b949e';
   let legsHtml = '';
   m.legs.forEach((leg,i) => {
     const hw=leg.home_goals>leg.away_goals, aw=leg.away_goals>leg.home_goals;
