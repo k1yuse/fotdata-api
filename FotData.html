@@ -117,9 +117,9 @@
     .leg-ttl { font-size: 10px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
     .leg-row { display: flex; align-items: center; justify-content: space-between; background: #21262d; border-radius: 6px; padding: 8px 10px; }
     .leg-t { font-size: 12px; color: #e6edf3; flex: 1; }
-    .leg-t.w { color: #238636; font-weight: 600; }
+    .leg-t.w { color: #58a6ff; font-weight: 600; }
     .leg-s { font-size: 13px; font-weight: 700; color: #8b949e; padding: 0 8px; }
-    .leg-s.w { color: #238636; }
+    .leg-s.w { color: #58a6ff; }
     .leg-tbd { text-align: center; font-size: 11px; color: #30363d; font-style: italic; padding: 8px; background: #21262d; border-radius: 6px; }
     .modal-badge { margin: 0 16px 14px; text-align: center; padding: 6px; border-radius: 6px; font-size: 11px; font-weight: 600; }
     .modal-badge.live { background: #2a1e00; color: #d29922; border: 0.5px solid #d2992260; }
@@ -556,8 +556,7 @@ function openTModal(t1, t2) {
   let legsHtml = '';
   m.legs.forEach((leg,i) => {
     const hw=leg.home_goals>leg.away_goals, aw=leg.away_goals>leg.home_goals;
-    legsHtml += `<div class="leg-item"><div class="leg-ttl">${i+1}차전 (${leg.home_team.split(' ')[0]} 홈)</div><div class="leg-row"><span class="leg-t ${hw?'w':''}">${leg.home_team}</span><span class="leg-s ${hw?'w':''}">${leg.home_goals} - ${leg.away_goals}</span><span class="leg-t ${aw?'w':''}">${leg.away_team}</span></div></div>`;
-  });
+    legsHtml += `<div class="leg-item"><div class="leg-ttl">${i+1}차전 (${leg.home_team.split(' ')[0]} 홈)</div><div class="leg-row"><span class="leg-t ${hw?'w':''}" style="color:${hw?'#58a6ff':'#8b949e'}">${leg.home_team}</span><span class="leg-s" style="color:${hw?'#58a6ff':aw?'#8b949e':'#8b949e'};font-weight:700;padding:0 8px">${leg.home_goals} - ${leg.away_goals}</span><span class="leg-t ${aw?'w':''}" style="color:${aw?'#58a6ff':'#8b949e'}">${leg.away_team}</span></div></div>`;  });
   if (m.status==='UPCOMING' && m.legs.length<2) legsHtml += `<div class="leg-item"><div class="leg-ttl">${m.legs.length+1}차전</div><div class="leg-tbd">미진행</div></div>`;
   document.getElementById('t-legs').innerHTML = legsHtml;
   const badge = document.getElementById('t-badge');
