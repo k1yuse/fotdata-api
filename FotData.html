@@ -450,12 +450,14 @@ function shortName(name) {
 }
 
 function mcHtml(m, idx) {
+  if (!m) return emptyMc();
   const isW1 = m.team1_goals > m.team2_goals;
   const isW2 = m.team2_goals > m.team1_goals;
   const isLive = m.status === 'UPCOMING';
   const badgeClass = isLive ? 'live' : 'done';
   const badgeText = isLive ? '진행 중' : (m.winner ? shortName(m.winner) + ' 진출' : '완료');
-  return `<div class="mc ${isLive?'live':''}" onclick="openTModal(${idx})">
+  const t1esc = m.team1.replace(/'/g,"\\'"), t2esc = m.team2.replace(/'/g,"\\'");
+  return `<div class="mc ${isLive?'live':''}" onclick="openTModal('${t1esc}','${t2esc}')">
     <div class="mc-inner">
       <div class="t-row"><img class="t-logo" src="${m.team1_logo}" onerror="this.style.display='none'"><span class="t-short ${isW1?'w':''}">${shortName(m.team1)}</span><span class="t-score ${isW1?'w':''}">${m.team1_goals}</span></div>
       <div class="mc-div"></div>
@@ -535,8 +537,8 @@ function renderTournament(data) {
   document.getElementById('tournament-bracket').style.display = 'block';
 }
 
-function openTModal(idx) {
-  const m = flatMatches[idx];
+function openTModal(t1, t2) {
+  const m = flatMatches.find(x => x && x.team1 === t1 && x.team2 === t2);
   if (!m) return;
   const isW1=m.team1_goals>m.team2_goals, isW2=m.team2_goals>m.team1_goals;
   document.getElementById('t-modal-title').textContent = m.team1+' vs '+m.team2;
