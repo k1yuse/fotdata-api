@@ -483,15 +483,22 @@ function renderTournament(data) {
   const L_QF=QF.slice(0,2), R_QF=QF.slice(2,4);
   const L_SF=SF.slice(0,1), R_SF=SF.slice(1,2);
 
+  // flatMatches를 브래킷 HTML 렌더링 순서와 동일하게 미리 등록
+  const orderedMatches = [
+    ...L_PO, ...L_R16, ...L_QF, ...(L_SF[0]?[L_SF[0]]:[null]),
+    ...(FIN[0]?[FIN[0]]:[]),
+    ...(R_SF[0]?[R_SF[0]]:[null]), ...R_QF, ...R_R16, ...R_PO
+  ];
+  flatMatches = orderedMatches;
+
   let idx = 0;
   function col(matches, cls) {
     let html = `<div class="b-col ${cls}">`;
-    matches.forEach(m => { flatMatches.push(m); html += mcHtml(m, idx++); });
+    matches.forEach(m => { html += mcHtml(m, idx++); });
     html += '</div>';
     return html;
   }
   function sfCol(arr) {
-    flatMatches.push(arr[0]||null);
     const html = `<div class="b-col sf">${arr[0] ? mcHtml(arr[0], idx++) : emptyMc()}</div>`;
     return html;
   }
