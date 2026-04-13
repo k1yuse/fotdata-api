@@ -141,6 +141,113 @@ def build_features(df, df_stats):
         })
     return pd.DataFrame(rows)
 
+def fetch_ucl_tournament():
+    import json
+    print("\n[UCL 토너먼트] 수집 중...")
+    res = requests.get(
+        f"{BASE_URL}/competitions/CL/matches",
+        headers=HEADERS,
+        params={"season": 2025}
+    )
+    if res.status_code != 200:
+        print(f"  ❌ UCL 토너먼트 오류: {res.status_code}")
+        return
+
+    matches = res.json().get("matches", [])
+    stages = {"PLAYOFFS": [], "LAST_16": [], "QUARTER_FINALS": [], "SEMI_FINALS": [], "FINAL": []}
+
+    logo_path = f"{MODEL_DIR}/team_logos.json"
+    logos = {}
+    if os.path.exists(logo_path):
+        with open(logo_path, 'r', encoding='utf-8') as f:
+            logos = json.load(f)
+
+    agg = {}
+    for m in matches:
+        stage = m.get("stage", "")
+        if stage not in stages:
+            continue
+        home = m["homeTeam"].get("name")
+        away = m["awayTeam"].get("name")
+        if not home or not away:
+            continue
+        ft = m["score"]["fullTime"]
+        status = m["status"]
+        key = tuple(sorted([home, away]))
+        if key not in agg:
+            agg[key] = {"stage": stage, "team1": home, "team2": away, "team1_goals": 0, "team2_goals": 0, "legs": [], "status": "FINISHED"}
+        if ft.get("home") is not None:
+            hg, ag = ft["home"], ft["away"]
+            if agg[key]["team1"] == home:
+                agg[key]["team1_goals"] += hg
+                agg[key]["team2_goals"] += ag
+            else:
+                agg[key]["team1_goals"] += ag
+                agg[key]["team2_goals"] += hg
+            agg[key]["legs"].append({"home_team": home, "away_team": away, "home_goals": hg, "away_goals": ag})
+        if status in ["SCHEDULED", "TIMED"]:
+            agg[key]["status"] = "UPCOMING"
+
+    for key, v in agg.items():
+        t1, t2 = v["team1"], v["team2"]
+        t1g, t2g = v["team1_goals"], v["team2_goals"]
+        winner = t1 if t1g > t2g else (t2 if t2g > t1g else None)
+        stages[v["stage"]].append({
+            "team1": t1, "team2": t2,
+            "team1_goals": t1g, "team2_goals": t2g,
+            "team1_logo": logos.get(t1, ""),
+            "team2_logo": logos.get(t2, ""),
+            "winner": winner, "status": v["status"], "legs": v["legs"]
+        })
+
+    # 풋몹 기준 순서로 재정렬
+    PO_ORDER = [
+        ('Monaco', 'Paris'), ('Galatasaray', 'Juventus'),
+        ('Benfica', 'Real Madrid'), ('Dortmund', 'Atalanta'),
+        ('Qarab', 'Newcastle'), ('Brugge', 'Atlético'),
+        ('Bodø', 'Internazionale'), ('Olympiakos', 'Leverkusen'),
+    ]
+    R16_ORDER = [
+        ('Paris', 'Chelsea'), ('Galatasaray', 'Liverpool'),
+        ('Real Madrid', 'Manchester City'), ('Atalanta', 'Bayern'),
+        ('Newcastle', 'Barcelona'), ('Atlético', 'Tottenham'),
+        ('Bodø', 'Sporting'), ('Leverkusen', 'Arsenal'),
+    ]
+    QF_ORDER = [
+        ('Paris', 'Liverpool'), ('Real Madrid', 'Bayern'),
+        ('Barcelona', 'Atlético'), ('Sporting', 'Arsenal'),
+    ]
+
+    def find_and_sort(stage_data, order):
+        result = []
+        for t1k, t2k in order:
+            for m in stage_data:
+                names = [m['team1'], m['team2']]
+                if any(t1k in n for n in names) and any(t2k in n for n in names):
+                    if t1k not in m['team1']:
+                        m['team1'], m['team2'] = m['team2'], m['team1']
+                        m['team1_goals'], m['team2_goals'] = m['team2_goals'], m['team1_goals']
+                        m['team1_logo'], m['team2_logo'] = m['team2_logo'], m['team1_logo']
+                    result.append(m)
+                    break
+        # 순서에 없는 새 팀(4강, 결승 등)은 그냥 뒤에 추가
+        ordered_keys = set()
+        for m in result:
+            ordered_keys.add(tuple(sorted([m['team1'], m['team2']])))
+        for m in stage_data:
+            k = tuple(sorted([m['team1'], m['team2']]))
+            if k not in ordered_keys:
+                result.append(m)
+        return result
+
+    stages['PLAYOFFS'] = find_and_sort(stages['PLAYOFFS'], PO_ORDER)
+    stages['LAST_16'] = find_and_sort(stages['LAST_16'], R16_ORDER)
+    stages['QUARTER_FINALS'] = find_and_sort(stages['QUARTER_FINALS'], QF_ORDER)
+
+    with open(f"{MODEL_DIR}/ucl_tournament.json", 'w', encoding='utf-8') as f:
+        json.dump(stages, f, ensure_ascii=False, indent=2)
+    print(f"  ✅ UCL 토너먼트 저장 완료")
+
 def main():
     print("=== FotData 자동 업데이트 시작 ===")
 
@@ -232,6 +339,9 @@ def main():
     joblib.dump(scaler, f"{MODEL_DIR}/scaler.pkl")
     joblib.dump(le,     f"{MODEL_DIR}/label_encoder.pkl")
 
+# UCL 토너먼트
+    fetch_ucl_tournament()
+    
     print(f"\n🏆 업데이트 완료!")
     print(f"   데이터: {len(df_total)}경기")
     print(f"   최고 정확도: {max(acc_lr, acc_rf, acc_xgb):.1%}")
