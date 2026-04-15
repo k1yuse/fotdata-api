@@ -391,7 +391,7 @@
     {
       "team1": "Paris Saint-Germain FC",
       "team2": "Liverpool FC",
-      "team1_goals": 2,
+      "team1_goals": 4,
       "team2_goals": 0,
       "team1_logo": "https://crests.football-data.org/524.png",
       "team2_logo": "https://crests.football-data.org/64.png",
@@ -408,33 +408,39 @@
           "home_team": "Liverpool FC",
           "away_team": "Paris Saint-Germain FC",
           "home_goals": 0,
-          "away_goals": 0
+          "away_goals": 2
         }
       ]
     },
     {
       "team1": "Real Madrid CF",
       "team2": "FC Bayern München",
-      "team1_goals": 1,
-      "team2_goals": 2,
+      "team1_goals": 2,
+      "team2_goals": 3,
       "team1_logo": "https://crests.football-data.org/86.png",
       "team2_logo": "https://crests.football-data.org/5.png",
       "winner": "FC Bayern München",
-      "status": "UPCOMING",
+      "status": "FINISHED",
       "legs": [
         {
           "home_team": "Real Madrid CF",
           "away_team": "FC Bayern München",
           "home_goals": 1,
           "away_goals": 2
+        },
+        {
+          "home_team": "FC Bayern München",
+          "away_team": "Real Madrid CF",
+          "home_goals": 1,
+          "away_goals": 1
         }
       ]
     },
     {
       "team1": "FC Barcelona",
       "team2": "Club Atlético de Madrid",
-      "team1_goals": 1,
-      "team2_goals": 2,
+      "team1_goals": 2,
+      "team2_goals": 3,
       "team1_logo": "https://crests.football-data.org/81.png",
       "team2_logo": "https://crests.football-data.org/78.png",
       "winner": "Club Atlético de Madrid",
@@ -449,8 +455,8 @@
         {
           "home_team": "Club Atlético de Madrid",
           "away_team": "FC Barcelona",
-          "home_goals": 0,
-          "away_goals": 1
+          "home_goals": 1,
+          "away_goals": 2
         }
       ]
     },
@@ -462,13 +468,19 @@
       "team1_logo": "https://crests.football-data.org/498.png",
       "team2_logo": "https://crests.football-data.org/57.png",
       "winner": "Arsenal FC",
-      "status": "UPCOMING",
+      "status": "FINISHED",
       "legs": [
         {
           "home_team": "Sporting Clube de Portugal",
           "away_team": "Arsenal FC",
           "home_goals": 0,
           "away_goals": 1
+        },
+        {
+          "home_team": "Arsenal FC",
+          "away_team": "Sporting Clube de Portugal",
+          "home_goals": 0,
+          "away_goals": 0
         }
       ]
     }
