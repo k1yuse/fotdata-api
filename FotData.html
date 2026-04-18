@@ -108,7 +108,7 @@
     .modal-team-name { font-size: 12px; color: #e6edf3; text-align: center; font-weight: 600; }
     .modal-team-name.w { color: #58a6ff; }
     .modal-vs { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 0 12px; }
-    .modal-score { font-size: 24px; font-weight: 700; display: flex; gap: 8px; align-items: center; }
+    .modal-score { font-size: 24px; font-weight: 700; display: flex; gap: 8px; align-items: center; color: #8b949e; }
     .modal-score .w { color: #58a6ff; }
     .modal-agg { font-size: 10px; color: #8b949e; }
     .modal-legs { padding: 12px 16px; }
@@ -380,7 +380,7 @@
     <div class="modal-header"><span class="modal-title" id="t-modal-title"></span><span class="modal-close" onclick="closeTModal()">✕</span></div>
     <div class="modal-teams">
       <div class="modal-team"><img class="modal-logo" id="t-logo1" src="" onerror="this.style.display='none'"><span class="modal-team-name" id="t-name1"></span></div>
-      <div class="modal-vs"><div class="modal-score"><span id="t-s1"></span><span style="color:#8b949e">-</span><span id="t-s2"></span></div><span class="modal-agg">합산</span></div>
+      <div class="modal-vs"><div class="modal-score"><span id="t-s1" style="font-size:24px;font-weight:700"></span><span style="color:#8b949e;font-size:24px;font-weight:700">-</span><span id="t-s2" style="font-size:24px;font-weight:700"></span></div><span class="modal-agg">합산</span></div>
       <div class="modal-team"><img class="modal-logo" id="t-logo2" src="" onerror="this.style.display='none'"><span class="modal-team-name" id="t-name2"></span></div>
     </div>
     <div class="modal-legs" id="t-legs"></div>
@@ -556,7 +556,7 @@ function openTModal(t1, t2) {
   let legsHtml = '';
   m.legs.forEach((leg,i) => {
     const hw=leg.home_goals>leg.away_goals, aw=leg.away_goals>leg.home_goals;
-    legsHtml += `<div class="leg-item"><div class="leg-ttl">${i+1}차전 (${leg.home_team.split(' ')[0]} 홈)</div><div class="leg-row"><span class="leg-t ${hw?'w':''}" style="color:${hw?'#58a6ff':'#8b949e'}">${leg.home_team}</span><span class="leg-s" style="color:${hw?'#58a6ff':aw?'#8b949e':'#8b949e'};font-weight:700;padding:0 8px">${leg.home_goals} - ${leg.away_goals}</span><span class="leg-t ${aw?'w':''}" style="color:${aw?'#58a6ff':'#8b949e'}">${leg.away_team}</span></div></div>`;  });
+    legsHtml += `<div class="leg-item"><div class="leg-ttl">${i+1}차전 (${leg.home_team.split(' ')[0]} 홈)</div><div class="leg-row"><span style="flex:1;font-size:12px;color:${hw?'#58a6ff':'#8b949e'};font-weight:${hw?'600':'400'}">${leg.home_team}</span><span style="font-size:13px;font-weight:700;color:${hw?'#58a6ff':aw?'#8b949e':'#e6edf3'};padding:0 8px">${leg.home_goals} - ${leg.away_goals}</span><span style="flex:1;font-size:12px;color:${aw?'#58a6ff':'#8b949e'};font-weight:${aw?'600':'400'};text-align:right">${leg.away_team}</span></div></div>`;  });
   if (m.status==='UPCOMING' && m.legs.length<2) legsHtml += `<div class="leg-item"><div class="leg-ttl">${m.legs.length+1}차전</div><div class="leg-tbd">미진행</div></div>`;
   document.getElementById('t-legs').innerHTML = legsHtml;
   const badge = document.getElementById('t-badge');
