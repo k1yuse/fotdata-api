@@ -439,11 +439,11 @@
     {
       "team1": "FC Barcelona",
       "team2": "Club Atlético de Madrid",
-      "team1_goals": 2,
+      "team1_goals": 3,
       "team2_goals": 3,
       "team1_logo": "https://crests.football-data.org/81.png",
       "team2_logo": "https://crests.football-data.org/78.png",
-      "winner": "Club Atlético de Madrid",
+      "winner": null,
       "status": "FINISHED",
       "legs": [
         {
@@ -456,7 +456,7 @@
           "home_team": "Club Atlético de Madrid",
           "away_team": "FC Barcelona",
           "home_goals": 1,
-          "away_goals": 2
+          "away_goals": 3
         }
       ]
     },
@@ -485,43 +485,6 @@
       ]
     }
   ],
-  "SEMI_FINALS": [
-    {
-      "team1": "Paris Saint-Germain FC",
-      "team2": "FC Bayern München",
-      "team1_goals": 5,
-      "team2_goals": 4,
-      "team1_logo": "https://crests.football-data.org/524.png",
-      "team2_logo": "https://crests.football-data.org/5.png",
-      "winner": "Paris Saint-Germain FC",
-      "status": "UPCOMING",
-      "legs": [
-        {
-          "home_team": "Paris Saint-Germain FC",
-          "away_team": "FC Bayern München",
-          "home_goals": 5,
-          "away_goals": 4
-        }
-      ]
-    },
-    {
-      "team1": "Club Atlético de Madrid",
-      "team2": "Arsenal FC",
-      "team1_goals": 1,
-      "team2_goals": 1,
-      "team1_logo": "https://crests.football-data.org/78.png",
-      "team2_logo": "https://crests.football-data.org/57.png",
-      "winner": null,
-      "status": "UPCOMING",
-      "legs": [
-        {
-          "home_team": "Club Atlético de Madrid",
-          "away_team": "Arsenal FC",
-          "home_goals": 1,
-          "away_goals": 1
-        }
-      ]
-    }
-  ],
+  "SEMI_FINALS": [],
   "FINAL": []
 }
