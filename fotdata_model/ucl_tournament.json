@@ -490,7 +490,7 @@
       "team1": "Paris Saint-Germain FC",
       "team2": "FC Bayern München",
       "team1_goals": 6,
-      "team2_goals": 4,
+      "team2_goals": 5,
       "team1_logo": "https://crests.football-data.org/524.png",
       "team2_logo": "https://crests.football-data.org/5.png",
       "winner": "Paris Saint-Germain FC",
@@ -505,7 +505,7 @@
         {
           "home_team": "FC Bayern München",
           "away_team": "Paris Saint-Germain FC",
-          "home_goals": 0,
+          "home_goals": 1,
           "away_goals": 1
         }
       ]
@@ -535,5 +535,17 @@
       ]
     }
   ],
-  "FINAL": []
+  "FINAL": [
+    {
+      "team1": "Paris Saint-Germain FC",
+      "team2": "Arsenal FC",
+      "team1_goals": 0,
+      "team2_goals": 0,
+      "team1_logo": "https://crests.football-data.org/524.png",
+      "team2_logo": "https://crests.football-data.org/57.png",
+      "winner": null,
+      "status": "UPCOMING",
+      "legs": []
+    }
+  ]
 }
