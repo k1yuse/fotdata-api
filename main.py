@@ -23,7 +23,9 @@ app.add_middleware(
 BASE = os.path.dirname(__file__)
 MODEL_DIR = os.path.join(BASE, "fotdata_model")
 
-lr_model  = joblib.load(os.path.join(MODEL_DIR, "logistic_regression.pkl"))
+lr_model = joblib.load(os.path.join(MODEL_DIR, "logistic_regression.pkl"))
+if not hasattr(lr_model, 'multi_class'):
+    lr_model.multi_class = 'auto'
 scaler    = joblib.load(os.path.join(MODEL_DIR, "scaler.pkl"))
 df_stats  = pd.read_csv(os.path.join(MODEL_DIR, "team_stats.csv"))
 
