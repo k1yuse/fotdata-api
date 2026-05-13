@@ -107,6 +107,40 @@ def get_recent_form(df, team, before_date, n=5):
             elif row['result'] == 'D': points += 1
     return points
 
+def get_recent_form_weighted(df, team, before_date, n=5):
+    """최근 경기일수록 가중치 높게"""
+    team_matches = df[
+        ((df['home_team']==team) | (df['away_team']==team)) &
+        (df['date'] < before_date)
+    ].tail(n)
+    points = 0
+    weights = list(range(1, len(team_matches)+1))
+    total_weight = sum(weights)
+    if total_weight == 0:
+        return 0
+    for i, (_, row) in enumerate(team_matches.iterrows()):
+        w = weights[i]
+        if row['home_team'] == team:
+            if row['result'] == 'H': points += 3 * w
+            elif row['result'] == 'D': points += 1 * w
+        else:
+            if row['result'] == 'A': points += 3 * w
+            elif row['result'] == 'D': points += 1 * w
+    return round(points / total_weight, 3)
+
+def get_h2h_rate(df, home, away, before_date, n=10):
+    """H2H 홈팀 승률"""
+    h2h = df[
+        ((df['home_team']==home) & (df['away_team']==away)) |
+        ((df['home_team']==away) & (df['away_team']==home))
+    ]
+    h2h = h2h[h2h['date'] < before_date].tail(n)
+    if len(h2h) == 0:
+        return 0.33
+    home_wins = len(h2h[((h2h['home_team']==home) & (h2h['result']=='H')) |
+                        ((h2h['away_team']==home) & (h2h['result']=='A'))])
+    return round(home_wins / len(h2h), 3)
+
 def build_features(df, df_stats):
     rows = []
     for _, match in df.iterrows():
@@ -115,6 +149,9 @@ def build_features(df, df_stats):
         date = match['date']
         home_form = get_recent_form(df, home, date)
         away_form = get_recent_form(df, away, date)
+        home_form_w = get_recent_form_weighted(df, home, date)
+        away_form_w = get_recent_form_weighted(df, away, date)
+        h2h_rate = get_h2h_rate(df, home, away, date)
         h_stats = df_stats[df_stats['team']==home]
         a_stats = df_stats[df_stats['team']==away]
         if h_stats.empty or a_stats.empty:
@@ -122,22 +159,26 @@ def build_features(df, df_stats):
         h = h_stats.iloc[0]
         a = a_stats.iloc[0]
         rows.append({
-            'home_attack':    h['attack_strength'],
-            'away_attack':    a['attack_strength'],
-            'home_defense':   h['defense_strength'],
-            'away_defense':   a['defense_strength'],
-            'home_form':      home_form,
-            'away_form':      away_form,
-            'form_diff':      home_form - away_form,
-            'home_win_rate':  h['win_rate'],
-            'away_win_rate':  a['win_rate'],
-            'win_rate_diff':  h['win_rate'] - a['win_rate'],
-            'home_goal_diff': h['goal_diff'],
-            'away_goal_diff': a['goal_diff'],
-            'attack_diff':    h['attack_strength'] - a['attack_strength'],
-            'defense_diff':   h['defense_strength'] - a['defense_strength'],
-            'home_advantage': len(df[df['result']=='H']) / len(df),
-            'result':         match['result'],
+            'home_attack':      h['attack_strength'],
+            'away_attack':      a['attack_strength'],
+            'home_defense':     h['defense_strength'],
+            'away_defense':     a['defense_strength'],
+            'home_form':        home_form,
+            'away_form':        away_form,
+            'form_diff':        home_form - away_form,
+            'home_form_w':      home_form_w,
+            'away_form_w':      away_form_w,
+            'form_diff_w':      home_form_w - away_form_w,
+            'home_win_rate':    h['win_rate'],
+            'away_win_rate':    a['win_rate'],
+            'win_rate_diff':    h['win_rate'] - a['win_rate'],
+            'home_goal_diff':   h['goal_diff'],
+            'away_goal_diff':   a['goal_diff'],
+            'attack_diff':      h['attack_strength'] - a['attack_strength'],
+            'defense_diff':     h['defense_strength'] - a['defense_strength'],
+            'home_advantage':   len(df[df['result']=='H']) / len(df),
+            'h2h_home_rate':    h2h_rate,
+            'result':           match['result'],
         })
     return pd.DataFrame(rows)
 
@@ -296,9 +337,11 @@ def main():
     FEATURES = [
         'home_attack','away_attack','home_defense','away_defense',
         'home_form','away_form','form_diff',
+        'home_form_w','away_form_w','form_diff_w',
         'home_win_rate','away_win_rate','win_rate_diff',
         'home_goal_diff','away_goal_diff',
-        'attack_diff','defense_diff','home_advantage'
+        'attack_diff','defense_diff','home_advantage',
+        'h2h_home_rate'
     ]
 
     X = df_features[FEATURES].dropna()

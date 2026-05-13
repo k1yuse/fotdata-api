@@ -100,6 +100,18 @@ def predict_match(req: MatchRequest):
 
     home_advantage = 0.45  # 데이터 기반 홈 어드밴티지
 
+    # H2H 홈팀 승률 계산
+    h2h_df = df_matches_all[
+        ((df_matches_all['home_team']==home_team) & (df_matches_all['away_team']==away_team)) |
+        ((df_matches_all['home_team']==away_team) & (df_matches_all['away_team']==home_team))
+    ].tail(10)
+    if len(h2h_df) > 0:
+        h2h_home_wins = len(h2h_df[((h2h_df['home_team']==home_team) & (h2h_df['result']=='H')) |
+                                    ((h2h_df['away_team']==home_team) & (h2h_df['result']=='A'))])
+        h2h_rate = round(h2h_home_wins / len(h2h_df), 3)
+    else:
+        h2h_rate = 0.33
+
     input_data = pd.DataFrame([{
         'home_attack':    h['attack_strength'],
         'away_attack':    a['attack_strength'],
@@ -108,6 +120,9 @@ def predict_match(req: MatchRequest):
         'home_form':      h['win_rate'] * 15,
         'away_form':      a['win_rate'] * 15,
         'form_diff':      (h['win_rate'] - a['win_rate']) * 15,
+        'home_form_w':    h['win_rate'] * 3,
+        'away_form_w':    a['win_rate'] * 3,
+        'form_diff_w':    (h['win_rate'] - a['win_rate']) * 3,
         'home_win_rate':  h['win_rate'],
         'away_win_rate':  a['win_rate'],
         'win_rate_diff':  h['win_rate'] - a['win_rate'],
@@ -116,6 +131,7 @@ def predict_match(req: MatchRequest):
         'attack_diff':    h['attack_strength'] - a['attack_strength'],
         'defense_diff':   h['defense_strength'] - a['defense_strength'],
         'home_advantage': 0.43,
+        'h2h_home_rate':  h2h_rate,
     }])
 
     input_scaled = scaler.transform(input_data)
