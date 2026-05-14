@@ -396,3 +396,38 @@ def get_team_form(team_name: str, n: int = 5):
         })
 
     return {"team": team_name, "form": form}
+
+    # ── 선수 데이터 API ──
+import json as _json
+
+@app.get("/players/topscorers/{league_code}")
+def get_top_scorers(league_code: str):
+    """리그별 득점왕"""
+    players_path = os.path.join(MODEL_DIR, "players.json")
+    if not os.path.exists(players_path):
+        raise HTTPException(status_code=404, detail="선수 데이터 없음")
+    
+    with open(players_path, 'r', encoding='utf-8') as f:
+        data = _json.load(f)
+    
+    scorers = data.get("topscorers", {}).get(league_code.upper(), [])
+    if not scorers:
+        raise HTTPException(status_code=404, detail="해당 리그 데이터 없음")
+    
+    return {"league": league_code.upper(), "players": scorers}
+
+@app.get("/players/topassists/{league_code}")
+def get_top_assists(league_code: str):
+    """리그별 도움왕"""
+    players_path = os.path.join(MODEL_DIR, "players.json")
+    if not os.path.exists(players_path):
+        raise HTTPException(status_code=404, detail="선수 데이터 없음")
+    
+    with open(players_path, 'r', encoding='utf-8') as f:
+        data = _json.load(f)
+    
+    assists = data.get("topassists", {}).get(league_code.upper(), [])
+    if not assists:
+        raise HTTPException(status_code=404, detail="해당 리그 데이터 없음")
+    
+    return {"league": league_code.upper(), "players": assists}

@@ -237,6 +237,7 @@
   </div>
   <div class="nav-tab active" onclick="showPage('predict')">경기 예측</div>
   <div class="nav-tab" onclick="showPage('standings')">순위표</div>
+  <div class="nav-tab" onclick="showPage('players')">선수</div>
 </nav>
 
 <div class="container">
@@ -266,7 +267,22 @@
       </div>
     </div>
   </div>
-
+<!-- 선수 페이지 -->
+<div id="page-players" class="page" style="display:none">
+  <div class="card">
+    <div class="card-title">⚽ EPL 24-25 시즌</div>
+    <div style="display:flex;gap:24px;flex-wrap:wrap">
+      <div style="flex:1;min-width:400px">
+        <h3 style="font-size:14px;color:#e6edf3;margin-bottom:12px;display:flex;align-items:center;gap:8px">🥇 득점왕 TOP 10</h3>
+        <div id="topscorers-list"><div class="loading">불러오는 중...</div></div>
+      </div>
+      <div style="flex:1;min-width:400px">
+        <h3 style="font-size:14px;color:#e6edf3;margin-bottom:12px;display:flex;align-items:center;gap:8px">🎯 도움왕 TOP 10</h3>
+        <div id="topassists-list"><div class="loading">불러오는 중...</div></div>
+      </div>
+    </div>
+  </div>
+</div>
   <div class="page active" id="page-predict">
     <div class="card">
       <div class="team-selector">
@@ -389,7 +405,7 @@
 </div>
 
 <script>
-const API = "https://fotdata-api.onrender.com";
+const API = "hhttp://127.0.0.1:8000/FotData.html";
 let logos = {};
 let selectedTeams = { home: '', away: '' };
 let currentLeagueTab = { home: 'all', away: 'all' };
@@ -601,6 +617,53 @@ function showPage(page) {
   document.getElementById('page-'+page).classList.add('active');
   event.target.classList.add('active');
   if(page!=='standings'){document.getElementById('ucl-subtabs').style.display='none';}
+  if(page==='players'){loadPlayers();}
+}
+
+async function loadPlayers() {
+  const API = 'https://fotdata-api.onrender.com';
+  
+  try {
+    const [scorersRes, assistsRes] = await Promise.all([
+      fetch(`${API}/players/topscorers/PL`),
+      fetch(`${API}/players/topassists/PL`)
+    ]);
+    
+    const scorersData = await scorersRes.json();
+    const assistsData = await assistsRes.json();
+    
+    document.getElementById('topscorers-list').innerHTML = renderPlayerList(scorersData.players, 'goals');
+    document.getElementById('topassists-list').innerHTML = renderPlayerList(assistsData.players, 'assists');
+  } catch (e) {
+    document.getElementById('topscorers-list').innerHTML = '<div style="color:#da3633;padding:12px">불러오기 실패</div>';
+    document.getElementById('topassists-list').innerHTML = '<div style="color:#da3633;padding:12px">불러오기 실패</div>';
+  }
+}
+
+function renderPlayerList(players, type) {
+  const top10 = players.slice(0, 10);
+  return top10.map((p, i) => {
+    const stats = p.statistics[0];
+    const value = type === 'goals' ? stats.goals.total : stats.goals.assists;
+    const rating = stats.games.rating ? parseFloat(stats.games.rating).toFixed(2) : '-';
+    return `
+      <div style="display:flex;align-items:center;gap:12px;padding:10px;border-bottom:0.5px solid #30363d">
+        <div style="font-size:14px;color:#8b949e;width:24px;text-align:center;font-weight:600">${i+1}</div>
+        <img src="${p.player.photo}" style="width:36px;height:36px;border-radius:50%;background:#21262d;object-fit:cover" onerror="this.style.display='none'">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;color:#e6edf3;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.player.name}</div>
+          <div style="font-size:11px;color:#8b949e;display:flex;align-items:center;gap:4px">
+            <img src="${stats.team.logo}" style="width:14px;height:14px" onerror="this.style.display='none'">
+            ${stats.team.name}
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:18px;font-weight:700;color:#58a6ff">${value}</div>
+          <div style="font-size:10px;color:#8b949e">평점 ${rating}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
 async function loadStandings(leagueCode) {

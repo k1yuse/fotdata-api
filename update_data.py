@@ -17,6 +17,20 @@ BASE_URL = "https://api.football-data.org/v4"
 HEADERS = {"X-Auth-Token": API_KEY}
 MODEL_DIR = "fotdata_model"
 
+# API-Football (선수 데이터용)
+API_FOOTBALL_KEY = os.environ.get('API_FOOTBALL_KEY', '')
+API_FOOTBALL_URL = "https://v3.football.api-sports.io"
+API_FOOTBALL_HEADERS = {"x-apisports-key": API_FOOTBALL_KEY}
+
+# API-Football 리그 ID
+LEAGUE_IDS = {
+    "PL":  39,   # EPL
+    "PD":  140,  # LaLiga
+    "BL1": 78,   # Bundesliga
+    "SA":  135,  # Serie A
+    "FL1": 61,   # Ligue 1
+}
+
 LEAGUES_V2 = {
     "PL":  "EPL (잉글랜드)",
     "PD":  "라리가 (스페인)",
@@ -385,9 +399,76 @@ def main():
 # UCL 토너먼트
     fetch_ucl_tournament()
     
+    fetch_top_scorers()
+
     print(f"\n🏆 업데이트 완료!")
     print(f"   데이터: {len(df_total)}경기")
     print(f"   최고 정확도: {max(acc_lr, acc_rf, acc_xgb):.1%}")
+
+def fetch_top_scorers():
+    """리그별 득점왕/도움왕 데이터 수집"""
+    import json
+    print("\n[선수 스탯] 수집 중...")
+    
+    if not API_FOOTBALL_KEY:
+        print("  ⚠️ API_FOOTBALL_KEY가 없어 건너뜀")
+        return
+    
+    all_players = {"topscorers": {}, "topassists": {}}
+    
+    # 무료 플랜은 24-25 시즌만 가능
+    SEASON = 2024
+    
+    for code, league_id in LEAGUE_IDS.items():
+        league_name = LEAGUES_V2.get(code, code)
+        
+        # 무료 플랜은 EPL만 가능 (다른 리그는 유료)
+        if code != "PL":
+            print(f"  [{league_name}] 무료 플랜 미지원, 건너뜀")
+            continue
+        
+        # 득점왕
+        print(f"  [{league_name}] 득점왕 수집 중...")
+        try:
+            res = requests.get(
+                f"{API_FOOTBALL_URL}/players/topscorers",
+                headers=API_FOOTBALL_HEADERS,
+                params={"league": league_id, "season": SEASON}
+            )
+            if res.status_code == 200:
+                data = res.json()
+                all_players["topscorers"][code] = data.get("response", [])
+                print(f"    ✅ {len(data.get('response', []))}명")
+            else:
+                print(f"    ❌ 오류: {res.status_code}")
+        except Exception as e:
+            print(f"    ❌ 예외: {e}")
+        
+        time.sleep(2)
+        
+        # 도움왕
+        print(f"  [{league_name}] 도움왕 수집 중...")
+        try:
+            res = requests.get(
+                f"{API_FOOTBALL_URL}/players/topassists",
+                headers=API_FOOTBALL_HEADERS,
+                params={"league": league_id, "season": SEASON}
+            )
+            if res.status_code == 200:
+                data = res.json()
+                all_players["topassists"][code] = data.get("response", [])
+                print(f"    ✅ {len(data.get('response', []))}명")
+            else:
+                print(f"    ❌ 오류: {res.status_code}")
+        except Exception as e:
+            print(f"    ❌ 예외: {e}")
+        
+        time.sleep(2)
+    
+    # 파일 저장
+    with open(f"{MODEL_DIR}/players.json", 'w', encoding='utf-8') as f:
+        json.dump(all_players, f, ensure_ascii=False, indent=2)
+    print(f"  ✅ players.json 저장 완료")
 
 if __name__ == "__main__":
     main()
