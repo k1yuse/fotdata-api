@@ -539,13 +539,20 @@
     {
       "team1": "Paris Saint-Germain FC",
       "team2": "Arsenal FC",
-      "team1_goals": 0,
-      "team2_goals": 0,
+      "team1_goals": 5,
+      "team2_goals": 4,
       "team1_logo": "https://crests.football-data.org/524.png",
       "team2_logo": "https://crests.football-data.org/57.png",
-      "winner": null,
-      "status": "UPCOMING",
-      "legs": []
+      "winner": "Paris Saint-Germain FC",
+      "status": "FINISHED",
+      "legs": [
+        {
+          "home_team": "Paris Saint-Germain FC",
+          "away_team": "Arsenal FC",
+          "home_goals": 5,
+          "away_goals": 4
+        }
+      ]
     }
   ]
 }
