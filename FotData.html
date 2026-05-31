@@ -555,14 +555,32 @@ function renderTournament(data) {
   const sfFin = [[0,250,20,250]];
 
   const fin = FIN[0];
+  const finIsT1Winner = fin && fin.winner === fin.team1;
+  const finIsT2Winner = fin && fin.winner === fin.team2;
   const finalHtml = `<div class="b-final">
     <div class="final-label">결승</div>
-    <div style="font-size:34px;text-align:center">🏆</div>
-    <div class="final-match">
-      <div class="final-team ${fin?'decided':''}">${fin?shortName(fin.team1):'미정'}</div>
-      <div class="final-team ${fin?'decided':''}">${fin?shortName(fin.team2):'미정'}</div>
+    <div style="font-size:28px;text-align:center;margin-bottom:4px">🏆</div>
+    ${fin ? `
+    <div class="mc" style="width:130px;border-color:#f0c040;cursor:default">
+      <div class="mc-team ${finIsT1Winner?'winner':''}">
+        ${fin.team1_logo?`<img src="${fin.team1_logo}" class="mc-logo">`:'<div class="mc-logo"></div>'}
+        <span class="mc-name">${shortName(fin.team1)}${finIsT1Winner?' 🏆':''}</span>
+        <span class="mc-score">${fin.team1_goals ?? ''}</span>
+      </div>
+      <div class="mc-team ${finIsT2Winner?'winner':''}">
+        ${fin.team2_logo?`<img src="${fin.team2_logo}" class="mc-logo">`:'<div class="mc-logo"></div>'}
+        <span class="mc-name">${shortName(fin.team2)}${finIsT2Winner?' 🏆':''}</span>
+        <span class="mc-score">${fin.team2_goals ?? ''}</span>
+      </div>
+      ${fin.winner ? `<div class="mc-winner" style="color:#f0c040;font-weight:700">🏆 ${shortName(fin.winner)} 우승</div>` : ''}
     </div>
-    <div style="font-size:9px;color:#8b949e;text-align:center">2026.05.31</div>
+    ` : `
+    <div class="final-match">
+      <div class="final-team">미정</div>
+      <div class="final-team">미정</div>
+    </div>
+    `}
+    <div style="font-size:9px;color:#8b949e;text-align:center;margin-top:6px">2026.05.31</div>
   </div>`;
 
   document.getElementById('bracket-inner').innerHTML =
