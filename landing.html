@@ -289,10 +289,10 @@
     <a href="FotData.html" class="btn-primary">경기 예측하기</a>
     <a href="FotData.html#standings" class="btn-secondary">순위표 보기</a>
   </div>
-  <div class="stats-row">
-    <div class="stat-item"><div class="stat-num">5756</div><div class="stat-label">경기 데이터</div></div>
+  
+    <div class="stats-row"><div class="stat-item"><div class="stat-num">5756</div><div class="stat-label">경기 데이터</div></div>
     <div class="stat-item"><div class="stat-num">96</div><div class="stat-label">팀 분석</div></div>
-    <div class="stat-item"><div class="stat-num">60%</div><div class="stat-label">예측 정확도</div></div>
+    <div class="stat-item"><div class="stat-num" id="accuracy-stat">--</div><div class="stat-label">예측 정확도</div></div>
     <div class="stat-item"><div class="stat-num">6</div><div class="stat-label">지원 리그</div></div>
   </div>
 </section>
@@ -586,6 +586,18 @@
 </div>
   <div class="footer-text">© 2026 FotData · AI 축구 분석 플랫폼</div>
 </footer>
+
+<script>
+(async function() {
+  try {
+    const res = await fetch('https://fotdata-api.onrender.com/accuracy');
+    const data = await res.json();
+    document.getElementById('accuracy-stat').textContent = data.best + '%';
+  } catch(e) {
+    document.getElementById('accuracy-stat').textContent = '56%';
+  }
+})();
+</script>
 
 </body>
 </html>
