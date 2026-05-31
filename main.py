@@ -100,7 +100,7 @@ def predict_match(req: MatchRequest):
 
     home_advantage = 0.45  # 데이터 기반 홈 어드밴티지
 
-    # H2H 홈팀 승률 계산
+   # H2H 홈팀 승률 계산
     h2h_df = df_matches_all[
         ((df_matches_all['home_team']==home_team) & (df_matches_all['away_team']==away_team)) |
         ((df_matches_all['home_team']==away_team) & (df_matches_all['away_team']==home_team))
@@ -112,26 +112,29 @@ def predict_match(req: MatchRequest):
     else:
         h2h_rate = 0.33
 
+    # ELO 점수 추정 (승률 기반)
+    home_elo = 1500 + (h['win_rate'] - 0.33) * 1000
+    away_elo = 1500 + (a['win_rate'] - 0.33) * 1000
+
     input_data = pd.DataFrame([{
-        'home_attack':    h['attack_strength'],
-        'away_attack':    a['attack_strength'],
-        'home_defense':   h['defense_strength'],
-        'away_defense':   a['defense_strength'],
-        'home_form':      h['win_rate'] * 15,
-        'away_form':      a['win_rate'] * 15,
-        'form_diff':      (h['win_rate'] - a['win_rate']) * 15,
-        'home_form_w':    h['win_rate'] * 3,
-        'away_form_w':    a['win_rate'] * 3,
-        'form_diff_w':    (h['win_rate'] - a['win_rate']) * 3,
-        'home_win_rate':  h['win_rate'],
-        'away_win_rate':  a['win_rate'],
-        'win_rate_diff':  h['win_rate'] - a['win_rate'],
-        'home_goal_diff': h['goal_diff'],
-        'away_goal_diff': a['goal_diff'],
-        'attack_diff':    h['attack_strength'] - a['attack_strength'],
-        'defense_diff':   h['defense_strength'] - a['defense_strength'],
-        'home_advantage': 0.43,
-        'h2h_home_rate':  h2h_rate,
+        'home_elo':          home_elo,
+        'away_elo':          away_elo,
+        'elo_diff':          home_elo - away_elo,
+        'home_form':         h['win_rate'] * 15,
+        'away_form':         a['win_rate'] * 15,
+        'form_diff':         (h['win_rate'] - a['win_rate']) * 15,
+        'home_avg_scored':   h['attack_strength'],
+        'away_avg_scored':   a['attack_strength'],
+        'home_avg_conceded': h['defense_strength'],
+        'away_avg_conceded': a['defense_strength'],
+        'home_attack':       h['attack_strength'],
+        'away_attack':       a['attack_strength'],
+        'home_defense':      h['defense_strength'],
+        'away_defense':      a['defense_strength'],
+        'home_win_rate':     h['win_rate'],
+        'away_win_rate':     a['win_rate'],
+        'win_rate_diff':     h['win_rate'] - a['win_rate'],
+        'h2h_home_rate':     h2h_rate,
     }])
 
     input_scaled = scaler.transform(input_data)

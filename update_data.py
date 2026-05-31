@@ -107,6 +107,7 @@ def calculate_team_stats(df):
     return pd.DataFrame(stats).sort_values("points", ascending=False).reset_index(drop=True)
 
 def get_recent_form(df, team, before_date, n=5):
+    """최근 N경기 승점 합"""
     team_matches = df[
         ((df['home_team']==team) | (df['away_team']==team)) &
         (df['date'] < before_date)
@@ -121,26 +122,23 @@ def get_recent_form(df, team, before_date, n=5):
             elif row['result'] == 'D': points += 1
     return points
 
-def get_recent_form_weighted(df, team, before_date, n=5):
-    """최근 경기일수록 가중치 높게"""
+def get_recent_goals(df, team, before_date, n=10):
+    """최근 N경기 평균 득점, 실점"""
     team_matches = df[
         ((df['home_team']==team) | (df['away_team']==team)) &
         (df['date'] < before_date)
     ].tail(n)
-    points = 0
-    weights = list(range(1, len(team_matches)+1))
-    total_weight = sum(weights)
-    if total_weight == 0:
-        return 0
-    for i, (_, row) in enumerate(team_matches.iterrows()):
-        w = weights[i]
+    if len(team_matches) == 0:
+        return 1.0, 1.0
+    scored, conceded = 0, 0
+    for _, row in team_matches.iterrows():
         if row['home_team'] == team:
-            if row['result'] == 'H': points += 3 * w
-            elif row['result'] == 'D': points += 1 * w
+            scored += row['home_goals']
+            conceded += row['away_goals']
         else:
-            if row['result'] == 'A': points += 3 * w
-            elif row['result'] == 'D': points += 1 * w
-    return round(points / total_weight, 3)
+            scored += row['away_goals']
+            conceded += row['home_goals']
+    return scored / len(team_matches), conceded / len(team_matches)
 
 def get_h2h_rate(df, home, away, before_date, n=10):
     """H2H 홈팀 승률"""
@@ -155,44 +153,114 @@ def get_h2h_rate(df, home, away, before_date, n=10):
                         ((h2h['away_team']==home) & (h2h['result']=='A'))])
     return round(home_wins / len(h2h), 3)
 
+def calculate_elo_ratings(df, k=20, home_advantage=70):
+    """ELO 점수 계산 (시간 순서대로)"""
+    elo = {}
+    elo_history = []
+    
+    df_sorted = df.sort_values('date').reset_index(drop=True)
+    
+    for _, match in df_sorted.iterrows():
+        home, away = match['home_team'], match['away_team']
+        
+        # 초기값 1500
+        if home not in elo: elo[home] = 1500
+        if away not in elo: elo[away] = 1500
+        
+        # 경기 전 ELO 저장
+        elo_history.append({
+            'date': match['date'],
+            'home_team': home,
+            'away_team': away,
+            'home_elo_before': elo[home],
+            'away_elo_before': elo[away],
+        })
+        
+        # 기대 승률 (홈 어드밴티지 적용)
+        home_elo_adj = elo[home] + home_advantage
+        away_elo_adj = elo[away]
+        expected_home = 1 / (1 + 10 ** ((away_elo_adj - home_elo_adj) / 400))
+        
+        # 실제 결과
+        if match['result'] == 'H':
+            actual_home = 1.0
+        elif match['result'] == 'D':
+            actual_home = 0.5
+        else:
+            actual_home = 0.0
+        
+        # ELO 업데이트
+        change = k * (actual_home - expected_home)
+        elo[home] += change
+        elo[away] -= change
+    
+    return pd.DataFrame(elo_history), elo
+
 def build_features(df, df_stats):
+    """피처 생성 (ELO 포함)"""
+    print("ELO 계산 중...")
+    elo_df, final_elo = calculate_elo_ratings(df)
+    
+    # 빠른 조회를 위해 인덱스 설정
+    elo_lookup = {}
+    for _, row in elo_df.iterrows():
+        key = (row['date'], row['home_team'], row['away_team'])
+        elo_lookup[key] = (row['home_elo_before'], row['away_elo_before'])
+    
     rows = []
-    for _, match in df.iterrows():
-        home = match['home_team']
-        away = match['away_team']
-        date = match['date']
+    df_sorted = df.sort_values('date').reset_index(drop=True)
+    
+    for _, match in df_sorted.iterrows():
+        home, away, date = match['home_team'], match['away_team'], match['date']
+        
+        # ELO
+        home_elo, away_elo = elo_lookup.get((date, home, away), (1500, 1500))
+        
+        # 폼
         home_form = get_recent_form(df, home, date)
         away_form = get_recent_form(df, away, date)
-        home_form_w = get_recent_form_weighted(df, home, date)
-        away_form_w = get_recent_form_weighted(df, away, date)
+
+        # 첫 경기는 데이터 없어서 건너뜀
+        if len(df[(df['date'] < date) & ((df['home_team']==home) | (df['away_team']==home))]) < 5:
+            continue
+        if len(df[(df['date'] < date) & ((df['home_team']==away) | (df['away_team']==away))]) < 5:
+            continue
+        
+        # 최근 평균 득실점
+        home_avg_scored, home_avg_conceded = get_recent_goals(df, home, date)
+        away_avg_scored, away_avg_conceded = get_recent_goals(df, away, date)
+        
+        # H2H
         h2h_rate = get_h2h_rate(df, home, away, date)
+        
+        # 팀 스탯
         h_stats = df_stats[df_stats['team']==home]
         a_stats = df_stats[df_stats['team']==away]
         if h_stats.empty or a_stats.empty:
             continue
         h = h_stats.iloc[0]
         a = a_stats.iloc[0]
+        
         rows.append({
-            'home_attack':      h['attack_strength'],
-            'away_attack':      a['attack_strength'],
-            'home_defense':     h['defense_strength'],
-            'away_defense':     a['defense_strength'],
-            'home_form':        home_form,
-            'away_form':        away_form,
-            'form_diff':        home_form - away_form,
-            'home_form_w':      home_form_w,
-            'away_form_w':      away_form_w,
-            'form_diff_w':      home_form_w - away_form_w,
-            'home_win_rate':    h['win_rate'],
-            'away_win_rate':    a['win_rate'],
-            'win_rate_diff':    h['win_rate'] - a['win_rate'],
-            'home_goal_diff':   h['goal_diff'],
-            'away_goal_diff':   a['goal_diff'],
-            'attack_diff':      h['attack_strength'] - a['attack_strength'],
-            'defense_diff':     h['defense_strength'] - a['defense_strength'],
-            'home_advantage':   len(df[df['result']=='H']) / len(df),
-            'h2h_home_rate':    h2h_rate,
-            'result':           match['result'],
+            'home_elo':          home_elo,
+            'away_elo':          away_elo,
+            'elo_diff':          home_elo - away_elo,
+            'home_form':         home_form,
+            'away_form':         away_form,
+            'form_diff':         home_form - away_form,
+            'home_avg_scored':   home_avg_scored,
+            'away_avg_scored':   away_avg_scored,
+            'home_avg_conceded': home_avg_conceded,
+            'away_avg_conceded': away_avg_conceded,
+            'home_attack':       h['attack_strength'],
+            'away_attack':       a['attack_strength'],
+            'home_defense':      h['defense_strength'],
+            'away_defense':      a['defense_strength'],
+            'home_win_rate':     h['win_rate'],
+            'away_win_rate':     a['win_rate'],
+            'win_rate_diff':     h['win_rate'] - a['win_rate'],
+            'h2h_home_rate':     h2h_rate,
+            'result':            match['result'],
         })
     return pd.DataFrame(rows)
 
@@ -349,17 +417,24 @@ def main():
     df_features = build_features(df_total, df_stats_all)
 
     FEATURES = [
-        'home_attack','away_attack','home_defense','away_defense',
+        'home_elo','away_elo','elo_diff',
         'home_form','away_form','form_diff',
-        'home_form_w','away_form_w','form_diff_w',
+        'home_avg_scored','away_avg_scored','home_avg_conceded','away_avg_conceded',
+        'home_attack','away_attack','home_defense','away_defense',
         'home_win_rate','away_win_rate','win_rate_diff',
-        'home_goal_diff','away_goal_diff',
-        'attack_diff','defense_diff','home_advantage',
         'h2h_home_rate'
     ]
 
     X = df_features[FEATURES].dropna()
     y = df_features.loc[X.index, 'result']
+
+    # 무한대 값 제거
+    import numpy as np
+    X = X.replace([np.inf, -np.inf], np.nan).dropna()
+    y = y.loc[X.index]
+
+    # 이상치 확인
+    print(f"학습 데이터: {len(X)}경기")
 
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42, stratify=y
@@ -370,7 +445,7 @@ def main():
     X_train_scaled = scaler.fit_transform(X_train)
     X_test_scaled  = scaler.transform(X_test)
 
-    lr = LogisticRegression(max_iter=1000, random_state=42, C=0.5)
+    lr = LogisticRegression(max_iter=2000, random_state=42, C=0.1, solver='lbfgs')
     lr.fit(X_train_scaled, y_train)
     acc_lr = accuracy_score(y_test, lr.predict(X_test_scaled))
     print(f"✅ Logistic Regression: {acc_lr:.1%}")
