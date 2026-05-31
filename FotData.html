@@ -250,6 +250,10 @@
       <div style="font-size:11px;color:#c9d1d9">2026-27 시즌 시작까지 카운트다운</div>
     </div>
   </div>
+  <div style="margin-bottom:14px">
+  <div style="font-size:11px;color:#c9d1d9;margin-bottom:8px;font-weight:600">2025-26 시즌 우승팀</div>
+  <div id="champions-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px"></div>
+</div>
   <div id="countdown-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px"></div>
 </div>
 
@@ -791,6 +795,30 @@ function updateCountdown() {
     `;
   }).join('');
 }
+// 시즌 우승팀
+const CHAMPIONS = [
+  { league: 'EPL',         team: 'Arsenal FC',           logo: 'https://crests.football-data.org/57.png' },
+  { league: '라리가',      team: 'FC Barcelona',         logo: 'https://crests.football-data.org/81.png' },
+  { league: '세리에A',     team: 'Inter Milan',          logo: 'https://crests.football-data.org/108.png' },
+  { league: '분데스리가',  team: 'FC Bayern München',    logo: 'https://crests.football-data.org/5.png' },
+  { league: '리그앙',      team: 'Paris Saint-Germain',  logo: 'https://crests.football-data.org/524.png' },
+  { league: '챔피언스리그',team: 'Paris Saint-Germain',  logo: 'https://crests.football-data.org/524.png' },
+];
+
+function renderChampions() {
+  const grid = document.getElementById('champions-grid');
+  if (!grid) return;
+  grid.innerHTML = CHAMPIONS.map(c => `
+    <div style="background:rgba(255,215,0,0.12);border:1px solid rgba(255,215,0,0.3);padding:10px;border-radius:8px;display:flex;align-items:center;gap:8px">
+      <img src="${c.logo}" style="width:24px;height:24px;object-fit:contain" onerror="this.style.display='none'">
+      <div style="flex:1;min-width:0">
+        <div style="font-size:9px;color:#c9d1d9">${c.league}</div>
+        <div style="font-size:11px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">🏆 ${c.team}</div>
+      </div>
+    </div>
+  `).join('');
+}
+renderChampions();
 updateCountdown();
 setInterval(updateCountdown, 60000);
 
