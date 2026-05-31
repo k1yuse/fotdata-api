@@ -242,28 +242,28 @@
 
 <div class="container">
 <!-- 시즌 종료 배너 -->
-<div style="background:linear-gradient(135deg,#1f6feb 0%,#388bfd 100%);border-radius:12px;padding:20px;margin-bottom:20px">
-  <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap">
+<div style="background:#161b22;border:0.5px solid #30363d;border-radius:12px;padding:20px;margin-bottom:20px">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap">
     <div style="font-size:24px">🏆</div>
     <div style="flex:1;min-width:200px">
-      <div style="font-size:15px;font-weight:700;color:#fff">2025-26 시즌 종료</div>
+      <div style="font-size:15px;font-weight:700;color:#e6edf3">2025-26 시즌 종료</div>
     </div>
   </div>
   
   <div style="margin-bottom:18px">
-    <div style="font-size:11px;color:#c9d1d9;margin-bottom:8px;font-weight:600">2025-26 시즌 우승팀</div>
+    <div style="font-size:11px;color:#8b949e;margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">시즌 우승팀</div>
     <div id="champions-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px"></div>
   </div>
 
-  <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,0.15);padding-top:16px">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap;border-top:0.5px solid #30363d;padding-top:18px">
     <div style="font-size:24px">⏳</div>
     <div style="flex:1;min-width:200px">
-      <div style="font-size:15px;font-weight:700;color:#fff">2026-27 시즌 시작</div>
+      <div style="font-size:15px;font-weight:700;color:#e6edf3">2026-27 시즌 시작</div>
     </div>
   </div>
   
   <div>
-    <div style="font-size:11px;color:#c9d1d9;margin-bottom:8px;font-weight:600">카운트다운</div>
+    <div style="font-size:11px;color:#8b949e;margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">카운트다운</div>
     <div id="countdown-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px"></div>
   </div>
 </div>
@@ -796,7 +796,7 @@ function updateCountdown() {
       badge = '<span style="color:#f0883e;font-weight:600">미정</span>';
     }
     return `
-      <div style="background:rgba(255,255,255,0.1);padding:10px;border-radius:8px;display:flex;align-items:center;gap:8px">
+      <div style="background:#21262d;border:0.5px solid #30363d;padding:10px;border-radius:8px;display:flex;align-items:center;gap:8px">
         <img src="${l.logo}" style="width:18px;height:18px;${l.filter?`filter:${l.filter}`:''}" onerror="this.style.display='none'">
         <div style="flex:1;min-width:0">
           <div style="font-size:10px;color:#c9d1d9">${l.name}</div>
@@ -820,7 +820,7 @@ function renderChampions() {
   const grid = document.getElementById('champions-grid');
   if (!grid) return;
   grid.innerHTML = CHAMPIONS.map(c => `
-    <div style="background:rgba(255,215,0,0.12);border:1px solid rgba(255,215,0,0.3);padding:10px;border-radius:8px;display:flex;align-items:center;gap:8px">
+    <div style="background:#21262d;border:0.5px solid #30363d;padding:10px;border-radius:8px;display:flex;align-items:center;gap:8px">
       <img src="${c.logo}" style="width:24px;height:24px;object-fit:contain" onerror="this.style.display='none'">
       <div style="flex:1;min-width:0">
         <div style="font-size:9px;color:#c9d1d9">${c.league}</div>
