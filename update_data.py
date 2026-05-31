@@ -476,6 +476,21 @@ def main():
     
     fetch_top_scorers()
 
+    # 정확도 저장
+    import json as _json
+    accuracy_data = {
+        "logistic_regression": round(acc_lr * 100, 1),
+        "random_forest": round(acc_rf * 100, 1),
+        "xgboost": round(acc_xgb * 100, 1),
+        "best": round(max(acc_lr, acc_rf, acc_xgb) * 100, 1),
+        "total_matches": len(df_total),
+        "training_matches": len(X),
+        "updated_at": pd.Timestamp.now().isoformat(),
+    }
+    with open(f"{MODEL_DIR}/accuracy.json", 'w', encoding='utf-8') as f:
+        _json.dump(accuracy_data, f, ensure_ascii=False, indent=2)
+    print(f"✅ accuracy.json 저장 완료")
+    
     print(f"\n🏆 업데이트 완료!")
     print(f"   데이터: {len(df_total)}경기")
     print(f"   최고 정확도: {max(acc_lr, acc_rf, acc_xgb):.1%}")
