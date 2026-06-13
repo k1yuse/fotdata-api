@@ -38,4 +38,5 @@ jobs:
         git config --global user.name "k1yuse"
         git add fotdata_model/
         git diff --staged --quiet || git commit -m "자동 데이터 업데이트 $(date '+%Y-%m-%d')"
+        git pull --rebase origin main || true
         git push
