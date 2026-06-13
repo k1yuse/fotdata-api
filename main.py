@@ -450,3 +450,30 @@ def get_top_assists(league_code: str):
         raise HTTPException(status_code=404, detail="해당 리그 데이터 없음")
     
     return {"league": league_code.upper(), "players": assists}
+
+    # ── 우승 예측 API ──
+@app.get("/predict/champion/{league_code}")
+def get_champion_prediction(league_code: str):
+    """리그 우승 예측"""
+    path = os.path.join(MODEL_DIR, "champion_predictions.json")
+    if not os.path.exists(path):
+        raise HTTPException(status_code=404, detail="우승 예측 데이터 없음")
+    
+    with open(path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    
+    league = data.get(league_code.upper())
+    if not league:
+        raise HTTPException(status_code=404, detail="해당 리그 데이터 없음")
+    
+    # 로고 추가
+    logo_path = os.path.join(MODEL_DIR, "team_logos.json")
+    logos = {}
+    if os.path.exists(logo_path):
+        with open(logo_path, 'r', encoding='utf-8') as f:
+            logos = json.load(f)
+    
+    for team in league['teams']:
+        team['logo'] = logos.get(team['team'], '')
+    
+    return league

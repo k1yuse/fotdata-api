@@ -476,6 +476,9 @@ def main():
     
     fetch_top_scorers()
 
+    # 우승 예측
+    fetch_champion_predictions()
+
     # 정확도 저장
     import json as _json
     accuracy_data = {
@@ -494,6 +497,146 @@ def main():
     print(f"\n🏆 업데이트 완료!")
     print(f"   데이터: {len(df_total)}경기")
     print(f"   최고 정확도: {max(acc_lr, acc_rf, acc_xgb):.1%}")
+
+def simulate_season(teams, df_stats, n_simulations=1000):
+    """몬테카를로 시뮬레이션으로 리그 우승 예측"""
+    import random
+    
+    win_counts = {team: 0 for team in teams}
+    top4_counts = {team: 0 for team in teams}
+    relegated_counts = {team: 0 for team in teams}
+    
+    for _ in range(n_simulations):
+        # 시즌 일정 생성 (홈/원정 각 1번)
+        points = {team: 0 for team in teams}
+        
+        for home in teams:
+            for away in teams:
+                if home == away:
+                    continue
+                
+                h = df_stats[df_stats['team'] == home]
+                a = df_stats[df_stats['team'] == away]
+                
+                if h.empty or a.empty:
+                    continue
+                
+                h = h.iloc[0]
+                a = a.iloc[0]
+                
+                # ELO 기반 승률 계산
+                import random as _random
+                home_elo = 1500 + (h['win_rate'] - 0.33) * 1000 + 70 + _random.gauss(0, 50)
+                away_elo = 1500 + (a['win_rate'] - 0.33) * 1000 + _random.gauss(0, 50)
+                
+                exp_home = 1 / (1 + 10 ** ((away_elo - home_elo) / 400))
+                exp_away = 1 / (1 + 10 ** ((home_elo - away_elo) / 400))
+                
+                # 무승부 확률 조정
+                draw_prob = 0.25
+                home_win_prob = exp_home * (1 - draw_prob)
+                away_win_prob = exp_away * (1 - draw_prob)
+                
+                # 정규화
+                total = home_win_prob + draw_prob + away_win_prob
+                home_win_prob /= total
+                draw_prob /= total
+                away_win_prob /= total
+                
+                # 결과 결정
+                rand = random.random()
+                if rand < home_win_prob:
+                    points[home] += 3
+                elif rand < home_win_prob + draw_prob:
+                    points[home] += 1
+                    points[away] += 1
+                else:
+                    points[away] += 3
+        
+        # 순위 계산
+        sorted_teams = sorted(points.items(), key=lambda x: x[1], reverse=True)
+        
+        # 우승
+        win_counts[sorted_teams[0][0]] += 1
+        
+        # TOP 4
+        for team, _ in sorted_teams[:4]:
+            top4_counts[team] += 1
+        
+        # 강등 (하위 3팀)
+        for team, _ in sorted_teams[-3:]:
+            relegated_counts[team] += 1
+    
+    results = []
+    for team in teams:
+        results.append({
+            "team": team,
+            "champion_prob": round(win_counts[team] / n_simulations * 100, 1),
+            "top4_prob": round(top4_counts[team] / n_simulations * 100, 1),
+            "relegation_prob": round(relegated_counts[team] / n_simulations * 100, 1),
+        })
+    
+    return sorted(results, key=lambda x: x['champion_prob'], reverse=True)
+
+
+def fetch_champion_predictions():
+    """5대 리그 우승 예측 시뮬레이션"""
+    import json
+    print("\n[우승 예측] 시뮬레이션 중...")
+    
+    predictions = {}
+    
+    LEAGUE_TEAMS = {
+        "PL":  "Premier League",
+        "PD":  "LaLiga",
+        "BL1": "Bundesliga",
+        "SA":  "Serie A",
+        "FL1": "Ligue 1",
+    }
+    
+    df_all = pd.read_csv(f"{MODEL_DIR}/all_matches.csv")
+    df_all['date'] = pd.to_datetime(df_all['date'])
+    
+    for code, name in LEAGUE_TEAMS.items():
+        print(f"  [{name}] 시뮬레이션 중...")
+        
+        # 25-26 시즌 해당 리그 팀만
+        league_df = df_all[
+            (df_all['league'] == code) &
+            (df_all['date'] >= '2025-08-01')
+        ]
+        
+        if league_df.empty:
+            print(f"  ❌ {name} 데이터 없음")
+            continue
+        
+        teams = list(set(league_df['home_team'].tolist() + league_df['away_team'].tolist()))
+        
+        # 3시즌 평균 스탯 계산
+        df_all_stats = pd.read_csv(f"{MODEL_DIR}/all_matches.csv")
+        df_all_stats['date'] = pd.to_datetime(df_all_stats['date'])
+        
+        # 해당 리그 전체 데이터로 스탯 계산
+        league_all = df_all_stats[df_all_stats['league'] == code]
+        df_stats = calculate_team_stats(league_all)
+        
+        # 해당 리그 팀만 필터
+        league_teams = [t for t in teams if not df_stats[df_stats['team']==t].empty]
+        
+        if len(league_teams) < 5:
+            print(f"  ❌ {name} 팀 수 부족")
+            continue
+        
+        results = simulate_season(league_teams, df_stats)
+        predictions[code] = {
+            "league": name,
+            "teams": results
+        }
+        print(f"  ✅ {name} 완료 ({len(league_teams)}팀)")
+    
+    with open(f"{MODEL_DIR}/champion_predictions.json", 'w', encoding='utf-8') as f:
+        json.dump(predictions, f, ensure_ascii=False, indent=2)
+    print(f"  ✅ champion_predictions.json 저장 완료")
 
 def fetch_top_scorers():
     """리그별 득점왕/도움왕 데이터 수집"""

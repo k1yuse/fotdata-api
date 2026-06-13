@@ -215,6 +215,15 @@
       .standings-table .hide-mobile { display: none; }
       .standings-table td, .standings-table th { padding: 8px 6px; font-size: 11px; }
     }
+    
+    .champ-league-btn { padding: 8px 16px; background: #161b22; border: 0.5px solid #30363d; border-radius: 8px; color: #8b949e; font-size: 13px; cursor: pointer; transition: all .15s; }
+    .champ-league-btn:hover { border-color: #58a6ff; }
+    .champ-league-btn.active { background: #1f6feb; border-color: #1f6feb; color: #fff; font-weight: 600; }
+    .champ-row { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-bottom: 0.5px solid #21262d; }
+    .champ-rank { font-size: 14px; color: #8b949e; width: 24px; text-align: center; font-weight: 600; }
+    .champ-bar-wrap { flex: 1; background: #21262d; border-radius: 6px; height: 24px; position: relative; overflow: hidden; }
+    .champ-bar { height: 100%; background: linear-gradient(90deg, #1f6feb, #58a6ff); border-radius: 6px; transition: width .5s; }
+    .champ-prob { font-size: 13px; font-weight: 700; color: #58a6ff; width: 50px; text-align: right; }
   </style>
 </head>
 <body>
@@ -236,6 +245,7 @@
     </div>
   </div>
   <div class="nav-tab active" onclick="showPage('predict')">경기 예측</div>
+  <div class="nav-tab" onclick="showPage('champion')">우승 예측</div>
   <div class="nav-tab" onclick="showPage('standings')">순위표</div>
   <div class="nav-tab" onclick="showPage('players')">선수</div>
 </nav>
@@ -294,6 +304,25 @@
       </div>
     </div>
   </div>
+
+  <!-- 우승 예측 페이지 -->
+<div id="page-champion" class="page" style="display:none">
+  <div class="card">
+    <div class="card-title">🏆 2026-27 시즌 우승 예측</div>
+    <div style="font-size:12px;color:#8b949e;margin-bottom:16px">몬테카를로 시뮬레이션 1,000회 기반 · 3시즌 데이터 학습</div>
+    
+    <div class="league-tabs" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
+      <button class="champ-league-btn active" onclick="loadChampion('PL', this)">EPL</button>
+      <button class="champ-league-btn" onclick="loadChampion('PD', this)">라리가</button>
+      <button class="champ-league-btn" onclick="loadChampion('BL1', this)">분데스리가</button>
+      <button class="champ-league-btn" onclick="loadChampion('SA', this)">세리에A</button>
+      <button class="champ-league-btn" onclick="loadChampion('FL1', this)">리그앙</button>
+    </div>
+    
+    <div id="champion-content"><div class="loading">불러오는 중...</div></div>
+  </div>
+</div>
+
 <!-- 선수 페이지 -->
 <div id="page-players" class="page" style="display:none">
   <div class="card">
@@ -663,6 +692,71 @@ function showPage(page) {
   event.target.classList.add('active');
   if(page!=='standings'){document.getElementById('ucl-subtabs').style.display='none';}
   if(page==='players'){loadPlayers();}
+  if(page==='champion'){loadChampion('PL');}
+}
+async function loadChampion(league, btn) {
+  const API = 'https://fotdata-api.onrender.com';
+  
+  // 버튼 active 토글
+  if (btn) {
+    document.querySelectorAll('.champ-league-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  
+  const content = document.getElementById('champion-content');
+  content.innerHTML = '<div class="loading">불러오는 중...</div>';
+  
+  try {
+    const res = await fetch(`${API}/predict/champion/${league}`);
+    const data = await res.json();
+    
+    const top10 = data.teams.slice(0, 10);
+    const maxProb = top10[0].champion_prob || 1;
+    
+    let html = '<div style="margin-bottom:20px"><div style="font-size:13px;color:#e6edf3;font-weight:600;margin-bottom:10px">우승 확률 TOP 10</div>';
+    
+    top10.forEach((t, i) => {
+      const barWidth = (t.champion_prob / maxProb) * 100;
+      html += `
+        <div class="champ-row">
+          <div class="champ-rank">${i+1}</div>
+          <img src="${t.logo}" style="width:24px;height:24px;object-fit:contain" onerror="this.style.display='none'">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;color:#e6edf3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.team}</div>
+          </div>
+          <div class="champ-bar-wrap" style="max-width:200px">
+            <div class="champ-bar" style="width:${barWidth}%"></div>
+          </div>
+          <div class="champ-prob">${t.champion_prob}%</div>
+        </div>
+      `;
+    });
+    html += '</div>';
+    
+    // 강등 위험 TOP 5
+    const relegation = [...data.teams].sort((a,b) => b.relegation_prob - a.relegation_prob).slice(0, 5);
+    html += '<div><div style="font-size:13px;color:#e6edf3;font-weight:600;margin-bottom:10px">⚠️ 강등 위험 TOP 5</div>';
+    relegation.forEach((t, i) => {
+      html += `
+        <div class="champ-row">
+          <div class="champ-rank">${i+1}</div>
+          <img src="${t.logo}" style="width:24px;height:24px;object-fit:contain" onerror="this.style.display='none'">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;color:#e6edf3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.team}</div>
+          </div>
+          <div class="champ-bar-wrap" style="max-width:200px">
+            <div class="champ-bar" style="width:${t.relegation_prob}%;background:linear-gradient(90deg,#da3633,#f85149)"></div>
+          </div>
+          <div class="champ-prob" style="color:#f85149">${t.relegation_prob}%</div>
+        </div>
+      `;
+    });
+    html += '</div>';
+    
+    content.innerHTML = html;
+  } catch (e) {
+    content.innerHTML = '<div style="color:#da3633;padding:12px">불러오기 실패</div>';
+  }
 }
 
 async function loadPlayers() {
