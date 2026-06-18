@@ -473,7 +473,21 @@ def get_champion_prediction(league_code: str):
         with open(logo_path, 'r', encoding='utf-8') as f:
             logos = json.load(f)
     
+    # for team in league['teams']:
+    #     team['logo'] = logos.get(team['team'], '')
+    
+    # return league
+
+    # 팀 승률 추가 (사용자 시뮬레이션용)
+    stats_path = os.path.join(MODEL_DIR, "team_stats.csv")
+    win_rates = {}
+    if os.path.exists(stats_path):
+        df_s = pd.read_csv(stats_path)
+        for _, row in df_s.iterrows():
+            win_rates[row['team']] = float(row['win_rate'])
+    
     for team in league['teams']:
         team['logo'] = logos.get(team['team'], '')
+        team['win_rate'] = win_rates.get(team['team'], 0.33)
     
     return league

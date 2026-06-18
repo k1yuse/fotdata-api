@@ -318,7 +318,22 @@
       <button class="champ-league-btn" onclick="loadChampion('SA', this)"><img src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">세리에A</button>
       <button class="champ-league-btn" onclick="loadChampion('FL1', this)"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">리그앙</button>
     </div>
-    <div id="champion-content"><div class="loading">불러오는 중...</div></div>
+    <!-- <div id="champion-content"><div class="loading">불러오는 중...</div></div> -->
+     <div style="background:#161b22;border:0.5px solid #30363d;border-radius:8px;padding:16px;margin-bottom:20px">
+  <div style="font-size:13px;color:#e6edf3;font-weight:600;margin-bottom:12px">🎲 직접 시뮬레이션 돌리기</div>
+  <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+    <div style="flex:1;min-width:200px">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:#8b949e;margin-bottom:4px">
+        <span>시뮬레이션 횟수</span>
+        <span id="sim-count-label">5,000회</span>
+      </div>
+      <input type="range" id="sim-slider" min="1000" max="10000" step="1000" value="5000" style="width:100%" oninput="document.getElementById('sim-count-label').textContent=Number(this.value).toLocaleString()+'회'">
+    </div>
+    <button onclick="runSimulation()" style="padding:10px 20px;background:#1f6feb;border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:600;cursor:pointer">▶️ 시뮬레이션 시작</button>
+  </div>
+</div>
+
+<div id="champion-content"><div class="loading">불러오는 중...</div></div>
   </div>
 </div>
 
@@ -693,8 +708,79 @@ function showPage(page) {
   if(page==='players'){loadPlayers();}
   if(page==='champion'){loadChampion('PL');}
 }
+let currentChampionData = null;
+let currentLeagueCode = 'PL';
+
+function runSimulation() {
+  if (!currentChampionData) return;
+  
+  const nSim = parseInt(document.getElementById('sim-slider').value);
+  const teams = currentChampionData.teams;
+  
+  const winCounts = {};
+  const top4Counts = {};
+  const relegationCounts = {};
+  teams.forEach(t => { winCounts[t.team]=0; top4Counts[t.team]=0; relegationCounts[t.team]=0; });
+  
+  for (let sim = 0; sim < nSim; sim++) {
+    const points = {};
+    teams.forEach(t => points[t.team] = 0);
+    
+    // 모든 팀끼리 홈/원정 경기
+    for (let i = 0; i < teams.length; i++) {
+      for (let j = 0; j < teams.length; j++) {
+        if (i === j) continue;
+        const home = teams[i], away = teams[j];
+        
+        // ELO 계산 (노이즈 포함)
+        const homeElo = 1500 + (home.win_rate - 0.33) * 1000 + 70 + gaussRandom() * 50;
+        const awayElo = 1500 + (away.win_rate - 0.33) * 1000 + gaussRandom() * 50;
+        
+        const expHome = 1 / (1 + Math.pow(10, (awayElo - homeElo) / 400));
+        const expAway = 1 / (1 + Math.pow(10, (homeElo - awayElo) / 400));
+        
+        const drawProb = 0.25;
+        let hWin = expHome * (1 - drawProb);
+        let aWin = expAway * (1 - drawProb);
+        const total = hWin + drawProb + aWin;
+        hWin /= total;
+        const dProb = drawProb / total;
+        
+        const rand = Math.random();
+        if (rand < hWin) points[home.team] += 3;
+        else if (rand < hWin + dProb) { points[home.team] += 1; points[away.team] += 1; }
+        else points[away.team] += 3;
+      }
+    }
+    
+    const sorted = Object.entries(points).sort((a,b) => b[1]-a[1]);
+    winCounts[sorted[0][0]]++;
+    sorted.slice(0,4).forEach(([t]) => top4Counts[t]++);
+    sorted.slice(-3).forEach(([t]) => relegationCounts[t]++);
+  }
+  
+  const results = teams.map(t => ({
+    team: t.team,
+    logo: t.logo,
+    champion_prob: Math.round(winCounts[t.team]/nSim*1000)/10,
+    top4_prob: Math.round(top4Counts[t.team]/nSim*1000)/10,
+    relegation_prob: Math.round(relegationCounts[t.team]/nSim*1000)/10,
+  })).sort((a,b) => b.champion_prob - a.champion_prob);
+  
+  renderChampionResults({teams: results});
+}
+
+// 정규분포 난수 생성
+function gaussRandom() {
+  let u = 0, v = 0;
+  while(u === 0) u = Math.random();
+  while(v === 0) v = Math.random();
+  return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+}
+
 async function loadChampion(league, btn) {
   const API = 'https://fotdata-api.onrender.com';
+  currentLeagueCode = league;
   
   // 버튼 active 토글
   if (btn) {
@@ -708,55 +794,61 @@ async function loadChampion(league, btn) {
   try {
     const res = await fetch(`${API}/predict/champion/${league}`);
     const data = await res.json();
-    
-    const top10 = data.teams.slice(0, 10);
-    const maxProb = top10[0].champion_prob || 1;
-    
-    let html = '<div style="margin-bottom:20px"><div style="font-size:13px;color:#e6edf3;font-weight:600;margin-bottom:10px">우승 확률 TOP 10</div>';
-    
-    top10.forEach((t, i) => {
-      const barWidth = (t.champion_prob / maxProb) * 100;
-      html += `
-        <div class="champ-row">
-          <div class="champ-rank">${i+1}</div>
-          <img src="${t.logo}" style="width:24px;height:24px;object-fit:contain" onerror="this.style.display='none'">
-          <div style="flex:1;min-width:0">
-            <div style="font-size:13px;color:#e6edf3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.team}</div>
-          </div>
-          <div class="champ-bar-wrap" style="max-width:200px">
-            <div class="champ-bar" style="width:${barWidth}%"></div>
-          </div>
-          <div class="champ-prob">${t.champion_prob}%</div>
-        </div>
-      `;
-    });
-    html += '</div>';
-    
-    // 강등 위험 TOP 5
-    const relegation = [...data.teams].sort((a,b) => b.relegation_prob - a.relegation_prob).slice(0, 5);
-    html += '<div><div style="font-size:13px;color:#e6edf3;font-weight:600;margin-bottom:10px">⚠️ 강등 위험 TOP 5</div>';
-    relegation.forEach((t, i) => {
-      html += `
-        <div class="champ-row">
-          <div class="champ-rank">${i+1}</div>
-          <img src="${t.logo}" style="width:24px;height:24px;object-fit:contain" onerror="this.style.display='none'">
-          <div style="flex:1;min-width:0">
-            <div style="font-size:13px;color:#e6edf3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.team}</div>
-          </div>
-          <div class="champ-bar-wrap" style="max-width:200px">
-            <div class="champ-bar" style="width:${t.relegation_prob}%;background:linear-gradient(90deg,#da3633,#f85149)"></div>
-          </div>
-          <div class="champ-prob" style="color:#f85149">${t.relegation_prob}%</div>
-        </div>
-      `;
-    });
-    html += '</div>';
-    
-    content.innerHTML = html;
+    currentChampionData = data;
+    renderChampionResults(data);
   } catch (e) {
     content.innerHTML = '<div style="color:#da3633;padding:12px">불러오기 실패</div>';
   }
 }
+
+function renderChampionResults(data) {
+  const content = document.getElementById('champion-content');
+  const top10 = data.teams.slice(0, 10);
+  const maxProb = top10[0].champion_prob || 1;
+  
+  let html = '<div style="margin-bottom:20px"><div style="font-size:13px;color:#e6edf3;font-weight:600;margin-bottom:10px">우승 확률 TOP 10</div>';
+  
+  top10.forEach((t, i) => {
+    const barWidth = (t.champion_prob / maxProb) * 100;
+    html += `
+      <div class="champ-row">
+        <div class="champ-rank">${i+1}</div>
+        <img src="${t.logo}" style="width:24px;height:24px;object-fit:contain" onerror="this.style.display='none'">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;color:#e6edf3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.team}</div>
+        </div>
+        <div class="champ-bar-wrap" style="max-width:200px">
+          <div class="champ-bar" style="width:${barWidth}%"></div>
+        </div>
+        <div class="champ-prob">${t.champion_prob}%</div>
+      </div>
+    `;
+  });
+  html += '</div>';
+  
+  // 강등 위험 TOP 5
+  const relegation = [...data.teams].sort((a,b) => b.relegation_prob - a.relegation_prob).slice(0, 5);
+  html += '<div><div style="font-size:13px;color:#e6edf3;font-weight:600;margin-bottom:10px">⚠️ 강등 위험 TOP 5</div>';
+  relegation.forEach((t, i) => {
+    html += `
+      <div class="champ-row">
+        <div class="champ-rank">${i+1}</div>
+        <img src="${t.logo}" style="width:24px;height:24px;object-fit:contain" onerror="this.style.display='none'">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;color:#e6edf3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.team}</div>
+        </div>
+        <div class="champ-bar-wrap" style="max-width:200px">
+          <div class="champ-bar" style="width:${t.relegation_prob}%;background:linear-gradient(90deg,#da3633,#f85149)"></div>
+        </div>
+        <div class="champ-prob" style="color:#f85149">${t.relegation_prob}%</div>
+      </div>
+    `;
+  });
+  html += '</div>';
+  
+  content.innerHTML = html;
+}
+
 
 async function loadPlayers() {
   const API = 'https://fotdata-api.onrender.com';
