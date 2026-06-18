@@ -329,7 +329,7 @@
       </div>
       <input type="range" id="sim-slider" min="1000" max="10000" step="1000" value="5000" style="width:100%" oninput="document.getElementById('sim-count-label').textContent=Number(this.value).toLocaleString()+'회'">
     </div>
-    <button onclick="runSimulation()" style="padding:10px 20px;background:#1f6feb;border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:600;cursor:pointer">▶️ 시뮬레이션 시작</button>
+    <button id="sim-btn" onclick="runSimulation()" style="padding:10px 20px;background:#1f6feb;border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:transform .1s,background .2s" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'" onmouseleave="this.style.transform='scale(1)'">▶️ 시뮬레이션 시작</button>
   </div>
 </div>
 
@@ -714,6 +714,10 @@ let currentLeagueCode = 'PL';
 function runSimulation() {
   if (!currentChampionData) return;
   
+  const simBtn = document.getElementById('sim-btn');
+  if (simBtn) { simBtn.textContent = '⏳ 계산 중...'; simBtn.style.background = '#388bfd'; }
+  
+  setTimeout(() => {
   const nSim = parseInt(document.getElementById('sim-slider').value);
   const teams = currentChampionData.teams;
   
@@ -724,7 +728,11 @@ function runSimulation() {
   
   for (let sim = 0; sim < nSim; sim++) {
     const points = {};
-    teams.forEach(t => points[t.team] = 0);
+    const seasonForm = {};
+    teams.forEach(t => {
+      points[t.team] = 0;
+      seasonForm[t.team] = gaussRandom() * 90;  // 시즌 전체 폼 변동
+    });
     
     // 모든 팀끼리 홈/원정 경기
     for (let i = 0; i < teams.length; i++) {
@@ -733,8 +741,8 @@ function runSimulation() {
         const home = teams[i], away = teams[j];
         
         // ELO 계산 (노이즈 포함)
-        const homeElo = 1500 + (home.win_rate - 0.33) * 1000 + 70 + gaussRandom() * 50;
-        const awayElo = 1500 + (away.win_rate - 0.33) * 1000 + gaussRandom() * 50;
+        const homeElo = 1500 + (home.win_rate - 0.33) * 1000 + 70 + seasonForm[home.team] + gaussRandom() * 250;
+        const awayElo = 1500 + (away.win_rate - 0.33) * 1000 + seasonForm[away.team] + gaussRandom() * 250;
         
         const expHome = 1 / (1 + Math.pow(10, (awayElo - homeElo) / 400));
         const expAway = 1 / (1 + Math.pow(10, (homeElo - awayElo) / 400));
@@ -768,6 +776,9 @@ function runSimulation() {
   })).sort((a,b) => b.champion_prob - a.champion_prob);
   
   renderChampionResults({teams: results});
+  
+  if (simBtn) { simBtn.textContent = '▶️ 시뮬레이션 시작'; simBtn.style.background = '#1f6feb'; }
+  }, 50);
 }
 
 // 정규분포 난수 생성
