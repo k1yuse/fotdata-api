@@ -245,7 +245,7 @@
     </div>
   </div>
   <div class="nav-tab active" onclick="showPage('predict')">경기 예측</div>
-  <div class="nav-tab" onclick="showPage('champion')">우승 예측</div>
+  <div class="nav-tab" onclick="showPage('champion')">순위 예측</div>
   <div class="nav-tab" onclick="showPage('standings')">순위표</div>
   <div class="nav-tab" onclick="showPage('players')">선수</div>
 </nav>
@@ -308,7 +308,7 @@
   <!-- 우승 예측 페이지 -->
 <div id="page-champion" class="page">
   <div class="card">
-    <div class="card-title">🏆 2026-27 시즌 우승 예측</div>
+    <div class="card-title">🏆 2026-27 시즌 순위 예측</div>
     <div style="font-size:12px;color:#8b949e;margin-bottom:16px">몬테카를로 시뮬레이션 1,000회 기반 · 3시즌 데이터 학습</div>
     
     <div class="league-tabs" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
@@ -791,7 +791,8 @@ function runSimulation() {
     const sorted = Object.entries(points).sort((a,b) => b[1]-a[1]);
     winCounts[sorted[0][0]]++;
     sorted.slice(0,4).forEach(([t]) => top4Counts[t]++);
-    sorted.slice(-3).forEach(([t]) => relegationCounts[t]++);
+    const releCount = (currentLeagueCode === 'BL1' || currentLeagueCode === 'FL1') ? 2 : 3;
+    sorted.slice(-releCount).forEach(([t]) => relegationCounts[t]++);
   }
   
   const results = teams.map(t => ({
@@ -806,6 +807,11 @@ function runSimulation() {
   
   if (simBtn) { simBtn.textContent = '▶️ 시뮬레이션 시작'; simBtn.style.background = '#1f6feb'; }
   }, 50);
+}
+
+function cleanTeamName(name) {
+  if (!name) return name || '';
+  return name.replace(/^\d+\.\s*/, '');
 }
 
 // 정규분포 난수 생성
@@ -832,7 +838,7 @@ async function loadChampion(league, btn) {
   try {
     const res = await fetch(`${API}/predict/champion/${league}`);
     const data = await res.json();
-    ccurrentChampionData = data;
+    currentChampionData = data;
     renderChampionInitial(data);
   } catch (e) {
     content.innerHTML = '<div style="color:#da3633;padding:12px">불러오기 실패</div>';
@@ -841,7 +847,7 @@ async function loadChampion(league, btn) {
 
 function renderChampionInitial(data) {
   const content = document.getElementById('champion-content');
-  const teams = [...data.teams].sort((a,b) => a.team.localeCompare(b.team));
+  const teams = [...data.teams].sort((a,b) => cleanTeamName(a.team).localeCompare(cleanTeamName(b.team)));
   
   let html = '<div style="font-size:12px;color:#8b949e;margin-bottom:12px">⬆️ 시뮬레이션 시작 버튼을 눌러 우승 확률을 계산하세요</div>';
   teams.forEach((t, i) => {
@@ -850,7 +856,7 @@ function renderChampionInitial(data) {
         <div class="champ-rank">${i+1}</div>
         <img src="${t.logo}" style="width:24px;height:24px;object-fit:contain" onerror="this.style.display='none'">
         <div style="flex:1;min-width:0">
-          <div style="font-size:13px;color:#e6edf3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.team}</div>
+          <div style="font-size:13px;color:#e6edf3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${cleanTeamName(t.team)}</div>
         </div>
         <div class="champ-bar-wrap" style="max-width:200px">
           <div class="champ-bar" style="width:0%"></div>
@@ -864,52 +870,55 @@ function renderChampionInitial(data) {
 
 function renderChampionResults(data) {
   const content = document.getElementById('champion-content');
-  const top10 = data.teams.slice(0, 10);
-  const maxProb = top10[0].champion_prob || 1;
+  const releCount = (currentLeagueCode === 'BL1' || currentLeagueCode === 'FL1') ? 2 : 3;
+  const teams = data.teams;  // 이미 우승확률 내림차순 정렬됨
+  const maxProb = teams[0].champion_prob || 1;
   
-  let html = '<div style="margin-bottom:20px"><div style="font-size:13px;color:#e6edf3;font-weight:600;margin-bottom:10px">우승 확률 TOP 10</div>';
+  let html = '<div style="font-size:13px;color:#e6edf3;font-weight:600;margin-bottom:10px">📊 예상 순위 (우승 확률 순)</div>';
   
-  top10.forEach((t, i) => {
+  teams.forEach((t, i) => {
     const barWidth = (t.champion_prob / maxProb) * 100;
+    // 순위별 색상: 1위 금색, 2-4위(유럽대항권) 파랑, 강등권(하위3) 빨강
+    let rankColor = '#8b949e';
+    if (i === 0) rankColor = '#f0c040';
+    else if (i < 4) rankColor = '#58a6ff';
+    else if (i >= teams.length - releCount) rankColor = '#f85149';
+    
+    // 막대 색상: 강등권은 빨강 계열
+    const isRele = i >= teams.length - releCount;
+    const barColor = isRele
+      ? 'linear-gradient(90deg,#da3633,#f85149)'
+      : 'linear-gradient(90deg,#1f6feb,#58a6ff)';
+    // 막대는 우승확률 / 강등권은 강등확률 표시
+    const showProb = isRele ? t.relegation_prob : t.champion_prob;
+    const probColor = isRele ? '#f85149' : '#58a6ff';
+    const probLabel = isRele ? t.relegation_prob + '%↓' : t.champion_prob + '%';
+    const releBarWidth = isRele ? t.relegation_prob : barWidth;
+    
     html += `
       <div class="champ-row">
-        <div class="champ-rank">${i+1}</div>
+        <div class="champ-rank" style="color:${rankColor};font-weight:700">${i+1}</div>
         <img src="${t.logo}" style="width:24px;height:24px;object-fit:contain" onerror="this.style.display='none'">
         <div style="flex:1;min-width:0">
-          <div style="font-size:13px;color:#e6edf3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.team}</div>
+          <div style="font-size:13px;color:#e6edf3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${cleanTeamName(t.team)}</div>
         </div>
         <div class="champ-bar-wrap" style="max-width:200px">
-          <div class="champ-bar" style="width:${barWidth}%"></div>
+          <div class="champ-bar" style="width:${releBarWidth}%;background:${barColor}"></div>
         </div>
-        <div class="champ-prob">${t.champion_prob}%</div>
+        <div class="champ-prob" style="color:${probColor}">${probLabel}</div>
       </div>
     `;
   });
-  html += '</div>';
   
-  // 강등 위험 TOP 5
-  const relegation = [...data.teams].sort((a,b) => b.relegation_prob - a.relegation_prob).slice(0, 5);
-  html += '<div><div style="font-size:13px;color:#e6edf3;font-weight:600;margin-bottom:10px">⚠️ 강등 위험 TOP 5</div>';
-  relegation.forEach((t, i) => {
-    html += `
-      <div class="champ-row">
-        <div class="champ-rank">${i+1}</div>
-        <img src="${t.logo}" style="width:24px;height:24px;object-fit:contain" onerror="this.style.display='none'">
-        <div style="flex:1;min-width:0">
-          <div style="font-size:13px;color:#e6edf3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.team}</div>
-        </div>
-        <div class="champ-bar-wrap" style="max-width:200px">
-          <div class="champ-bar" style="width:${t.relegation_prob}%;background:linear-gradient(90deg,#da3633,#f85149)"></div>
-        </div>
-        <div class="champ-prob" style="color:#f85149">${t.relegation_prob}%</div>
-      </div>
-    `;
-  });
-  html += '</div>';
+  // 범례
+  html += `<div style="display:flex;gap:16px;margin-top:14px;font-size:11px;color:#8b949e;flex-wrap:wrap">
+    <span><span style="color:#f0c040">●</span> 우승 후보</span>
+    <span><span style="color:#58a6ff">●</span> 상위권 (우승 확률)</span>
+    <span><span style="color:#f85149">●</span> 강등권 (강등 확률 ↓)</span>
+  </div>`;
   
   content.innerHTML = html;
 }
-
 
 async function loadPlayers() {
   const API = 'https://fotdata-api.onrender.com';
@@ -984,7 +993,7 @@ function renderStandings(data,leagueCode){
     else if(leagueCode==='FL1'){if(i<3)zc='zone-cl';else if(i<5)zc='zone-el';else if(i>=totalTeams-3)zc='zone-rel';}
     const rc=i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'';
     const fb=team.form.map(f=>`<div class="form-badge ${f}">${f}</div>`).join('');
-    html+=`<tr class="${zc}"><td><span class="rank-num ${rc}">${team.rank}</span></td><td><div class="team-cell"><img src="${team.logo}" width="24" height="24" style="object-fit:contain" onerror="this.style.display='none'"><span>${team.team}${i===0 && !isCL ? ' 🏆' : ''}</span></div></td><td class="center">${team.played}</td><td class="center">${team.wins}</td><td class="center">${team.draws}</td><td class="center">${team.losses}</td><td class="center hide-mobile">${team.gf}</td><td class="center hide-mobile">${team.ga}</td><td class="center" style="color:${team.gd>0?'#238636':team.gd<0?'#da3633':'#8b949e'}">${team.gd>0?'+':''}${team.gd}</td><td class="center"><div class="form-badges">${fb}</div></td><td class="center pts">${team.points}</td></tr>`;
+    html+=`<tr class="${zc}"><td><span class="rank-num ${rc}">${team.rank}</span></td><td><div class="team-cell"><img src="${team.logo}" width="24" height="24" style="object-fit:contain" onerror="this.style.display='none'"><span>${cleanTeamName(team.team)}${i===0 && !isCL ? ' 🏆' : ''}</span></div></td><td class="center">${team.played}</td><td class="center">${team.wins}</td><td class="center">${team.draws}</td><td class="center">${team.losses}</td><td class="center hide-mobile">${team.gf}</td><td class="center hide-mobile">${team.ga}</td><td class="center" style="color:${team.gd>0?'#238636':team.gd<0?'#da3633':'#8b949e'}">${team.gd>0?'+':''}${team.gd}</td><td class="center"><div class="form-badges">${fb}</div></td><td class="center pts">${team.points}</td></tr>`;
   });
   html+='</tbody></table><div style="display:flex;gap:16px;margin-top:12px;font-size:11px;color:#8b949e;flex-wrap:wrap">';
   if(isCL){html+=`<span><span style="display:inline-block;width:10px;height:10px;background:#f0c040;border-radius:1px;margin-right:4px"></span>16강 직행</span><span><span style="display:inline-block;width:10px;height:10px;background:#f0883e;border-radius:1px;margin-right:4px"></span>플레이오프</span>`;}
