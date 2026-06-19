@@ -721,6 +721,33 @@ function runSimulation() {
   const nSim = parseInt(document.getElementById('sim-slider').value);
   const teams = currentChampionData.teams;
   
+  /// 리그별 설정 [승률반영계수, 시즌폼노이즈] (독주 리그는 계수 높게/노이즈 낮게)
+  const LEAGUE_CONFIG = {
+    'PL':  [650, 160],   // EPL: 경쟁 치열
+    'PD':  [650, 150],   // 라리가: 경쟁 치열
+    'SA':  [750, 150],   // 세리에A: 경쟁 치열
+    'BL1': [1300, 90],   // 분데스: 뮌헨 독주
+    'FL1': [1400, 60],   // 리그앙: PSG 독주
+  };
+  const cfg = LEAGUE_CONFIG[currentLeagueCode] || [800, 140];
+  const eloScale = cfg[0];
+  const seasonNoise = cfg[1];
+
+  // 클럽 전력 보정 (누적 전력/스쿼드 가치 기반 ELO 보너스)
+  const PRESTIGE = {
+    // EPL
+    'Liverpool FC':110,'Chelsea FC':90,'Manchester United FC':80,'Tottenham Hotspur FC':70,
+    'Manchester City FC':70,'Arsenal FC':40,'Newcastle United FC':40,'Aston Villa FC':10,
+    // 라리가
+    'Club Atlético de Madrid':50,'Sevilla FC':30,'Valencia CF':20,
+    // 세리에A
+    'Juventus FC':90,'AC Milan':40,'SSC Napoli':30,'Atalanta BC':20,
+    // 분데스
+    'Bayer 04 Leverkusen':60,'Borussia Dortmund':30,
+    // 리그앙
+    'Paris Saint-Germain FC':120,'Olympique de Marseille':40,'AS Monaco FC':40,'Olympique Lyonnais':20,
+  };
+
   const winCounts = {};
   const top4Counts = {};
   const relegationCounts = {};
@@ -731,7 +758,7 @@ function runSimulation() {
     const seasonForm = {};
     teams.forEach(t => {
       points[t.team] = 0;
-      seasonForm[t.team] = gaussRandom() * 90;  // 시즌 전체 폼 변동
+      seasonForm[t.team] = gaussRandom() * seasonNoise;  // 시즌 전체 폼 변동  // 시즌 전체 폼 변동
     });
     
     // 모든 팀끼리 홈/원정 경기
@@ -741,8 +768,8 @@ function runSimulation() {
         const home = teams[i], away = teams[j];
         
         // ELO 계산 (노이즈 포함)
-        const homeElo = 1500 + (home.win_rate - 0.33) * 1000 + 70 + seasonForm[home.team] + gaussRandom() * 250;
-        const awayElo = 1500 + (away.win_rate - 0.33) * 1000 + seasonForm[away.team] + gaussRandom() * 250;
+        const homeElo = 1500 + (home.win_rate - 0.33) * eloScale + (PRESTIGE[home.team]||0) + 70 + seasonForm[home.team] + gaussRandom() * 40;
+        const awayElo = 1500 + (away.win_rate - 0.33) * eloScale + (PRESTIGE[away.team]||0) + seasonForm[away.team] + gaussRandom() * 40;
         
         const expHome = 1 / (1 + Math.pow(10, (awayElo - homeElo) / 400));
         const expAway = 1 / (1 + Math.pow(10, (homeElo - awayElo) / 400));
@@ -805,11 +832,34 @@ async function loadChampion(league, btn) {
   try {
     const res = await fetch(`${API}/predict/champion/${league}`);
     const data = await res.json();
-    currentChampionData = data;
-    renderChampionResults(data);
+    ccurrentChampionData = data;
+    renderChampionInitial(data);
   } catch (e) {
     content.innerHTML = '<div style="color:#da3633;padding:12px">불러오기 실패</div>';
   }
+}
+
+function renderChampionInitial(data) {
+  const content = document.getElementById('champion-content');
+  const teams = [...data.teams].sort((a,b) => a.team.localeCompare(b.team));
+  
+  let html = '<div style="font-size:12px;color:#8b949e;margin-bottom:12px">⬆️ 시뮬레이션 시작 버튼을 눌러 우승 확률을 계산하세요</div>';
+  teams.forEach((t, i) => {
+    html += `
+      <div class="champ-row">
+        <div class="champ-rank">${i+1}</div>
+        <img src="${t.logo}" style="width:24px;height:24px;object-fit:contain" onerror="this.style.display='none'">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;color:#e6edf3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.team}</div>
+        </div>
+        <div class="champ-bar-wrap" style="max-width:200px">
+          <div class="champ-bar" style="width:0%"></div>
+        </div>
+        <div class="champ-prob">0%</div>
+      </div>
+    `;
+  });
+  content.innerHTML = html;
 }
 
 function renderChampionResults(data) {
