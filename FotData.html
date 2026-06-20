@@ -1039,8 +1039,6 @@ function showResult(data,h2h,homeForm,awayForm,home,away){
   document.getElementById('result-section').classList.add('show');document.getElementById('result-section').scrollIntoView({behavior:'smooth'});
 }
 
-if(location.hash==='#standings'){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.getElementById('page-standings').classList.add('active');document.querySelector('[onclick="showPage(\'standings\')"]').classList.add('active');}
-
 // 리그별 다음 시즌 카운트다운
 const LEAGUE_SEASONS = [
     { name: 'EPL', logo: 'https://crests.football-data.org/PL.png', filter: 'brightness(0) invert(1)', date: '2026-08-22' },
@@ -1108,7 +1106,7 @@ setInterval(updateCountdown, 60000);
 
 loadLogos();loadStandings('PL');
 
-if(window.location.hash==='#standings'){setTimeout(()=>{document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));document.getElementById('page-standings').classList.add('active');document.querySelector('[onclick="showPage(\'standings\')"]').classList.add('active');},100);}
+if(window.location.hash){setTimeout(()=>{const h=window.location.hash.replace('#','');const valid=['predict','champion','standings','players'];if(!valid.includes(h))return;document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));const pg=document.getElementById('page-'+h);if(pg)pg.classList.add('active');const tab=document.querySelector('[onclick="showPage(\''+h+'\')"]');if(tab)tab.classList.add('active');if(h==='champion')loadChampion('PL');if(h==='players')loadPlayers();},100);}
 </script>
 
 <footer style="padding:20px 24px;border-top:0.5px solid #30363d;display:flex;align-items:center;justify-content:space-between;background:#161b22">
