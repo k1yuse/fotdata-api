@@ -323,9 +323,9 @@
     <div style="flex:1;min-width:200px">
       <div style="display:flex;justify-content:space-between;font-size:11px;color:#8b949e;margin-bottom:4px">
         <span>시뮬레이션 횟수</span>
-        <span id="sim-count-label">5,000회</span>
+        <span id="sim-count-label">1,000회</span>
       </div>
-      <input type="range" id="sim-slider" min="1000" max="10000" step="1000" value="5000" style="width:100%" oninput="document.getElementById('sim-count-label').textContent=Number(this.value).toLocaleString()+'회'">
+      <input type="range" id="sim-slider" min="1000" max="10000" step="1000" value="1000" style="width:100%" oninput="document.getElementById('sim-count-label').textContent=Number(this.value).toLocaleString()+'회'">
     </div>
     <button id="sim-btn" onclick="runSimulation()" style="padding:10px 20px;background:#1f6feb;border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:transform .1s,background .2s" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'" onmouseleave="this.style.transform='scale(1)'">▶️ 시뮬레이션 시작</button>
   </div>
