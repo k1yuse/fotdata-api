@@ -28,12 +28,12 @@
     .card-title { font-size: 13px; color: #8b949e; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
 
     .league-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-    .league-tab { padding: 8px 16px; border-radius: 20px; font-size: 13px; cursor: pointer; border: 0.5px solid #30363d; background: #21262d; color: #8b949e; display: flex; align-items: center; gap: 6px; transition: all 0.2s; }
+    .league-tab { padding: 8px 16px; border-radius: 8px; font-size: 13px; cursor: pointer; border: 0.5px solid #30363d; background: #161b22; color: #8b949e; display: flex; align-items: center; gap: 6px; transition: all .15s; }
     .league-tab img { width: 16px; height: 16px; object-fit: contain; }
-    .league-tab:hover { border-color: #58a6ff; color: #e6edf3; }
-    .league-tab.active { background: #1f4e8c; border-color: #58a6ff; color: #58a6ff; }
-    .league-tab.ucl-tab { border-color: #30363d; color: #8b949e; background: #21262d; }
-    .league-tab.ucl-tab.active { background: #1f4e8c; border-color: #58a6ff; color: #58a6ff; }
+    .league-tab:hover { border-color: #58a6ff; }
+    .league-tab.active { background: #1f6feb; border-color: #1f6feb; color: #fff; font-weight: 600; }
+    .league-tab.ucl-tab { border-color: #30363d; color: #8b949e; background: #161b22; }
+    .league-tab.ucl-tab.active { background: #1f6feb; border-color: #1f6feb; color: #fff; font-weight: 600; }
 
     .ucl-subtabs { display: flex; gap: 8px; margin-bottom: 16px; }
     .ucl-subtab { padding: 7px 18px; border-radius: 20px; font-size: 13px; cursor: pointer; border: 0.5px solid #30363d; background: #21262d; color: #8b949e; transition: all 0.2s; }
@@ -216,7 +216,7 @@
       .standings-table td, .standings-table th { padding: 8px 6px; font-size: 11px; }
     }
     
-    .champ-league-btn { padding: 8px 16px; background: #161b22; border: 0.5px solid #30363d; border-radius: 8px; color: #8b949e; font-size: 13px; cursor: pointer; transition: all .15s; }
+    .champ-league-btn { padding: 8px 16px; background: #161b22; border: 0.5px solid #30363d; border-radius: 8px; color: #8b949e; font-size: 13px; font-family: inherit; cursor: pointer; transition: all .15s; }
     .champ-league-btn:hover { border-color: #58a6ff; }
     .champ-league-btn.active { background: #1f6feb; border-color: #1f6feb; color: #fff; font-weight: 600; }
     .champ-row { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-bottom: 0.5px solid #21262d; }
@@ -279,7 +279,8 @@
 </div>
 
   <div class="page" id="page-standings">
-    <div class="league-tabs" id="league-tabs">
+    <div id="standings-card" class="card">
+      <div class="league-tabs" id="league-tabs">
       <div class="league-tab active" onclick="loadStandings('PL')" data-league="PL"><img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> EPL</div>
       <div class="league-tab" onclick="loadStandings('PD')" data-league="PD"><img src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'"> 라리가</div>
       <div class="league-tab" onclick="loadStandings('BL1')" data-league="BL1"><img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'"> 분데스리가</div>
@@ -287,13 +288,10 @@
       <div class="league-tab" onclick="loadStandings('FL1')" data-league="FL1"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'"> 리그앙</div>
       <div class="league-tab ucl-tab" onclick="loadCL()" data-league="CL"><img src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> 챔피언스리그</div>
     </div>
-
     <div id="ucl-subtabs" style="display:none" class="ucl-subtabs">
       <div class="ucl-subtab active" onclick="showUCLTab('standings',this)">리그 스테이지</div>
       <div class="ucl-subtab" onclick="showUCLTab('tournament',this)">토너먼트</div>
     </div>
-
-    <div id="standings-card" class="card">
       <div id="standings-content"><div class="loading">순위표 불러오는 중...</div></div>
     </div>
 
@@ -309,7 +307,7 @@
 <div id="page-champion" class="page">
   <div class="card">
     <div class="card-title">🏆 2026-27 시즌 순위 예측</div>
-    <div style="font-size:12px;color:#8b949e;margin-bottom:16px">몬테카를로 시뮬레이션 1,000회 기반 · 3시즌 데이터 학습</div>
+    <div style="font-size:12px;color:#8b949e;margin-bottom:16px">최근 3시즌 성적 + 클럽 전력 보정 기반 · 몬테카를로 시뮬레이션</div>
     
     <div class="league-tabs" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
       <button class="champ-league-btn active" onclick="loadChampion('PL', this)"><img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="width:16px;height:16px;filter:brightness(0) invert(1);vertical-align:middle;margin-right:4px">EPL</button>
@@ -340,7 +338,14 @@
 <!-- 선수 페이지 -->
 <div id="page-players" class="page">
   <div class="card">
-    <div class="card-title">⚽ EPL 24-25 시즌</div>
+    <div class="league-tabs" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
+    <button class="champ-league-btn active"><img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="width:16px;height:16px;filter:brightness(0) invert(1);vertical-align:middle;margin-right:4px">EPL</button>
+    <button class="champ-league-btn" onclick="alert('라리가 선수 데이터는 준비 중입니다 ⚽')" style="opacity:0.5"><img src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">라리가</button>
+    <button class="champ-league-btn" onclick="alert('분데스리가 선수 데이터는 준비 중입니다 ⚽')" style="opacity:0.5"><img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">분데스리가</button>
+    <button class="champ-league-btn" onclick="alert('세리에A 선수 데이터는 준비 중입니다 ⚽')" style="opacity:0.5"><img src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">세리에A</button>
+    <button class="champ-league-btn" onclick="alert('리그앙 선수 데이터는 준비 중입니다 ⚽')" style="opacity:0.5"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">리그앙</button>
+  </div>
+  <div class="card-title" style="margin-bottom:16px;font-size:18px">⚽ EPL 24-25 시즌</div>
     <div style="display:flex;gap:24px;flex-wrap:wrap">
       <div style="flex:1;min-width:400px">
         <h3 style="font-size:14px;color:#e6edf3;margin-bottom:12px;display:flex;align-items:center;gap:8px">🥇 득점 TOP 10</h3>
@@ -507,11 +512,11 @@ function showUCLTab(tab, el) {
   document.querySelectorAll('.ucl-subtab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
   if (tab === 'standings') {
-    document.getElementById('standings-card').style.display = 'block';
+    document.getElementById('standings-content').style.display = 'block';
     document.getElementById('ucl-tournament-content').style.display = 'none';
     loadStandings('CL');
   } else {
-    document.getElementById('standings-card').style.display = 'none';
+    document.getElementById('standings-content').style.display = 'none';
     document.getElementById('ucl-tournament-content').style.display = 'block';
     loadTournament();
   }
