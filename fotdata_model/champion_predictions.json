@@ -4,123 +4,123 @@
     "teams": [
       {
         "team": "Arsenal FC",
-        "champion_prob": 44.6,
-        "top4_prob": 94.8,
+        "champion_prob": 41.5,
+        "top4_prob": 94.4,
         "relegation_prob": 0.0
       },
       {
         "team": "Manchester City FC",
-        "champion_prob": 35.9,
-        "top4_prob": 94.6,
+        "champion_prob": 38.0,
+        "top4_prob": 96.0,
         "relegation_prob": 0.0
       },
       {
         "team": "Liverpool FC",
-        "champion_prob": 15.8,
-        "top4_prob": 81.7,
+        "champion_prob": 13.6,
+        "top4_prob": 79.3,
         "relegation_prob": 0.0
       },
       {
         "team": "Aston Villa FC",
-        "champion_prob": 2.5,
-        "top4_prob": 51.4,
-        "relegation_prob": 0.0
+        "champion_prob": 4.7,
+        "top4_prob": 53.7,
+        "relegation_prob": 0.2
       },
       {
         "team": "Chelsea FC",
-        "champion_prob": 0.8,
-        "top4_prob": 21.1,
+        "champion_prob": 1.1,
+        "top4_prob": 21.5,
         "relegation_prob": 0.3
       },
       {
         "team": "Newcastle United FC",
-        "champion_prob": 0.3,
-        "top4_prob": 23.8,
-        "relegation_prob": 1.0
+        "champion_prob": 0.7,
+        "top4_prob": 21.4,
+        "relegation_prob": 0.4
       },
       {
         "team": "Manchester United FC",
-        "champion_prob": 0.1,
-        "top4_prob": 13.0,
-        "relegation_prob": 1.2
+        "champion_prob": 0.3,
+        "top4_prob": 14.4,
+        "relegation_prob": 0.6
       },
       {
-        "team": "Fulham FC",
-        "champion_prob": 0.0,
-        "top4_prob": 4.3,
-        "relegation_prob": 4.3
+        "team": "Tottenham Hotspur FC",
+        "champion_prob": 0.1,
+        "top4_prob": 2.8,
+        "relegation_prob": 7.8
       },
       {
         "team": "Wolverhampton Wanderers FC",
         "champion_prob": 0.0,
-        "top4_prob": 0.0,
-        "relegation_prob": 53.8
-      },
-      {
-        "team": "Leeds United FC",
-        "champion_prob": 0.0,
-        "top4_prob": 0.0,
-        "relegation_prob": 32.0
-      },
-      {
-        "team": "Brighton & Hove Albion FC",
-        "champion_prob": 0.0,
-        "top4_prob": 3.6,
-        "relegation_prob": 6.5
-      },
-      {
-        "team": "Tottenham Hotspur FC",
-        "champion_prob": 0.0,
-        "top4_prob": 2.4,
-        "relegation_prob": 8.4
+        "top4_prob": 0.1,
+        "relegation_prob": 54.3
       },
       {
         "team": "West Ham United FC",
         "champion_prob": 0.0,
-        "top4_prob": 0.3,
-        "relegation_prob": 24.0
-      },
-      {
-        "team": "Sunderland AFC",
-        "champion_prob": 0.0,
-        "top4_prob": 3.4,
-        "relegation_prob": 6.3
+        "top4_prob": 0.2,
+        "relegation_prob": 22.4
       },
       {
         "team": "Burnley FC",
         "champion_prob": 0.0,
         "top4_prob": 0.0,
-        "relegation_prob": 96.9
+        "relegation_prob": 96.0
+      },
+      {
+        "team": "Brighton & Hove Albion FC",
+        "champion_prob": 0.0,
+        "top4_prob": 3.3,
+        "relegation_prob": 5.6
       },
       {
         "team": "Everton FC",
         "champion_prob": 0.0,
-        "top4_prob": 0.7,
-        "relegation_prob": 17.8
+        "top4_prob": 0.5,
+        "relegation_prob": 18.0
       },
       {
-        "team": "Brentford FC",
+        "team": "Leeds United FC",
         "champion_prob": 0.0,
-        "top4_prob": 1.5,
-        "relegation_prob": 9.5
-      },
-      {
-        "team": "Crystal Palace FC",
-        "champion_prob": 0.0,
-        "top4_prob": 0.7,
-        "relegation_prob": 18.9
-      },
-      {
-        "team": "Nottingham Forest FC",
-        "champion_prob": 0.0,
-        "top4_prob": 1.0,
-        "relegation_prob": 10.7
+        "top4_prob": 0.0,
+        "relegation_prob": 33.7
       },
       {
         "team": "AFC Bournemouth",
         "champion_prob": 0.0,
-        "top4_prob": 1.7,
+        "top4_prob": 2.2,
         "relegation_prob": 8.4
+      },
+      {
+        "team": "Crystal Palace FC",
+        "champion_prob": 0.0,
+        "top4_prob": 0.9,
+        "relegation_prob": 19.0
+      },
+      {
+        "team": "Nottingham Forest FC",
+        "champion_prob": 0.0,
+        "top4_prob": 1.2,
+        "relegation_prob": 11.9
+      },
+      {
+        "team": "Brentford FC",
+        "champion_prob": 0.0,
+        "top4_prob": 1.6,
+        "relegation_prob": 9.5
+      },
+      {
+        "team": "Fulham FC",
+        "champion_prob": 0.0,
+        "top4_prob": 3.4,
+        "relegation_prob": 4.7
+      },
+      {
+        "team": "Sunderland AFC",
+        "champion_prob": 0.0,
+        "top4_prob": 3.1,
+        "relegation_prob": 7.2
       }
     ]
   },
@@ -128,82 +128,100 @@
     "league": "LaLiga",
     "teams": [
       {
+        "team": "FC Barcelona",
+        "champion_prob": 47.9,
+        "top4_prob": 99.5,
+        "relegation_prob": 0.0
+      },
+      {
         "team": "Real Madrid CF",
-        "champion_prob": 46.7,
+        "champion_prob": 44.8,
         "top4_prob": 99.7,
         "relegation_prob": 0.0
       },
       {
-        "team": "FC Barcelona",
-        "champion_prob": 46.2,
-        "top4_prob": 99.8,
+        "team": "Club Atlético de Madrid",
+        "champion_prob": 6.6,
+        "top4_prob": 90.9,
         "relegation_prob": 0.0
       },
       {
-        "team": "Club Atlético de Madrid",
-        "champion_prob": 6.5,
-        "top4_prob": 91.2,
-        "relegation_prob": 0.0
+        "team": "Athletic Club",
+        "champion_prob": 0.3,
+        "top4_prob": 27.7,
+        "relegation_prob": 0.2
       },
       {
         "team": "Villarreal CF",
-        "champion_prob": 0.6,
-        "top4_prob": 50.8,
-        "relegation_prob": 0.0
+        "champion_prob": 0.2,
+        "top4_prob": 45.8,
+        "relegation_prob": 0.1
       },
       {
-        "team": "Getafe CF",
-        "champion_prob": 0.0,
-        "top4_prob": 1.9,
-        "relegation_prob": 13.2
+        "team": "Girona FC",
+        "champion_prob": 0.1,
+        "top4_prob": 10.9,
+        "relegation_prob": 1.7
       },
       {
-        "team": "Deportivo Alavés",
-        "champion_prob": 0.0,
-        "top4_prob": 0.4,
-        "relegation_prob": 18.0
-      },
-      {
-        "team": "Valencia CF",
-        "champion_prob": 0.0,
-        "top4_prob": 1.7,
-        "relegation_prob": 8.9
-      },
-      {
-        "team": "RCD Mallorca",
-        "champion_prob": 0.0,
-        "top4_prob": 0.1,
-        "relegation_prob": 29.7
-      },
-      {
-        "team": "RCD Espanyol de Barcelona",
-        "champion_prob": 0.0,
-        "top4_prob": 1.2,
-        "relegation_prob": 9.9
+        "team": "Real Betis Balompié",
+        "champion_prob": 0.1,
+        "top4_prob": 11.3,
+        "relegation_prob": 1.8
       },
       {
         "team": "Real Oviedo",
         "champion_prob": 0.0,
         "top4_prob": 0.0,
-        "relegation_prob": 82.9
+        "relegation_prob": 81.6
       },
       {
-        "team": "Real Sociedad de Fútbol",
+        "team": "Valencia CF",
         "champion_prob": 0.0,
-        "top4_prob": 3.1,
-        "relegation_prob": 5.0
+        "top4_prob": 2.6,
+        "relegation_prob": 8.3
       },
       {
-        "team": "CA Osasuna",
+        "team": "Getafe CF",
         "champion_prob": 0.0,
-        "top4_prob": 1.3,
-        "relegation_prob": 14.2
+        "top4_prob": 1.4,
+        "relegation_prob": 12.6
+      },
+      {
+        "team": "RCD Espanyol de Barcelona",
+        "champion_prob": 0.0,
+        "top4_prob": 1.5,
+        "relegation_prob": 8.9
+      },
+      {
+        "team": "Sevilla FC",
+        "champion_prob": 0.0,
+        "top4_prob": 0.6,
+        "relegation_prob": 22.8
       },
       {
         "team": "Levante UD",
         "champion_prob": 0.0,
-        "top4_prob": 0.5,
+        "top4_prob": 1.0,
         "relegation_prob": 20.2
+      },
+      {
+        "team": "Deportivo Alavés",
+        "champion_prob": 0.0,
+        "top4_prob": 0.6,
+        "relegation_prob": 20.5
+      },
+      {
+        "team": "CA Osasuna",
+        "champion_prob": 0.0,
+        "top4_prob": 0.9,
+        "relegation_prob": 13.2
+      },
+      {
+        "team": "RCD Mallorca",
+        "champion_prob": 0.0,
+        "top4_prob": 0.1,
+        "relegation_prob": 32.8
       },
       {
         "team": "Rayo Vallecano de Madrid",
@@ -212,40 +230,22 @@
         "relegation_prob": 29.1
       },
       {
-        "team": "Athletic Club",
+        "team": "Real Sociedad de Fútbol",
         "champion_prob": 0.0,
-        "top4_prob": 24.2,
-        "relegation_prob": 0.3
-      },
-      {
-        "team": "Girona FC",
-        "champion_prob": 0.0,
-        "top4_prob": 10.7,
-        "relegation_prob": 1.2
-      },
-      {
-        "team": "Real Betis Balompié",
-        "champion_prob": 0.0,
-        "top4_prob": 10.4,
-        "relegation_prob": 1.1
-      },
-      {
-        "team": "Elche CF",
-        "champion_prob": 0.0,
-        "top4_prob": 0.0,
-        "relegation_prob": 31.9
+        "top4_prob": 2.4,
+        "relegation_prob": 5.6
       },
       {
         "team": "RC Celta de Vigo",
         "champion_prob": 0.0,
-        "top4_prob": 2.2,
-        "relegation_prob": 6.4
+        "top4_prob": 2.5,
+        "relegation_prob": 7.3
       },
       {
-        "team": "Sevilla FC",
+        "team": "Elche CF",
         "champion_prob": 0.0,
-        "top4_prob": 0.4,
-        "relegation_prob": 28.0
+        "top4_prob": 0.2,
+        "relegation_prob": 33.3
       }
     ]
   },
@@ -254,111 +254,111 @@
     "teams": [
       {
         "team": "FC Bayern München",
-        "champion_prob": 87.9,
-        "top4_prob": 99.9,
+        "champion_prob": 87.5,
+        "top4_prob": 100.0,
         "relegation_prob": 0.0
       },
       {
         "team": "Borussia Dortmund",
         "champion_prob": 7.6,
-        "top4_prob": 88.7,
+        "top4_prob": 87.0,
         "relegation_prob": 0.0
       },
       {
         "team": "Bayer 04 Leverkusen",
-        "champion_prob": 2.6,
-        "top4_prob": 70.6,
+        "champion_prob": 3.0,
+        "top4_prob": 73.0,
         "relegation_prob": 0.0
       },
       {
         "team": "RB Leipzig",
-        "champion_prob": 0.9,
-        "top4_prob": 53.0,
-        "relegation_prob": 0.0
+        "champion_prob": 1.2,
+        "top4_prob": 52.9,
+        "relegation_prob": 0.1
       },
       {
         "team": "VfB Stuttgart",
-        "champion_prob": 0.7,
-        "top4_prob": 41.6,
+        "champion_prob": 0.6,
+        "top4_prob": 44.6,
         "relegation_prob": 0.0
       },
       {
         "team": "SC Freiburg",
-        "champion_prob": 0.3,
-        "top4_prob": 20.3,
-        "relegation_prob": 1.1
-      },
-      {
-        "team": "Hamburger SV",
-        "champion_prob": 0.0,
-        "top4_prob": 0.2,
-        "relegation_prob": 20.5
-      },
-      {
-        "team": "SV Werder Bremen",
-        "champion_prob": 0.0,
-        "top4_prob": 0.2,
-        "relegation_prob": 31.8
-      },
-      {
-        "team": "1. FC Union Berlin",
-        "champion_prob": 0.0,
-        "top4_prob": 1.1,
-        "relegation_prob": 10.9
+        "champion_prob": 0.1,
+        "top4_prob": 15.4,
+        "relegation_prob": 0.1
       },
       {
         "team": "TSG 1899 Hoffenheim",
         "champion_prob": 0.0,
-        "top4_prob": 4.9,
-        "relegation_prob": 2.5
+        "top4_prob": 4.0,
+        "relegation_prob": 2.9
       },
       {
-        "team": "1. FC Heidenheim 1846",
+        "team": "Borussia Mönchengladbach",
         "champion_prob": 0.0,
-        "top4_prob": 0.0,
-        "relegation_prob": 67.4
-      },
-      {
-        "team": "1. FC Köln",
-        "champion_prob": 0.0,
-        "top4_prob": 0.1,
-        "relegation_prob": 49.7
+        "top4_prob": 2.3,
+        "relegation_prob": 6.6
       },
       {
         "team": "VfL Wolfsburg",
         "champion_prob": 0.0,
         "top4_prob": 0.0,
-        "relegation_prob": 28.7
+        "relegation_prob": 29.6
       },
       {
         "team": "1. FSV Mainz 05",
         "champion_prob": 0.0,
-        "top4_prob": 2.7,
-        "relegation_prob": 5.1
+        "top4_prob": 2.8,
+        "relegation_prob": 4.3
+      },
+      {
+        "team": "Eintracht Frankfurt",
+        "champion_prob": 0.0,
+        "top4_prob": 12.7,
+        "relegation_prob": 0.9
+      },
+      {
+        "team": "SV Werder Bremen",
+        "champion_prob": 0.0,
+        "top4_prob": 0.2,
+        "relegation_prob": 32.6
+      },
+      {
+        "team": "1. FC Union Berlin",
+        "champion_prob": 0.0,
+        "top4_prob": 1.0,
+        "relegation_prob": 12.1
+      },
+      {
+        "team": "FC Augsburg",
+        "champion_prob": 0.0,
+        "top4_prob": 3.7,
+        "relegation_prob": 5.2
       },
       {
         "team": "FC St. Pauli 1910",
         "champion_prob": 0.0,
         "top4_prob": 0.0,
-        "relegation_prob": 67.0
+        "relegation_prob": 64.6
       },
       {
-        "team": "FC Augsburg",
+        "team": "Hamburger SV",
         "champion_prob": 0.0,
-        "top4_prob": 2.4,
-        "relegation_prob": 5.9
+        "top4_prob": 0.4,
+        "relegation_prob": 23.9
       },
       {
-        "team": "Borussia Mönchengladbach",
+        "team": "1. FC Heidenheim 1846",
         "champion_prob": 0.0,
-        "top4_prob": 2.0,
-        "relegation_prob": 8.6
+        "top4_prob": 0.0,
+        "relegation_prob": 65.7
       },
       {
-        "team": "Eintracht Frankfurt",
+        "team": "1. FC Köln",
         "champion_prob": 0.0,
-        "top4_prob": 12.3,
-        "relegation_prob": 0.8
+        "top4_prob": 0.0,
+        "relegation_prob": 51.4
       }
     ]
   },
@@ -367,123 +367,123 @@
     "teams": [
       {
         "team": "FC Internazionale Milano",
-        "champion_prob": 68.2,
-        "top4_prob": 98.4,
+        "champion_prob": 68.8,
+        "top4_prob": 98.1,
         "relegation_prob": 0.0
       },
       {
         "team": "SSC Napoli",
-        "champion_prob": 20.4,
-        "top4_prob": 87.5,
+        "champion_prob": 18.0,
+        "top4_prob": 89.8,
         "relegation_prob": 0.0
       },
       {
         "team": "AS Roma",
-        "champion_prob": 7.5,
-        "top4_prob": 73.1,
-        "relegation_prob": 0.0
-      },
-      {
-        "team": "AC Milan",
-        "champion_prob": 1.4,
-        "top4_prob": 30.6,
+        "champion_prob": 9.2,
+        "top4_prob": 74.7,
         "relegation_prob": 0.0
       },
       {
         "team": "Juventus FC",
-        "champion_prob": 1.0,
-        "top4_prob": 36.6,
+        "champion_prob": 1.6,
+        "top4_prob": 34.1,
         "relegation_prob": 0.0
       },
       {
-        "team": "Atalanta BC",
-        "champion_prob": 0.6,
-        "top4_prob": 28.5,
+        "team": "AC Milan",
+        "champion_prob": 1.0,
+        "top4_prob": 31.0,
         "relegation_prob": 0.0
       },
       {
         "team": "Como 1907",
+        "champion_prob": 0.6,
+        "top4_prob": 17.4,
+        "relegation_prob": 0.0
+      },
+      {
+        "team": "Atalanta BC",
         "champion_prob": 0.4,
-        "top4_prob": 14.9,
-        "relegation_prob": 0.1
+        "top4_prob": 27.1,
+        "relegation_prob": 0.0
       },
       {
         "team": "SS Lazio",
-        "champion_prob": 0.3,
-        "top4_prob": 10.1,
-        "relegation_prob": 0.2
+        "champion_prob": 0.2,
+        "top4_prob": 9.9,
+        "relegation_prob": 0.1
       },
       {
-        "team": "ACF Fiorentina",
+        "team": "Udinese Calcio",
         "champion_prob": 0.1,
-        "top4_prob": 4.8,
-        "relegation_prob": 0.1
+        "top4_prob": 1.6,
+        "relegation_prob": 1.8
       },
       {
         "team": "Bologna FC 1909",
         "champion_prob": 0.1,
-        "top4_prob": 10.3,
-        "relegation_prob": 0.0
-      },
-      {
-        "team": "US Lecce",
-        "champion_prob": 0.0,
-        "top4_prob": 0.0,
-        "relegation_prob": 30.0
-      },
-      {
-        "team": "US Cremonese",
-        "champion_prob": 0.0,
-        "top4_prob": 0.0,
-        "relegation_prob": 33.0
-      },
-      {
-        "team": "Udinese Calcio",
-        "champion_prob": 0.0,
-        "top4_prob": 1.7,
-        "relegation_prob": 1.6
-      },
-      {
-        "team": "Parma Calcio 1913",
-        "champion_prob": 0.0,
-        "top4_prob": 0.0,
-        "relegation_prob": 22.2
-      },
-      {
-        "team": "Genoa CFC",
-        "champion_prob": 0.0,
-        "top4_prob": 0.3,
-        "relegation_prob": 18.0
-      },
-      {
-        "team": "AC Pisa 1909",
-        "champion_prob": 0.0,
-        "top4_prob": 0.0,
-        "relegation_prob": 94.5
-      },
-      {
-        "team": "Hellas Verona FC",
-        "champion_prob": 0.0,
-        "top4_prob": 0.0,
-        "relegation_prob": 68.1
-      },
-      {
-        "team": "Torino FC",
-        "champion_prob": 0.0,
-        "top4_prob": 0.1,
-        "relegation_prob": 16.6
-      },
-      {
-        "team": "US Sassuolo Calcio",
-        "champion_prob": 0.0,
-        "top4_prob": 3.0,
-        "relegation_prob": 0.5
+        "top4_prob": 7.8,
+        "relegation_prob": 0.1
       },
       {
         "team": "Cagliari Calcio",
         "champion_prob": 0.0,
         "top4_prob": 0.1,
-        "relegation_prob": 15.1
+        "relegation_prob": 12.7
+      },
+      {
+        "team": "Genoa CFC",
+        "champion_prob": 0.0,
+        "top4_prob": 0.0,
+        "relegation_prob": 18.6
+      },
+      {
+        "team": "US Cremonese",
+        "champion_prob": 0.0,
+        "top4_prob": 0.0,
+        "relegation_prob": 32.8
+      },
+      {
+        "team": "US Lecce",
+        "champion_prob": 0.0,
+        "top4_prob": 0.0,
+        "relegation_prob": 29.5
+      },
+      {
+        "team": "AC Pisa 1909",
+        "champion_prob": 0.0,
+        "top4_prob": 0.0,
+        "relegation_prob": 94.6
+      },
+      {
+        "team": "Torino FC",
+        "champion_prob": 0.0,
+        "top4_prob": 0.0,
+        "relegation_prob": 15.5
+      },
+      {
+        "team": "ACF Fiorentina",
+        "champion_prob": 0.0,
+        "top4_prob": 5.3,
+        "relegation_prob": 0.3
+      },
+      {
+        "team": "Parma Calcio 1913",
+        "champion_prob": 0.0,
+        "top4_prob": 0.0,
+        "relegation_prob": 26.6
+      },
+      {
+        "team": "US Sassuolo Calcio",
+        "champion_prob": 0.0,
+        "top4_prob": 3.0,
+        "relegation_prob": 0.7
+      },
+      {
+        "team": "Hellas Verona FC",
+        "champion_prob": 0.0,
+        "top4_prob": 0.1,
+        "relegation_prob": 66.7
       }
     ]
   },
@@ -492,111 +492,111 @@
     "teams": [
       {
         "team": "Paris Saint-Germain FC",
-        "champion_prob": 72.3,
-        "top4_prob": 98.1,
+        "champion_prob": 75.1,
+        "top4_prob": 98.0,
         "relegation_prob": 0.0
       },
       {
         "team": "Olympique de Marseille",
-        "champion_prob": 9.6,
-        "top4_prob": 68.1,
-        "relegation_prob": 0.0
-      },
-      {
-        "team": "Racing Club de Lens",
-        "champion_prob": 5.4,
-        "top4_prob": 48.0,
+        "champion_prob": 6.8,
+        "top4_prob": 65.3,
         "relegation_prob": 0.0
       },
       {
         "team": "Lille OSC",
-        "champion_prob": 4.5,
-        "top4_prob": 52.7,
+        "champion_prob": 4.9,
+        "top4_prob": 50.2,
         "relegation_prob": 0.0
       },
       {
         "team": "Olympique Lyonnais",
-        "champion_prob": 3.7,
-        "top4_prob": 49.0,
+        "champion_prob": 4.7,
+        "top4_prob": 51.6,
         "relegation_prob": 0.0
       },
       {
         "team": "AS Monaco FC",
-        "champion_prob": 3.1,
-        "top4_prob": 39.2,
-        "relegation_prob": 0.1
+        "champion_prob": 3.9,
+        "top4_prob": 45.2,
+        "relegation_prob": 0.0
+      },
+      {
+        "team": "Racing Club de Lens",
+        "champion_prob": 3.9,
+        "top4_prob": 50.7,
+        "relegation_prob": 0.0
       },
       {
         "team": "RC Strasbourg Alsace",
-        "champion_prob": 1.0,
-        "top4_prob": 23.7,
-        "relegation_prob": 0.5
+        "champion_prob": 0.4,
+        "top4_prob": 19.5,
+        "relegation_prob": 0.1
       },
       {
         "team": "Stade Rennais FC 1901",
         "champion_prob": 0.3,
-        "top4_prob": 12.4,
-        "relegation_prob": 0.3
-      },
-      {
-        "team": "Stade Brestois 29",
-        "champion_prob": 0.1,
-        "top4_prob": 3.6,
-        "relegation_prob": 2.6
-      },
-      {
-        "team": "FC Metz",
-        "champion_prob": 0.0,
-        "top4_prob": 0.0,
-        "relegation_prob": 94.0
-      },
-      {
-        "team": "FC Lorient",
-        "champion_prob": 0.0,
-        "top4_prob": 1.0,
-        "relegation_prob": 8.6
-      },
-      {
-        "team": "Paris FC",
-        "champion_prob": 0.0,
-        "top4_prob": 0.7,
-        "relegation_prob": 8.0
-      },
-      {
-        "team": "Angers SCO",
-        "champion_prob": 0.0,
-        "top4_prob": 0.0,
-        "relegation_prob": 27.3
-      },
-      {
-        "team": "AJ Auxerre",
-        "champion_prob": 0.0,
-        "top4_prob": 0.2,
-        "relegation_prob": 22.2
-      },
-      {
-        "team": "Le Havre AC",
-        "champion_prob": 0.0,
-        "top4_prob": 0.1,
-        "relegation_prob": 43.9
-      },
-      {
-        "team": "Toulouse FC",
-        "champion_prob": 0.0,
-        "top4_prob": 1.5,
-        "relegation_prob": 9.5
-      },
-      {
-        "team": "OGC Nice",
-        "champion_prob": 0.0,
-        "top4_prob": 1.7,
-        "relegation_prob": 7.9
+        "top4_prob": 12.2,
+        "relegation_prob": 0.7
       },
       {
         "team": "FC Nantes",
         "champion_prob": 0.0,
         "top4_prob": 0.0,
-        "relegation_prob": 75.1
+        "relegation_prob": 69.3
+      },
+      {
+        "team": "Stade Brestois 29",
+        "champion_prob": 0.0,
+        "top4_prob": 3.1,
+        "relegation_prob": 2.7
+      },
+      {
+        "team": "AJ Auxerre",
+        "champion_prob": 0.0,
+        "top4_prob": 0.1,
+        "relegation_prob": 20.5
+      },
+      {
+        "team": "Toulouse FC",
+        "champion_prob": 0.0,
+        "top4_prob": 1.2,
+        "relegation_prob": 9.5
+      },
+      {
+        "team": "Paris FC",
+        "champion_prob": 0.0,
+        "top4_prob": 0.8,
+        "relegation_prob": 9.4
+      },
+      {
+        "team": "FC Lorient",
+        "champion_prob": 0.0,
+        "top4_prob": 0.7,
+        "relegation_prob": 9.4
+      },
+      {
+        "team": "Angers SCO",
+        "champion_prob": 0.0,
+        "top4_prob": 0.2,
+        "relegation_prob": 31.0
+      },
+      {
+        "team": "OGC Nice",
+        "champion_prob": 0.0,
+        "top4_prob": 1.2,
+        "relegation_prob": 7.6
+      },
+      {
+        "team": "FC Metz",
+        "champion_prob": 0.0,
+        "top4_prob": 0.0,
+        "relegation_prob": 94.4
+      },
+      {
+        "team": "Le Havre AC",
+        "champion_prob": 0.0,
+        "top4_prob": 0.0,
+        "relegation_prob": 45.4
       }
     ]
   }
