@@ -226,10 +226,10 @@ def get_standings(league_code: str):
     if not league_name:
         raise HTTPException(status_code=404, detail="리그를 찾을 수 없습니다")
 
-    cutoff = pd.Timestamp('2025-08-01')
+    cutoff = pd.Timestamp('2026-08-01')
     filters = (df_matches_all['league'] == league_code.upper()) & (df_matches_all['date'] >= cutoff)
     if league_code.upper() == 'CL':
-        filters = filters & (df_matches_all['date'] < pd.Timestamp('2026-02-01'))
+        filters = filters & (df_matches_all['date'] < pd.Timestamp('2027-02-01'))
     league_df = df_matches_all[filters].copy()
 
     print(f"🔍 {league_code} 데이터: {len(league_df)}경기")
