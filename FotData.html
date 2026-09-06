@@ -284,18 +284,19 @@
       <div class="league-tab active" onclick="setStandingsSeason('current', this)">2026-27 시즌</div>
       <div class="league-tab" onclick="setStandingsSeason('previous', this)">2025-26 시즌</div>
     </div>
-    <div class="league-tabs" id="league-tabs">
-      <div class="league-tab active" onclick="loadStandings('PL')" data-league="PL"><img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> EPL</div>
-      <div class="league-tab" onclick="loadStandings('PD')" data-league="PD"><img src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'"> 라리가</div>
-      <div class="league-tab" onclick="loadStandings('BL1')" data-league="BL1"><img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'"> 분데스리가</div>
-      <div class="league-tab" onclick="loadStandings('SA')" data-league="SA"><img src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'"> 세리에A</div>
-      <div class="league-tab" onclick="loadStandings('FL1')" data-league="FL1"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'"> 리그앙</div>
-      <div class="league-tab ucl-tab" onclick="loadCL()" data-league="CL"><img src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> 챔피언스리그</div>
-    </div>
-    <div id="ucl-subtabs" style="display:none" class="ucl-subtabs">
-      <div class="ucl-subtab active" onclick="showUCLTab('standings',this)">리그 스테이지</div>
-      <div class="ucl-subtab" onclick="showUCLTab('tournament',this)">토너먼트</div>
-    </div>
+    <div id="standings-card" class="card">
+      <div class="league-tabs" id="league-tabs">
+        <div class="league-tab active" onclick="loadStandings('PL')" data-league="PL"><img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> EPL</div>
+        <div class="league-tab" onclick="loadStandings('PD')" data-league="PD"><img src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'"> 라리가</div>
+        <div class="league-tab" onclick="loadStandings('BL1')" data-league="BL1"><img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'"> 분데스리가</div>
+        <div class="league-tab" onclick="loadStandings('SA')" data-league="SA"><img src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'"> 세리에A</div>
+        <div class="league-tab" onclick="loadStandings('FL1')" data-league="FL1"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'"> 리그앙</div>
+        <div class="league-tab ucl-tab" onclick="loadCL()" data-league="CL"><img src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> 챔피언스리그</div>
+      </div>
+      <div id="ucl-subtabs" style="display:none" class="ucl-subtabs">
+        <div class="ucl-subtab active" onclick="showUCLTab('standings',this)">리그 스테이지</div>
+        <div class="ucl-subtab" onclick="showUCLTab('tournament',this)">토너먼트</div>
+      </div>
       <div id="standings-content"><div class="loading">순위표 불러오는 중...</div></div>
     </div>
 
