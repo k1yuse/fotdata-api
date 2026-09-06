@@ -1,9 +1,9 @@
 {
-  "logistic_regression": 54.8,
-  "random_forest": 54.3,
-  "xgboost": 54.6,
-  "best": 54.8,
-  "total_matches": 4690,
-  "training_matches": 4156,
-  "updated_at": "2026-09-05T20:29:59.619206"
+  "logistic_regression": 54.0,
+  "random_forest": 52.4,
+  "xgboost": 51.0,
+  "best": 54.0,
+  "total_matches": 4706,
+  "training_matches": 4167,
+  "updated_at": "2026-09-06T20:33:37.327945"
 }
