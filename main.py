@@ -221,15 +221,26 @@ LEAGUE_MAP = {
 
 # ── 순위표 API ──
 @app.get("/standings/{league_code}")
-def get_standings(league_code: str):
+def get_standings(league_code: str, season: str = "current"):
     league_name = LEAGUE_MAP.get(league_code.upper())
     if not league_name:
         raise HTTPException(status_code=404, detail="리그를 찾을 수 없습니다")
 
-    cutoff = pd.Timestamp('2026-08-01')
-    filters = (df_matches_all['league'] == league_code.upper()) & (df_matches_all['date'] >= cutoff)
+    if season == "previous":
+        cutoff = pd.Timestamp('2025-08-01')
+        end = pd.Timestamp('2026-08-01')
+        league_name = f"{league_name} (2025-26)"
+    else:
+        cutoff = pd.Timestamp('2026-08-01')
+        end = pd.Timestamp('2027-08-01')
+        league_name = f"{league_name} (2026-27)"
+
+    filters = (df_matches_all['league'] == league_code.upper()) & (df_matches_all['date'] >= cutoff) & (df_matches_all['date'] < end)
     if league_code.upper() == 'CL':
-        filters = filters & (df_matches_all['date'] < pd.Timestamp('2027-02-01'))
+        if season == "previous":
+            filters = filters & (df_matches_all['date'] < pd.Timestamp('2026-02-01'))
+        else:
+            filters = filters & (df_matches_all['date'] < pd.Timestamp('2027-02-01'))
     league_df = df_matches_all[filters].copy()
 
     print(f"🔍 {league_code} 데이터: {len(league_df)}경기")

@@ -251,7 +251,8 @@
 </nav>
 
 <div class="container">
-<!-- 시즌 종료 배너 -->
+
+<!-- 시즌 종료 배너 (26-27 시즌 시작으로 임시 비활성화. 27-28 시즌 전환 시점에 재사용 가능)
 <div style="background:#161b22;border:0.5px solid #30363d;border-radius:12px;padding:20px;margin-bottom:20px">
   <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap">
     <div style="font-size:24px">🏆</div>
@@ -277,10 +278,14 @@
     <div id="countdown-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px"></div>
   </div>
 </div>
-
+-->
   <div class="page" id="page-standings">
     <div id="standings-card" class="card">
-      <div class="league-tabs" id="league-tabs">
+  <div class="league-tabs" id="season-tabs" style="margin-bottom:10px">
+    <div class="league-tab active" onclick="setStandingsSeason('current', this)">🟢 2026-27 시즌 (진행중)</div>
+    <div class="league-tab" onclick="setStandingsSeason('previous', this)">📋 2025-26 시즌 (종료)</div>
+  </div>
+  <div class="league-tabs" id="league-tabs">
       <div class="league-tab active" onclick="loadStandings('PL')" data-league="PL"><img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> EPL</div>
       <div class="league-tab" onclick="loadStandings('PD')" data-league="PD"><img src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'"> 라리가</div>
       <div class="league-tab" onclick="loadStandings('BL1')" data-league="BL1"><img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'"> 분데스리가</div>
@@ -497,7 +502,7 @@ const LEAGUE_DATA = {
 };
 
 function loadCL() {
-  document.querySelectorAll('.league-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('#league-tabs .league-tab').forEach(t => t.classList.remove('active'));
   document.querySelector('[data-league="CL"]').classList.add('active');
   document.getElementById('ucl-subtabs').style.display = 'flex';
   const firstTab = document.querySelector('.ucl-subtab');
@@ -971,9 +976,25 @@ function renderPlayerList(players, type) {
   }).join('');
 }
 
+let currentStandingsSeason = 'current';
+
+function setStandingsSeason(season, el) {
+  currentStandingsSeason = season;
+  document.querySelectorAll('#season-tabs .league-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  // 현재 선택된 리그로 다시 불러오기
+  const activeLeagueTab = document.querySelector('#league-tabs .league-tab.active');
+  const leagueCode = activeLeagueTab ? activeLeagueTab.dataset.league : 'PL';
+  if (leagueCode === 'CL') {
+    loadCL();
+  } else {
+    loadStandings(leagueCode);
+  }
+}
+
 async function loadStandings(leagueCode) {
   if(leagueCode!=='CL'){
-    document.querySelectorAll('.league-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('#league-tabs .league-tab').forEach(t=>t.classList.remove('active'));
     document.querySelector(`[data-league="${leagueCode}"]`).classList.add('active');
     document.getElementById('ucl-subtabs').style.display='none';
     document.getElementById('ucl-tournament-content').style.display='none';
@@ -981,7 +1002,7 @@ async function loadStandings(leagueCode) {
   }
   const content=document.getElementById('standings-content');
   content.innerHTML='<div class="loading">순위표 불러오는 중...</div>';
-  try{const res=await fetch(`${API}/standings/${leagueCode}`);const data=await res.json();renderStandings(data,leagueCode);}
+  try{const res=await fetch(`${API}/standings/${leagueCode}?season=${currentStandingsSeason}`);const data=await res.json();renderStandings(data,leagueCode);}
   catch(e){content.innerHTML='<div class="loading">데이터를 불러올 수 없어요.</div>';}
 }
 
