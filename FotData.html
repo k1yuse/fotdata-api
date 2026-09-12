@@ -528,15 +528,26 @@ function showUCLTab(tab, el) {
 }
 
 async function loadTournament() {
+  const loading = document.getElementById('tournament-loading');
+  const bracket = document.getElementById('tournament-bracket');
+
+  if (currentStandingsSeason === 'current') {
+    bracket.style.display = 'none';
+    loading.style.display = 'block';
+    loading.innerHTML = '🏆 2026-27 시즌 토너먼트는 아직 시작 전입니다<br><span style="font-size:12px;color:#8b949e">리그 페이지 종료 후 2027년 2월경 시작 예정</span>';
+    return;
+  }
+
   if (tournamentData) { renderTournament(tournamentData); return; }
-  document.getElementById('tournament-loading').style.display = 'block';
-  document.getElementById('tournament-bracket').style.display = 'none';
+  loading.style.display = 'block';
+  loading.textContent = '토너먼트 불러오는 중...';
+  bracket.style.display = 'none';
   try {
     const res = await fetch(`${API}/ucl/tournament`);
     tournamentData = await res.json();
     renderTournament(tournamentData);
   } catch(e) {
-    document.getElementById('tournament-loading').textContent = '데이터를 불러올 수 없어요.';
+    loading.textContent = '데이터를 불러올 수 없어요.';
   }
 }
 
