@@ -264,6 +264,50 @@ def build_features(df, df_stats):
         })
     return pd.DataFrame(rows)
 
+def update_team_logos():
+    """team_stats.csv에 있는 팀 중 로고 없는 팀을 자동으로 채워넣기"""
+    import json
+    print("\n[로고 자동 업데이트] 확인 중...")
+    
+    logo_path = f"{MODEL_DIR}/team_logos.json"
+    logos = {}
+    if os.path.exists(logo_path):
+        with open(logo_path, 'r', encoding='utf-8') as f:
+            logos = json.load(f)
+    
+    df_stats = pd.read_csv(f"{MODEL_DIR}/team_stats.csv")
+    all_teams = set(df_stats['team'].tolist())
+    missing_teams = all_teams - set(logos.keys())
+    
+    if not missing_teams:
+        print("  ✅ 누락된 로고 없음")
+        return
+    
+    print(f"  ⚠️ 로고 없는 팀 {len(missing_teams)}개 발견: {missing_teams}")
+    
+    # 5대 리그 + CL 전체 팀 목록을 API로 조회해서 매칭
+    for code in list(LEAGUES_V2.keys()):
+        try:
+            url = f"https://api.football-data.org/v4/competitions/{code}/teams"
+            headers = {"X-Auth-Token": os.environ.get("FOOTBALL_API_KEY")}
+            res = requests.get(url, headers=headers)
+            data = res.json()
+            for team in data.get('teams', []):
+                name = team['name']
+                if name in missing_teams and team.get('crest'):
+                    logos[name] = team['crest']
+                    missing_teams.discard(name)
+            time.sleep(6)
+        except Exception as e:
+            print(f"  ❌ {code} 로고 조회 실패: {e}")
+    
+    with open(logo_path, 'w', encoding='utf-8') as f:
+        json.dump(logos, f, ensure_ascii=False, indent=2)
+    
+    if missing_teams:
+        print(f"  ⚠️ 여전히 못 찾은 팀: {missing_teams}")
+    print(f"  ✅ team_logos.json 업데이트 완료")
+    
 def fetch_ucl_tournament():
     import json
     print("\n[UCL 토너먼트] 수집 중...")
@@ -475,6 +519,9 @@ def main():
     fetch_ucl_tournament()
     
     fetch_top_scorers()
+
+    # 로고 자동 업데이트
+    update_team_logos()
 
     # 우승 예측
     fetch_champion_predictions()
