@@ -1,97 +1,97 @@
 ﻿team,games,win_rate,attack_strength,defense_strength,prestige
 FC Barcelona,5,0.812,2.948,0.973,185.4
-FC Internazionale Milano,4,0.616,2.107,1.188,157.4
-Real Madrid CF,5,0.719,2.182,0.951,151.4
-Arsenal FC,4,0.684,1.874,0.692,104.4
 Real Betis Balompié,5,0.49,1.507,1.271,7.4
+FC Internazionale Milano,4,0.616,2.107,1.188,157.4
+Arsenal FC,4,0.684,1.874,0.692,104.4
 AS Roma,4,0.648,1.827,0.765,82.9
+Real Madrid CF,5,0.719,2.182,0.951,151.4
 Manchester City FC,4,0.663,1.968,0.932,91.4
-Deportivo Alavés,5,0.338,1.269,1.281,-61.1
+Deportivo Alavés,6,0.318,1.195,1.281,-61.1
 AS Monaco FC,4,0.558,1.767,1.226,55.9
 SS Lazio,4,0.48,1.406,1.131,7.4
-Sevilla FC,5,0.349,1.216,1.466,-54.1
-Lille OSC,4,0.568,1.581,0.961,63.4
-Stade Rennais FC 1901,4,0.492,1.662,1.458,17.4
 Como 1907,4,0.498,1.637,1.054,20.9
+Lille OSC,4,0.568,1.581,0.961,63.4
 Club Atlético de Madrid,5,0.581,1.773,1.023,89.4
-Borussia Dortmund,3,0.671,2.219,1.096,97.4
+Sevilla FC,5,0.349,1.216,1.466,-54.1
+Stade Rennais FC 1901,4,0.492,1.662,1.458,17.4
 RC Deportivo La Coruña,5,0.344,1.4,1.28,0.0
 SC Freiburg,3,0.528,1.842,1.387,6.4
 Cagliari Calcio,4,0.357,1.044,1.264,-68.1
-Paris FC,4,0.362,1.373,1.208,-36.1
-Olympique Lyonnais,4,0.518,1.685,1.112,63.4
+Borussia Dortmund,3,0.671,2.219,1.096,97.4
 Hull City AFC,4,0.364,1.29,1.14,0.0
-AC Milan,4,0.482,1.548,1.06,41.4
 Leeds United FC,4,0.348,1.386,1.26,-53.6
-US Sassuolo Calcio,4,0.379,1.404,1.396,-14.1
-Real Racing Club de Santander,5,0.344,1.4,1.4,0.0
-Juventus FC,4,0.483,1.548,0.924,41.4
-RCD Espanyol de Barcelona,5,0.338,1.293,1.299,-40.1
+Olympique Lyonnais,4,0.518,1.685,1.112,63.4
+AC Milan,4,0.482,1.548,1.06,41.4
+Paris FC,4,0.362,1.373,1.208,-36.1
 Brighton & Hove Albion FC,4,0.416,1.892,1.356,-0.6
-Real Sociedad de Fútbol,6,0.308,1.153,1.523,-47.6
-FC Bayern München,3,0.595,2.422,1.077,213.9
-Chelsea FC,4,0.458,1.784,1.45,25.4
-RC Strasbourg Alsace,4,0.47,1.829,1.482,32.9
-FC Augsburg,3,0.399,1.53,1.48,-31.6
-CA Osasuna,5,0.321,1.155,1.395,-47.6
+Rayo Vallecano de Madrid,6,0.307,1.188,1.466,-47.6
+RCD Espanyol de Barcelona,6,0.325,1.273,1.332,-40.1
+Real Racing Club de Santander,5,0.344,1.4,1.4,0.0
 Frosinone Calcio,4,0.364,1.39,1.24,0.0
 Athletic Club,5,0.411,1.281,1.148,7.4
-Everton FC,4,0.302,1.187,1.14,-40.1
-Atalanta BC,4,0.475,1.552,1.052,34.9
+Juventus FC,4,0.483,1.548,0.924,41.4
+Real Sociedad de Fútbol,6,0.308,1.153,1.523,-47.6
+FC Bayern München,3,0.595,2.422,1.077,213.9
+RC Strasbourg Alsace,4,0.47,1.829,1.482,32.9
+CA Osasuna,5,0.321,1.155,1.395,-47.6
+US Sassuolo Calcio,4,0.379,1.404,1.396,-14.1
+Chelsea FC,4,0.458,1.784,1.45,25.4
+FC Augsburg,3,0.399,1.53,1.48,-31.6
 Brentford FC,4,0.366,1.624,1.347,-0.6
+Ipswich Town FC,4,0.274,1.249,1.883,-145.6
+RB Leipzig,3,0.519,1.976,1.315,44.4
+Atalanta BC,4,0.475,1.552,1.052,34.9
 US Lecce,4,0.274,0.808,1.528,-88.6
 SSC Napoli,4,0.594,1.562,0.937,109.9
-SV 07 Elversberg,3,0.397,1.573,1.507,0.0
-RB Leipzig,3,0.519,1.976,1.315,44.4
-Ipswich Town FC,4,0.274,1.249,1.883,-145.6
 Liverpool FC,4,0.492,1.868,1.19,78.4
-Nottingham Forest FC,4,0.366,1.316,1.221,-0.6
-FC Lorient,4,0.312,1.285,1.32,-36.1
-Stade Brestois 29,4,0.348,1.4,1.618,-13.6
-Levante UD,5,0.288,1.295,1.522,-53.6
-Newcastle United FC,4,0.408,1.624,1.474,25.4
-Paris Saint-Germain FC,4,0.642,2.216,1.054,170.9
+SV 07 Elversberg,3,0.397,1.573,1.507,0.0
+Everton FC,4,0.302,1.187,1.14,-40.1
 Getafe CF,5,0.301,0.777,1.063,-33.6
-SV Werder Bremen,3,0.293,1.289,1.626,-80.6
-Rayo Vallecano de Madrid,5,0.281,1.174,1.526,-47.6
-Eintracht Frankfurt,3,0.384,1.947,1.836,-1.1
-Racing Club de Lens,4,0.464,1.641,1.265,63.4
-ES Troyes AC,4,0.314,1.24,1.49,0.0
-1. FSV Mainz 05,3,0.334,1.518,1.348,-31.6
-Bayer 04 Leverkusen,3,0.491,2.196,1.411,66.9
+Paris Saint-Germain FC,4,0.642,2.216,1.054,170.9
+Newcastle United FC,4,0.408,1.624,1.474,25.4
+Stade Brestois 29,4,0.348,1.4,1.618,-13.6
+FC Lorient,4,0.312,1.285,1.32,-36.1
+Levante UD,5,0.288,1.295,1.522,-53.6
+Nottingham Forest FC,4,0.366,1.316,1.221,-0.6
 FC Schalke 04,3,0.331,1.24,1.307,0.0
-RC Celta de Vigo,6,0.307,1.31,1.322,-6.1
-1. FC Köln,3,0.281,1.43,1.728,-95.1
-Udinese Calcio,4,0.323,1.285,1.588,-27.1
-Sunderland AFC,4,0.329,1.112,1.275,-14.1
+SV Werder Bremen,3,0.293,1.289,1.626,-80.6
 Angers SCO,4,0.259,0.864,1.447,-67.1
+ES Troyes AC,4,0.314,1.24,1.49,0.0
+Racing Club de Lens,4,0.464,1.641,1.265,63.4
+Udinese Calcio,4,0.323,1.285,1.588,-27.1
+Valencia CF,6,0.285,1.019,1.495,-40.6
+Sunderland AFC,4,0.329,1.112,1.275,-14.1
+1. FSV Mainz 05,3,0.334,1.518,1.348,-31.6
+1. FC Köln,3,0.281,1.43,1.728,-95.1
 Manchester United FC,4,0.376,1.54,1.445,5.9
+Eintracht Frankfurt,3,0.384,1.947,1.836,-1.1
+Bayer 04 Leverkusen,3,0.491,2.196,1.411,66.9
+RC Celta de Vigo,6,0.307,1.31,1.322,-6.1
 VfB Stuttgart,3,0.441,1.96,1.747,36.9
-ACF Fiorentina,4,0.362,1.344,1.499,-6.1
-TSG 1899 Hoffenheim,3,0.341,1.69,1.916,-24.1
-Crystal Palace FC,4,0.302,1.268,1.624,-40.1
-AJ Auxerre,4,0.273,1.205,1.648,-59.6
-AFC Bournemouth,4,0.295,1.521,1.403,-14.1
-Olympique de Marseille,4,0.494,1.893,1.397,78.9
 Málaga CF,5,0.264,1.12,1.36,0.0
-Le Mans FC,4,0.264,1.39,1.44,0.0
 Torino FC,4,0.256,1.063,1.528,-68.1
-Elche CF,5,0.237,1.276,1.64,-66.6
+Le Mans FC,4,0.264,1.39,1.44,0.0
+Olympique de Marseille,4,0.494,1.893,1.397,78.9
+TSG 1899 Hoffenheim,3,0.341,1.69,1.916,-24.1
+AJ Auxerre,4,0.273,1.205,1.648,-59.6
+ACF Fiorentina,4,0.362,1.344,1.499,-6.1
+AFC Bournemouth,4,0.295,1.521,1.403,-14.1
+Crystal Palace FC,4,0.302,1.268,1.624,-40.1
 OGC Nice,4,0.276,1.221,1.42,-29.1
 Toulouse FC,4,0.262,1.26,1.424,-34.1
-Tottenham Hotspur FC,4,0.221,1.179,1.534,-60.1
 Villarreal CF,5,0.426,1.746,1.422,68.9
+Tottenham Hotspur FC,4,0.221,1.179,1.534,-60.1
+Elche CF,5,0.237,1.276,1.64,-66.6
 Le Havre AC,4,0.186,0.928,1.621,-82.6
-Parma Calcio 1913,4,0.184,0.852,1.402,-81.6
 Genoa CFC,4,0.197,0.92,1.462,-74.6
+Parma Calcio 1913,4,0.184,0.852,1.402,-81.6
+Fulham FC,4,0.316,1.263,1.455,-0.6
+1. FC Union Berlin,3,0.25,1.304,1.869,-51.1
 SC Paderborn 07,3,0.264,1.04,1.307,0.0
 Aston Villa FC,4,0.4,1.25,1.402,51.9
-1. FC Union Berlin,3,0.25,1.304,1.869,-51.1
 Bologna FC 1909,4,0.328,1.221,1.249,7.4
-Fulham FC,4,0.316,1.263,1.455,-0.6
 AC Monza,4,0.179,1.173,1.94,-139.1
-Valencia CF,5,0.251,0.993,1.562,-40.6
-Borussia Mönchengladbach,3,0.256,1.319,2.086,-39.1
-Venezia FC,4,0.132,0.979,1.776,-198.1
 Coventry City FC,4,0.264,1.04,1.54,0.0
+Venezia FC,4,0.132,0.979,1.776,-198.1
+Borussia Mönchengladbach,3,0.256,1.319,2.086,-39.1
 Hamburger SV,3,0.238,0.99,1.955,-65.6
