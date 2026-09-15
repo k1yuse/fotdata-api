@@ -156,9 +156,28 @@ def calculate_blended_stats(df_total):
             "defense_strength": round(blended_defense, 3),
         })
 
-    df_blended = pd.DataFrame(rows)
-    league_avg = df_blended['win_rate'].mean()
-    df_blended['prestige'] = ((df_blended['win_rate'] - league_avg) * 300).round(1)
+        df_blended = pd.DataFrame(rows)
+
+    # prestige: 26-27 시즌 영향 배제하고, 24-25+25-26 두 시즌만으로 "안정적인 체급" 계산
+    df_prior2 = df_total[(df_total['date'] >= '2024-08-01') & (df_total['date'] < '2026-08-01') & (df_total['league'] != 'CL')]
+    stats_prior2 = calculate_team_stats(df_prior2).set_index('team')
+
+    prior_win_rates = []
+    for team in df_blended['team']:
+        wr = stats_prior2.loc[team, 'win_rate'] if team in stats_prior2.index else None
+        prior_win_rates.append(wr)
+    df_blended['_prior_win_rate'] = prior_win_rates
+
+    valid_prior = df_blended['_prior_win_rate'].dropna()
+    prior_league_avg = valid_prior.mean() if len(valid_prior) > 0 else 0.33
+
+    def calc_prestige(wr):
+        if pd.isna(wr):
+            return 0  # 24-25/25-26 기록 없는 신규 승격팀 등은 보정 없음
+        return round((wr - prior_league_avg) * 500, 1)
+
+    df_blended['prestige'] = df_blended['_prior_win_rate'].apply(calc_prestige)
+    df_blended = df_blended.drop(columns=['_prior_win_rate'])
 
     return df_blended
 
@@ -626,10 +645,12 @@ def simulate_season(teams, df_stats, n_simulations=1000):
                 h = h.iloc[0]
                 a = a.iloc[0]
                 
-                # ELO 기반 승률 계산
+                # ELO 기반 승률 계산 (prestige 반영)
                 import random as _random
-                home_elo = 1500 + (h['win_rate'] - 0.33) * 1000 + 70 + _random.gauss(0, 50)
-                away_elo = 1500 + (a['win_rate'] - 0.33) * 1000 + _random.gauss(0, 50)
+                h_prestige = h['prestige'] if 'prestige' in h.index and pd.notna(h['prestige']) else 0
+                a_prestige = a['prestige'] if 'prestige' in a.index and pd.notna(a['prestige']) else 0
+                home_elo = 1500 + (h['win_rate'] - 0.33) * 1000 + h_prestige + 70 + _random.gauss(0, 50)
+                away_elo = 1500 + (a['win_rate'] - 0.33) * 1000 + a_prestige + _random.gauss(0, 50)
                 
                 exp_home = 1 / (1 + 10 ** ((away_elo - home_elo) / 400))
                 exp_away = 1 / (1 + 10 ** ((home_elo - away_elo) / 400))
@@ -698,11 +719,14 @@ def fetch_champion_predictions():
     
     df_all = pd.read_csv(f"{MODEL_DIR}/all_matches.csv")
     df_all['date'] = pd.to_datetime(df_all['date'])
-    
+
+    # 3시즌 혼합 + prestige 보정된 스탯을 미리 한 번만 계산 (5대 리그 전체)
+    df_blended_all = calculate_blended_stats(df_all)
+
     for code, name in LEAGUE_TEAMS.items():
         print(f"  [{name}] 시뮬레이션 중...")
         
-        # 25-26 시즌 해당 리그 팀만
+        # 26-27 시즌 해당 리그 팀만
         league_df = df_all[
             (df_all['league'] == code) &
             (df_all['date'] >= '2026-08-01')
@@ -714,16 +738,9 @@ def fetch_champion_predictions():
         
         teams = list(set(league_df['home_team'].tolist() + league_df['away_team'].tolist()))
         
-        # 3시즌 평균 스탯 계산
-        df_all_stats = pd.read_csv(f"{MODEL_DIR}/all_matches.csv")
-        df_all_stats['date'] = pd.to_datetime(df_all_stats['date'])
-        
-        # 해당 리그 전체 데이터로 스탯 계산
-        league_all = df_all_stats[df_all_stats['league'] == code]
-        df_stats = calculate_team_stats(league_all)
-        
-        # 해당 리그 팀만 필터
-        league_teams = [t for t in teams if not df_stats[df_stats['team']==t].empty]
+        # 미리 계산해둔 혼합 스탯에서 해당 리그 팀만 필터
+        df_stats = df_blended_all[df_blended_all['team'].isin(teams)].reset_index(drop=True)
+        league_teams = df_stats['team'].tolist()
         
         if len(league_teams) < 5:
             print(f"  ❌ {name} 팀 수 부족")
