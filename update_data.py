@@ -108,9 +108,9 @@ def calculate_team_stats(df):
     
 def calculate_blended_stats(df_total):
     """3시즌(24-25/25-26/26-27) 혼합 + prestige 보정이 반영된 팀 스탯 계산"""
-    df_2425 = df_total[(df_total['date'] >= '2024-08-01') & (df_total['date'] < '2025-08-01')]
-    df_2526 = df_total[(df_total['date'] >= '2025-08-01') & (df_total['date'] < '2026-08-01')]
-    df_2627 = df_total[df_total['date'] >= '2026-08-01']
+    df_2425 = df_total[(df_total['date'] >= '2024-08-01') & (df_total['date'] < '2025-08-01') & (df_total['league'] != 'CL')]
+    df_2526 = df_total[(df_total['date'] >= '2025-08-01') & (df_total['date'] < '2026-08-01') & (df_total['league'] != 'CL')]
+    df_2627 = df_total[(df_total['date'] >= '2026-08-01') & (df_total['league'] != 'CL')]
 
     stats_2425 = calculate_team_stats(df_2425).set_index('team')
     stats_2526 = calculate_team_stats(df_2526).set_index('team')
