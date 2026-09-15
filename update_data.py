@@ -705,7 +705,7 @@ def fetch_champion_predictions():
         # 25-26 시즌 해당 리그 팀만
         league_df = df_all[
             (df_all['league'] == code) &
-            (df_all['date'] >= '2025-08-01')
+            (df_all['date'] >= '2026-08-01')
         ]
         
         if league_df.empty:
