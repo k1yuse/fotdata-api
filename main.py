@@ -98,8 +98,6 @@ def predict_match(req: MatchRequest):
 
     h, a = h.iloc[0], a.iloc[0]
 
-    home_advantage = 0.45  # 데이터 기반 홈 어드밴티지
-
    # H2H 홈팀 승률 계산
     h2h_df = df_matches_all[
         ((df_matches_all['home_team']==home_team) & (df_matches_all['away_team']==away_team)) |
@@ -112,9 +110,20 @@ def predict_match(req: MatchRequest):
     else:
         h2h_rate = 0.33
 
-    # ELO 점수 추정 (승률 기반)
-    home_elo = 1500 + (h['win_rate'] - 0.33) * 1000
-    away_elo = 1500 + (a['win_rate'] - 0.33) * 1000
+    # ELO 점수 추정 (승률 + prestige + 전력차 기반 홈 어드밴티지 감쇠)
+    home_prestige = h['prestige'] if 'prestige' in h.index and pd.notna(h['prestige']) else 0
+    away_prestige = a['prestige'] if 'prestige' in a.index and pd.notna(a['prestige']) else 0
+
+    base_home_elo = 1500 + (h['win_rate'] - 0.33) * 1000
+    base_away_elo = 1500 + (a['win_rate'] - 0.33) * 1000
+    elo_gap = abs(base_home_elo - base_away_elo)
+
+    home_advantage_base = 70
+    home_advantage_factor = max(0.4, 1 - elo_gap / 800)
+    home_advantage_bonus = home_advantage_base * home_advantage_factor
+
+    home_elo = base_home_elo + home_prestige + home_advantage_bonus
+    away_elo = base_away_elo + away_prestige
 
     input_data = pd.DataFrame([{
         'home_elo':          home_elo,
