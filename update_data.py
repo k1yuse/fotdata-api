@@ -105,6 +105,62 @@ def calculate_team_stats(df):
             "win_rate":         round(wins / games, 3),
         })
     return pd.DataFrame(stats).sort_values("points", ascending=False).reset_index(drop=True)
+    
+def calculate_blended_stats(df_total):
+    """3시즌(24-25/25-26/26-27) 혼합 + prestige 보정이 반영된 팀 스탯 계산"""
+    df_2425 = df_total[(df_total['date'] >= '2024-08-01') & (df_total['date'] < '2025-08-01')]
+    df_2526 = df_total[(df_total['date'] >= '2025-08-01') & (df_total['date'] < '2026-08-01')]
+    df_2627 = df_total[df_total['date'] >= '2026-08-01']
+
+    stats_2425 = calculate_team_stats(df_2425).set_index('team')
+    stats_2526 = calculate_team_stats(df_2526).set_index('team')
+    stats_2627 = calculate_team_stats(df_2627).set_index('team')
+
+    current_teams = stats_2627.index.tolist()
+
+    def get_val(stats_df, team, col, default):
+        return stats_df.loc[team, col] if team in stats_df.index else default
+
+    rows = []
+    for team in current_teams:
+        games_2627 = stats_2627.loc[team, 'games']
+
+        if games_2627 < 10:
+            w2425, w2526, w2627 = 0.4, 0.4, 0.2
+        elif games_2627 < 18:
+            w2425, w2526, w2627 = 0.3, 0.3, 0.3
+        else:
+            w2425, w2526, w2627 = 0.3, 0.3, 0.4
+
+        blended_win_rate = (
+            w2425 * get_val(stats_2425, team, 'win_rate', 0.33) +
+            w2526 * get_val(stats_2526, team, 'win_rate', 0.33) +
+            w2627 * get_val(stats_2627, team, 'win_rate', 0.33)
+        )
+        blended_attack = (
+            w2425 * get_val(stats_2425, team, 'attack_strength', 1.3) +
+            w2526 * get_val(stats_2526, team, 'attack_strength', 1.3) +
+            w2627 * get_val(stats_2627, team, 'attack_strength', 1.3)
+        )
+        blended_defense = (
+            w2425 * get_val(stats_2425, team, 'defense_strength', 1.3) +
+            w2526 * get_val(stats_2526, team, 'defense_strength', 1.3) +
+            w2627 * get_val(stats_2627, team, 'defense_strength', 1.3)
+        )
+
+        rows.append({
+            "team": team,
+            "games": int(games_2627),
+            "win_rate": round(blended_win_rate, 3),
+            "attack_strength": round(blended_attack, 3),
+            "defense_strength": round(blended_defense, 3),
+        })
+
+    df_blended = pd.DataFrame(rows)
+    league_avg = df_blended['win_rate'].mean()
+    df_blended['prestige'] = ((df_blended['win_rate'] - league_avg) * 300).round(1)
+
+    return df_blended
 
 def get_recent_form(df, team, before_date, n=5):
     """최근 N경기 승점 합"""
@@ -450,9 +506,8 @@ def main():
 
     df_total.to_csv(f"{MODEL_DIR}/all_matches.csv", index=False, encoding='utf-8-sig')
 
-    # 3. 최신 시즌 스탯 (예측용) — 현재 진행중인 26-27 시즌만
-    df_current = df_total[df_total['date'] >= '2026-08-01']
-    df_stats_current = calculate_team_stats(df_current)
+    # 3. 3시즌 혼합 스탯 (예측용) — 경기 수 구간별 가중치 + prestige 보정
+    df_stats_current = calculate_blended_stats(df_total)
     df_stats_current.to_csv(f"{MODEL_DIR}/team_stats.csv", index=False, encoding='utf-8-sig')
     
     # 4. Feature 생성 (전체 데이터로 학습)
