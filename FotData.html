@@ -754,20 +754,7 @@ function runSimulation() {
   const eloScale = cfg[0];
   const seasonNoise = cfg[1];
 
-  // 클럽 전력 보정 (누적 전력/스쿼드 가치 기반 ELO 보너스)
-  const PRESTIGE = {
-    // EPL
-    'Liverpool FC':110,'Chelsea FC':90,'Manchester United FC':80,'Tottenham Hotspur FC':70,
-    'Manchester City FC':70,'Arsenal FC':40,'Newcastle United FC':40,'Aston Villa FC':10,
-    // 라리가
-    'Club Atlético de Madrid':50,'Sevilla FC':30,'Valencia CF':20,
-    // 세리에A
-    'Juventus FC':90,'AC Milan':40,'SSC Napoli':30,'Atalanta BC':20,
-    // 분데스
-    'Bayer 04 Leverkusen':60,'Borussia Dortmund':30,
-    // 리그앙
-    'Paris Saint-Germain FC':120,'Olympique de Marseille':40,'AS Monaco FC':40,'Olympique Lyonnais':20,
-  };
+  // prestige는 API 응답(t.prestige)에서 직접 가져옴
 
   const winCounts = {};
   const top4Counts = {};
@@ -789,8 +776,8 @@ function runSimulation() {
         const home = teams[i], away = teams[j];
         
         // ELO 계산 (노이즈 포함)
-        const homeElo = 1500 + (home.win_rate - 0.33) * eloScale + (PRESTIGE[home.team]||0) + 70 + seasonForm[home.team] + gaussRandom() * 40;
-        const awayElo = 1500 + (away.win_rate - 0.33) * eloScale + (PRESTIGE[away.team]||0) + seasonForm[away.team] + gaussRandom() * 40;
+        const homeElo = 1500 + (home.win_rate - 0.33) * eloScale + (home.prestige||0) + 70 + seasonForm[home.team] + gaussRandom() * 40;
+        const awayElo = 1500 + (away.win_rate - 0.33) * eloScale + (away.prestige||0) + seasonForm[away.team] + gaussRandom() * 40;
         
         const expHome = 1 / (1 + Math.pow(10, (awayElo - homeElo) / 400));
         const expAway = 1 / (1 + Math.pow(10, (homeElo - awayElo) / 400));
