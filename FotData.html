@@ -224,6 +224,24 @@
     .champ-bar-wrap { flex: 1; background: #21262d; border-radius: 6px; height: 24px; position: relative; overflow: hidden; }
     .champ-bar { height: 100%; background: linear-gradient(90deg, #1f6feb, #58a6ff); border-radius: 6px; transition: width .5s; }
     .champ-prob { font-size: 13px; font-weight: 700; color: #58a6ff; width: 50px; text-align: right; }
+
+    /* 일정 */
+    .sched-month-tabs { flex-wrap: wrap; }
+    .sched-date-header { font-size: 12px; color: #8b949e; font-weight: 600; margin: 18px 0 8px; padding-bottom: 6px; border-bottom: 0.5px solid #30363d; }
+    .sched-date-header:first-child { margin-top: 0; }
+    .sched-match { display: flex; align-items: center; padding: 10px 4px; border-bottom: 0.5px solid #21262d; font-size: 13px; }
+    .sched-match:last-child { border-bottom: none; }
+    .sched-team { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+    .sched-team span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .sched-team.away { justify-content: flex-end; text-align: right; }
+    .sched-team img { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
+    .sched-vs { font-size: 12px; color: #8b949e; padding: 0 14px; text-align: center; min-width: 60px; flex-shrink: 0; }
+    .sched-score { font-weight: 700; color: #e6edf3; }
+    .sched-time { font-size: 11px; color: #8b949e; }
+
+    @media (max-width: 768px) {
+      .sched-team span { font-size: 12px; }
+    }
   </style>
 </head>
 <body>
@@ -247,6 +265,7 @@
   <div class="nav-tab active" onclick="showPage('predict')">경기 예측</div>
   <div class="nav-tab" onclick="showPage('champion')">순위 예측</div>
   <div class="nav-tab" onclick="showPage('standings')">순위표</div>
+  <div class="nav-tab" onclick="showPage('schedule')">일정</div>
   <div class="nav-tab" onclick="showPage('players')">선수</div>
 </nav>
 
@@ -340,6 +359,22 @@
   </div>
 </div>
 
+<!-- 일정 페이지 -->
+<div id="page-schedule" class="page">
+  <div class="card">
+    <div class="league-tabs" id="schedule-league-tabs">
+      <div class="league-tab active" onclick="loadSchedule('PL', this)" data-league="PL"><img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> EPL</div>
+      <div class="league-tab" onclick="loadSchedule('PD', this)" data-league="PD"><img src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'"> 라리가</div>
+      <div class="league-tab" onclick="loadSchedule('BL1', this)" data-league="BL1"><img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'"> 분데스리가</div>
+      <div class="league-tab" onclick="loadSchedule('SA', this)" data-league="SA"><img src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'"> 세리에A</div>
+      <div class="league-tab" onclick="loadSchedule('FL1', this)" data-league="FL1"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'"> 리그앙</div>
+      <div class="league-tab ucl-tab" onclick="loadSchedule('CL', this)" data-league="CL"><img src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> 챔피언스리그</div>
+    </div>
+    <div id="schedule-month-tabs" class="ucl-subtabs sched-month-tabs"></div>
+    <div id="schedule-content"><div class="loading">일정 불러오는 중...</div></div>
+  </div>
+</div>
+
 <!-- 선수 페이지 -->
 <div id="page-players" class="page">
   <div class="card">
@@ -363,6 +398,7 @@
     </div>
   </div>
 </div>
+
   <div class="page active" id="page-predict">
     <div class="card">
       <div class="team-selector">
@@ -728,6 +764,7 @@ function showPage(page) {
   if(page!=='standings'){document.getElementById('ucl-subtabs').style.display='none';}
   if(page==='players'){loadPlayers();}
   if(page==='champion'){loadChampion('PL');}
+  if(page==='schedule' && !scheduleData[currentScheduleLeague]){loadSchedule(currentScheduleLeague);}
 }
 let currentChampionData = null;
 let currentLeagueCode = 'PL';
@@ -974,6 +1011,97 @@ function renderPlayerList(players, type) {
   }).join('');
 }
 
+// ── 일정 탭 ──
+let scheduleData = {};
+let currentScheduleLeague = 'PL';
+let currentScheduleMonth = null;
+const STAGE_LABEL = { PLAYOFFS: '플레이오프', LEAGUE_STAGE: '리그 스테이지', LAST_16: '16강', QUARTER_FINALS: '8강', SEMI_FINALS: '4강', FINAL: '결승' };
+
+async function loadSchedule(league, btn) {
+  currentScheduleLeague = league;
+  if (btn) {
+    document.querySelectorAll('#schedule-league-tabs .league-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  document.getElementById('schedule-month-tabs').innerHTML = '';
+  const content = document.getElementById('schedule-content');
+  content.innerHTML = '<div class="loading">일정 불러오는 중...</div>';
+  try {
+    if (!scheduleData[league]) {
+      const res = await fetch(`${API}/schedule/${league}`);
+      if (!res.ok) throw new Error('fetch failed');
+      const data = await res.json();
+      scheduleData[league] = data.matches;
+    }
+    renderScheduleMonths(league);
+  } catch (e) {
+    content.innerHTML = '<div class="loading">일정을 불러올 수 없어요.</div>';
+  }
+}
+
+function scheduleMonthKey(dateStr) {
+  const d = new Date(dateStr);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+}
+
+function renderScheduleMonths(league) {
+  const matches = scheduleData[league] || [];
+  if (!matches.length) {
+    document.getElementById('schedule-content').innerHTML = '<div class="loading">일정 데이터가 없습니다.</div>';
+    return;
+  }
+  const months = [...new Set(matches.map(m => scheduleMonthKey(m.date)))].sort();
+  const nowKey = scheduleMonthKey(new Date().toISOString());
+  const defaultMonth = months.includes(nowKey) ? nowKey : (months.find(mk => mk >= nowKey) || months[months.length - 1]);
+  currentScheduleMonth = defaultMonth;
+
+  const tabsEl = document.getElementById('schedule-month-tabs');
+  tabsEl.innerHTML = months.map(mk => {
+    const [y, m] = mk.split('-');
+    return `<div class="ucl-subtab ${mk === defaultMonth ? 'active' : ''}" onclick="selectScheduleMonth('${mk}', this)">${y}년 ${parseInt(m)}월</div>`;
+  }).join('');
+
+  renderScheduleContent(league, defaultMonth);
+}
+
+function selectScheduleMonth(mk, el) {
+  currentScheduleMonth = mk;
+  document.querySelectorAll('#schedule-month-tabs .ucl-subtab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderScheduleContent(currentScheduleLeague, mk);
+}
+
+function renderScheduleContent(league, monthKey) {
+  const content = document.getElementById('schedule-content');
+  const matches = (scheduleData[league] || []).filter(m => scheduleMonthKey(m.date) === monthKey);
+  if (!matches.length) {
+    content.innerHTML = '<div class="loading">해당 월에 예정된 경기가 없습니다.</div>';
+    return;
+  }
+  const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토'];
+  let html = '';
+  let lastDate = null;
+  matches.forEach(m => {
+    const d = new Date(m.date);
+    const dateStr = `${d.getMonth() + 1}.${d.getDate()} (${WEEKDAY[d.getDay()]})`;
+    if (dateStr !== lastDate) {
+      const roundLabel = league === 'CL' ? (STAGE_LABEL[m.stage] || '') : (m.matchday ? `${m.matchday}라운드` : '');
+      html += `<div class="sched-date-header">${dateStr}${roundLabel ? ' · ' + roundLabel : ''}</div>`;
+      lastDate = dateStr;
+    }
+    const played = m.status === 'FINISHED';
+    const timeStr = d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+    const homeShort = m.home_team.replace(' FC', '').replace(' CF', '');
+    const awayShort = m.away_team.replace(' FC', '').replace(' CF', '');
+    html += `<div class="sched-match">
+      <div class="sched-team"><img src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span>${homeShort}</span></div>
+      <div class="sched-vs">${played ? `<span class="sched-score">${m.home_goals} - ${m.away_goals}</span>` : `<span class="sched-time">${timeStr}</span>`}</div>
+      <div class="sched-team away"><span>${awayShort}</span><img src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"></div>
+    </div>`;
+  });
+  content.innerHTML = html;
+}
+
 let currentStandingsSeason = 'current';
 
 function setStandingsSeason(season, el) {
@@ -1130,7 +1258,7 @@ setInterval(updateCountdown, 60000);
 
 loadLogos();loadStandings('PL');
 
-if(window.location.hash){setTimeout(()=>{const h=window.location.hash.replace('#','');const valid=['predict','champion','standings','players'];if(!valid.includes(h))return;document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));const pg=document.getElementById('page-'+h);if(pg)pg.classList.add('active');const tab=document.querySelector('[onclick="showPage(\''+h+'\')"]');if(tab)tab.classList.add('active');if(h==='champion')loadChampion('PL');if(h==='players')loadPlayers();},100);}
+if(window.location.hash){setTimeout(()=>{const h=window.location.hash.replace('#','');const valid=['predict','champion','standings','players','schedule'];if(!valid.includes(h))return;document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));const pg=document.getElementById('page-'+h);if(pg)pg.classList.add('active');const tab=document.querySelector('[onclick="showPage(\''+h+'\')"]');if(tab)tab.classList.add('active');if(h==='champion')loadChampion('PL');if(h==='players')loadPlayers();if(h==='schedule')loadSchedule('PL');},100);}
 </script>
 
 <footer style="padding:20px 24px;border-top:0.5px solid #30363d;display:flex;align-items:center;justify-content:space-between;background:#161b22">

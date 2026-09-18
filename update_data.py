@@ -383,6 +383,89 @@ def update_team_logos():
         print(f"  ⚠️ 여전히 못 찾은 팀: {missing_teams}")
     print(f"  ✅ team_logos.json 업데이트 완료")
     
+def reconstruct_bracket_order(stages):
+    """하드코딩 없이 실제 대진(팀 실명)으로 이전 라운드의 좌우 배치를 역추적한다.
+
+    상위 라운드가 확정되면 그 대진의 두 팀이 각각 하위 라운드 어느 매치에서
+    이겼는지는 팀 이름으로 100% 정확히 역산 가능하다 (PO→R16은 1:1, 그 외는
+    2:1이지만 팀 소속 여부만 보면 되므로 같은 로직으로 처리된다 — R16 매치의
+    두 팀 중 시즌 내내 직행한 팀은 PO 소속이 아니라 자동으로 걸러진다).
+    아직 다음 라운드가 확정되지 않은 최전선 라운드는 API 응답 순서를 그대로 둔다.
+    """
+    STAGE_ORDER = ["PLAYOFFS", "LAST_16", "QUARTER_FINALS", "SEMI_FINALS", "FINAL"]
+    present = [i for i, s in enumerate(STAGE_ORDER) if stages.get(s)]
+    if not present:
+        return stages
+
+    ordered = {s: list(stages.get(s, [])) for s in STAGE_ORDER}
+    top_idx = present[-1]
+
+    def reorder_lower_by_upper(upper_ties, lower_raw):
+        lower_by_team = {}
+        for tie in lower_raw:
+            lower_by_team[tie['team1']] = tie
+            lower_by_team[tie['team2']] = tie
+        result, used = [], set()
+        for upper_tie in upper_ties:
+            for team in (upper_tie['team1'], upper_tie['team2']):
+                src = lower_by_team.get(team)
+                if src is not None and id(src) not in used:
+                    result.append(src)
+                    used.add(id(src))
+        for tie in lower_raw:
+            if id(tie) not in used:
+                result.append(tie)  # 대진 미확정 등 예외 상황 안전망
+        return result
+
+    for i in range(top_idx, 0, -1):
+        upper_stage, lower_stage = STAGE_ORDER[i], STAGE_ORDER[i - 1]
+        if not ordered[lower_stage]:
+            continue
+        ordered[lower_stage] = reorder_lower_by_upper(ordered[upper_stage], ordered[lower_stage])
+
+    return ordered
+
+def fetch_full_schedule():
+    """5대리그+UCL 26-27 시즌 전체 일정(완료+예정 전부) 수집 — 일정 탭 전용.
+    all_matches.csv/team_stats.csv 등 모델 학습 파이프라인과는 무관한 별도 캐시."""
+    import json
+    print("\n[전체 일정] 수집 중...")
+    CURRENT_SEASON = 2026
+    schedule = {}
+    for code, name in LEAGUES_V2.items():
+        print(f"  [{name}] 일정 수집 중...")
+        res = requests.get(
+            f"{BASE_URL}/competitions/{code}/matches",
+            headers=HEADERS,
+            params={"season": CURRENT_SEASON}
+        )
+        if res.status_code != 200:
+            print(f"  ❌ {name} 일정 오류: {res.status_code}")
+            time.sleep(6)
+            continue
+
+        rows = []
+        for m in res.json().get("matches", []):
+            ft = m["score"]["fullTime"]
+            rows.append({
+                "date":       m["utcDate"],
+                "matchday":   m.get("matchday"),
+                "stage":      m.get("stage"),
+                "home_team":  m["homeTeam"]["name"],
+                "away_team":  m["awayTeam"]["name"],
+                "home_goals": ft.get("home"),
+                "away_goals": ft.get("away"),
+                "status":     m["status"],
+            })
+        rows.sort(key=lambda r: r["date"])
+        schedule[code] = rows
+        print(f"  ✅ {name} {len(rows)}경기")
+        time.sleep(6)
+
+    with open(f"{MODEL_DIR}/schedule.json", 'w', encoding='utf-8') as f:
+        json.dump(schedule, f, ensure_ascii=False, indent=2)
+    print(f"  ✅ schedule.json 저장 완료")
+
 def fetch_ucl_tournament():
     import json
     print("\n[UCL 토너먼트] 수집 중...")
@@ -442,49 +525,7 @@ def fetch_ucl_tournament():
             "winner": winner, "status": v["status"], "legs": v["legs"]
         })
 
-    # 풋몹 기준 순서로 재정렬
-    PO_ORDER = [
-        ('Monaco', 'Paris'), ('Galatasaray', 'Juventus'),
-        ('Benfica', 'Real Madrid'), ('Dortmund', 'Atalanta'),
-        ('Qarab', 'Newcastle'), ('Brugge', 'Atlético'),
-        ('Bodø', 'Internazionale'), ('Olympiakos', 'Leverkusen'),
-    ]
-    R16_ORDER = [
-        ('Paris', 'Chelsea'), ('Galatasaray', 'Liverpool'),
-        ('Real Madrid', 'Manchester City'), ('Atalanta', 'Bayern'),
-        ('Newcastle', 'Barcelona'), ('Atlético', 'Tottenham'),
-        ('Bodø', 'Sporting'), ('Leverkusen', 'Arsenal'),
-    ]
-    QF_ORDER = [
-        ('Paris', 'Liverpool'), ('Real Madrid', 'Bayern'),
-        ('Barcelona', 'Atlético'), ('Sporting', 'Arsenal'),
-    ]
-
-    def find_and_sort(stage_data, order):
-        result = []
-        for t1k, t2k in order:
-            for m in stage_data:
-                names = [m['team1'], m['team2']]
-                if any(t1k in n for n in names) and any(t2k in n for n in names):
-                    if t1k not in m['team1']:
-                        m['team1'], m['team2'] = m['team2'], m['team1']
-                        m['team1_goals'], m['team2_goals'] = m['team2_goals'], m['team1_goals']
-                        m['team1_logo'], m['team2_logo'] = m['team2_logo'], m['team1_logo']
-                    result.append(m)
-                    break
-        # 순서에 없는 새 팀(4강, 결승 등)은 그냥 뒤에 추가
-        ordered_keys = set()
-        for m in result:
-            ordered_keys.add(tuple(sorted([m['team1'], m['team2']])))
-        for m in stage_data:
-            k = tuple(sorted([m['team1'], m['team2']]))
-            if k not in ordered_keys:
-                result.append(m)
-        return result
-
-    stages['PLAYOFFS'] = find_and_sort(stages['PLAYOFFS'], PO_ORDER)
-    stages['LAST_16'] = find_and_sort(stages['LAST_16'], R16_ORDER)
-    stages['QUARTER_FINALS'] = find_and_sort(stages['QUARTER_FINALS'], QF_ORDER)
+    stages = reconstruct_bracket_order(stages)
 
     with open(f"{MODEL_DIR}/ucl_tournament.json", 'w', encoding='utf-8') as f:
         json.dump(stages, f, ensure_ascii=False, indent=2)
@@ -591,7 +632,10 @@ def main():
 
 # UCL 토너먼트
     fetch_ucl_tournament()
-    
+
+    # 전체 일정 (일정 탭용)
+    fetch_full_schedule()
+
     fetch_top_scorers()
 
     # 로고 자동 업데이트

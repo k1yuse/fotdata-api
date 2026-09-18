@@ -163,7 +163,7 @@ python update_data.py
 
 ## 10. 알려진 이슈 / 향후 정리 과제
 
-- UCL 토너먼트 PO/R16 매칭 순서가 `PO_ORDER`/`R16_ORDER`/`QF_ORDER` 하드코딩 리스트(`update_data.py`)에 의존 — 시즌마다 대진표가 바뀌면 수동으로 갱신해야 함. 근본적으로는 API가 제공하는 매치업 정보로 자동 정렬하는 방식으로 리팩토링이 필요.
+- ~~UCL 토너먼트 PO/R16 매칭 순서 하드코딩~~ → 2026-09-19에 `update_data.py`의 `reconstruct_bracket_order()`로 리팩토링 완료. 상위 라운드(R16/QF/SF/Final)가 실제로 확정되면 그 대진의 팀 실명으로 하위 라운드 어느 매치에서 이겼는지 역추적해서 좌우 순서를 자동 복원함(팀 이름 완전일치 기반, substring 매칭 버그도 같이 제거됨). 아직 다음 라운드가 안 열린 최전선 라운드(예: R16 발표 전의 PO)만 API 응답 순서를 그대로 씀 — 이건 UEFA의 실제 추첨 슬롯 정보가 API에 없어서 발생하는 구조적 한계로, 다음 라운드가 열리는 순간 자동으로 소급 재정렬됨.
 - 모델 로드 시 구버전 scikit-learn으로 저장된 pkl과의 `multi_class` 속성 호환성 문제가 있었음 → `main.py`에 `if not hasattr(lr_model, 'multi_class')` 패치로 해결한 상태. sklearn 버전을 올릴 때 이 부분 재확인.
 - `FotData_01.ipynb`는 초기 개발 단계(Stage 0~1 초반)의 유물로, 현재는 `update_data.py`가 전체 파이프라인(수집→피처→학습→저장)을 대체함. 노트북은 과거 히스토리 참고용이며 실행 경로가 아님.
 - 시즌 종료 배너(`FotData.html`/`landing.html`에 HTML 주석으로 비활성화됨)는 27-28 시즌 전환 시점에 재활성화 예정.
@@ -176,7 +176,6 @@ python update_data.py
 - [ ] `team_stats.csv` / `/standings` 엔드포인트의 시즌 컷오프 날짜 (여러 위치에 흩어져 있음, main.py와 update_data.py 둘 다 확인)
 - [ ] `FotData.html`의 `LEAGUE_DATA` 하드코딩 팀 리스트 — 승강팀 반영
 - [ ] 신규 승격팀 로고 (`update_team_logos()`가 자동 시도하지만 실패 시 수동 추가)
-- [ ] UCL 대진표 순서 하드코딩 (`PO_ORDER` 등) 최신화
 - [ ] 시즌 종료 배너 재활성화 여부
 
 ## 12. 다음 계획 / 수익화 로드맵

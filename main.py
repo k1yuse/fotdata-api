@@ -507,10 +507,27 @@ def get_champion_prediction(league_code: str):
         for _, row in df_s.iterrows():
             win_rates[row['team']] = float(row['win_rate'])
             prestiges[row['team']] = float(row['prestige']) if 'prestige' in row and pd.notna(row['prestige']) else 0.0
-    
+
     for team in league['teams']:
         team['logo'] = logos.get(team['team'], '')
         team['win_rate'] = win_rates.get(team['team'], 0.33)
         team['prestige'] = prestiges.get(team['team'], 0.0)
-    
+
     return league
+
+# ── 전체 일정 API ──
+@app.get("/schedule/{league_code}")
+def get_schedule(league_code: str):
+    """리그 전체 시즌 일정 (완료 + 예정 경기 전부)"""
+    path = os.path.join(MODEL_DIR, "schedule.json")
+    if not os.path.exists(path):
+        raise HTTPException(status_code=404, detail="일정 데이터 없음")
+
+    with open(path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+
+    matches = data.get(league_code.upper())
+    if matches is None:
+        raise HTTPException(status_code=404, detail="해당 리그 데이터 없음")
+
+    return {"league": league_code.upper(), "matches": matches}
