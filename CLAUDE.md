@@ -24,7 +24,14 @@
 | 로컬 경로 | `~/fotdata-api` (맥북 프로 M5) |
 | conda 환경 | `fotdata` (Python 3.10) |
 
-⚠️ **보안 주의**: 로컬 저장소의 `git remote -v`를 확인해보니 origin URL에 GitHub Personal Access Token이 평문으로 박혀 있다(`https://k1yuse:ghp_...@github.com/...`). 이 레포를 남과 공유하거나 `.git/config`를 커밋/캡처할 일이 있으면 절대 노출하지 말 것. 가능하면 credential helper(osxkeychain)로 옮기고 remote URL에서 토큰을 빼는 걸 권장.
+**보안 사고 이력 (2026-09-19에 발견·조치 완료)**: 아래 두 건이 발견되어 즉시 조치했다. 앞으로 비슷한 실수를 반복하지 않기 위해 기록해둔다.
+1. `git remote -v`의 origin URL에 GitHub Personal Access Token이 평문으로 박혀 있었음(`https://k1yuse:ghp_...@github.com/...`) — 로컬 `.git/config`에만 있던 것이라 레포 자체가 노출된 건 아니었지만, 토큰을 폐기하고 새로 발급받아 remote URL을 교체했다.
+2. **(더 심각) `FotData_01.ipynb`에 football-data.org API 키가 하드코딩된 채 GitHub에 커밋되어 있었고, 레포가 public이라 실제로 전 세계에 노출된 상태였음.** 키를 재발급(무효화)하고, 노트북 코드는 `os.environ["FOOTBALL_API_KEY"]`로 환경변수에서 읽도록 수정했다. 같은 키가 들어있던 `.ipynb_checkpoints/FotData_01-checkpoint.ipynb`도 삭제하고, `.gitignore`를 추가해 체크포인트/`__pycache__`/`.env`가 다시 커밋되지 않게 했다.
+
+**앞으로 지킬 규칙**:
+- API 키/토큰은 절대 코드나 노트북에 하드코딩하지 말고 `os.environ.get(...)`으로만 읽을 것
+- 새 노트북 셀을 추가할 때도 이 규칙 유지 — 노트북은 실수로 키를 박아넣기 가장 쉬운 곳
+- `git remote -v` 결과에 자격증명이 보이면 즉시 정리 (credential helper로 이전)
 
 ## 3. 기술 스택
 
@@ -124,6 +131,7 @@ cp landing.html index.html
 3. **일일 데이터 갱신**: GitHub Actions(`update_data.yml`, 매일 UTC 18:00)가 `update_data.py` 실행 → `fotdata_model/*` 변경분을 자동 커밋·푸시 (`자동 데이터 업데이트 YYYY-MM-DD`)
    - ⚠️ 이 워크플로우에는 `FOOTBALL_API_KEY`만 GitHub Secrets로 주입됨. `API_FOOTBALL_KEY`는 설정돼 있지 않아서, GitHub Actions 실행에서는 `fetch_top_scorers()`가 조용히 스킵된다 — 선수 데이터는 현재 **로컬에서 수동 실행할 때만** 갱신 가능. 자동화하려면 `API_FOOTBALL_KEY`도 GitHub Secrets에 추가해야 함.
    - Render 무료 플랜은 아웃바운드 API 호출이 막혀 있어서, 모든 외부 데이터(football-data.org, API-Football)는 반드시 GitHub Actions/로컬에서 미리 fetch해 JSON/CSV 캐시로 만든 뒤 서빙해야 한다. Render 서버가 직접 외부 API를 호출하는 코드는 작동하지 않는다.
+   - `API_FOOTBALL_KEY`를 GitHub Secrets에 넣지 않은 것은 의도적인 선택이다: API-Football 무료 플랜은 2024 시즌 데이터만 제공해서, 자동화해도 최신 시즌 선수 스탯은 어차피 못 가져온다. 유료 플랜(Pro, $19/월)으로 업그레이드하기 전까지는 선수 데이터는 로컬에서 수동으로만 `python update_data.py`를 돌려 갱신한다.
 
 ## 8. 환경 세팅 (맥북 기준)
 
