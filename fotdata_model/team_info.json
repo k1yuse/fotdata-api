@@ -6066,6 +6066,12 @@
         "position": "Offence",
         "nationality": "Belgium",
         "shirtNumber": null
+      },
+      {
+        "name": "Iker Rodríguez",
+        "position": null,
+        "nationality": "Spain",
+        "shirtNumber": null
       }
     ]
   },
@@ -9823,6 +9829,18 @@
         "name": "Bazoumana Touré",
         "position": "Offence",
         "nationality": "Ivory Coast",
+        "shirtNumber": null
+      },
+      {
+        "name": "Kyran Thompson",
+        "position": null,
+        "nationality": "England",
+        "shirtNumber": null
+      },
+      {
+        "name": "Michael Mills",
+        "position": null,
+        "nationality": "England",
         "shirtNumber": null
       },
       {
