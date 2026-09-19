@@ -227,13 +227,14 @@
 
     /* 일정 */
     .sched-month-tabs { flex-wrap: wrap; }
+    #schedule-content { max-width: 640px; margin: 0 auto; }
     .sched-date-header { font-size: 12px; color: #8b949e; font-weight: 600; margin: 18px 0 8px; padding-bottom: 6px; border-bottom: 0.5px solid #30363d; }
     .sched-date-header:first-child { margin-top: 0; }
     .sched-match { display: flex; align-items: center; padding: 10px 4px; border-bottom: 0.5px solid #21262d; font-size: 13px; }
     .sched-match:last-child { border-bottom: none; }
-    .sched-team { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+    .sched-team { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; max-width: 260px; }
     .sched-team span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .sched-team.away { justify-content: flex-end; text-align: right; }
+    .sched-team.away { justify-content: flex-end; text-align: right; margin-left: auto; }
     .sched-team img { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
     .sched-vs { font-size: 12px; color: #8b949e; padding: 0 14px; text-align: center; min-width: 60px; flex-shrink: 0; }
     .sched-score { font-weight: 700; color: #e6edf3; }
