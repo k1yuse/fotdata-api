@@ -482,10 +482,10 @@
             <div class="prob-row"><span class="prob-label">✈️ 원정승</span><div class="prob-bar-bg"><div class="prob-bar away" id="bar-away" style="width:0%"></div></div><span class="prob-value" id="val-away"></span></div>
           </div>
           <div class="stats-grid">
-            <div class="stat-box"><div class="stat-val" id="s-home-atk">-</div><div class="stat-label">홈 공격력</div></div>
-            <div class="stat-box"><div class="stat-val" id="s-home-def">-</div><div class="stat-label">홈 수비력</div></div>
-            <div class="stat-box"><div class="stat-val" id="s-away-atk">-</div><div class="stat-label">원정 공격력</div></div>
-            <div class="stat-box"><div class="stat-val" id="s-away-def">-</div><div class="stat-label">원정 수비력</div></div>
+            <div class="stat-box"><div class="stat-val" id="s-home-atk">-</div><div class="stat-label" id="s-home-atk-label">홈 공격력</div></div>
+            <div class="stat-box"><div class="stat-val" id="s-home-def">-</div><div class="stat-label" id="s-home-def-label">홈 수비력</div></div>
+            <div class="stat-box"><div class="stat-val" id="s-away-atk">-</div><div class="stat-label" id="s-away-atk-label">원정 공격력</div></div>
+            <div class="stat-box"><div class="stat-val" id="s-away-def">-</div><div class="stat-label" id="s-away-def-label">원정 수비력</div></div>
           </div>
         </div>
         <div class="card">
@@ -1275,6 +1275,11 @@ function showResult(data,h2h,homeForm,awayForm,home,away){
   document.getElementById('val-home').textContent=hw+'%';document.getElementById('val-draw').textContent=dw+'%';document.getElementById('val-away').textContent=aw+'%';
   document.getElementById('s-home-atk').textContent=data.home_stats.attack;document.getElementById('s-home-def').textContent=data.home_stats.defense;
   document.getElementById('s-away-atk').textContent=data.away_stats.attack;document.getElementById('s-away-def').textContent=data.away_stats.defense;
+  const homeShortLabel=home.split(' ')[0],awayShortLabel=away.split(' ')[0];
+  document.getElementById('s-home-atk-label').textContent=homeShortLabel+' 공격력';
+  document.getElementById('s-home-def-label').textContent=homeShortLabel+' 수비력';
+  document.getElementById('s-away-atk-label').textContent=awayShortLabel+' 공격력';
+  document.getElementById('s-away-def-label').textContent=awayShortLabel+' 수비력';
   document.getElementById('h2h-home-wins').textContent=h2h.summary.home_wins;document.getElementById('h2h-draws').textContent=h2h.summary.draws;document.getElementById('h2h-away-wins').textContent=h2h.summary.away_wins;
   document.getElementById('h2h-home-label').textContent=home.split(' ')[0]+' 승';document.getElementById('h2h-away-label').textContent=away.split(' ')[0]+' 승';
   let h2hHtml='';h2h.matches.forEach(m=>{h2hHtml+=`<div class="h2h-match"><span class="h2h-date">${m.date}</span><span class="h2h-score ${m.result}">${m.home_team.split(' ')[0]} ${m.home_goals} - ${m.away_goals} ${m.away_team.split(' ')[0]}</span></div>`;});
