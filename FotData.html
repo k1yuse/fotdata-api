@@ -588,7 +588,7 @@
 <div class="modal-overlay" id="ti-modal" onclick="closeTeamInfoModal(event)">
   <div class="modal ti-modal">
     <div class="ti-header">
-      <img class="ti-logo" id="ti-logo" src="" onerror="this.style.display='none'">
+      <img class="ti-logo" id="ti-logo" onerror="this.style.display='none'">
       <div>
         <div class="ti-name" id="ti-name"></div>
         <div class="ti-meta" id="ti-meta"></div>
@@ -844,7 +844,9 @@ let teamInfoCache = {};
 async function openTeamInfo(teamName) {
   if (!teamName) return;
   const modal = document.getElementById('ti-modal');
-  document.getElementById('ti-logo').src = logos[teamName] || '';
+  const tiLogo = document.getElementById('ti-logo');
+  tiLogo.style.display = '';
+  tiLogo.src = logos[teamName] || '';
   document.getElementById('ti-name').textContent = teamName;
   document.getElementById('ti-meta').textContent = '';
   document.getElementById('ti-body').innerHTML = '<div class="ti-empty">불러오는 중...</div>';
