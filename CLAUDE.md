@@ -104,6 +104,10 @@ cp landing.html index.html
 ### 5.4 우승 예측 (`simulate_season`, update_data.py)
 - 몬테카를로 시뮬레이션 1000회, 팀별 ELO에 매 경기 가우시안 노이즈(σ=50) 추가해 변동성 반영
 - 결과: 우승 확률 / TOP4 확률 / 강등 확률
+- 강등 확률 집계 인원수는 리그별로 다름(`RELEGATION_COUNT`): 18팀 리그(분데스리가/리그앙)는
+  하위 2팀만 집계(16위 강등 PO 대상은 제외, FotData.html의 `runSimulation()` releCount와
+  동일 기준), 20팀 리그(EPL/라리가/세리에A)는 하위 3팀. 2026-09-19에 5개 리그 전부 하위
+  3팀 고정이던 버그를 수정함(순위표 존 표시 수정과 같은 날 발견).
 
 ## 6. API 엔드포인트 (main.py)
 

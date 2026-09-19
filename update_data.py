@@ -663,10 +663,16 @@ def main():
     print(f"   데이터: {len(df_total)}경기")
     print(f"   최고 정확도: {max(acc_lr, acc_rf, acc_xgb):.1%}")
 
-def simulate_season(teams, df_stats, n_simulations=1000):
+# 강등 위험 집계 인원수. FotData.html의 runSimulation()이 쓰는 releCount와 동일 기준으로
+# 맞춰야 함 — 18팀 리그(분데스리가/리그앙)는 16위 강등 플레이오프 + 17·18위 직행강등이라
+# "강등 확률"은 직행 2팀만 집계(PO 대상 16위는 프론트와 마찬가지로 제외). 20팀 리그는 하위 3팀.
+RELEGATION_COUNT = {"BL1": 2, "FL1": 2}
+
+def simulate_season(teams, df_stats, league_code, n_simulations=1000):
     """몬테카를로 시뮬레이션으로 리그 우승 예측"""
     import random
-    
+
+    rel_n = RELEGATION_COUNT.get(league_code, 3)
     win_counts = {team: 0 for team in teams}
     top4_counts = {team: 0 for team in teams}
     relegated_counts = {team: 0 for team in teams}
@@ -730,8 +736,8 @@ def simulate_season(teams, df_stats, n_simulations=1000):
         for team, _ in sorted_teams[:4]:
             top4_counts[team] += 1
         
-        # 강등 (하위 3팀)
-        for team, _ in sorted_teams[-3:]:
+        # 강등 (리그별 직행 강등 인원수만큼 하위팀 집계)
+        for team, _ in sorted_teams[-rel_n:]:
             relegated_counts[team] += 1
     
     results = []
@@ -790,7 +796,7 @@ def fetch_champion_predictions():
             print(f"  ❌ {name} 팀 수 부족")
             continue
         
-        results = simulate_season(league_teams, df_stats)
+        results = simulate_season(league_teams, df_stats, code)
         predictions[code] = {
             "league": name,
             "teams": results
