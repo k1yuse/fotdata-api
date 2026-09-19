@@ -254,7 +254,12 @@
     .champ-prob { font-size: 13px; font-weight: 700; color: #58a6ff; width: 50px; text-align: right; }
 
     /* 일정 */
-    .sched-month-tabs { flex-wrap: wrap; }
+    .sched-month-nav { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 16px; }
+    .sched-month-arrow { width: 32px; height: 32px; border-radius: 50%; border: 0.5px solid #30363d; background: #21262d; color: #e6edf3; font-size: 17px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color .15s; }
+    .sched-month-arrow:hover:not(:disabled) { border-color: #58a6ff; }
+    .sched-month-arrow:disabled { opacity: 0.3; cursor: not-allowed; }
+    #schedule-month-select { background: #21262d; border: 0.5px solid #30363d; color: #e6edf3; font-size: 14px; font-weight: 600; padding: 8px 16px; border-radius: 8px; cursor: pointer; text-align: center; text-align-last: center; min-width: 140px; }
+    #schedule-month-select:hover { border-color: #58a6ff; }
     #schedule-content { max-width: 640px; margin: 0 auto; }
     .sched-date-header { font-size: 12px; color: #8b949e; font-weight: 600; margin: 18px 0 8px; padding-bottom: 6px; border-bottom: 0.5px solid #30363d; }
     .sched-date-header:first-child { margin-top: 0; }
@@ -399,7 +404,11 @@
       <div class="league-tab" onclick="loadSchedule('FL1', this)" data-league="FL1"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'"> 리그앙</div>
       <div class="league-tab ucl-tab" onclick="loadSchedule('CL', this)" data-league="CL"><img src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> 챔피언스리그</div>
     </div>
-    <div id="schedule-month-tabs" class="ucl-subtabs sched-month-tabs"></div>
+    <div class="sched-month-nav">
+      <button class="sched-month-arrow" id="sched-month-prev" onclick="stepScheduleMonth(-1)" aria-label="이전 달">‹</button>
+      <select id="schedule-month-select" onchange="selectScheduleMonth(this.value)"></select>
+      <button class="sched-month-arrow" id="sched-month-next" onclick="stepScheduleMonth(1)" aria-label="다음 달">›</button>
+    </div>
     <div id="schedule-content"><div class="loading">일정 불러오는 중...</div></div>
   </div>
 </div>
@@ -1097,7 +1106,6 @@ async function loadSchedule(league, btn) {
     document.querySelectorAll('#schedule-league-tabs .league-tab').forEach(t => t.classList.remove('active'));
     btn.classList.add('active');
   }
-  document.getElementById('schedule-month-tabs').innerHTML = '';
   const content = document.getElementById('schedule-content');
   content.innerHTML = '<div class="loading">일정 불러오는 중...</div>';
   try {
@@ -1119,30 +1127,58 @@ function scheduleMonthKey(dateStr) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
 }
 
-function renderScheduleMonths(league) {
+function scheduleMonthLabel(mk) {
+  const [y, m] = mk.split('-');
+  return `${y}년 ${parseInt(m)}월`;
+}
+
+function getScheduleMonths(league) {
   const matches = scheduleData[league] || [];
-  if (!matches.length) {
+  return [...new Set(matches.map(m => scheduleMonthKey(m.date)))].sort();
+}
+
+function updateScheduleNavButtons(months, currentIdx) {
+  const prevBtn = document.getElementById('sched-month-prev');
+  const nextBtn = document.getElementById('sched-month-next');
+  if (prevBtn) prevBtn.disabled = currentIdx <= 0;
+  if (nextBtn) nextBtn.disabled = currentIdx >= months.length - 1;
+}
+
+function renderScheduleMonths(league) {
+  const months = getScheduleMonths(league);
+  if (!months.length) {
     document.getElementById('schedule-content').innerHTML = '<div class="loading">일정 데이터가 없습니다.</div>';
     return;
   }
-  const months = [...new Set(matches.map(m => scheduleMonthKey(m.date)))].sort();
   const nowKey = scheduleMonthKey(new Date().toISOString());
   const defaultMonth = months.includes(nowKey) ? nowKey : (months.find(mk => mk >= nowKey) || months[months.length - 1]);
   currentScheduleMonth = defaultMonth;
 
-  const tabsEl = document.getElementById('schedule-month-tabs');
-  tabsEl.innerHTML = months.map(mk => {
-    const [y, m] = mk.split('-');
-    return `<div class="ucl-subtab ${mk === defaultMonth ? 'active' : ''}" onclick="selectScheduleMonth('${mk}', this)">${y}년 ${parseInt(m)}월</div>`;
-  }).join('');
+  const select = document.getElementById('schedule-month-select');
+  select.innerHTML = months.map(mk =>
+    `<option value="${mk}" ${mk === defaultMonth ? 'selected' : ''}>${scheduleMonthLabel(mk)}</option>`
+  ).join('');
+  updateScheduleNavButtons(months, months.indexOf(defaultMonth));
 
   renderScheduleContent(league, defaultMonth);
 }
 
-function selectScheduleMonth(mk, el) {
+function selectScheduleMonth(mk) {
   currentScheduleMonth = mk;
-  document.querySelectorAll('#schedule-month-tabs .ucl-subtab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
+  const months = getScheduleMonths(currentScheduleLeague);
+  updateScheduleNavButtons(months, months.indexOf(mk));
+  renderScheduleContent(currentScheduleLeague, mk);
+}
+
+function stepScheduleMonth(delta) {
+  const months = getScheduleMonths(currentScheduleLeague);
+  const idx = months.indexOf(currentScheduleMonth);
+  const newIdx = Math.min(Math.max(idx + delta, 0), months.length - 1);
+  if (newIdx === idx) return;
+  const mk = months[newIdx];
+  currentScheduleMonth = mk;
+  document.getElementById('schedule-month-select').value = mk;
+  updateScheduleNavButtons(months, newIdx);
   renderScheduleContent(currentScheduleLeague, mk);
 }
 
