@@ -82,7 +82,7 @@ MAX_GOALS = 6             # 이보다 큰 스코어는 확률이 미미해 계�
 def poisson_pmf(k: int, lam: float) -> float:
     return math.exp(-lam) * (lam ** k) / math.factorial(k)
 
-def predict_score(home_attack, away_defense, away_attack, home_defense):
+def predict_score(home_attack, away_defense, away_attack, home_defense, prediction):
     lambda_home = max(0.3, (home_attack + away_defense) / 2 * HOME_GOAL_BOOST)
     lambda_away = max(0.3, (away_attack + home_defense) / 2 * AWAY_GOAL_PENALTY)
 
@@ -90,10 +90,22 @@ def predict_score(home_attack, away_defense, away_attack, home_defense):
     for i in range(MAX_GOALS + 1):
         for j in range(MAX_GOALS + 1):
             score_probs.append((i, j, poisson_pmf(i, lambda_home) * poisson_pmf(j, lambda_away)))
-    score_probs.sort(key=lambda x: x[2], reverse=True)
-
-    top = score_probs[:5]
     total_p = sum(p for _, _, p in score_probs)  # MAX_GOALS 초과분 잘려나간 것 재정규화
+
+    # 승/무/패 예측(로지스틱 회귀 모델)과 스코어 예측(포아송 분포)은 서로 다른
+    # 모델이라, 필터링 없이 그냥 "가장 확률 높은 스코어"만 뽑으면 무승부 스코어
+    # (0-0, 1-1 등)가 개별 확률이 커서 상위권을 차지하는 경우가 많다 — 이 경우
+    # "홈팀 승리 예측"이라고 해놓고 스코어는 1-1이 뜨는 모순이 생김. 그래서
+    # 승/무/패 예측과 같은 결과(홈승이면 홈득점>원정득점 등)의 스코어만 후보로
+    # 남겨서, 화면에 보이는 스코어들이 위에 뜨는 예측 배지랑 항상 일치하게 한다.
+    def outcome_of(i, j):
+        if i > j: return 'home_win'
+        if i < j: return 'away_win'
+        return 'draw'
+
+    consistent = [s for s in score_probs if outcome_of(s[0], s[1]) == prediction]
+    consistent.sort(key=lambda x: x[2], reverse=True)
+    top = consistent[:5] if consistent else sorted(score_probs, key=lambda x: x[2], reverse=True)[:5]
     top_scores = [{"score": f"{i}-{j}", "prob": round(p / total_p * 100, 1)} for i, j, p in top]
 
     return {
@@ -197,6 +209,7 @@ def predict_match(req: MatchRequest):
     score_prediction = predict_score(
         home_attack=float(h['attack_strength']), away_defense=float(a['defense_strength']),
         away_attack=float(a['attack_strength']), home_defense=float(h['defense_strength']),
+        prediction=prediction,
     )
 
     return {
