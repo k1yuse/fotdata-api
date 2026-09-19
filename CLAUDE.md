@@ -167,6 +167,7 @@ python update_data.py
 - 모델 로드 시 구버전 scikit-learn으로 저장된 pkl과의 `multi_class` 속성 호환성 문제가 있었음 → `main.py`에 `if not hasattr(lr_model, 'multi_class')` 패치로 해결한 상태. sklearn 버전을 올릴 때 이 부분 재확인.
 - `FotData_01.ipynb`는 초기 개발 단계(Stage 0~1 초반)의 유물로, 현재는 `update_data.py`가 전체 파이프라인(수집→피처→학습→저장)을 대체함. 노트북은 과거 히스토리 참고용이며 실행 경로가 아님.
 - 시즌 종료 배너(`FotData.html`/`landing.html`에 HTML 주석으로 비활성화됨)는 27-28 시즌 전환 시점에 재활성화 예정.
+- ~~자동 업데이트 워크플로우 커밋/푸시 간헐적 실패~~ → 2026-09-19에 `.github/workflows/update_data.yml` 수정. 원인: GitHub Actions 러너가 큐에서 오래 대기하다 실행되면(수 시간 지연도 발생 가능) 그 사이 다른 커밋이 먼저 push될 수 있는데, 기존 `git pull --rebase origin main || true`는 `update_data.py`가 이미 워킹트리를 건드려놓은 상태라 원격이 움직였을 때 항상 실패하고 그 에러가 `|| true`에 조용히 삼켜져서, 결국 낡은 베이스 위에 커밋 → `push --force-with-lease` 거절로 이어짐. `git fetch` + `git reset`(mixed) + 재시도 루프로 교체해 해결. (`--soft`로 하면 인덱스가 안 갱신돼서 체크아웃 이후 원격에 새로 추가된 파일이 다음 커밋에서 삭제된 것처럼 처리되는 별도 버그가 있으니 반드시 기본/`--mixed` reset을 쓸 것.)
 
 ## 11. 시즌 전환 체크리스트 (매년 반복 작업)
 

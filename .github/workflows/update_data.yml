@@ -36,7 +36,28 @@ jobs:
       run: |
         git config --global user.email "eattotoys@gmail.com"
         git config --global user.name "k1yuse"
-        git pull --rebase origin main || true
-        git add fotdata_model/
-        git diff --staged --quiet || git commit -m "자동 데이터 업데이트 $(date '+%Y-%m-%d')"
-        git push origin main --force-with-lease
+
+        # update_data.py가 이미 워킹트리를 건드려놓은 상태라 pull --rebase는
+        # "unstaged changes" 에러로 항상 실패할 수 있다(원격이 그 사이 움직였을 때만
+        # 겉으로 드러남 — 러너가 큐에서 오래 대기하다 실행되면 흔히 발생).
+        # 대신 원격 최신 커밋으로 브랜치+인덱스를 맞추고(워킹트리 파일은 그대로 유지 —
+        # update_data.py가 만든 새 데이터가 보존됨), 그 위에 새로 커밋해서 push한다.
+        # (reset은 --soft가 아닌 기본/--mixed여야 함: --soft는 인덱스를 안 건드려서
+        # 체크아웃 이후 원격에 새로 추가된 파일이 다음 커밋에서 삭제된 것처럼 처리됨)
+        # 푸시가 경쟁 상태로 거절되면 재시도.
+        for i in 1 2 3 4 5; do
+          git fetch origin main
+          git reset origin/main
+          git add fotdata_model/
+          if git diff --staged --quiet; then
+            echo "변경사항 없음, 종료"
+            break
+          fi
+          git commit -m "자동 데이터 업데이트 $(date '+%Y-%m-%d')"
+          if git push origin main; then
+            echo "푸시 성공"
+            break
+          fi
+          echo "푸시 실패 (시도 $i), 원격 갱신 후 재시도..."
+          sleep 5
+        done
