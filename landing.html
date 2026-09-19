@@ -43,15 +43,15 @@
       backdrop-filter: blur(12px);
       border-bottom: 0.5px solid var(--border);
       padding: 0 48px;
-      display: flex; align-items: center; justify-content: space-between;
+      display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
       height: 60px;
     }
-    .nav-logo { font-size: 18px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .nav-logo { font-size: 18px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 8px; text-decoration: none; justify-self: start; }
     .nav-logo span { color: var(--blue); }
-    .nav-links { display: flex; gap: 28px; }
+    .nav-links { display: flex; gap: 28px; justify-self: center; }
     .nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color .2s; }
     .nav-links a:hover { color: var(--text); }
-    .nav-cta { padding: 8px 18px; background: var(--blue); border: none; border-radius: 6px; color: #0d1117; font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; transition: opacity .2s; }
+    .nav-cta { justify-self: end; padding: 8px 18px; background: var(--blue); border: none; border-radius: 6px; color: #0d1117; font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; transition: opacity .2s; }
     .nav-cta:hover { opacity: .85; }
 
     /* HERO */
