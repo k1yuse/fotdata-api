@@ -8,6 +8,7 @@ import pandas as pd
 import numpy as np
 import os
 import json
+import math
 
 app = FastAPI(title="FotData API", version="1.0.0")
 
@@ -69,6 +70,37 @@ team_logos_cache = get_logos_with_mapping()
 class MatchRequest(BaseModel):
     home_team: str
     away_team: str
+
+# ── 스코어 예측 (포아송 분포 기반) ──
+# 스쿼드/부상자 데이터는 무료 API로는 구할 수 없어서, 대신 팀별 평균 득실점
+# (attack_strength/defense_strength — 이미 3시즌 블렌딩된 값)만으로 기대 득점을
+# 추정하는 전통적인 축구 분석 기법(Dixon-Coles류의 단순화 버전)을 사용한다.
+HOME_GOAL_BOOST = 1.12   # 홈 팀 기대 득점 보정(홈 어드밴티지)
+AWAY_GOAL_PENALTY = 0.92  # 원정 팀 기대 득점 보정
+MAX_GOALS = 6             # 이보다 큰 스코어는 확률이 미미해 계산에서 제외(재정규화로 보정)
+
+def poisson_pmf(k: int, lam: float) -> float:
+    return math.exp(-lam) * (lam ** k) / math.factorial(k)
+
+def predict_score(home_attack, away_defense, away_attack, home_defense):
+    lambda_home = max(0.3, (home_attack + away_defense) / 2 * HOME_GOAL_BOOST)
+    lambda_away = max(0.3, (away_attack + home_defense) / 2 * AWAY_GOAL_PENALTY)
+
+    score_probs = []
+    for i in range(MAX_GOALS + 1):
+        for j in range(MAX_GOALS + 1):
+            score_probs.append((i, j, poisson_pmf(i, lambda_home) * poisson_pmf(j, lambda_away)))
+    score_probs.sort(key=lambda x: x[2], reverse=True)
+
+    top = score_probs[:5]
+    total_p = sum(p for _, _, p in score_probs)  # MAX_GOALS 초과분 잘려나간 것 재정규화
+    top_scores = [{"score": f"{i}-{j}", "prob": round(p / total_p * 100, 1)} for i, j, p in top]
+
+    return {
+        "expected_goals": {"home": round(lambda_home, 2), "away": round(lambda_away, 2)},
+        "most_likely": top_scores[0]["score"],
+        "top_scores": top_scores,
+    }
 
 # ── 엔드포인트 ──
 @app.get("/")
@@ -162,6 +194,11 @@ def predict_match(req: MatchRequest):
     else:
         prediction = "draw"
 
+    score_prediction = predict_score(
+        home_attack=float(h['attack_strength']), away_defense=float(a['defense_strength']),
+        away_attack=float(a['attack_strength']), home_defense=float(h['defense_strength']),
+    )
+
     return {
         "home_team":   req.home_team,
         "away_team":   req.away_team,
@@ -171,6 +208,7 @@ def predict_match(req: MatchRequest):
             "draw":     d_prob,
             "away_win": a_prob,
         },
+        "score_prediction": score_prediction,
         "home_stats": {
             "attack":   round(float(h['attack_strength']), 3),
             "defense":  round(float(h['defense_strength']), 3),

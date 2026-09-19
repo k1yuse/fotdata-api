@@ -487,6 +487,14 @@
             <div class="stat-box"><div class="stat-val" id="s-away-atk">-</div><div class="stat-label" id="s-away-atk-label">원정 공격력</div></div>
             <div class="stat-box"><div class="stat-val" id="s-away-def">-</div><div class="stat-label" id="s-away-def-label">원정 수비력</div></div>
           </div>
+          <div style="margin-top:16px;padding-top:16px;border-top:0.5px solid #30363d">
+            <div style="font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">⚽ 예상 스코어 <span style="font-size:10px;color:#6e7681;text-transform:none;letter-spacing:0">(AI 추정·참고용)</span></div>
+            <div style="text-align:center;margin-bottom:10px">
+              <div style="font-size:32px;font-weight:800;color:#58a6ff" id="score-most-likely">- : -</div>
+              <div style="font-size:11px;color:#8b949e;margin-top:2px" id="score-most-likely-sub"></div>
+            </div>
+            <div id="score-top-list" class="prob-bars"></div>
+          </div>
         </div>
         <div class="card">
           <div class="card-title">⚔️ 최근 3시즌 맞대 기록</div>
@@ -1280,6 +1288,18 @@ function showResult(data,h2h,homeForm,awayForm,home,away){
   document.getElementById('s-home-def-label').textContent=homeShortLabel+' 수비력';
   document.getElementById('s-away-atk-label').textContent=awayShortLabel+' 공격력';
   document.getElementById('s-away-def-label').textContent=awayShortLabel+' 수비력';
+  if(data.score_prediction){
+    const sp=data.score_prediction;
+    document.getElementById('score-most-likely').textContent=sp.most_likely.replace('-',' : ');
+    document.getElementById('score-most-likely-sub').textContent=`확률 ${sp.top_scores[0].prob}% · 예상 득점 ${homeShortLabel} ${sp.expected_goals.home} - ${sp.expected_goals.away} ${awayShortLabel}`;
+    const maxP=sp.top_scores[0].prob;
+    document.getElementById('score-top-list').innerHTML=sp.top_scores.map(s=>`
+      <div class="prob-row" style="grid-template-columns:56px 1fr 45px">
+        <span class="prob-label">${s.score.replace('-',' : ')}</span>
+        <div class="prob-bar-bg"><div class="prob-bar home" style="width:${(s.prob/maxP)*100}%"></div></div>
+        <span class="prob-value">${s.prob}%</span>
+      </div>`).join('');
+  }
   document.getElementById('h2h-home-wins').textContent=h2h.summary.home_wins;document.getElementById('h2h-draws').textContent=h2h.summary.draws;document.getElementById('h2h-away-wins').textContent=h2h.summary.away_wins;
   document.getElementById('h2h-home-label').textContent=home.split(' ')[0]+' 승';document.getElementById('h2h-away-label').textContent=away.split(' ')[0]+' 승';
   function matchRowHtml(homeTeam, awayTeam, homeGoals, awayGoals, date, scoreColor, resultBadge) {
