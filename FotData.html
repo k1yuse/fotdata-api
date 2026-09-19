@@ -15,9 +15,13 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; background: #0d1117; color: #e6edf3; min-height: 100vh; }
 
-    .nav { background: #161b22; border-bottom: 0.5px solid #30363d; padding: 0 24px; display: flex; align-items: center; gap: 0; position: sticky; top: 0; z-index: 100; }
-    .nav-logo { font-size: 18px; font-weight: 700; color: #e6edf3; padding: 14px 0; margin-right: 24px; display: flex; align-items: center; gap: 8px; }
-    .nav-tab { padding: 16px 16px; font-size: 14px; color: #8b949e; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; white-space: nowrap; }
+    .nav { background: #161b22; border-bottom: 0.5px solid #30363d; padding: 0 24px; display: flex; align-items: center; gap: 0; position: sticky; top: 0; z-index: 100; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .nav::-webkit-scrollbar { display: none; }
+    .nav-logo { font-size: 18px; font-weight: 700; color: #e6edf3; padding: 14px 0; margin-right: 24px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .nav-tab { padding: 16px 16px; font-size: 14px; color: #8b949e; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; white-space: nowrap; flex-shrink: 0; }
+    .nav-wordmark { display: flex; flex-shrink: 0; }
+    .player-col { flex: 1; min-width: 400px; }
+    #standings-content { overflow-x: auto; -webkit-overflow-scrolling: touch; }
     .nav-tab:hover { color: #e6edf3; }
     .nav-tab.active { color: #58a6ff; border-bottom-color: #58a6ff; }
 
@@ -212,12 +216,21 @@
     @media (max-width: 768px) {
       .predict-grid { grid-template-columns: 1fr; }
       .stats-grid { grid-template-columns: 1fr 1fr; }
-      .nav-tab { padding: 14px 10px; font-size: 13px; }
+      .nav { padding: 0 12px; }
+      .nav-logo { margin-right: 12px; }
+      .nav-tab { padding: 14px 8px; font-size: 12.5px; }
       .container { padding: 16px; }
       .team-popup { width: 320px; }
       .popup-team-grid { grid-template-columns: repeat(2,1fr); }
       .standings-table .hide-mobile { display: none; }
       .standings-table td, .standings-table th { padding: 8px 6px; font-size: 11px; }
+      .player-col { min-width: 0; width: 100%; }
+    }
+
+    @media (max-width: 400px) {
+      .nav-wordmark { display: none; }
+      .nav-logo { margin-right: 8px; }
+      .nav-tab { padding: 14px 6px; font-size: 12px; }
     }
     
     .champ-league-btn { padding: 8px 16px; background: #161b22; border: 0.5px solid #30363d; border-radius: 8px; color: #8b949e; font-size: 13px; font-family: inherit; cursor: pointer; transition: all .15s; }
@@ -262,7 +275,7 @@
         <div style="width:3px;height:10px;background:#0d1117;border-radius:1px 1px 0 0"></div>
       </div>
     </div>
-    <div style="display:flex">
+    <div class="nav-wordmark">
       <span style="font-size:19px;font-weight:800;color:#e6edf3;letter-spacing:-0.5px">Fot</span>
       <span style="font-size:19px;font-weight:800;color:#58a6ff;letter-spacing:-0.5px">Data</span>
     </div>
@@ -392,11 +405,11 @@
   </div>
   <div class="card-title" style="margin-bottom:16px;font-size:18px">EPL 24-25 시즌</div>
     <div style="display:flex;gap:24px;flex-wrap:wrap">
-      <div style="flex:1;min-width:400px">
+      <div class="player-col">
         <h3 style="font-size:14px;color:#e6edf3;margin-bottom:12px;display:flex;align-items:center;gap:8px">득점 TOP 10</h3>
         <div id="topscorers-list"><div class="loading">불러오는 중...</div></div>
       </div>
-      <div style="flex:1;min-width:400px">
+      <div class="player-col">
         <h3 style="font-size:14px;color:#e6edf3;margin-bottom:12px;display:flex;align-items:center;gap:8px">도움 TOP 10</h3>
         <div id="topassists-list"><div class="loading">불러오는 중...</div></div>
       </div>
