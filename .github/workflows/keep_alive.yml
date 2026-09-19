@@ -1,0 +1,18 @@
+name: Render 슬립 방지 핑
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 헬스체크 핑
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 90 https://fotdata-api.onrender.com/)
+          echo "응답 코드: $code"
+          if [ "$code" != "200" ]; then
+            echo "::warning::헬스체크 실패 (HTTP $code)"
+          fi

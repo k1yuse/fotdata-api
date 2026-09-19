@@ -190,4 +190,4 @@ python update_data.py
 - **수익화 단기**: 도네이션 버튼(Ko-fi), Google AdSense
 - **수익화 중기**: Freemium 구독(Pro 티어), RapidAPI 예측 API 판매
 - **수익화 장기**: 유소년/아마추어팀 대상 SaaS 영상 분석, B2B 대시보드
-- UptimeRobot으로 Render 무료 플랜 슬립 방지 설정 필요
+- ~~UptimeRobot으로 Render 무료 플랜 슬립 방지 설정 필요~~ → 2026-09-19에 `.github/workflows/keep_alive.yml`로 해결. 참고: 이전에 "cron-job.org로 이미 설정함"이라고 기록된 커밋(`7fc7076`)이 있었는데 실제 diff를 보면 그 내용이 전혀 없었음 — 실제로는 아무 슬립 방지 장치도 없었던 상태였고, 이번에 GitHub Actions 자체 핑(10분 간격)으로 대체함. 앞으로 "설정했다"는 기록은 실제 diff/동작 확인 후에만 남길 것.
