@@ -1077,7 +1077,7 @@ function renderChampionInitial(data) {
         <div class="champ-rank">${i+1}</div>
         <img src="${t.logo}" style="width:24px;height:24px;object-fit:contain;cursor:pointer" onerror="this.style.display='none'" onclick="openTeamInfo('${escJs(t.team)}')">
         <div style="flex:1;min-width:0">
-          <div class="clickable-team" style="font-size:13px;color:#e6edf3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" onclick="openTeamInfo('${escJs(t.team)}')">${cleanTeamName(t.team)}</div>
+          <div class="clickable-team" style="font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" onclick="openTeamInfo('${escJs(t.team)}')">${cleanTeamName(t.team)}</div>
         </div>
         <div class="champ-bar-wrap" style="max-width:200px">
           <div class="champ-bar" style="width:0%"></div>
@@ -1121,7 +1121,7 @@ function renderChampionResults(data) {
         <div class="champ-rank" style="color:${rankColor};font-weight:700">${i+1}</div>
         <img src="${t.logo}" style="width:24px;height:24px;object-fit:contain;cursor:pointer" onerror="this.style.display='none'" onclick="openTeamInfo('${escJs(t.team)}')">
         <div style="flex:1;min-width:0">
-          <div class="clickable-team" style="font-size:13px;color:#e6edf3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" onclick="openTeamInfo('${escJs(t.team)}')">${cleanTeamName(t.team)}</div>
+          <div class="clickable-team" style="font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" onclick="openTeamInfo('${escJs(t.team)}')">${cleanTeamName(t.team)}</div>
         </div>
         <div class="champ-bar-wrap" style="max-width:200px">
           <div class="champ-bar" style="width:${releBarWidth}%;background:${barColor}"></div>
