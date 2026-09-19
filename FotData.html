@@ -334,7 +334,7 @@
   <!-- 우승 예측 페이지 -->
 <div id="page-champion" class="page">
   <div class="card">
-    <div class="card-title">🏆 2026-27 시즌 순위 예측</div>
+    <div class="card-title">2026-27 시즌 순위 예측</div>
     <div style="font-size:12px;color:#8b949e;margin-bottom:16px">최근 3시즌 성적 + 클럽 전력 보정 기반 · 몬테카를로 시뮬레이션</div>
     
     <div class="league-tabs" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
@@ -346,7 +346,7 @@
     </div>
     <!-- <div id="champion-content"><div class="loading">불러오는 중...</div></div> -->
      <div style="background:#161b22;border:0.5px solid #30363d;border-radius:8px;padding:16px;margin-bottom:20px">
-  <div style="font-size:13px;color:#e6edf3;font-weight:600;margin-bottom:12px">🎲 직접 시뮬레이션 돌리기</div>
+  <div style="font-size:13px;color:#e6edf3;font-weight:600;margin-bottom:12px">직접 시뮬레이션 돌리기</div>
   <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
     <div style="flex:1;min-width:200px">
       <div style="display:flex;justify-content:space-between;font-size:11px;color:#8b949e;margin-bottom:4px">
@@ -355,7 +355,7 @@
       </div>
       <input type="range" id="sim-slider" min="1000" max="10000" step="1000" value="1000" style="width:100%" oninput="document.getElementById('sim-count-label').textContent=Number(this.value).toLocaleString()+'회'">
     </div>
-    <button id="sim-btn" onclick="runSimulation()" style="padding:10px 20px;background:#1f6feb;border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:transform .1s,background .2s" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'" onmouseleave="this.style.transform='scale(1)'">▶️ 시뮬레이션 시작</button>
+    <button id="sim-btn" onclick="runSimulation()" style="padding:10px 20px;background:#1f6feb;border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:transform .1s,background .2s" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'" onmouseleave="this.style.transform='scale(1)'">시뮬레이션 시작</button>
   </div>
 </div>
 
@@ -384,19 +384,19 @@
   <div class="card">
     <div class="league-tabs" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
     <button class="champ-league-btn active"><img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="width:16px;height:16px;filter:brightness(0) invert(1);vertical-align:middle;margin-right:4px">EPL</button>
-    <button class="champ-league-btn" onclick="alert('라리가 선수 데이터는 준비 중입니다 ⚽')" style="opacity:0.5"><img src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">라리가</button>
-    <button class="champ-league-btn" onclick="alert('분데스리가 선수 데이터는 준비 중입니다 ⚽')" style="opacity:0.5"><img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">분데스리가</button>
-    <button class="champ-league-btn" onclick="alert('세리에A 선수 데이터는 준비 중입니다 ⚽')" style="opacity:0.5"><img src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">세리에A</button>
-    <button class="champ-league-btn" onclick="alert('리그앙 선수 데이터는 준비 중입니다 ⚽')" style="opacity:0.5"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">리그앙</button>
+    <button class="champ-league-btn" onclick="alert('라리가 선수 데이터는 준비 중입니다')" style="opacity:0.5"><img src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">라리가</button>
+    <button class="champ-league-btn" onclick="alert('분데스리가 선수 데이터는 준비 중입니다')" style="opacity:0.5"><img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">분데스리가</button>
+    <button class="champ-league-btn" onclick="alert('세리에A 선수 데이터는 준비 중입니다')" style="opacity:0.5"><img src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">세리에A</button>
+    <button class="champ-league-btn" onclick="alert('리그앙 선수 데이터는 준비 중입니다')" style="opacity:0.5"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">리그앙</button>
   </div>
-  <div class="card-title" style="margin-bottom:16px;font-size:18px">⚽ EPL 24-25 시즌</div>
+  <div class="card-title" style="margin-bottom:16px;font-size:18px">EPL 24-25 시즌</div>
     <div style="display:flex;gap:24px;flex-wrap:wrap">
       <div style="flex:1;min-width:400px">
-        <h3 style="font-size:14px;color:#e6edf3;margin-bottom:12px;display:flex;align-items:center;gap:8px">🥇 득점 TOP 10</h3>
+        <h3 style="font-size:14px;color:#e6edf3;margin-bottom:12px;display:flex;align-items:center;gap:8px">득점 TOP 10</h3>
         <div id="topscorers-list"><div class="loading">불러오는 중...</div></div>
       </div>
       <div style="flex:1;min-width:400px">
-        <h3 style="font-size:14px;color:#e6edf3;margin-bottom:12px;display:flex;align-items:center;gap:8px">🎯 도움 TOP 10</h3>
+        <h3 style="font-size:14px;color:#e6edf3;margin-bottom:12px;display:flex;align-items:center;gap:8px">도움 TOP 10</h3>
         <div id="topassists-list"><div class="loading">불러오는 중...</div></div>
       </div>
     </div>
@@ -462,14 +462,15 @@
           </div>
         </div>
       </div>
-      <button class="predict-btn" onclick="predict()">🔮 경기 예측하기</button>
+      <button class="predict-btn" onclick="predict()">경기 예측하기</button>
       <div class="error-msg" id="error-msg"></div>
+      <div style="text-align:center;font-size:11px;color:#8b949e;margin-top:10px" id="model-accuracy-note"></div>
     </div>
 
     <div class="result-section" id="result-section">
       <div class="predict-grid">
         <div class="card">
-          <div class="card-title">🎯 예측 결과</div>
+          <div class="card-title">예측 결과</div>
           <div class="result-teams">
             <div class="result-team"><img id="result-home-logo" src="" alt=""><div class="result-team-name" id="result-home-name"></div></div>
             <div class="result-vs">VS</div>
@@ -477,9 +478,9 @@
           </div>
           <div class="prediction-badge"><span class="badge" id="pred-badge"></span></div>
           <div class="prob-bars">
-            <div class="prob-row"><span class="prob-label">🏠 홈승</span><div class="prob-bar-bg"><div class="prob-bar home" id="bar-home" style="width:0%"></div></div><span class="prob-value" id="val-home"></span></div>
-            <div class="prob-row"><span class="prob-label">🤝 무승부</span><div class="prob-bar-bg"><div class="prob-bar draw" id="bar-draw" style="width:0%"></div></div><span class="prob-value" id="val-draw"></span></div>
-            <div class="prob-row"><span class="prob-label">✈️ 원정승</span><div class="prob-bar-bg"><div class="prob-bar away" id="bar-away" style="width:0%"></div></div><span class="prob-value" id="val-away"></span></div>
+            <div class="prob-row"><span class="prob-label">홈승</span><div class="prob-bar-bg"><div class="prob-bar home" id="bar-home" style="width:0%"></div></div><span class="prob-value" id="val-home"></span></div>
+            <div class="prob-row"><span class="prob-label">무승부</span><div class="prob-bar-bg"><div class="prob-bar draw" id="bar-draw" style="width:0%"></div></div><span class="prob-value" id="val-draw"></span></div>
+            <div class="prob-row"><span class="prob-label">원정승</span><div class="prob-bar-bg"><div class="prob-bar away" id="bar-away" style="width:0%"></div></div><span class="prob-value" id="val-away"></span></div>
           </div>
           <div class="stats-grid">
             <div class="stat-box"><div class="stat-val" id="s-home-atk">-</div><div class="stat-label" id="s-home-atk-label">홈 공격력</div></div>
@@ -488,7 +489,7 @@
             <div class="stat-box"><div class="stat-val" id="s-away-def">-</div><div class="stat-label" id="s-away-def-label">원정 수비력</div></div>
           </div>
           <div style="margin-top:16px;padding-top:16px;border-top:0.5px solid #30363d">
-            <div style="font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">⚽ 예상 스코어 <span style="font-size:10px;color:#6e7681;text-transform:none;letter-spacing:0">(AI 추정·참고용)</span></div>
+            <div style="font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">예상 스코어 <span style="font-size:10px;color:#6e7681;text-transform:none;letter-spacing:0">(AI 추정·참고용)</span></div>
             <div style="text-align:center;margin-bottom:10px">
               <div style="font-size:32px;font-weight:800;color:#58a6ff" id="score-most-likely">- : -</div>
               <div style="font-size:11px;color:#8b949e;margin-top:2px" id="score-most-likely-sub"></div>
@@ -497,7 +498,7 @@
           </div>
         </div>
         <div class="card">
-          <div class="card-title">⚔️ 최근 3시즌 맞대 기록</div>
+          <div class="card-title">최근 3시즌 맞대 기록</div>
           <div class="h2h-summary">
             <div class="h2h-stat"><div class="h2h-num wins" id="h2h-home-wins">-</div><div class="h2h-label" id="h2h-home-label">홈팀 승</div></div>
             <div class="h2h-stat"><div class="h2h-num draws" id="h2h-draws">-</div><div class="h2h-label">무승부</div></div>
@@ -506,11 +507,11 @@
           <div id="h2h-matches"></div>
         </div>
         <div class="card">
-          <div class="card-title">📊 <span id="home-form-title">홈팀</span> 최근 경기</div>
+          <div class="card-title"><span id="home-form-title">홈팀</span> 최근 경기</div>
           <div id="home-form-list"></div>
         </div>
         <div class="card">
-          <div class="card-title">📊 <span id="away-form-title">원정팀</span> 최근 경기</div>
+          <div class="card-title"><span id="away-form-title">원정팀</span> 최근 경기</div>
           <div id="away-form-list"></div>
         </div>
       </div>
@@ -611,7 +612,7 @@ async function loadTournament() {
   if (currentStandingsSeason === 'current') {
     bracket.style.display = 'none';
     loading.style.display = 'block';
-    loading.innerHTML = '🏆 2026-27 시즌 토너먼트는 아직 시작 전입니다<br><span style="font-size:12px;color:#8b949e">리그 페이지 종료 후 2027년 2월경 시작 예정</span>';
+    loading.innerHTML = '2026-27 시즌 토너먼트는 아직 시작 전입니다<br><span style="font-size:12px;color:#8b949e">리그 페이지 종료 후 2027년 2월경 시작 예정</span>';
     return;
   }
 
@@ -702,20 +703,19 @@ function renderTournament(data) {
   const finIsT2Winner = fin && fin.winner === fin.team2;
   const finalHtml = `<div class="b-final">
     <div class="final-label">결승</div>
-    <div style="font-size:28px;text-align:center;margin-bottom:4px">🏆</div>
-    ${fin ? `
+        ${fin ? `
     <div style="background:#161b22;border:1px solid #f0c040;border-radius:8px;overflow:hidden;width:140px">
       <div style="display:flex;align-items:center;gap:6px;padding:8px 10px;border-bottom:0.5px solid #21262d;${finIsT1Winner?'background:rgba(240,192,64,0.1)':''}">
         ${fin.team1_logo?`<img src="${fin.team1_logo}" style="width:18px;height:18px;object-fit:contain" onerror="this.style.display='none'">`:''}
-        <span style="flex:1;font-size:11px;color:#e6edf3;font-weight:${finIsT1Winner?'700':'400'}">${shortName(fin.team1)}${finIsT1Winner?' 🏆':''}</span>
+        <span style="flex:1;font-size:11px;color:#e6edf3;font-weight:${finIsT1Winner?'700':'400'}">${shortName(fin.team1)}</span>
         <span style="font-size:12px;font-weight:600;color:#58a6ff">${fin.team1_goals ?? ''}</span>
       </div>
       <div style="display:flex;align-items:center;gap:6px;padding:8px 10px;${finIsT2Winner?'background:rgba(240,192,64,0.1)':''}">
         ${fin.team2_logo?`<img src="${fin.team2_logo}" style="width:18px;height:18px;object-fit:contain" onerror="this.style.display='none'">`:''}
-        <span style="flex:1;font-size:11px;color:#e6edf3;font-weight:${finIsT2Winner?'700':'400'}">${shortName(fin.team2)}${finIsT2Winner?' 🏆':''}</span>
+        <span style="flex:1;font-size:11px;color:#e6edf3;font-weight:${finIsT2Winner?'700':'400'}">${shortName(fin.team2)}</span>
         <span style="font-size:12px;font-weight:600;color:#58a6ff">${fin.team2_goals ?? ''}</span>
       </div>
-      ${fin.winner ? `<div style="padding:6px;text-align:center;font-size:10px;color:#f0c040;font-weight:700;border-top:0.5px solid #21262d;background:rgba(240,192,64,0.05)">🏆 ${shortName(fin.winner)} 우승</div>` : ''}
+      ${fin.winner ? `<div style="padding:6px;text-align:center;font-size:10px;color:#f0c040;font-weight:700;border-top:0.5px solid #21262d;background:rgba(240,192,64,0.05)">${shortName(fin.winner)} 우승</div>` : ''}
     </div>
     ` : `
     <div class="final-match">
@@ -816,7 +816,7 @@ function runSimulation() {
   if (!currentChampionData) return;
   
   const simBtn = document.getElementById('sim-btn');
-  if (simBtn) { simBtn.textContent = '⏳ 계산 중...'; simBtn.style.background = '#388bfd'; }
+  if (simBtn) { simBtn.textContent = '계산 중...'; simBtn.style.background = '#388bfd'; }
   
   setTimeout(() => {
   const nSim = parseInt(document.getElementById('sim-slider').value);
@@ -893,7 +893,7 @@ function runSimulation() {
   
   renderChampionResults({teams: results});
   
-  if (simBtn) { simBtn.textContent = '▶️ 시뮬레이션 시작'; simBtn.style.background = '#1f6feb'; }
+  if (simBtn) { simBtn.textContent = '시뮬레이션 시작'; simBtn.style.background = '#1f6feb'; }
   }, 50);
 }
 
@@ -939,7 +939,7 @@ function renderChampionInitial(data) {
   const content = document.getElementById('champion-content');
   const teams = [...data.teams].sort((a,b) => cleanTeamName(a.team).localeCompare(cleanTeamName(b.team)));
   
-  let html = '<div style="font-size:12px;color:#8b949e;margin-bottom:12px">⬆️ 시뮬레이션 시작 버튼을 눌러 우승 확률을 계산하세요</div>';
+  let html = '<div style="font-size:12px;color:#8b949e;margin-bottom:12px">시뮬레이션 시작 버튼을 눌러 우승 확률을 계산하세요</div>';
   teams.forEach((t, i) => {
     html += `
       <div class="champ-row">
@@ -964,7 +964,7 @@ function renderChampionResults(data) {
   const teams = data.teams;  // 이미 우승확률 내림차순 정렬됨
   const maxProb = teams[0].champion_prob || 1;
   
-  let html = '<div style="font-size:13px;color:#e6edf3;font-weight:600;margin-bottom:10px">📊 예상 순위 (우승 확률 순)</div>';
+  let html = '<div style="font-size:13px;color:#e6edf3;font-weight:600;margin-bottom:10px">예상 순위 (우승 확률 순)</div>';
   
   teams.forEach((t, i) => {
     const barWidth = (t.champion_prob / maxProb) * 100;
@@ -1231,7 +1231,7 @@ function renderStandings(data,leagueCode){
     else{zc=getZoneClass(leagueCode, i, totalTeams);}
     const rc=i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'';
     const fb=team.form.map(f=>`<div class="form-badge ${f}">${f}</div>`).join('');
-    html+=`<tr class="${zc}"><td><span class="rank-num ${rc}">${team.rank}</span></td><td><div class="team-cell"><img src="${team.logo}" width="24" height="24" style="object-fit:contain" onerror="this.style.display='none'"><span>${cleanTeamName(team.team)}${i===0 && !isCL && currentStandingsSeason==='previous' ? ' 🏆' : ''}</span></div></td><td class="center">${team.played}</td><td class="center">${team.wins}</td><td class="center">${team.draws}</td><td class="center">${team.losses}</td><td class="center hide-mobile">${team.gf}</td><td class="center hide-mobile">${team.ga}</td><td class="center" style="color:${team.gd>0?'#238636':team.gd<0?'#da3633':'#8b949e'}">${team.gd>0?'+':''}${team.gd}</td><td class="center"><div class="form-badges">${fb}</div></td><td class="center pts">${team.points}</td></tr>`;
+    html+=`<tr class="${zc}"><td><span class="rank-num ${rc}">${team.rank}</span></td><td><div class="team-cell"><img src="${team.logo}" width="24" height="24" style="object-fit:contain" onerror="this.style.display='none'"><span>${cleanTeamName(team.team)}${i===0 && !isCL && currentStandingsSeason==='previous' ? ' (우승)' : ''}</span></div></td><td class="center">${team.played}</td><td class="center">${team.wins}</td><td class="center">${team.draws}</td><td class="center">${team.losses}</td><td class="center hide-mobile">${team.gf}</td><td class="center hide-mobile">${team.ga}</td><td class="center" style="color:${team.gd>0?'#238636':team.gd<0?'#da3633':'#8b949e'}">${team.gd>0?'+':''}${team.gd}</td><td class="center"><div class="form-badges">${fb}</div></td><td class="center pts">${team.points}</td></tr>`;
   });
   html+='</tbody></table><div style="display:flex;gap:16px;margin-top:12px;font-size:11px;color:#8b949e;flex-wrap:wrap">';
   if(isCL){html+=`<span><span style="display:inline-block;width:10px;height:10px;background:#f0c040;border-radius:1px;margin-right:4px"></span>16강 직행</span><span><span style="display:inline-block;width:10px;height:10px;background:#f0883e;border-radius:1px;margin-right:4px"></span>플레이오프</span>`;}
@@ -1250,13 +1250,25 @@ function renderStandings(data,leagueCode){
 
 async function loadLogos(){try{const res=await fetchWithRetry(`${API}/logos`);logos=await res.json();}catch(e){console.error('로고 로드 실패');}renderTeamGrid('home','all');renderTeamGrid('away','all');}
 
+async function loadAccuracy(){
+  const note=document.getElementById('model-accuracy-note');
+  if(!note) return;
+  try{
+    const res=await fetchWithRetry(`${API}/accuracy`);
+    const data=await res.json();
+    if(data.best!=null){
+      note.textContent=`AI 모델 정확도 ${data.best}% · 최근 ${Number(data.total_matches).toLocaleString()}경기 기준`;
+    }
+  }catch(e){ /* 부가 정보라 실패해도 기능엔 지장 없음 */ }
+}
+
 async function predict(){
   const home=selectedTeams.home,away=selectedTeams.away,errorMsg=document.getElementById('error-msg'),btn=document.querySelector('.predict-btn');
   errorMsg.style.display='none';
-  if(!home||!away){errorMsg.textContent='❌ 홈팀과 원정팀을 모두 선택해주세요';errorMsg.style.display='block';return;}
-  if(home===away){errorMsg.textContent='❌ 같은 팀은 선택할 수 없습니다';errorMsg.style.display='block';return;}
-  btn.disabled=true; btn.textContent='⏳ 예측 중...';
-  const onRetry=(a,r)=>{btn.textContent=`⏳ 서버를 깨우는 중... (${a}/${r})`;};
+  if(!home||!away){errorMsg.textContent='홈팀과 원정팀을 모두 선택해주세요';errorMsg.style.display='block';return;}
+  if(home===away){errorMsg.textContent='같은 팀은 선택할 수 없습니다';errorMsg.style.display='block';return;}
+  btn.disabled=true; btn.textContent='예측 중...';
+  const onRetry=(a,r)=>{btn.textContent=`서버를 깨우는 중... (${a}/${r})`;};
   try{
     const[pR,hR,hfR,afR]=await Promise.all([
       fetchWithRetry(`${API}/predict`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({home_team:home,away_team:away})},{onRetry}),
@@ -1266,8 +1278,8 @@ async function predict(){
     ]);
     const[pD,hD,hfD,afD]=await Promise.all([pR.json(),hR.json(),hfR.json(),afR.json()]);
     showResult(pD,hD,hfD,afD,home,away);
-  }catch(e){errorMsg.textContent='❌ 서버 연결 오류. 잠시 후 다시 시도해주세요.';errorMsg.style.display='block';}
-  finally{btn.disabled=false;btn.textContent='🔮 경기 예측하기';}
+  }catch(e){errorMsg.textContent='서버 연결 오류. 잠시 후 다시 시도해주세요.';errorMsg.style.display='block';}
+  finally{btn.disabled=false;btn.textContent='경기 예측하기';}
 }
 
 function showResult(data,h2h,homeForm,awayForm,home,away){
@@ -1275,9 +1287,9 @@ function showResult(data,h2h,homeForm,awayForm,home,away){
   document.getElementById('result-home-logo').src=logos[home]||''; document.getElementById('result-away-logo').src=logos[away]||'';
   document.getElementById('result-home-name').textContent=home; document.getElementById('result-away-name').textContent=away;
   const badge=document.getElementById('pred-badge');
-  if(data.prediction==='home_win'){badge.textContent=`🏠 ${home} 승리 예측`;badge.className='badge home';}
-  else if(data.prediction==='away_win'){badge.textContent=`✈️ ${away} 승리 예측`;badge.className='badge away';}
-  else{badge.textContent='🤝 무승부 예측';badge.className='badge draw';}
+  if(data.prediction==='home_win'){badge.textContent=`${home} 승리 예측`;badge.className='badge home';}
+  else if(data.prediction==='away_win'){badge.textContent=`${away} 승리 예측`;badge.className='badge away';}
+  else{badge.textContent='무승부 예측';badge.className='badge draw';}
   const hw=Math.round(prob.home_win*100),dw=Math.round(prob.draw*100),aw=Math.round(prob.away_win*100);
   document.getElementById('bar-home').style.width=hw+'%';document.getElementById('bar-draw').style.width=dw+'%';document.getElementById('bar-away').style.width=aw+'%';
   document.getElementById('val-home').textContent=hw+'%';document.getElementById('val-draw').textContent=dw+'%';document.getElementById('val-away').textContent=aw+'%';
@@ -1391,7 +1403,7 @@ function renderChampions() {
       <img src="${c.logo}" style="width:24px;height:24px;object-fit:contain" onerror="this.style.display='none'">
       <div style="flex:1;min-width:0">
         <div style="font-size:9px;color:#c9d1d9">${c.league}</div>
-        <div style="font-size:11px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">🏆 ${c.team}</div>
+        <div style="font-size:11px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.team}</div>
       </div>
     </div>
   `).join('');
@@ -1400,7 +1412,7 @@ renderChampions();
 updateCountdown();
 setInterval(updateCountdown, 60000);
 
-loadLogos();loadStandings('PL');
+loadLogos();loadStandings('PL');loadAccuracy();
 
 if(window.location.hash){setTimeout(()=>{const h=window.location.hash.replace('#','');const valid=['predict','champion','standings','players','schedule'];if(!valid.includes(h))return;document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));const pg=document.getElementById('page-'+h);if(pg)pg.classList.add('active');const tab=document.querySelector('[onclick="showPage(\''+h+'\')"]');if(tab)tab.classList.add('active');if(h==='champion')loadChampion('PL');if(h==='players')loadPlayers();if(h==='schedule')loadSchedule('PL');},100);}
 </script>
