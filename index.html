@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta property="og:title" content="FotData - AI 축구 분석 플랫폼">
-  <meta property="og:description" content="5개 유럽 리그 실시간 순위, AI 경기 예측, 역대 맞대 기록. 전문가 수준의 축구 인사이트를 무료로.">
+  <meta property="og:description" content="5대 리그+UCL 실시간 순위, AI 경기 예측, 역대 맞대 기록. 전문가 수준의 축구 인사이트를 무료로.">
   <meta property="og:image" content="https://fotdata-api.vercel.app/og-image.png">
   <meta property="og:url" content="https://fotdata-api.vercel.app">
   <meta property="og:type" content="website">
@@ -286,14 +286,14 @@
     AI 기반 축구 분석 플랫폼
   </div>
   <h1>축구를 데이터로<br><em>예측하다</em></h1>
-  <p>5개 유럽 리그 실시간 순위, AI 경기 예측, 역대 맞대 기록. 전문가 수준의 축구 인사이트를 무료로.</p>
+  <p>5대 리그+UCL 실시간 순위, AI 경기 예측, 역대 맞대 기록. 전문가 수준의 축구 인사이트를 무료로.</p>
   <div class="hero-btns">
     <a href="FotData.html" class="btn-primary">경기 예측하기</a>
     <a href="FotData.html#standings" class="btn-secondary">순위표 보기</a>
   </div>
   
-    <div class="stats-row"><div class="stat-item"><div class="stat-num">5756</div><div class="stat-label">경기 데이터</div></div>
-    <div class="stat-item"><div class="stat-num">96</div><div class="stat-label">팀 분석</div></div>
+    <div class="stats-row"><div class="stat-item"><div class="stat-num" id="matches-stat">--</div><div class="stat-label">경기 데이터</div></div>
+    <div class="stat-item"><div class="stat-num" id="teams-stat">--</div><div class="stat-label">팀 분석</div></div>
     <div class="stat-item"><div class="stat-num" id="accuracy-stat">--</div><div class="stat-label">예측 정확도</div></div>
     <div class="stat-item"><div class="stat-num">6</div><div class="stat-label">지원 리그</div></div>
   </div>
@@ -496,7 +496,7 @@
       <div class="feat-card">
         <div class="feat-icon">🔮</div>
         <h3>AI 경기 예측</h3>
-        <p>머신러닝이 분석한 승/무/패 확률로 경기를 더 재미있게.</p>
+        <p>머신러닝이 분석한 승/무/패 확률과 예상 스코어까지 한번에 확인하세요.</p>
       </div>
       <div class="feat-card">
         <div class="feat-icon">⚔️</div>
@@ -509,9 +509,9 @@
         <p>공격력, 수비력, 승률 등 팀별 상세 퍼포먼스 지표.</p>
       </div>
       <div class="feat-card">
-        <div class="feat-icon">📈</div>
-        <h3>최근 폼 추적</h3>
-        <p>각 팀의 최근 5경기 W/D/L 폼을 시각적으로 확인.</p>
+        <div class="feat-icon">📅</div>
+        <h3>경기 일정</h3>
+        <p>5대 리그+UCL 시즌 전체 일정을 월별로, 완료 경기는 결과까지.</p>
       </div>
       <div class="feat-card">
         <div class="feat-icon">🔄</div>
@@ -568,8 +568,17 @@
     const res = await fetch('https://fotdata-api.onrender.com/accuracy');
     const data = await res.json();
     document.getElementById('accuracy-stat').textContent = data.best + '%';
+    document.getElementById('matches-stat').textContent = Number(data.total_matches).toLocaleString();
   } catch(e) {
     document.getElementById('accuracy-stat').textContent = '56%';
+    document.getElementById('matches-stat').textContent = '4,800+';
+  }
+  try {
+    const res = await fetch('https://fotdata-api.onrender.com/teams');
+    const data = await res.json();
+    document.getElementById('teams-stat').textContent = data.count;
+  } catch(e) {
+    document.getElementById('teams-stat').textContent = '96';
   }
 })();
 </script>
