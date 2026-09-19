@@ -59,6 +59,7 @@
     .form-badge.D { background: #6e7681; color: #fff; }
     .form-badge.L { background: #da3633; color: #fff; }
     .zone-cl { border-left: 3px solid #58a6ff; }
+    .zone-cl-q { border-left: 3px solid #a371f7; }
     .zone-el { border-left: 3px solid #f0883e; }
     .zone-ecl { border-left: 3px solid #3fb950; }
     .zone-rel-po { border-left: 3px solid #d29922; }
@@ -1180,25 +1181,32 @@ async function loadStandings(leagueCode) {
 }
 
 // 리그별 유럽대항전/강등 인원수 (2026-27 시즌 UEFA 공식 배정 기준)
-// cl/el/ecl: 챔피언스리그·유로파리그·컨퍼런스리그 진출 팀 수 (순위 상위부터 순서대로)
+// clDirect: 챔스 리그페이즈 직행 팀 수, cl: clDirect 포함 챔스행 전체 팀 수
+//           (clDirect < cl인 팀은 리그페이즈 직행이 아니라 예선을 거쳐야 함)
+// el/ecl: 유로파리그·컨퍼런스리그 진출 팀 수 (cl 다음 순위부터)
 // relPlayoff: 강등 플레이오프(승강 PO) 대상 팀 수, rel: 직행 강등 팀 수
-// * EPL/라리가는 2025-26 UEFA 협회 계수 1·2위로 챔스 5장(European Performance Spot) 확보
+// * EPL/라리가는 2025-26 UEFA 협회 계수 1·2위라 5위까지 챔스 리그페이즈 직행
+//   (European Performance Spot)
+// * 리그앙은 UEFA 협회 계수가 4위 밖이라 4위 팀은 챔스 진출권은 얻지만
+//   리그페이즈 직행이 아니라 예선(3차 예선/리그 패스)을 거쳐야 함 — 분데스/
+//   세리에A의 4위는 협회 계수 top4 안이라 직행 (UEFA 2026-27 access list 기준)
 // * 분데스리가/리그앙은 18팀 리그라 16위 PO, 17·18위 직행강등 (20팀 리그는 하위 3팀 직행)
 // * 자국 컵대회 우승팀이 리그 순위로 이미 유럽행이 확정되면 유로파/컨퍼런스 자리가
 //   한 칸씩 밀려 내려가는 경우가 있는데(시즌 중 컵 결과에 따라 달라짐, 예측 불가)
 //   여기서는 시즌 시작 전 확정된 "표준 배정"만 표시함
 const LEAGUE_ZONES = {
-  PL:  { cl: 5, el: 2, ecl: 1, relPlayoff: 0, rel: 3 },
-  PD:  { cl: 5, el: 2, ecl: 1, relPlayoff: 0, rel: 3 },
-  BL1: { cl: 4, el: 1, ecl: 1, relPlayoff: 1, rel: 2 },
-  SA:  { cl: 4, el: 1, ecl: 1, relPlayoff: 0, rel: 3 },
-  FL1: { cl: 4, el: 1, ecl: 1, relPlayoff: 1, rel: 2 },
+  PL:  { clDirect: 5, cl: 5, el: 2, ecl: 1, relPlayoff: 0, rel: 3 },
+  PD:  { clDirect: 5, cl: 5, el: 2, ecl: 1, relPlayoff: 0, rel: 3 },
+  BL1: { clDirect: 4, cl: 4, el: 1, ecl: 1, relPlayoff: 1, rel: 2 },
+  SA:  { clDirect: 4, cl: 4, el: 1, ecl: 1, relPlayoff: 0, rel: 3 },
+  FL1: { clDirect: 3, cl: 4, el: 1, ecl: 1, relPlayoff: 1, rel: 2 },
 };
 
 function getZoneClass(leagueCode, i, totalTeams) {
   const z = LEAGUE_ZONES[leagueCode];
   if (!z) return '';
-  if (i < z.cl) return 'zone-cl';
+  if (i < z.clDirect) return 'zone-cl';
+  if (i < z.cl) return 'zone-cl-q';
   if (i < z.cl + z.el) return 'zone-el';
   if (i < z.cl + z.el + z.ecl) return 'zone-ecl';
   if (z.relPlayoff && i === totalTeams - z.rel - z.relPlayoff) return 'zone-rel-po';
@@ -1223,6 +1231,7 @@ function renderStandings(data,leagueCode){
     const z = LEAGUE_ZONES[leagueCode] || {};
     const legendItem = (color, label) => `<span><span style="display:inline-block;width:10px;height:10px;background:${color};border-radius:1px;margin-right:4px"></span>${label}</span>`;
     html += legendItem('#58a6ff', '챔피언스리그');
+    if (z.cl > z.clDirect) html += legendItem('#a371f7', '챔피언스리그 진출권(예선)');
     if (z.el) html += legendItem('#f0883e', '유로파리그');
     if (z.ecl) html += legendItem('#3fb950', '컨퍼런스리그');
     if (z.relPlayoff) html += legendItem('#d29922', '강등 플레이오프');
