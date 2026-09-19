@@ -1282,9 +1282,35 @@ function showResult(data,h2h,homeForm,awayForm,home,away){
   document.getElementById('s-away-def-label').textContent=awayShortLabel+' 수비력';
   document.getElementById('h2h-home-wins').textContent=h2h.summary.home_wins;document.getElementById('h2h-draws').textContent=h2h.summary.draws;document.getElementById('h2h-away-wins').textContent=h2h.summary.away_wins;
   document.getElementById('h2h-home-label').textContent=home.split(' ')[0]+' 승';document.getElementById('h2h-away-label').textContent=away.split(' ')[0]+' 승';
-  let h2hHtml='';h2h.matches.forEach(m=>{h2hHtml+=`<div class="h2h-match"><span class="h2h-date">${m.date}</span><span class="h2h-score ${m.result}">${m.home_team.split(' ')[0]} ${m.home_goals} - ${m.away_goals} ${m.away_team.split(' ')[0]}</span></div>`;});
+  function matchRowHtml(homeTeam, awayTeam, homeGoals, awayGoals, date, scoreColor, resultBadge) {
+    const homeShort = homeTeam.replace(' FC','').replace(' CF','');
+    const awayShort = awayTeam.replace(' FC','').replace(' CF','');
+    return `<div style="padding:8px 0;border-bottom:0.5px solid #21262d">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+        <span style="font-size:10px;color:#8b949e">${date}</span>
+        ${resultBadge||''}
+      </div>
+      <div class="sched-match" style="padding:0;border-bottom:none">
+        <div class="sched-team"><img src="${logos[homeTeam]||''}" onerror="this.style.display='none'"><span>${homeShort}</span></div>
+        <div class="sched-vs"><span class="sched-score" style="${scoreColor?`color:${scoreColor}`:''}">${homeGoals} - ${awayGoals}</span></div>
+        <div class="sched-team away"><span>${awayShort}</span><img src="${logos[awayTeam]||''}" onerror="this.style.display='none'"></div>
+      </div>
+    </div>`;
+  }
+  let h2hHtml='';h2h.matches.forEach(m=>{
+    const color = m.result==='W' ? '#238636' : m.result==='L' ? '#da3633' : '#8b949e';
+    h2hHtml += matchRowHtml(m.home_team, m.away_team, m.home_goals, m.away_goals, m.date, color);
+  });
   document.getElementById('h2h-matches').innerHTML=h2hHtml||'<div style="color:#8b949e;font-size:13px;padding:8px 0">맞대 기록 없음</div>';
-  function renderForm(fd,cid,tid){document.getElementById(tid).textContent=fd.team.split(' ')[0];let html='';fd.form.forEach(m=>{const isH=m.home_team===fd.team;const opp=isH?m.away_team:m.home_team;html+=`<div class="h2h-match"><div><div style="font-size:12px;color:#8b949e">${m.date}</div><div style="font-size:12px">${isH?'홈':'원정'} vs ${opp.split(' ')[0]}</div></div><div style="display:flex;align-items:center;gap:8px"><span style="font-size:13px">${m.home_goals} - ${m.away_goals}</span><div class="form-badge ${m.result}">${m.result}</div></div></div>`;});document.getElementById(cid).innerHTML=html;}
+  function renderForm(fd,cid,tid){
+    document.getElementById(tid).textContent=fd.team.split(' ')[0];
+    let html='';
+    fd.form.forEach(m=>{
+      const badge = `<div class="form-badge ${m.result}">${m.result}</div>`;
+      html += matchRowHtml(m.home_team, m.away_team, m.home_goals, m.away_goals, m.date, null, badge);
+    });
+    document.getElementById(cid).innerHTML=html;
+  }
   renderForm(homeForm,'home-form-list','home-form-title');renderForm(awayForm,'away-form-list','away-form-title');
   document.getElementById('result-section').classList.add('show');document.getElementById('result-section').scrollIntoView({behavior:'smooth'});
 }
