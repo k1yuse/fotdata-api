@@ -383,6 +383,76 @@ def update_team_logos():
         print(f"  ⚠️ 여전히 못 찾은 팀: {missing_teams}")
     print(f"  ✅ team_logos.json 업데이트 완료")
     
+POSITION_ORDER = {"Goalkeeper": 0, "Defence": 1, "Midfield": 2, "Offence": 3}
+
+def fetch_team_info():
+    """팀 상세 정보(홈구장/창단연도/구단색/스쿼드) 수집 — 팀 클릭 시 정보 패널용.
+    team_stats.csv에 있는(=현재 서빙 중인) 팀만 대상으로 한다."""
+    import json
+    print("\n[팀 상세정보] 수집 중...")
+
+    df_stats = pd.read_csv(f"{MODEL_DIR}/team_stats.csv")
+    target_teams = set(df_stats['team'].tolist())
+
+    # 1. 경쟁 리그별 팀 목록으로 이름→ID 매핑 확보
+    name_to_id = {}
+    for code in list(LEAGUES_V2.keys()):
+        try:
+            res = requests.get(f"{BASE_URL}/competitions/{code}/teams", headers=HEADERS)
+            data = res.json()
+            for team in data.get('teams', []):
+                name_to_id[team['name']] = team['id']
+            time.sleep(6)
+        except Exception as e:
+            print(f"  ❌ {code} 팀 목록 조회 실패: {e}")
+
+    # 2. 대상 팀별 상세 정보 조회
+    team_info = {}
+    missing = []
+    for name in sorted(target_teams):
+        team_id = name_to_id.get(name)
+        if team_id is None:
+            missing.append(name)
+            continue
+        try:
+            res = requests.get(f"{BASE_URL}/teams/{team_id}", headers=HEADERS)
+            if res.status_code != 200:
+                print(f"  ❌ {name} 조회 실패: {res.status_code}")
+                time.sleep(6)
+                continue
+            d = res.json()
+            squad = sorted(
+                [
+                    {
+                        "name": p.get("name"),
+                        "position": p.get("position"),
+                        "nationality": p.get("nationality"),
+                        "shirtNumber": p.get("shirtNumber"),
+                    }
+                    for p in d.get("squad", [])
+                ],
+                key=lambda p: POSITION_ORDER.get(p["position"], 99)
+            )
+            coach = d.get("coach") or {}
+            team_info[name] = {
+                "venue": d.get("venue"),
+                "founded": d.get("founded"),
+                "clubColors": d.get("clubColors"),
+                "coach": coach.get("name"),
+                "squad": squad,
+            }
+            print(f"  ✅ {name} ({len(squad)}명)")
+        except Exception as e:
+            print(f"  ❌ {name} 예외: {e}")
+        time.sleep(6)
+
+    if missing:
+        print(f"  ⚠️ ID 못 찾은 팀: {missing}")
+
+    with open(f"{MODEL_DIR}/team_info.json", 'w', encoding='utf-8') as f:
+        json.dump(team_info, f, ensure_ascii=False, indent=2)
+    print(f"  ✅ team_info.json 저장 완료 ({len(team_info)}팀)")
+
 def reconstruct_bracket_order(stages):
     """하드코딩 없이 실제 대진(팀 실명)으로 이전 라운드의 좌우 배치를 역추적한다.
 
@@ -640,6 +710,9 @@ def main():
 
     # 로고 자동 업데이트
     update_team_logos()
+
+    # 팀 상세정보 (홈구장/스쿼드 등)
+    fetch_team_info()
 
     # 우승 예측
     fetch_champion_predictions()

@@ -68,7 +68,9 @@ fotdata-api/
     ├── accuracy.json             # 모델 정확도 (3개 모델 비교 + best)
     ├── ucl_tournament.json       # UCL 브래킷 데이터 (PO→R16→QF→SF→Final)
     ├── champion_predictions.json # 5대리그 우승/TOP4/강등 확률 (몬테카를로 1000회)
-    └── players.json               # 득점왕/도움왕 (현재 EPL만)
+    ├── players.json               # 득점왕/도움왕 (현재 EPL만)
+    ├── schedule.json              # 5대리그+UCL 26-27 시즌 전체 일정 (완료+예정) — 일정 탭 전용
+    └── team_info.json             # 팀 상세정보(홈구장/창단연도/구단색/감독/스쿼드) — 팀 클릭 정보 패널용
 ```
 
 ### 4.1 `index.html` = `landing.html`의 사본 — 반드시 동기화
@@ -109,6 +111,12 @@ cp landing.html index.html
   동일 기준), 20팀 리그(EPL/라리가/세리에A)는 하위 3팀. 2026-09-19에 5개 리그 전부 하위
   3팀 고정이던 버그를 수정함(순위표 존 표시 수정과 같은 날 발견).
 
+### 5.5 팀 상세정보 (`fetch_team_info`, update_data.py · 2026-09-19 추가)
+- football-data.org의 팀 리소스(`/teams/{id}`)를 이용, 무료 플랜(기존 `FOOTBALL_API_KEY`)으로 홈구장(venue)/창단연도/구단색/스쿼드를 가져올 수 있음이 확인됨
+- **감독(coach)과 등번호(shirtNumber)는 이 무료 플랜에서 항상 null** — API 자체가 제공을 안 함(신뢰성 문제가 아니라 무료 티어 제약)
+- **선수 사진은 이 API에 필드 자체가 없음.** API-Football(별도 키)에는 있지만 그쪽은 EPL·2024 시즌 고정이라 현재 스쿼드와 안 맞음 — 사진 기능은 보류
+- 스쿼드는 시즌 중 이적으로 계속 바뀌므로, 로고와 달리 "누락분만" 채우는 게 아니라 매번 전체 팀을 다시 fetch함 (일일 자동 업데이트에 포함됨, `FOOTBALL_API_KEY`만 있으면 되므로 GitHub Actions에서도 정상 동작)
+
 ## 6. API 엔드포인트 (main.py)
 
 | Method | Path | 설명 |
@@ -125,6 +133,8 @@ cp landing.html index.html
 | GET | `/accuracy` | 모델 정확도 |
 | GET | `/players/topscorers/{league_code}`, `/players/topassists/{league_code}` | 득점왕/도움왕 (현재 PL만 데이터 있음) |
 | GET | `/predict/champion/{league_code}` | 리그 우승 예측 |
+| GET | `/schedule/{league_code}` | 리그 전체 시즌 일정 (완료+예정 전부) |
+| GET | `/team/info/{team_name}` | 팀 상세정보 (홈구장/창단연도/구단색/감독/스쿼드) |
 
 리그 코드: `PL`(EPL), `PD`(라리가), `BL1`(분데스리가), `SA`(세리에A), `FL1`(리그앙), `CL`(UCL)
 

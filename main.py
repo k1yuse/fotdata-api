@@ -582,3 +582,19 @@ def get_schedule(league_code: str):
         raise HTTPException(status_code=404, detail="해당 리그 데이터 없음")
 
     return {"league": league_code.upper(), "matches": matches}
+
+@app.get("/team/info/{team_name}")
+def get_team_info(team_name: str):
+    """팀 상세 정보 (홈구장, 창단연도, 구단색, 스쿼드) — update_data.py의 fetch_team_info()가 생성한 캐시"""
+    path = os.path.join(MODEL_DIR, "team_info.json")
+    if not os.path.exists(path):
+        raise HTTPException(status_code=404, detail="팀 정보 데이터 없음")
+
+    with open(path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+
+    info = data.get(team_name)
+    if info is None:
+        raise HTTPException(status_code=404, detail=f"팀 정보를 찾을 수 없습니다: {team_name}")
+
+    return info

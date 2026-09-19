@@ -140,6 +140,23 @@
     .modal-badge { margin: 0 16px 14px; text-align: center; padding: 6px; border-radius: 6px; font-size: 11px; font-weight: 600; }
     .modal-badge.live { background: #2a1e00; color: #d29922; border: 0.5px solid #d2992260; }
     .modal-badge.done { background: #0a1a0a; color: #238636; border: 0.5px solid #23863660; }
+    .clickable-team { cursor: pointer; }
+    .clickable-team:hover { color: #58a6ff; }
+    .ti-modal { width: 340px; max-height: 82vh; display: flex; flex-direction: column; }
+    .ti-header { padding: 18px 16px 14px; display: flex; align-items: center; gap: 12px; border-bottom: 0.5px solid #30363d; }
+    .ti-logo { width: 44px; height: 44px; object-fit: contain; flex-shrink: 0; }
+    .ti-name { font-size: 15px; font-weight: 700; color: #e6edf3; }
+    .ti-meta { font-size: 11px; color: #8b949e; margin-top: 2px; }
+    .ti-body { overflow-y: auto; padding: 12px 16px 16px; }
+    .ti-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+    .ti-fact { background: #0d1117; border: 0.5px solid #21262d; border-radius: 8px; padding: 8px 10px; }
+    .ti-fact-label { font-size: 10px; color: #8b949e; }
+    .ti-fact-value { font-size: 12px; color: #e6edf3; font-weight: 600; margin-top: 2px; }
+    .ti-section-title { font-size: 11px; color: #8b949e; font-weight: 600; margin: 14px 0 6px; }
+    .ti-player-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 2px; border-bottom: 0.5px solid #21262d; font-size: 12px; }
+    .ti-player-name { color: #e6edf3; }
+    .ti-player-nation { color: #8b949e; font-size: 11px; }
+    .ti-empty { text-align: center; color: #8b949e; font-size: 12px; padding: 20px 0; }
 
     /* 예측 */
     .predict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -254,7 +271,7 @@
     .champ-prob { font-size: 13px; font-weight: 700; color: #58a6ff; width: 50px; text-align: right; }
 
     /* 일정 */
-    .sched-month-nav { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 16px; }
+    .sched-month-nav { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 0 auto 16px; max-width: 640px; }
     .sched-month-arrow { width: 32px; height: 32px; border-radius: 50%; border: 0.5px solid #30363d; background: #21262d; color: #e6edf3; font-size: 17px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color .15s; }
     .sched-month-arrow:hover:not(:disabled) { border-color: #58a6ff; }
     .sched-month-arrow:disabled { opacity: 0.3; cursor: not-allowed; }
@@ -567,6 +584,21 @@
   </div>
 </div>
 
+<!-- 팀 정보 모달 -->
+<div class="modal-overlay" id="ti-modal" onclick="closeTeamInfoModal(event)">
+  <div class="modal ti-modal">
+    <div class="ti-header">
+      <img class="ti-logo" id="ti-logo" src="" onerror="this.style.display='none'">
+      <div>
+        <div class="ti-name" id="ti-name"></div>
+        <div class="ti-meta" id="ti-meta"></div>
+      </div>
+      <span class="modal-close" style="margin-left:auto" onclick="closeTeamInfoModal()">✕</span>
+    </div>
+    <div class="ti-body" id="ti-body"></div>
+  </div>
+</div>
+
 <script>
 const API = "https://fotdata-api.onrender.com";
 
@@ -664,6 +696,8 @@ async function loadTournament() {
     loading.textContent = '데이터를 불러올 수 없어요. 잠시 후 다시 시도해주세요.';
   }
 }
+
+function escJs(str) { return String(str).replace(/'/g, "\\'"); }
 
 function shortName(name) {
   const parts = name.replace(/\bFC\b|\bCF\b|\bBC\b|\bSC\b|\bAC\b|\bUS\b/g,'').trim().split(' ');
@@ -803,6 +837,66 @@ function openTModal(t1, t2) {
   document.getElementById('t-modal').classList.add('show');
 }
 function closeTModal(e) { if(!e||e.target===document.getElementById('t-modal')) document.getElementById('t-modal').classList.remove('show'); }
+
+const POSITION_LABEL = { Goalkeeper: '골키퍼', Defence: '수비수', Midfield: '미드필더', Offence: '공격수' };
+let teamInfoCache = {};
+
+async function openTeamInfo(teamName) {
+  if (!teamName) return;
+  const modal = document.getElementById('ti-modal');
+  document.getElementById('ti-logo').src = logos[teamName] || '';
+  document.getElementById('ti-name').textContent = teamName;
+  document.getElementById('ti-meta').textContent = '';
+  document.getElementById('ti-body').innerHTML = '<div class="ti-empty">불러오는 중...</div>';
+  modal.classList.add('show');
+
+  try {
+    let info = teamInfoCache[teamName];
+    if (!info) {
+      const res = await fetch(`${API}/team/info/${encodeURIComponent(teamName)}`);
+      if (!res.ok) throw new Error('not found');
+      info = await res.json();
+      teamInfoCache[teamName] = info;
+    }
+    renderTeamInfo(info);
+  } catch (e) {
+    document.getElementById('ti-body').innerHTML = '<div class="ti-empty">팀 정보를 아직 준비 중이에요.</div>';
+  }
+}
+
+function renderTeamInfo(info) {
+  document.getElementById('ti-meta').textContent = info.founded ? `창단 ${info.founded}년` : '';
+
+  const facts = [
+    { label: '홈구장', value: info.venue },
+    { label: '창단연도', value: info.founded },
+    { label: '구단 컬러', value: info.clubColors },
+    { label: '감독', value: info.coach },
+  ].filter(f => f.value);
+
+  let html = '';
+  if (facts.length) {
+    html += `<div class="ti-facts">${facts.map(f => `<div class="ti-fact"><div class="ti-fact-label">${f.label}</div><div class="ti-fact-value">${f.value}</div></div>`).join('')}</div>`;
+  }
+
+  const squad = info.squad || [];
+  if (squad.length) {
+    const groups = {};
+    squad.forEach(p => { (groups[p.position] = groups[p.position] || []).push(p); });
+    Object.keys(POSITION_LABEL).forEach(pos => {
+      const players = groups[pos];
+      if (!players || !players.length) return;
+      html += `<div class="ti-section-title">${POSITION_LABEL[pos]} (${players.length})</div>`;
+      html += players.map(p => `<div class="ti-player-row"><span class="ti-player-name">${p.shirtNumber ? `#${p.shirtNumber} ` : ''}${p.name}</span><span class="ti-player-nation">${p.nationality || ''}</span></div>`).join('');
+    });
+  } else if (!facts.length) {
+    html = '<div class="ti-empty">팀 정보를 아직 준비 중이에요.</div>';
+  }
+
+  document.getElementById('ti-body').innerHTML = html;
+}
+
+function closeTeamInfoModal(e) { if (!e || e.target === document.getElementById('ti-modal')) document.getElementById('ti-modal').classList.remove('show'); }
 
 function getTeamLeague(team) { for (const [key,data] of Object.entries(LEAGUE_DATA)) { if (key!=='UCL'&&data.teams.includes(team)) return data; } return null; }
 function renderTeamGrid(side, leagueKey, search='') {
@@ -1205,9 +1299,9 @@ function renderScheduleContent(league, monthKey) {
     const homeShort = m.home_team.replace(' FC', '').replace(' CF', '');
     const awayShort = m.away_team.replace(' FC', '').replace(' CF', '');
     html += `<div class="sched-match">
-      <div class="sched-team"><img src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span>${homeShort}</span></div>
+      <div class="sched-team clickable-team" onclick="openTeamInfo('${escJs(m.home_team)}')"><img src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span>${homeShort}</span></div>
       <div class="sched-vs">${played ? `<span class="sched-score">${m.home_goals} - ${m.away_goals}</span>` : `<span class="sched-time">${timeStr}</span>`}</div>
-      <div class="sched-team away"><span>${awayShort}</span><img src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"></div>
+      <div class="sched-team away clickable-team" onclick="openTeamInfo('${escJs(m.away_team)}')"><span>${awayShort}</span><img src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"></div>
     </div>`;
   });
   content.innerHTML = html;
@@ -1292,7 +1386,7 @@ function renderStandings(data,leagueCode){
     else{zc=getZoneClass(leagueCode, i, totalTeams);}
     const rc=i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'';
     const fb=team.form.map(f=>`<div class="form-badge ${f}">${f}</div>`).join('');
-    html+=`<tr class="${zc}"><td><span class="rank-num ${rc}">${team.rank}</span></td><td><div class="team-cell"><img src="${team.logo}" width="24" height="24" style="object-fit:contain" onerror="this.style.display='none'"><span>${cleanTeamName(team.team)}${i===0 && !isCL && currentStandingsSeason==='previous' ? ' (우승)' : ''}</span></div></td><td class="center">${team.played}</td><td class="center">${team.wins}</td><td class="center">${team.draws}</td><td class="center">${team.losses}</td><td class="center hide-mobile">${team.gf}</td><td class="center hide-mobile">${team.ga}</td><td class="center" style="color:${team.gd>0?'#238636':team.gd<0?'#da3633':'#8b949e'}">${team.gd>0?'+':''}${team.gd}</td><td class="center"><div class="form-badges">${fb}</div></td><td class="center pts">${team.points}</td></tr>`;
+    html+=`<tr class="${zc}"><td><span class="rank-num ${rc}">${team.rank}</span></td><td><div class="team-cell clickable-team" onclick="openTeamInfo('${escJs(team.team)}')"><img src="${team.logo}" width="24" height="24" style="object-fit:contain" onerror="this.style.display='none'"><span>${cleanTeamName(team.team)}${i===0 && !isCL && currentStandingsSeason==='previous' ? ' (우승)' : ''}</span></div></td><td class="center">${team.played}</td><td class="center">${team.wins}</td><td class="center">${team.draws}</td><td class="center">${team.losses}</td><td class="center hide-mobile">${team.gf}</td><td class="center hide-mobile">${team.ga}</td><td class="center" style="color:${team.gd>0?'#238636':team.gd<0?'#da3633':'#8b949e'}">${team.gd>0?'+':''}${team.gd}</td><td class="center"><div class="form-badges">${fb}</div></td><td class="center pts">${team.points}</td></tr>`;
   });
   html+='</tbody></table><div style="display:flex;gap:16px;margin-top:12px;font-size:11px;color:#8b949e;flex-wrap:wrap">';
   if(isCL){html+=`<span><span style="display:inline-block;width:10px;height:10px;background:#f0c040;border-radius:1px;margin-right:4px"></span>16강 직행</span><span><span style="display:inline-block;width:10px;height:10px;background:#f0883e;border-radius:1px;margin-right:4px"></span>플레이오프</span>`;}
@@ -1347,6 +1441,10 @@ function showResult(data,h2h,homeForm,awayForm,home,away){
   const prob=data.probabilities;
   document.getElementById('result-home-logo').src=logos[home]||''; document.getElementById('result-away-logo').src=logos[away]||'';
   document.getElementById('result-home-name').textContent=home; document.getElementById('result-away-name').textContent=away;
+  document.getElementById('result-home-name').onclick=()=>openTeamInfo(home);
+  document.getElementById('result-away-name').onclick=()=>openTeamInfo(away);
+  document.getElementById('result-home-name').classList.add('clickable-team');
+  document.getElementById('result-away-name').classList.add('clickable-team');
   const badge=document.getElementById('pred-badge');
   if(data.prediction==='home_win'){badge.textContent=`${home} 승리 예측`;badge.className='badge home';}
   else if(data.prediction==='away_win'){badge.textContent=`${away} 승리 예측`;badge.className='badge away';}
@@ -1384,9 +1482,9 @@ function showResult(data,h2h,homeForm,awayForm,home,away){
         ${resultBadge||''}
       </div>
       <div class="sched-match" style="padding:0;border-bottom:none">
-        <div class="sched-team"><img src="${logos[homeTeam]||''}" onerror="this.style.display='none'"><span>${homeShort}</span></div>
+        <div class="sched-team clickable-team" onclick="openTeamInfo('${escJs(homeTeam)}')"><img src="${logos[homeTeam]||''}" onerror="this.style.display='none'"><span>${homeShort}</span></div>
         <div class="sched-vs"><span class="sched-score" style="${scoreColor?`color:${scoreColor}`:''}">${homeGoals} - ${awayGoals}</span></div>
-        <div class="sched-team away"><span>${awayShort}</span><img src="${logos[awayTeam]||''}" onerror="this.style.display='none'"></div>
+        <div class="sched-team away clickable-team" onclick="openTeamInfo('${escJs(awayTeam)}')"><span>${awayShort}</span><img src="${logos[awayTeam]||''}" onerror="this.style.display='none'"></div>
       </div>
     </div>`;
   }
