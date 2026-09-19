@@ -60,6 +60,8 @@
     .form-badge.L { background: #da3633; color: #fff; }
     .zone-cl { border-left: 3px solid #58a6ff; }
     .zone-el { border-left: 3px solid #f0883e; }
+    .zone-ecl { border-left: 3px solid #3fb950; }
+    .zone-rel-po { border-left: 3px solid #d29922; }
     .zone-rel { border-left: 3px solid #da3633; }
     .zone-ucl-ko { border-left: 3px solid #f0c040; }
     .zone-ucl-po { border-left: 3px solid #f0883e; }
@@ -523,6 +525,35 @@
 
 <script>
 const API = "https://fotdata-api.onrender.com";
+
+// Render 무료 플랜은 한동안 안 쓰면 서버가 잠들었다가, 요청이 오면 깨어나는 데
+// 최대 1분 가까이 걸릴 수 있다. 그동안 나는 타임아웃/네트워크 에러를 재시도로
+// 흡수하고, 재시도 중임을 onRetry 콜백으로 화면에 알려준다.
+async function fetchWithRetry(url, options = {}, { retries = 4, timeoutMs = 15000, onRetry } = {}) {
+  let lastErr;
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const res = await fetch(url, { ...options, signal: controller.signal });
+      clearTimeout(timer);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res;
+    } catch (e) {
+      clearTimeout(timer);
+      lastErr = e;
+      if (attempt === retries) break;
+      if (onRetry) onRetry(attempt, retries);
+      await new Promise(r => setTimeout(r, 2000 * attempt));
+    }
+  }
+  throw lastErr;
+}
+
+function wakingUpHtml(attempt, retries) {
+  return `<div class="loading">서버를 깨우는 중이에요... (${attempt}/${retries})<br><span style="font-size:11px;color:#8b949e">잠시 쉬고 있던 서버라 최대 1분 정도 걸릴 수 있어요</span></div>`;
+}
+
 let logos = {};
 let selectedTeams = { home: '', away: '' };
 let currentLeagueTab = { home: 'all', away: 'all' };
@@ -580,11 +611,13 @@ async function loadTournament() {
   loading.textContent = '토너먼트 불러오는 중...';
   bracket.style.display = 'none';
   try {
-    const res = await fetch(`${API}/ucl/tournament`);
+    const res = await fetchWithRetry(`${API}/ucl/tournament`, {}, {
+      onRetry: (a, r) => { loading.innerHTML = wakingUpHtml(a, r); }
+    });
     tournamentData = await res.json();
     renderTournament(tournamentData);
   } catch(e) {
-    loading.textContent = '데이터를 불러올 수 없어요.';
+    loading.textContent = '데이터를 불러올 수 없어요. 잠시 후 다시 시도해주세요.';
   }
 }
 
@@ -882,12 +915,14 @@ async function loadChampion(league, btn) {
   content.innerHTML = '<div class="loading">불러오는 중...</div>';
   
   try {
-    const res = await fetch(`${API}/predict/champion/${league}`);
+    const res = await fetchWithRetry(`${API}/predict/champion/${league}`, {}, {
+      onRetry: (a, r) => { content.innerHTML = wakingUpHtml(a, r); }
+    });
     const data = await res.json();
     currentChampionData = data;
     renderChampionInitial(data);
   } catch (e) {
-    content.innerHTML = '<div style="color:#da3633;padding:12px">불러오기 실패</div>';
+    content.innerHTML = '<div style="color:#da3633;padding:12px">불러오기 실패. 잠시 후 다시 시도해주세요.</div>';
   }
 }
 
@@ -969,20 +1004,24 @@ function renderChampionResults(data) {
 async function loadPlayers() {
   const API = 'https://fotdata-api.onrender.com';
   
+  const onRetry = (a, r) => {
+    document.getElementById('topscorers-list').innerHTML = wakingUpHtml(a, r);
+    document.getElementById('topassists-list').innerHTML = wakingUpHtml(a, r);
+  };
   try {
     const [scorersRes, assistsRes] = await Promise.all([
-      fetch(`${API}/players/topscorers/PL`),
-      fetch(`${API}/players/topassists/PL`)
+      fetchWithRetry(`${API}/players/topscorers/PL`, {}, { onRetry }),
+      fetchWithRetry(`${API}/players/topassists/PL`, {}, { onRetry })
     ]);
-    
+
     const scorersData = await scorersRes.json();
     const assistsData = await assistsRes.json();
-    
+
     document.getElementById('topscorers-list').innerHTML = renderPlayerList(scorersData.players, 'goals');
     document.getElementById('topassists-list').innerHTML = renderPlayerList(assistsData.players, 'assists');
   } catch (e) {
-    document.getElementById('topscorers-list').innerHTML = '<div style="color:#da3633;padding:12px">불러오기 실패</div>';
-    document.getElementById('topassists-list').innerHTML = '<div style="color:#da3633;padding:12px">불러오기 실패</div>';
+    document.getElementById('topscorers-list').innerHTML = '<div style="color:#da3633;padding:12px">불러오기 실패. 잠시 후 다시 시도해주세요.</div>';
+    document.getElementById('topassists-list').innerHTML = '<div style="color:#da3633;padding:12px">불러오기 실패. 잠시 후 다시 시도해주세요.</div>';
   }
 }
 
@@ -1029,14 +1068,15 @@ async function loadSchedule(league, btn) {
   content.innerHTML = '<div class="loading">일정 불러오는 중...</div>';
   try {
     if (!scheduleData[league]) {
-      const res = await fetch(`${API}/schedule/${league}`);
-      if (!res.ok) throw new Error('fetch failed');
+      const res = await fetchWithRetry(`${API}/schedule/${league}`, {}, {
+        onRetry: (a, r) => { content.innerHTML = wakingUpHtml(a, r); }
+      });
       const data = await res.json();
       scheduleData[league] = data.matches;
     }
     renderScheduleMonths(league);
   } catch (e) {
-    content.innerHTML = '<div class="loading">일정을 불러올 수 없어요.</div>';
+    content.innerHTML = '<div class="loading">일정을 불러올 수 없어요. 잠시 후 다시 시도해주세요.</div>';
   }
 }
 
@@ -1129,8 +1169,41 @@ async function loadStandings(leagueCode) {
   }
   const content=document.getElementById('standings-content');
   content.innerHTML='<div class="loading">순위표 불러오는 중...</div>';
-  try{const res=await fetch(`${API}/standings/${leagueCode}?season=${currentStandingsSeason}`);const data=await res.json();renderStandings(data,leagueCode);}
-  catch(e){content.innerHTML='<div class="loading">데이터를 불러올 수 없어요.</div>';}
+  try{
+    const res=await fetchWithRetry(`${API}/standings/${leagueCode}?season=${currentStandingsSeason}`, {}, {
+      onRetry: (a, r) => { content.innerHTML = wakingUpHtml(a, r); }
+    });
+    const data=await res.json();
+    renderStandings(data,leagueCode);
+  }
+  catch(e){content.innerHTML='<div class="loading">데이터를 불러올 수 없어요. 잠시 후 다시 시도해주세요.</div>';}
+}
+
+// 리그별 유럽대항전/강등 인원수 (2026-27 시즌 UEFA 공식 배정 기준)
+// cl/el/ecl: 챔피언스리그·유로파리그·컨퍼런스리그 진출 팀 수 (순위 상위부터 순서대로)
+// relPlayoff: 강등 플레이오프(승강 PO) 대상 팀 수, rel: 직행 강등 팀 수
+// * EPL/라리가는 2025-26 UEFA 협회 계수 1·2위로 챔스 5장(European Performance Spot) 확보
+// * 분데스리가/리그앙은 18팀 리그라 16위 PO, 17·18위 직행강등 (20팀 리그는 하위 3팀 직행)
+// * 자국 컵대회 우승팀이 리그 순위로 이미 유럽행이 확정되면 유로파/컨퍼런스 자리가
+//   한 칸씩 밀려 내려가는 경우가 있는데(시즌 중 컵 결과에 따라 달라짐, 예측 불가)
+//   여기서는 시즌 시작 전 확정된 "표준 배정"만 표시함
+const LEAGUE_ZONES = {
+  PL:  { cl: 5, el: 2, ecl: 1, relPlayoff: 0, rel: 3 },
+  PD:  { cl: 5, el: 2, ecl: 1, relPlayoff: 0, rel: 3 },
+  BL1: { cl: 4, el: 1, ecl: 1, relPlayoff: 1, rel: 2 },
+  SA:  { cl: 4, el: 1, ecl: 1, relPlayoff: 0, rel: 3 },
+  FL1: { cl: 4, el: 1, ecl: 1, relPlayoff: 1, rel: 2 },
+};
+
+function getZoneClass(leagueCode, i, totalTeams) {
+  const z = LEAGUE_ZONES[leagueCode];
+  if (!z) return '';
+  if (i < z.cl) return 'zone-cl';
+  if (i < z.cl + z.el) return 'zone-el';
+  if (i < z.cl + z.el + z.ecl) return 'zone-ecl';
+  if (z.relPlayoff && i === totalTeams - z.rel - z.relPlayoff) return 'zone-rel-po';
+  if (i >= totalTeams - z.rel) return 'zone-rel';
+  return '';
 }
 
 function renderStandings(data,leagueCode){
@@ -1139,35 +1212,45 @@ function renderStandings(data,leagueCode){
   data.standings.forEach((team,i)=>{
     let zc='';
     if(isCL){if(i<8)zc='zone-ucl-ko';else if(i<24)zc='zone-ucl-po';}
-    else if(leagueCode==='PL'){if(i<4)zc='zone-cl';else if(i<6)zc='zone-el';else if(i>=totalTeams-3)zc='zone-rel';}
-    else if(leagueCode==='PD'){if(i<4)zc='zone-cl';else if(i<7)zc='zone-el';else if(i>=totalTeams-3)zc='zone-rel';}
-    else if(leagueCode==='BL1'){if(i<4)zc='zone-cl';else if(i<6)zc='zone-el';else if(i>=totalTeams-3)zc='zone-rel';}
-    else if(leagueCode==='SA'){if(i<4)zc='zone-cl';else if(i<7)zc='zone-el';else if(i>=totalTeams-3)zc='zone-rel';}
-    else if(leagueCode==='FL1'){if(i<3)zc='zone-cl';else if(i<5)zc='zone-el';else if(i>=totalTeams-3)zc='zone-rel';}
+    else{zc=getZoneClass(leagueCode, i, totalTeams);}
     const rc=i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'';
     const fb=team.form.map(f=>`<div class="form-badge ${f}">${f}</div>`).join('');
     html+=`<tr class="${zc}"><td><span class="rank-num ${rc}">${team.rank}</span></td><td><div class="team-cell"><img src="${team.logo}" width="24" height="24" style="object-fit:contain" onerror="this.style.display='none'"><span>${cleanTeamName(team.team)}${i===0 && !isCL && currentStandingsSeason==='previous' ? ' 🏆' : ''}</span></div></td><td class="center">${team.played}</td><td class="center">${team.wins}</td><td class="center">${team.draws}</td><td class="center">${team.losses}</td><td class="center hide-mobile">${team.gf}</td><td class="center hide-mobile">${team.ga}</td><td class="center" style="color:${team.gd>0?'#238636':team.gd<0?'#da3633':'#8b949e'}">${team.gd>0?'+':''}${team.gd}</td><td class="center"><div class="form-badges">${fb}</div></td><td class="center pts">${team.points}</td></tr>`;
   });
   html+='</tbody></table><div style="display:flex;gap:16px;margin-top:12px;font-size:11px;color:#8b949e;flex-wrap:wrap">';
   if(isCL){html+=`<span><span style="display:inline-block;width:10px;height:10px;background:#f0c040;border-radius:1px;margin-right:4px"></span>16강 직행</span><span><span style="display:inline-block;width:10px;height:10px;background:#f0883e;border-radius:1px;margin-right:4px"></span>플레이오프</span>`;}
-  else{html+=`<span><span style="display:inline-block;width:10px;height:10px;background:#58a6ff;border-radius:1px;margin-right:4px"></span>챔피언스리그</span><span><span style="display:inline-block;width:10px;height:10px;background:#f0883e;border-radius:1px;margin-right:4px"></span>유로파/컨퍼런스</span><span><span style="display:inline-block;width:10px;height:10px;background:#da3633;border-radius:1px;margin-right:4px"></span>강등</span>`;}
+  else{
+    const z = LEAGUE_ZONES[leagueCode] || {};
+    const legendItem = (color, label) => `<span><span style="display:inline-block;width:10px;height:10px;background:${color};border-radius:1px;margin-right:4px"></span>${label}</span>`;
+    html += legendItem('#58a6ff', '챔피언스리그');
+    if (z.el) html += legendItem('#f0883e', '유로파리그');
+    if (z.ecl) html += legendItem('#3fb950', '컨퍼런스리그');
+    if (z.relPlayoff) html += legendItem('#d29922', '강등 플레이오프');
+    html += legendItem('#da3633', '강등');
+  }
   html+='</div>'; content.innerHTML=html;
 }
 
-async function loadLogos(){try{const res=await fetch(`${API}/logos`);logos=await res.json();}catch(e){console.error('로고 로드 실패');}renderTeamGrid('home','all');renderTeamGrid('away','all');}
+async function loadLogos(){try{const res=await fetchWithRetry(`${API}/logos`);logos=await res.json();}catch(e){console.error('로고 로드 실패');}renderTeamGrid('home','all');renderTeamGrid('away','all');}
 
 async function predict(){
-  const home=selectedTeams.home,away=selectedTeams.away,errorMsg=document.getElementById('error-msg');
+  const home=selectedTeams.home,away=selectedTeams.away,errorMsg=document.getElementById('error-msg'),btn=document.querySelector('.predict-btn');
   errorMsg.style.display='none';
   if(!home||!away){errorMsg.textContent='❌ 홈팀과 원정팀을 모두 선택해주세요';errorMsg.style.display='block';return;}
   if(home===away){errorMsg.textContent='❌ 같은 팀은 선택할 수 없습니다';errorMsg.style.display='block';return;}
-  document.querySelector('.predict-btn').disabled=true; document.querySelector('.predict-btn').textContent='⏳ 예측 중...';
+  btn.disabled=true; btn.textContent='⏳ 예측 중...';
+  const onRetry=(a,r)=>{btn.textContent=`⏳ 서버를 깨우는 중... (${a}/${r})`;};
   try{
-    const[pR,hR,hfR,afR]=await Promise.all([fetch(`${API}/predict`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({home_team:home,away_team:away})}),fetch(`${API}/h2h?home_team=${encodeURIComponent(home)}&away_team=${encodeURIComponent(away)}`),fetch(`${API}/form/${encodeURIComponent(home)}`),fetch(`${API}/form/${encodeURIComponent(away)}`)]);
+    const[pR,hR,hfR,afR]=await Promise.all([
+      fetchWithRetry(`${API}/predict`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({home_team:home,away_team:away})},{onRetry}),
+      fetchWithRetry(`${API}/h2h?home_team=${encodeURIComponent(home)}&away_team=${encodeURIComponent(away)}`,{},{onRetry}),
+      fetchWithRetry(`${API}/form/${encodeURIComponent(home)}`,{},{onRetry}),
+      fetchWithRetry(`${API}/form/${encodeURIComponent(away)}`,{},{onRetry})
+    ]);
     const[pD,hD,hfD,afD]=await Promise.all([pR.json(),hR.json(),hfR.json(),afR.json()]);
     showResult(pD,hD,hfD,afD,home,away);
   }catch(e){errorMsg.textContent='❌ 서버 연결 오류. 잠시 후 다시 시도해주세요.';errorMsg.style.display='block';}
-  finally{document.querySelector('.predict-btn').disabled=false;document.querySelector('.predict-btn').textContent='🔮 경기 예측하기';}
+  finally{btn.disabled=false;btn.textContent='🔮 경기 예측하기';}
 }
 
 function showResult(data,h2h,homeForm,awayForm,home,away){
