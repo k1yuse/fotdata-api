@@ -531,7 +531,41 @@ def get_accuracy():
     
     with open(accuracy_path, 'r', encoding='utf-8') as f:
         return _json.load(f)
-        
+
+@app.get("/predict/track-record")
+def get_track_record():
+    """AI 예측 트랙레코드 — update_data.py가 매일 그 시점에 실제 서빙 중인 /predict를
+    호출해 미리 기록해두고, 경기가 끝나면 실제 결과와 대조해 채워넣은 로그(prediction_log.json)의
+    요약 + 최근 완료 경기 목록"""
+    log_path = os.path.join(MODEL_DIR, "prediction_log.json")
+    empty = {"summary": {"total_logged": 0}, "recent": []}
+    if not os.path.exists(log_path):
+        return empty
+
+    with open(log_path, 'r', encoding='utf-8') as f:
+        log = _json.load(f)
+
+    resolved = [e for e in log.values() if e.get("actual") is not None]
+    resolved.sort(key=lambda e: e["date"])
+    if not resolved:
+        return empty
+
+    recent = resolved[-50:]
+    total_correct = sum(1 for e in resolved if e["correct"])
+    recent_correct = sum(1 for e in recent if e["correct"])
+
+    return {
+        "summary": {
+            "total_logged": len(resolved),
+            "total_correct": total_correct,
+            "accuracy_pct": round(total_correct / len(resolved) * 100, 1),
+            "recent_n": len(recent),
+            "recent_correct": recent_correct,
+            "recent_accuracy_pct": round(recent_correct / len(recent) * 100, 1),
+        },
+        "recent": list(reversed(recent[-20:])),
+    }
+
 @app.get("/players/topscorers/{league_code}")
 def get_top_scorers(league_code: str):
     """리그별 득점왕"""

@@ -70,7 +70,9 @@ fotdata-api/
     ├── champion_predictions.json # 5대리그 우승/TOP4/강등 확률 (몬테카를로 1000회)
     ├── players.json               # 득점왕/도움왕 (현재 EPL만)
     ├── schedule.json              # 5대리그+UCL 26-27 시즌 전체 일정 (완료+예정) — 일정 탭 전용
-    └── team_info.json             # 팀 상세정보(홈구장/창단연도/구단색/감독/스쿼드) — 팀 클릭 정보 패널용
+    ├── team_info.json             # 팀 상세정보(홈구장/창단연도/구단색/감독/스쿼드) — 팀 클릭 정보 패널용
+    ├── team_extra.json            # API-Football 스쿼드 사진/등번호 + 이적 기록 (현재 EPL 20팀 중 16팀만, 2026-09-20 추가)
+    └── prediction_log.json        # AI 예측 트랙레코드 로그 (2026-09-21 추가, 5.6 참고)
 ```
 
 ### 4.1 `index.html` = `landing.html`의 사본 — 반드시 동기화
@@ -117,6 +119,14 @@ cp landing.html index.html
 - **선수 사진은 이 API에 필드 자체가 없음.** API-Football(별도 키)에는 있지만 그쪽은 EPL·2024 시즌 고정이라 현재 스쿼드와 안 맞음 — 사진 기능은 보류
 - 스쿼드는 시즌 중 이적으로 계속 바뀌므로, 로고와 달리 "누락분만" 채우는 게 아니라 매번 전체 팀을 다시 fetch함 (일일 자동 업데이트에 포함됨, `FOOTBALL_API_KEY`만 있으면 되므로 GitHub Actions에서도 정상 동작)
 
+### 5.6 AI 예측 트랙레코드 (`update_prediction_log`, update_data.py · 2026-09-21 추가)
+- 예측 신뢰도를 보여주기 위해, 매일 그 시점에 예정된 경기들(향후 10일 내)에 대해 **모델 로직을 재구현하지 않고 그 순간 실제 서빙 중인 라이브 `/predict`를 그대로 호출**해서 `fotdata_model/prediction_log.json`에 미리 스냅샷 기록해둠 — main.py와 별도로 예측 로직을 두 군데서 관리하면 언젠가 어긋나서 "기록된 예측"이 실제로 사용자가 봤던 예측과 달라지는 문제를 원천 차단하기 위한 설계
+- `update_data.py` 실행 순서상 모델 재학습 이후 & git push 이전에 실행되므로, 그날 아직 배포 안 된 새 모델이 아니라 "그 시점까지 실제로 서빙 중이던" 모델의 예측이 기록됨 (의도된 동작)
+- 경기가 끝나면(schedule.json의 status가 FINISHED) 같은 로그 항목에 실제 결과·적중 여부(`actual`/`actual_score`/`correct`)를 채워넣음
+- 결과가 확정된 항목은 최근 500건만 유지, 미확정(예정) 항목은 개수 제한 없이 계속 보관
+- 프론트: `/predict` 결과 하단 "AI 모델 정확도 ... · 트랙레코드 보기" 문구 클릭 → 모달로 전체/최근 적중률 + 최근 20경기 예측-결과 비교 표시 (`/predict/track-record`)
+- **첫 배포 직후에는 기록이 비어 있는 게 정상** — GitHub Actions가 매일 돌 때마다 그날 예정 경기들의 예측이 쌓이고, 그 경기들이 끝나야 적중 여부가 채워지므로 실제 트랙레코드가 유의미해지기까지 며칠~1주 정도 걸림
+
 ## 6. API 엔드포인트 (main.py)
 
 | Method | Path | 설명 |
@@ -135,6 +145,9 @@ cp landing.html index.html
 | GET | `/predict/champion/{league_code}` | 리그 우승 예측 |
 | GET | `/schedule/{league_code}` | 리그 전체 시즌 일정 (완료+예정 전부) |
 | GET | `/team/info/{team_name}` | 팀 상세정보 (홈구장/창단연도/구단색/감독/스쿼드) |
+| GET | `/teams/prestige` | 팀별 prestige 맵 (전역 검색 기본 정렬용, 2026-09-20 추가) |
+| GET | `/proxy/logo?url=` | 팀 로고 이미지 프록시 (2026-09-21 추가) — crests.football-data.org/wikimedia는 CORS 헤더가 없어서 프론트 `<canvas>`(예측 결과 공유카드)에 바로 그리면 tainted되어 내보내기가 막힘; 허용된 두 호스트로만 제한해 우리 서버(CORS 전체 허용)를 거쳐 내려줌 |
+| GET | `/predict/track-record` | AI 예측 트랙레코드 요약 + 최근 20경기 (2026-09-21 추가, 5.6 참고) |
 
 리그 코드: `PL`(EPL), `PD`(라리가), `BL1`(분데스리가), `SA`(세리에A), `FL1`(리그앙), `CL`(UCL)
 
@@ -146,6 +159,7 @@ cp landing.html index.html
    - ⚠️ 이 워크플로우에는 `FOOTBALL_API_KEY`만 GitHub Secrets로 주입됨. `API_FOOTBALL_KEY`는 설정돼 있지 않아서, GitHub Actions 실행에서는 `fetch_top_scorers()`가 조용히 스킵된다 — 선수 데이터는 현재 **로컬에서 수동 실행할 때만** 갱신 가능. 자동화하려면 `API_FOOTBALL_KEY`도 GitHub Secrets에 추가해야 함.
    - Render 무료 플랜은 아웃바운드 API 호출이 막혀 있어서, 모든 외부 데이터(football-data.org, API-Football)는 반드시 GitHub Actions/로컬에서 미리 fetch해 JSON/CSV 캐시로 만든 뒤 서빙해야 한다. Render 서버가 직접 외부 API를 호출하는 코드는 작동하지 않는다.
    - `API_FOOTBALL_KEY`를 GitHub Secrets에 넣지 않은 것은 의도적인 선택이다: API-Football 무료 플랜은 2024 시즌 데이터만 제공해서, 자동화해도 최신 시즌 선수 스탯은 어차피 못 가져온다. 유료 플랜(Pro, $19/월)으로 업그레이드하기 전까지는 선수 데이터는 로컬에서 수동으로만 `python update_data.py`를 돌려 갱신한다.
+   - `update_prediction_log()`(5.6)는 GitHub Actions 러너에서 **Render 배포 API로 직접 HTTP 요청**을 보낸다(로컬/러너 → Render는 인바운드라 문제 없음, Render 무료 플랜의 아웃바운드 제한과는 무관). 그 시점에 Render가 자고 있으면 첫 호출에서 콜드스타트(~50초)가 걸릴 수 있어 타임아웃을 60초로 넉넉히 잡아둠.
 
 ## 8. 환경 세팅 (맥북 기준)
 
@@ -182,6 +196,7 @@ python update_data.py
 - `FotData_01.ipynb`는 초기 개발 단계(Stage 0~1 초반)의 유물로, 현재는 `update_data.py`가 전체 파이프라인(수집→피처→학습→저장)을 대체함. 노트북은 과거 히스토리 참고용이며 실행 경로가 아님.
 - 시즌 종료 배너(`FotData.html`/`landing.html`에 HTML 주석으로 비활성화됨)는 27-28 시즌 전환 시점에 재활성화 예정.
 - ~~자동 업데이트 워크플로우 커밋/푸시 간헐적 실패~~ → 2026-09-19에 `.github/workflows/update_data.yml` 수정. 원인: GitHub Actions 러너가 큐에서 오래 대기하다 실행되면(수 시간 지연도 발생 가능) 그 사이 다른 커밋이 먼저 push될 수 있는데, 기존 `git pull --rebase origin main || true`는 `update_data.py`가 이미 워킹트리를 건드려놓은 상태라 원격이 움직였을 때 항상 실패하고 그 에러가 `|| true`에 조용히 삼켜져서, 결국 낡은 베이스 위에 커밋 → `push --force-with-lease` 거절로 이어짐. `git fetch` + `git reset`(mixed) + 재시도 루프로 교체해 해결. (`--soft`로 하면 인덱스가 안 갱신돼서 체크아웃 이후 원격에 새로 추가된 파일이 다음 커밋에서 삭제된 것처럼 처리되는 별도 버그가 있으니 반드시 기본/`--mixed` reset을 쓸 것.)
+- **(2026-09-21 발견, 미해결) 로컬 conda `fotdata` 환경에서 `import sklearn`이 아예 실패함** — `scipy/sparse/linalg/_propack/_spropack...so` 로드 시 `ImportError: ... section '__DATA/__thread_bss' has a zero-fill section type, but offset field is not zero`. scipy 바이너리가 현재 macOS/Xcode 툴체인과 안 맞는 것으로 보이며, 아마 OS 업데이트 이후 생긴 문제(맥북 M5). **이 상태에서는 로컬에서 `python update_data.py`/`uvicorn main:app` 둘 다 기동 자체가 안 됨** — 선수 데이터 수동 갱신(7번 참고)이나 로컬 백엔드 테스트가 필요할 때 먼저 이것부터 고쳐야 함. 시도해볼 것: `conda install -c conda-forge scipy --force-reinstall` 또는 `pip install --force-reinstall --no-binary scipy scipy`로 현재 아키텍처에 맞게 재빌드.
 
 ## 11. 시즌 전환 체크리스트 (매년 반복 작업)
 

@@ -671,6 +671,108 @@ def fetch_full_schedule():
     with open(f"{MODEL_DIR}/schedule.json", 'w', encoding='utf-8') as f:
         json.dump(schedule, f, ensure_ascii=False, indent=2)
     print(f"  ✅ schedule.json 저장 완료")
+    return schedule
+
+def update_prediction_log(schedule):
+    """
+    AI 예측 트랙레코드용 로그 갱신 (fotdata_model/prediction_log.json).
+    - 모델 예측 로직을 여기서 재구현하지 않고, 그 시점에 실제 서빙 중인 라이브
+      /predict를 그대로 호출해서 예정 경기들의 예측을 미리 스냅샷으로 저장해둔다.
+      main.py와 별도로 예측 로직을 두 군데 관리하면 언젠가 반드시 어긋나서
+      "기록된 예측"과 "그때 사용자가 실제로 본 예측"이 달라지는 문제가 생기므로,
+      항상 라이브 API 응답을 그대로 기록하는 방식으로 그 문제 자체를 없앤다.
+    - 이미 기록된 예측 중 경기가 끝난 것들은 실제 결과와 대조해 적중 여부를 채운다.
+    """
+    import json
+    print("\n[예측 트랙레코드] 갱신 중...")
+    API_BASE = "https://fotdata-api.onrender.com"
+    log_path = f"{MODEL_DIR}/prediction_log.json"
+
+    log = {}
+    if os.path.exists(log_path):
+        with open(log_path, 'r', encoding='utf-8') as f:
+            log = json.load(f)
+
+    now = pd.Timestamp.utcnow().tz_localize(None)
+
+    # 1) 완료된 경기 결과로 기존 로그 백필
+    filled = 0
+    for code, rows in schedule.items():
+        for m in rows:
+            if m["status"] != "FINISHED" or m["home_goals"] is None or m["away_goals"] is None:
+                continue
+            key = f"{code}|{m['home_team']}|{m['away_team']}|{m['date'][:10]}"
+            entry = log.get(key)
+            if not entry or entry.get("actual") is not None:
+                continue
+            hg, ag = m["home_goals"], m["away_goals"]
+            actual = "home_win" if hg > ag else ("away_win" if hg < ag else "draw")
+            entry["actual"] = actual
+            entry["actual_score"] = f"{hg}-{ag}"
+            entry["correct"] = (actual == entry["predicted"])
+            filled += 1
+    if filled:
+        print(f"  ✅ {filled}건 결과 대조 완료")
+
+    # 2) 새로 예정된 경기들 미리 예측해서 기록 (앞으로 10일 내, 아직 안 찍힌 것만)
+    horizon = now + pd.Timedelta(days=10)
+    logged = 0
+    for code, rows in schedule.items():
+        for m in rows:
+            if m["status"] not in ("SCHEDULED", "TIMED"):
+                continue
+            try:
+                match_dt = pd.Timestamp(m["date"]).tz_localize(None)
+            except Exception:
+                continue
+            if not (now < match_dt <= horizon):
+                continue
+            key = f"{code}|{m['home_team']}|{m['away_team']}|{m['date'][:10]}"
+            if key in log:
+                continue
+            try:
+                resp = requests.post(
+                    f"{API_BASE}/predict",
+                    json={"home_team": m["home_team"], "away_team": m["away_team"]},
+                    timeout=60,
+                )
+                if resp.status_code != 200:
+                    continue
+                pred = resp.json()
+                log[key] = {
+                    "league": code,
+                    "home_team": m["home_team"],
+                    "away_team": m["away_team"],
+                    "date": m["date"],
+                    "predicted": pred["prediction"],
+                    "home_win_prob": pred["probabilities"]["home_win"],
+                    "draw_prob": pred["probabilities"]["draw"],
+                    "away_win_prob": pred["probabilities"]["away_win"],
+                    "predicted_score": (pred.get("score_prediction") or {}).get("most_likely"),
+                    "logged_at": now.isoformat(),
+                    "actual": None,
+                    "actual_score": None,
+                    "correct": None,
+                }
+                logged += 1
+                time.sleep(1)
+            except Exception as e:
+                print(f"  ⚠️ 예측 기록 실패 ({m['home_team']} vs {m['away_team']}): {e}")
+    if logged:
+        print(f"  ✅ {logged}건 신규 예측 기록")
+
+    # 3) 로그 크기 관리 — 결과가 확정된 것 중 오래된 건 정리(최근 500건만 유지), 미확정 건은 계속 보관
+    resolved_keys = sorted(
+        [k for k, e in log.items() if e.get("actual") is not None],
+        key=lambda k: log[k]["date"],
+    )
+    if len(resolved_keys) > 500:
+        for k in resolved_keys[:-500]:
+            del log[k]
+
+    with open(log_path, 'w', encoding='utf-8') as f:
+        json.dump(log, f, ensure_ascii=False, indent=2)
+    print(f"  ✅ prediction_log.json 저장 완료 (총 {len(log)}건, 결과 확정 {len(resolved_keys)}건)")
 
 def fetch_ucl_tournament():
     import json
@@ -840,7 +942,15 @@ def main():
     fetch_ucl_tournament()
 
     # 전체 일정 (일정 탭용)
-    fetch_full_schedule()
+    schedule = fetch_full_schedule()
+
+    # AI 예측 트랙레코드 (라이브 /predict를 호출하므로 반드시 위 모델 학습 이후,
+    # 그리고 아직 이번 실행분 커밋을 push하기 전에 실행 — 그래야 "그 시점에 실제
+    # 서빙 중이던 모델"의 예측을 기록하게 됨)
+    try:
+        update_prediction_log(schedule)
+    except Exception as e:
+        print(f"⚠️ 예측 트랙레코드 갱신 실패(다음 실행에서 재시도): {e}")
 
     fetch_top_scorers()
 
