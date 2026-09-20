@@ -65,10 +65,10 @@
     .ucl-subtab:hover { border-color: #58a6ff; color: #e6edf3; }
     .ucl-subtab.active { background: #1f4e8c; border-color: #58a6ff; color: #58a6ff; }
 
-    .standings-table { width: 100%; max-width: 1100px; margin: 0 auto; border-collapse: collapse; }
+    .standings-table { width: 100%; max-width: 1100px; margin: 0 auto; border-collapse: separate; border-spacing: 0; }
     .standings-table th { font-size: 11px; color: #8b949e; text-align: left; padding: 8px 12px; border-bottom: 0.5px solid #30363d; }
     @media (min-width: 769px) {
-      .standings-table th { position: sticky; top: var(--nav-height, 60px); background: #161b22; z-index: 5; }
+      .standings-table th { position: sticky; top: var(--nav-height, 60px); background: #161b22; z-index: 5; box-shadow: 0 1px 0 #30363d; }
     }
     .standings-table th.center { text-align: center; }
     .standings-table td { padding: 10px 12px; border-bottom: 0.5px solid #21262d; font-size: 13px; }
