@@ -82,9 +82,44 @@ MAX_GOALS = 6             # 이보다 큰 스코어는 확률이 미미해 계�
 def poisson_pmf(k: int, lam: float) -> float:
     return math.exp(-lam) * (lam ** k) / math.factorial(k)
 
-def predict_score(home_attack, away_defense, away_attack, home_defense, prediction):
-    lambda_home = max(0.3, (home_attack + away_defense) / 2 * HOME_GOAL_BOOST)
-    lambda_away = max(0.3, (away_attack + home_defense) / 2 * AWAY_GOAL_PENALTY)
+def _home_away_gap(lambda_home, lambda_away):
+    """포아송(홈,원정) 조합에서 내재적으로 함의되는 (홈승률 - 원정승률)"""
+    total_p = home_p = away_p = 0.0
+    for i in range(MAX_GOALS + 1):
+        for j in range(MAX_GOALS + 1):
+            p = poisson_pmf(i, lambda_home) * poisson_pmf(j, lambda_away)
+            total_p += p
+            if i > j: home_p += p
+            elif i < j: away_p += p
+    return (home_p - away_p) / total_p
+
+def _solve_lambdas(base_home, base_away, target_gap, iterations=25):
+    """
+    승/무/패 예측 모델(ELO+prestige+홈어드밴티지 등 반영)이 내놓은 승률 격차와
+    스코어 예측(포아송)이 내놓는 격차가 서로 다른 모델이라 어긋나는 문제를 보정한다.
+    총 기대득점(base_home+base_away, 팀 득실점 스탯 기반의 "경기 페이스")은 그대로 유지한 채,
+    홈/원정 배분 비율만 이분탐색으로 조정해서 "포아송이 내재적으로 함의하는 홈-원정 승률차"가
+    실제 모델이 내놓은 승률차와 같아지게 만든다 — 이러면 압도적 승률일수록 스코어도
+    자연스럽게 압도적으로(예: 3-0, 4-1) 나오게 된다.
+    """
+    total = base_home + base_away
+    lo, hi = -total * 0.49, total * 0.49
+    mid = 0.0
+    for _ in range(iterations):
+        mid = (lo + hi) / 2
+        lh = max(0.15, total / 2 + mid)
+        la = max(0.15, total / 2 - mid)
+        gap = _home_away_gap(lh, la)
+        if gap < target_gap:
+            lo = mid
+        else:
+            hi = mid
+    return max(0.15, total / 2 + mid), max(0.15, total / 2 - mid)
+
+def predict_score(home_attack, away_defense, away_attack, home_defense, prediction, home_win_prob, away_win_prob):
+    base_home = max(0.3, (home_attack + away_defense) / 2 * HOME_GOAL_BOOST)
+    base_away = max(0.3, (away_attack + home_defense) / 2 * AWAY_GOAL_PENALTY)
+    lambda_home, lambda_away = _solve_lambdas(base_home, base_away, home_win_prob - away_win_prob)
 
     score_probs = []
     for i in range(MAX_GOALS + 1):
@@ -209,7 +244,7 @@ def predict_match(req: MatchRequest):
     score_prediction = predict_score(
         home_attack=float(h['attack_strength']), away_defense=float(a['defense_strength']),
         away_attack=float(a['attack_strength']), home_defense=float(h['defense_strength']),
-        prediction=prediction,
+        prediction=prediction, home_win_prob=h_prob, away_win_prob=a_prob,
     )
 
     return {
