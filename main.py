@@ -251,6 +251,14 @@ def get_team_stats(team_name: str):
         "win_rate":         round(float(t['win_rate']), 3),
         "prestige":         round(float(t['prestige']), 1),
     }
+
+@app.get("/teams/prestige")
+def get_teams_prestige():
+    """전체 팀의 체급(prestige) 목록 — 팀 검색창 기본 정렬(파워랭킹순)용"""
+    return {
+        row['team']: round(float(row['prestige']), 1)
+        for _, row in df_stats.iterrows()
+    }
 # ── 로고 API 추가 ──
 # ── 로고 API 추가 ──
 @app.get("/logos")

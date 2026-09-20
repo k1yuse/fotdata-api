@@ -120,6 +120,7 @@
     .player-hero-stat { text-align: right; flex-shrink: 0; }
     .player-hero-value { font-size: 32px; font-weight: 800; color: #f0c040; line-height: 1; }
     .player-hero-unit { display: block; font-size: 11px; color: #8b949e; margin-top: 2px; }
+    .player-hero-rating { font-size: 10px; color: #8b949e; margin-top: 4px; }
     @media (max-width: 480px) {
       .player-hero { gap: 12px; padding: 14px 12px; }
       .player-hero-photo { width: 52px; height: 52px; }
@@ -244,7 +245,8 @@
     .team-box label { font-size: 12px; color: #8b949e; text-transform: uppercase; letter-spacing: 1px; }
     .team-logo-wrap { width: 80px; height: 80px; border-radius: 50%; background: #21262d; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 8px; flex-shrink: 0; border: 3px solid transparent; transition: border-color .4s ease, box-shadow .4s ease; }
     .team-logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
-    .team-logo-wrap span { font-size: 28px; }
+    .team-logo-placeholder { display: flex; align-items: flex-end; gap: 4px; height: 30px; }
+    .team-logo-placeholder div { width: 5px; background: #484f58; border-radius: 1px 1px 0 0; }
     .league-badge-sm { font-size: 11px; color: #8b949e; display: flex; align-items: center; gap: 4px; min-height: 16px; }
     .league-badge-sm img { width: 12px; height: 12px; object-fit: contain; }
     .vs-center { font-size: 22px; font-weight: 700; color: #8b949e; margin-top: 50px; }
@@ -260,19 +262,18 @@
     .popup-search-input:focus { outline: none; border-color: #58a6ff; }
     .popup-close { color: #8b949e; cursor: pointer; font-size: 16px; padding: 4px 8px; }
     .popup-close:hover { color: #e6edf3; }
-    .popup-league-tabs { display: flex; border-bottom: 0.5px solid #30363d; overflow-x: auto; }
-    .popup-league-tabs::-webkit-scrollbar { display: none; }
-    .pltab { padding: 9px 12px; font-size: 12px; color: #8b949e; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
-    .pltab:hover { color: #e6edf3; }
-    .pltab.active { color: #58a6ff; border-bottom-color: #58a6ff; }
-    .pltab img { width: 14px; height: 14px; object-fit: contain; }
-    .popup-team-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; padding: 12px; max-height: 220px; overflow-y: auto; }
-    .popup-team-grid::-webkit-scrollbar { width: 4px; }
-    .popup-team-grid::-webkit-scrollbar-thumb { background: #30363d; border-radius: 2px; }
-    .popup-team-item { display: flex; align-items: center; gap: 7px; padding: 7px 9px; background: #21262d; border-radius: 8px; cursor: pointer; font-size: 11px; border: 0.5px solid transparent; transition: all .15s; }
-    .popup-team-item:hover { border-color: #58a6ff; background: #1a2a3a; }
-    .popup-team-item.selected { background: #1f4e8c; border-color: #58a6ff; color: #58a6ff; }
-    .popup-team-item img { width: 18px; height: 18px; object-fit: contain; border-radius: 50%; flex-shrink: 0; }
+    .popup-league-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 12px 14px; border-bottom: 0.5px solid #30363d; }
+    .popup-league-btn { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 8px; background: #21262d; border: 0.5px solid #30363d; border-radius: 8px; color: #8b949e; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .15s; }
+    .popup-league-btn img { width: 16px; height: 16px; object-fit: contain; flex-shrink: 0; }
+    .popup-league-btn:hover { border-color: #58a6ff; color: #e6edf3; }
+    .popup-league-btn.active { background: #1f4e8c; border-color: #58a6ff; color: #58a6ff; }
+    .popup-team-list { display: flex; flex-direction: column; padding: 8px; max-height: 260px; overflow-y: auto; gap: 2px; }
+    .popup-team-row { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; cursor: pointer; font-size: 13px; color: #e6edf3; transition: background .1s; }
+    .popup-team-row:hover { background: #21262d; }
+    .popup-team-row.selected { background: #1f4e8c; color: #58a6ff; }
+    .popup-team-row img { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
+    .popup-team-list::-webkit-scrollbar { width: 4px; }
+    .popup-team-list::-webkit-scrollbar-thumb { background: #30363d; border-radius: 2px; }
     .predict-btn { width: 100%; padding: 14px; background: #238636; border: none; border-radius: 10px; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
     .predict-btn:hover { background: #2ea043; }
     .predict-btn:disabled { background: #30363d; cursor: not-allowed; }
@@ -330,7 +331,6 @@
       .nav-tab { padding: 14px 8px; font-size: 12.5px; }
       .container { padding: 16px; }
       .team-popup { width: 320px; }
-      .popup-team-grid { grid-template-columns: repeat(2,1fr); }
       .standings-table { min-width: 560px; }
       #standings-content { overflow-x: auto; -webkit-overflow-scrolling: touch; }
       .standings-table .hide-mobile { display: none; }
@@ -554,7 +554,7 @@
       <div class="team-selector">
         <div class="team-box">
           <label>홈팀</label>
-          <div class="team-logo-wrap" id="home-logo"><span>⚽</span></div>
+          <div class="team-logo-wrap" id="home-logo"><div class="team-logo-placeholder"><div style="height:14px"></div><div style="height:22px"></div><div style="height:12px"></div><div style="height:26px"></div><div style="height:17px"></div></div></div>
           <div class="league-badge-sm" id="home-league"></div>
           <div class="popup-relative">
             <div class="select-trigger" id="home-trigger" onclick="togglePopup('home')">
@@ -566,23 +566,22 @@
                 <input class="popup-search-input" id="home-search" placeholder="팀 검색..." oninput="filterTeams('home', this.value)">
                 <span class="popup-close" onclick="closePopup('home')">✕</span>
               </div>
-              <div class="popup-league-tabs">
-                <div class="pltab active" onclick="selectLeagueTab('home','all',this)">전체</div>
-                <div class="pltab" onclick="selectLeagueTab('home','EPL',this)"><img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> EPL</div>
-                <div class="pltab" onclick="selectLeagueTab('home','LaLiga',this)"><img src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'"> 라리가</div>
-                <div class="pltab" onclick="selectLeagueTab('home','Bundesliga',this)"><img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'"> 분데스</div>
-                <div class="pltab" onclick="selectLeagueTab('home','SerieA',this)"><img src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'"> 세리에A</div>
-                <div class="pltab" onclick="selectLeagueTab('home','Ligue1',this)"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'"> 리그앙</div>
-                <div class="pltab" onclick="selectLeagueTab('home','UCL',this)"><img src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> UCL</div>
+              <div class="popup-league-grid">
+                <div class="popup-league-btn active" onclick="selectLeagueTab('home','EPL',this)"><img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> EPL</div>
+                <div class="popup-league-btn" onclick="selectLeagueTab('home','LaLiga',this)"><img src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'"> 라리가</div>
+                <div class="popup-league-btn" onclick="selectLeagueTab('home','Bundesliga',this)"><img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'"> 분데스</div>
+                <div class="popup-league-btn" onclick="selectLeagueTab('home','SerieA',this)"><img src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'"> 세리에A</div>
+                <div class="popup-league-btn" onclick="selectLeagueTab('home','Ligue1',this)"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'"> 리그앙</div>
+                <div class="popup-league-btn" onclick="selectLeagueTab('home','UCL',this)"><img src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> UCL</div>
               </div>
-              <div class="popup-team-grid" id="home-team-grid"></div>
+              <div class="popup-team-list" id="home-team-grid"></div>
             </div>
           </div>
         </div>
         <div class="vs-center">VS</div>
         <div class="team-box">
           <label>원정팀</label>
-          <div class="team-logo-wrap" id="away-logo"><span>⚽</span></div>
+          <div class="team-logo-wrap" id="away-logo"><div class="team-logo-placeholder"><div style="height:14px"></div><div style="height:22px"></div><div style="height:12px"></div><div style="height:26px"></div><div style="height:17px"></div></div></div>
           <div class="league-badge-sm" id="away-league"></div>
           <div class="popup-relative">
             <div class="select-trigger" id="away-trigger" onclick="togglePopup('away')">
@@ -594,16 +593,15 @@
                 <input class="popup-search-input" id="away-search" placeholder="팀 검색..." oninput="filterTeams('away', this.value)">
                 <span class="popup-close" onclick="closePopup('away')">✕</span>
               </div>
-              <div class="popup-league-tabs">
-                <div class="pltab active" onclick="selectLeagueTab('away','all',this)">전체</div>
-                <div class="pltab" onclick="selectLeagueTab('away','EPL',this)"><img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> EPL</div>
-                <div class="pltab" onclick="selectLeagueTab('away','LaLiga',this)"><img src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'"> 라리가</div>
-                <div class="pltab" onclick="selectLeagueTab('away','Bundesliga',this)"><img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'"> 분데스</div>
-                <div class="pltab" onclick="selectLeagueTab('away','SerieA',this)"><img src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'"> 세리에A</div>
-                <div class="pltab" onclick="selectLeagueTab('away','Ligue1',this)"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'"> 리그앙</div>
-                <div class="pltab" onclick="selectLeagueTab('away','UCL',this)"><img src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> UCL</div>
+              <div class="popup-league-grid">
+                <div class="popup-league-btn active" onclick="selectLeagueTab('away','EPL',this)"><img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> EPL</div>
+                <div class="popup-league-btn" onclick="selectLeagueTab('away','LaLiga',this)"><img src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'"> 라리가</div>
+                <div class="popup-league-btn" onclick="selectLeagueTab('away','Bundesliga',this)"><img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'"> 분데스</div>
+                <div class="popup-league-btn" onclick="selectLeagueTab('away','SerieA',this)"><img src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'"> 세리에A</div>
+                <div class="popup-league-btn" onclick="selectLeagueTab('away','Ligue1',this)"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'"> 리그앙</div>
+                <div class="popup-league-btn" onclick="selectLeagueTab('away','UCL',this)"><img src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> UCL</div>
               </div>
-              <div class="popup-team-grid" id="away-team-grid"></div>
+              <div class="popup-team-list" id="away-team-grid"></div>
             </div>
           </div>
         </div>
@@ -748,7 +746,7 @@ function wakingUpHtml(attempt, retries) {
 
 let logos = {};
 let selectedTeams = { home: '', away: '' };
-let currentLeagueTab = { home: 'all', away: 'all' };
+let currentLeagueTab = { home: 'EPL', away: 'EPL' };
 let tournamentData = null;
 let flatMatches = [];
 
@@ -814,6 +812,8 @@ async function loadTournament() {
 }
 
 function escJs(str) { return String(str).replace(/'/g, "\\'"); }
+
+const TEAM_LOGO_PLACEHOLDER = '<div class="team-logo-placeholder"><div style="height:14px"></div><div style="height:22px"></div><div style="height:12px"></div><div style="height:26px"></div><div style="height:17px"></div></div>';
 
 function skeletonRows(n, opts = {}) {
   const widths = opts.widths || ['60%', '30%'];
@@ -1079,13 +1079,24 @@ let teamStatsCache = {};
 let standingsCache = {};
 let tiState = { team: null, code: null, tab: 'overview' };
 
+let teamPrestigeCache = null;
 function getAllTeamsForSearch() {
   const seen = new Set();
   const all = [];
   Object.values(LEAGUE_DATA).forEach(d => {
     d.teams.forEach(t => { if (!seen.has(t)) { seen.add(t); all.push(t); } });
   });
+  if (teamPrestigeCache) {
+    return all.sort((a, b) => (teamPrestigeCache[b] ?? -999) - (teamPrestigeCache[a] ?? -999));
+  }
   return all.sort((a, b) => cleanTeamName(a).localeCompare(cleanTeamName(b)));
+}
+async function ensureTeamPrestigeLoaded() {
+  if (teamPrestigeCache) return;
+  try {
+    const res = await fetch(`${API}/teams/prestige`);
+    teamPrestigeCache = await res.json();
+  } catch (e) { teamPrestigeCache = {}; }
 }
 function renderGlobalSearchResults(query) {
   const container = document.getElementById('team-search-results');
@@ -1093,7 +1104,7 @@ function renderGlobalSearchResults(query) {
   const q = query.trim().toLowerCase();
   const filtered = q ? all.filter(t => t.toLowerCase().includes(q) || cleanTeamName(t).toLowerCase().includes(q)) : all;
   if (!filtered.length) { container.innerHTML = '<div class="ti-empty">검색 결과가 없어요.</div>'; return; }
-  container.innerHTML = filtered.slice(0, 40).map(t => `
+  container.innerHTML = filtered.map(t => `
     <div class="team-search-item" onclick="selectGlobalSearchResult('${escJs(t)}')">
       <img src="${logos[t] || ''}" onerror="this.style.display='none'">
       <span>${cleanTeamName(t)}</span>
@@ -1105,13 +1116,15 @@ function selectGlobalSearchResult(team) {
   closeTeamSearch();
   openTeamInfo(team);
 }
-function openTeamSearch() {
+async function openTeamSearch() {
   const modal = document.getElementById('team-search-modal');
   modal.classList.add('show');
   const input = document.getElementById('team-search-input');
   input.value = '';
   renderGlobalSearchResults('');
   setTimeout(() => input.focus(), 50);
+  await ensureTeamPrestigeLoaded();
+  if (!input.value) renderGlobalSearchResults('');
 }
 function closeTeamSearch(e) {
   if (!e || e.target === document.getElementById('team-search-modal')) {
@@ -1321,11 +1334,10 @@ function closeTeamInfoModal(e) { if (!e || e.target === document.getElementById(
 function getTeamLeague(team) { for (const [key,data] of Object.entries(LEAGUE_DATA)) { if (key!=='UCL'&&data.teams.includes(team)) return data; } return null; }
 function renderTeamGrid(side, leagueKey, search='') {
   const grid = document.getElementById(`${side}-team-grid`);
-  let teams = [];
-  if (leagueKey==='all') { const seen=new Set(); Object.entries(LEAGUE_DATA).forEach(([k,d])=>{if(k==='UCL')return;d.teams.forEach(t=>{if(!seen.has(t)){seen.add(t);teams.push(t);}});}); teams.sort(); }
-  else { teams=[...(LEAGUE_DATA[leagueKey]?.teams||[])].sort(); }
+  let teams = [...(LEAGUE_DATA[leagueKey]?.teams||[])].sort((a,b)=>cleanTeamName(a).localeCompare(cleanTeamName(b)));
   if (search) teams=teams.filter(t=>t.toLowerCase().includes(search.toLowerCase()));
-  grid.innerHTML=teams.map(t=>`<div class="popup-team-item ${selectedTeams[side]===t?'selected':''}" onclick="selectTeamFromPopup('${side}','${t.replace(/'/g,"\\'")}')"><img src="${logos[t]||''}" onerror="this.style.display='none'" style="width:18px;height:18px;object-fit:contain;border-radius:50%;flex-shrink:0"><span style="line-height:1.3;overflow:hidden;text-overflow:ellipsis">${t.replace(' FC','').replace(' CF','').replace(' BC','')}</span></div>`).join('');
+  if (!teams.length) { grid.innerHTML = '<div class="ti-empty">검색 결과가 없어요.</div>'; return; }
+  grid.innerHTML=teams.map(t=>`<div class="popup-team-row ${selectedTeams[side]===t?'selected':''}" onclick="selectTeamFromPopup('${side}','${t.replace(/'/g,"\\'")}')"><img src="${logos[t]||''}" onerror="this.style.display='none'"><span>${cleanTeamName(t)}</span></div>`).join('');
 }
 function togglePopup(side) {
   const popup=document.getElementById(`${side}-popup`), other=side==='home'?'away':'home';
@@ -1334,12 +1346,12 @@ function togglePopup(side) {
   if(popup.classList.contains('show')){renderTeamGrid(side,currentLeagueTab[side]);document.getElementById(`${side}-search`).focus();}
 }
 function closePopup(side){document.getElementById(`${side}-popup`).classList.remove('show');document.getElementById(`${side}-trigger`).classList.remove('active');}
-function selectLeagueTab(side,leagueKey,el){currentLeagueTab[side]=leagueKey;el.closest('.popup-league-tabs').querySelectorAll('.pltab').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.getElementById(`${side}-search`).value='';renderTeamGrid(side,leagueKey);}
+function selectLeagueTab(side,leagueKey,el){currentLeagueTab[side]=leagueKey;el.closest('.popup-league-grid').querySelectorAll('.popup-league-btn').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.getElementById(`${side}-search`).value='';renderTeamGrid(side,leagueKey);}
 function filterTeams(side,val){renderTeamGrid(side,currentLeagueTab[side],val);}
 function selectTeamFromPopup(side,team){
   selectedTeams[side]=team; document.getElementById(`${side}-selected-text`).textContent=team; document.getElementById(`${side}-selected-text`).style.color='#e6edf3';
   const logoUrl=logos[team]||''; const logoDiv=document.getElementById(`${side}-logo`);
-  logoDiv.innerHTML=logoUrl?`<img src="${logoUrl}" style="width:100%;height:100%;object-fit:contain" onerror="this.parentNode.innerHTML='<span>⚽</span>'">`:'<span>⚽</span>';
+  logoDiv.innerHTML=logoUrl?`<img src="${logoUrl}" style="width:100%;height:100%;object-fit:contain" onerror="this.parentNode.innerHTML=TEAM_LOGO_PLACEHOLDER">`:TEAM_LOGO_PLACEHOLDER;
   const leagueInfo=getTeamLeague(team); const leagueDiv=document.getElementById(`${side}-league`);
   if(leagueInfo){leagueDiv.innerHTML=`<img src="${leagueInfo.logo}" onerror="this.style.display='none'"> ${leagueInfo.name}`;}
   else{leagueDiv.innerHTML=`<img src="https://crests.football-data.org/CL.png" style="width:12px;height:12px;object-fit:contain"> UEFA 챔피언스리그`;}
@@ -1639,7 +1651,7 @@ function renderPlayerList(players, type) {
             <div class="player-hero-name">${p.player.name}</div>
             <div class="player-hero-team"><img src="${stats.team.logo}" onerror="this.style.display='none'">${stats.team.name}</div>
           </div>
-          <div class="player-hero-stat"><span class="player-hero-value">${value}</span><span class="player-hero-unit">${unit}</span></div>
+          <div class="player-hero-stat"><span class="player-hero-value">${value}</span><span class="player-hero-unit">${unit}</span><div class="player-hero-rating">평점 ${rating}</div></div>
         </div>
       `;
     }
@@ -1879,7 +1891,7 @@ function renderStandings(data,leagueCode){
   html+='</div>'; content.innerHTML=html;
 }
 
-async function loadLogos(){try{const res=await fetchWithRetry(`${API}/logos`);logos=await res.json();}catch(e){console.error('로고 로드 실패');}renderTeamGrid('home','all');renderTeamGrid('away','all');}
+async function loadLogos(){try{const res=await fetchWithRetry(`${API}/logos`);logos=await res.json();}catch(e){console.error('로고 로드 실패');}renderTeamGrid('home','EPL');renderTeamGrid('away','EPL');}
 
 async function loadAccuracy(){
   const note=document.getElementById('model-accuracy-note');
