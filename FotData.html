@@ -40,7 +40,8 @@
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     .page-enter { animation: fadeUp .45s ease both; }
     .page-enter .card, .page-enter > div > .card { animation: fadeUp .45s .05s ease both; }
-    .row-enter { animation: fadeIn .35s ease both; }
+    @keyframes rowSlideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+    .row-enter { animation: rowSlideIn .4s ease both; }
 
     .card { background: #161b22; border: 0.5px solid #30363d; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
     .card-title { font-size: 13px; color: #8b949e; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
@@ -1586,7 +1587,7 @@ function renderStandings(data,leagueCode){
     else{zc=getZoneClass(leagueCode, i, totalTeams);}
     const rc=i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'';
     const fb=team.form.map(f=>`<div class="form-badge ${f}">${f}</div>`).join('');
-    html+=`<tr class="${zc} row-enter" style="animation-delay:${Math.min(i*25,400)}ms"><td><span class="rank-num ${rc}">${team.rank}</span></td><td><div class="team-cell clickable-team" onclick="openTeamInfo('${escJs(team.team)}')"><img src="${team.logo}" width="24" height="24" style="object-fit:contain" onerror="this.style.display='none'"><span>${cleanTeamName(team.team)}${i===0 && !isCL && currentStandingsSeason==='previous' ? ' (우승)' : ''}</span></div></td><td class="center">${team.played}</td><td class="center">${team.wins}</td><td class="center">${team.draws}</td><td class="center">${team.losses}</td><td class="center hide-mobile">${team.gf}</td><td class="center hide-mobile">${team.ga}</td><td class="center" style="color:${team.gd>0?'#238636':team.gd<0?'#da3633':'#8b949e'}">${team.gd>0?'+':''}${team.gd}</td><td class="center"><div class="form-badges">${fb}</div></td><td class="center pts">${team.points}</td></tr>`;
+    html+=`<tr class="${zc} row-enter" style="animation-delay:${Math.min(i*45,650)}ms"><td><span class="rank-num ${rc}">${team.rank}</span></td><td><div class="team-cell clickable-team" onclick="openTeamInfo('${escJs(team.team)}')"><img src="${team.logo}" width="24" height="24" style="object-fit:contain" onerror="this.style.display='none'"><span>${cleanTeamName(team.team)}${i===0 && !isCL && currentStandingsSeason==='previous' ? ' (우승)' : ''}</span></div></td><td class="center">${team.played}</td><td class="center">${team.wins}</td><td class="center">${team.draws}</td><td class="center">${team.losses}</td><td class="center hide-mobile">${team.gf}</td><td class="center hide-mobile">${team.ga}</td><td class="center" style="color:${team.gd>0?'#238636':team.gd<0?'#da3633':'#8b949e'}">${team.gd>0?'+':''}${team.gd}</td><td class="center"><div class="form-badges">${fb}</div></td><td class="center pts">${team.points}</td></tr>`;
   });
   html+='</tbody></table><div style="display:flex;gap:16px;margin-top:12px;font-size:11px;color:#8b949e;flex-wrap:wrap">';
   if(isCL){html+=`<span><span style="display:inline-block;width:10px;height:10px;background:#f0c040;border-radius:1px;margin-right:4px"></span>16강 직행</span><span><span style="display:inline-block;width:10px;height:10px;background:#f0883e;border-radius:1px;margin-right:4px"></span>플레이오프</span>`;}
