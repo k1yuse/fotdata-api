@@ -200,4 +200,5 @@ python update_data.py
 - **수익화 단기**: 도네이션 버튼(Ko-fi), Google AdSense
 - **수익화 중기**: Freemium 구독(Pro 티어), RapidAPI 예측 API 판매
 - **수익화 장기**: 유소년/아마추어팀 대상 SaaS 영상 분석, B2B 대시보드
-- ~~UptimeRobot으로 Render 무료 플랜 슬립 방지 설정 필요~~ → 2026-09-19에 `.github/workflows/keep_alive.yml`로 해결. 참고: 이전에 "cron-job.org로 이미 설정함"이라고 기록된 커밋(`7fc7076`)이 있었는데 실제 diff를 보면 그 내용이 전혀 없었음 — 실제로는 아무 슬립 방지 장치도 없었던 상태였고, 이번에 GitHub Actions 자체 핑(10분 간격)으로 대체함. 앞으로 "설정했다"는 기록은 실제 diff/동작 확인 후에만 남길 것.
+- ~~UptimeRobot으로 Render 무료 플랜 슬립 방지 설정 필요~~ → 2026-09-19에 `.github/workflows/keep_alive.yml`(10분 간격 핑)로 1차 조치했으나, 2026-09-20에 실제 실행 기록(`gh`/GitHub API로 직접 확인)을 보니 GitHub Actions의 `schedule` 크론이 best-effort라 10분 설정이 실제로는 2~5시간 간격으로만 실행되고 있었음 — 그 사이 Render가 슬립해버려 근본적 해결이 안 됐던 상태. **2026-09-20에 cron-job.org(외부 전용 크론 서비스, 10분 간격)로 교체**해 실제 해결. `keep_alive.yml`은 삭제하지 않고 보조 백업으로 유지(있어도 방해 안 됨, 어차피 못 미더우니 주력으로 의존하지 말 것).
+  - 참고: 과거에 "cron-job.org로 이미 설정함"이라고 기록된 커밋(`7fc7076`)이 있었는데 그때는 실제 diff에 아무 내용이 없어 허위 기록이었음 — 이번엔 실제로 cron-job.org 콘솔에서 job 생성 확인 후 기록. 앞으로 "설정했다"는 기록은 반드시 실제 diff/동작(로그, 응답시간 등) 확인 후에만 남길 것.
