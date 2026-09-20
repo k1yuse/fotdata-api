@@ -2349,7 +2349,7 @@ function renderRadarChart(data, h2h, home, away) {
 
 let lastPrediction = null;
 function showResult(data,h2h,homeForm,awayForm,home,away){
-  lastPrediction = { data, home, away };
+  lastPrediction = { data, h2h, home, away };
   const prob=data.probabilities;
   document.getElementById('result-home-logo').src=logos[home]||''; document.getElementById('result-away-logo').src=logos[away]||'';
   document.getElementById('result-home-name').textContent=home; document.getElementById('result-away-name').textContent=away;
@@ -2456,20 +2456,73 @@ function drawImageContain(ctx, img, cx, cy, maxSize) {
   ctx.drawImage(img, cx - w / 2, cy - h / 2, w, h);
 }
 
+// 공유카드 캔버스용 레이더 차트 — 페이지의 SVG 레이더(computeRadarValues/RADAR_AXES 재사용)와
+// 같은 데이터를 캔버스 2D API로 그린 버전
+function drawRadarPolygon(ctx, vals, cx, cy, maxR, color, fillAlpha) {
+  ctx.beginPath();
+  RADAR_AXES.forEach((_, i) => {
+    const a = (Math.PI * 2 * i / RADAR_AXES.length) - Math.PI / 2;
+    const r = maxR * vals[i];
+    const x = cx + r * Math.cos(a), y = cy + r * Math.sin(a);
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.closePath();
+  ctx.globalAlpha = fillAlpha;
+  ctx.fillStyle = color;
+  ctx.fill();
+  ctx.globalAlpha = 1;
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+}
+function drawRadarChartOnCanvas(ctx, homeVals, awayVals, cx, cy, maxR, font) {
+  const n = RADAR_AXES.length;
+  const pointFor = (i, val) => {
+    const a = (Math.PI * 2 * i / n) - Math.PI / 2, r = maxR * val;
+    return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+  };
+  ctx.strokeStyle = '#30363d'; ctx.lineWidth = 1;
+  [0.25, 0.5, 0.75, 1].forEach(frac => {
+    ctx.beginPath();
+    RADAR_AXES.forEach((_, i) => {
+      const [x, y] = pointFor(i, frac);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.closePath();
+    ctx.stroke();
+  });
+  RADAR_AXES.forEach((_, i) => {
+    const [x, y] = pointFor(i, 1);
+    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(x, y); ctx.stroke();
+  });
+  ctx.fillStyle = '#8b949e';
+  ctx.font = `18px ${font}`;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  RADAR_AXES.forEach((ax, i) => {
+    const [lx, ly] = pointFor(i, 1.26);
+    ctx.fillText(ax.label, lx, ly);
+  });
+  drawRadarPolygon(ctx, homeVals, cx, cy, maxR, '#58a6ff', 0.22);
+  drawRadarPolygon(ctx, awayVals, cx, cy, maxR, '#f0883e', 0.18);
+  ctx.textBaseline = 'alphabetic';
+}
+
 async function shareResultCard() {
   if (!lastPrediction) return;
   const btn = document.getElementById('share-result-btn');
   const origHtml = btn.innerHTML;
   btn.disabled = true; btn.textContent = '생성 중...';
   try {
-    const { data, home, away } = lastPrediction;
+    const { data, h2h, home, away } = lastPrediction;
     const prob = data.probabilities, sp = data.score_prediction;
     const [homeImg, awayImg] = await Promise.all([
       loadImageForCanvas(proxiedLogo(logos[home])),
       loadImageForCanvas(proxiedLogo(logos[away])),
     ]);
+    await ensureTeamPrestigeLoaded();
+    const radarVals = computeRadarValues(data, h2h, home, away);
 
-    const W = 900, H = 1120;
+    const W = 900, H = 1340;
     const canvas = document.createElement('canvas');
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext('2d');
@@ -2535,6 +2588,15 @@ async function shareResultCard() {
       ctx.fillText(r.val + '%', barX + barW, y - 12);
       ctx.textAlign = 'left';
     });
+
+    ctx.textAlign = 'center';
+    ctx.font = `600 20px ${FONT}`; ctx.fillStyle = '#8b949e';
+    ctx.fillText('팀 비교', W / 2, 930);
+    drawRadarChartOnCanvas(ctx, radarVals.home, radarVals.away, W / 2, 1105, 115, FONT);
+    ctx.textAlign = 'center';
+    ctx.font = `600 16px ${FONT}`;
+    ctx.fillStyle = '#58a6ff'; ctx.fillText(`● ${homeClean}`, W / 2 - 70, 1270);
+    ctx.fillStyle = '#f0883e'; ctx.fillText(`● ${awayClean}`, W / 2 + 70, 1270);
 
     ctx.textAlign = 'center';
     ctx.font = `600 18px ${FONT}`; ctx.fillStyle = '#6e7681';
