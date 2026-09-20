@@ -236,23 +236,20 @@ def predict_match(req: MatchRequest):
 
 @app.get("/team/{team_name}")
 def get_team_stats(team_name: str):
-    """특정 팀 스탯 조회"""
+    """특정 팀 스탯 조회 (team_stats.csv는 3시즌 블렌딩 값이라 승/무/패/승점/득실차 같은
+    실경기 집계치는 없음 — win_rate/attack/defense/prestige만 존재)"""
     team = df_stats[df_stats['team'] == team_name]
     if team.empty:
         raise HTTPException(status_code=404, detail=f"팀을 찾을 수 없습니다: {team_name}")
-    
+
     t = team.iloc[0]
     return {
         "team":             t['team'],
         "games":            int(t['games']),
-        "wins":             int(t['wins']),
-        "draws":            int(t['draws']),
-        "losses":           int(t['losses']),
-        "points":           int(t['points']),
         "attack_strength":  round(float(t['attack_strength']), 3),
         "defense_strength": round(float(t['defense_strength']), 3),
-        "goal_diff":        int(t['goal_diff']),
         "win_rate":         round(float(t['win_rate']), 3),
+        "prestige":         round(float(t['prestige']), 1),
     }
 # ── 로고 API 추가 ──
 # ── 로고 API 추가 ──

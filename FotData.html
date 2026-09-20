@@ -144,16 +144,18 @@
     .modal-badge.done { background: #0a1a0a; color: #238636; border: 0.5px solid #23863660; }
     .clickable-team { cursor: pointer; }
     .clickable-team:hover { color: #58a6ff; }
-    .ti-modal { width: min(680px, 92vw); max-height: 82vh; display: flex; flex-direction: column; }
+    .ti-modal { width: min(760px, 94vw); max-height: 85vh; display: flex; flex-direction: column; }
     .ti-header { padding: 18px 16px 14px; display: flex; align-items: center; gap: 12px; border-bottom: 0.5px solid #30363d; flex-shrink: 0; }
     .ti-logo { width: 44px; height: 44px; object-fit: contain; flex-shrink: 0; }
     .ti-name { font-size: 15px; font-weight: 700; color: #e6edf3; }
     .ti-meta { font-size: 11px; color: #8b949e; margin-top: 2px; }
-    .ti-content { display: flex; flex: 1; min-height: 0; }
-    .ti-left { width: 220px; flex-shrink: 0; padding: 14px 16px; border-right: 0.5px solid #30363d; overflow-y: auto; }
-    .ti-right { flex: 1; min-width: 0; padding: 14px 16px; overflow-y: auto; }
-    .ti-squad-title { font-size: 11px; color: #8b949e; font-weight: 600; margin-bottom: 8px; }
-    .ti-facts { display: grid; grid-template-columns: 1fr; gap: 8px; }
+    .ti-tabs { display: flex; gap: 4px; padding: 0 16px; border-bottom: 0.5px solid #30363d; overflow-x: auto; flex-shrink: 0; scrollbar-width: none; }
+    .ti-tabs::-webkit-scrollbar { display: none; }
+    .ti-tab { padding: 10px 12px; font-size: 12px; color: #8b949e; cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; transition: color .15s, border-color .15s; }
+    .ti-tab:hover { color: #e6edf3; }
+    .ti-tab.active { color: #e6edf3; border-bottom-color: #58a6ff; font-weight: 600; }
+    .ti-panel { flex: 1; min-height: 0; overflow-y: auto; padding: 14px 16px; }
+    .ti-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
     .ti-fact { background: #0d1117; border: 0.5px solid #21262d; border-radius: 8px; padding: 8px 10px; }
     .ti-fact-label { font-size: 10px; color: #8b949e; }
     .ti-fact-value { font-size: 12px; color: #e6edf3; font-weight: 600; margin-top: 2px; }
@@ -163,11 +165,16 @@
     .ti-player-name { color: #e6edf3; }
     .ti-player-nation { color: #8b949e; font-size: 11px; }
     .ti-empty { text-align: center; color: #8b949e; font-size: 12px; padding: 20px 0; }
+    .ti-standings-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .ti-standings-table th { text-align: left; color: #8b949e; font-weight: 500; font-size: 10px; padding: 6px 4px; border-bottom: 0.5px solid #30363d; }
+    .ti-standings-table th.center, .ti-standings-table td.center { text-align: center; }
+    .ti-standings-table td { padding: 6px 4px; border-bottom: 0.5px solid #21262d; color: #e6edf3; }
+    .ti-standings-table tr.me { background: #1f6feb26; }
+    .ti-standings-team { display: flex; align-items: center; gap: 6px; }
+    .ti-standings-team img { width: 16px; height: 16px; object-fit: contain; }
     @media (max-width: 560px) {
-      .ti-modal { width: 92vw; }
-      .ti-content { flex-direction: column; overflow-y: auto; }
-      .ti-left { width: 100%; border-right: none; border-bottom: 0.5px solid #30363d; overflow-y: visible; }
-      .ti-right { overflow-y: visible; }
+      .ti-modal { width: 94vw; }
+      .ti-standings-table { font-size: 11px; }
     }
 
     /* 예측 */
@@ -607,13 +614,16 @@
       </div>
       <span class="modal-close" style="margin-left:auto" onclick="closeTeamInfoModal()">✕</span>
     </div>
-    <div class="ti-content">
-      <div class="ti-left" id="ti-left"></div>
-      <div class="ti-right">
-        <div class="ti-squad-title">스쿼드</div>
-        <div id="ti-squad-body"></div>
-      </div>
+    <div class="ti-tabs" id="ti-tabs">
+      <div class="ti-tab active" data-tab="overview" onclick="switchTiTab('overview')">개요</div>
+      <div class="ti-tab" data-tab="standings" onclick="switchTiTab('standings')">순위</div>
+      <div class="ti-tab" data-tab="fixtures" onclick="switchTiTab('fixtures')">경기</div>
+      <div class="ti-tab" data-tab="squad" onclick="switchTiTab('squad')">스쿼드</div>
+      <div class="ti-tab" data-tab="playerstats" onclick="switchTiTab('playerstats')">플레이어 통계</div>
+      <div class="ti-tab" data-tab="teamstats" onclick="switchTiTab('teamstats')">팀 통계</div>
+      <div class="ti-tab" data-tab="transfers" onclick="switchTiTab('transfers')">이적</div>
     </div>
+    <div class="ti-panel" id="ti-panel"></div>
   </div>
 </div>
 
@@ -857,7 +867,18 @@ function openTModal(t1, t2) {
 function closeTModal(e) { if(!e||e.target===document.getElementById('t-modal')) document.getElementById('t-modal').classList.remove('show'); }
 
 const POSITION_LABEL = { Goalkeeper: '골키퍼', Defence: '수비수', Midfield: '미드필더', Offence: '공격수' };
+const TI_LEAGUE_CODE_MAP = { EPL: 'PL', LaLiga: 'PD', Bundesliga: 'BL1', SerieA: 'SA', Ligue1: 'FL1', UCL: 'CL' };
 let teamInfoCache = {};
+let teamStatsCache = {};
+let standingsCache = {};
+let tiState = { team: null, code: null, tab: 'overview' };
+
+function getTeamLeagueCode(team) {
+  for (const [key, data] of Object.entries(LEAGUE_DATA)) {
+    if (key !== 'UCL' && data.teams.includes(team)) return TI_LEAGUE_CODE_MAP[key];
+  }
+  return null;
+}
 
 async function openTeamInfo(teamName) {
   if (!teamName) return;
@@ -867,54 +888,120 @@ async function openTeamInfo(teamName) {
   tiLogo.src = logos[teamName] || '';
   document.getElementById('ti-name').textContent = teamName;
   document.getElementById('ti-meta').textContent = '';
-  document.getElementById('ti-left').innerHTML = '<div class="ti-empty">불러오는 중...</div>';
-  document.getElementById('ti-squad-body').innerHTML = '';
+  tiState = { team: teamName, code: getTeamLeagueCode(teamName), tab: 'overview' };
+  document.querySelectorAll('#ti-tabs .ti-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === 'overview'));
   modal.classList.add('show');
-
-  try {
-    let info = teamInfoCache[teamName];
-    if (!info) {
-      const res = await fetch(`${API}/team/info/${encodeURIComponent(teamName)}`);
-      if (!res.ok) throw new Error('not found');
-      info = await res.json();
-      teamInfoCache[teamName] = info;
-    }
-    renderTeamInfo(info);
-  } catch (e) {
-    document.getElementById('ti-left').innerHTML = '<div class="ti-empty">팀 정보를 아직 준비 중이에요.</div>';
-  }
+  await switchTiTab('overview');
 }
 
-function renderTeamInfo(info) {
-  document.getElementById('ti-meta').textContent = info.founded ? `창단 ${info.founded}년` : '';
-
-  const facts = [
-    { label: '홈구장', value: info.venue },
-    { label: '창단연도', value: info.founded },
-    { label: '구단 컬러', value: info.clubColors },
-    { label: '감독', value: info.coach },
-  ].filter(f => f.value);
-
-  document.getElementById('ti-left').innerHTML = facts.length
-    ? `<div class="ti-facts">${facts.map(f => `<div class="ti-fact"><div class="ti-fact-label">${f.label}</div><div class="ti-fact-value">${f.value}</div></div>`).join('')}</div>`
-    : '<div class="ti-empty">팀 정보를 아직 준비 중이에요.</div>';
-
-  const squad = info.squad || [];
-  let squadHtml = '';
-  if (squad.length) {
-    const groups = {};
-    squad.forEach(p => { (groups[p.position] = groups[p.position] || []).push(p); });
-    Object.keys(POSITION_LABEL).forEach(pos => {
-      const players = groups[pos];
-      if (!players || !players.length) return;
-      squadHtml += `<div class="ti-section-title">${POSITION_LABEL[pos]} (${players.length})</div>`;
-      squadHtml += players.map(p => `<div class="ti-player-row"><span class="ti-player-name">${p.shirtNumber ? `#${p.shirtNumber} ` : ''}${p.name}</span><span class="ti-player-nation">${p.nationality || ''}</span></div>`).join('');
-    });
-  } else {
-    squadHtml = '<div class="ti-empty">스쿼드 정보가 없어요.</div>';
+async function fetchTeamInfo(teamName) {
+  let info = teamInfoCache[teamName];
+  if (!info) {
+    const res = await fetch(`${API}/team/info/${encodeURIComponent(teamName)}`);
+    if (!res.ok) throw new Error('not found');
+    info = await res.json();
+    teamInfoCache[teamName] = info;
   }
+  return info;
+}
 
-  document.getElementById('ti-squad-body').innerHTML = squadHtml;
+async function switchTiTab(tab) {
+  tiState.tab = tab;
+  document.querySelectorAll('#ti-tabs .ti-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  const panel = document.getElementById('ti-panel');
+  panel.innerHTML = '<div class="ti-empty">불러오는 중...</div>';
+  const { team, code } = tiState;
+  try {
+    if (tab === 'overview') {
+      const info = await fetchTeamInfo(team);
+      document.getElementById('ti-meta').textContent = info.founded ? `창단 ${info.founded}년` : '';
+      const facts = [
+        { label: '홈구장', value: info.venue },
+        { label: '창단연도', value: info.founded },
+        { label: '구단 컬러', value: info.clubColors },
+        { label: '감독', value: info.coach },
+      ].filter(f => f.value);
+      panel.innerHTML = facts.length
+        ? `<div class="ti-facts">${facts.map(f => `<div class="ti-fact"><div class="ti-fact-label">${f.label}</div><div class="ti-fact-value">${f.value}</div></div>`).join('')}</div>`
+        : '<div class="ti-empty">팀 정보를 아직 준비 중이에요.</div>';
+    } else if (tab === 'squad') {
+      const info = await fetchTeamInfo(team);
+      const squad = info.squad || [];
+      if (!squad.length) { panel.innerHTML = '<div class="ti-empty">스쿼드 정보가 없어요.</div>'; return; }
+      const groups = {};
+      squad.forEach(p => { (groups[p.position] = groups[p.position] || []).push(p); });
+      let html = '';
+      Object.keys(POSITION_LABEL).forEach(pos => {
+        const players = groups[pos];
+        if (!players || !players.length) return;
+        html += `<div class="ti-section-title">${POSITION_LABEL[pos]} (${players.length})</div>`;
+        html += players.map(p => `<div class="ti-player-row"><span class="ti-player-name">${p.shirtNumber ? `#${p.shirtNumber} ` : ''}${p.name}</span><span class="ti-player-nation">${p.nationality || ''}</span></div>`).join('');
+      });
+      panel.innerHTML = html || '<div class="ti-empty">스쿼드 정보가 없어요.</div>';
+    } else if (tab === 'standings') {
+      if (!code) { panel.innerHTML = '<div class="ti-empty">이 팀의 리그 정보를 찾을 수 없어요.</div>'; return; }
+      let data = standingsCache[code];
+      if (!data) {
+        const res = await fetch(`${API}/standings/${code}`);
+        if (!res.ok) throw new Error('standings fetch failed');
+        data = await res.json();
+        standingsCache[code] = data;
+      }
+      const rows = data.standings || [];
+      panel.innerHTML = `<table class="ti-standings-table"><thead><tr><th style="width:24px">#</th><th>팀</th><th class="center">경기</th><th class="center">승</th><th class="center">무</th><th class="center">패</th><th class="center">득실</th><th class="center">승점</th></tr></thead><tbody>${
+        rows.map(r => `<tr class="${r.team === team ? 'me' : ''}"><td>${r.rank}</td><td><div class="ti-standings-team"><img src="${r.logo || ''}" onerror="this.style.display='none'">${cleanTeamName ? cleanTeamName(r.team) : r.team}</div></td><td class="center">${r.played}</td><td class="center">${r.wins}</td><td class="center">${r.draws}</td><td class="center">${r.losses}</td><td class="center">${r.gd > 0 ? '+' : ''}${r.gd}</td><td class="center">${r.points}</td></tr>`).join('')
+      }</tbody></table>`;
+    } else if (tab === 'fixtures') {
+      if (!code) { panel.innerHTML = '<div class="ti-empty">이 팀의 리그 정보를 찾을 수 없어요.</div>'; return; }
+      if (!scheduleData[code]) {
+        const res = await fetch(`${API}/schedule/${code}`);
+        if (!res.ok) throw new Error('schedule fetch failed');
+        const data = await res.json();
+        scheduleData[code] = data.matches;
+      }
+      const matches = (scheduleData[code] || []).filter(m => m.home_team === team || m.away_team === team)
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
+      if (!matches.length) { panel.innerHTML = '<div class="ti-empty">경기 일정이 없어요.</div>'; return; }
+      const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토'];
+      let html = '';
+      matches.forEach(m => {
+        const d = new Date(m.date);
+        const dateStr = `${d.getMonth() + 1}.${d.getDate()} (${WEEKDAY[d.getDay()]})`;
+        const played = m.status === 'FINISHED';
+        const timeStr = d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+        const homeShort = m.home_team.replace(' FC', '').replace(' CF', '');
+        const awayShort = m.away_team.replace(' FC', '').replace(' CF', '');
+        html += `<div class="sched-date-header">${dateStr}</div><div class="sched-match">
+          <div class="sched-team${m.home_team===team?' clickable-team':''}"><img src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span>${homeShort}</span></div>
+          <div class="sched-vs">${played ? `<span class="sched-score">${m.home_goals} - ${m.away_goals}</span>` : `<span class="sched-time">${timeStr}</span>`}</div>
+          <div class="sched-team away${m.away_team===team?' clickable-team':''}"><span>${awayShort}</span><img src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"></div>
+        </div>`;
+      });
+      panel.innerHTML = html;
+    } else if (tab === 'teamstats') {
+      let stats = teamStatsCache[team];
+      if (!stats) {
+        const res = await fetch(`${API}/team/${encodeURIComponent(team)}`);
+        if (!res.ok) throw new Error('team stats fetch failed');
+        stats = await res.json();
+        teamStatsCache[team] = stats;
+      }
+      const facts = [
+        { label: '26-27 경기수', value: stats.games },
+        { label: '승률(3시즌 블렌딩)', value: `${Math.round(stats.win_rate * 100)}%` },
+        { label: '공격력', value: stats.attack_strength },
+        { label: '수비력', value: stats.defense_strength },
+        { label: '체급(prestige)', value: stats.prestige > 0 ? `+${stats.prestige}` : stats.prestige },
+      ];
+      panel.innerHTML = `<div class="ti-facts">${facts.map(f => `<div class="ti-fact"><div class="ti-fact-label">${f.label}</div><div class="ti-fact-value">${f.value}</div></div>`).join('')}</div><div class="ti-empty" style="padding-top:14px">이 수치는 예측 모델용 3시즌 블렌딩 값이라, 실제 이번 시즌 승/무/패 기록과는 다를 수 있어요. 정확한 이번 시즌 기록은 순위 탭을 참고하세요.</div>`;
+    } else if (tab === 'playerstats') {
+      panel.innerHTML = '<div class="ti-empty">플레이어 통계는 준비 중이에요.</div>';
+    } else if (tab === 'transfers') {
+      panel.innerHTML = '<div class="ti-empty">이적 기록은 준비 중이에요.</div>';
+    }
+  } catch (e) {
+    panel.innerHTML = '<div class="ti-empty">데이터를 불러올 수 없어요. 잠시 후 다시 시도해주세요.</div>';
+  }
 }
 
 function closeTeamInfoModal(e) { if (!e || e.target === document.getElementById('ti-modal')) document.getElementById('ti-modal').classList.remove('show'); }
