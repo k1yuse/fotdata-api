@@ -66,7 +66,7 @@
     .ucl-subtab.active { background: #1f4e8c; border-color: #58a6ff; color: #58a6ff; }
 
     .standings-table { width: 100%; max-width: 1100px; margin: 0 auto; border-collapse: separate; border-spacing: 0; }
-    .standings-table th { font-size: 11px; color: #8b949e; text-align: left; padding: 8px 12px; border-bottom: 0.5px solid #30363d; }
+    .standings-table th { font-size: 11px; font-weight: 700; color: #c9d1d9; text-align: left; padding: 8px 12px; border-bottom: 0.5px solid #30363d; }
     @media (min-width: 769px) {
       .standings-table th { position: sticky; top: var(--nav-height, 60px); background: #161b22; z-index: 5; box-shadow: 0 1px 0 #30363d; }
     }
@@ -80,6 +80,12 @@
     .rank-1 { color: #FFD700; }
     .rank-2 { color: #C0C0C0; }
     .rank-3 { color: #CD7F32; }
+    .rank-zone-cl { color: #58a6ff; font-weight: 700; }
+    .rank-zone-clq { color: #a371f7; font-weight: 700; }
+    .rank-zone-el { color: #f0883e; font-weight: 700; }
+    .rank-zone-ecl { color: #3fb950; font-weight: 700; }
+    .rank-zone-relpo { color: #d29922; font-weight: 700; }
+    .rank-zone-rel { color: #da3633; font-weight: 700; }
     .pts { font-weight: 700; color: #58a6ff; }
     .form-badges { display: flex; gap: 3px; justify-content: center; }
     .form-badge { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
@@ -1644,7 +1650,8 @@ function renderStandings(data,leagueCode){
     let zc='';
     if(isCL){if(i<8)zc='zone-ucl-ko';else if(i<24)zc='zone-ucl-po';}
     else{zc=getZoneClass(leagueCode, i, totalTeams);}
-    const rc=i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'';
+    const ZONE_RANK_CLASS={'zone-cl':'rank-zone-cl','zone-cl-q':'rank-zone-clq','zone-el':'rank-zone-el','zone-ecl':'rank-zone-ecl','zone-rel-po':'rank-zone-relpo','zone-rel':'rank-zone-rel'};
+    const rc=i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':(ZONE_RANK_CLASS[zc]||'');
     const fb=team.form.map(f=>`<div class="form-badge ${f}">${f}</div>`).join('');
     html+=`<tr class="${zc} row-enter" style="animation-delay:${Math.min(i*45,650)}ms"><td><span class="rank-num ${rc}">${team.rank}</span></td><td><div class="team-cell clickable-team" onclick="openTeamInfo('${escJs(team.team)}')"><img src="${team.logo}" width="24" height="24" style="object-fit:contain" onerror="this.style.display='none'"><span>${cleanTeamName(team.team)}${i===0 && !isCL && currentStandingsSeason==='previous' ? ' (우승)' : ''}</span></div></td><td class="center">${team.played}</td><td class="center">${team.wins}</td><td class="center">${team.draws}</td><td class="center">${team.losses}</td><td class="center hide-mobile">${team.gf}</td><td class="center hide-mobile">${team.ga}</td><td class="center" style="color:${team.gd>0?'#238636':team.gd<0?'#da3633':'#8b949e'}">${team.gd>0?'+':''}${team.gd}</td><td class="center"><div class="form-badges">${fb}</div></td><td class="center pts">${team.points}</td></tr>`;
   });
