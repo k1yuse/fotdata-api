@@ -466,9 +466,9 @@
       "stage": "REGULAR_SEASON",
       "home_team": "AFC Bournemouth",
       "away_team": "Liverpool FC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
+      "home_goals": 0,
+      "away_goals": 1,
+      "status": "FINISHED"
     },
     {
       "date": "2026-09-20T13:00:00Z",
@@ -476,9 +476,9 @@
       "stage": "REGULAR_SEASON",
       "home_team": "Leeds United FC",
       "away_team": "Crystal Palace FC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
+      "home_goals": 0,
+      "away_goals": 0,
+      "status": "FINISHED"
     },
     {
       "date": "2026-09-20T13:00:00Z",
@@ -486,9 +486,9 @@
       "stage": "REGULAR_SEASON",
       "home_team": "Manchester City FC",
       "away_team": "Sunderland AFC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
+      "home_goals": 5,
+      "away_goals": 3,
+      "status": "FINISHED"
     },
     {
       "date": "2026-09-20T15:30:00Z",
@@ -496,9 +496,9 @@
       "stage": "REGULAR_SEASON",
       "home_team": "Fulham FC",
       "away_team": "Manchester United FC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
+      "home_goals": 1,
+      "away_goals": 1,
+      "status": "FINISHED"
     },
     {
       "date": "2026-10-10T11:30:00Z",
@@ -4439,8 +4439,8 @@
       "home_team": "Sevilla FC",
       "away_team": "FC Barcelona",
       "home_goals": 1,
-      "away_goals": 1,
-      "status": "IN_PLAY"
+      "away_goals": 3,
+      "status": "FINISHED"
     },
     {
       "date": "2026-09-20T12:00:00Z",
@@ -4448,9 +4448,9 @@
       "stage": "REGULAR_SEASON",
       "home_team": "Getafe CF",
       "away_team": "Málaga CF",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
+      "home_goals": 1,
+      "away_goals": 0,
+      "status": "FINISHED"
     },
     {
       "date": "2026-09-20T14:15:00Z",
@@ -4458,9 +4458,9 @@
       "stage": "REGULAR_SEASON",
       "home_team": "Club Atlético de Madrid",
       "away_team": "Real Madrid CF",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
+      "home_goals": 2,
+      "away_goals": 1,
+      "status": "FINISHED"
     },
     {
       "date": "2026-09-20T16:30:00Z",
@@ -4468,9 +4468,9 @@
       "stage": "REGULAR_SEASON",
       "home_team": "RC Deportivo La Coruña",
       "away_team": "Real Betis Balompié",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
+      "home_goals": 1,
+      "away_goals": 1,
+      "status": "FINISHED"
     },
     {
       "date": "2026-09-20T16:30:00Z",
@@ -4478,9 +4478,9 @@
       "stage": "REGULAR_SEASON",
       "home_team": "Villarreal CF",
       "away_team": "Levante UD",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
+      "home_goals": 3,
+      "away_goals": 1,
+      "status": "FINISHED"
     },
     {
       "date": "2026-09-20T19:00:00Z",
@@ -4488,9 +4488,9 @@
       "stage": "REGULAR_SEASON",
       "home_team": "Valencia CF",
       "away_team": "Real Sociedad de Fútbol",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
+      "home_goals": 1,
+      "away_goals": 1,
+      "status": "IN_PLAY"
     },
     {
       "date": "2026-10-09T19:00:00Z",
@@ -7940,9 +7940,9 @@
       "stage": "REGULAR_SEASON",
       "home_team": "Bayer 04 Leverkusen",
       "away_team": "RB Leipzig",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
+      "home_goals": 2,
+      "away_goals": 0,
+      "status": "FINISHED"
     },
     {
       "date": "2026-09-20T15:30:00Z",
@@ -7950,9 +7950,9 @@
       "stage": "REGULAR_SEASON",
       "home_team": "FC Schalke 04",
       "away_team": "SV 07 Elversberg",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
+      "home_goals": 0,
+      "away_goals": 0,
+      "status": "FINISHED"
     },
     {
       "date": "2026-09-20T17:30:00Z",
@@ -7960,9 +7960,9 @@
       "stage": "REGULAR_SEASON",
       "home_team": "SC Paderborn 07",
       "away_team": "TSG 1899 Hoffenheim",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
+      "home_goals": 3,
+      "away_goals": 1,
+      "status": "FINISHED"
     },
     {
       "date": "2026-10-09T18:30:00Z",
@@ -11114,7 +11114,7 @@
       "away_team": "SS Lazio",
       "home_goals": 0,
       "away_goals": 2,
-      "status": "IN_PLAY"
+      "status": "FINISHED"
     },
     {
       "date": "2026-09-20T10:30:00Z",
@@ -11122,9 +11122,9 @@
       "stage": "REGULAR_SEASON",
       "home_team": "ACF Fiorentina",
       "away_team": "SSC Napoli",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
+      "home_goals": 1,
+      "away_goals": 1,
+      "status": "FINISHED"
     },
     {
       "date": "2026-09-20T13:00:00Z",
@@ -11132,9 +11132,9 @@
       "stage": "REGULAR_SEASON",
       "home_team": "Frosinone Calcio",
       "away_team": "Como 1907",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
+      "home_goals": 2,
+      "away_goals": 0,
+      "status": "FINISHED"
     },
     {
       "date": "2026-09-20T13:00:00Z",
@@ -11142,9 +11142,9 @@
       "stage": "REGULAR_SEASON",
       "home_team": "Parma Calcio 1913",
       "away_team": "Genoa CFC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
+      "home_goals": 2,
+      "away_goals": 1,
+      "status": "FINISHED"
     },
     {
       "date": "2026-09-20T16:00:00Z",
@@ -11152,9 +11152,9 @@
       "stage": "REGULAR_SEASON",
       "home_team": "Juventus FC",
       "away_team": "Atalanta BC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
+      "home_goals": 2,
+      "away_goals": 0,
+      "status": "FINISHED"
     },
     {
       "date": "2026-09-20T18:45:00Z",
@@ -11162,9 +11162,9 @@
       "stage": "REGULAR_SEASON",
       "home_team": "AC Milan",
       "away_team": "US Lecce",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
+      "home_goals": 3,
+      "away_goals": 0,
+      "status": "IN_PLAY"
     },
     {
       "date": "2026-10-10T13:00:00Z",
@@ -14855,8 +14855,8 @@
       "home_team": "Le Mans FC",
       "away_team": "FC Lorient",
       "home_goals": 2,
-      "away_goals": 0,
-      "status": "IN_PLAY"
+      "away_goals": 1,
+      "status": "FINISHED"
     },
     {
       "date": "2026-09-19T18:45:00Z",
@@ -14864,9 +14864,9 @@
       "stage": "REGULAR_SEASON",
       "home_team": "Toulouse FC",
       "away_team": "Le Havre AC",
-      "home_goals": 2,
-      "away_goals": 0,
-      "status": "IN_PLAY"
+      "home_goals": 3,
+      "away_goals": 2,
+      "status": "FINISHED"
     },
     {
       "date": "2026-09-19T18:45:00Z",
@@ -14876,7 +14876,7 @@
       "away_team": "ES Troyes AC",
       "home_goals": 2,
       "away_goals": 0,
-      "status": "IN_PLAY"
+      "status": "FINISHED"
     },
     {
       "date": "2026-09-19T18:45:00Z",
@@ -14884,9 +14884,9 @@
       "stage": "REGULAR_SEASON",
       "home_team": "Olympique Lyonnais",
       "away_team": "Stade Rennais FC 1901",
-      "home_goals": 3,
+      "home_goals": 4,
       "away_goals": 0,
-      "status": "IN_PLAY"
+      "status": "FINISHED"
     },
     {
       "date": "2026-09-20T13:00:00Z",
@@ -14894,9 +14894,9 @@
       "stage": "REGULAR_SEASON",
       "home_team": "AJ Auxerre",
       "away_team": "Stade Brestois 29",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
+      "home_goals": 2,
+      "away_goals": 1,
+      "status": "FINISHED"
     },
     {
       "date": "2026-09-20T15:15:00Z",
@@ -14904,9 +14904,9 @@
       "stage": "REGULAR_SEASON",
       "home_team": "OGC Nice",
       "away_team": "Lille OSC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
+      "home_goals": 2,
+      "away_goals": 1,
+      "status": "FINISHED"
     },
     {
       "date": "2026-09-20T18:45:00Z",
@@ -14914,9 +14914,9 @@
       "stage": "REGULAR_SEASON",
       "home_team": "Olympique de Marseille",
       "away_team": "Paris Saint-Germain FC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
+      "home_goals": 1,
+      "away_goals": 2,
+      "status": "IN_PLAY"
     },
     {
       "date": "2026-10-09T18:45:00Z",
