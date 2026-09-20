@@ -2281,9 +2281,9 @@ async function shareResultCard() {
 
     const barW = 680, barH = 36, barX = (W - barW) / 2;
     const rows = [
-      { label: '홈승', val: Math.round(prob.home_win * 100), color: '#58a6ff' },
+      { label: `${homeClean} 승`, val: Math.round(prob.home_win * 100), color: '#58a6ff' },
       { label: '무승부', val: Math.round(prob.draw * 100), color: '#8b949e' },
-      { label: '원정승', val: Math.round(prob.away_win * 100), color: '#f0883e' },
+      { label: `${awayClean} 승`, val: Math.round(prob.away_win * 100), color: '#f0883e' },
     ];
     ctx.textAlign = 'left';
     rows.forEach((r, i) => {
