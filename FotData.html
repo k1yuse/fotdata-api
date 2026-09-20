@@ -2210,13 +2210,15 @@ async function shareResultCard() {
     drawImageContain(ctx, awayImg, W * 0.73, logoY, logoSize);
     ctx.font = `800 26px ${FONT}`; ctx.fillStyle = '#8b949e';
     ctx.fillText('VS', W / 2, logoY + 10);
+    const homeClean = home.replace(' FC', '').replace(' CF', '');
+    const awayClean = away.replace(' FC', '').replace(' CF', '');
     ctx.font = `700 25px ${FONT}`; ctx.fillStyle = '#e6edf3';
-    ctx.fillText(home.replace(' FC', '').replace(' CF', ''), W * 0.27, logoY + 95);
-    ctx.fillText(away.replace(' FC', '').replace(' CF', ''), W * 0.73, logoY + 95);
+    ctx.fillText(homeClean, W * 0.27, logoY + 95);
+    ctx.fillText(awayClean, W * 0.73, logoY + 95);
 
     let badgeText, badgeColor;
-    if (data.prediction === 'home_win') { badgeText = `${home.split(' ')[0]} 승리 예측`; badgeColor = '#58a6ff'; }
-    else if (data.prediction === 'away_win') { badgeText = `${away.split(' ')[0]} 승리 예측`; badgeColor = '#f0883e'; }
+    if (data.prediction === 'home_win') { badgeText = `${homeClean} 승리 예측`; badgeColor = '#58a6ff'; }
+    else if (data.prediction === 'away_win') { badgeText = `${awayClean} 승리 예측`; badgeColor = '#f0883e'; }
     else { badgeText = '무승부 예측'; badgeColor = '#8b949e'; }
     ctx.font = `700 24px ${FONT}`; ctx.fillStyle = badgeColor;
     ctx.fillText(badgeText, W / 2, 420);
