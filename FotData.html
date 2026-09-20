@@ -48,6 +48,7 @@
     @keyframes toastOut { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(8px) scale(0.95); } }
 
     .card { background: #161b22; border: 0.5px solid #30363d; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+    .predict-selector-card { position: relative; z-index: 10; }
     .card-title { font-size: 13px; color: #8b949e; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
 
     .league-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
@@ -530,7 +531,7 @@
       <div class="card-title" id="today-matches-title">오늘의 경기</div>
       <div class="today-matches-strip" id="today-matches-widget"></div>
     </div>
-    <div class="card">
+    <div class="card predict-selector-card">
       <div class="team-selector">
         <div class="team-box">
           <label>홈팀</label>
