@@ -124,25 +124,43 @@
     .player-hero-rating { font-size: 10px; color: #8b949e; margin-top: 4px; }
 
     /* 빅매치 카운트다운 배너 */
-    .bigmatch-banner { position: relative; padding: 16px; border-radius: 12px; background: linear-gradient(135deg, rgba(88,166,255,0.16), rgba(163,113,247,0.05)); border: 0.5px solid rgba(88,166,255,0.35); box-shadow: 0 6px 20px rgba(88,166,255,0.1); margin-bottom: 8px; }
-    .bigmatch-label { font-size: 11px; font-weight: 700; color: #58a6ff; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; margin-bottom: 12px; }
-    .bigmatch-label img { width: 14px; height: 14px; object-fit: contain; }
-    .bigmatch-teams { display: flex; align-items: center; justify-content: center; gap: 18px; margin-bottom: 14px; }
-    .bigmatch-team { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; min-width: 0; }
-    .bigmatch-team img { width: 40px; height: 40px; object-fit: contain; }
-    .bigmatch-team span { font-size: 12px; font-weight: 700; color: #e6edf3; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
-    .bigmatch-vs { font-size: 13px; font-weight: 800; color: #8b949e; flex-shrink: 0; }
-    .bigmatch-countdown { display: flex; justify-content: center; gap: 8px; }
-    .bigmatch-unit { background: #0d1117; border: 0.5px solid #30363d; border-radius: 8px; padding: 6px 10px; text-align: center; min-width: 48px; }
-    .bigmatch-unit .num { font-size: 18px; font-weight: 800; color: #58a6ff; line-height: 1; }
-    .bigmatch-unit .lbl { font-size: 9px; color: #8b949e; margin-top: 3px; }
+    .bigmatch-banner { position: relative; padding: 22px 24px; border-radius: 14px; background: linear-gradient(135deg, rgba(88,166,255,0.18), rgba(163,113,247,0.06)); border: 0.5px solid rgba(88,166,255,0.4); box-shadow: 0 6px 24px rgba(88,166,255,0.12); margin-bottom: 8px; }
+    .bigmatch-label { font-size: 12px; font-weight: 700; color: #58a6ff; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 6px; }
+    .bigmatch-label img { width: 16px; height: 16px; object-fit: contain; }
+    .bigmatch-venue { text-align: center; font-size: 11px; color: #6e7681; margin-bottom: 18px; display: flex; align-items: center; justify-content: center; gap: 4px; }
+    .bigmatch-venue svg { width: 11px; height: 11px; flex-shrink: 0; }
+    .bigmatch-teams { display: flex; align-items: center; justify-content: center; gap: 28px; margin-bottom: 20px; }
+    .bigmatch-team { display: flex; flex-direction: column; align-items: center; gap: 10px; flex: 1; max-width: 220px; min-width: 0; }
+    .bigmatch-team img { width: 72px; height: 72px; object-fit: contain; }
+    .bigmatch-team .bigmatch-team-name { font-size: 17px; font-weight: 800; color: #e6edf3; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+    .bigmatch-team .bigmatch-team-prob { font-size: 15px; font-weight: 800; color: #58a6ff; }
+    .bigmatch-team.away .bigmatch-team-prob { color: #f0883e; }
+    .bigmatch-vs-col { display: flex; flex-direction: column; align-items: center; gap: 10px; flex-shrink: 0; }
+    .bigmatch-vs { font-size: 15px; font-weight: 800; color: #8b949e; }
+    .bigmatch-prob-bar { display: flex; width: 120px; height: 8px; border-radius: 4px; overflow: hidden; background: #21262d; }
+    .bigmatch-prob-bar .seg.home { background: #58a6ff; }
+    .bigmatch-prob-bar .seg.draw { background: #8b949e; }
+    .bigmatch-prob-bar .seg.away { background: #f0883e; }
+    .bigmatch-draw-prob { font-size: 11px; color: #8b949e; }
+    .bigmatch-countdown { display: flex; justify-content: center; gap: 12px; }
+    .bigmatch-unit { background: #0d1117; border: 0.5px solid #30363d; border-radius: 10px; padding: 10px 16px; text-align: center; min-width: 64px; }
+    .bigmatch-unit .num { font-size: 28px; font-weight: 800; color: #58a6ff; line-height: 1; }
+    .bigmatch-unit .lbl { font-size: 10px; color: #8b949e; margin-top: 4px; }
+    @media (max-width: 480px) {
+      .bigmatch-banner { padding: 16px; }
+      .bigmatch-teams { gap: 14px; }
+      .bigmatch-team img { width: 52px; height: 52px; }
+      .bigmatch-team .bigmatch-team-name { font-size: 13px; }
+      .bigmatch-unit { padding: 8px 10px; min-width: 48px; }
+      .bigmatch-unit .num { font-size: 20px; }
+    }
 
     /* 예측 결과 공유 버튼 */
-    .result-card-header { display: flex; align-items: center; justify-content: space-between; }
-    .share-btn { display: flex; align-items: center; gap: 5px; background: #21262d; border: 0.5px solid #30363d; color: #c9d1d9; font-size: 11px; font-weight: 600; padding: 6px 10px; border-radius: 7px; cursor: pointer; transition: background .15s, border-color .15s; }
-    .share-btn:hover { background: #30363d; border-color: #58a6ff; }
-    .share-btn svg { width: 13px; height: 13px; }
-    .share-btn:disabled { opacity: 0.6; cursor: default; }
+    .share-result-btn { width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(88,166,255,0.1); border: 1px solid rgba(88,166,255,0.4); color: #58a6ff; font-size: 14px; font-weight: 700; padding: 13px; border-radius: 9px; cursor: pointer; margin-top: 18px; transition: background .15s, border-color .15s, transform .1s; }
+    .share-result-btn:hover { background: rgba(88,166,255,0.18); border-color: #58a6ff; }
+    .share-result-btn:active { transform: scale(0.98); }
+    .share-result-btn svg { width: 17px; height: 17px; }
+    .share-result-btn:disabled { opacity: 0.6; cursor: default; }
 
     /* PWA 설치 유도 배너 */
     .pwa-install-banner { position: fixed; left: 16px; right: 16px; bottom: 16px; max-width: 420px; margin: 0 auto; background: #161b22; border: 0.5px solid #30363d; border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; gap: 12px; box-shadow: 0 16px 48px rgba(0,0,0,.5), 0 4px 12px rgba(0,0,0,.3); z-index: 500; transform: translateY(120%); transition: transform .3s ease; }
@@ -650,10 +668,7 @@
     <div class="result-section" id="result-section">
       <div class="predict-grid">
         <div class="card">
-          <div class="result-card-header">
-            <div class="card-title">예측 결과</div>
-            <button class="share-btn" id="share-result-btn" onclick="shareResultCard()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>공유</button>
-          </div>
+          <div class="card-title">예측 결과</div>
           <div class="result-teams">
             <div class="result-team"><img id="result-home-logo" src="" alt=""><div class="result-team-name" id="result-home-name"></div></div>
             <div class="result-vs">VS</div>
@@ -661,9 +676,9 @@
           </div>
           <div class="prediction-badge"><span class="badge" id="pred-badge"></span></div>
           <div class="prob-bars">
-            <div class="prob-row"><span class="prob-label">홈승</span><div class="prob-bar-bg"><div class="prob-bar home" id="bar-home" style="width:0%"></div></div><span class="prob-value" id="val-home"></span></div>
-            <div class="prob-row"><span class="prob-label">무승부</span><div class="prob-bar-bg"><div class="prob-bar draw" id="bar-draw" style="width:0%"></div></div><span class="prob-value" id="val-draw"></span></div>
-            <div class="prob-row"><span class="prob-label">원정승</span><div class="prob-bar-bg"><div class="prob-bar away" id="bar-away" style="width:0%"></div></div><span class="prob-value" id="val-away"></span></div>
+            <div class="prob-row" style="grid-template-columns:90px 1fr 45px"><span class="prob-label" id="prob-label-home">홈승</span><div class="prob-bar-bg"><div class="prob-bar home" id="bar-home" style="width:0%"></div></div><span class="prob-value" id="val-home"></span></div>
+            <div class="prob-row" style="grid-template-columns:90px 1fr 45px"><span class="prob-label">무승부</span><div class="prob-bar-bg"><div class="prob-bar draw" id="bar-draw" style="width:0%"></div></div><span class="prob-value" id="val-draw"></span></div>
+            <div class="prob-row" style="grid-template-columns:90px 1fr 45px"><span class="prob-label" id="prob-label-away">원정승</span><div class="prob-bar-bg"><div class="prob-bar away" id="bar-away" style="width:0%"></div></div><span class="prob-value" id="val-away"></span></div>
           </div>
           <div class="stats-grid">
             <div class="stat-box"><div class="stat-val" id="s-home-atk">-</div><div class="stat-label" id="s-home-atk-label">홈 공격력</div></div>
@@ -679,6 +694,7 @@
             </div>
             <div id="score-top-list" class="prob-bars"></div>
           </div>
+          <button class="share-result-btn" id="share-result-btn" onclick="shareResultCard()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>예측 결과 이미지로 저장</button>
         </div>
         <div class="card">
           <div class="card-title">최근 3시즌 맞대 기록</div>
@@ -958,24 +974,53 @@ async function loadBigMatch() {
     }).sort((a, b) => b.matchScore - a.matchScore || new Date(a.date) - new Date(b.date));
     const big = scored[0];
     if (!big || big.matchScore < BIGMATCH_MIN_PRESTIGE) { banner.style.display = 'none'; return; }
-    renderBigMatchBanner(big);
+    await renderBigMatchBanner(big);
     banner.style.display = 'block';
   } catch (e) {
     banner.style.display = 'none';
   }
 }
 
-function renderBigMatchBanner(m) {
+async function renderBigMatchBanner(m) {
   const banner = document.getElementById('bigmatch-banner');
   const li = TODAY_LEAGUE_INFO[m.league];
   const d = new Date(m.date);
   const dateLabel = `${d.getMonth() + 1}.${d.getDate()} ${d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}`;
+  const homeName = m.home_team.replace(' FC', '').replace(' CF', '');
+  const awayName = m.away_team.replace(' FC', '').replace(' CF', '');
+
+  let probHtml = '<div class="bigmatch-vs">VS</div>';
+  try {
+    const res = await fetchWithRetry(`${API}/predict`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ home_team: m.home_team, away_team: m.away_team }) });
+    const pd = await res.json();
+    const hw = Math.round(pd.probabilities.home_win * 100), dw = Math.round(pd.probabilities.draw * 100), aw = Math.round(pd.probabilities.away_win * 100);
+    probHtml = `
+      <div class="bigmatch-vs">VS</div>
+      <div class="bigmatch-prob-bar"><div class="seg home" style="width:${hw}%"></div><div class="seg draw" style="width:${dw}%"></div><div class="seg away" style="width:${aw}%"></div></div>
+      <div class="bigmatch-draw-prob">무 ${dw}%</div>
+    `;
+    banner.dataset.homeProb = hw; banner.dataset.awayProb = aw;
+    var homeProbHtml = `<span class="bigmatch-team-prob">${hw}%</span>`;
+    var awayProbHtml = `<span class="bigmatch-team-prob">${aw}%</span>`;
+  } catch (e) {
+    var homeProbHtml = '', awayProbHtml = '';
+  }
+
+  let venueHtml = '';
+  try {
+    const info = await fetchTeamInfo(m.home_team);
+    if (info && info.venue) {
+      venueHtml = `<div class="bigmatch-venue"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>${info.venue}</div>`;
+    }
+  } catch (e) { /* 구장 정보 없으면 그냥 생략 */ }
+
   banner.innerHTML = `
     <div class="bigmatch-label"><img src="${li.logo}" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">빅매치 · ${li.name} · ${dateLabel}</div>
+    ${venueHtml}
     <div class="bigmatch-teams">
-      <div class="bigmatch-team clickable-team" onclick="openTeamInfo('${escJs(m.home_team)}')"><img src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span>${m.home_team.replace(' FC', '').replace(' CF', '')}</span></div>
-      <div class="bigmatch-vs">VS</div>
-      <div class="bigmatch-team clickable-team" onclick="openTeamInfo('${escJs(m.away_team)}')"><img src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"><span>${m.away_team.replace(' FC', '').replace(' CF', '')}</span></div>
+      <div class="bigmatch-team clickable-team" onclick="openTeamInfo('${escJs(m.home_team)}')"><img src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span class="bigmatch-team-name">${homeName}</span>${homeProbHtml}</div>
+      <div class="bigmatch-vs-col">${probHtml}</div>
+      <div class="bigmatch-team away clickable-team" onclick="openTeamInfo('${escJs(m.away_team)}')"><img src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"><span class="bigmatch-team-name">${awayName}</span>${awayProbHtml}</div>
     </div>
     <div class="bigmatch-countdown" id="bigmatch-countdown"></div>
   `;
@@ -2087,6 +2132,8 @@ function showResult(data,h2h,homeForm,awayForm,home,away){
   document.getElementById('s-home-atk').textContent=data.home_stats.attack;document.getElementById('s-home-def').textContent=data.home_stats.defense;
   document.getElementById('s-away-atk').textContent=data.away_stats.attack;document.getElementById('s-away-def').textContent=data.away_stats.defense;
   const homeShortLabel=home.split(' ')[0],awayShortLabel=away.split(' ')[0];
+  document.getElementById('prob-label-home').textContent=homeShortLabel+' 승';
+  document.getElementById('prob-label-away').textContent=awayShortLabel+' 승';
   document.getElementById('s-home-atk-label').textContent=homeShortLabel+' 공격력';
   document.getElementById('s-home-def-label').textContent=homeShortLabel+' 수비력';
   document.getElementById('s-away-atk-label').textContent=awayShortLabel+' 공격력';
@@ -2261,17 +2308,24 @@ async function shareResultCard() {
       const safeName = s => s.replace(/[^a-zA-Z0-9가-힣]/g, '_');
       const filename = `fotdata_${safeName(home)}_vs_${safeName(away)}.png`;
       const file = new File([blob], filename, { type: 'image/png' });
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        try {
-          await navigator.share({ files: [file], title: 'FotData 예측 결과', text: `${home} vs ${away} 예측 결과 · FotData` });
-        } catch (e) { /* 사용자가 공유 취소 */ }
-      } else {
+      // 데스크톱(마우스 포인터)에서는 항상 바로 다운로드. 터치 기기에서만 카카오톡 등으로
+      // 바로 보낼 수 있는 네이티브 공유시트를 띄운다 — Web Share가 있다고 무조건 그걸 우선하면
+      // 데스크톱에서도 불필요한 공유 다이얼로그가 앞을 가려 "다운로드가 안 되는" 것처럼 보였음.
+      const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+      const downloadFile = () => {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url; a.download = filename;
         document.body.appendChild(a); a.click(); a.remove();
         URL.revokeObjectURL(url);
         showToast('예측 결과 이미지가 저장됐어요');
+      };
+      if (isTouchDevice && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({ files: [file], title: 'FotData 예측 결과', text: `${home} vs ${away} 예측 결과 · FotData` });
+        } catch (e) { /* 사용자가 공유 취소 */ }
+      } else {
+        downloadFile();
       }
     }, 'image/png');
   } catch (e) {
