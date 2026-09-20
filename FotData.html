@@ -1170,10 +1170,12 @@ function showToast(message, duration = 2200) {
 
 // ── PWA 설치 유도 배너 ──
 let deferredPwaPrompt = null;
+// 닫기는 "이번 페이지에서만" 숨기는 용도 — localStorage에 영구 기록하지 않는다.
+// 랜딩페이지로 나갔다가 FotData.html로 다시 들어오면(=새 페이지 로드) beforeinstallprompt가
+// 다시 발생해 안내 배너도 다시 뜨는 게 자연스러운 동작이라는 피드백을 반영함.
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPwaPrompt = e;
-  if (localStorage.getItem('pwaInstallDismissed')) return;
   if (window.matchMedia('(display-mode: standalone)').matches) return;
   document.getElementById('pwa-install-banner').classList.add('show');
 });
@@ -1187,7 +1189,6 @@ async function installPwa() {
 }
 function dismissPwaBanner() {
   document.getElementById('pwa-install-banner').classList.remove('show');
-  localStorage.setItem('pwaInstallDismissed', '1');
 }
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
