@@ -23,8 +23,21 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; background: #0d1117; color: #e6edf3; min-height: 100vh; }
 
-    .nav { background: #161b22; border-bottom: 0.5px solid #30363d; padding: 0 24px; padding-top: env(safe-area-inset-top); display: flex; align-items: center; gap: 0; position: sticky; top: 0; z-index: 100; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-    .nav::-webkit-scrollbar { display: none; }
+    .nav { background: #161b22; border-bottom: 0.5px solid #30363d; padding: 0 24px; padding-top: env(safe-area-inset-top); display: flex; align-items: center; gap: 0; position: sticky; top: 0; z-index: 100; }
+    .nav-tabs-scroll { display: flex; align-items: center; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; flex: 1; min-width: 0; }
+    .nav-tabs-scroll::-webkit-scrollbar { display: none; }
+    .nav-search-btn { flex-shrink: 0; display: flex; align-items: center; gap: 6px; margin-left: 8px; padding: 7px 10px; background: #21262d; border: 0.5px solid #30363d; border-radius: 8px; color: #8b949e; cursor: pointer; transition: all .15s; }
+    .nav-search-btn:hover { border-color: #58a6ff; color: #e6edf3; }
+    .nav-search-kbd { font-size: 10px; font-weight: 600; }
+    @media (max-width: 480px) { .nav-search-kbd { display: none; } }
+    .team-search-box { width: 480px; max-width: 92vw; max-height: 72vh; display: flex; flex-direction: column; align-items: stretch; }
+    .team-search-input-wrap { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 0.5px solid #30363d; flex-shrink: 0; }
+    .team-search-input-wrap input { flex: 1; background: none; border: none; outline: none; color: #e6edf3; font-size: 15px; font-family: inherit; }
+    .team-search-input-wrap input::placeholder { color: #8b949e; }
+    .team-search-results { overflow-y: auto; padding: 8px; }
+    .team-search-item { display: flex; align-items: center; gap: 10px; padding: 10px 10px; border-radius: 8px; cursor: pointer; font-size: 13px; color: #e6edf3; transition: background .1s; }
+    .team-search-item:hover { background: #21262d; }
+    .team-search-item img { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
     .nav-logo { font-size: 18px; font-weight: 700; color: #e6edf3; padding: 14px 0; margin-right: 24px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
     .nav-tab { padding: 16px 16px; font-size: 14px; color: #8b949e; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; white-space: nowrap; flex-shrink: 0; }
     .nav-wordmark { display: flex; flex-shrink: 0; }
@@ -385,11 +398,17 @@
       <span style="font-size:19px;font-weight:800;color:#58a6ff;letter-spacing:-0.5px">Data</span>
     </div>
   </div>
-  <div class="nav-tab active" onclick="showPage('predict')">경기 예측</div>
-  <div class="nav-tab" onclick="showPage('champion')">순위 예측</div>
-  <div class="nav-tab" onclick="showPage('standings')">순위표</div>
-  <div class="nav-tab" onclick="showPage('schedule')">일정</div>
-  <div class="nav-tab" onclick="showPage('players')">선수</div>
+  <div class="nav-tabs-scroll">
+    <div class="nav-tab active" onclick="showPage('predict')">경기 예측</div>
+    <div class="nav-tab" onclick="showPage('champion')">순위 예측</div>
+    <div class="nav-tab" onclick="showPage('standings')">순위표</div>
+    <div class="nav-tab" onclick="showPage('schedule')">일정</div>
+    <div class="nav-tab" onclick="showPage('players')">선수</div>
+  </div>
+  <button class="nav-search-btn" onclick="openTeamSearch()" aria-label="팀 검색" title="팀 검색 (Ctrl/Cmd+K)">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    <span class="nav-search-kbd">⌘K</span>
+  </button>
 </nav>
 
 <div class="container">
@@ -657,6 +676,18 @@
     </div>
     <div class="modal-legs" id="t-legs"></div>
     <div class="modal-badge" id="t-badge"></div>
+  </div>
+</div>
+
+<!-- 전역 팀 검색 -->
+<div class="modal-overlay" id="team-search-modal" onclick="closeTeamSearch(event)">
+  <div class="modal team-search-box">
+    <div class="team-search-input-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8b949e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <input type="text" id="team-search-input" placeholder="팀 이름 검색..." oninput="filterGlobalSearch(this.value)">
+      <span class="popup-close" onclick="closeTeamSearch()">✕</span>
+    </div>
+    <div class="team-search-results" id="team-search-results"></div>
   </div>
 </div>
 
@@ -1047,6 +1078,54 @@ let teamInfoCache = {};
 let teamStatsCache = {};
 let standingsCache = {};
 let tiState = { team: null, code: null, tab: 'overview' };
+
+function getAllTeamsForSearch() {
+  const seen = new Set();
+  const all = [];
+  Object.values(LEAGUE_DATA).forEach(d => {
+    d.teams.forEach(t => { if (!seen.has(t)) { seen.add(t); all.push(t); } });
+  });
+  return all.sort((a, b) => cleanTeamName(a).localeCompare(cleanTeamName(b)));
+}
+function renderGlobalSearchResults(query) {
+  const container = document.getElementById('team-search-results');
+  const all = getAllTeamsForSearch();
+  const q = query.trim().toLowerCase();
+  const filtered = q ? all.filter(t => t.toLowerCase().includes(q) || cleanTeamName(t).toLowerCase().includes(q)) : all;
+  if (!filtered.length) { container.innerHTML = '<div class="ti-empty">검색 결과가 없어요.</div>'; return; }
+  container.innerHTML = filtered.slice(0, 40).map(t => `
+    <div class="team-search-item" onclick="selectGlobalSearchResult('${escJs(t)}')">
+      <img src="${logos[t] || ''}" onerror="this.style.display='none'">
+      <span>${cleanTeamName(t)}</span>
+    </div>
+  `).join('');
+}
+function filterGlobalSearch(value) { renderGlobalSearchResults(value); }
+function selectGlobalSearchResult(team) {
+  closeTeamSearch();
+  openTeamInfo(team);
+}
+function openTeamSearch() {
+  const modal = document.getElementById('team-search-modal');
+  modal.classList.add('show');
+  const input = document.getElementById('team-search-input');
+  input.value = '';
+  renderGlobalSearchResults('');
+  setTimeout(() => input.focus(), 50);
+}
+function closeTeamSearch(e) {
+  if (!e || e.target === document.getElementById('team-search-modal')) {
+    document.getElementById('team-search-modal').classList.remove('show');
+  }
+}
+document.addEventListener('keydown', (e) => {
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+    e.preventDefault();
+    openTeamSearch();
+  } else if (e.key === 'Escape') {
+    closeTeamSearch();
+  }
+});
 let tiFixturesState = { team: null, matches: [], month: null };
 
 function tiFixturesMonthKey(dateStr) {
