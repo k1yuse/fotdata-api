@@ -29,7 +29,6 @@
     .nav-tab { padding: 16px 16px; font-size: 14px; color: #8b949e; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; white-space: nowrap; flex-shrink: 0; }
     .nav-wordmark { display: flex; flex-shrink: 0; }
     .player-col { flex: 1; min-width: 400px; }
-    #standings-content { overflow-x: auto; -webkit-overflow-scrolling: touch; }
     .nav-tab:hover { color: #e6edf3; }
     .nav-tab.active { color: #58a6ff; border-bottom-color: #58a6ff; }
 
@@ -42,6 +41,11 @@
     .page-enter .card, .page-enter > div > .card { animation: fadeUp .45s .05s ease both; }
     @keyframes rowSlideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
     .row-enter { animation: rowSlideIn .4s ease both; }
+    #toast-container { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 2000; display: flex; flex-direction: column; gap: 8px; align-items: center; pointer-events: none; }
+    .toast { background: #21262d; border: 0.5px solid #30363d; color: #e6edf3; font-size: 13px; padding: 12px 20px; border-radius: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); animation: toastIn .3s ease both; max-width: 90vw; text-align: center; }
+    .toast.hide { animation: toastOut .25s ease both; }
+    @keyframes toastIn { from { opacity: 0; transform: translateY(12px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes toastOut { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(8px) scale(0.95); } }
 
     .card { background: #161b22; border: 0.5px solid #30363d; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
     .card-title { font-size: 13px; color: #8b949e; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
@@ -63,6 +67,9 @@
 
     .standings-table { width: 100%; max-width: 1100px; margin: 0 auto; border-collapse: collapse; }
     .standings-table th { font-size: 11px; color: #8b949e; text-align: left; padding: 8px 12px; border-bottom: 0.5px solid #30363d; }
+    @media (min-width: 769px) {
+      .standings-table th { position: sticky; top: var(--nav-height, 60px); background: #161b22; z-index: 5; }
+    }
     .standings-table th.center { text-align: center; }
     .standings-table td { padding: 10px 12px; border-bottom: 0.5px solid #21262d; font-size: 13px; }
     .standings-table td.center { text-align: center; }
@@ -262,6 +269,11 @@
     .stat-val { font-size: 18px; font-weight: 700; }
     .stat-label { font-size: 11px; color: #8b949e; margin-top: 4px; }
     .loading { text-align: center; padding: 40px; color: #8b949e; }
+    .skeleton { background: linear-gradient(90deg, #21262d 25%, #2d333b 37%, #21262d 63%); background-size: 400% 100%; animation: skeletonShimmer 1.4s ease infinite; border-radius: 6px; }
+    @keyframes skeletonShimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
+    .skeleton-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; }
+    .skeleton-circle { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; }
+    .skeleton-line { height: 12px; }
     .error-msg { background: #4c1d1d; border: 0.5px solid #f85149; border-radius: 8px; padding: 10px 14px; color: #f85149; font-size: 13px; margin-top: 10px; display: none; }
 
     @media (max-width: 768px) {
@@ -274,6 +286,7 @@
       .team-popup { width: 320px; }
       .popup-team-grid { grid-template-columns: repeat(2,1fr); }
       .standings-table { min-width: 560px; }
+      #standings-content { overflow-x: auto; -webkit-overflow-scrolling: touch; }
       .standings-table .hide-mobile { display: none; }
       .standings-table td, .standings-table th { padding: 8px 6px; font-size: 11px; }
       .player-col { flex: 1 1 100%; min-width: 0; }
@@ -461,10 +474,10 @@
   <div class="card">
     <div class="league-tabs" id="players-league-tabs">
     <button class="champ-league-btn active"><img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="width:16px;height:16px;filter:brightness(0) invert(1);vertical-align:middle;margin-right:4px">EPL</button>
-    <button class="champ-league-btn" onclick="alert('라리가 선수 데이터는 준비 중입니다')" style="opacity:0.5"><img src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">라리가</button>
-    <button class="champ-league-btn" onclick="alert('분데스리가 선수 데이터는 준비 중입니다')" style="opacity:0.5"><img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">분데스리가</button>
-    <button class="champ-league-btn" onclick="alert('세리에A 선수 데이터는 준비 중입니다')" style="opacity:0.5"><img src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">세리에A</button>
-    <button class="champ-league-btn" onclick="alert('리그앙 선수 데이터는 준비 중입니다')" style="opacity:0.5"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">리그앙</button>
+    <button class="champ-league-btn" onclick="showToast('라리가 선수 데이터는 준비 중이에요')" style="opacity:0.5"><img src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">라리가</button>
+    <button class="champ-league-btn" onclick="showToast('분데스리가 선수 데이터는 준비 중이에요')" style="opacity:0.5"><img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">분데스리가</button>
+    <button class="champ-league-btn" onclick="showToast('세리에A 선수 데이터는 준비 중이에요')" style="opacity:0.5"><img src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">세리에A</button>
+    <button class="champ-league-btn" onclick="showToast('리그앙 선수 데이터는 준비 중이에요')" style="opacity:0.5"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">리그앙</button>
   </div>
   <div class="card-title" style="margin-bottom:16px;font-size:18px">EPL 24-25 시즌</div>
     <div style="display:flex;gap:24px;flex-wrap:wrap">
@@ -733,6 +746,50 @@ async function loadTournament() {
 }
 
 function escJs(str) { return String(str).replace(/'/g, "\\'"); }
+
+function skeletonRows(n, opts = {}) {
+  const widths = opts.widths || ['60%', '30%'];
+  let html = '';
+  for (let i = 0; i < n; i++) {
+    html += `<div class="skeleton-row">
+      <div class="skeleton skeleton-circle"></div>
+      <div class="skeleton skeleton-line" style="flex:1;max-width:${widths[0]}"></div>
+      <div class="skeleton skeleton-line" style="width:${widths[1]}"></div>
+    </div>`;
+  }
+  return html;
+}
+
+function skeletonMatchRows(n) {
+  let html = '';
+  for (let i = 0; i < n; i++) {
+    html += `<div class="sched-match">
+      <div class="sched-team"><div class="skeleton skeleton-circle" style="width:20px;height:20px"></div><div class="skeleton skeleton-line" style="width:70px"></div></div>
+      <div class="sched-vs"><div class="skeleton skeleton-line" style="width:36px;height:14px;margin:0 auto"></div></div>
+      <div class="sched-team away"><div class="skeleton skeleton-line" style="width:70px"></div><div class="skeleton skeleton-circle" style="width:20px;height:20px"></div></div>
+    </div>`;
+  }
+  return html;
+}
+
+function updateNavHeightVar() {
+  const nav = document.querySelector('.nav');
+  if (nav) document.documentElement.style.setProperty('--nav-height', nav.offsetHeight + 'px');
+}
+window.addEventListener('resize', updateNavHeightVar);
+updateNavHeightVar();
+
+function showToast(message, duration = 2200) {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = message;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.classList.add('hide');
+    setTimeout(() => toast.remove(), 250);
+  }, duration);
+}
 
 function animateCountUp(el, endValue, opts = {}) {
   if (!el) return;
@@ -1244,8 +1301,8 @@ async function loadChampion(league, btn) {
   }
   
   const content = document.getElementById('champion-content');
-  content.innerHTML = '<div class="loading">불러오는 중...</div>';
-  
+  content.innerHTML = skeletonRows(10);
+
   try {
     const res = await fetchWithRetry(`${API}/predict/champion/${league}`, {}, {
       onRetry: (a, r) => { content.innerHTML = wakingUpHtml(a, r); }
@@ -1341,7 +1398,9 @@ function renderChampionResults(data) {
 
 async function loadPlayers() {
   const API = 'https://fotdata-api.onrender.com';
-  
+  document.getElementById('topscorers-list').innerHTML = skeletonRows(8, {widths:['50%','20%']});
+  document.getElementById('topassists-list').innerHTML = skeletonRows(8, {widths:['50%','20%']});
+
   const onRetry = (a, r) => {
     document.getElementById('topscorers-list').innerHTML = wakingUpHtml(a, r);
     document.getElementById('topassists-list').innerHTML = wakingUpHtml(a, r);
@@ -1402,7 +1461,7 @@ async function loadSchedule(league, btn) {
     btn.classList.add('active');
   }
   const content = document.getElementById('schedule-content');
-  content.innerHTML = '<div class="loading">일정 불러오는 중...</div>';
+  content.innerHTML = skeletonMatchRows(6);
   try {
     if (!scheduleData[league]) {
       const res = await fetchWithRetry(`${API}/schedule/${league}`, {}, {
@@ -1533,7 +1592,7 @@ async function loadStandings(leagueCode) {
     document.getElementById('standings-card').style.display='block';
   }
   const content=document.getElementById('standings-content');
-  content.innerHTML='<div class="loading">순위표 불러오는 중...</div>';
+  content.innerHTML=skeletonRows(10);
   try{
     const res=await fetchWithRetry(`${API}/standings/${leagueCode}?season=${currentStandingsSeason}`, {}, {
       onRetry: (a, r) => { content.innerHTML = wakingUpHtml(a, r); }
@@ -1797,5 +1856,6 @@ if(window.location.hash){setTimeout(()=>{const h=window.location.hash.replace('#
   </div>
   <div style="font-size:12px;color:#8b949e">© 2026 FotData · AI 축구 분석 플랫폼</div>
 </footer>
+<div id="toast-container"></div>
 </body>
 </html>

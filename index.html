@@ -240,6 +240,15 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .feat-grid .feat-card:nth-child(1) { transition-delay: 0s; }
+    .feat-grid .feat-card:nth-child(2) { transition-delay: .08s; }
+    .feat-grid .feat-card:nth-child(3) { transition-delay: .16s; }
+    .feat-grid .feat-card:nth-child(4) { transition-delay: .24s; }
+    .feat-grid .feat-card:nth-child(5) { transition-delay: .32s; }
+    .feat-grid .feat-card:nth-child(6) { transition-delay: .4s; }
+
     @media (max-width: 768px) {
       nav { padding: 0 20px; }
       .nav-links { display: none; }
@@ -401,7 +410,7 @@
 </script>
 
 
-<section class="preview">
+<section class="preview reveal">
   <div class="preview-inner">
     <div>
       <div class="preview-label">경기 예측</div>
@@ -464,7 +473,7 @@
   </div>
 </section>
 
-<section class="standings-preview">
+<section class="standings-preview reveal">
   <div class="standings-inner">
     <div class="standings-mock">
       <div class="standings-mock-header">
@@ -496,32 +505,32 @@
       <div class="section-title">필요한 모든 축구 데이터</div>
     </div>
     <div class="feat-grid">
-      <div class="feat-card">
+      <div class="feat-card reveal">
         <div class="feat-icon">🏆</div>
         <h3>실시간 순위표</h3>
         <p>6개 리그 최신 순위, 폼, 득실 현황을 한눈에 확인하세요.</p>
       </div>
-      <div class="feat-card">
+      <div class="feat-card reveal">
         <div class="feat-icon">🔮</div>
         <h3>AI 경기 예측</h3>
         <p>머신러닝이 분석한 승/무/패 확률과 예상 스코어까지 한번에 확인하세요.</p>
       </div>
-      <div class="feat-card">
+      <div class="feat-card reveal">
         <div class="feat-icon">⚔️</div>
         <h3>H2H 맞대 기록</h3>
         <p>두 팀의 최근 3시즌 맞대 기록과 상세 경기 결과.</p>
       </div>
-      <div class="feat-card">
+      <div class="feat-card reveal">
         <div class="feat-icon">📊</div>
         <h3>팀 스탯 분석</h3>
         <p>공격력, 수비력, 승률 등 팀별 상세 퍼포먼스 지표.</p>
       </div>
-      <div class="feat-card">
+      <div class="feat-card reveal">
         <div class="feat-icon">📅</div>
         <h3>경기 일정</h3>
         <p>5대 리그+UCL 시즌 전체 일정을 월별로, 완료 경기는 결과까지.</p>
       </div>
-      <div class="feat-card">
+      <div class="feat-card reveal">
         <div class="feat-icon">🔄</div>
         <h3>자동 업데이트</h3>
         <p>매일 새벽 최신 경기 결과가 자동으로 반영됩니다.</p>
@@ -545,7 +554,7 @@
   </div>
 </section>
 
-<section class="cta-section">
+<section class="cta-section reveal">
   <h2>지금 바로<br><em>시작하세요</em></h2>
   <p>무료로 모든 기능을 이용할 수 있어요</p>
   <a href="FotData.html" class="btn-primary" style="font-size:16px;padding:16px 40px">FotData 시작하기 →</a>
@@ -615,6 +624,19 @@
   } catch(e) {
     document.getElementById('landing-standings-preview').innerHTML = '<div class="standings-row"><span style="color:#8b949e;padding:12px 0">순위표를 불러올 수 없습니다</span></div>';
   }
+})();
+</script>
+<script>
+(function() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 })();
 </script>
 </body>
