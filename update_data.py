@@ -1,4 +1,5 @@
 # ── 자동 데이터 업데이트 스크립트 ──
+import re
 import requests
 import time
 import pandas as pd
@@ -453,6 +454,141 @@ def fetch_team_info():
         json.dump(team_info, f, ensure_ascii=False, indent=2)
     print(f"  ✅ team_info.json 저장 완료 ({len(team_info)}팀)")
 
+SQUAD_POSITION_MAP = {"Goalkeeper": "Goalkeeper", "Defender": "Defence", "Midfielder": "Midfield", "Attacker": "Offence"}
+
+def _normalize_team_name(name):
+    n = name.lower().strip()
+    n = re.sub(r'^(afc|ac|cf|sk|bk)\s+', '', n)
+    for suf in (" fc", " afc", " cf", " sk", " bk", " ac"):
+        if n.endswith(suf):
+            n = n[: -len(suf)]
+    n = n.replace('&', ' ').replace('  ', ' ')
+    return n.strip()
+
+LEAGUE_COUNTRY = {"PL": "England", "PD": "Spain", "BL1": "Germany", "SA": "Italy", "FL1": "France"}
+
+def _search_af_team_id_query(query, country):
+    res = requests.get(f"{API_FOOTBALL_URL}/teams", headers=API_FOOTBALL_HEADERS, params={"search": query})
+    candidates = res.json().get("response", [])
+    for c in candidates:
+        t = c.get("team", {})
+        name = (t.get("name") or "")
+        if t.get("country") == country and not any(x in name.upper() for x in (" U21", " U23", " U19", " II", " B", " W")):
+            return t.get("id")
+    return None
+
+def _search_af_team_id(team_name, country):
+    """이름으로 API-Football 팀ID 검색 (시즌 제한 없는 엔드포인트).
+    같은 이름의 유스/리저브팀·해외 동명팀을 걸러내기 위해 국가로 필터링.
+    football-data.org의 공식 풀네임(예: "Brighton & Hove Albion FC",
+    "AFC Bournemouth")과 API-Football의 짧은 통칭("Brighton", "Bournemouth")이
+    달라서 전체 이름으로 검색이 실패하면 원래 이름의 첫 단어로 한 번 더 시도한다."""
+    query = _normalize_team_name(team_name)
+    af_id = _search_af_team_id_query(query, country)
+    if af_id:
+        return af_id
+    first_word = team_name.split()[0].lower()
+    if first_word != query:
+        return _search_af_team_id_query(first_word, country)
+    return None
+
+def _af_get(url, params):
+    """레이트리밋(errors 응답) 대비 1회 재시도가 포함된 API-Football 호출."""
+    res = requests.get(url, headers=API_FOOTBALL_HEADERS, params=params)
+    data = res.json()
+    if data.get("errors"):
+        print(f"    ⚠️ API 응답 오류({data['errors']}), 20초 후 재시도")
+        time.sleep(20)
+        res = requests.get(url, headers=API_FOOTBALL_HEADERS, params=params)
+        data = res.json()
+    return data
+
+def fetch_squad_transfers(league_code):
+    """API-Football 무료 플랜으로 스쿼드(사진/등번호)+이적 기록 수집.
+    시즌 제한이 있는 통계 엔드포인트와 달리, 스쿼드/이적 엔드포인트는
+    무료 플랜에서도 시즌 제약 없이 현재 데이터를 준다 — 요청 한도(100회/일)만
+    문제라 리그 단위로 나눠서 점진적으로 채운다.
+    팀ID는 /teams?league=&season=으로 한 번에 못 가져온다 — 이 조합은
+    시즌 제한에 걸려 무료 플랜에서 빈 배열만 옴. 대신 팀 이름 검색
+    (/teams?search=, 시즌 무관)으로 팀별로 하나씩 찾는다.
+    이미 처리된 팀은 건너뛰어서(팀당 3회 호출·10회/분 한도라 20팀 전체를
+    한 번에 다 못 돌 수도 있음) 재실행 시 이어서 채울 수 있게 한다."""
+    import json
+    print(f"\n[{league_code} 스쿼드+이적] 수집 중...")
+
+    if not API_FOOTBALL_KEY:
+        print("  ⚠️ API_FOOTBALL_KEY가 없어 건너뜀")
+        return
+
+    country = LEAGUE_COUNTRY.get(league_code)
+    if not country:
+        print(f"  ❌ {league_code}: 국가 매핑 없음")
+        return
+
+    schedule_path = f"{MODEL_DIR}/schedule.json"
+    with open(schedule_path, 'r', encoding='utf-8') as f:
+        schedule = json.load(f)
+    our_teams = sorted({m['home_team'] for m in schedule.get(league_code, [])} |
+                        {m['away_team'] for m in schedule.get(league_code, [])})
+
+    extra_path = f"{MODEL_DIR}/team_extra.json"
+    extra = {}
+    if os.path.exists(extra_path):
+        with open(extra_path, 'r', encoding='utf-8') as f:
+            extra = json.load(f)
+
+    for team_name in our_teams:
+        if extra.get(team_name, {}).get("squad"):
+            continue  # 이미 처리됨 — 재실행 시 스킵
+
+        af_id = _search_af_team_id(team_name, country)
+        time.sleep(7)
+        if not af_id:
+            print(f"  ⚠️ 매칭 실패: {team_name}")
+            continue
+
+        entry = extra.get(team_name, {})
+        try:
+            squad_raw = (_af_get(f"{API_FOOTBALL_URL}/players/squads", {"team": af_id}).get("response") or [{}])[0].get("players", [])
+            entry["squad"] = [
+                {
+                    "name": p.get("name"),
+                    "position": SQUAD_POSITION_MAP.get(p.get("position"), p.get("position")),
+                    "shirtNumber": p.get("number"),
+                    "photo": p.get("photo"),
+                }
+                for p in squad_raw
+            ]
+            time.sleep(7)
+
+            transfers_raw = _af_get(f"{API_FOOTBALL_URL}/transfers", {"team": af_id}).get("response", [])
+            flat = []
+            for item in transfers_raw:
+                player_name = item.get("player", {}).get("name")
+                for t in item.get("transfers", []):
+                    tin = t.get("teams", {}).get("in") or {}
+                    tout = t.get("teams", {}).get("out") or {}
+                    if tin.get("id") == af_id or tout.get("id") == af_id:
+                        flat.append({
+                            "player": player_name,
+                            "date": t.get("date"),
+                            "type": t.get("type"),
+                            "from": tout.get("name"),
+                            "to": tin.get("name"),
+                        })
+            flat.sort(key=lambda x: x["date"] or "", reverse=True)
+            entry["transfers"] = flat[:20]
+
+            extra[team_name] = entry
+            with open(extra_path, 'w', encoding='utf-8') as f:
+                json.dump(extra, f, ensure_ascii=False, indent=2)
+            print(f"  ✅ {team_name} (스쿼드 {len(entry['squad'])}명, 이적 {len(entry['transfers'])}건)")
+            time.sleep(7)
+        except Exception as e:
+            print(f"  ❌ {team_name} 예외: {e}")
+
+    print(f"  ✅ team_extra.json 저장 완료 ({sum(1 for t in our_teams if extra.get(t, {}).get('squad'))}/{len(our_teams)}팀)")
+
 def reconstruct_bracket_order(stages):
     """하드코딩 없이 실제 대진(팀 실명)으로 이전 라운드의 좌우 배치를 역추적한다.
 
@@ -713,6 +849,9 @@ def main():
 
     # 팀 상세정보 (홈구장/스쿼드 등)
     fetch_team_info()
+
+    # 스쿼드 사진/등번호 + 이적 기록 (API-Football, 현재는 PL만 — 요청 한도 때문에 리그별로 점진 확대 예정)
+    fetch_squad_transfers('PL')
 
     # 우승 예측
     fetch_champion_predictions()

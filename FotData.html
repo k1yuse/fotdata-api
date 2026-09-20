@@ -872,6 +872,58 @@ let teamInfoCache = {};
 let teamStatsCache = {};
 let standingsCache = {};
 let tiState = { team: null, code: null, tab: 'overview' };
+let tiFixturesState = { team: null, matches: [], month: null };
+
+function tiFixturesMonthKey(dateStr) {
+  const d = new Date(dateStr);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+}
+function tiFixturesMonthLabel(mk) {
+  const [y, m] = mk.split('-');
+  return `${y}년 ${parseInt(m)}월`;
+}
+function stepTiFixturesMonth(delta) {
+  const months = [...new Set(tiFixturesState.matches.map(m => tiFixturesMonthKey(m.date)))].sort();
+  const idx = months.indexOf(tiFixturesState.month) + delta;
+  if (idx < 0 || idx >= months.length) return;
+  tiFixturesState.month = months[idx];
+  renderTiFixturesContent();
+}
+function selectTiFixturesMonth(mk) {
+  tiFixturesState.month = mk;
+  renderTiFixturesContent();
+}
+function renderTiFixturesContent() {
+  const panel = document.getElementById('ti-panel');
+  const { team, matches, month } = tiFixturesState;
+  const months = [...new Set(matches.map(m => tiFixturesMonthKey(m.date)))].sort();
+  const idx = months.indexOf(month);
+  const monthMatches = matches.filter(m => tiFixturesMonthKey(m.date) === month);
+  const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토'];
+  let html = `<div class="sched-month-nav" style="margin-bottom:12px">
+    <button class="sched-month-arrow" ${idx <= 0 ? 'disabled' : ''} onclick="stepTiFixturesMonth(-1)">‹</button>
+    <select onchange="selectTiFixturesMonth(this.value)">${months.map(mk => `<option value="${mk}" ${mk === month ? 'selected' : ''}>${tiFixturesMonthLabel(mk)}</option>`).join('')}</select>
+    <button class="sched-month-arrow" ${idx >= months.length - 1 ? 'disabled' : ''} onclick="stepTiFixturesMonth(1)">›</button>
+  </div>`;
+  if (!monthMatches.length) {
+    html += '<div class="ti-empty">해당 월에 경기가 없어요.</div>';
+  } else {
+    monthMatches.forEach(m => {
+      const d = new Date(m.date);
+      const dateStr = `${d.getMonth() + 1}.${d.getDate()} (${WEEKDAY[d.getDay()]})`;
+      const played = m.status === 'FINISHED';
+      const timeStr = d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+      const homeShort = m.home_team.replace(' FC', '').replace(' CF', '');
+      const awayShort = m.away_team.replace(' FC', '').replace(' CF', '');
+      html += `<div class="sched-date-header">${dateStr}</div><div class="sched-match">
+        <div class="sched-team${m.home_team===team?' clickable-team':''}"><img src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span>${homeShort}</span></div>
+        <div class="sched-vs">${played ? `<span class="sched-score">${m.home_goals} - ${m.away_goals}</span>` : `<span class="sched-time">${timeStr}</span>`}</div>
+        <div class="sched-team away${m.away_team===team?' clickable-team':''}"><span>${awayShort}</span><img src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"></div>
+      </div>`;
+    });
+  }
+  panel.innerHTML = html;
+}
 
 function getTeamLeagueCode(team) {
   for (const [key, data] of Object.entries(LEAGUE_DATA)) {
@@ -935,7 +987,13 @@ async function switchTiTab(tab) {
         const players = groups[pos];
         if (!players || !players.length) return;
         html += `<div class="ti-section-title">${POSITION_LABEL[pos]} (${players.length})</div>`;
-        html += players.map(p => `<div class="ti-player-row"><span class="ti-player-name">${p.shirtNumber ? `#${p.shirtNumber} ` : ''}${p.name}</span><span class="ti-player-nation">${p.nationality || ''}</span></div>`).join('');
+        html += players.map(p => `<div class="ti-player-row">
+          <div style="display:flex;align-items:center;gap:8px;min-width:0">
+            ${p.photo ? `<img src="${p.photo}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;background:#21262d" onerror="this.style.display='none'">` : ''}
+            <span class="ti-player-name" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.shirtNumber ? `#${p.shirtNumber} ` : ''}${p.name}</span>
+          </div>
+          <span class="ti-player-nation">${p.nationality || ''}</span>
+        </div>`).join('');
       });
       panel.innerHTML = html || '<div class="ti-empty">스쿼드 정보가 없어요.</div>';
     } else if (tab === 'standings') {
@@ -962,22 +1020,10 @@ async function switchTiTab(tab) {
       const matches = (scheduleData[code] || []).filter(m => m.home_team === team || m.away_team === team)
         .sort((a, b) => new Date(a.date) - new Date(b.date));
       if (!matches.length) { panel.innerHTML = '<div class="ti-empty">경기 일정이 없어요.</div>'; return; }
-      const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토'];
-      let html = '';
-      matches.forEach(m => {
-        const d = new Date(m.date);
-        const dateStr = `${d.getMonth() + 1}.${d.getDate()} (${WEEKDAY[d.getDay()]})`;
-        const played = m.status === 'FINISHED';
-        const timeStr = d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
-        const homeShort = m.home_team.replace(' FC', '').replace(' CF', '');
-        const awayShort = m.away_team.replace(' FC', '').replace(' CF', '');
-        html += `<div class="sched-date-header">${dateStr}</div><div class="sched-match">
-          <div class="sched-team${m.home_team===team?' clickable-team':''}"><img src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span>${homeShort}</span></div>
-          <div class="sched-vs">${played ? `<span class="sched-score">${m.home_goals} - ${m.away_goals}</span>` : `<span class="sched-time">${timeStr}</span>`}</div>
-          <div class="sched-team away${m.away_team===team?' clickable-team':''}"><span>${awayShort}</span><img src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"></div>
-        </div>`;
-      });
-      panel.innerHTML = html;
+      const months = [...new Set(matches.map(m => tiFixturesMonthKey(m.date)))].sort();
+      const todayKey = tiFixturesMonthKey(new Date().toISOString());
+      tiFixturesState = { team, matches, month: months.includes(todayKey) ? todayKey : months[0] };
+      renderTiFixturesContent();
     } else if (tab === 'teamstats') {
       let stats = teamStatsCache[team];
       if (!stats) {
@@ -997,7 +1043,19 @@ async function switchTiTab(tab) {
     } else if (tab === 'playerstats') {
       panel.innerHTML = '<div class="ti-empty">플레이어 통계는 준비 중이에요.</div>';
     } else if (tab === 'transfers') {
-      panel.innerHTML = '<div class="ti-empty">이적 기록은 준비 중이에요.</div>';
+      const info = await fetchTeamInfo(team);
+      const transfers = info.transfers || [];
+      if (!transfers.length) { panel.innerHTML = '<div class="ti-empty">이적 기록은 준비 중이에요.</div>'; return; }
+      panel.innerHTML = transfers.map(t => `<div class="ti-player-row">
+        <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+          <span class="ti-player-name">${t.player}</span>
+          <span class="ti-player-nation">${t.from || '?'} → ${t.to || '?'}</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px">
+          <span class="ti-player-name" style="font-size:11px">${t.type || ''}</span>
+          <span class="ti-player-nation">${t.date || ''}</span>
+        </div>
+      </div>`).join('');
     }
   } catch (e) {
     panel.innerHTML = '<div class="ti-empty">데이터를 불러올 수 없어요. 잠시 후 다시 시도해주세요.</div>';

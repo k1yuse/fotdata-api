@@ -594,4 +594,16 @@ def get_team_info(team_name: str):
     if info is None:
         raise HTTPException(status_code=404, detail=f"팀 정보를 찾을 수 없습니다: {team_name}")
 
+    # API-Football 스쿼드 사진/등번호 + 이적 기록 (현재는 PL만 — fetch_squad_transfers() 참고)
+    extra_path = os.path.join(MODEL_DIR, "team_extra.json")
+    if os.path.exists(extra_path):
+        with open(extra_path, 'r', encoding='utf-8') as f:
+            extra = json.load(f).get(team_name)
+        if extra:
+            info = {**info}
+            if extra.get("squad"):
+                info["squad"] = extra["squad"]
+            if extra.get("transfers") is not None:
+                info["transfers"] = extra["transfers"]
+
     return info
