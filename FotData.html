@@ -294,8 +294,8 @@
     .sched-month-arrow { width: 32px; height: 32px; border-radius: 50%; border: 0.5px solid #30363d; background: #21262d; color: #e6edf3; font-size: 17px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color .15s; }
     .sched-month-arrow:hover:not(:disabled) { border-color: #58a6ff; }
     .sched-month-arrow:disabled { opacity: 0.3; cursor: not-allowed; }
-    #schedule-month-select { background: #21262d; border: 0.5px solid #30363d; color: #e6edf3; font-size: 14px; font-weight: 600; padding: 8px 16px; border-radius: 8px; cursor: pointer; text-align: center; text-align-last: center; min-width: 140px; }
-    #schedule-month-select:hover { border-color: #58a6ff; }
+    #schedule-month-select, .sched-month-select { background: #21262d; border: 0.5px solid #30363d; color: #e6edf3; font-size: 14px; font-weight: 600; padding: 8px 16px; border-radius: 8px; cursor: pointer; text-align: center; text-align-last: center; min-width: 140px; }
+    #schedule-month-select:hover, .sched-month-select:hover { border-color: #58a6ff; }
     #schedule-content { max-width: 640px; margin: 0 auto; }
     .sched-date-header { font-size: 12px; color: #8b949e; font-weight: 600; margin: 18px 0 8px; padding-bottom: 6px; border-bottom: 0.5px solid #30363d; }
     .sched-date-header:first-child { margin-top: 0; }
@@ -902,7 +902,7 @@ function renderTiFixturesContent() {
   const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토'];
   let html = `<div class="sched-month-nav" style="margin-bottom:12px">
     <button class="sched-month-arrow" ${idx <= 0 ? 'disabled' : ''} onclick="stepTiFixturesMonth(-1)">‹</button>
-    <select onchange="selectTiFixturesMonth(this.value)">${months.map(mk => `<option value="${mk}" ${mk === month ? 'selected' : ''}>${tiFixturesMonthLabel(mk)}</option>`).join('')}</select>
+    <select class="sched-month-select" onchange="selectTiFixturesMonth(this.value)">${months.map(mk => `<option value="${mk}" ${mk === month ? 'selected' : ''}>${tiFixturesMonthLabel(mk)}</option>`).join('')}</select>
     <button class="sched-month-arrow" ${idx >= months.length - 1 ? 'disabled' : ''} onclick="stepTiFixturesMonth(1)">›</button>
   </div>`;
   if (!monthMatches.length) {
