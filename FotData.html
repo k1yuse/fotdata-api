@@ -86,6 +86,32 @@
     .rank-zone-ecl { color: #3fb950; font-weight: 700; }
     .rank-zone-relpo { color: #d29922; font-weight: 700; }
     .rank-zone-rel { color: #da3633; font-weight: 700; }
+    .today-matches-strip { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+    .today-card { flex-shrink: 0; min-width: 152px; background: #0d1117; border: 0.5px solid #30363d; border-radius: 10px; padding: 10px 12px; transition: border-color .15s, transform .15s; }
+    .today-card:hover { border-color: #58a6ff; transform: translateY(-1px); }
+    .today-card-league { font-size: 10px; color: #8b949e; display: flex; align-items: center; gap: 4px; margin-bottom: 8px; white-space: nowrap; }
+    .today-card-league img { width: 12px; height: 12px; object-fit: contain; }
+    .today-card-row { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #e6edf3; margin-bottom: 4px; }
+    .today-card-row img { width: 16px; height: 16px; object-fit: contain; flex-shrink: 0; }
+    .today-card-row span.name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .today-card-row span.score { font-weight: 700; color: #58a6ff; }
+    .today-card-time { font-size: 10px; color: #8b949e; text-align: center; margin-top: 4px; }
+    .player-hero { position: relative; display: flex; align-items: center; gap: 16px; padding: 18px 16px; margin-bottom: 8px; border-radius: 12px; background: linear-gradient(135deg, rgba(240,192,64,0.14), rgba(240,192,64,0.02)); border: 0.5px solid rgba(240,192,64,0.35); overflow: hidden; }
+    .player-hero-badge { position: absolute; top: 10px; right: 12px; font-size: 11px; font-weight: 700; color: #f0c040; }
+    .player-hero-photo { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; background: #21262d; border: 2px solid #f0c040; flex-shrink: 0; }
+    .player-hero-info { flex: 1; min-width: 0; }
+    .player-hero-name { font-size: 17px; font-weight: 800; color: #e6edf3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .player-hero-team { font-size: 12px; color: #8b949e; display: flex; align-items: center; gap: 5px; margin-top: 4px; }
+    .player-hero-team img { width: 16px; height: 16px; object-fit: contain; }
+    .player-hero-stat { text-align: right; flex-shrink: 0; }
+    .player-hero-value { font-size: 32px; font-weight: 800; color: #f0c040; line-height: 1; }
+    .player-hero-unit { display: block; font-size: 11px; color: #8b949e; margin-top: 2px; }
+    @media (max-width: 480px) {
+      .player-hero { gap: 12px; padding: 14px 12px; }
+      .player-hero-photo { width: 52px; height: 52px; }
+      .player-hero-name { font-size: 15px; }
+      .player-hero-value { font-size: 26px; }
+    }
     .pts { font-weight: 700; color: #58a6ff; }
     .form-badges { display: flex; gap: 3px; justify-content: center; }
     .form-badge { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
@@ -202,7 +228,7 @@
     .team-selector { display: grid; grid-template-columns: 1fr auto 1fr; align-items: start; gap: 24px; margin-bottom: 16px; }
     .team-box { display: flex; flex-direction: column; align-items: center; gap: 8px; padding-top: 8px; }
     .team-box label { font-size: 12px; color: #8b949e; text-transform: uppercase; letter-spacing: 1px; }
-    .team-logo-wrap { width: 80px; height: 80px; border-radius: 50%; background: #21262d; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 8px; flex-shrink: 0; }
+    .team-logo-wrap { width: 80px; height: 80px; border-radius: 50%; background: #21262d; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 8px; flex-shrink: 0; border: 3px solid transparent; transition: border-color .4s ease, box-shadow .4s ease; }
     .team-logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
     .team-logo-wrap span { font-size: 28px; }
     .league-badge-sm { font-size: 11px; color: #8b949e; display: flex; align-items: center; gap: 4px; min-height: 16px; }
@@ -501,6 +527,10 @@
 
   <div class="page active" id="page-predict">
     <div class="card">
+      <div class="card-title" id="today-matches-title">오늘의 경기</div>
+      <div class="today-matches-strip" id="today-matches-widget"></div>
+    </div>
+    <div class="card">
       <div class="team-selector">
         <div class="team-box">
           <label>홈팀</label>
@@ -764,6 +794,62 @@ function skeletonRows(n, opts = {}) {
     </div>`;
   }
   return html;
+}
+
+const TODAY_LEAGUE_INFO = {
+  PL: { name: 'EPL', logo: 'https://crests.football-data.org/PL.png', invert: true },
+  PD: { name: '라리가', logo: 'https://crests.football-data.org/laliga.png' },
+  BL1: { name: '분데스리가', logo: 'https://crests.football-data.org/BL1.png' },
+  SA: { name: '세리에A', logo: 'https://crests.football-data.org/c111.png' },
+  FL1: { name: '리그앙', logo: 'https://crests.football-data.org/FL1.png' },
+  CL: { name: 'UCL', logo: 'https://crests.football-data.org/CL.png', invert: true },
+};
+
+async function loadTodayMatches() {
+  const container = document.getElementById('today-matches-widget');
+  if (!container) return;
+  container.innerHTML = skeletonMatchRows(3);
+  try {
+    const codes = Object.keys(TODAY_LEAGUE_INFO);
+    const lists = await Promise.all(codes.map(async code => {
+      if (!scheduleData[code]) {
+        const res = await fetch(`${API}/schedule/${code}`);
+        const data = await res.json();
+        scheduleData[code] = data.matches;
+      }
+      return (scheduleData[code] || []).map(m => ({ ...m, league: code }));
+    }));
+    const all = lists.flat();
+    const todayStr = new Date().toISOString().slice(0, 10);
+    let matches = all.filter(m => m.date.slice(0, 10) === todayStr);
+    let label = '오늘의 경기';
+    if (!matches.length) {
+      const future = all.filter(m => m.date.slice(0, 10) > todayStr).sort((a, b) => new Date(a.date) - new Date(b.date));
+      if (future.length) {
+        const nextDate = future[0].date.slice(0, 10);
+        matches = future.filter(m => m.date.slice(0, 10) === nextDate);
+        const d = new Date(nextDate);
+        label = `다음 경기 · ${d.getMonth() + 1}.${d.getDate()}`;
+      }
+    }
+    document.getElementById('today-matches-title').textContent = label;
+    if (!matches.length) { container.innerHTML = '<div class="ti-empty">예정된 경기가 없어요.</div>'; return; }
+    container.innerHTML = matches.map(m => {
+      const li = TODAY_LEAGUE_INFO[m.league];
+      const played = m.status === 'FINISHED';
+      const timeStr = new Date(m.date).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+      const homeShort = m.home_team.replace(' FC', '').replace(' CF', '');
+      const awayShort = m.away_team.replace(' FC', '').replace(' CF', '');
+      return `<div class="today-card">
+        <div class="today-card-league"><img src="${li.logo}" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">${li.name}</div>
+        <div class="today-card-row clickable-team" onclick="openTeamInfo('${escJs(m.home_team)}')"><img src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span class="name">${homeShort}</span>${played ? `<span class="score">${m.home_goals}</span>` : ''}</div>
+        <div class="today-card-row clickable-team" onclick="openTeamInfo('${escJs(m.away_team)}')"><img src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"><span class="name">${awayShort}</span>${played ? `<span class="score">${m.away_goals}</span>` : ''}</div>
+        ${played ? '' : `<div class="today-card-time">${timeStr}</div>`}
+      </div>`;
+    }).join('');
+  } catch (e) {
+    container.innerHTML = '<div class="ti-empty">일정을 불러올 수 없어요.</div>';
+  }
 }
 
 function skeletonMatchRows(n) {
@@ -1178,6 +1264,35 @@ function selectTeamFromPopup(side,team){
   if(leagueInfo){leagueDiv.innerHTML=`<img src="${leagueInfo.logo}" onerror="this.style.display='none'"> ${leagueInfo.name}`;}
   else{leagueDiv.innerHTML=`<img src="https://crests.football-data.org/CL.png" style="width:12px;height:12px;object-fit:contain"> UEFA 챔피언스리그`;}
   closePopup(side); renderTeamGrid(side,currentLeagueTab[side]);
+  applyClubAccent(side, team);
+}
+
+const CLUB_COLOR_MAP = {
+  'red':'#e5484d', 'blue':'#3b82f6', 'sky blue':'#58a6ff', 'light blue':'#58a6ff', 'navy':'#1e3a8a',
+  'navy blue':'#1e3a8a', 'dark blue':'#1e3a8a', 'royal blue':'#2563eb', 'white':'#e6edf3',
+  'black':'#3a3a3a', 'yellow':'#f0c040', 'gold':'#d4af37', 'green':'#3fb950', 'dark green':'#256029',
+  'claret':'#8c2f3d', 'maroon':'#8c2f3d', 'burgundy':'#8c2f3d', 'purple':'#a371f7', 'violet':'#a371f7',
+  'orange':'#f0883e', 'amber':'#f0883e', 'crimson':'#e5484d', 'scarlet':'#e5484d', 'pink':'#ec4899',
+  'grey':'#8b949e', 'gray':'#8b949e', 'sky':'#58a6ff', 'cream':'#e6edf3', 'garnet':'#8c2f3d',
+};
+function getClubAccentColor(clubColors) {
+  if (!clubColors) return null;
+  const first = clubColors.split('/')[0].trim().toLowerCase();
+  return CLUB_COLOR_MAP[first] || null;
+}
+async function applyClubAccent(side, team) {
+  const logoDiv = document.getElementById(`${side}-logo`);
+  try {
+    const info = await fetchTeamInfo(team);
+    const color = getClubAccentColor(info.clubColors);
+    if (color) {
+      logoDiv.style.borderColor = color;
+      logoDiv.style.boxShadow = `0 0 18px ${color}66`;
+      return;
+    }
+  } catch (e) {}
+  logoDiv.style.borderColor = 'transparent';
+  logoDiv.style.boxShadow = 'none';
 }
 document.addEventListener('click',e=>{['home','away'].forEach(side=>{if(!e.target.closest(`#${side}-popup`)&&!e.target.closest(`#${side}-trigger`))closePopup(side);});});
 
@@ -1430,10 +1545,24 @@ async function loadPlayers() {
 
 function renderPlayerList(players, type) {
   const top10 = players.slice(0, 10);
+  const unit = type === 'goals' ? '골' : '도움';
   return top10.map((p, i) => {
     const stats = p.statistics[0];
     const value = type === 'goals' ? stats.goals.total : stats.goals.assists;
     const rating = stats.games.rating ? parseFloat(stats.games.rating).toFixed(2) : '-';
+    if (i === 0) {
+      return `
+        <div class="player-hero">
+          <div class="player-hero-badge">👑 1위</div>
+          <img class="player-hero-photo" src="${p.player.photo}" onerror="this.style.display='none'">
+          <div class="player-hero-info">
+            <div class="player-hero-name">${p.player.name}</div>
+            <div class="player-hero-team"><img src="${stats.team.logo}" onerror="this.style.display='none'">${stats.team.name}</div>
+          </div>
+          <div class="player-hero-stat"><span class="player-hero-value">${value}</span><span class="player-hero-unit">${unit}</span></div>
+        </div>
+      `;
+    }
     return `
       <div style="display:flex;align-items:center;gap:12px;padding:10px;border-bottom:0.5px solid #30363d">
         <div style="font-size:14px;color:#8b949e;width:24px;text-align:center;font-weight:600">${i+1}</div>
@@ -1840,7 +1969,7 @@ renderChampions();
 updateCountdown();
 setInterval(updateCountdown, 60000);
 
-loadLogos();loadStandings('PL');loadAccuracy();
+loadLogos();loadStandings('PL');loadAccuracy();loadTodayMatches();
 
 if(window.location.hash){setTimeout(()=>{const h=window.location.hash.replace('#','');const valid=['predict','champion','standings','players','schedule'];if(!valid.includes(h))return;document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));const pg=document.getElementById('page-'+h);if(pg)pg.classList.add('active');const tab=document.querySelector('[onclick="showPage(\''+h+'\')"]');if(tab)tab.classList.add('active');if(h==='champion')loadChampion('PL');if(h==='players')loadPlayers();if(h==='schedule')loadSchedule('PL');},100);}
 </script>
