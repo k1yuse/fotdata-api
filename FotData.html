@@ -36,6 +36,11 @@
     .container { max-width: 1600px; margin: 0 auto; padding: 24px; }
     .page { display: none; }
     .page.active { display: block; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .page-enter { animation: fadeUp .45s ease both; }
+    .page-enter .card, .page-enter > div > .card { animation: fadeUp .45s .05s ease both; }
+    .row-enter { animation: fadeIn .35s ease both; }
 
     .card { background: #161b22; border: 0.5px solid #30363d; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
     .card-title { font-size: 13px; color: #8b949e; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
@@ -45,7 +50,7 @@
     #season-tabs { margin-bottom: 10px; }
     .league-tab { padding: 8px 16px; border-radius: 8px; font-size: 13px; cursor: pointer; border: 0.5px solid #30363d; background: #161b22; color: #8b949e; display: flex; align-items: center; gap: 6px; transition: all .15s; }
     .league-tab img { width: 16px; height: 16px; object-fit: contain; }
-    .league-tab:hover { border-color: #58a6ff; }
+    .league-tab:hover { border-color: #58a6ff; transform: translateY(-1px); }
     .league-tab.active { background: #1f6feb; border-color: #1f6feb; color: #fff; font-weight: 600; }
     .league-tab.ucl-tab { border-color: #30363d; color: #8b949e; background: #161b22; }
     .league-tab.ucl-tab.active { background: #1f6feb; border-color: #1f6feb; color: #fff; font-weight: 600; }
@@ -113,9 +118,10 @@
     .mc-badge.tbd { background: #161b22; color: #30363d; }
 
     /* 모달 */
-    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 1000; align-items: center; justify-content: center; }
-    .modal-overlay.show { display: flex; }
-    .modal { background: #161b22; border: 0.5px solid #30363d; border-radius: 14px; width: 320px; overflow: hidden; }
+    .modal-overlay { display: flex; visibility: hidden; opacity: 0; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 1000; align-items: center; justify-content: center; transition: opacity .2s ease, visibility .2s; }
+    .modal-overlay.show { visibility: visible; opacity: 1; }
+    .modal { background: #161b22; border: 0.5px solid #30363d; border-radius: 14px; width: 320px; overflow: hidden; transform: scale(0.95) translateY(10px); opacity: 0; transition: transform .25s cubic-bezier(.2,.9,.3,1), opacity .25s ease; }
+    .modal-overlay.show .modal { transform: scale(1) translateY(0); opacity: 1; }
     .modal-header { padding: 14px 16px; border-bottom: 0.5px solid #30363d; display: flex; align-items: center; justify-content: space-between; }
     .modal-title { font-size: 14px; font-weight: 600; color: #e6edf3; }
     .modal-close { color: #8b949e; cursor: pointer; font-size: 18px; }
@@ -217,7 +223,7 @@
     .predict-btn:hover { background: #2ea043; }
     .predict-btn:disabled { background: #30363d; cursor: not-allowed; }
     .result-section { display: none; }
-    .result-section.show { display: block; }
+    .result-section.show { display: block; animation: fadeUp .5s ease both; }
     .result-teams { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
     .result-team { display: flex; flex-direction: column; align-items: center; gap: 8px; }
     .result-team img { width: 56px; height: 56px; object-fit: contain; }
@@ -281,7 +287,7 @@
     }
     
     .champ-league-btn { padding: 8px 16px; background: #161b22; border: 0.5px solid #30363d; border-radius: 8px; color: #8b949e; font-size: 13px; font-family: inherit; cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; }
-    .champ-league-btn:hover { border-color: #58a6ff; }
+    .champ-league-btn:hover { border-color: #58a6ff; transform: translateY(-1px); }
     .champ-league-btn.active { background: #1f6feb; border-color: #1f6feb; color: #fff; font-weight: 600; }
     .champ-row { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-bottom: 0.5px solid #21262d; }
     .champ-rank { font-size: 14px; color: #8b949e; width: 24px; text-align: center; font-weight: 600; }
@@ -727,6 +733,24 @@ async function loadTournament() {
 
 function escJs(str) { return String(str).replace(/'/g, "\\'"); }
 
+function animateCountUp(el, endValue, opts = {}) {
+  if (!el) return;
+  const duration = opts.duration || 700;
+  const decimals = opts.decimals ?? 0;
+  const suffix = opts.suffix || '';
+  const prefix = opts.prefix || '';
+  const startValue = opts.from ?? 0;
+  const start = performance.now();
+  function tick(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    const val = startValue + (endValue - startValue) * eased;
+    el.textContent = prefix + val.toFixed(decimals) + suffix;
+    if (p < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
 function shortName(name) {
   const parts = name.replace(/\bFC\b|\bCF\b|\bBC\b|\bSC\b|\bAC\b|\bUS\b/g,'').trim().split(' ');
   return parts[parts.length-1] || parts[0];
@@ -1096,7 +1120,11 @@ document.addEventListener('click',e=>{['home','away'].forEach(side=>{if(!e.targe
 function showPage(page) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('page-'+page).classList.add('active');
+  const target = document.getElementById('page-'+page);
+  target.classList.add('active');
+  target.classList.remove('page-enter');
+  void target.offsetWidth;
+  target.classList.add('page-enter');
   event.target.classList.add('active');
   if(page!=='standings'){document.getElementById('ucl-subtabs').style.display='none';}
   if(page==='players'){loadPlayers();}
@@ -1287,21 +1315,27 @@ function renderChampionResults(data) {
           <div class="clickable-team" style="font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" onclick="openTeamInfo('${escJs(t.team)}')">${cleanTeamName(t.team)}</div>
         </div>
         <div class="champ-bar-wrap" style="max-width:200px">
-          <div class="champ-bar" style="width:${releBarWidth}%;background:${barColor}"></div>
+          <div class="champ-bar" data-width="${releBarWidth}" style="width:0%;background:${barColor}"></div>
         </div>
-        <div class="champ-prob" style="color:${probColor}">${probLabel}</div>
+        <div class="champ-prob" data-target="${showProb}" data-suffix="${isRele ? '%↓' : '%'}" style="color:${probColor}">0%</div>
       </div>
     `;
   });
-  
+
   // 범례
   html += `<div style="display:flex;gap:16px;margin-top:14px;font-size:11px;color:#8b949e;flex-wrap:wrap">
     <span><span style="color:#f0c040">●</span> 우승 후보</span>
     <span><span style="color:#58a6ff">●</span> 상위권 (우승 확률)</span>
     <span><span style="color:#f85149">●</span> 강등권 (강등 확률 ↓)</span>
   </div>`;
-  
+
   content.innerHTML = html;
+  requestAnimationFrame(() => {
+    content.querySelectorAll('.champ-bar').forEach(el => { el.style.width = el.dataset.width + '%'; });
+    content.querySelectorAll('.champ-prob').forEach(el => {
+      animateCountUp(el, parseFloat(el.dataset.target), { decimals: 1, suffix: el.dataset.suffix });
+    });
+  });
 }
 
 async function loadPlayers() {
@@ -1617,7 +1651,9 @@ function showResult(data,h2h,homeForm,awayForm,home,away){
   else{badge.textContent='무승부 예측';badge.className='badge draw';}
   const hw=Math.round(prob.home_win*100),dw=Math.round(prob.draw*100),aw=Math.round(prob.away_win*100);
   document.getElementById('bar-home').style.width=hw+'%';document.getElementById('bar-draw').style.width=dw+'%';document.getElementById('bar-away').style.width=aw+'%';
-  document.getElementById('val-home').textContent=hw+'%';document.getElementById('val-draw').textContent=dw+'%';document.getElementById('val-away').textContent=aw+'%';
+  animateCountUp(document.getElementById('val-home'), hw, {suffix:'%'});
+  animateCountUp(document.getElementById('val-draw'), dw, {suffix:'%'});
+  animateCountUp(document.getElementById('val-away'), aw, {suffix:'%'});
   document.getElementById('s-home-atk').textContent=data.home_stats.attack;document.getElementById('s-home-def').textContent=data.home_stats.defense;
   document.getElementById('s-away-atk').textContent=data.away_stats.attack;document.getElementById('s-away-def').textContent=data.away_stats.defense;
   const homeShortLabel=home.split(' ')[0],awayShortLabel=away.split(' ')[0];
