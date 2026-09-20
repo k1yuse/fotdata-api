@@ -60,7 +60,7 @@
     @keyframes toastIn { from { opacity: 0; transform: translateY(12px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
     @keyframes toastOut { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(8px) scale(0.95); } }
 
-    .card { background: #161b22; border: 0.5px solid #30363d; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+    .card { background: #161b22; border: 0.5px solid #30363d; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.28), 0 1px 3px rgba(0,0,0,0.24); }
     .predict-selector-card { position: relative; z-index: 10; }
     .card-title { font-size: 13px; color: #8b949e; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
 
@@ -110,8 +110,9 @@
     .today-card-row span.name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .today-card-row span.score { font-weight: 700; color: #58a6ff; }
     .today-card-time { font-size: 10px; color: #8b949e; text-align: center; margin-top: 4px; }
-    .player-hero { position: relative; display: flex; align-items: center; gap: 16px; padding: 18px 16px; margin-bottom: 8px; border-radius: 12px; background: linear-gradient(135deg, rgba(240,192,64,0.14), rgba(240,192,64,0.02)); border: 0.5px solid rgba(240,192,64,0.35); overflow: hidden; }
-    .player-hero-badge { position: absolute; top: 10px; right: 12px; font-size: 11px; font-weight: 700; color: #f0c040; }
+    .player-hero { position: relative; display: flex; align-items: center; gap: 16px; padding: 18px 16px; margin-bottom: 8px; border-radius: 12px; background: linear-gradient(135deg, rgba(240,192,64,0.14), rgba(240,192,64,0.02)); border: 0.5px solid rgba(240,192,64,0.35); overflow: hidden; box-shadow: 0 6px 20px rgba(240,192,64,0.08); }
+    .player-hero-badge { position: absolute; top: 10px; right: 12px; font-size: 11px; font-weight: 700; color: #f0c040; display: flex; align-items: center; gap: 4px; }
+    .player-hero-badge svg { width: 12px; height: 12px; }
     .player-hero-photo { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; background: #21262d; border: 2px solid #f0c040; flex-shrink: 0; }
     .player-hero-info { flex: 1; min-width: 0; }
     .player-hero-name { font-size: 17px; font-weight: 800; color: #e6edf3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -175,7 +176,7 @@
     /* 모달 */
     .modal-overlay { display: flex; visibility: hidden; opacity: 0; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 1000; align-items: center; justify-content: center; transition: opacity .2s ease, visibility .2s; }
     .modal-overlay.show { visibility: visible; opacity: 1; }
-    .modal { background: #161b22; border: 0.5px solid #30363d; border-radius: 14px; width: 320px; overflow: hidden; transform: scale(0.95) translateY(10px); opacity: 0; transition: transform .25s cubic-bezier(.2,.9,.3,1), opacity .25s ease; }
+    .modal { background: #161b22; border: 0.5px solid #30363d; border-radius: 14px; width: 320px; overflow: hidden; transform: scale(0.95) translateY(10px); opacity: 0; transition: transform .25s cubic-bezier(.2,.9,.3,1), opacity .25s ease; box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 4px 12px rgba(0,0,0,0.3); }
     .modal-overlay.show .modal { transform: scale(1) translateY(0); opacity: 1; }
     .modal-header { padding: 14px 16px; border-bottom: 0.5px solid #30363d; display: flex; align-items: center; justify-content: space-between; }
     .modal-title { font-size: 14px; font-weight: 600; color: #e6edf3; }
@@ -274,8 +275,9 @@
     .popup-team-row img { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
     .popup-team-list::-webkit-scrollbar { width: 4px; }
     .popup-team-list::-webkit-scrollbar-thumb { background: #30363d; border-radius: 2px; }
-    .predict-btn { width: 100%; padding: 14px; background: #238636; border: none; border-radius: 10px; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-    .predict-btn:hover { background: #2ea043; }
+    .predict-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #2ea043, #238636); border: none; border-radius: 10px; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; transition: box-shadow 0.2s, transform 0.1s; box-shadow: 0 4px 14px rgba(35,134,54,0.35); }
+    .predict-btn:hover { box-shadow: 0 6px 18px rgba(35,134,54,0.5); }
+    .predict-btn:active { transform: scale(0.98); }
     .predict-btn:disabled { background: #30363d; cursor: not-allowed; }
     .result-section { display: none; }
     .result-section.show { display: block; animation: fadeUp .5s ease both; }
@@ -1645,7 +1647,7 @@ function renderPlayerList(players, type) {
     if (i === 0) {
       return `
         <div class="player-hero">
-          <div class="player-hero-badge">👑 1위</div>
+          <div class="player-hero-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 16L3 6l5.5 4L12 4l3.5 6L21 6l-2 10H5zm0 2h14v2H5v-2z"/></svg> 1위</div>
           <img class="player-hero-photo" src="${p.player.photo}" onerror="this.style.display='none'">
           <div class="player-hero-info">
             <div class="player-hero-name">${p.player.name}</div>

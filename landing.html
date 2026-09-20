@@ -99,7 +99,8 @@
       margin-bottom: 72px;
       animation: fadeUp .6s .3s ease both;
     }
-    .btn-primary { padding: 14px 32px; background: var(--blue); border: none; border-radius: 8px; color: #0d1117; font-size: 15px; font-weight: 700; cursor: pointer; transition: opacity .2s; text-decoration: none; display: inline-block; }
+    .btn-primary { padding: 14px 32px; background: linear-gradient(135deg, #78b8ff, var(--blue)); border: none; border-radius: 8px; color: #0d1117; font-size: 15px; font-weight: 700; cursor: pointer; transition: box-shadow .2s, transform .1s; text-decoration: none; display: inline-block; box-shadow: 0 4px 16px rgba(88,166,255,0.3); }
+    .btn-primary:active { transform: scale(0.98); }
     .btn-primary:hover { opacity: .85; }
     .btn-secondary { padding: 14px 32px; background: transparent; border: 0.5px solid var(--border); border-radius: 8px; color: var(--text); font-size: 15px; cursor: pointer; transition: border-color .2s, background .2s; text-decoration: none; display: inline-block; }
     .btn-secondary:hover { border-color: var(--blue); background: rgba(88,166,255,0.05); }
@@ -136,6 +137,7 @@
       border: 0.5px solid var(--border);
       border-radius: 14px;
       overflow: hidden;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.35);
     }
     .mock-topbar { padding: 12px 16px; border-bottom: 0.5px solid var(--border); display: flex; align-items: center; gap: 6px; }
     .mock-dot { width: 10px; height: 10px; border-radius: 50%; }
@@ -169,9 +171,10 @@
       border: 0.5px solid var(--border);
       border-radius: 12px;
       padding: 28px;
-      transition: border-color .2s, transform .2s;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
     }
-    .feat-card:hover { border-color: rgba(88,166,255,0.4); transform: translateY(-2px); }
+    .feat-card:hover { border-color: rgba(88,166,255,0.4); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
     .feat-icon {
       width: 44px; height: 44px;
       background: rgba(88,166,255,0.1);
