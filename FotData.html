@@ -122,6 +122,39 @@
     .player-hero-value { font-size: 20px; font-weight: 800; color: #f0c040; line-height: 1; }
     .player-hero-unit { display: block; font-size: 11px; color: #8b949e; margin-top: 2px; }
     .player-hero-rating { font-size: 10px; color: #8b949e; margin-top: 4px; }
+
+    /* 빅매치 카운트다운 배너 */
+    .bigmatch-banner { position: relative; padding: 16px; border-radius: 12px; background: linear-gradient(135deg, rgba(88,166,255,0.16), rgba(163,113,247,0.05)); border: 0.5px solid rgba(88,166,255,0.35); box-shadow: 0 6px 20px rgba(88,166,255,0.1); margin-bottom: 8px; }
+    .bigmatch-label { font-size: 11px; font-weight: 700; color: #58a6ff; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; margin-bottom: 12px; }
+    .bigmatch-label img { width: 14px; height: 14px; object-fit: contain; }
+    .bigmatch-teams { display: flex; align-items: center; justify-content: center; gap: 18px; margin-bottom: 14px; }
+    .bigmatch-team { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; min-width: 0; }
+    .bigmatch-team img { width: 40px; height: 40px; object-fit: contain; }
+    .bigmatch-team span { font-size: 12px; font-weight: 700; color: #e6edf3; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+    .bigmatch-vs { font-size: 13px; font-weight: 800; color: #8b949e; flex-shrink: 0; }
+    .bigmatch-countdown { display: flex; justify-content: center; gap: 8px; }
+    .bigmatch-unit { background: #0d1117; border: 0.5px solid #30363d; border-radius: 8px; padding: 6px 10px; text-align: center; min-width: 48px; }
+    .bigmatch-unit .num { font-size: 18px; font-weight: 800; color: #58a6ff; line-height: 1; }
+    .bigmatch-unit .lbl { font-size: 9px; color: #8b949e; margin-top: 3px; }
+
+    /* 예측 결과 공유 버튼 */
+    .result-card-header { display: flex; align-items: center; justify-content: space-between; }
+    .share-btn { display: flex; align-items: center; gap: 5px; background: #21262d; border: 0.5px solid #30363d; color: #c9d1d9; font-size: 11px; font-weight: 600; padding: 6px 10px; border-radius: 7px; cursor: pointer; transition: background .15s, border-color .15s; }
+    .share-btn:hover { background: #30363d; border-color: #58a6ff; }
+    .share-btn svg { width: 13px; height: 13px; }
+    .share-btn:disabled { opacity: 0.6; cursor: default; }
+
+    /* PWA 설치 유도 배너 */
+    .pwa-install-banner { position: fixed; left: 16px; right: 16px; bottom: 16px; max-width: 420px; margin: 0 auto; background: #161b22; border: 0.5px solid #30363d; border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; gap: 12px; box-shadow: 0 16px 48px rgba(0,0,0,.5), 0 4px 12px rgba(0,0,0,.3); z-index: 500; transform: translateY(120%); transition: transform .3s ease; }
+    .pwa-install-banner.show { transform: translateY(0); }
+    .pwa-install-icon { width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0; }
+    .pwa-install-text { flex: 1; min-width: 0; }
+    .pwa-install-text .t1 { font-size: 13px; font-weight: 700; color: #e6edf3; }
+    .pwa-install-text .t2 { font-size: 11px; color: #8b949e; margin-top: 2px; }
+    .pwa-install-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .pwa-install-btn { background: linear-gradient(135deg, #58a6ff, #4090e8); color: #0d1117; border: none; font-size: 12px; font-weight: 700; padding: 8px 12px; border-radius: 7px; cursor: pointer; }
+    .pwa-install-close { background: none; border: none; color: #8b949e; font-size: 18px; line-height: 1; cursor: pointer; padding: 4px; }
+    @media (max-width: 480px) { .pwa-install-banner { left: 10px; right: 10px; bottom: 10px; padding: 10px 12px; } }
     @media (max-width: 480px) {
       .player-hero { gap: 12px; padding: 14px 12px; }
       .player-hero-photo { width: 52px; height: 52px; }
@@ -548,6 +581,7 @@
 </div>
 
   <div class="page active" id="page-predict">
+    <div class="bigmatch-banner" id="bigmatch-banner" style="display:none"></div>
     <div class="card">
       <div class="card-title" id="today-matches-title">오늘의 경기</div>
       <div class="today-matches-strip" id="today-matches-widget"></div>
@@ -616,7 +650,10 @@
     <div class="result-section" id="result-section">
       <div class="predict-grid">
         <div class="card">
-          <div class="card-title">예측 결과</div>
+          <div class="result-card-header">
+            <div class="card-title">예측 결과</div>
+            <button class="share-btn" id="share-result-btn" onclick="shareResultCard()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>공유</button>
+          </div>
           <div class="result-teams">
             <div class="result-team"><img id="result-home-logo" src="" alt=""><div class="result-team-name" id="result-home-name"></div></div>
             <div class="result-vs">VS</div>
@@ -886,6 +923,80 @@ async function loadTodayMatches() {
   }
 }
 
+// ── 빅매치 카운트다운 배너 ──
+// "빅매치" = 향후 21일 내 예정된 경기 중, 두 팀 모두 prestige(체급 지표)가 높은 매치업.
+// 한쪽만 강한 매치(상위팀 vs 하위팀)는 빅매치로 안 치고, 양팀 다 강해야 후보로 삼는다.
+const BIGMATCH_HORIZON_DAYS = 21;
+const BIGMATCH_MIN_PRESTIGE = 50;
+let bigMatchTimer = null;
+
+async function loadBigMatch() {
+  const banner = document.getElementById('bigmatch-banner');
+  if (!banner) return;
+  try {
+    await ensureTeamPrestigeLoaded();
+    const codes = Object.keys(TODAY_LEAGUE_INFO);
+    const lists = await Promise.all(codes.map(async code => {
+      if (!scheduleData[code]) {
+        const res = await fetch(`${API}/schedule/${code}`);
+        const data = await res.json();
+        scheduleData[code] = data.matches;
+      }
+      return (scheduleData[code] || []).map(m => ({ ...m, league: code }));
+    }));
+    const now = new Date();
+    const horizon = new Date(now.getTime() + BIGMATCH_HORIZON_DAYS * 24 * 60 * 60 * 1000);
+    const upcoming = lists.flat().filter(m => {
+      const d = new Date(m.date);
+      return m.status !== 'FINISHED' && d > now && d <= horizon;
+    });
+    if (!upcoming.length) { banner.style.display = 'none'; return; }
+    const scored = upcoming.map(m => {
+      const hp = teamPrestigeCache[m.home_team] ?? 0;
+      const ap = teamPrestigeCache[m.away_team] ?? 0;
+      return { ...m, matchScore: Math.min(hp, ap) };
+    }).sort((a, b) => b.matchScore - a.matchScore || new Date(a.date) - new Date(b.date));
+    const big = scored[0];
+    if (!big || big.matchScore < BIGMATCH_MIN_PRESTIGE) { banner.style.display = 'none'; return; }
+    renderBigMatchBanner(big);
+    banner.style.display = 'block';
+  } catch (e) {
+    banner.style.display = 'none';
+  }
+}
+
+function renderBigMatchBanner(m) {
+  const banner = document.getElementById('bigmatch-banner');
+  const li = TODAY_LEAGUE_INFO[m.league];
+  const d = new Date(m.date);
+  const dateLabel = `${d.getMonth() + 1}.${d.getDate()} ${d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}`;
+  banner.innerHTML = `
+    <div class="bigmatch-label"><img src="${li.logo}" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">빅매치 · ${li.name} · ${dateLabel}</div>
+    <div class="bigmatch-teams">
+      <div class="bigmatch-team clickable-team" onclick="openTeamInfo('${escJs(m.home_team)}')"><img src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span>${m.home_team.replace(' FC', '').replace(' CF', '')}</span></div>
+      <div class="bigmatch-vs">VS</div>
+      <div class="bigmatch-team clickable-team" onclick="openTeamInfo('${escJs(m.away_team)}')"><img src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"><span>${m.away_team.replace(' FC', '').replace(' CF', '')}</span></div>
+    </div>
+    <div class="bigmatch-countdown" id="bigmatch-countdown"></div>
+  `;
+  if (bigMatchTimer) clearInterval(bigMatchTimer);
+  const tick = () => {
+    const diff = new Date(m.date) - new Date();
+    const el = document.getElementById('bigmatch-countdown');
+    if (!el) { clearInterval(bigMatchTimer); return; }
+    if (diff <= 0) { loadBigMatch(); return; }
+    const days = Math.floor(diff / 86400000);
+    const hours = Math.floor(diff % 86400000 / 3600000);
+    const mins = Math.floor(diff % 3600000 / 60000);
+    const secs = Math.floor(diff % 60000 / 1000);
+    el.innerHTML = [
+      { n: days, l: '일' }, { n: hours, l: '시간' }, { n: mins, l: '분' }, { n: secs, l: '초' },
+    ].map(u => `<div class="bigmatch-unit"><div class="num">${String(u.n).padStart(2, '0')}</div><div class="lbl">${u.l}</div></div>`).join('');
+  };
+  tick();
+  bigMatchTimer = setInterval(tick, 1000);
+}
+
 function skeletonMatchRows(n) {
   let html = '';
   for (let i = 0; i < n; i++) {
@@ -915,6 +1026,33 @@ function showToast(message, duration = 2200) {
     toast.classList.add('hide');
     setTimeout(() => toast.remove(), 250);
   }, duration);
+}
+
+// ── PWA 설치 유도 배너 ──
+let deferredPwaPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPwaPrompt = e;
+  if (localStorage.getItem('pwaInstallDismissed')) return;
+  if (window.matchMedia('(display-mode: standalone)').matches) return;
+  document.getElementById('pwa-install-banner').classList.add('show');
+});
+async function installPwa() {
+  const banner = document.getElementById('pwa-install-banner');
+  if (!deferredPwaPrompt) { banner.classList.remove('show'); return; }
+  deferredPwaPrompt.prompt();
+  await deferredPwaPrompt.userChoice;
+  deferredPwaPrompt = null;
+  banner.classList.remove('show');
+}
+function dismissPwaBanner() {
+  document.getElementById('pwa-install-banner').classList.remove('show');
+  localStorage.setItem('pwaInstallDismissed', '1');
+}
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  });
 }
 
 function animateCountUp(el, endValue, opts = {}) {
@@ -1927,7 +2065,9 @@ async function predict(){
   finally{btn.disabled=false;btn.textContent='경기 예측하기';}
 }
 
+let lastPrediction = null;
 function showResult(data,h2h,homeForm,awayForm,home,away){
+  lastPrediction = { data, home, away };
   const prob=data.probabilities;
   document.getElementById('result-home-logo').src=logos[home]||''; document.getElementById('result-away-logo').src=logos[away]||'';
   document.getElementById('result-home-name').textContent=home; document.getElementById('result-away-name').textContent=away;
@@ -1998,6 +2138,146 @@ function showResult(data,h2h,homeForm,awayForm,home,away){
   document.getElementById('result-section').classList.add('show');document.getElementById('result-section').scrollIntoView({behavior:'smooth'});
 }
 
+// ── 예측 결과 공유 카드 ──
+// crests.football-data.org 이미지는 CORS 헤더가 없어 그냥 그리면 캔버스가
+// tainted되어 toBlob이 막힌다 — 백엔드 /proxy/logo(CORS 전체 허용)를 거쳐 로드한다.
+function proxiedLogo(url) {
+  if (!url) return null;
+  return `${API}/proxy/logo?url=${encodeURIComponent(url)}`;
+}
+function loadImageForCanvas(url) {
+  return new Promise(resolve => {
+    if (!url) { resolve(null); return; }
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => resolve(img);
+    img.onerror = () => resolve(null);
+    img.src = url;
+  });
+}
+function roundRectPath(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+function drawImageContain(ctx, img, cx, cy, maxSize) {
+  if (!img) return;
+  const scale = Math.min(maxSize / img.width, maxSize / img.height);
+  const w = img.width * scale, h = img.height * scale;
+  ctx.drawImage(img, cx - w / 2, cy - h / 2, w, h);
+}
+
+async function shareResultCard() {
+  if (!lastPrediction) return;
+  const btn = document.getElementById('share-result-btn');
+  const origHtml = btn.innerHTML;
+  btn.disabled = true; btn.textContent = '생성 중...';
+  try {
+    const { data, home, away } = lastPrediction;
+    const prob = data.probabilities, sp = data.score_prediction;
+    const [homeImg, awayImg] = await Promise.all([
+      loadImageForCanvas(proxiedLogo(logos[home])),
+      loadImageForCanvas(proxiedLogo(logos[away])),
+    ]);
+
+    const W = 900, H = 1120;
+    const canvas = document.createElement('canvas');
+    canvas.width = W; canvas.height = H;
+    const ctx = canvas.getContext('2d');
+    const FONT = '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+
+    const bg = ctx.createLinearGradient(0, 0, 0, H);
+    bg.addColorStop(0, '#0d1117'); bg.addColorStop(1, '#161b22');
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+
+    ctx.textAlign = 'center';
+    ctx.font = `600 20px ${FONT}`; ctx.fillStyle = '#8b949e';
+    ctx.fillText('AI 축구 경기 예측', W / 2, 64);
+    ctx.font = `800 42px ${FONT}`;
+    const wFot = ctx.measureText('Fot').width, wData = ctx.measureText('Data').width;
+    const startX = W / 2 - (wFot + wData) / 2;
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#e6edf3'; ctx.fillText('Fot', startX, 122);
+    ctx.fillStyle = '#58a6ff'; ctx.fillText('Data', startX + wFot, 122);
+    ctx.textAlign = 'center';
+
+    const logoY = 250, logoSize = 116;
+    drawImageContain(ctx, homeImg, W * 0.27, logoY, logoSize);
+    drawImageContain(ctx, awayImg, W * 0.73, logoY, logoSize);
+    ctx.font = `800 26px ${FONT}`; ctx.fillStyle = '#8b949e';
+    ctx.fillText('VS', W / 2, logoY + 10);
+    ctx.font = `700 25px ${FONT}`; ctx.fillStyle = '#e6edf3';
+    ctx.fillText(home.replace(' FC', '').replace(' CF', ''), W * 0.27, logoY + 95);
+    ctx.fillText(away.replace(' FC', '').replace(' CF', ''), W * 0.73, logoY + 95);
+
+    let badgeText, badgeColor;
+    if (data.prediction === 'home_win') { badgeText = `${home.split(' ')[0]} 승리 예측`; badgeColor = '#58a6ff'; }
+    else if (data.prediction === 'away_win') { badgeText = `${away.split(' ')[0]} 승리 예측`; badgeColor = '#f0883e'; }
+    else { badgeText = '무승부 예측'; badgeColor = '#8b949e'; }
+    ctx.font = `700 24px ${FONT}`; ctx.fillStyle = badgeColor;
+    ctx.fillText(badgeText, W / 2, 420);
+
+    ctx.font = `600 20px ${FONT}`; ctx.fillStyle = '#8b949e';
+    ctx.fillText('예상 스코어', W / 2, 480);
+    ctx.font = `800 88px ${FONT}`; ctx.fillStyle = '#e6edf3';
+    ctx.fillText(sp ? sp.most_likely.replace('-', ' : ') : '- : -', W / 2, 580);
+    if (sp) {
+      ctx.font = `500 18px ${FONT}`; ctx.fillStyle = '#8b949e';
+      ctx.fillText(`예상 득점 ${sp.expected_goals.home} - ${sp.expected_goals.away}`, W / 2, 615);
+    }
+
+    const barW = 680, barH = 36, barX = (W - barW) / 2;
+    const rows = [
+      { label: '홈승', val: Math.round(prob.home_win * 100), color: '#58a6ff' },
+      { label: '무승부', val: Math.round(prob.draw * 100), color: '#8b949e' },
+      { label: '원정승', val: Math.round(prob.away_win * 100), color: '#f0883e' },
+    ];
+    ctx.textAlign = 'left';
+    rows.forEach((r, i) => {
+      const y = 680 + i * 78;
+      ctx.font = `600 19px ${FONT}`; ctx.fillStyle = '#c9d1d9';
+      ctx.fillText(r.label, barX, y - 12);
+      roundRectPath(ctx, barX, y, barW, barH, 9); ctx.fillStyle = '#21262d'; ctx.fill();
+      const fillW = Math.max(barH, barW * r.val / 100);
+      roundRectPath(ctx, barX, y, fillW, barH, 9); ctx.fillStyle = r.color; ctx.fill();
+      ctx.textAlign = 'right'; ctx.font = `700 19px ${FONT}`; ctx.fillStyle = '#e6edf3';
+      ctx.fillText(r.val + '%', barX + barW, y - 12);
+      ctx.textAlign = 'left';
+    });
+
+    ctx.textAlign = 'center';
+    ctx.font = `600 18px ${FONT}`; ctx.fillStyle = '#6e7681';
+    ctx.fillText('fotdata-api.vercel.app · AI 추정 결과이므로 참고용으로만 활용하세요', W / 2, H - 36);
+
+    canvas.toBlob(async (blob) => {
+      btn.disabled = false; btn.innerHTML = origHtml;
+      if (!blob) { showToast('이미지 생성에 실패했어요'); return; }
+      const safeName = s => s.replace(/[^a-zA-Z0-9가-힣]/g, '_');
+      const filename = `fotdata_${safeName(home)}_vs_${safeName(away)}.png`;
+      const file = new File([blob], filename, { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({ files: [file], title: 'FotData 예측 결과', text: `${home} vs ${away} 예측 결과 · FotData` });
+        } catch (e) { /* 사용자가 공유 취소 */ }
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = filename;
+        document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+        showToast('예측 결과 이미지가 저장됐어요');
+      }
+    }, 'image/png');
+  } catch (e) {
+    btn.disabled = false; btn.innerHTML = origHtml;
+    showToast('공유 카드 생성 중 오류가 발생했어요');
+  }
+}
+
 // 리그별 다음 시즌 카운트다운
 const LEAGUE_SEASONS = [
     { name: 'EPL', logo: 'https://crests.football-data.org/PL.png', filter: 'brightness(0) invert(1)', date: '2026-08-22' },
@@ -2063,7 +2343,7 @@ renderChampions();
 updateCountdown();
 setInterval(updateCountdown, 60000);
 
-loadLogos();loadStandings('PL');loadAccuracy();loadTodayMatches();
+loadLogos();loadStandings('PL');loadAccuracy();loadTodayMatches();loadBigMatch();
 
 if(window.location.hash){setTimeout(()=>{const h=window.location.hash.replace('#','');const valid=['predict','champion','standings','players','schedule'];if(!valid.includes(h))return;document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));const pg=document.getElementById('page-'+h);if(pg)pg.classList.add('active');const tab=document.querySelector('[onclick="showPage(\''+h+'\')"]');if(tab)tab.classList.add('active');if(h==='champion')loadChampion('PL');if(h==='players')loadPlayers();if(h==='schedule')loadSchedule('PL');},100);}
 </script>
@@ -2087,5 +2367,16 @@ if(window.location.hash){setTimeout(()=>{const h=window.location.hash.replace('#
   <div style="font-size:12px;color:#8b949e">© 2026 FotData · AI 축구 분석 플랫폼</div>
 </footer>
 <div id="toast-container"></div>
+<div class="pwa-install-banner" id="pwa-install-banner">
+  <img class="pwa-install-icon" src="/icon-192.png" onerror="this.style.display='none'">
+  <div class="pwa-install-text">
+    <div class="t1">FotData 앱으로 설치하기</div>
+    <div class="t2">홈 화면에 추가하고 더 빠르게 접속하세요</div>
+  </div>
+  <div class="pwa-install-actions">
+    <button class="pwa-install-btn" onclick="installPwa()">설치</button>
+    <button class="pwa-install-close" onclick="dismissPwaBanner()">✕</button>
+  </div>
+</div>
 </body>
 </html>

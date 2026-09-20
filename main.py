@@ -1,6 +1,8 @@
 # ── [API] FotData FastAPI 서버 ──
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import Response
 import requests
+from urllib.parse import urlparse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import joblib
@@ -650,3 +652,26 @@ def get_team_info(team_name: str):
                 info["transfers"] = extra["transfers"]
 
     return info
+
+# ── 팀 로고 이미지 프록시 ──
+# crests.football-data.org / wikimedia는 CORS 헤더를 안 내려줘서, 프론트에서
+# <canvas>에 로고를 그려 예측 결과 공유카드 이미지를 만들 때 canvas가 tainted되어
+# toDataURL/toBlob이 막힌다. 허용 호스트로 제한한 프록시를 거쳐 우리 서버(CORS 전체 허용)
+# 응답으로 내려주면 crossOrigin="anonymous"로 안전하게 로드해 캔버스에 사용할 수 있다.
+PROXY_ALLOWED_HOSTS = {"crests.football-data.org", "upload.wikimedia.org"}
+
+@app.get("/proxy/logo")
+def proxy_logo(url: str):
+    parsed = urlparse(url)
+    if parsed.scheme != "https" or parsed.hostname not in PROXY_ALLOWED_HOSTS:
+        raise HTTPException(status_code=400, detail="허용되지 않은 이미지 URL")
+    try:
+        resp = requests.get(url, timeout=5)
+        resp.raise_for_status()
+    except Exception:
+        raise HTTPException(status_code=502, detail="이미지를 불러올 수 없습니다")
+    return Response(
+        content=resp.content,
+        media_type=resp.headers.get("Content-Type", "image/png"),
+        headers={"Cache-Control": "public, max-age=86400"},
+    )
