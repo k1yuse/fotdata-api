@@ -351,6 +351,8 @@
     .feat-grid .feat-card:nth-child(4) { transition-delay: .24s; }
     .feat-grid .feat-card:nth-child(5) { transition-delay: .32s; }
     .feat-grid .feat-card:nth-child(6) { transition-delay: .4s; }
+    .feat-grid .feat-card:nth-child(7) { transition-delay: .48s; grid-column: 2; }
+    @media (max-width: 768px) { .feat-grid .feat-card:nth-child(7) { grid-column: auto; } }
 
     @media (max-width: 768px) {
       nav { padding: 0 20px; }
@@ -404,6 +406,7 @@
     <a href="FotData.html#standings">순위표</a>
     <a href="FotData.html#schedule">일정</a>
     <a href="FotData.html#players">선수</a>
+    <a href="FotData.html#shootout">승부차기</a>
   </div>
   <a href="FotData.html" class="nav-cta">시작하기 →</a>
 </nav>
@@ -650,6 +653,11 @@
         <div class="feat-icon">🔄</div>
         <h3>자동 업데이트</h3>
         <p>매일 새벽 최신 경기 결과가 자동으로 반영됩니다.</p>
+      </div>
+      <div class="feat-card reveal">
+        <div class="feat-icon">⚽</div>
+        <h3>승부차기 미니게임</h3>
+        <p>내 팀 키커 순서를 직접 정하고 실제 승부차기 규칙으로 AI와 대결하세요.</p>
       </div>
     </div>
   </div>
