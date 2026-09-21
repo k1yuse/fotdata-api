@@ -207,8 +207,10 @@
     .kofi-float-btn { position: fixed; left: 16px; bottom: 16px; z-index: 400; display: inline-flex; align-items: center; gap: 8px; background: #58a6ff; color: #0d1117; font-size: 13px; font-weight: 700; padding: 11px 18px; border-radius: 999px; box-shadow: 0 8px 24px rgba(0,0,0,.35); border: none; cursor: pointer; font-family: inherit; }
     .kofi-float-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
     @media (max-width: 480px) { .kofi-float-btn { left: 10px; bottom: 10px; padding: 10px 14px; font-size: 12px; } }
-    .kofi-panel { position: fixed; left: 16px; bottom: 76px; width: 340px; max-width: 92vw; height: 560px; max-height: 70vh; background: #fff; border-radius: 14px; box-shadow: 0 16px 48px rgba(0,0,0,.45); overflow: hidden; display: flex; flex-direction: column; z-index: 401; opacity: 0; transform: translateY(16px) scale(0.96); transform-origin: bottom left; pointer-events: none; transition: opacity .22s ease, transform .22s ease; }
-    .kofi-panel.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+    .kofi-panel { position: fixed; left: 16px; bottom: 76px; width: 340px; max-width: 92vw; height: 560px; max-height: 70vh; border-radius: 14px; box-shadow: 0 16px 48px rgba(0,0,0,.45); overflow: hidden; z-index: 401; opacity: 0; pointer-events: none; transition: opacity .2s ease; will-change: transform, opacity; }
+    .kofi-panel.open { opacity: 1; pointer-events: auto; }
+    .kofi-panel-inner { width: 100%; height: 100%; background: #fff; display: flex; flex-direction: column; transform: translateY(100%); transition: transform .32s cubic-bezier(.22,.68,0,1.01); will-change: transform; }
+    .kofi-panel.open .kofi-panel-inner { transform: translateY(0); }
     .kofi-panel-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: #f6f6f6; border-bottom: 1px solid #e5e5e5; font-size: 13px; font-weight: 700; color: #222; flex-shrink: 0; }
     .kofi-panel-header button { background: none; border: none; font-size: 18px; line-height: 1; cursor: pointer; color: #666; padding: 2px; }
     .kofi-panel-body { flex: 1; min-height: 0; }
@@ -3343,11 +3345,13 @@ if(window.location.hash){setTimeout(()=>{const h=window.location.hash.replace('#
   후원하기
 </button>
 <div class="kofi-panel" id="kofi-panel">
-  <div class="kofi-panel-header">
-    <span>FotData 후원하기</span>
-    <button onclick="toggleKofiPanel()">✕</button>
+  <div class="kofi-panel-inner">
+    <div class="kofi-panel-header">
+      <span>FotData 후원하기</span>
+      <button onclick="toggleKofiPanel()">✕</button>
+    </div>
+    <div class="kofi-panel-body" id="kofi-panel-body"></div>
   </div>
-  <div class="kofi-panel-body" id="kofi-panel-body"></div>
 </div>
 <script>
 let kofiCloseTimer = null;
@@ -3361,7 +3365,7 @@ function toggleKofiPanel() {
     panel.classList.add('open');
   } else {
     panel.classList.remove('open');
-    kofiCloseTimer = setTimeout(() => { body.innerHTML = ''; kofiCloseTimer = null; }, 250);
+    kofiCloseTimer = setTimeout(() => { body.innerHTML = ''; kofiCloseTimer = null; }, 340);
   }
 }
 </script>
