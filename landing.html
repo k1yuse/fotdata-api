@@ -2,6 +2,31 @@
 <html lang="ko">
 <head>
   <script>if ('scrollRestoration' in history) history.scrollRestoration = 'manual';</script>
+<script>
+// 골대로 들어가는 축구공 인트로 — 세션당 1회만 재생(로고 클릭 새로고침 등 반복 방문마다
+// 뜨면 오히려 방해가 되므로 sessionStorage로 방문 세션당 1번만). 접근성: 모션 최소화
+// 설정 사용자는 애니메이션 없이 바로 페이지를 보여줌. 클릭하면 바로 건너뛸 수 있음.
+(function() {
+  let skip = false;
+  try {
+    skip = sessionStorage.getItem('introPlayed') || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  } catch (e) { /* 세션스토리지 접근 불가(프라이빗 모드 등)면 그냥 재생 */ }
+  document.addEventListener('DOMContentLoaded', () => {
+    const overlay = document.getElementById('intro-overlay');
+    if (!overlay) return;
+    if (skip) { overlay.remove(); return; }
+    document.body.style.overflow = 'hidden';
+    const dismiss = () => {
+      overlay.classList.add('hide');
+      document.body.style.overflow = '';
+      try { sessionStorage.setItem('introPlayed', '1'); } catch (e) {}
+      setTimeout(() => overlay.remove(), 550);
+    };
+    overlay.addEventListener('click', dismiss);
+    setTimeout(dismiss, 2100);
+  });
+})();
+</script>
   <meta charset="UTF-8">
   <meta property="og:title" content="FotData - AI 축구 분석 플랫폼">
   <meta property="og:description" content="5대 리그+UCL 실시간 순위, AI 경기 예측, 역대 맞대 기록. 전문가 수준의 축구 인사이트를 무료로.">
@@ -36,6 +61,50 @@
     }
     html { scroll-behavior: smooth; }
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+
+    /* 인트로: 골대로 들어가는 축구공 환영 애니메이션 (세션당 1회) */
+    .intro-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: var(--bg);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 32px;
+      transition: opacity .5s ease;
+      cursor: pointer;
+    }
+    .intro-overlay.hide { opacity: 0; pointer-events: none; }
+    .intro-stage { position: relative; width: 300px; height: 220px; display: flex; align-items: flex-end; justify-content: center; }
+    .intro-goal-frame { position: relative; width: 260px; height: 140px; border: 5px solid var(--text); border-bottom: none; border-radius: 2px 2px 0 0; overflow: hidden; }
+    .intro-net {
+      position: absolute; inset: 0; transform-origin: top center;
+      background-image:
+        repeating-linear-gradient(90deg, rgba(230,237,243,0.28) 0 1px, transparent 1px 20px),
+        repeating-linear-gradient(0deg, rgba(230,237,243,0.28) 0 1px, transparent 1px 20px);
+      animation: introNetJiggle .6s ease-out 1s both;
+    }
+    .intro-ball {
+      position: absolute; bottom: 10px; left: 50%;
+      width: 34px; height: 34px; margin-left: -17px;
+      font-size: 34px; line-height: 1;
+      animation: introBallFly 1s cubic-bezier(.3,.6,.4,1) both;
+    }
+    .intro-brand { display: flex; gap: 2px; font-size: 22px; font-weight: 800; opacity: 0; animation: introBrandIn .5s 1.15s ease both; }
+    .intro-brand .blue { color: var(--blue); }
+    @keyframes introBallFly {
+      0%   { transform: translate(-150px, 170px) scale(0.55) rotate(0deg); opacity: 1; }
+      75%  { transform: translate(0px, 6px) scale(1.05) rotate(520deg); opacity: 1; }
+      90%  { transform: translate(4px, -8px) scale(0.85) rotate(580deg); opacity: 1; }
+      100% { transform: translate(6px, -18px) scale(0.4) rotate(620deg); opacity: 0; }
+    }
+    @keyframes introNetJiggle {
+      0%   { transform: scaleY(1) skewX(0deg); }
+      25%  { transform: scaleY(1.08) skewX(-4deg); }
+      50%  { transform: scaleY(0.95) skewX(4deg); }
+      75%  { transform: scaleY(1.03) skewX(-2deg); }
+      100% { transform: scaleY(1) skewX(0deg); }
+    }
+    @keyframes introBrandIn { from { opacity: 0; transform: scale(0.85); } to { opacity: 1; transform: scale(1); } }
+    @media (prefers-reduced-motion: reduce) {
+      .intro-overlay { display: none; }
+    }
 
     /* NAV */
     nav {
@@ -116,6 +185,21 @@
     .stat-item:last-child { border-right: none; }
     .stat-num { font-size: 28px; font-weight: 800; color: var(--blue); }
     .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+    .leaders-label { font-size: 12px; color: var(--muted); margin-top: 44px; margin-bottom: 14px; animation: fadeUp .6s .45s ease both; }
+    .leaders-strip { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; max-width: 760px; margin: 0 auto; animation: fadeUp .6s .5s ease both; }
+    .leader-card { display: flex; align-items: center; gap: 9px; background: var(--bg2); border: 0.5px solid var(--border); border-radius: 10px; padding: 8px 14px; text-align: left; transition: border-color .2s, transform .15s; }
+    .leader-card:hover { border-color: rgba(88,166,255,0.4); transform: translateY(-2px); }
+    .leader-card .team-crest { width: 26px; height: 26px; object-fit: contain; flex-shrink: 0; }
+    .leader-card .league-crest { width: 12px; height: 12px; object-fit: contain; }
+    .leader-league { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.3px; display: flex; align-items: center; gap: 4px; }
+    .leader-team { font-size: 12px; font-weight: 700; color: var(--text); white-space: nowrap; max-width: 108px; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 4px; margin-top: 2px; }
+    .leader-team svg { width: 10px; height: 10px; color: var(--yellow); flex-shrink: 0; }
+    @media (max-width: 768px) {
+      .leaders-strip { gap: 8px; }
+      .leader-card { padding: 6px 10px; }
+      .leader-team { max-width: 74px; }
+    }
 
     /* PREVIEW */
     .preview {
@@ -272,6 +356,14 @@
 </head>
 <body>
 
+<div class="intro-overlay" id="intro-overlay">
+  <div class="intro-stage">
+    <div class="intro-goal-frame"><div class="intro-net"></div></div>
+    <div class="intro-ball">⚽</div>
+  </div>
+  <div class="intro-brand"><span>Fot</span><span class="blue">Data</span></div>
+</div>
+
 <nav>
   <a href="" class="nav-logo" style="display:flex;align-items:center;gap:13px;text-decoration:none">
   <div style="width:42px;height:42px;background:#58a6ff;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
@@ -317,6 +409,11 @@
     <div class="stat-item"><div class="stat-num" id="teams-stat">--</div><div class="stat-label">팀 분석</div></div>
     <div class="stat-item"><div class="stat-num" id="accuracy-stat">--</div><div class="stat-label">예측 정확도</div></div>
     <div class="stat-item"><div class="stat-num">6</div><div class="stat-label">지원 리그</div></div>
+  </div>
+
+  <div class="leaders-label">⚡ 지금 이 순간, 각 리그 1위</div>
+  <div class="leaders-strip" id="landing-leaders-strip">
+    <div style="color:var(--muted);font-size:12px;padding:10px 0">불러오는 중...</div>
   </div>
 </section>
 
@@ -600,6 +697,44 @@
     document.getElementById('teams-stat').textContent = data.count;
   } catch(e) {
     document.getElementById('teams-stat').textContent = '96';
+  }
+})();
+</script>
+<script>
+(async function() {
+  const strip = document.getElementById('landing-leaders-strip');
+  if (!strip) return;
+  const LEADER_LEAGUES = [
+    { code: 'PL', name: 'EPL', logo: 'https://crests.football-data.org/PL.png', invert: true },
+    { code: 'PD', name: '라리가', logo: 'https://crests.football-data.org/laliga.png' },
+    { code: 'BL1', name: '분데스리가', logo: 'https://crests.football-data.org/BL1.png' },
+    { code: 'SA', name: '세리에A', logo: 'https://crests.football-data.org/c111.png' },
+    { code: 'FL1', name: '리그앙', logo: 'https://crests.football-data.org/FL1.png' },
+    { code: 'CL', name: '챔피언스리그', logo: 'https://crests.football-data.org/CL.png', invert: true },
+  ];
+  try {
+    const results = await Promise.all(LEADER_LEAGUES.map(async (l) => {
+      try {
+        const res = await fetch(`https://fotdata-api.onrender.com/standings/${l.code}`);
+        const data = await res.json();
+        return { league: l, team: data.standings && data.standings[0] };
+      } catch (e) { return { league: l, team: null }; }
+    }));
+    const cardsHtml = results.filter(r => r.team).map(({ league, team }) => {
+      const teamName = team.team.replace(' FC', '').replace(' CF', '');
+      return `
+        <div class="leader-card">
+          <img class="team-crest" src="${team.logo}" onerror="this.style.display='none'">
+          <div>
+            <div class="leader-league"><img class="league-crest" src="${league.logo}" style="${league.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">${league.name}</div>
+            <div class="leader-team"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 16L3 6l5.5 4L12 4l3.5 6L21 6l-2 10H5zm0 2h14v2H5v-2z"/></svg>${teamName}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+    strip.innerHTML = cardsHtml || '';
+  } catch (e) {
+    strip.innerHTML = '';
   }
 })();
 </script>
