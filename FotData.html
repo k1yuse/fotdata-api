@@ -3328,5 +3328,14 @@ if(window.location.hash){setTimeout(()=>{const h=window.location.hash.replace('#
     <button class="pwa-install-close" onclick="dismissPwaBanner()">✕</button>
   </div>
 </div>
+<script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script>
+<script>
+  kofiWidgetOverlay.draw('fotdata', {
+    'type': 'floating-chat',
+    'floating-chat.donateButton.text': '후원하기',
+    'floating-chat.donateButton.background-color': '#58a6ff',
+    'floating-chat.donateButton.text-color': '#0d1117'
+  });
+</script>
 </body>
 </html>
