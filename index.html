@@ -371,6 +371,9 @@
       .preview p, .standings-preview p { word-break: keep-all; line-height: 1.6; }
       footer { flex-direction: column; gap: 8px; text-align: center; }
     }
+    .kofi-float-btn { position: fixed; left: 16px; bottom: 16px; z-index: 400; display: inline-flex; align-items: center; gap: 8px; background: var(--blue); color: #0d1117; font-size: 13px; font-weight: 700; padding: 11px 18px; border-radius: 999px; box-shadow: 0 8px 24px rgba(0,0,0,.35); }
+    .kofi-float-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+    @media (max-width: 480px) { .kofi-float-btn { left: 10px; bottom: 10px; padding: 10px 14px; font-size: 12px; } }
   </style>
 </head>
 <body>
@@ -835,14 +838,9 @@ window.addEventListener('load', () => window.scrollTo(0, 0));
   });
 })();
 </script>
-<script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script>
-<script>
-  kofiWidgetOverlay.draw('fotdata', {
-    'type': 'floating-chat',
-    'floating-chat.donateButton.text': '후원하기',
-    'floating-chat.donateButton.background-color': '#58a6ff',
-    'floating-chat.donateButton.text-color': '#0d1117'
-  });
-</script>
+<a class="kofi-float-btn" href="https://ko-fi.com/fotdata" target="_blank" rel="noopener">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+  후원하기
+</a>
 </body>
 </html>
