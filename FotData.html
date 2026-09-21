@@ -406,6 +406,7 @@
     .loading { text-align: center; padding: 40px; color: #8b949e; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
 
     /* 로고의 그래프 바 애니메이션 — 로고 클릭(새로고침) 피드백 + 로딩 표시 공용 */
+    .logo-bars { display: flex; align-items: flex-end; }
     .logo-bar { transform-origin: bottom; }
     .logo-bars.animate .logo-bar { animation: logoBarBounce .7s ease-in-out infinite; }
     .logo-bars.animate .logo-bar:nth-child(1) { animation-delay: 0s; }
@@ -973,7 +974,7 @@ async function fetchAllSchedules() {
 async function loadTodayMatches() {
   const container = document.getElementById('today-matches-widget');
   if (!container) return;
-  container.innerHTML = skeletonMatchRows(3);
+  container.innerHTML = `<div class="loading" style="padding:16px 0;width:100%">${BRAND_LOADER_ICON}불러오는 중...</div>`;
   try {
     const all = await fetchAllSchedules();
     const todayStr = new Date().toISOString().slice(0, 10);

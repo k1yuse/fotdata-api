@@ -154,6 +154,7 @@
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 
     /* 로고의 그래프 바 애니메이션 — 클릭(새로고침) 피드백 + 로딩 표시에 공용으로 사용 */
+    .logo-bars { display: flex; align-items: flex-end; }
     .logo-bar { transform-origin: bottom; }
     .logo-bars.animate .logo-bar { animation: logoBarBounce .7s ease-in-out infinite; }
     .logo-bars.animate .logo-bar:nth-child(1) { animation-delay: 0s; }
