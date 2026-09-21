@@ -418,6 +418,53 @@
     .brand-loader-icon { width: 34px; height: 34px; background: #58a6ff; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .brand-loader-icon .logo-bars { display: flex; align-items: flex-end; gap: 3px; height: 18px; }
     .brand-loader-icon .logo-bar { width: 3px; background: #0d1117; border-radius: 1px 1px 0 0; }
+
+    /* ── 승부차기 미니게임 ── */
+    .kicker-avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; background: #21262d; flex-shrink: 0; }
+    .kicker-avatar-placeholder { width: 44px; height: 44px; border-radius: 50%; background: #21262d; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #484f58; }
+    .kicker-avatar-placeholder svg { width: 22px; height: 22px; }
+    .kicker-row { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; border: 0.5px solid #30363d; margin-bottom: 8px; cursor: pointer; transition: border-color .15s, background .15s; position: relative; }
+    .kicker-row:hover { border-color: #58a6ff; }
+    .kicker-row.selected { border-color: #58a6ff; background: rgba(88,166,255,0.08); }
+    .kicker-row-info { flex: 1; min-width: 0; }
+    .kicker-row-name { font-size: 13px; font-weight: 600; color: #e6edf3; }
+    .kicker-row-pos { font-size: 11px; color: #8b949e; margin-top: 2px; }
+    .kicker-order-badge { width: 24px; height: 24px; border-radius: 50%; background: #21262d; border: 1px solid #30363d; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #8b949e; flex-shrink: 0; }
+    .kicker-row.selected .kicker-order-badge { background: #58a6ff; border-color: #58a6ff; color: #0d1117; }
+    .shootout-scoreboard { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px; }
+    .shootout-score-side { text-align: center; flex: 1; }
+    .shootout-score-side img { width: 32px; height: 32px; object-fit: contain; margin-bottom: 6px; }
+    .shootout-score-name { font-size: 13px; font-weight: 700; color: #e6edf3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .shootout-score-num { font-size: 28px; font-weight: 800; color: #58a6ff; margin: 4px 0; }
+    .shootout-score-dots { display: flex; gap: 4px; justify-content: center; }
+    .shootout-dot { width: 12px; height: 12px; border-radius: 50%; background: #30363d; }
+    .shootout-dot.goal { background: #3fb950; }
+    .shootout-dot.miss { background: #da3633; }
+    .shootout-vs { font-size: 14px; color: #8b949e; font-weight: 700; }
+    .shootout-turn-banner { text-align: center; font-size: 14px; color: #e6edf3; margin-bottom: 14px; min-height: 20px; }
+    .shootout-turn-banner b { color: #58a6ff; }
+    .shootout-stage { position: relative; width: 320px; height: 220px; margin: 0 auto 16px; }
+    .shootout-goal-frame { position: absolute; top: 10px; left: 0; width: 320px; height: 150px; border: 5px solid #e6edf3; border-bottom: none; border-radius: 2px 2px 0 0; overflow: hidden; display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr; }
+    .shootout-net { position: absolute; inset: 0; grid-column: 1 / -1; grid-row: 1 / -1; transform-origin: top center; background-image: repeating-linear-gradient(90deg, rgba(230,237,243,0.28) 0 1px, transparent 1px 20px), repeating-linear-gradient(0deg, rgba(230,237,243,0.28) 0 1px, transparent 1px 20px); pointer-events: none; }
+    .shootout-net.jiggle { animation: shootoutNetJiggle .5s ease-out; }
+    @keyframes shootoutNetJiggle {
+      0%   { transform: scaleY(1) skewX(0deg); }
+      25%  { transform: scaleY(1.08) skewX(-4deg); }
+      50%  { transform: scaleY(0.95) skewX(4deg); }
+      75%  { transform: scaleY(1.03) skewX(-2deg); }
+      100% { transform: scaleY(1) skewX(0deg); }
+    }
+    .shootout-zone { position: relative; cursor: pointer; transition: background .15s; z-index: 2; }
+    .shootout-zone:hover { background: rgba(88,166,255,0.18); }
+    .shootout-zone.disabled { cursor: default; pointer-events: none; }
+    .shootout-ball { position: absolute; width: 26px; height: 26px; font-size: 26px; line-height: 1; left: 50%; top: 108%; transform: translate(-50%, -50%); transition: left .5s cubic-bezier(.2,.7,.3,1), top .5s cubic-bezier(.2,.7,.3,1); z-index: 3; }
+    .shootout-keeper { position: absolute; width: 30px; height: 30px; font-size: 28px; line-height: 1; left: 50%; top: 62%; transform: translate(-50%, -50%); transition: left .45s ease, top .45s ease; z-index: 3; }
+    .shootout-outcome { text-align: center; font-size: 22px; font-weight: 800; margin: 8px 0; min-height: 30px; }
+    .shootout-outcome.goal { color: #3fb950; }
+    .shootout-outcome.miss { color: #da3633; }
+    .shootout-btn { display: block; margin: 0 auto; background: linear-gradient(135deg, #78b8ff, #58a6ff); border: none; border-radius: 9px; color: #0d1117; font-size: 14px; font-weight: 700; padding: 12px 28px; cursor: pointer; }
+    .shootout-btn-secondary { display: inline-block; background: #21262d; border: 0.5px solid #30363d; border-radius: 9px; color: #e6edf3; font-size: 14px; font-weight: 700; padding: 12px 28px; cursor: pointer; }
+    .shootout-btn-secondary:hover { border-color: #58a6ff; }
     .skeleton { background: linear-gradient(90deg, #21262d 25%, #2d333b 37%, #21262d 63%); background-size: 400% 100%; animation: skeletonShimmer 1.4s ease infinite; border-radius: 6px; }
     @keyframes skeletonShimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
     .skeleton-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; }
@@ -506,6 +553,7 @@
     <div class="nav-tab" onclick="showPage('standings')">순위표</div>
     <div class="nav-tab" onclick="showPage('schedule')">일정</div>
     <div class="nav-tab" onclick="showPage('players')">선수</div>
+    <div class="nav-tab" onclick="showPage('shootout')">승부차기</div>
   </div>
   <button class="nav-search-btn" onclick="openTeamSearch()" aria-label="팀 검색" title="팀 검색 (Ctrl/Cmd+K)">
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -644,6 +692,13 @@
         <div id="topassists-list"><div class="loading"><div class="brand-loader-icon"><div class="logo-bars animate"><div class="logo-bar" style="height:8px"></div><div class="logo-bar" style="height:13px"></div><div class="logo-bar" style="height:7px"></div><div class="logo-bar" style="height:16px"></div><div class="logo-bar" style="height:10px"></div></div></div>불러오는 중...</div></div>
       </div>
     </div>
+  </div>
+</div>
+
+<div id="page-shootout" class="page">
+  <div class="card">
+    <div class="card-title">⚽ 승부차기 미니게임</div>
+    <div id="shootout-body"></div>
   </div>
 </div>
 
@@ -1409,11 +1464,15 @@ function renderGlobalSearchResults(query) {
   `).join('');
 }
 function filterGlobalSearch(value) { renderGlobalSearchResults(value); }
+let teamSearchMode = 'info';
 function selectGlobalSearchResult(team) {
   closeTeamSearch();
+  if (teamSearchMode === 'shootout-my') { pickShootoutTeam('my', team); return; }
+  if (teamSearchMode === 'shootout-opp') { pickShootoutTeam('opp', team); return; }
   openTeamInfo(team);
 }
-async function openTeamSearch() {
+async function openTeamSearch(mode) {
+  teamSearchMode = mode || 'info';
   const modal = document.getElementById('team-search-modal');
   modal.classList.add('show');
   const input = document.getElementById('team-search-input');
@@ -1729,6 +1788,7 @@ function showPage(page) {
   if(page==='players'){loadPlayers();}
   if(page==='champion'){loadChampion('PL');}
   if(page==='schedule' && !scheduleData[currentScheduleLeague]){loadSchedule(currentScheduleLeague);}
+  if(page==='shootout' && !shootoutState){initShootout();}
 }
 
 // 로고 클릭 = 지금 보고 있는 탭을 그 자리에서 새로고침(전체 페이지 리로드는 아님 —
@@ -2745,9 +2805,392 @@ renderChampions();
 updateCountdown();
 setInterval(updateCountdown, 60000);
 
+// ══════════════════════════════════════════════════════════════════
+// 승부차기 미니게임
+// 실제 IFAB 승부차기 규칙: 5명 교대 슛, 이미 승부가 결정되면 조기 종료,
+// 동점이면 서든데스(1:1 교대, 동일 라운드 종료 후 점수 갈리면 즉시 종료).
+// 선수 개별 능력치 데이터가 없어서(EPL 득점왕 TOP10 외엔 전무), 상대(AI)
+// 키커 순서는 포지션 우선순위(공격수→미드필더→수비수)로 정하고, EPL
+// 득점왕 데이터가 있는 선수면 그 안에서 골 수로 한 번 더 정렬한다.
+// ══════════════════════════════════════════════════════════════════
+let shootoutState = null;
+
+function newShootoutState() {
+  return {
+    phase: 'pick-my-team', loading: false, busy: false,
+    myTeam: null, oppTeam: null,
+    mySquad: [], oppSquad: [],
+    myGK: null, oppGK: null,
+    myKickers: [], oppKickers: [], myKickersNeeded: 5,
+    firstKicker: null,
+    myShotsTaken: 0, oppShotsTaken: 0,
+    myScore: 0, oppScore: 0,
+    myLog: [], oppLog: [],
+    suddenDeath: false, turn: null, winner: null,
+  };
+}
+function initShootout() { shootoutState = newShootoutState(); renderShootout(); }
+function resetShootout() { shootoutState = newShootoutState(); renderShootout(); }
+
+function kickerPlaceholderHtml(player) {
+  const num = player && player.shirtNumber ? player.shirtNumber : '';
+  return num
+    ? `<div class="kicker-avatar-placeholder"><span style="font-size:14px;font-weight:700;color:#8b949e">${num}</span></div>`
+    : `<div class="kicker-avatar-placeholder"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg></div>`;
+}
+function kickerAvatarError(img) {
+  const num = img.getAttribute('data-num') || '';
+  const div = document.createElement('div');
+  div.className = 'kicker-avatar-placeholder';
+  div.innerHTML = num
+    ? `<span style="font-size:14px;font-weight:700;color:#8b949e">${num}</span>`
+    : '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>';
+  img.replaceWith(div);
+}
+function kickerAvatarHtml(player) {
+  if (player && player.photo) {
+    const num = player.shirtNumber || '';
+    return `<img class="kicker-avatar" src="${player.photo}" data-num="${num}" onerror="kickerAvatarError(this)">`;
+  }
+  return kickerPlaceholderHtml(player);
+}
+
+function renderShootout() {
+  const body = document.getElementById('shootout-body');
+  if (!body || !shootoutState) return;
+  const s = shootoutState;
+  if (s.phase === 'pick-my-team') body.innerHTML = renderShootoutPickTeamHtml();
+  else if (s.phase === 'pick-my-kickers') body.innerHTML = renderShootoutPickKickersHtml();
+  else if (s.phase === 'pick-opponent') body.innerHTML = renderShootoutPickOpponentHtml();
+  else if (s.phase === 'coin-toss') body.innerHTML = renderShootoutCoinTossHtml();
+  else if (s.phase === 'playing') body.innerHTML = renderShootoutPlayingHtml();
+  else if (s.phase === 'result') body.innerHTML = renderShootoutResultHtml();
+}
+
+function renderShootoutPickTeamHtml() {
+  if (shootoutState.loading) return `<div class="loading">${BRAND_LOADER_ICON}스쿼드 불러오는 중...</div>`;
+  return `
+    <div style="text-align:center;padding:32px 0">
+      <div style="font-size:15px;color:#c9d1d9;margin-bottom:18px">먼저 내가 사용할 팀을 선택해줘</div>
+      <button class="shootout-btn" onclick="openTeamSearch('shootout-my')">내 팀 선택하기</button>
+    </div>
+  `;
+}
+
+function renderShootoutPickKickersHtml() {
+  const s = shootoutState;
+  if (s.loading) return `<div class="loading">${BRAND_LOADER_ICON}스쿼드 불러오는 중...</div>`;
+  const gkCandidates = s.mySquad.filter(p => p.position === 'Goalkeeper');
+  const outfield = s.mySquad.filter(p => p.position !== 'Goalkeeper');
+  const order = { Offence: 0, Midfield: 1, Defence: 2 };
+  outfield.sort((a, b) => (order[a.position] ?? 3) - (order[b.position] ?? 3));
+
+  let html = `<div style="text-align:center;margin-bottom:18px"><img src="${logos[s.myTeam] || ''}" style="width:28px;height:28px;vertical-align:middle;margin-right:8px;object-fit:contain" onerror="this.style.display='none'"><b style="font-size:15px">${cleanTeamName(s.myTeam)}</b></div>`;
+  html += `<div style="font-size:13px;color:#8b949e;margin-bottom:8px;font-weight:700">① 우리 팀 골키퍼 선택</div>`;
+  if (!gkCandidates.length) {
+    html += `<div class="ti-empty">골키퍼 정보가 없어요.</div>`;
+  } else {
+    html += gkCandidates.map(p => `
+      <div class="kicker-row ${s.myGK && s.myGK.name === p.name ? 'selected' : ''}" onclick="selectMyGK('${escJs(p.name)}')">
+        ${kickerAvatarHtml(p)}
+        <div class="kicker-row-info"><div class="kicker-row-name">${p.name}</div><div class="kicker-row-pos">골키퍼</div></div>
+        <div class="kicker-order-badge">${s.myGK && s.myGK.name === p.name ? '✓' : ''}</div>
+      </div>
+    `).join('');
+  }
+  html += `<div style="font-size:13px;color:#8b949e;margin:18px 0 8px;font-weight:700">② 키커 순서 선택 (1~${s.myKickersNeeded}번, ${s.myKickers.length}/${s.myKickersNeeded})</div>`;
+  html += outfield.map(p => {
+    const idx = s.myKickers.findIndex(k => k.name === p.name);
+    return `
+      <div class="kicker-row ${idx >= 0 ? 'selected' : ''}" onclick="toggleMyKicker('${escJs(p.name)}')">
+        ${kickerAvatarHtml(p)}
+        <div class="kicker-row-info"><div class="kicker-row-name">${p.name}</div><div class="kicker-row-pos">${POSITION_LABEL[p.position] || p.position}</div></div>
+        <div class="kicker-order-badge">${idx >= 0 ? idx + 1 : ''}</div>
+      </div>
+    `;
+  }).join('');
+  const ready = !!s.myGK && s.myKickers.length === s.myKickersNeeded;
+  html += `<button class="shootout-btn" style="margin-top:18px;${ready ? '' : 'opacity:0.4;cursor:default'}" onclick="${ready ? 'goToShootoutPickOpponent()' : ''}">다음: 상대팀 선택</button>`;
+  return html;
+}
+function selectMyGK(name) {
+  shootoutState.myGK = shootoutState.mySquad.find(p => p.name === name) || null;
+  renderShootout();
+}
+function toggleMyKicker(name) {
+  const s = shootoutState;
+  const idx = s.myKickers.findIndex(p => p.name === name);
+  if (idx >= 0) {
+    s.myKickers.splice(idx, 1);
+  } else {
+    if (s.myKickers.length >= s.myKickersNeeded) { showToast(`키커는 ${s.myKickersNeeded}명까지 선택할 수 있어요`); return; }
+    const p = s.mySquad.find(x => x.name === name);
+    s.myKickers.push(p);
+  }
+  renderShootout();
+}
+function goToShootoutPickOpponent() {
+  shootoutState.phase = 'pick-opponent';
+  renderShootout();
+}
+
+function renderShootoutPickOpponentHtml() {
+  const s = shootoutState;
+  if (s.loading) return `<div class="loading">${BRAND_LOADER_ICON}상대팀 정보 불러오는 중...</div>`;
+  return `
+    <div style="text-align:center;padding:24px 0">
+      <div style="font-size:15px;color:#c9d1d9;margin-bottom:6px">상대팀을 정해줘</div>
+      <div style="font-size:12px;color:#8b949e;margin-bottom:18px">상대 키커 순서는 포지션(공격수→미드필더→수비수) 우선순위로 자동 결정돼</div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button class="shootout-btn" onclick="pickRandomShootoutOpponent()">🎲 AI 랜덤 상대</button>
+        <button class="shootout-btn-secondary" onclick="openTeamSearch('shootout-opp')">직접 선택하기</button>
+      </div>
+    </div>
+  `;
+}
+async function pickShootoutTeam(side, team) {
+  shootoutState.loading = true;
+  renderShootout();
+  try {
+    const info = await fetchTeamInfo(team);
+    const squad = info.squad || [];
+    if (!squad.length) throw new Error('empty squad');
+    if (side === 'my') {
+      shootoutState.myTeam = team;
+      shootoutState.mySquad = squad;
+      shootoutState.myGK = null;
+      shootoutState.myKickers = [];
+      const outfieldCount = squad.filter(p => p.position !== 'Goalkeeper').length;
+      shootoutState.myKickersNeeded = Math.min(5, Math.max(1, outfieldCount));
+      shootoutState.phase = 'pick-my-kickers';
+    } else {
+      shootoutState.oppTeam = team;
+      shootoutState.oppSquad = squad;
+      await autoSetOpponentLineup();
+      shootoutState.phase = 'coin-toss';
+    }
+  } catch (e) {
+    showToast('스쿼드 정보를 불러올 수 없어요. 다른 팀을 선택해줘');
+    shootoutState.phase = side === 'my' ? 'pick-my-team' : 'pick-opponent';
+  }
+  shootoutState.loading = false;
+  renderShootout();
+  if (shootoutState.phase === 'coin-toss') startCoinToss();
+}
+async function pickRandomShootoutOpponent() {
+  const all = getAllTeamsForSearch().filter(t => t !== shootoutState.myTeam);
+  const team = all[Math.floor(Math.random() * all.length)];
+  await pickShootoutTeam('opp', team);
+}
+async function autoSetOpponentLineup() {
+  const s = shootoutState;
+  s.oppGK = s.oppSquad.find(p => p.position === 'Goalkeeper') || null;
+  const outfield = s.oppSquad.filter(p => p.position !== 'Goalkeeper');
+  const order = { Offence: 0, Midfield: 1, Defence: 2 };
+  const goalMap = {};
+  try {
+    if (!window.__eplTopscorersCache) {
+      const res = await fetch(`${API}/players/topscorers/PL`);
+      const data = await res.json();
+      window.__eplTopscorersCache = data.players || [];
+    }
+    window.__eplTopscorersCache.forEach(p => { goalMap[p.player.name] = p.statistics[0].goals.total; });
+  } catch (e) { /* 실패해도 포지션 우선순위만으로 정렬 진행 */ }
+  outfield.sort((a, b) => {
+    const pa = order[a.position] ?? 3, pb = order[b.position] ?? 3;
+    if (pa !== pb) return pa - pb;
+    const ga = goalMap[a.name] ?? -1, gb = goalMap[b.name] ?? -1;
+    return gb - ga;
+  });
+  s.oppKickers = outfield.slice(0, Math.min(5, outfield.length));
+  if (!s.oppKickers.length) s.oppKickers = s.oppSquad.slice(0, 5);
+}
+
+function renderShootoutCoinTossHtml() {
+  return `<div style="text-align:center;padding:48px 0">
+    <div style="font-size:15px;color:#c9d1d9;margin-bottom:20px">동전 던지기로 선축 팀을 정하는 중...</div>
+    <div style="font-size:56px">🪙</div>
+  </div>`;
+}
+function startCoinToss() {
+  shootoutState.phase = 'coin-toss';
+  renderShootout();
+  setTimeout(() => {
+    shootoutState.firstKicker = Math.random() < 0.5 ? 'me' : 'opp';
+    beginShootoutPlaying();
+  }, 1500);
+}
+function beginShootoutPlaying() {
+  const s = shootoutState;
+  s.myShotsTaken = 0; s.oppShotsTaken = 0;
+  s.myScore = 0; s.oppScore = 0;
+  s.myLog = []; s.oppLog = [];
+  s.suddenDeath = false;
+  s.turn = s.firstKicker === 'me' ? 'me-shoot' : 'opp-shoot';
+  s.phase = 'playing';
+  s.busy = false;
+  renderShootout();
+  showToast(s.firstKicker === 'me' ? '우리 팀이 먼저 찹니다!' : '상대 팀이 먼저 찹니다!');
+}
+
+const SHOOTOUT_ZONE_POS = [
+  { x: 16.67, y: 22 }, { x: 50, y: 22 }, { x: 83.33, y: 22 },
+  { x: 16.67, y: 70 }, { x: 50, y: 70 }, { x: 83.33, y: 70 },
+];
+function renderShootoutPlayingHtml() {
+  const s = shootoutState;
+  const needed = s.myKickersNeeded || 5;
+  const dotsHtml = (log) => {
+    let html = '';
+    for (let i = 0; i < Math.max(log.length, needed); i++) {
+      html += `<div class="shootout-dot ${i < log.length ? (log[i] ? 'goal' : 'miss') : ''}"></div>`;
+    }
+    return html;
+  };
+  let turnText;
+  if (s.turn === 'me-shoot') {
+    const kicker = s.myKickers[s.myShotsTaken % s.myKickers.length];
+    turnText = `<b>${kicker.name}</b> 슛! 노릴 지점을 클릭해줘`;
+  } else {
+    const kicker = s.oppKickers[s.oppShotsTaken % s.oppKickers.length];
+    turnText = `상대 <b>${kicker.name}</b>의 슛 — 골키퍼 <b>${s.myGK.name}</b>가 막을 방향을 클릭해줘`;
+  }
+  return `
+    <div class="shootout-scoreboard">
+      <div class="shootout-score-side">
+        <img src="${logos[s.myTeam] || ''}" onerror="this.style.display='none'"><div class="shootout-score-name">${cleanTeamName(s.myTeam)}</div>
+        <div class="shootout-score-num">${s.myScore}</div>
+        <div class="shootout-score-dots">${dotsHtml(s.myLog)}</div>
+      </div>
+      <div class="shootout-vs">${s.suddenDeath ? '서든데스' : 'VS'}</div>
+      <div class="shootout-score-side">
+        <img src="${logos[s.oppTeam] || ''}" onerror="this.style.display='none'"><div class="shootout-score-name">${cleanTeamName(s.oppTeam)}</div>
+        <div class="shootout-score-num">${s.oppScore}</div>
+        <div class="shootout-score-dots">${dotsHtml(s.oppLog)}</div>
+      </div>
+    </div>
+    <div class="shootout-turn-banner" id="shootout-turn-banner">${turnText}</div>
+    <div class="shootout-stage">
+      <div class="shootout-goal-frame">
+        <div class="shootout-net" id="shootout-net"></div>
+        ${[0, 1, 2, 3, 4, 5].map(z => `<div class="shootout-zone" onclick="onShootoutZoneClick(${z})"></div>`).join('')}
+      </div>
+      <div class="shootout-ball" id="shootout-ball">⚽</div>
+      <div class="shootout-keeper" id="shootout-keeper">🧤</div>
+    </div>
+    <div class="shootout-outcome" id="shootout-outcome"></div>
+  `;
+}
+function onShootoutZoneClick(zone) {
+  const s = shootoutState;
+  if (s.busy) return;
+  if (s.turn === 'me-shoot') myShootAt(zone);
+  else if (s.turn === 'opp-shoot') myDefendAt(zone);
+}
+function myShootAt(zone) {
+  const s = shootoutState;
+  s.busy = true;
+  const gkZone = Math.floor(Math.random() * 6);
+  const goal = zone !== gkZone;
+  animateShootout(zone, gkZone, goal, () => {
+    recordShootoutResult('me', goal);
+    s.busy = false;
+    advanceAfterShootout();
+  });
+}
+function myDefendAt(zone) {
+  const s = shootoutState;
+  s.busy = true;
+  const shotZone = Math.floor(Math.random() * 6);
+  const goal = zone !== shotZone;
+  animateShootout(shotZone, zone, goal, () => {
+    recordShootoutResult('opp', goal);
+    s.busy = false;
+    advanceAfterShootout();
+  });
+}
+function recordShootoutResult(side, goal) {
+  const s = shootoutState;
+  if (side === 'me') { s.myShotsTaken++; if (goal) s.myScore++; s.myLog.push(goal); }
+  else { s.oppShotsTaken++; if (goal) s.oppScore++; s.oppLog.push(goal); }
+}
+function checkShootoutDecided() {
+  const s = shootoutState;
+  const needed = s.myKickersNeeded || 5;
+  if (!s.suddenDeath) {
+    const remMe = Math.max(0, needed - s.myShotsTaken);
+    const remOpp = Math.max(0, needed - s.oppShotsTaken);
+    if (s.myScore > s.oppScore + remOpp) return 'me';
+    if (s.oppScore > s.myScore + remMe) return 'opp';
+    if (s.myShotsTaken >= needed && s.oppShotsTaken >= needed) {
+      if (s.myScore !== s.oppScore) return s.myScore > s.oppScore ? 'me' : 'opp';
+      s.suddenDeath = true;
+      return null;
+    }
+    return null;
+  }
+  if (s.myShotsTaken === s.oppShotsTaken && s.myShotsTaken > needed && s.myScore !== s.oppScore) {
+    return s.myScore > s.oppScore ? 'me' : 'opp';
+  }
+  return null;
+}
+function advanceAfterShootout() {
+  const s = shootoutState;
+  const winner = checkShootoutDecided();
+  if (winner) { finishShootout(winner); return; }
+  s.turn = s.turn === 'me-shoot' ? 'opp-shoot' : 'me-shoot';
+  renderShootout();
+}
+function animateShootout(ballZone, keeperZone, goal, onDone) {
+  const ball = document.getElementById('shootout-ball');
+  const keeper = document.getElementById('shootout-keeper');
+  const net = document.getElementById('shootout-net');
+  const outcome = document.getElementById('shootout-outcome');
+  const bp = SHOOTOUT_ZONE_POS[ballZone], kp = SHOOTOUT_ZONE_POS[keeperZone];
+  ball.style.transition = 'none'; ball.style.left = '50%'; ball.style.top = '108%';
+  keeper.style.transition = 'none'; keeper.style.left = '50%'; keeper.style.top = '62%';
+  outcome.textContent = ''; outcome.className = 'shootout-outcome';
+  void ball.offsetWidth;
+  requestAnimationFrame(() => {
+    ball.style.transition = '';
+    keeper.style.transition = '';
+    ball.style.left = bp.x + '%'; ball.style.top = bp.y + '%';
+    keeper.style.left = kp.x + '%'; keeper.style.top = (kp.y - 8) + '%';
+  });
+  setTimeout(() => {
+    if (goal) {
+      net.classList.add('jiggle');
+      outcome.textContent = 'GOAL!';
+      outcome.classList.add('goal');
+      setTimeout(() => net.classList.remove('jiggle'), 500);
+    } else {
+      outcome.textContent = 'SAVE!';
+      outcome.classList.add('miss');
+    }
+    setTimeout(onDone, 900);
+  }, 520);
+}
+function finishShootout(winner) {
+  shootoutState.phase = 'result';
+  shootoutState.winner = winner;
+  renderShootout();
+}
+function renderShootoutResultHtml() {
+  const s = shootoutState;
+  const won = s.winner === 'me';
+  return `
+    <div style="text-align:center;padding:24px 0">
+      <div style="font-size:40px;margin-bottom:8px">${won ? '🏆' : '😢'}</div>
+      <div style="font-size:20px;font-weight:800;color:${won ? '#3fb950' : '#da3633'};margin-bottom:16px">${won ? '승리!' : '패배...'}</div>
+      <div style="font-size:15px;color:#c9d1d9;margin-bottom:24px">${cleanTeamName(s.myTeam)} ${s.myScore} : ${s.oppScore} ${cleanTeamName(s.oppTeam)}</div>
+      <button class="shootout-btn" onclick="resetShootout()">다시하기</button>
+    </div>
+  `;
+}
+
 loadLogos();loadStandings('PL');loadAccuracy();loadTodayMatches();loadBigMatch();loadMyTeamWidget();
 
-if(window.location.hash){setTimeout(()=>{const h=window.location.hash.replace('#','');const valid=['predict','champion','standings','players','schedule'];if(!valid.includes(h))return;document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));const pg=document.getElementById('page-'+h);if(pg)pg.classList.add('active');const tab=document.querySelector('[onclick="showPage(\''+h+'\')"]');if(tab)tab.classList.add('active');if(h==='champion')loadChampion('PL');if(h==='players')loadPlayers();if(h==='schedule')loadSchedule('PL');},100);}
+if(window.location.hash){setTimeout(()=>{const h=window.location.hash.replace('#','');const valid=['predict','champion','standings','players','schedule','shootout'];if(!valid.includes(h))return;document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));const pg=document.getElementById('page-'+h);if(pg)pg.classList.add('active');const tab=document.querySelector('[onclick="showPage(\''+h+'\')"]');if(tab)tab.classList.add('active');if(h==='champion')loadChampion('PL');if(h==='players')loadPlayers();if(h==='schedule')loadSchedule('PL');if(h==='shootout')initShootout();},100);}
 </script>
 
 <footer style="padding:20px 24px;padding-bottom:calc(20px + env(safe-area-inset-bottom));border-top:0.5px solid #30363d;display:flex;align-items:center;justify-content:space-between;background:#161b22">
