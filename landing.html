@@ -152,6 +152,20 @@
     }
     .hero-badge-dot { width: 6px; height: 6px; background: var(--blue); border-radius: 50%; animation: pulse 2s infinite; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+    /* 로고의 그래프 바 애니메이션 — 클릭(새로고침) 피드백 + 로딩 표시에 공용으로 사용 */
+    .logo-bar { transform-origin: bottom; }
+    .logo-bars.animate .logo-bar { animation: logoBarBounce .7s ease-in-out infinite; }
+    .logo-bars.animate .logo-bar:nth-child(1) { animation-delay: 0s; }
+    .logo-bars.animate .logo-bar:nth-child(2) { animation-delay: .08s; }
+    .logo-bars.animate .logo-bar:nth-child(3) { animation-delay: .16s; }
+    .logo-bars.animate .logo-bar:nth-child(4) { animation-delay: .24s; }
+    .logo-bars.animate .logo-bar:nth-child(5) { animation-delay: .32s; }
+    @keyframes logoBarBounce { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.7); } }
+    .mini-loader-row { display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .mini-loader { display: flex; align-items: center; justify-content: center; width: 26px; height: 26px; background: var(--blue); border-radius: 7px; flex-shrink: 0; }
+    .mini-loader .logo-bars { height: 13px; gap: 2px; }
+    .mini-loader .logo-bar { width: 2.5px; background: #0d1117; border-radius: 1px 1px 0 0; }
     .hero h1 {
       font-size: 60px; font-weight: 800; line-height: 1.1;
       letter-spacing: -1.5px;
@@ -186,19 +200,18 @@
     .stat-num { font-size: 28px; font-weight: 800; color: var(--blue); }
     .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
-    .leaders-label { font-size: 12px; color: var(--muted); margin-top: 44px; margin-bottom: 14px; animation: fadeUp .6s .45s ease both; }
-    .leaders-strip { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; max-width: 760px; margin: 0 auto; animation: fadeUp .6s .5s ease both; }
-    .leader-card { display: flex; align-items: center; gap: 9px; background: var(--bg2); border: 0.5px solid var(--border); border-radius: 10px; padding: 8px 14px; text-align: left; transition: border-color .2s, transform .15s; }
+    .leaders-label { font-size: 12px; color: var(--muted); margin-top: 44px; margin-bottom: 14px; display: flex; align-items: center; justify-content: center; gap: 7px; animation: fadeUp .6s .45s ease both; }
+    .leaders-label .live-dot { width: 6px; height: 6px; background: #3fb950; border-radius: 50%; animation: pulse 2s infinite; }
+    .leaders-strip { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; max-width: 900px; margin: 0 auto; animation: fadeUp .6s .5s ease both; }
+    .leader-card { display: flex; align-items: center; gap: 10px; background: var(--bg2); border: 0.5px solid var(--border); border-radius: 10px; padding: 10px 16px; text-align: left; transition: border-color .2s, transform .15s; }
     .leader-card:hover { border-color: rgba(88,166,255,0.4); transform: translateY(-2px); }
-    .leader-card .team-crest { width: 26px; height: 26px; object-fit: contain; flex-shrink: 0; }
+    .leader-card .team-crest { width: 28px; height: 28px; object-fit: contain; flex-shrink: 0; }
     .leader-card .league-crest { width: 12px; height: 12px; object-fit: contain; }
     .leader-league { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.3px; display: flex; align-items: center; gap: 4px; }
-    .leader-team { font-size: 12px; font-weight: 700; color: var(--text); white-space: nowrap; max-width: 108px; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 4px; margin-top: 2px; }
-    .leader-team svg { width: 10px; height: 10px; color: var(--yellow); flex-shrink: 0; }
+    .leader-team { font-size: 13px; font-weight: 700; color: var(--text); white-space: nowrap; margin-top: 2px; }
     @media (max-width: 768px) {
       .leaders-strip { gap: 8px; }
-      .leader-card { padding: 6px 10px; }
-      .leader-team { max-width: 74px; }
+      .leader-card { padding: 8px 12px; }
     }
 
     /* PREVIEW */
@@ -365,14 +378,14 @@
 </div>
 
 <nav>
-  <a href="" class="nav-logo" style="display:flex;align-items:center;gap:13px;text-decoration:none">
+  <a href="" class="nav-logo" id="landing-nav-logo" style="display:flex;align-items:center;gap:13px;text-decoration:none">
   <div style="width:42px;height:42px;background:#58a6ff;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-    <div style="display:flex;align-items:flex-end;gap:3px;height:24px">
-      <div style="width:4px;height:10px;background:#0d1117;border-radius:2px 2px 0 0"></div>
-      <div style="width:4px;height:17px;background:#0d1117;border-radius:2px 2px 0 0"></div>
-      <div style="width:4px;height:8px;background:#0d1117;border-radius:2px 2px 0 0"></div>
-      <div style="width:4px;height:21px;background:#0d1117;border-radius:2px 2px 0 0"></div>
-      <div style="width:4px;height:13px;background:#0d1117;border-radius:2px 2px 0 0"></div>
+    <div class="logo-bars" id="landing-logo-bars" style="display:flex;align-items:flex-end;gap:3px;height:24px">
+      <div class="logo-bar" style="width:4px;height:10px;background:#0d1117;border-radius:2px 2px 0 0"></div>
+      <div class="logo-bar" style="width:4px;height:17px;background:#0d1117;border-radius:2px 2px 0 0"></div>
+      <div class="logo-bar" style="width:4px;height:8px;background:#0d1117;border-radius:2px 2px 0 0"></div>
+      <div class="logo-bar" style="width:4px;height:21px;background:#0d1117;border-radius:2px 2px 0 0"></div>
+      <div class="logo-bar" style="width:4px;height:13px;background:#0d1117;border-radius:2px 2px 0 0"></div>
     </div>
   </div>
   <div style="display:flex;flex-direction:column;gap:0px">
@@ -411,9 +424,9 @@
     <div class="stat-item"><div class="stat-num">6</div><div class="stat-label">지원 리그</div></div>
   </div>
 
-  <div class="leaders-label">⚡ 지금 이 순간, 각 리그 1위</div>
+  <div class="leaders-label"><span class="live-dot"></span>지금 이 순간, 각 리그 1위</div>
   <div class="leaders-strip" id="landing-leaders-strip">
-    <div style="color:var(--muted);font-size:12px;padding:10px 0">불러오는 중...</div>
+    <div class="mini-loader-row" style="color:var(--muted);font-size:12px;padding:10px 0"><div class="mini-loader"><div class="logo-bars animate"><div class="logo-bar" style="height:5px"></div><div class="logo-bar" style="height:9px"></div><div class="logo-bar" style="height:4px"></div><div class="logo-bar" style="height:11px"></div><div class="logo-bar" style="height:7px"></div></div></div>불러오는 중...</div>
   </div>
 </section>
 
@@ -582,7 +595,7 @@
           EPL 2026-27 순위표
         </div>
       <div id="landing-standings-preview">
-    <div class="standings-row"><span style="color:#8b949e;padding:12px 0">불러오는 중...</span></div>
+    <div class="standings-row mini-loader-row" style="padding:12px 0"><div class="mini-loader"><div class="logo-bars animate"><div class="logo-bar" style="height:5px"></div><div class="logo-bar" style="height:9px"></div><div class="logo-bar" style="height:4px"></div><div class="logo-bar" style="height:11px"></div><div class="logo-bar" style="height:7px"></div></div></div><span style="color:#8b949e">불러오는 중...</span></div>
   </div>
   </div>
     <div>
@@ -727,7 +740,7 @@
           <img class="team-crest" src="${team.logo}" onerror="this.style.display='none'">
           <div>
             <div class="leader-league"><img class="league-crest" src="${league.logo}" style="${league.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">${league.name}</div>
-            <div class="leader-team"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 16L3 6l5.5 4L12 4l3.5 6L21 6l-2 10H5zm0 2h14v2H5v-2z"/></svg>${teamName}</div>
+            <div class="leader-team">${teamName}</div>
           </div>
         </div>
       `;
@@ -785,6 +798,20 @@ if ('serviceWorker' in navigator) {
   });
 }
 window.addEventListener('load', () => window.scrollTo(0, 0));
+</script>
+<script>
+// 로고 클릭 = 새로고침. 그래프 바가 한 번 튀어오르는 걸 보여준 뒤 리로드(즉시 리로드하면
+// 애니메이션이 보일 틈도 없이 페이지가 넘어가버림)
+(function() {
+  const logo = document.getElementById('landing-nav-logo');
+  const bars = document.getElementById('landing-logo-bars');
+  if (!logo || !bars) return;
+  logo.addEventListener('click', (e) => {
+    e.preventDefault();
+    bars.classList.add('animate');
+    setTimeout(() => { window.location.reload(); }, 500);
+  });
+})();
 </script>
 </body>
 </html>
