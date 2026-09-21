@@ -471,7 +471,7 @@
 <body>
 
 <nav class="nav">
-  <div class="nav-logo" style="display:flex;align-items:center;gap:11px">
+  <div class="nav-logo" style="display:flex;align-items:center;gap:11px;cursor:pointer" onclick="refreshCurrentTab()" title="새로고침">
     <div style="width:34px;height:34px;background:#58a6ff;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
       <div style="display:flex;align-items:flex-end;gap:3px;height:18px">
         <div style="width:3px;height:8px;background:#0d1117;border-radius:1px 1px 0 0"></div>
@@ -1713,6 +1713,31 @@ function showPage(page) {
   if(page==='players'){loadPlayers();}
   if(page==='champion'){loadChampion('PL');}
   if(page==='schedule' && !scheduleData[currentScheduleLeague]){loadSchedule(currentScheduleLeague);}
+}
+
+// 로고 클릭 = 지금 보고 있는 탭을 그 자리에서 새로고침(전체 페이지 리로드는 아님 —
+// 리로드하면 해시 라우팅이 없는 이상 항상 '경기 예측' 탭으로 돌아가버리기 때문)
+function refreshCurrentTab() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  const activePage = document.querySelector('.page.active');
+  if (!activePage) return;
+  const page = activePage.id.replace('page-', '');
+  if (page === 'predict') {
+    loadTodayMatches(); loadBigMatch(); loadMyTeamWidget(); loadAccuracy();
+  } else if (page === 'champion') {
+    loadChampion(currentLeagueCode || 'PL');
+  } else if (page === 'standings') {
+    if (document.getElementById('ucl-tournament-content').style.display === 'block') {
+      loadTournament();
+    } else {
+      const activeLeagueTab = document.querySelector('#league-tabs .league-tab.active');
+      loadStandings(activeLeagueTab ? activeLeagueTab.dataset.league : 'PL');
+    }
+  } else if (page === 'schedule') {
+    loadSchedule(currentScheduleLeague);
+  } else if (page === 'players') {
+    loadPlayers();
+  }
 }
 let currentChampionData = null;
 let currentLeagueCode = 'PL';

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+  <script>if ('scrollRestoration' in history) history.scrollRestoration = 'manual';</script>
   <meta charset="UTF-8">
   <meta property="og:title" content="FotData - AI 축구 분석 플랫폼">
   <meta property="og:description" content="5대 리그+UCL 실시간 순위, AI 경기 예측, 역대 맞대 기록. 전문가 수준의 축구 인사이트를 무료로.">
@@ -648,6 +649,7 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').catch(() => {});
   });
 }
+window.addEventListener('load', () => window.scrollTo(0, 0));
 </script>
 </body>
 </html>

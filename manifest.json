@@ -2,7 +2,7 @@
   "name": "FotData - AI 축구 분석 플랫폼",
   "short_name": "FotData",
   "description": "5대 리그+UCL 실시간 순위, AI 경기 예측",
-  "start_url": "/FotData.html",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#0d1117",
   "theme_color": "#58a6ff",
