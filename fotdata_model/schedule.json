@@ -4488,9 +4488,9 @@
       "stage": "REGULAR_SEASON",
       "home_team": "Valencia CF",
       "away_team": "Real Sociedad de Fútbol",
-      "home_goals": 1,
-      "away_goals": 1,
-      "status": "IN_PLAY"
+      "home_goals": 2,
+      "away_goals": 3,
+      "status": "FINISHED"
     },
     {
       "date": "2026-10-09T19:00:00Z",
@@ -11164,7 +11164,7 @@
       "away_team": "US Lecce",
       "home_goals": 3,
       "away_goals": 0,
-      "status": "IN_PLAY"
+      "status": "FINISHED"
     },
     {
       "date": "2026-10-10T13:00:00Z",
@@ -14916,7 +14916,7 @@
       "away_team": "Paris Saint-Germain FC",
       "home_goals": 1,
       "away_goals": 2,
-      "status": "IN_PLAY"
+      "status": "FINISHED"
     },
     {
       "date": "2026-10-09T18:45:00Z",
