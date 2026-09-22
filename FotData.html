@@ -1943,6 +1943,8 @@ function openTeamPopup(side, popup) {
   inner.style.transition = '';
   popup.classList.add('show');
   inner.style.transform = '';
+  // 팝업 전체가 자연스럽게 화면에 들어오도록 살짝 스크롤
+  popup.scrollIntoView({ behavior: 'smooth', block: 'end' });
 }
 function closePopup(side){
   const popup = document.getElementById(`${side}-popup`);
@@ -2823,7 +2825,7 @@ function showResult(data,h2h,homeForm,awayForm,home,away){
   });
   document.getElementById('h2h-matches').innerHTML=h2hHtml||'<div style="color:#8b949e;font-size:13px;padding:8px 0">맞대 기록 없음</div>';
   function renderForm(fd,cid,tid){
-    document.getElementById(tid).textContent=fd.team.split(' ')[0];
+    document.getElementById(tid).textContent=fd.team;
     let html='';
     fd.form.forEach(m=>{
       const badge = `<div class="form-badge ${m.result}">${m.result}</div>`;
@@ -2832,11 +2834,14 @@ function showResult(data,h2h,homeForm,awayForm,home,away){
     document.getElementById(cid).innerHTML=html;
   }
   renderForm(homeForm,'home-form-list','home-form-title');renderForm(awayForm,'away-form-list','away-form-title');
-  document.getElementById('result-section').classList.add('show');document.getElementById('result-section').scrollIntoView({behavior:'smooth'});
-  // 예측 결과 카드가 보이기 시작하면 그 자체로 팝업이 겹칠 공간이 충분히 생기므로,
-  // 팝업 전용으로 미리 잡아둔 여백은 더 이상 필요 없음 — 없으면 결과 카드 사이에
-  // 불필요한 빈 공간이 생겨버림
+  // 팝업용으로 잡아둔 여백을 스크롤 계산 전에 먼저 없애야 함 — scrollIntoView
+  // 호출 후에 레이아웃이 줄어들면 목표 위치가 어긋나서 스크롤이 안 먹음
   document.querySelector('.predict-selector-card').style.marginBottom = '16px';
+  const resultSection = document.getElementById('result-section');
+  resultSection.classList.add('show');
+  // sticky 네브바가 "예측 결과" 제목을 가리지 않도록 네브바 높이만큼 스크롤 여유를 둠
+  resultSection.style.scrollMarginTop = (document.querySelector('.nav').getBoundingClientRect().height + 24) + 'px';
+  resultSection.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 // ── 예측 결과 공유 카드 ──
