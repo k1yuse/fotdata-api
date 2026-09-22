@@ -397,11 +397,11 @@
     .league-badge-sm img { width: 12px; height: 12px; object-fit: contain; }
     .vs-center { font-size: 22px; font-weight: 700; color: #8b949e; margin-top: 50px; }
     .popup-relative { position: relative; width: 100%; }
-    .select-trigger { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: #21262d; border: 0.5px solid #30363d; border-radius: 8px; cursor: pointer; font-size: 13px; color: #e6edf3; user-select: none; }
+    .select-trigger { display: flex; align-items: center; gap: 8px; padding: 10px 14px; max-width: 480px; margin: 0 auto; background: #21262d; border: 0.5px solid #30363d; border-radius: 8px; cursor: pointer; font-size: 13px; color: #e6edf3; user-select: none; }
     .select-trigger:hover { border-color: #58a6ff; }
     .select-trigger.active { border-color: #58a6ff; }
     .select-trigger img { width: 20px; height: 20px; object-fit: contain; border-radius: 50%; }
-    .team-popup { display: none; position: absolute; width: 420px; background: #161b22; border: 0.5px solid #30363d; border-radius: 14px; overflow: hidden; z-index: 200; top: calc(100% + 4px); left: 0; }
+    .team-popup { display: none; position: absolute; width: 480px; max-width: 92vw; background: #161b22; border: 0.5px solid #30363d; border-radius: 14px; overflow: hidden; z-index: 200; top: calc(100% + 4px); left: 50%; transform: translateX(-50%); }
     .team-popup.show { display: block; }
     .popup-header { padding: 12px 14px; border-bottom: 0.5px solid #30363d; display: flex; align-items: center; gap: 8px; }
     .popup-search-input { flex: 1; padding: 7px 12px; background: #21262d; border: 0.5px solid #30363d; border-radius: 6px; color: #e6edf3; font-size: 13px; }
@@ -565,7 +565,7 @@
       .nav-logo { margin-right: 12px; }
       .nav-tab { padding: 14px 8px; font-size: 12.5px; }
       .container { padding: 16px; }
-      .team-popup { width: 320px; }
+      .team-popup { width: 320px; left: 0; transform: none; }
       .standings-table { min-width: 480px; }
       #standings-content { overflow-x: auto; -webkit-overflow-scrolling: touch; }
       .standings-table .hide-mobile { display: none; }
