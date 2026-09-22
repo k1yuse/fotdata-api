@@ -599,6 +599,18 @@ def get_track_record():
     total_correct = sum(1 for e in resolved if e["correct"])
     recent_correct = sum(1 for e in recent if e["correct"])
 
+    # 누적 적중률 추이: 확정된 경기를 날짜순으로 하나씩 반영했을 때 그 시점까지의
+    # 누적 적중률(%)이 어떻게 움직였는지 — 차트 가독성을 위해 최근 30포인트만
+    # 잘라서 보여주되, 값 자체는 처음부터 누적한 진짜 전체 누적치를 유지한다
+    # (30개 구간으로 다시 시작하는 게 아니라, 긴 누적 곡선의 최근 구간만 보여주는 것).
+    cum_correct = 0
+    accuracy_trend = []
+    for i, e in enumerate(resolved, start=1):
+        if e["correct"]:
+            cum_correct += 1
+        accuracy_trend.append({"n": i, "accuracy_pct": round(cum_correct / i * 100, 1)})
+    accuracy_trend = accuracy_trend[-30:]
+
     return {
         "summary": {
             "total_scheduled": total_scheduled,
@@ -609,6 +621,7 @@ def get_track_record():
             "recent_correct": recent_correct,
             "recent_accuracy_pct": round(recent_correct / len(recent) * 100, 1),
         },
+        "accuracy_trend": accuracy_trend,
         "recent": list(reversed(recent[-20:])),
     }
 

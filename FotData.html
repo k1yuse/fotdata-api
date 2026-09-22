@@ -2389,6 +2389,44 @@ async function loadAccuracy(){
 // 그대로 호출하기 때문에, 여기 나오는 예측은 항상 그 시점에 사용자가 실제로 봤을
 // 예측과 정확히 같다.
 const OUTCOME_LABEL = { home_win: '홈승', draw: '무승부', away_win: '원정승' };
+
+// ── 누적 적중률 추이 차트 ──
+function buildAccuracyTrendSVG(trend) {
+  const W = 420, H = 130, padL = 34, padR = 10, padT = 14, padB = 20;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const n = trend.length;
+  const xFor = i => padL + (n === 1 ? plotW / 2 : plotW * i / (n - 1));
+  const yFor = pct => padT + plotH * (1 - pct / 100);
+  const points = trend.map((t, i) => [xFor(i), yFor(t.accuracy_pct)]);
+  const fmt = v => v.toFixed(1);
+  const pathD = points.map((p, i) => (i === 0 ? 'M' : 'L') + fmt(p[0]) + ',' + fmt(p[1])).join(' ');
+  const baseY = fmt(padT + plotH);
+  const areaD = `${pathD} L${fmt(points[points.length - 1][0])},${baseY} L${fmt(points[0][0])},${baseY} Z`;
+  const gridLines = [0, 50, 100].map(pct => {
+    const y = fmt(yFor(pct));
+    return `<line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="#30363d" stroke-width="1"/><text x="${padL - 8}" y="${Number(y) + 3}" fill="#6e7681" font-size="9" text-anchor="end">${pct}%</text>`;
+  }).join('');
+  const last = points[points.length - 1];
+  const lastPct = trend[trend.length - 1].accuracy_pct;
+  const labelAbove = last[1] > 24;
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;display:block">
+    ${gridLines}
+    <path d="${areaD}" fill="#58a6ff" fill-opacity="0.12" stroke="none"/>
+    <path d="${pathD}" fill="none" stroke="#58a6ff" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${fmt(last[0])}" cy="${fmt(last[1])}" r="4" fill="#58a6ff"/>
+    <text x="${fmt(last[0])}" y="${fmt(last[1] + (labelAbove ? -10 : 16))}" fill="#58a6ff" font-size="12" font-weight="700" text-anchor="end">${lastPct}%</text>
+  </svg>`;
+}
+function renderAccuracyTrendChart(trend) {
+  if (!trend || trend.length < 3) return '';
+  return `
+    <div style="margin-bottom:16px;padding:14px;background:#0d1117;border:0.5px solid #30363d;border-radius:10px">
+      <div style="font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">누적 적중률 추이 (최근 ${trend.length}건)</div>
+      ${buildAccuracyTrendSVG(trend)}
+    </div>
+  `;
+}
+
 async function openTrackRecordModal() {
   const modal = document.getElementById('track-record-modal');
   const body = document.getElementById('track-record-body');
@@ -2420,6 +2458,7 @@ async function openTrackRecordModal() {
         <div class="tr-summary-box"><div class="tr-summary-val">${summary.accuracy_pct ?? '-'}%</div><div class="tr-summary-label">전체 적중률 (${summary.total_resolved}경기)</div></div>
         <div class="tr-summary-box"><div class="tr-summary-val">${summary.recent_accuracy_pct ?? '-'}%</div><div class="tr-summary-label">최근 ${summary.recent_n ?? 0}경기</div></div>
       </div>
+      ${renderAccuracyTrendChart(data.accuracy_trend)}
       ${recent.map(e => `
         <div class="tr-row">
           <div class="tr-row-icon ${e.correct ? 'correct' : 'wrong'}">${e.correct ? '✓' : '✕'}</div>
