@@ -2691,7 +2691,9 @@ async function shareResultCard() {
     await ensureTeamPrestigeLoaded();
     const radarVals = computeRadarValues(data, h2h, home, away);
 
-    const W = 900, H = 1340;
+    const factors = data.explanation || [];
+    const explanationH = factors.length ? 42 + factors.length * 46 + 20 : 0;
+    const W = 900, H = 1340 + explanationH;
     const canvas = document.createElement('canvas');
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext('2d');
@@ -2758,14 +2760,34 @@ async function shareResultCard() {
       ctx.textAlign = 'left';
     });
 
+    if (factors.length) {
+      ctx.textAlign = 'center';
+      ctx.font = `600 20px ${FONT}`; ctx.fillStyle = '#8b949e';
+      ctx.fillText('예측 근거', W / 2, 930);
+      const fBarW = 680, fBarH = 20, fBarX = (W - fBarW) / 2;
+      ctx.textAlign = 'left';
+      factors.forEach((f, i) => {
+        const y = 972 + i * 46;
+        ctx.font = `500 17px ${FONT}`; ctx.fillStyle = '#c9d1d9';
+        ctx.fillText(f.label, fBarX, y - 8);
+        roundRectPath(ctx, fBarX, y, fBarW, fBarH, 6); ctx.fillStyle = '#21262d'; ctx.fill();
+        const fillW = Math.max(fBarH, fBarW * f.influence_pct / 100);
+        roundRectPath(ctx, fBarX, y, fillW, fBarH, 6); ctx.fillStyle = '#58a6ff'; ctx.fill();
+        ctx.textAlign = 'right'; ctx.font = `700 17px ${FONT}`; ctx.fillStyle = '#e6edf3';
+        ctx.fillText(f.influence_pct + '%', fBarX + fBarW, y - 8);
+        ctx.textAlign = 'left';
+      });
+    }
+
+    const teamCompareY = 930 + explanationH;
     ctx.textAlign = 'center';
     ctx.font = `600 20px ${FONT}`; ctx.fillStyle = '#8b949e';
-    ctx.fillText('팀 비교', W / 2, 930);
-    drawRadarChartOnCanvas(ctx, radarVals.home, radarVals.away, W / 2, 1105, 115, FONT);
+    ctx.fillText('팀 비교', W / 2, teamCompareY);
+    drawRadarChartOnCanvas(ctx, radarVals.home, radarVals.away, W / 2, teamCompareY + 175, 115, FONT);
     ctx.textAlign = 'center';
     ctx.font = `600 16px ${FONT}`;
-    ctx.fillStyle = '#58a6ff'; ctx.fillText(`● ${homeClean}`, W / 2 - 70, 1270);
-    ctx.fillStyle = '#f0883e'; ctx.fillText(`● ${awayClean}`, W / 2 + 70, 1270);
+    ctx.fillStyle = '#58a6ff'; ctx.fillText(`● ${homeClean}`, W / 2 - 70, teamCompareY + 340);
+    ctx.fillStyle = '#f0883e'; ctx.fillText(`● ${awayClean}`, W / 2 + 70, teamCompareY + 340);
 
     ctx.textAlign = 'center';
     ctx.font = `600 18px ${FONT}`; ctx.fillStyle = '#6e7681';
