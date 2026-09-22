@@ -2196,8 +2196,11 @@ function renderScheduleMonths(league) {
     document.getElementById('schedule-content').innerHTML = '<div class="loading">일정 데이터가 없습니다.</div>';
     return;
   }
-  const nowKey = scheduleMonthKey(new Date().toISOString());
-  const defaultMonth = months.includes(nowKey) ? nowKey : (months.find(mk => mk >= nowKey) || months[months.length - 1]);
+  // 달력상 현재 월이 아니라 "다음 경기가 있는 월"을 기준으로 열어야, 국제 A매치
+  // 기간처럼 이번 달 남은 경기가 없을 때도 곧바로 다음 달(다음 라운드)로 넘어감.
+  const matches = scheduleData[league] || [];
+  const nextMatch = matches.find(m => m.status !== 'FINISHED');
+  const defaultMonth = nextMatch ? scheduleMonthKey(nextMatch.date) : months[months.length - 1];
   currentScheduleMonth = defaultMonth;
 
   const select = document.getElementById('schedule-month-select');
