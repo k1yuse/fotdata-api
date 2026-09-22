@@ -151,6 +151,46 @@ def predict_score(home_attack, away_defense, away_attack, home_defense, predicti
         "top_scores": top_scores,
     }
 
+# ── 예측 설명(explainable) ──
+# LogisticRegression 계수 × 스케일된 피처값 = 해당 클래스 로짓에 대한 기여도.
+# 모델에는 동일 신호가 이름만 다르게 중복 입력된 피처가 있어(home_attack==home_avg_scored 등),
+# 원본 피처 그대로 보여주면 사용자에게 의미 없는 나열이 되므로 축구팬이 이해할 수 있는
+# 5개 개념(전력차/최근폼/공격력/수비력/승률/상대전적)으로 묶어서 기여도를 합산한다.
+FEATURE_INDEX = {name: i for i, name in enumerate(scaler.feature_names_in_)}
+FACTOR_GROUPS = [
+    # ELO와 승률은 ELO 자체가 승률에서 파생된 값이라 서로 강하게 상관돼 있음 —
+    # 따로 두면 모델이 같은 신호를 두 피처에 나눠 담으면서 계수 부호가 서로
+    # 반대로 나오는 통계적 아티팩트(다중공선성)가 생겨 "ELO는 불리했다"처럼
+    # 오해를 부르는 설명이 됨. 같은 개념(팀 전력)으로 묶어서 합산한다.
+    ("팀 전력",   ["home_elo", "away_elo", "elo_diff", "home_win_rate", "away_win_rate", "win_rate_diff"]),
+    ("최근 폼",   ["home_form", "away_form", "form_diff"]),
+    ("공격력",    ["home_avg_scored", "away_avg_scored", "home_attack", "away_attack"]),
+    ("수비력",    ["home_avg_conceded", "away_avg_conceded", "home_defense", "away_defense"]),
+    ("상대전적(H2H)", ["h2h_home_rate"]),
+]
+
+def compute_prediction_factors(scaled_row, prediction):
+    class_idx = {"away_win": "A", "draw": "D", "home_win": "H"}[prediction]
+    class_pos = list(lr_model.classes_).index(class_idx)
+    coef_row = lr_model.coef_[class_pos]
+
+    raw = []
+    for label, feature_names in FACTOR_GROUPS:
+        contribution = sum(coef_row[FEATURE_INDEX[f]] * scaled_row[FEATURE_INDEX[f]] for f in feature_names)
+        raw.append((label, contribution))
+
+    total_abs = sum(abs(c) for _, c in raw) or 1.0
+    factors = [
+        {
+            "label": label,
+            "direction": "support" if contribution >= 0 else "against",
+            "influence_pct": round(abs(contribution) / total_abs * 100, 1),
+        }
+        for label, contribution in raw
+    ]
+    factors.sort(key=lambda f: f["influence_pct"], reverse=True)
+    return factors
+
 # ── 엔드포인트 ──
 @app.get("/")
 def root():
@@ -249,6 +289,8 @@ def predict_match(req: MatchRequest):
         prediction=prediction, home_win_prob=h_prob, away_win_prob=a_prob,
     )
 
+    explanation = compute_prediction_factors(input_scaled[0], prediction)
+
     return {
         "home_team":   req.home_team,
         "away_team":   req.away_team,
@@ -259,6 +301,7 @@ def predict_match(req: MatchRequest):
             "away_win": a_prob,
         },
         "score_prediction": score_prediction,
+        "explanation": explanation,
         "home_stats": {
             "attack":   round(float(h['attack_strength']), 3),
             "defense":  round(float(h['defense_strength']), 3),

@@ -398,6 +398,8 @@
     .prob-bar.home { background: #58a6ff; }
     .prob-bar.draw { background: #d29922; }
     .prob-bar.away { background: #f85149; }
+    .prob-bar.factor-support { background: #58a6ff; }
+    .prob-bar.factor-against { background: #484f58; }
     .prob-value { font-size: 13px; font-weight: 600; text-align: right; }
     .h2h-summary { display: flex; justify-content: space-around; align-items: center; padding: 16px 0; margin-bottom: 16px; border-bottom: 0.5px solid #30363d; }
     .h2h-stat { text-align: center; }
@@ -824,6 +826,14 @@
             <div class="prob-row" style="grid-template-columns:90px 1fr 45px"><span class="prob-label" id="prob-label-home">홈승</span><div class="prob-bar-bg"><div class="prob-bar home" id="bar-home" style="width:0%"></div></div><span class="prob-value" id="val-home"></span></div>
             <div class="prob-row" style="grid-template-columns:90px 1fr 45px"><span class="prob-label">무승부</span><div class="prob-bar-bg"><div class="prob-bar draw" id="bar-draw" style="width:0%"></div></div><span class="prob-value" id="val-draw"></span></div>
             <div class="prob-row" style="grid-template-columns:90px 1fr 45px"><span class="prob-label" id="prob-label-away">원정승</span><div class="prob-bar-bg"><div class="prob-bar away" id="bar-away" style="width:0%"></div></div><span class="prob-value" id="val-away"></span></div>
+          </div>
+          <div style="margin-top:16px;padding-top:16px;border-top:0.5px solid #30363d">
+            <div style="font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">예측 근거 <span style="font-size:10px;color:#6e7681;text-transform:none;letter-spacing:0">(모델이 참고한 주요 요인)</span></div>
+            <div id="explanation-factors"></div>
+            <div style="display:flex;gap:14px;margin-top:10px;font-size:11px;color:#8b949e">
+              <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#58a6ff;margin-right:5px;vertical-align:middle"></span>예측을 뒷받침</span>
+              <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#484f58;margin-right:5px;vertical-align:middle"></span>반대로 작용</span>
+            </div>
           </div>
           <div class="stats-grid">
             <div class="stat-box"><div class="stat-val" id="s-home-atk">-</div><div class="stat-label" id="s-home-atk-label">홈 공격력</div></div>
@@ -2495,6 +2505,21 @@ function renderRadarChart(data, h2h, home, away) {
     `<div class="radar-legend"><span><span class="dot" style="background:#58a6ff"></span>${homeShort}</span><span><span class="dot" style="background:#f0883e"></span>${awayShort}</span></div>`;
 }
 
+// ── 예측 근거(설명 가능한 AI) ──
+function renderExplanationFactors(data) {
+  const wrap = document.getElementById('explanation-factors');
+  if (!wrap) return;
+  const factors = data.explanation;
+  if (!factors || !factors.length) { wrap.innerHTML = ''; return; }
+  wrap.innerHTML = factors.map(f => `
+    <div class="prob-row" style="grid-template-columns:88px 1fr 42px">
+      <span class="prob-label">${f.label}</span>
+      <div class="prob-bar-bg"><div class="prob-bar ${f.direction === 'support' ? 'factor-support' : 'factor-against'}" style="width:${f.influence_pct}%"></div></div>
+      <span class="prob-value" style="color:${f.direction === 'support' ? '#58a6ff' : '#8b949e'}">${f.influence_pct}%</span>
+    </div>
+  `).join('');
+}
+
 let lastPrediction = null;
 function showResult(data,h2h,homeForm,awayForm,home,away){
   lastPrediction = { data, h2h, home, away };
@@ -2524,6 +2549,7 @@ function showResult(data,h2h,homeForm,awayForm,home,away){
   document.getElementById('s-away-atk-label').textContent=awayShortLabel+' 공격력';
   document.getElementById('s-away-def-label').textContent=awayShortLabel+' 수비력';
   renderRadarChart(data, h2h, home, away);
+  renderExplanationFactors(data);
   if(data.score_prediction){
     const sp=data.score_prediction;
     document.getElementById('score-most-likely').textContent=sp.most_likely.replace('-',' : ');
