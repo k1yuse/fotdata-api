@@ -5942,5 +5942,1556 @@
         "to": "Lincoln"
       }
     ]
+  },
+  "Athletic Club": {
+    "squad": [
+      {
+        "name": "Álex Padilla",
+        "position": "Goalkeeper",
+        "shirtNumber": 13,
+        "photo": "https://media.api-sports.io/football/players/312468.png"
+      },
+      {
+        "name": "Unai Simón",
+        "position": "Goalkeeper",
+        "shirtNumber": 1,
+        "photo": "https://media.api-sports.io/football/players/47270.png"
+      },
+      {
+        "name": "Yeray",
+        "position": "Defence",
+        "shirtNumber": 5,
+        "photo": "https://media.api-sports.io/football/players/47271.png"
+      },
+      {
+        "name": "Jesús Areso",
+        "position": "Defence",
+        "shirtNumber": 12,
+        "photo": "https://media.api-sports.io/football/players/182181.png"
+      },
+      {
+        "name": "Yuri",
+        "position": "Defence",
+        "shirtNumber": 17,
+        "photo": "https://media.api-sports.io/football/players/47273.png"
+      },
+      {
+        "name": "Aymeric Laporte",
+        "position": "Defence",
+        "shirtNumber": 14,
+        "photo": "https://media.api-sports.io/football/players/622.png"
+      },
+      {
+        "name": "Aitor Paredes",
+        "position": "Defence",
+        "shirtNumber": 4,
+        "photo": "https://media.api-sports.io/football/players/183849.png"
+      },
+      {
+        "name": "Alejandro Rego",
+        "position": "Midfield",
+        "shirtNumber": 20,
+        "photo": "https://media.api-sports.io/football/players/332309.png"
+      },
+      {
+        "name": "Hugo Rincón",
+        "position": "Defence",
+        "shirtNumber": 15,
+        "photo": "https://media.api-sports.io/football/players/313025.png"
+      },
+      {
+        "name": "Dani Vivian",
+        "position": "Defence",
+        "shirtNumber": 3,
+        "photo": "https://media.api-sports.io/football/players/47278.png"
+      },
+      {
+        "name": "Peio Canales",
+        "position": "Midfield",
+        "shirtNumber": 28,
+        "photo": "https://media.api-sports.io/football/players/437643.png"
+      },
+      {
+        "name": "Beñat Gerenabarrena",
+        "position": "Midfield",
+        "shirtNumber": 24,
+        "photo": "https://media.api-sports.io/football/players/332307.png"
+      },
+      {
+        "name": "Mikel Jauregizar",
+        "position": "Midfield",
+        "shirtNumber": 18,
+        "photo": "https://media.api-sports.io/football/players/383780.png"
+      },
+      {
+        "name": "Robert Navarro",
+        "position": "Midfield",
+        "shirtNumber": 23,
+        "photo": "https://media.api-sports.io/football/players/84086.png"
+      },
+      {
+        "name": "Beñat Prados",
+        "position": "Midfield",
+        "shirtNumber": 6,
+        "photo": "https://media.api-sports.io/football/players/182617.png"
+      },
+      {
+        "name": "Ruíz de Galarreta",
+        "position": "Midfield",
+        "shirtNumber": 16,
+        "photo": "https://media.api-sports.io/football/players/47007.png"
+      },
+      {
+        "name": "Oihan Sancet",
+        "position": "Midfield",
+        "shirtNumber": 8,
+        "photo": "https://media.api-sports.io/football/players/128398.png"
+      },
+      {
+        "name": "Álex Berenguer",
+        "position": "Offence",
+        "shirtNumber": 7,
+        "photo": "https://media.api-sports.io/football/players/30510.png"
+      },
+      {
+        "name": "Álvaro Djaló",
+        "position": "Offence",
+        "shirtNumber": 25,
+        "photo": "https://media.api-sports.io/football/players/190489.png"
+      },
+      {
+        "name": "Gorka Guruzeta",
+        "position": "Offence",
+        "shirtNumber": 11,
+        "photo": "https://media.api-sports.io/football/players/47291.png"
+      },
+      {
+        "name": "Maroan Sannadi",
+        "position": "Offence",
+        "shirtNumber": 21,
+        "photo": "https://media.api-sports.io/football/players/287680.png"
+      },
+      {
+        "name": "Nico Serrano",
+        "position": "Offence",
+        "shirtNumber": 22,
+        "photo": "https://media.api-sports.io/football/players/286593.png"
+      },
+      {
+        "name": "I. Williams",
+        "position": "Offence",
+        "shirtNumber": 9,
+        "photo": "https://media.api-sports.io/football/players/47294.png"
+      },
+      {
+        "name": "Nico Williams",
+        "position": "Midfield",
+        "shirtNumber": 10,
+        "photo": "https://media.api-sports.io/football/players/183799.png"
+      }
+    ],
+    "transfers": [
+      {
+        "player": "Unai Vencedor",
+        "date": "2026-08-31",
+        "type": "Free agent",
+        "from": "Athletic Club",
+        "to": "Burgos"
+      },
+      {
+        "player": "Gorosabel",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Athletic Club",
+        "to": "Espanyol"
+      },
+      {
+        "player": "A. Boiro",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Athletic Club",
+        "to": "West Ham"
+      },
+      {
+        "player": "E. Gift",
+        "date": "2026-08-30",
+        "type": "Loan",
+        "from": "Athletic Club",
+        "to": "Eibar"
+      },
+      {
+        "player": "Aingeru Olabarrieta",
+        "date": "2026-08-30",
+        "type": "Loan",
+        "from": "Athletic Club",
+        "to": "Eldense"
+      },
+      {
+        "player": "M. Gibelalde",
+        "date": "2026-08-17",
+        "type": "Transfer",
+        "from": "Athletic Club",
+        "to": "Grasshoppers"
+      },
+      {
+        "player": "C. Mutilva",
+        "date": "2026-08-13",
+        "type": "Free agent",
+        "from": "Athletic Club",
+        "to": "Unionistas de Salamanca"
+      },
+      {
+        "player": "A. Lekuna",
+        "date": "2026-08-10",
+        "type": "Loan",
+        "from": "Athletic Club",
+        "to": "Arenas Getxo"
+      },
+      {
+        "player": "Julen Agirrezabala",
+        "date": "2026-08-09",
+        "type": "Transfer",
+        "from": "Athletic Club",
+        "to": "Racing Santander"
+      },
+      {
+        "player": "Mikel Vesga",
+        "date": "2026-08-01",
+        "type": "Free agent",
+        "from": "Athletic Club",
+        "to": "Almeria"
+      },
+      {
+        "player": "Iker Varela",
+        "date": "2026-07-16",
+        "type": "Free agent",
+        "from": "Athletic Club",
+        "to": "Ibiza"
+      },
+      {
+        "player": "Urko Izeta",
+        "date": "2026-07-10",
+        "type": "-",
+        "from": "Athletic Club",
+        "to": "Cadiz"
+      },
+      {
+        "player": "Unai Gómez",
+        "date": "2026-07-07",
+        "type": "Transfer",
+        "from": "Athletic Club",
+        "to": "Udinese"
+      },
+      {
+        "player": "E. Garcia",
+        "date": "2026-07-07",
+        "type": "Loan",
+        "from": "Athletic Club",
+        "to": "Cordoba"
+      },
+      {
+        "player": "Aimar Duñabeitia",
+        "date": "2026-07-07",
+        "type": "Transfer",
+        "from": "Athletic Club",
+        "to": "Sporting Gijon"
+      },
+      {
+        "player": "I. Sanz",
+        "date": "2026-07-06",
+        "type": "Loan",
+        "from": "Athletic Club",
+        "to": "Cordoba"
+      },
+      {
+        "player": "Jon de Luis",
+        "date": "2026-07-03",
+        "type": "Free agent",
+        "from": "Athletic Club",
+        "to": "Kifisia"
+      },
+      {
+        "player": "A. Lekuna",
+        "date": "2026-06-30",
+        "type": "Free agent",
+        "from": "Basconia",
+        "to": "Athletic Club"
+      },
+      {
+        "player": "E. Gamen",
+        "date": "2026-06-30",
+        "type": "Free agent",
+        "from": "Athletic Club",
+        "to": "UD Logroñés"
+      },
+      {
+        "player": "Unai Vencedor",
+        "date": "2026-06-29",
+        "type": "Return from loan",
+        "from": "Levante",
+        "to": "Athletic Club"
+      }
+    ]
+  },
+  "Club Atlético de Madrid": {
+    "squad": [],
+    "transfers": []
+  },
+  "Deportivo Alavés": {
+    "squad": [],
+    "transfers": []
+  },
+  "Elche CF": {
+    "squad": [
+      {
+        "name": "M. Dituro",
+        "position": "Goalkeeper",
+        "shirtNumber": 1,
+        "photo": "https://media.api-sports.io/football/players/11346.png"
+      },
+      {
+        "name": "Alejandro Iturbe",
+        "position": "Goalkeeper",
+        "shirtNumber": 13,
+        "photo": "https://media.api-sports.io/football/players/315604.png"
+      },
+      {
+        "name": "Bigas",
+        "position": "Defence",
+        "shirtNumber": 6,
+        "photo": "https://media.api-sports.io/football/players/47378.png"
+      },
+      {
+        "name": "Víctor Chust",
+        "position": "Defence",
+        "shirtNumber": 23,
+        "photo": "https://media.api-sports.io/football/players/162058.png"
+      },
+      {
+        "name": "Bambo Diaby",
+        "position": "Defence",
+        "shirtNumber": 4,
+        "photo": "https://media.api-sports.io/football/players/8746.png"
+      },
+      {
+        "name": "K. Lomónaco",
+        "position": "Defence",
+        "shirtNumber": 26,
+        "photo": "https://media.api-sports.io/football/players/237206.png"
+      },
+      {
+        "name": "R. Revivo",
+        "position": "Defence",
+        "shirtNumber": 3,
+        "photo": "https://media.api-sports.io/football/players/315127.png"
+      },
+      {
+        "name": "Rubén Sánchez",
+        "position": "Defence",
+        "shirtNumber": 22,
+        "photo": "https://media.api-sports.io/football/players/199824.png"
+      },
+      {
+        "name": "Marc Aguado",
+        "position": "Midfield",
+        "shirtNumber": 8,
+        "photo": "https://media.api-sports.io/football/players/187318.png"
+      },
+      {
+        "name": "F. Buonanotte",
+        "position": "Midfield",
+        "shirtNumber": 10,
+        "photo": "https://media.api-sports.io/football/players/311334.png"
+      },
+      {
+        "name": "G. Diangana",
+        "position": "Offence",
+        "shirtNumber": 19,
+        "photo": "https://media.api-sports.io/football/players/18821.png"
+      },
+      {
+        "name": "T. Lemar",
+        "position": "Midfield",
+        "shirtNumber": 18,
+        "photo": "https://media.api-sports.io/football/players/45.png"
+      },
+      {
+        "name": "J. Morcillo",
+        "position": "Midfield",
+        "shirtNumber": 47,
+        "photo": "https://media.api-sports.io/football/players/548704.png"
+      },
+      {
+        "name": "Martim Neto",
+        "position": "Midfield",
+        "shirtNumber": 16,
+        "photo": "https://media.api-sports.io/football/players/271580.png"
+      },
+      {
+        "name": "F. Redondo",
+        "position": "Defence",
+        "shirtNumber": 5,
+        "photo": "https://media.api-sports.io/football/players/311345.png"
+      },
+      {
+        "name": "Gonzalo Villar",
+        "position": "Midfield",
+        "shirtNumber": 12,
+        "photo": "https://media.api-sports.io/football/players/46982.png"
+      },
+      {
+        "name": "L. Cepeda",
+        "position": "Offence",
+        "shirtNumber": 21,
+        "photo": "https://media.api-sports.io/football/players/318592.png"
+      },
+      {
+        "name": "Ali Houary",
+        "position": "Offence",
+        "shirtNumber": 29,
+        "photo": "https://media.api-sports.io/football/players/448243.png"
+      },
+      {
+        "name": "Fer Niño",
+        "position": "Offence",
+        "shirtNumber": 14,
+        "photo": "https://media.api-sports.io/football/players/184277.png"
+      },
+      {
+        "name": "A. Osorio",
+        "position": "Offence",
+        "shirtNumber": 24,
+        "photo": "https://media.api-sports.io/football/players/358600.png"
+      },
+      {
+        "name": "E. Ponce",
+        "position": "Offence",
+        "shirtNumber": 9,
+        "photo": "https://media.api-sports.io/football/players/612.png"
+      },
+      {
+        "name": "Álex Sánchez",
+        "position": "Offence",
+        "shirtNumber": 38,
+        "photo": "https://media.api-sports.io/football/players/635179.png"
+      },
+      {
+        "name": "Tete Morente",
+        "position": "Offence",
+        "shirtNumber": 20,
+        "photo": "https://media.api-sports.io/football/players/47182.png"
+      },
+      {
+        "name": "Germán Valera",
+        "position": "Offence",
+        "shirtNumber": 11,
+        "photo": "https://media.api-sports.io/football/players/161963.png"
+      }
+    ],
+    "transfers": [
+      {
+        "player": "D. Affengruber",
+        "date": "2026-08-31",
+        "type": "Transfer",
+        "from": "Elche",
+        "to": "Fulham"
+      },
+      {
+        "player": "R. Núñez",
+        "date": "2026-08-31",
+        "type": "Free agent",
+        "from": "Elche",
+        "to": "CD Coria"
+      },
+      {
+        "player": "R. Revivo",
+        "date": "2026-08-31",
+        "type": "Transfer",
+        "from": "Maccabi Tel Aviv",
+        "to": "Elche"
+      },
+      {
+        "player": "T. Lemar",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Atletico Madrid",
+        "to": "Elche"
+      },
+      {
+        "player": "U. Konare",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Elche",
+        "to": "AD Ceuta FC"
+      },
+      {
+        "player": "Rubén Sánchez",
+        "date": "2026-08-31",
+        "type": "Transfer",
+        "from": "Espanyol",
+        "to": "Elche"
+      },
+      {
+        "player": "K. Lomónaco",
+        "date": "2026-08-31",
+        "type": "Transfer",
+        "from": "Independiente",
+        "to": "Elche"
+      },
+      {
+        "player": "John Nwankwo",
+        "date": "2026-08-30",
+        "type": "Loan",
+        "from": "Elche",
+        "to": "Mallorca"
+      },
+      {
+        "player": "E. Ponce",
+        "date": "2026-08-13",
+        "type": "Transfer",
+        "from": "Houston Dynamo",
+        "to": "Elche"
+      },
+      {
+        "player": "Tiziano Perrota",
+        "date": "2026-08-13",
+        "type": "Loan",
+        "from": "Elche",
+        "to": "Defensa Y Justicia"
+      },
+      {
+        "player": "Tiziano Perrota",
+        "date": "2026-08-12",
+        "type": "Transfer",
+        "from": "Banfield",
+        "to": "Elche"
+      },
+      {
+        "player": "F. Buonanotte",
+        "date": "2026-08-07",
+        "type": "Loan",
+        "from": "Brighton",
+        "to": "Elche"
+      },
+      {
+        "player": "J. Morcillo",
+        "date": "2026-08-05",
+        "type": "Transfer",
+        "from": "Atletico Madrid",
+        "to": "Elche"
+      },
+      {
+        "player": "Fer Niño",
+        "date": "2026-07-28",
+        "type": "Transfer",
+        "from": "Burgos",
+        "to": "Elche"
+      },
+      {
+        "player": "Diego Sanchez",
+        "date": "2026-07-16",
+        "type": "Raise",
+        "from": "Elche",
+        "to": "Elche"
+      },
+      {
+        "player": "Á. Rodríguez",
+        "date": "2026-07-13",
+        "type": "Transfer",
+        "from": "Elche",
+        "to": "Bournemouth"
+      },
+      {
+        "player": "A. Werner",
+        "date": "2026-07-11",
+        "type": "Loan",
+        "from": "Elche",
+        "to": "Rosario Central"
+      },
+      {
+        "player": "L. Pétrot",
+        "date": "2026-07-01",
+        "type": "Free agent",
+        "from": "Elche",
+        "to": "Anderlecht"
+      },
+      {
+        "player": "Gonzalo Villar",
+        "date": "2026-06-30",
+        "type": "Transfer",
+        "from": "Din. Zagreb",
+        "to": "Elche"
+      },
+      {
+        "player": "Gonzalo Villar",
+        "date": "2026-06-30",
+        "type": "Transfer",
+        "from": "Dinamo Zagreb",
+        "to": "Elche"
+      }
+    ]
+  },
+  "Getafe CF": {
+    "squad": [
+      {
+        "name": "J. Letáček",
+        "position": "Goalkeeper",
+        "shirtNumber": 1,
+        "photo": "https://media.api-sports.io/football/players/66491.png"
+      },
+      {
+        "name": "David Soria",
+        "position": "Goalkeeper",
+        "shirtNumber": 13,
+        "photo": "https://media.api-sports.io/football/players/47247.png"
+      },
+      {
+        "name": "A. Abqar",
+        "position": "Defence",
+        "shirtNumber": 5,
+        "photo": "https://media.api-sports.io/football/players/46813.png"
+      },
+      {
+        "name": "S. Boselli",
+        "position": "Defence",
+        "shirtNumber": 15,
+        "photo": "https://media.api-sports.io/football/players/316516.png"
+      },
+      {
+        "name": "Davinchi",
+        "position": "Defence",
+        "shirtNumber": 3,
+        "photo": "https://media.api-sports.io/football/players/471478.png"
+      },
+      {
+        "name": "D. Dakonam",
+        "position": "Defence",
+        "shirtNumber": 2,
+        "photo": "https://media.api-sports.io/football/players/47250.png"
+      },
+      {
+        "name": "Kiko Femenía",
+        "position": "Defence",
+        "shirtNumber": 17,
+        "photo": "https://media.api-sports.io/football/players/18794.png"
+      },
+      {
+        "name": "J. Mojica",
+        "position": "Defence",
+        "shirtNumber": 22,
+        "photo": "https://media.api-sports.io/football/players/64268.png"
+      },
+      {
+        "name": "Z. Romero",
+        "position": "Defence",
+        "shirtNumber": 24,
+        "photo": "https://media.api-sports.io/football/players/180927.png"
+      },
+      {
+        "name": "S. Sazonov",
+        "position": "Defence",
+        "shirtNumber": 4,
+        "photo": "https://media.api-sports.io/football/players/268728.png"
+      },
+      {
+        "name": "J. Valou",
+        "position": "Defence",
+        "shirtNumber": 26,
+        "photo": "https://media.api-sports.io/football/players/484474.png"
+      },
+      {
+        "name": "Francho Serrano",
+        "position": "Midfield",
+        "shirtNumber": 16,
+        "photo": "https://media.api-sports.io/football/players/162249.png"
+      },
+      {
+        "name": "N. Gudelj",
+        "position": "Midfield",
+        "shirtNumber": 8,
+        "photo": "https://media.api-sports.io/football/players/1489.png"
+      },
+      {
+        "name": "O. Mangala",
+        "position": "Midfield",
+        "shirtNumber": 23,
+        "photo": "https://media.api-sports.io/football/players/24882.png"
+      },
+      {
+        "name": "Ramón Terrats",
+        "position": "Midfield",
+        "shirtNumber": 11,
+        "photo": "https://media.api-sports.io/football/players/187987.png"
+      },
+      {
+        "name": "Iván Azón",
+        "position": "Midfield",
+        "shirtNumber": 20,
+        "photo": "https://media.api-sports.io/football/players/161590.png"
+      },
+      {
+        "name": "Borja Mayoral",
+        "position": "Offence",
+        "shirtNumber": 9,
+        "photo": "https://media.api-sports.io/football/players/47472.png"
+      },
+      {
+        "name": "M. Satriano",
+        "position": "Midfield",
+        "shirtNumber": 10,
+        "photo": "https://media.api-sports.io/football/players/195512.png"
+      },
+      {
+        "name": "E. Ünal",
+        "position": "Offence",
+        "shirtNumber": 19,
+        "photo": "https://media.api-sports.io/football/players/47499.png"
+      }
+    ],
+    "transfers": [
+      {
+        "player": "Y. Neyou",
+        "date": "2026-09-01",
+        "type": "Loan",
+        "from": "Getafe",
+        "to": "Volos NFC"
+      },
+      {
+        "player": "Juan Berrocal",
+        "date": "2026-08-31",
+        "type": "Free agent",
+        "from": "Getafe",
+        "to": "Malaga"
+      },
+      {
+        "player": "Iván Azón",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Como",
+        "to": "Getafe"
+      },
+      {
+        "player": "Juan Berrocal",
+        "date": "2026-08-30",
+        "type": "Free agent",
+        "from": "Getafe",
+        "to": "Malaga"
+      },
+      {
+        "player": "N. Gudelj",
+        "date": "2026-08-29",
+        "type": "Free agent",
+        "from": "Sevilla",
+        "to": "Getafe"
+      },
+      {
+        "player": "Javi Muñoz",
+        "date": "2026-08-27",
+        "type": "Free agent",
+        "from": "Getafe",
+        "to": "Almeria"
+      },
+      {
+        "player": "Javi Muñoz",
+        "date": "2026-08-26",
+        "type": "Free agent",
+        "from": "Getafe",
+        "to": "Almeria"
+      },
+      {
+        "player": "Z. Tassounte",
+        "date": "2026-08-24",
+        "type": "Free agent",
+        "from": "Getafe",
+        "to": "Extremadura 1924"
+      },
+      {
+        "player": "Z. Tassounte",
+        "date": "2026-08-23",
+        "type": "Free agent",
+        "from": "Getafe",
+        "to": "Extremadura 1924"
+      },
+      {
+        "player": "M. Aleksandrov",
+        "date": "2026-08-20",
+        "type": "Free agent",
+        "from": "Getafe",
+        "to": "Veres Rivne"
+      },
+      {
+        "player": "M. Aleksandrov",
+        "date": "2026-08-19",
+        "type": "Free agent",
+        "from": "Getafe",
+        "to": "Veres Rivne"
+      },
+      {
+        "player": "Francho Serrano",
+        "date": "2026-08-17",
+        "type": "Free agent",
+        "from": "Zaragoza",
+        "to": "Getafe"
+      },
+      {
+        "player": "E. Ünal",
+        "date": "2026-08-12",
+        "type": "Free agent",
+        "from": "Bournemouth",
+        "to": "Getafe"
+      },
+      {
+        "player": "J. Mojica",
+        "date": "2026-08-12",
+        "type": "Transfer",
+        "from": "Mallorca",
+        "to": "Getafe"
+      },
+      {
+        "player": "Diego Rico",
+        "date": "2026-08-11",
+        "type": "Free agent",
+        "from": "Getafe",
+        "to": "Osasuna"
+      },
+      {
+        "player": "E. Ünal",
+        "date": "2026-08-11",
+        "type": "Free agent",
+        "from": "Bournemouth",
+        "to": "Getafe"
+      },
+      {
+        "player": "J. Mojica",
+        "date": "2026-08-11",
+        "type": "Transfer",
+        "from": "Mallorca",
+        "to": "Getafe"
+      },
+      {
+        "player": "Diego Rico",
+        "date": "2026-08-10",
+        "type": "Free agent",
+        "from": "Getafe",
+        "to": "Osasuna"
+      },
+      {
+        "player": "Domingos Duarte",
+        "date": "2026-08-05",
+        "type": "Free agent",
+        "from": "Getafe",
+        "to": "Sao Paulo"
+      },
+      {
+        "player": "O. Mangala",
+        "date": "2026-08-05",
+        "type": "Loan",
+        "from": "Lyon",
+        "to": "Getafe"
+      }
+    ]
+  },
+  "Levante UD": {
+    "squad": [
+      {
+        "name": "Pablo Cuñat",
+        "position": "Goalkeeper",
+        "shirtNumber": 1,
+        "photo": "https://media.api-sports.io/football/players/286611.png"
+      },
+      {
+        "name": "M. Ryan",
+        "position": "Goalkeeper",
+        "shirtNumber": 13,
+        "photo": "https://media.api-sports.io/football/players/2741.png"
+      },
+      {
+        "name": "Jorge Cabello",
+        "position": "Defence",
+        "shirtNumber": 14,
+        "photo": "https://media.api-sports.io/football/players/408320.png"
+      },
+      {
+        "name": "A. Mandi",
+        "position": "Defence",
+        "shirtNumber": 2,
+        "photo": "https://media.api-sports.io/football/players/1567.png"
+      },
+      {
+        "name": "IfeanyiIfeanyi Ndukwe",
+        "position": "Defence",
+        "shirtNumber": 3,
+        "photo": "https://media.api-sports.io/football/players/511971.png"
+      },
+      {
+        "name": "Nacho Pérez",
+        "position": "Defence",
+        "shirtNumber": 29,
+        "photo": "https://media.api-sports.io/football/players/504605.png"
+      },
+      {
+        "name": "Manu Sánchez",
+        "position": "Defence",
+        "shirtNumber": 23,
+        "photo": "https://media.api-sports.io/football/players/64309.png"
+      },
+      {
+        "name": "J. Toljan",
+        "position": "Defence",
+        "shirtNumber": 22,
+        "photo": "https://media.api-sports.io/football/players/1118.png"
+      },
+      {
+        "name": "E. Bardeli",
+        "position": "Midfield",
+        "shirtNumber": 18,
+        "photo": "https://media.api-sports.io/football/players/161893.png"
+      },
+      {
+        "name": "Paco Cortés",
+        "position": "Offence",
+        "shirtNumber": 27,
+        "photo": "https://media.api-sports.io/football/players/463279.png"
+      },
+      {
+        "name": "Jon Ander Olasagasti",
+        "position": "Midfield",
+        "shirtNumber": 8,
+        "photo": "https://media.api-sports.io/football/players/182603.png"
+      },
+      {
+        "name": "Reque",
+        "position": "Midfield",
+        "shirtNumber": 6,
+        "photo": "https://media.api-sports.io/football/players/391131.png"
+      },
+      {
+        "name": "Oriol Rey",
+        "position": "Midfield",
+        "shirtNumber": 20,
+        "photo": "https://media.api-sports.io/football/players/106727.png"
+      },
+      {
+        "name": "Hugo Sotelo",
+        "position": "Midfield",
+        "shirtNumber": 5,
+        "photo": "https://media.api-sports.io/football/players/313651.png"
+      },
+      {
+        "name": "A. Tape",
+        "position": "Defence",
+        "shirtNumber": 16,
+        "photo": "https://media.api-sports.io/football/players/491103.png"
+      },
+      {
+        "name": "Etta Eyong",
+        "position": "Offence",
+        "shirtNumber": 21,
+        "photo": "https://media.api-sports.io/football/players/378284.png"
+      },
+      {
+        "name": "Víctor García",
+        "position": "Defence",
+        "shirtNumber": 17,
+        "photo": "https://media.api-sports.io/football/players/46790.png"
+      },
+      {
+        "name": "Yanis Musuayi",
+        "position": "Offence",
+        "shirtNumber": 11,
+        "photo": "https://media.api-sports.io/football/players/482302.png"
+      },
+      {
+        "name": "P. Ratkov",
+        "position": "Offence",
+        "shirtNumber": 10,
+        "photo": "https://media.api-sports.io/football/players/301763.png"
+      },
+      {
+        "name": "Iván Romero",
+        "position": "Offence",
+        "shirtNumber": 9,
+        "photo": "https://media.api-sports.io/football/players/192032.png"
+      }
+    ],
+    "transfers": [
+      {
+        "player": "Xavi",
+        "date": "2026-09-03",
+        "type": "Free agent",
+        "from": "Levante",
+        "to": "Academica"
+      },
+      {
+        "player": "Xavi",
+        "date": "2026-09-02",
+        "type": "Free agent",
+        "from": "Levante",
+        "to": "Academica"
+      },
+      {
+        "player": "Carlos Álvarez",
+        "date": "2026-09-01",
+        "type": "Transfer",
+        "from": "Levante",
+        "to": "Club America"
+      },
+      {
+        "player": "Dani Martín",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Levante",
+        "to": "Valladolid"
+      },
+      {
+        "player": "T. Abed",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Levante",
+        "to": "Valladolid"
+      },
+      {
+        "player": "Carlos Álvarez",
+        "date": "2026-08-31",
+        "type": "Transfer",
+        "from": "Levante",
+        "to": "Club America"
+      },
+      {
+        "player": "P. Ratkov",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Lazio",
+        "to": "Levante"
+      },
+      {
+        "player": "M. Krug",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Levante",
+        "to": "Juventud Torremolinos"
+      },
+      {
+        "player": "G. Biladi",
+        "date": "2026-08-30",
+        "type": "Transfer",
+        "from": "Anderlecht U18",
+        "to": "Levante"
+      },
+      {
+        "player": "R. Martin",
+        "date": "2026-08-30",
+        "type": "-",
+        "from": "Levante",
+        "to": "Villarreal U19"
+      },
+      {
+        "player": "A. Tape",
+        "date": "2026-08-29",
+        "type": "Loan",
+        "from": "Bayer Leverkusen",
+        "to": "Levante"
+      },
+      {
+        "player": "K. Tunde",
+        "date": "2026-08-26",
+        "type": "Transfer",
+        "from": "Levante",
+        "to": "West Brom"
+      },
+      {
+        "player": "K. Tunde",
+        "date": "2026-08-25",
+        "type": "Transfer",
+        "from": "Levante",
+        "to": "West Brom"
+      },
+      {
+        "player": "IfeanyiIfeanyi Ndukwe",
+        "date": "2026-08-21",
+        "type": "Loan",
+        "from": "Liverpool",
+        "to": "Levante"
+      },
+      {
+        "player": "Pablo Martínez",
+        "date": "2026-08-20",
+        "type": "Free agent",
+        "from": "Levante",
+        "to": "Malaga"
+      },
+      {
+        "player": "K. Arriaga",
+        "date": "2026-08-16",
+        "type": "Transfer",
+        "from": "Levante",
+        "to": "AEK Athens FC"
+      },
+      {
+        "player": "K. Arriaga",
+        "date": "2026-08-15",
+        "type": "Transfer",
+        "from": "Levante",
+        "to": "AEK Athens FC"
+      },
+      {
+        "player": "A. Calatrava",
+        "date": "2026-08-14",
+        "type": "-",
+        "from": "Levante",
+        "to": "Levante"
+      },
+      {
+        "player": "T. Fernández",
+        "date": "2026-08-10",
+        "type": "Loan",
+        "from": "Villarreal",
+        "to": "Levante"
+      },
+      {
+        "player": "Unai Elgezabal",
+        "date": "2026-08-04",
+        "type": "Free agent",
+        "from": "Levante",
+        "to": "Eibar"
+      }
+    ]
+  },
+  "Rayo Vallecano de Madrid": {
+    "squad": [
+      {
+        "name": "E. Audero",
+        "position": "Goalkeeper",
+        "shirtNumber": 25,
+        "photo": "https://media.api-sports.io/football/players/30441.png"
+      },
+      {
+        "name": "A. Batalla",
+        "position": "Goalkeeper",
+        "shirtNumber": 13,
+        "photo": "https://media.api-sports.io/football/players/11379.png"
+      },
+      {
+        "name": "Dani Cárdenas",
+        "position": "Goalkeeper",
+        "shirtNumber": 1,
+        "photo": "https://media.api-sports.io/football/players/156488.png"
+      },
+      {
+        "name": "I. Balliu",
+        "position": "Defence",
+        "shirtNumber": 20,
+        "photo": "https://media.api-sports.io/football/players/20520.png"
+      },
+      {
+        "name": "Pelayo Fernández",
+        "position": "Defence",
+        "shirtNumber": 22,
+        "photo": "https://media.api-sports.io/football/players/333292.png"
+      },
+      {
+        "name": "M. Kumbulla",
+        "position": "Defence",
+        "shirtNumber": 3,
+        "photo": "https://media.api-sports.io/football/players/30924.png"
+      },
+      {
+        "name": "F. Lejeune",
+        "position": "Defence",
+        "shirtNumber": 24,
+        "photo": "https://media.api-sports.io/football/players/18895.png"
+      },
+      {
+        "name": "Luiz Felipe",
+        "position": "Defence",
+        "shirtNumber": 5,
+        "photo": "https://media.api-sports.io/football/players/1847.png"
+      },
+      {
+        "name": "Adrià Pedrosa",
+        "position": "Defence",
+        "shirtNumber": 17,
+        "photo": "https://media.api-sports.io/football/players/47329.png"
+      },
+      {
+        "name": "A. Rațiu",
+        "position": "Defence",
+        "shirtNumber": 2,
+        "photo": "https://media.api-sports.io/football/players/1703.png"
+      },
+      {
+        "name": "Mujaid Sadick",
+        "position": "Defence",
+        "shirtNumber": 15,
+        "photo": "https://media.api-sports.io/football/players/104795.png"
+      },
+      {
+        "name": "J. Vertrouwd",
+        "position": "Defence",
+        "shirtNumber": 33,
+        "photo": "https://media.api-sports.io/football/players/314006.png"
+      },
+      {
+        "name": "G. Bouare",
+        "position": "Midfield",
+        "shirtNumber": 36,
+        "photo": "https://media.api-sports.io/football/players/548809.png"
+      },
+      {
+        "name": "P. Ciss",
+        "position": "Midfield",
+        "shirtNumber": 6,
+        "photo": "https://media.api-sports.io/football/players/41552.png"
+      },
+      {
+        "name": "Pedro Díaz",
+        "position": "Midfield",
+        "shirtNumber": 4,
+        "photo": "https://media.api-sports.io/football/players/46887.png"
+      },
+      {
+        "name": "Álvaro García",
+        "position": "Offence",
+        "shirtNumber": 18,
+        "photo": "https://media.api-sports.io/football/players/47543.png"
+      },
+      {
+        "name": "Unai López",
+        "position": "Midfield",
+        "shirtNumber": 8,
+        "photo": "https://media.api-sports.io/football/players/47285.png"
+      },
+      {
+        "name": "Óscar Valentín",
+        "position": "Midfield",
+        "shirtNumber": 23,
+        "photo": "https://media.api-sports.io/football/players/47109.png"
+      },
+      {
+        "name": "Alemão",
+        "position": "Offence",
+        "shirtNumber": 9,
+        "photo": "https://media.api-sports.io/football/players/91745.png"
+      },
+      {
+        "name": "Sergio Camello",
+        "position": "Offence",
+        "shirtNumber": 10,
+        "photo": "https://media.api-sports.io/football/players/52.png"
+      },
+      {
+        "name": "Isi Palazón",
+        "position": "Offence",
+        "shirtNumber": 7,
+        "photo": "https://media.api-sports.io/football/players/131546.png"
+      },
+      {
+        "name": "G. Tsitaishvili",
+        "position": "Offence",
+        "shirtNumber": 14,
+        "photo": "https://media.api-sports.io/football/players/2181.png"
+      },
+      {
+        "name": "Jorge de Frutos",
+        "position": "Offence",
+        "shirtNumber": 19,
+        "photo": "https://media.api-sports.io/football/players/128582.png"
+      }
+    ],
+    "transfers": [
+      {
+        "player": "Rayane Belid",
+        "date": "2026-09-02",
+        "type": "Transfer",
+        "from": "Atletico Madrid",
+        "to": "Rayo Vallecano"
+      },
+      {
+        "player": "Miguel Ángel Morro",
+        "date": "2026-09-01",
+        "type": "Free agent",
+        "from": "Rayo Vallecano",
+        "to": "Morro Miguel"
+      },
+      {
+        "player": "E. Eto'o",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Rayo Vallecano",
+        "to": "Racing Ferrol"
+      },
+      {
+        "player": "Mujaid Sadick",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Genk",
+        "to": "Rayo Vallecano"
+      },
+      {
+        "player": "E. Audero",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Como",
+        "to": "Rayo Vallecano"
+      },
+      {
+        "player": "Adrià Pedrosa",
+        "date": "2026-08-26",
+        "type": "Loan",
+        "from": "Sevilla",
+        "to": "Rayo Vallecano"
+      },
+      {
+        "player": "G. Bouare",
+        "date": "2026-08-26",
+        "type": "Transfer",
+        "from": "Real Betis",
+        "to": "Rayo Vallecano"
+      },
+      {
+        "player": "A. Mumin",
+        "date": "2026-08-17",
+        "type": "Free agent",
+        "from": "Rayo Vallecano",
+        "to": "Girona"
+      },
+      {
+        "player": "G. Tsitaishvili",
+        "date": "2026-08-12",
+        "type": "Free agent",
+        "from": "Dynamo Kyiv",
+        "to": "Rayo Vallecano"
+      },
+      {
+        "player": "Pep Chavarría",
+        "date": "2026-08-11",
+        "type": "Transfer",
+        "from": "Rayo Vallecano",
+        "to": "Chelsea"
+      },
+      {
+        "player": "N. Mendy",
+        "date": "2026-08-11",
+        "type": "Transfer",
+        "from": "Rayo Vallecano",
+        "to": "Hull City"
+      },
+      {
+        "player": "M. Kumbulla",
+        "date": "2026-08-06",
+        "type": "Loan",
+        "from": "AS Roma",
+        "to": "Rayo Vallecano"
+      },
+      {
+        "player": "A. Espino",
+        "date": "2026-07-01",
+        "type": "Free agent",
+        "from": "Rayo Vallecano",
+        "to": "Racing Club"
+      },
+      {
+        "player": "N. Mendy",
+        "date": "2026-06-30",
+        "type": "Transfer",
+        "from": "Real Betis",
+        "to": "Rayo Vallecano"
+      },
+      {
+        "player": "J. Vertrouwd",
+        "date": "2026-06-30",
+        "type": "Transfer",
+        "from": "Castellon",
+        "to": "Rayo Vallecano"
+      },
+      {
+        "player": "J. Vertrouwd",
+        "date": "2026-06-30",
+        "type": "Transfer",
+        "from": "Castellón",
+        "to": "Rayo Vallecano"
+      },
+      {
+        "player": "Unai Sabroso Lorenzo",
+        "date": "2026-06-30",
+        "type": "Free agent",
+        "from": "Rayo Vallecano",
+        "to": "Cordoba"
+      },
+      {
+        "player": "Raúl de Tomás",
+        "date": "2026-06-29",
+        "type": "Return from loan",
+        "from": "Al Wakra",
+        "to": "Rayo Vallecano"
+      },
+      {
+        "player": "Raúl de Tomás",
+        "date": "2026-06-29",
+        "type": "Return from loan",
+        "from": "Al Wakrah",
+        "to": "Rayo Vallecano"
+      },
+      {
+        "player": "Miguel Ángel Morro",
+        "date": "2026-06-29",
+        "type": "Free agent",
+        "from": "Rayo Vallecano",
+        "to": "Morro Miguel"
+      }
+    ]
+  },
+  "Real Madrid CF": {
+    "squad": [],
+    "transfers": [
+      {
+        "player": "Willy Kambwala Ndengushi",
+        "date": "2026-08-25",
+        "type": "Loan",
+        "from": "Villarreal",
+        "to": "Como"
+      },
+      {
+        "player": "N. Saliba",
+        "date": "2026-08-24",
+        "type": "Transfer",
+        "from": "Anderlecht",
+        "to": "Villarreal"
+      },
+      {
+        "player": "N. El Jmili",
+        "date": "2026-08-21",
+        "type": "Transfer",
+        "from": "Roda",
+        "to": "Villarreal"
+      },
+      {
+        "player": "T. Partey",
+        "date": "2026-08-20",
+        "type": "Free agent",
+        "from": "Villarreal",
+        "to": "Al Shabab"
+      },
+      {
+        "player": "E. Pujol",
+        "date": "2026-08-19",
+        "type": "Transfer",
+        "from": "Gimnastic",
+        "to": "Villarreal"
+      },
+      {
+        "player": "Daniel Budesca",
+        "date": "2026-08-18",
+        "type": "Loan",
+        "from": "Villarreal",
+        "to": "Cordoba"
+      },
+      {
+        "player": "E. Chukwuma",
+        "date": "2026-08-16",
+        "type": "Loan",
+        "from": "Oviedo",
+        "to": "Villarreal"
+      },
+      {
+        "player": "T. Fernández",
+        "date": "2026-08-10",
+        "type": "Loan",
+        "from": "Villarreal",
+        "to": "Levante"
+      },
+      {
+        "player": "Hugo López",
+        "date": "2026-08-10",
+        "type": "Loan",
+        "from": "Villarreal",
+        "to": "FC Andorra"
+      },
+      {
+        "player": "Álex Forés",
+        "date": "2026-08-06",
+        "type": "Transfer",
+        "from": "Villarreal",
+        "to": "Burgos"
+      },
+      {
+        "player": "Pau Cabanes",
+        "date": "2026-08-04",
+        "type": "Free agent",
+        "from": "Villarreal",
+        "to": "Eldense"
+      },
+      {
+        "player": "L. Spatz",
+        "date": "2026-08-02",
+        "type": "Transfer",
+        "from": "Villarreal",
+        "to": "FC Andorra"
+      },
+      {
+        "player": "P. Gulácsi",
+        "date": "2026-08-02",
+        "type": "Transfer",
+        "from": "RB Leipzig",
+        "to": "Villarreal"
+      },
+      {
+        "player": "P. Gulácsi",
+        "date": "2026-08-01",
+        "type": "Transfer",
+        "from": "RB Leipzig",
+        "to": "Villarreal"
+      },
+      {
+        "player": "Arnau Tenas",
+        "date": "2026-07-24",
+        "type": "Loan",
+        "from": "Villarreal",
+        "to": "Mallorca"
+      },
+      {
+        "player": "F. Gil",
+        "date": "2026-07-23",
+        "type": "Free agent",
+        "from": "Villarreal",
+        "to": "Gimnastic"
+      },
+      {
+        "player": "Diego Conde",
+        "date": "2026-07-19",
+        "type": "Loan",
+        "from": "Villarreal",
+        "to": "Real Betis"
+      },
+      {
+        "player": "Reque",
+        "date": "2026-07-16",
+        "type": "Loan",
+        "from": "Villarreal",
+        "to": "Levante"
+      },
+      {
+        "player": "T. Ojeda",
+        "date": "2026-07-10",
+        "type": "Transfer",
+        "from": "Villarreal",
+        "to": "Valladolid"
+      },
+      {
+        "player": "VÃ­ctor Moreno",
+        "date": "2026-07-10",
+        "type": "Transfer",
+        "from": "Villarreal",
+        "to": "Tenerife"
+      }
+    ]
+  },
+  "Real Racing Club de Santander": {
+    "squad": [],
+    "transfers": []
+  },
+  "Real Sociedad de Fútbol": {
+    "squad": [],
+    "transfers": []
   }
 }
