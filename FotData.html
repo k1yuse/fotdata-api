@@ -2389,7 +2389,7 @@ async function openTrackRecordModal() {
     const res = await fetchWithRetry(`${API}/predict/track-record`);
     const data = await res.json();
     const summary = data.summary || {};
-    if (!summary.total_logged) {
+    if (!summary.total_scheduled) {
       body.innerHTML = `
         <div class="tr-summary">
           <div class="tr-summary-box"><div class="tr-summary-val">-</div><div class="tr-summary-label">기록 없음</div></div>
@@ -2397,10 +2397,18 @@ async function openTrackRecordModal() {
         <div class="ti-empty">아직 검증된 예측 기록이 없어요.<br>앞으로의 예측부터 하나씩 쌓여서, 실제 경기 결과가 나오는 대로 여기서 확인할 수 있어요.</div>`;
       return;
     }
+    if (!summary.total_resolved) {
+      body.innerHTML = `
+        <div class="tr-summary">
+          <div class="tr-summary-box"><div class="tr-summary-val">${summary.total_scheduled}건</div><div class="tr-summary-label">예정된 예측 기록됨</div></div>
+        </div>
+        <div class="ti-empty">아직 끝난 경기가 없어서 적중률을 계산할 수 없어요.<br>기록해둔 예측 경기들이 끝나는 대로 여기서 결과를 확인할 수 있어요.</div>`;
+      return;
+    }
     const recent = data.recent || [];
     body.innerHTML = `
       <div class="tr-summary">
-        <div class="tr-summary-box"><div class="tr-summary-val">${summary.accuracy_pct ?? '-'}%</div><div class="tr-summary-label">전체 적중률 (${summary.total_logged}경기)</div></div>
+        <div class="tr-summary-box"><div class="tr-summary-val">${summary.accuracy_pct ?? '-'}%</div><div class="tr-summary-label">전체 적중률 (${summary.total_resolved}경기)</div></div>
         <div class="tr-summary-box"><div class="tr-summary-val">${summary.recent_accuracy_pct ?? '-'}%</div><div class="tr-summary-label">최근 ${summary.recent_n ?? 0}경기</div></div>
       </div>
       ${recent.map(e => `

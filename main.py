@@ -581,17 +581,19 @@ def get_track_record():
     호출해 미리 기록해두고, 경기가 끝나면 실제 결과와 대조해 채워넣은 로그(prediction_log.json)의
     요약 + 최근 완료 경기 목록"""
     log_path = os.path.join(MODEL_DIR, "prediction_log.json")
-    empty = {"summary": {"total_logged": 0}, "recent": []}
     if not os.path.exists(log_path):
-        return empty
+        return {"summary": {"total_scheduled": 0, "total_resolved": 0}, "recent": []}
 
     with open(log_path, 'r', encoding='utf-8') as f:
         log = _json.load(f)
 
+    # total_scheduled: 예정 경기까지 포함해 기록해둔 전체 건수 (아직 결과 없는 것 포함)
+    # total_resolved: 그중 실제로 경기가 끝나 적중 여부를 확정한 건수 — 적중률 계산은 이 값 기준
+    total_scheduled = len(log)
     resolved = [e for e in log.values() if e.get("actual") is not None]
     resolved.sort(key=lambda e: e["date"])
     if not resolved:
-        return empty
+        return {"summary": {"total_scheduled": total_scheduled, "total_resolved": 0}, "recent": []}
 
     recent = resolved[-50:]
     total_correct = sum(1 for e in resolved if e["correct"])
@@ -599,7 +601,8 @@ def get_track_record():
 
     return {
         "summary": {
-            "total_logged": len(resolved),
+            "total_scheduled": total_scheduled,
+            "total_resolved": len(resolved),
             "total_correct": total_correct,
             "accuracy_pct": round(total_correct / len(resolved) * 100, 1),
             "recent_n": len(recent),
