@@ -1612,6 +1612,11 @@ document.addEventListener('keydown', (e) => {
     closeTeamSearch();
   }
 });
+(function () {
+  const isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+  const kbd = document.querySelector('.nav-search-kbd');
+  if (kbd) kbd.textContent = isMac ? '⌘K' : 'Ctrl K';
+})();
 let tiFixturesState = { team: null, matches: [], month: null };
 
 function tiFixturesMonthKey(dateStr) {
@@ -1977,7 +1982,7 @@ function showPage(page) {
   if(page!=='standings'){document.getElementById('ucl-subtabs').style.display='none';}
   if(page==='players'){loadPlayers();}
   if(page==='champion'){loadChampion('PL');}
-  if(page==='schedule' && !scheduleData[currentScheduleLeague]){loadSchedule(currentScheduleLeague);}
+  if(page==='schedule'){loadSchedule(currentScheduleLeague);}
   if(page==='shootout'){initShootout();}
 }
 
@@ -3643,6 +3648,7 @@ function toggleKofiPanel() {
   if (opening) {
     positionKofiPanel();
     body.innerHTML = '<iframe src="https://ko-fi.com/fotdata/?hidefeed=true&widget=true&embed=true"></iframe>';
+    void panel.offsetWidth; // 위치/앵커 클래스가 먼저 페인트되게 강제 리플로우 (없으면 첫 오픈 때만 이전 위치에서 시작해버림)
     panel.classList.add('open');
   } else {
     panel.classList.remove('open');
