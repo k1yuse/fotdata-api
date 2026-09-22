@@ -106,7 +106,7 @@
     @keyframes toastOut { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(8px) scale(0.95); } }
 
     .card { background: #161b22; border: 0.5px solid #30363d; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.28), 0 1px 3px rgba(0,0,0,0.24); }
-    .predict-selector-card { position: relative; z-index: 10; }
+    .predict-selector-card { position: relative; z-index: 10; margin-bottom: 380px; }
     .card-title { font-size: 13px; color: #8b949e; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
 
     .league-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
@@ -2833,6 +2833,10 @@ function showResult(data,h2h,homeForm,awayForm,home,away){
   }
   renderForm(homeForm,'home-form-list','home-form-title');renderForm(awayForm,'away-form-list','away-form-title');
   document.getElementById('result-section').classList.add('show');document.getElementById('result-section').scrollIntoView({behavior:'smooth'});
+  // 예측 결과 카드가 보이기 시작하면 그 자체로 팝업이 겹칠 공간이 충분히 생기므로,
+  // 팝업 전용으로 미리 잡아둔 여백은 더 이상 필요 없음 — 없으면 결과 카드 사이에
+  // 불필요한 빈 공간이 생겨버림
+  document.querySelector('.predict-selector-card').style.marginBottom = '16px';
 }
 
 // ── 예측 결과 공유 카드 ──
