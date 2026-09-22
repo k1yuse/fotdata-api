@@ -1071,22 +1071,31 @@ async function fetchAllSchedules() {
   return lists.flat();
 }
 
+// UTC 문자열을 그대로 slice하면 KST(UTC+9) 기준 날짜랑 어긋난다 — 예를 들어
+// "2026-10-09T18:30:00Z"는 한국 시간으로는 이미 10.10 새벽이라, 일정 탭(로컬
+// 타임존으로 변환해서 표시)과 날짜가 하루 밀려 보이는 버그가 있었음. 항상
+// 로컬 타임존 기준 캘린더 날짜로 비교하도록 통일한다.
+function localDateStr(dateInput) {
+  const d = (dateInput instanceof Date) ? dateInput : new Date(dateInput);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
 async function loadTodayMatches() {
   const container = document.getElementById('today-matches-widget');
   if (!container) return;
   container.innerHTML = `<div class="loading" style="padding:16px 0;width:100%">${BRAND_LOADER_ICON}불러오는 중...</div>`;
   try {
     const all = await fetchAllSchedules();
-    const todayStr = new Date().toISOString().slice(0, 10);
-    let matches = all.filter(m => m.date.slice(0, 10) === todayStr);
+    const todayStr = localDateStr(new Date());
+    let matches = all.filter(m => localDateStr(m.date) === todayStr);
     let label = '오늘의 경기';
     if (!matches.length) {
-      const future = all.filter(m => m.date.slice(0, 10) > todayStr).sort((a, b) => new Date(a.date) - new Date(b.date));
+      const future = all.filter(m => localDateStr(m.date) > todayStr).sort((a, b) => new Date(a.date) - new Date(b.date));
       if (future.length) {
-        const nextDate = future[0].date.slice(0, 10);
-        matches = future.filter(m => m.date.slice(0, 10) === nextDate);
-        const d = new Date(nextDate);
-        label = `다음 경기 · ${d.getMonth() + 1}.${d.getDate()}`;
+        const nextDate = localDateStr(future[0].date);
+        matches = future.filter(m => localDateStr(m.date) === nextDate);
+        const [, mm, dd] = nextDate.split('-');
+        label = `다음 경기 · ${parseInt(mm)}.${parseInt(dd)}`;
       }
     }
     document.getElementById('today-matches-title').textContent = label;
@@ -1224,7 +1233,7 @@ async function loadMyTeamWidget() {
     const isHome = m.home_team === team;
     const opponent = isHome ? m.away_team : m.home_team;
     const d = new Date(m.date);
-    const isToday = m.date.slice(0, 10) === now.toISOString().slice(0, 10);
+    const isToday = localDateStr(m.date) === localDateStr(now);
     const dateLabel = isToday ? '오늘' : `${d.getMonth() + 1}.${d.getDate()}`;
     const timeLabel = d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
     const daysLeft = Math.max(1, Math.ceil((d - now) / 86400000));
