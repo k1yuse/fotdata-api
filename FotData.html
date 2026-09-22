@@ -469,17 +469,9 @@
 
     /* 로고의 그래프 바 애니메이션 — 로고 클릭(새로고침) 피드백 + 로딩 표시 공용 */
     .logo-bars { display: flex; align-items: flex-end; }
-    .logo-bar { transform-origin: bottom; }
-    .logo-bars.animate .logo-bar { animation: logoBarBounce .7s ease-in-out infinite; }
-    .logo-bars.animate .logo-bar:nth-child(1) { animation-delay: 0s; }
-    .logo-bars.animate .logo-bar:nth-child(2) { animation-delay: .08s; }
-    .logo-bars.animate .logo-bar:nth-child(3) { animation-delay: .16s; }
-    .logo-bars.animate .logo-bar:nth-child(4) { animation-delay: .24s; }
-    .logo-bars.animate .logo-bar:nth-child(5) { animation-delay: .32s; }
-    @keyframes logoBarBounce { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.7); } }
-    .brand-loader-icon { width: 34px; height: 34px; background: #58a6ff; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .brand-loader-icon .logo-bars { display: flex; align-items: flex-end; gap: 3px; height: 18px; }
-    .brand-loader-icon .logo-bar { width: 3px; background: #0d1117; border-radius: 1px 1px 0 0; }
+    .logo-bars { display: inline-block; transform-origin: 50% 50%; }
+    .logo-bars.animate { animation: logoBallSpin 1.6s cubic-bezier(.65,0,.35,1) infinite; }
+    @keyframes logoBallSpin { 0% { transform: rotate(0deg); } 40% { transform: rotate(360deg); } 100% { transform: rotate(360deg); } }
 
     /* ── 승부차기 미니게임 ── */
     .kicker-avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; background: #21262d; flex-shrink: 0; }
@@ -522,7 +514,7 @@
     .shootout-zone { position: relative; cursor: pointer; transition: background .15s; z-index: 2; }
     .shootout-zone:hover { background: rgba(88,166,255,0.18); }
     .shootout-zone.disabled { cursor: default; pointer-events: none; }
-    .shootout-ball { position: absolute; width: 22px; height: 22px; left: 50%; top: 108%; transform: translate(-50%, -50%); transition: left .5s cubic-bezier(.2,.7,.3,1), top .5s cubic-bezier(.2,.7,.3,1); z-index: 3; filter: drop-shadow(0 2px 3px rgba(0,0,0,.5)); }
+    .shootout-ball { position: absolute; width: 30px; height: 30px; left: 50%; top: 108%; transform: translate(-50%, -50%); transition: left .5s cubic-bezier(.2,.7,.3,1), top .5s cubic-bezier(.2,.7,.3,1); z-index: 3; filter: drop-shadow(0 2px 3px rgba(0,0,0,.5)); }
     .shootout-ball svg { width: 100%; height: 100%; }
     .shootout-keeper { position: absolute; width: 30px; height: 30px; left: 50%; top: 62%; transform: translate(-50%, -50%); transition: left .45s ease, top .45s ease; z-index: 3; color: #3fb950; filter: drop-shadow(0 2px 3px rgba(0,0,0,.5)); }
     .shootout-keeper svg { width: 100%; height: 100%; }
@@ -626,15 +618,7 @@
 
 <nav class="nav">
   <div class="nav-logo" style="display:flex;align-items:center;gap:11px;cursor:pointer" onclick="refreshCurrentTab()" title="새로고침">
-    <div style="width:34px;height:34px;background:#58a6ff;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-      <div class="logo-bars" id="nav-logo-bars" style="display:flex;align-items:flex-end;gap:3px;height:18px">
-        <div class="logo-bar" style="width:3px;height:8px;background:#0d1117;border-radius:1px 1px 0 0"></div>
-        <div class="logo-bar" style="width:3px;height:13px;background:#0d1117;border-radius:1px 1px 0 0"></div>
-        <div class="logo-bar" style="width:3px;height:7px;background:#0d1117;border-radius:1px 1px 0 0"></div>
-        <div class="logo-bar" style="width:3px;height:16px;background:#0d1117;border-radius:1px 1px 0 0"></div>
-        <div class="logo-bar" style="width:3px;height:10px;background:#0d1117;border-radius:1px 1px 0 0"></div>
-      </div>
-    </div>
+    <svg class="logo-bars" id="nav-logo-bars" viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg>
     <div class="nav-wordmark">
       <span style="font-size:19px;font-weight:800;color:#e6edf3;letter-spacing:-0.5px">Fot</span>
       <span style="font-size:19px;font-weight:800;color:#58a6ff;letter-spacing:-0.5px">Data</span>
@@ -704,11 +688,11 @@
         <div class="ucl-subtab active" onclick="showUCLTab('standings',this)">리그 스테이지</div>
         <div class="ucl-subtab" onclick="showUCLTab('tournament',this)">토너먼트</div>
       </div>
-      <div id="standings-content"><div class="loading"><div class="brand-loader-icon"><div class="logo-bars animate"><div class="logo-bar" style="height:8px"></div><div class="logo-bar" style="height:13px"></div><div class="logo-bar" style="height:7px"></div><div class="logo-bar" style="height:16px"></div><div class="logo-bar" style="height:10px"></div></div></div>순위표 불러오는 중...</div></div>
+      <div id="standings-content"><div class="loading"><svg class="logo-bars animate" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg>순위표 불러오는 중...</div></div>
     </div>
 
     <div id="ucl-tournament-content" style="display:none">
-      <div class="loading" id="tournament-loading"><div class="brand-loader-icon"><div class="logo-bars animate"><div class="logo-bar" style="height:8px"></div><div class="logo-bar" style="height:13px"></div><div class="logo-bar" style="height:7px"></div><div class="logo-bar" style="height:16px"></div><div class="logo-bar" style="height:10px"></div></div></div>토너먼트 불러오는 중...</div>
+      <div class="loading" id="tournament-loading"><svg class="logo-bars animate" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg>토너먼트 불러오는 중...</div>
       <div id="tournament-bracket" style="display:none">
         <div class="bracket-wrap"><div class="bracket" id="bracket-inner"></div></div>
       </div>
@@ -743,7 +727,7 @@
   </div>
 </div>
 
-<div id="champion-content"><div class="loading"><div class="brand-loader-icon"><div class="logo-bars animate"><div class="logo-bar" style="height:8px"></div><div class="logo-bar" style="height:13px"></div><div class="logo-bar" style="height:7px"></div><div class="logo-bar" style="height:16px"></div><div class="logo-bar" style="height:10px"></div></div></div>불러오는 중...</div></div>
+<div id="champion-content"><div class="loading"><svg class="logo-bars animate" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg>불러오는 중...</div></div>
   </div>
 </div>
 
@@ -763,7 +747,7 @@
       <select id="schedule-month-select" onchange="selectScheduleMonth(this.value)"></select>
       <button class="sched-month-arrow" id="sched-month-next" onclick="stepScheduleMonth(1)" aria-label="다음 달">›</button>
     </div>
-    <div id="schedule-content"><div class="loading"><div class="brand-loader-icon"><div class="logo-bars animate"><div class="logo-bar" style="height:8px"></div><div class="logo-bar" style="height:13px"></div><div class="logo-bar" style="height:7px"></div><div class="logo-bar" style="height:16px"></div><div class="logo-bar" style="height:10px"></div></div></div>일정 불러오는 중...</div></div>
+    <div id="schedule-content"><div class="loading"><svg class="logo-bars animate" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg>일정 불러오는 중...</div></div>
   </div>
 </div>
 
@@ -781,11 +765,11 @@
     <div style="display:flex;gap:24px;flex-wrap:wrap">
       <div class="player-col">
         <h3 style="font-size:14px;color:#e6edf3;margin-bottom:12px;display:flex;align-items:center;gap:8px">득점 TOP 10</h3>
-        <div id="topscorers-list"><div class="loading"><div class="brand-loader-icon"><div class="logo-bars animate"><div class="logo-bar" style="height:8px"></div><div class="logo-bar" style="height:13px"></div><div class="logo-bar" style="height:7px"></div><div class="logo-bar" style="height:16px"></div><div class="logo-bar" style="height:10px"></div></div></div>불러오는 중...</div></div>
+        <div id="topscorers-list"><div class="loading"><svg class="logo-bars animate" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg>불러오는 중...</div></div>
       </div>
       <div class="player-col">
         <h3 style="font-size:14px;color:#e6edf3;margin-bottom:12px;display:flex;align-items:center;gap:8px">도움 TOP 10</h3>
-        <div id="topassists-list"><div class="loading"><div class="brand-loader-icon"><div class="logo-bars animate"><div class="logo-bar" style="height:8px"></div><div class="logo-bar" style="height:13px"></div><div class="logo-bar" style="height:7px"></div><div class="logo-bar" style="height:16px"></div><div class="logo-bar" style="height:10px"></div></div></div>불러오는 중...</div></div>
+        <div id="topassists-list"><div class="loading"><svg class="logo-bars animate" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg>불러오는 중...</div></div>
       </div>
     </div>
   </div>
@@ -793,7 +777,7 @@
 
 <div id="page-shootout" class="page">
   <div class="card">
-    <div class="card-title"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.5M16.09 10.67L20.08 9.37M14.53 15.48L17 18.88M9.47 15.48L7 18.88M7.91 10.67L3.92 9.37"/></svg>승부차기 미니게임</div>
+    <div class="card-title"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg>승부차기 미니게임</div>
     <div id="shootout-body"></div>
   </div>
 </div>
@@ -957,7 +941,7 @@
 <div class="modal-overlay" id="track-record-modal" onclick="closeTrackRecordModal(event)">
   <div class="modal track-record-box">
     <div class="modal-header"><span class="modal-title">AI 예측 트랙레코드</span><span class="modal-close" onclick="closeTrackRecordModal()">✕</span></div>
-    <div id="track-record-body"><div class="loading"><div class="brand-loader-icon"><div class="logo-bars animate"><div class="logo-bar" style="height:8px"></div><div class="logo-bar" style="height:13px"></div><div class="logo-bar" style="height:7px"></div><div class="logo-bar" style="height:16px"></div><div class="logo-bar" style="height:10px"></div></div></div>불러오는 중...</div></div>
+    <div id="track-record-body"><div class="loading"><svg class="logo-bars animate" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg>불러오는 중...</div></div>
   </div>
 </div>
 
@@ -1026,7 +1010,7 @@ async function fetchWithRetry(url, options = {}, { retries = 4, timeoutMs = 1500
   throw lastErr;
 }
 
-const BRAND_LOADER_ICON = '<div class="brand-loader-icon"><div class="logo-bars animate"><div class="logo-bar" style="height:8px"></div><div class="logo-bar" style="height:13px"></div><div class="logo-bar" style="height:7px"></div><div class="logo-bar" style="height:16px"></div><div class="logo-bar" style="height:10px"></div></div></div>';
+const BRAND_LOADER_ICON = '<svg class="logo-bars animate" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg>';
 
 function wakingUpHtml(attempt, retries) {
   return `<div class="loading">${BRAND_LOADER_ICON}서버를 깨우는 중이에요... (${attempt}/${retries})<br><span style="font-size:11px;color:#8b949e">잠시 쉬고 있던 서버라 최대 1분 정도 걸릴 수 있어요</span></div>`;
@@ -3118,7 +3102,7 @@ setInterval(updateCountdown, 60000);
 // ══════════════════════════════════════════════════════════════════
 let shootoutState = null;
 
-const SHOOTOUT_BALL_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.5M16.09 10.67L20.08 9.37M14.53 15.48L17 18.88M9.47 15.48L7 18.88M7.91 10.67L3.92 9.37"/></svg>';
+const SHOOTOUT_BALL_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg>';
 const SHOOTOUT_GK_SVG = '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7" r="3.6"/><path d="M4.5 21v-1.5a7.5 7.5 0 0 1 15 0V21"/></svg>';
 
 function newShootoutState() {
@@ -3592,15 +3576,7 @@ if(window.location.hash){setTimeout(()=>{const h=window.location.hash.replace('#
 
 <footer style="padding:20px 24px;padding-bottom:calc(20px + env(safe-area-inset-bottom));border-top:0.5px solid #30363d;display:flex;align-items:center;justify-content:space-between;background:#161b22">
   <div style="display:flex;align-items:center;gap:9px">
-    <div style="width:26px;height:26px;background:#58a6ff;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
-      <div style="display:flex;align-items:flex-end;gap:2px;height:14px">
-        <div style="width:3px;height:6px;background:#0d1117;border-radius:1px 1px 0 0"></div>
-        <div style="width:3px;height:10px;background:#0d1117;border-radius:1px 1px 0 0"></div>
-        <div style="width:3px;height:5px;background:#0d1117;border-radius:1px 1px 0 0"></div>
-        <div style="width:3px;height:12px;background:#0d1117;border-radius:1px 1px 0 0"></div>
-        <div style="width:3px;height:7px;background:#0d1117;border-radius:1px 1px 0 0"></div>
-      </div>
-    </div>
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg>
     <div style="display:flex">
       <span style="font-size:16px;font-weight:800;color:#e6edf3">Fot</span>
       <span style="font-size:16px;font-weight:800;color:#58a6ff">Data</span>
