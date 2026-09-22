@@ -27,6 +27,9 @@
     .nav { background: #161b22; border-bottom: 0.5px solid #30363d; padding: 0 24px; padding-top: env(safe-area-inset-top); display: flex; align-items: center; gap: 0; position: sticky; top: 0; z-index: 100; }
     .nav-tabs-scroll { display: flex; align-items: center; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; flex: 1; min-width: 0; }
     .nav-tabs-scroll::-webkit-scrollbar { display: none; }
+    .scroll-fade-x.fade-left.fade-right { -webkit-mask-image: linear-gradient(to right, transparent 0, #000 20px, #000 calc(100% - 20px), transparent 100%); mask-image: linear-gradient(to right, transparent 0, #000 20px, #000 calc(100% - 20px), transparent 100%); }
+    .scroll-fade-x.fade-right:not(.fade-left) { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 20px), transparent 100%); mask-image: linear-gradient(to right, #000 calc(100% - 20px), transparent 100%); }
+    .scroll-fade-x.fade-left:not(.fade-right) { -webkit-mask-image: linear-gradient(to left, #000 calc(100% - 20px), transparent 100%); mask-image: linear-gradient(to left, #000 calc(100% - 20px), transparent 100%); }
     .nav-search-btn { flex-shrink: 0; display: flex; align-items: center; gap: 6px; margin-left: 8px; padding: 7px 10px; background: #21262d; border: 0.5px solid #30363d; border-radius: 8px; color: #8b949e; cursor: pointer; transition: all .15s; }
     .nav-search-btn:hover { border-color: #58a6ff; color: #e6edf3; }
     .nav-search-kbd { font-size: 10px; font-weight: 600; }
@@ -130,8 +133,8 @@
     .today-card-row span.score { font-weight: 700; color: #58a6ff; margin-left: auto; }
     .today-card-time { font-size: 10px; color: #8b949e; text-align: center; margin-top: 4px; }
     .player-hero { position: relative; display: flex; align-items: center; gap: 16px; padding: 18px 16px; margin-bottom: 8px; border-radius: 12px; background: linear-gradient(135deg, rgba(240,192,64,0.14), rgba(240,192,64,0.02)); border: 0.5px solid rgba(240,192,64,0.35); overflow: hidden; box-shadow: 0 6px 20px rgba(240,192,64,0.08); }
-    .player-hero-badge { position: absolute; top: 10px; right: 12px; font-size: 11px; font-weight: 700; color: #f0c040; display: flex; align-items: center; gap: 4px; }
-    .player-hero-badge svg { width: 12px; height: 12px; }
+    .player-hero-badge { font-size: 11px; font-weight: 700; color: #f0c040; display: flex; align-items: center; gap: 4px; margin-bottom: 3px; }
+    .player-hero-badge svg { width: 12px; height: 12px; flex-shrink: 0; }
     .player-hero-photo { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; background: #21262d; border: 2px solid #f0c040; flex-shrink: 0; }
     .player-hero-info { flex: 1; min-width: 0; }
     .player-hero-name { font-size: 17px; font-weight: 800; color: #e6edf3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -164,7 +167,7 @@
     .bigmatch-venue svg { width: 11px; height: 11px; flex-shrink: 0; }
     .bigmatch-teams { display: flex; align-items: center; justify-content: center; gap: 28px; margin-bottom: 20px; }
     .bigmatch-team { display: flex; flex-direction: column; align-items: center; gap: 10px; flex: 1; max-width: 220px; min-width: 0; }
-    .bigmatch-team-hit { display: inline-flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; --team-glow: #58a6ff; }
+    .bigmatch-team-hit { display: flex; width: 100%; min-width: 0; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; --team-glow: #58a6ff; }
     .bigmatch-team img { width: 72px; height: 72px; object-fit: contain; transition: filter .15s; }
     .bigmatch-team-hit:hover img { filter: drop-shadow(0 0 6px var(--team-glow)) drop-shadow(0 0 6px var(--team-glow)); }
     .bigmatch-team .bigmatch-team-name { font-size: 17px; font-weight: 800; color: #e6edf3; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; transition: color .15s; }
@@ -185,11 +188,19 @@
     .bigmatch-unit .lbl { font-size: 10px; color: #8b949e; margin-top: 4px; }
     @media (max-width: 480px) {
       .bigmatch-banner { padding: 16px; }
-      .bigmatch-teams { gap: 14px; }
+      .bigmatch-teams { gap: 10px; }
       .bigmatch-team img { width: 52px; height: 52px; }
       .bigmatch-team .bigmatch-team-name { font-size: 13px; }
+      .bigmatch-prob-bar { width: 90px; }
+      .bigmatch-vs-col { padding: 8px 8px; }
       .bigmatch-unit { padding: 8px 0; width: 48px; }
       .bigmatch-unit .num { font-size: 20px; }
+    }
+    @media (max-width: 340px) {
+      .bigmatch-teams { gap: 6px; }
+      .bigmatch-prob-bar { width: 68px; }
+      .bigmatch-vs-col { padding: 8px 4px; }
+      .bigmatch-team .bigmatch-team-name { font-size: 12px; }
     }
 
     /* 예측 결과 공유 버튼 */
@@ -212,7 +223,7 @@
     @media (max-width: 480px) { .pwa-install-banner { left: 10px; right: 10px; bottom: 10px; padding: 10px 12px; } }
     .kofi-float-btn { position: fixed; left: 16px; bottom: 16px; z-index: 400; display: inline-flex; align-items: center; gap: 8px; background: #58a6ff; color: #0d1117; font-size: 13px; font-weight: 700; padding: 11px 18px; border-radius: 999px; box-shadow: 0 8px 24px rgba(0,0,0,.35); border: none; cursor: pointer; font-family: inherit; }
     .kofi-float-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
-    @media (max-width: 480px) { .kofi-float-btn { left: 10px; bottom: 10px; padding: 10px 14px; font-size: 12px; } }
+    @media (max-width: 480px) { .kofi-float-btn { left: 10px; bottom: 10px; width: 44px; height: 44px; padding: 0; justify-content: center; gap: 0; } .kofi-float-btn .kofi-label { display: none; } }
     .kofi-panel { position: fixed; left: 16px; bottom: 76px; width: 340px; max-width: 92vw; height: 560px; max-height: 70vh; border-radius: 14px; box-shadow: 0 16px 48px rgba(0,0,0,.45); overflow: hidden; z-index: 401; opacity: 0; pointer-events: none; transition: opacity .2s ease; will-change: transform, opacity; }
     .kofi-panel.open { opacity: 1; pointer-events: auto; }
     .kofi-panel-inner { width: 100%; height: 100%; background: #fff; display: flex; flex-direction: column; transform: translateY(100%); transition: transform .32s cubic-bezier(.22,.68,0,1.01); will-change: transform; }
@@ -405,7 +416,7 @@
     .badge.away { background: #4c1d1d; color: #f85149; }
     .prob-bars { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
     .prob-row { display: grid; grid-template-columns: 70px 1fr 45px; align-items: center; gap: 10px; }
-    .prob-label { font-size: 12px; color: #8b949e; }
+    .prob-label { font-size: 12px; color: #8b949e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .prob-bar-bg { background: #21262d; border-radius: 4px; height: 8px; overflow: hidden; }
     .prob-bar { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
     .prob-bar.home { background: #58a6ff; }
@@ -534,19 +545,20 @@
       .nav-tab { padding: 14px 8px; font-size: 12.5px; }
       .container { padding: 16px; }
       .team-popup { width: 320px; }
-      .standings-table { min-width: 560px; }
+      .standings-table { min-width: 480px; }
       #standings-content { overflow-x: auto; -webkit-overflow-scrolling: touch; }
       .standings-table .hide-mobile { display: none; }
       .standings-table td, .standings-table th { padding: 8px 6px; font-size: 11px; }
+      .team-cell span { display: inline-block; max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle; }
       .player-col { flex: 1 1 100%; min-width: 0; }
     }
 
-    @media (max-width: 400px) {
-      .nav-logo { margin-right: 8px; }
-      .nav-tab { padding: 14px 6px; font-size: 12px; }
-    }
-    @media (max-width: 340px) {
+    @media (max-width: 480px) {
+      .nav { padding: 0 8px; }
+      .nav-logo { margin-right: 6px; }
+      .nav-tab { padding: 14px 5px; font-size: 11.5px; }
       .nav-wordmark { display: none; }
+      .nav-search-btn { margin-left: 4px; padding: 7px 8px; }
     }
     
     .champ-league-btn { padding: 8px 16px; background: #161b22; border: 0.5px solid #30363d; border-radius: 8px; color: #8b949e; font-size: 13px; font-family: inherit; cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; }
@@ -1144,6 +1156,7 @@ async function loadTodayMatches() {
         ${played ? '' : `<div class="today-card-time">${timeStr}</div>`}
       </div>`;
     }).join('');
+    initScrollFade(container);
   } catch (e) {
     container.innerHTML = '<div class="ti-empty">일정을 불러올 수 없어요.</div>';
   }
@@ -1482,6 +1495,7 @@ function renderTournament(data) {
 
   document.getElementById('tournament-loading').style.display = 'none';
   document.getElementById('tournament-bracket').style.display = 'block';
+  initScrollFade(document.querySelector('.bracket-wrap'));
 }
 
 function openTModal(t1, t2) {
@@ -1676,9 +1690,9 @@ async function openMatchPredictModal(home, away) {
     body.innerHTML = `
       <div class="prediction-badge"><span class="badge ${badgeClass}">${badgeText}</span></div>
       <div class="prob-bars">
-        <div class="prob-row" style="grid-template-columns:64px 1fr 40px"><span class="prob-label">${homeShort}</span><div class="prob-bar-bg"><div class="prob-bar home" style="width:${hw}%"></div></div><span class="prob-value">${hw}%</span></div>
-        <div class="prob-row" style="grid-template-columns:64px 1fr 40px"><span class="prob-label">무승부</span><div class="prob-bar-bg"><div class="prob-bar draw" style="width:${dw}%"></div></div><span class="prob-value">${dw}%</span></div>
-        <div class="prob-row" style="grid-template-columns:64px 1fr 40px"><span class="prob-label">${awayShort}</span><div class="prob-bar-bg"><div class="prob-bar away" style="width:${aw}%"></div></div><span class="prob-value">${aw}%</span></div>
+        <div class="prob-row" style="grid-template-columns:78px 1fr 40px"><span class="prob-label">${homeShort}</span><div class="prob-bar-bg"><div class="prob-bar home" style="width:${hw}%"></div></div><span class="prob-value">${hw}%</span></div>
+        <div class="prob-row" style="grid-template-columns:78px 1fr 40px"><span class="prob-label">무승부</span><div class="prob-bar-bg"><div class="prob-bar draw" style="width:${dw}%"></div></div><span class="prob-value">${dw}%</span></div>
+        <div class="prob-row" style="grid-template-columns:78px 1fr 40px"><span class="prob-label">${awayShort}</span><div class="prob-bar-bg"><div class="prob-bar away" style="width:${aw}%"></div></div><span class="prob-value">${aw}%</span></div>
       </div>
       ${sp ? `<div style="text-align:center;margin-top:14px;padding-top:14px;border-top:0.5px solid #30363d">
         <div style="font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">예상 스코어</div>
@@ -1718,6 +1732,7 @@ async function openTeamInfo(teamName) {
   document.querySelectorAll('#ti-tabs .ti-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === 'overview'));
   updateFavBtnState();
   modal.classList.add('show');
+  initScrollFade(document.getElementById('ti-tabs'));
   await switchTiTab('overview');
 }
 
@@ -2226,9 +2241,9 @@ function renderPlayerList(players, type) {
     if (i === 0) {
       return `
         <div class="player-hero">
-          <div class="player-hero-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 16L3 6l5.5 4L12 4l3.5 6L21 6l-2 10H5zm0 2h14v2H5v-2z"/></svg> 1위</div>
           <img class="player-hero-photo" src="${p.player.photo}" onerror="this.style.display='none'">
           <div class="player-hero-info">
+            <div class="player-hero-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 16L3 6l5.5 4L12 4l3.5 6L21 6l-2 10H5zm0 2h14v2H5v-2z"/></svg> 1위</div>
             <div class="player-hero-name">${p.player.name}</div>
             <div class="player-hero-team"><img src="${stats.team.logo}" onerror="this.style.display='none'">${stats.team.name}</div>
           </div>
@@ -2473,6 +2488,7 @@ function renderStandings(data,leagueCode){
     html += legendItem('#da3633', '강등');
   }
   html+='</div>'; content.innerHTML=html;
+  initScrollFade(content);
 }
 
 async function loadLogos(){try{const res=await fetchWithRetry(`${API}/logos`);logos=await res.json();}catch(e){console.error('로고 로드 실패');}renderTeamGrid('home','EPL');renderTeamGrid('away','EPL');}
@@ -3523,6 +3539,25 @@ function renderShootoutResultHtml() {
   `;
 }
 
+function initScrollFade(el) {
+  if (!el) return;
+  const update = () => {
+    const canLeft = el.scrollLeft > 2;
+    const canRight = el.scrollLeft < el.scrollWidth - el.clientWidth - 2;
+    el.classList.toggle('scroll-fade-x', canLeft || canRight);
+    el.classList.toggle('fade-left', canLeft);
+    el.classList.toggle('fade-right', canRight);
+  };
+  if (!el._scrollFadeInit) {
+    el._scrollFadeInit = true;
+    el.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    if (window.ResizeObserver) new ResizeObserver(update).observe(el);
+  }
+  setTimeout(update, 50);
+}
+initScrollFade(document.querySelector('.nav-tabs-scroll'));
+
 loadLogos();loadStandings('PL');loadAccuracy();loadTodayMatches();loadBigMatch();loadMyTeamWidget();
 
 if(window.location.hash){setTimeout(()=>{const h=window.location.hash.replace('#','');const valid=['predict','champion','standings','players','schedule','shootout'];if(!valid.includes(h))return;document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));const pg=document.getElementById('page-'+h);if(pg)pg.classList.add('active');const tab=document.querySelector('[onclick="showPage(\''+h+'\')"]');if(tab)tab.classList.add('active');if(h==='champion')loadChampion('PL');if(h==='players')loadPlayers();if(h==='schedule')loadSchedule('PL');if(h==='shootout')initShootout();},100);}
@@ -3558,9 +3593,9 @@ if(window.location.hash){setTimeout(()=>{const h=window.location.hash.replace('#
     <button class="pwa-install-close" onclick="dismissPwaBanner()">✕</button>
   </div>
 </div>
-<button class="kofi-float-btn" onclick="toggleKofiPanel()">
+<button class="kofi-float-btn" onclick="toggleKofiPanel()" aria-label="후원하기">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-  후원하기
+  <span class="kofi-label">후원하기</span>
 </button>
 <div class="kofi-panel" id="kofi-panel">
   <div class="kofi-panel-inner">
