@@ -714,8 +714,12 @@ def update_prediction_log(schedule):
     if filled:
         print(f"  ✅ {filled}건 결과 대조 완료")
 
-    # 2) 새로 예정된 경기들 미리 예측해서 기록 (앞으로 10일 내, 아직 안 찍힌 것만)
-    horizon = now + pd.Timedelta(days=10)
+    # 2) 새로 예정된 경기들 미리 예측해서 기록 (앞으로 25일 내, 아직 안 찍힌 것만)
+    # 2026-09-22에 발견: 국제 A매치 기간처럼 5대 리그+UCL이 동시에 2주 이상
+    # 쉬는 구간이 있으면 10일 윈도우 안에 걸리는 경기가 하나도 없어서 트랙레코드가
+    # 계속 텅 비는 문제가 있었음(코드 버그가 아니라 윈도우가 실제 리그 휴식기보다
+    # 짧았던 것) — 어떤 휴식기에도 다음 라운드가 걸리도록 25일로 넉넉하게 늘림.
+    horizon = now + pd.Timedelta(days=25)
     logged = 0
     for code, rows in schedule.items():
         for m in rows:
