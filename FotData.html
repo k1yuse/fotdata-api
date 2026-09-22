@@ -906,6 +906,19 @@
   </div>
 </div>
 
+<!-- 경기 예측 미리보기 모달 (빅매치/오늘·다음 경기/일정 탭에서 경기 클릭 시) -->
+<div class="modal-overlay" id="match-predict-modal" onclick="closeMatchPredictModal(event)">
+  <div class="modal" style="width:340px">
+    <div class="modal-header"><span class="modal-title">경기 예측</span><span class="modal-close" onclick="closeMatchPredictModal()">✕</span></div>
+    <div class="modal-teams">
+      <div class="modal-team"><img class="modal-logo" id="mp-logo1" src="" onerror="this.style.display='none'"><span class="modal-team-name" id="mp-name1"></span></div>
+      <div class="modal-vs"><span>VS</span></div>
+      <div class="modal-team"><img class="modal-logo" id="mp-logo2" src="" onerror="this.style.display='none'"><span class="modal-team-name" id="mp-name2"></span></div>
+    </div>
+    <div id="match-predict-body" style="padding:16px"></div>
+  </div>
+</div>
+
 <!-- 팀 정보 모달 -->
 <div class="modal-overlay" id="ti-modal" onclick="closeTeamInfoModal(event)">
   <div class="modal ti-modal">
@@ -1108,10 +1121,10 @@ async function loadTodayMatches() {
       const homeShort = m.home_team.replace(' FC', '').replace(' CF', '');
       const awayShort = m.away_team.replace(' FC', '').replace(' CF', '');
       const isFav = favTeam && (m.home_team === favTeam || m.away_team === favTeam);
-      return `<div class="today-card${isFav ? ' today-card-fav' : ''}">
+      return `<div class="today-card${isFav ? ' today-card-fav' : ''}"${played ? '' : ` onclick="openMatchPredictModal('${escJs(m.home_team)}','${escJs(m.away_team)}')" style="cursor:pointer"`}>
         <div class="today-card-league"><img src="${li.logo}" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">${li.name}</div>
-        <div class="today-card-row clickable-team" onclick="openTeamInfo('${escJs(m.home_team)}')"><img src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span class="name">${homeShort}</span>${played ? `<span class="score">${m.home_goals}</span>` : ''}</div>
-        <div class="today-card-row clickable-team" onclick="openTeamInfo('${escJs(m.away_team)}')"><img src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"><span class="name">${awayShort}</span>${played ? `<span class="score">${m.away_goals}</span>` : ''}</div>
+        <div class="today-card-row clickable-team" onclick="event.stopPropagation();openTeamInfo('${escJs(m.home_team)}')"><img src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span class="name">${homeShort}</span>${played ? `<span class="score">${m.home_goals}</span>` : ''}</div>
+        <div class="today-card-row clickable-team" onclick="event.stopPropagation();openTeamInfo('${escJs(m.away_team)}')"><img src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"><span class="name">${awayShort}</span>${played ? `<span class="score">${m.away_goals}</span>` : ''}</div>
         ${played ? '' : `<div class="today-card-time">${timeStr}</div>`}
       </div>`;
     }).join('');
@@ -1190,10 +1203,10 @@ async function renderBigMatchBanner(m) {
   banner.innerHTML = `
     <div class="bigmatch-label"><img src="${li.logo}" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">빅매치 · ${li.name} · ${dateLabel}</div>
     ${venueHtml}
-    <div class="bigmatch-teams">
-      <div class="bigmatch-team clickable-team" onclick="openTeamInfo('${escJs(m.home_team)}')"><img src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span class="bigmatch-team-name">${homeName}</span>${homeProbHtml}</div>
+    <div class="bigmatch-teams" onclick="openMatchPredictModal('${escJs(m.home_team)}','${escJs(m.away_team)}')" style="cursor:pointer">
+      <div class="bigmatch-team clickable-team" onclick="event.stopPropagation();openTeamInfo('${escJs(m.home_team)}')"><img src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span class="bigmatch-team-name">${homeName}</span>${homeProbHtml}</div>
       <div class="bigmatch-vs-col">${probHtml}</div>
-      <div class="bigmatch-team away clickable-team" onclick="openTeamInfo('${escJs(m.away_team)}')"><img src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"><span class="bigmatch-team-name">${awayName}</span>${awayProbHtml}</div>
+      <div class="bigmatch-team away clickable-team" onclick="event.stopPropagation();openTeamInfo('${escJs(m.away_team)}')"><img src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"><span class="bigmatch-team-name">${awayName}</span>${awayProbHtml}</div>
     </div>
     <div class="bigmatch-countdown" id="bigmatch-countdown"></div>
   `;
@@ -1607,6 +1620,64 @@ function getTeamLeagueCode(team) {
     if (key !== 'UCL' && data.teams.includes(team)) return TI_LEAGUE_CODE_MAP[key];
   }
   return null;
+}
+
+// ── 경기 예측 미리보기 모달 ──
+// 빅매치 배너/오늘·다음 경기 위젯/일정 탭에서 아직 안 열린 경기를 클릭하면,
+// 어느 탭에 있든 그 자리에서 바로 예측 결과를 보여준다. 팀 이름 클릭(팀 정보)과
+// 겹치지 않도록, 팀 이름 쪽 onclick에는 event.stopPropagation()을 걸어둔다.
+async function openMatchPredictModal(home, away) {
+  const modal = document.getElementById('match-predict-modal');
+  const body = document.getElementById('match-predict-body');
+  const homeShort = home.replace(' FC', '').replace(' CF', '');
+  const awayShort = away.replace(' FC', '').replace(' CF', '');
+  document.getElementById('mp-logo1').src = logos[home] || '';
+  document.getElementById('mp-logo2').src = logos[away] || '';
+  document.getElementById('mp-name1').textContent = homeShort;
+  document.getElementById('mp-name2').textContent = awayShort;
+  body.innerHTML = `<div class="loading">${BRAND_LOADER_ICON}예측 중...</div>`;
+  modal.classList.add('show');
+  try {
+    const res = await fetchWithRetry(`${API}/predict`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ home_team: home, away_team: away }) });
+    const data = await res.json();
+    const prob = data.probabilities;
+    const hw = Math.round(prob.home_win * 100), dw = Math.round(prob.draw * 100), aw = Math.round(prob.away_win * 100);
+    let badgeText, badgeClass;
+    if (data.prediction === 'home_win') { badgeText = `${homeShort} 승리 예측`; badgeClass = 'home'; }
+    else if (data.prediction === 'away_win') { badgeText = `${awayShort} 승리 예측`; badgeClass = 'away'; }
+    else { badgeText = '무승부 예측'; badgeClass = 'draw'; }
+    const sp = data.score_prediction;
+    body.innerHTML = `
+      <div class="prediction-badge"><span class="badge ${badgeClass}">${badgeText}</span></div>
+      <div class="prob-bars">
+        <div class="prob-row" style="grid-template-columns:64px 1fr 40px"><span class="prob-label">${homeShort}</span><div class="prob-bar-bg"><div class="prob-bar home" style="width:${hw}%"></div></div><span class="prob-value">${hw}%</span></div>
+        <div class="prob-row" style="grid-template-columns:64px 1fr 40px"><span class="prob-label">무승부</span><div class="prob-bar-bg"><div class="prob-bar draw" style="width:${dw}%"></div></div><span class="prob-value">${dw}%</span></div>
+        <div class="prob-row" style="grid-template-columns:64px 1fr 40px"><span class="prob-label">${awayShort}</span><div class="prob-bar-bg"><div class="prob-bar away" style="width:${aw}%"></div></div><span class="prob-value">${aw}%</span></div>
+      </div>
+      ${sp ? `<div style="text-align:center;margin-top:14px;padding-top:14px;border-top:0.5px solid #30363d">
+        <div style="font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">예상 스코어</div>
+        <div style="font-size:26px;font-weight:800;color:#58a6ff">${sp.most_likely.replace('-', ' : ')}</div>
+      </div>` : ''}
+      <button class="predict-btn" style="margin-top:16px;width:100%" onclick="goToFullPrediction('${escJs(home)}','${escJs(away)}')">전체 예측 결과 보기</button>
+    `;
+  } catch (e) {
+    body.innerHTML = '<div class="ti-empty">예측을 불러올 수 없어요.</div>';
+  }
+}
+function closeMatchPredictModal(e) {
+  if (!e || e.target === document.getElementById('match-predict-modal')) document.getElementById('match-predict-modal').classList.remove('show');
+}
+function goToFullPrediction(home, away) {
+  closeMatchPredictModal();
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-predict').classList.add('active');
+  const tab = document.querySelector('[onclick="showPage(\'predict\')"]');
+  if (tab) tab.classList.add('active');
+  selectTeamFromPopup('home', home);
+  selectTeamFromPopup('away', away);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  predict();
 }
 
 async function openTeamInfo(teamName) {
@@ -2262,10 +2333,10 @@ function renderScheduleContent(league, monthKey) {
     const timeStr = d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
     const homeShort = m.home_team.replace(' FC', '').replace(' CF', '');
     const awayShort = m.away_team.replace(' FC', '').replace(' CF', '');
-    html += `<div class="sched-match">
-      <div class="sched-team clickable-team" onclick="openTeamInfo('${escJs(m.home_team)}')"><img src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span>${homeShort}</span></div>
+    html += `<div class="sched-match"${played ? '' : ` onclick="openMatchPredictModal('${escJs(m.home_team)}','${escJs(m.away_team)}')" style="cursor:pointer"`}>
+      <div class="sched-team clickable-team" onclick="event.stopPropagation();openTeamInfo('${escJs(m.home_team)}')"><img src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span>${homeShort}</span></div>
       <div class="sched-vs">${played ? `<span class="sched-score">${m.home_goals} - ${m.away_goals}</span>` : `<span class="sched-time">${timeStr}</span>`}</div>
-      <div class="sched-team away clickable-team" onclick="openTeamInfo('${escJs(m.away_team)}')"><span>${awayShort}</span><img src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"></div>
+      <div class="sched-team away clickable-team" onclick="event.stopPropagation();openTeamInfo('${escJs(m.away_team)}')"><span>${awayShort}</span><img src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"></div>
     </div>`;
   });
   content.innerHTML = html;
