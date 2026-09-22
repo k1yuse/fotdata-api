@@ -41,7 +41,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: #0d1117; color: #e6edf3; min-height: 100vh; }
+    body { font-family: 'Inter', sans-serif; background: #0d1117; color: #e6edf3; min-height: 100vh; display: flex; flex-direction: column; }
+    body > .container { flex: 1 0 auto; }
+    footer { flex-shrink: 0; }
 
     .nav { background: #161b22; border-bottom: 0.5px solid #30363d; padding: 0 24px; padding-top: env(safe-area-inset-top); display: flex; align-items: center; gap: 0; position: sticky; top: 0; z-index: 100; }
     .nav-tabs-scroll { display: flex; align-items: center; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; flex: 1; min-width: 0; }
@@ -399,8 +401,10 @@
     .select-trigger:hover { border-color: #58a6ff; }
     .select-trigger.active { border-color: #58a6ff; }
     .select-trigger img { width: 20px; height: 20px; object-fit: contain; border-radius: 50%; }
-    .team-popup { display: none; position: absolute; width: 420px; background: #161b22; border: 0.5px solid #30363d; border-radius: 14px; overflow: hidden; z-index: 200; top: calc(100% + 4px); left: 0; }
-    .team-popup.show { display: block; }
+    .team-popup { display: none; position: absolute; width: 480px; max-width: 92vw; background: #161b22; border: 0.5px solid #30363d; border-radius: 14px; overflow: hidden; z-index: 200; top: calc(100% + 4px); left: 50%; transform: translateX(-50%); opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+    .team-popup.show { opacity: 1; pointer-events: auto; }
+    .popup-inner { transform: translateY(-100%); transition: transform .32s cubic-bezier(.22,.68,0,1.01); }
+    .team-popup.show .popup-inner { transform: translateY(0); }
     .popup-header { padding: 12px 14px; border-bottom: 0.5px solid #30363d; display: flex; align-items: center; gap: 8px; }
     .popup-search-input { flex: 1; padding: 7px 12px; background: #21262d; border: 0.5px solid #30363d; border-radius: 6px; color: #e6edf3; font-size: 13px; }
     .popup-search-input:focus { outline: none; border-color: #58a6ff; }
@@ -412,7 +416,7 @@
     .popup-league-btn:hover { border-color: #58a6ff; color: #e6edf3; }
     .popup-league-btn.active { background: #1f4e8c; border-color: #58a6ff; color: #58a6ff; }
     .popup-team-list { display: flex; flex-direction: column; padding: 8px; max-height: 260px; overflow-y: auto; gap: 2px; }
-    .popup-team-row { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; cursor: pointer; font-size: 13px; color: #e6edf3; transition: background .1s; }
+    .popup-team-row { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 9px 10px; border-radius: 8px; cursor: pointer; font-size: 13px; color: #e6edf3; transition: background .1s; }
     .popup-team-row:hover { background: #21262d; }
     .popup-team-row.selected { background: #1f4e8c; color: #58a6ff; }
     .popup-team-row img { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
@@ -563,7 +567,7 @@
       .nav-logo { margin-right: 12px; }
       .nav-tab { padding: 14px 8px; font-size: 12.5px; }
       .container { padding: 16px; }
-      .team-popup { width: 320px; }
+      .team-popup { width: 320px; max-width: 92vw; }
       .standings-table { min-width: 480px; }
       #standings-content { overflow-x: auto; -webkit-overflow-scrolling: touch; }
       .standings-table .hide-mobile { display: none; }
@@ -804,6 +808,7 @@
               <span style="margin-left:auto;font-size:10px;color:#8b949e">▼</span>
             </div>
             <div class="team-popup" id="home-popup">
+             <div class="popup-inner">
               <div class="popup-header">
                 <input class="popup-search-input" id="home-search" placeholder="팀 검색..." oninput="filterTeams('home', this.value)">
                 <span class="popup-close" onclick="closePopup('home')">✕</span>
@@ -817,6 +822,7 @@
                 <div class="popup-league-btn" onclick="selectLeagueTab('home','UCL',this)"><img src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> UCL</div>
               </div>
               <div class="popup-team-list" id="home-team-grid"></div>
+             </div>
             </div>
           </div>
         </div>
@@ -831,6 +837,7 @@
               <span style="margin-left:auto;font-size:10px;color:#8b949e">▼</span>
             </div>
             <div class="team-popup" id="away-popup">
+             <div class="popup-inner">
               <div class="popup-header">
                 <input class="popup-search-input" id="away-search" placeholder="팀 검색..." oninput="filterTeams('away', this.value)">
                 <span class="popup-close" onclick="closePopup('away')">✕</span>
@@ -844,6 +851,7 @@
                 <div class="popup-league-btn" onclick="selectLeagueTab('away','UCL',this)"><img src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> UCL</div>
               </div>
               <div class="popup-team-list" id="away-team-grid"></div>
+             </div>
             </div>
           </div>
         </div>
@@ -1911,13 +1919,49 @@ function renderTeamGrid(side, leagueKey, search='') {
   if (!teams.length) { grid.innerHTML = '<div class="ti-empty">검색 결과가 없어요.</div>'; return; }
   grid.innerHTML=teams.map(t=>`<div class="popup-team-row ${selectedTeams[side]===t?'selected':''}" onclick="selectTeamFromPopup('${side}','${t.replace(/'/g,"\\'")}')"><img src="${logos[t]||''}" onerror="this.style.display='none'"><span>${cleanTeamName(t)}</span></div>`).join('');
 }
+const teamPopupCloseTimers = {};
 function togglePopup(side) {
   const popup=document.getElementById(`${side}-popup`), other=side==='home'?'away':'home';
-  document.getElementById(`${other}-popup`).classList.remove('show'); document.getElementById(`${other}-trigger`).classList.remove('active');
-  popup.classList.toggle('show'); document.getElementById(`${side}-trigger`).classList.toggle('active');
-  if(popup.classList.contains('show')){renderTeamGrid(side,currentLeagueTab[side]);document.getElementById(`${side}-search`).focus();}
+  closePopup(other);
+  const wasOpen = popup.classList.contains('show');
+  document.getElementById(`${side}-trigger`).classList.toggle('active');
+  if (wasOpen) { closePopup(side); return; }
+  renderTeamGrid(side,currentLeagueTab[side]);
+  openTeamPopup(side, popup);
+  document.getElementById(`${side}-search`).focus({ preventScroll: true });
 }
-function closePopup(side){document.getElementById(`${side}-popup`).classList.remove('show');document.getElementById(`${side}-trigger`).classList.remove('active');}
+function positionTeamPopup(popup) {
+  // 팀 목록이 뷰포트 아래로 넘쳐서 포커스 시 화면이 자동 스크롤되던 문제 방지 —
+  // 남은 공간에 맞춰 목록 스크롤 영역 높이를 미리 제한해둠 (기본 260px는 유지)
+  const list = popup.querySelector('.popup-team-list');
+  const rect = popup.getBoundingClientRect();
+  const chrome = rect.height - list.offsetHeight;
+  const available = window.innerHeight - rect.top - 12;
+  list.style.maxHeight = Math.max(120, Math.min(260, available - chrome)) + 'px';
+}
+function openTeamPopup(side, popup) {
+  if (teamPopupCloseTimers[side]) { clearTimeout(teamPopupCloseTimers[side]); teamPopupCloseTimers[side] = null; }
+  // 닫혀있을 땐 display:none이라 문서 스크롤 높이에 전혀 관여하지 않다가, 열 때만
+  // block으로 바꿔줌 (display:none 상태에선 트랜지션이 애초에 재생되지 않으므로
+  // block으로 바꾼 뒤 강제 리플로우 → show 클래스 순서로 진행해야 함 — kofi-panel과
+  // 같은 이유)
+  popup.style.display = 'block';
+  positionTeamPopup(popup);
+  const inner = popup.querySelector('.popup-inner');
+  inner.style.transition = 'none';
+  inner.style.transform = 'translateY(-100%)';
+  void inner.offsetHeight;
+  inner.style.transition = '';
+  popup.classList.add('show');
+  inner.style.transform = '';
+}
+function closePopup(side){
+  const popup = document.getElementById(`${side}-popup`);
+  popup.classList.remove('show');
+  document.getElementById(`${side}-trigger`).classList.remove('active');
+  if (teamPopupCloseTimers[side]) clearTimeout(teamPopupCloseTimers[side]);
+  teamPopupCloseTimers[side] = setTimeout(() => { popup.style.display = 'none'; teamPopupCloseTimers[side] = null; }, 340);
+}
 function selectLeagueTab(side,leagueKey,el){currentLeagueTab[side]=leagueKey;el.closest('.popup-league-grid').querySelectorAll('.popup-league-btn').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.getElementById(`${side}-search`).value='';renderTeamGrid(side,leagueKey);}
 function filterTeams(side,val){renderTeamGrid(side,currentLeagueTab[side],val);}
 function selectTeamFromPopup(side,team){
@@ -2799,7 +2843,12 @@ function showResult(data,h2h,homeForm,awayForm,home,away){
     document.getElementById(cid).innerHTML=html;
   }
   renderForm(homeForm,'home-form-list','home-form-title');renderForm(awayForm,'away-form-list','away-form-title');
-  document.getElementById('result-section').classList.add('show');document.getElementById('result-section').scrollIntoView({behavior:'smooth'});
+  const resultSection = document.getElementById('result-section');
+  resultSection.classList.add('show');
+  // sticky 네비게이션 바에 결과 카드 제목("예측 결과"/"최근 3시즌 맞대 기록")이
+  // 가려지던 문제 방지 — 스크롤 목적지 위에 네브바 높이만큼 여백을 동적으로 확보
+  resultSection.style.scrollMarginTop = (document.querySelector('.nav').getBoundingClientRect().height + 12) + 'px';
+  resultSection.scrollIntoView({behavior:'smooth'});
 }
 
 // ── 예측 결과 공유 카드 ──
