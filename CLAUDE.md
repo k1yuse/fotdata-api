@@ -40,8 +40,8 @@
 - **프론트엔드**: Vanilla JS + HTML/CSS (프레임워크 없음), 다크 테마(#0d1117 배경, #58a6ff 포인트)
 - **자동화**: GitHub Actions (`update_data.py`, 매일 UTC 18:00 = KST 03:00 실행)
 - **데이터 소스**:
-  - football-data.org (`FOOTBALL_API_KEY`) — 경기 결과/순위. 무료 플랜은 최근 3시즌만 제공
-  - API-Football (`API_FOOTBALL_KEY`) — 선수 스탯(득점왕/도움왕). 무료 플랜은 **EPL만, 2024 시즌 고정**
+  - football-data.org (`FOOTBALL_API_KEY`) — 경기 결과/순위. **2026-09-23 실측 재확인: 무료 플랜은 "최근 3시즌"이 아니라 4시즌(현재 기준 2023~2026 시즌)까지 접근 가능**(2022 이하는 403). "최근 N시즌" 슬라이딩 윈도우로 보이며, 아직 `calculate_blended_stats`(5.1)는 3시즌만 씀 — 4시즌으로 확장 가능하나 블렌딩 가중치 재설계가 필요해 미착수(12번 참고). 스쿼드 리스트엔 선수 이름/포지션/국적/생년월일은 나오지만, 등번호·감독 이름은 이 API 자체에 필드가 있어도 항상 null, 선수 사진은 필드 자체가 없음(플랜 문제가 아니라 API 구조적 한계 — 유료로 올려도 안 나옴).
+  - API-Football (`API_FOOTBALL_KEY`) — 선수 스탯(득점왕/도움왕)·스쿼드 사진/등번호·이적기록. 무료 플랜은 **모든 엔드포인트 호출 가능하지만 최신 시즌이 막혀 2024 시즌 고정**(스쿼드/이적 엔드포인트는 예외적으로 시즌 제한 없이 현재 스쿼드가 나옴 — 그래서 team_extra.json은 이미 26-27 현재 스쿼드 기준). 요청 한도는 100회/일(분당 10회). Pro($19/월)는 요청 한도가 7,500회/일로 늘고 최신 시즌 제한이 풀림 — 라인업(`/fixtures/lineups`)도 같은 시즌 제한 패턴이라 유료 시 열릴 가능성이 높음(2026-09-23 기준 미검증, rate limit 초과로 실제 호출 테스트 실패).
 - **로컬 개발환경**: Miniconda(arm64), Jupyter Notebook(`FotData_01.ipynb`), VS Code
 
 ## 4. 파일 구조
@@ -55,6 +55,8 @@ fotdata-api/
 ├── index.html               # 루트(`/`)에서 서빙되는 파일 — landing.html의 사본 (아래 5.1 참고)
 ├── FotData_01.ipynb        # 초기 개발용 주피터 노트북 — 지금은 update_data.py가 대체, 참고용
 ├── manifest.json            # PWA 매니페스트
+├── icon-192.png / icon-512.png   # PWA/파비콘 아이콘 — 진한 남색(#0d1117) 배경 + 파란(#58a6ff) 축구공(2026-09-23 축구공 로고로 전면 교체)
+├── generate_icons.py         # 위 두 PNG를 생성하는 Pillow 스크립트 (2026-09-23 추가, 재사용 목적으로 보존) — 사이트 전역 축구공 SVG와 동일 좌표를 그대로 래스터화
 ├── requirements.txt          # 백엔드(Render) 의존성
 ├── .github/workflows/update_data.yml   # 매일 자동 업데이트 GitHub Action
 └── fotdata_model/            # 모델/데이터 산출물 (전부 update_data.py가 생성·갱신)
@@ -133,6 +135,25 @@ cp landing.html index.html
 - 선수 아바타: `team_extra.json`에 사진이 있는 팀(EPL 일부)은 실제 사진, 없으면 회색 실루엣 아이콘 + 등번호로 폴백. `<img onerror="...">`에 HTML을 통째로 문자열로 박아 넣으면 따옴표 충돌로 태그가 깨지는 버그가 있었음 → `onerror="kickerAvatarError(this)"`처럼 함수 호출 + `data-num` 속성으로 값만 전달하는 방식으로 수정(실제 버그였고 재발 방지 차 기록)
 - 슛/막기 조작은 6분할 존(좌/중/우 × 상/하) 클릭 방식, 슈터와 골키퍼가 각각 고른 존이 다르면 골, 같으면 선방 — 키커 존은 사용자가 고르고 상대 골키퍼(또는 상대 슈터) 존은 매번 무작위
 
+### 5.8 브랜드/UI 공통 패턴 (2026-09-23 대규모 정리)
+
+**로고 통일**: 기존 "막대그래프" 로고가 페이지마다 막대 두께(3px/4px)·모서리가 조금씩 달라 보이는 일관성 문제가 있었음 → 사이트 전역에서 이미 쓰던 축구공 SVG(오각형+선 5개, `viewBox 0 0 24 24`, `stroke-width:1.4`)로 전면 교체(nav/footer/로딩스피너/PWA 아이콘 전부). 오각형 바깥으로 뻗는 5개 선의 끝점은 원(반지름 9) 안에 `stroke-linecap:round`(반경 0.7)까지 포함해서 들어가야 하므로, 각 끝점은 원점 기준 반지름 **8.2**(72°씩 5방향)로 계산해야 큰 크기(PWA 아이콘 512px)에서도 선이 원 밖으로 삐져나오지 않음 — 작은 크기(15~42px)에서는 이 오차가 안 보여서 놓치기 쉬움.
+- 로딩 애니메이션: 배경 칩 없이 공만 노출, `@keyframes logoBallSpin`으로 1.6초 중 앞 40%(~0.64초)에 360° 회전 후 나머지는 정지 — "빠르게 한 바퀴 돌고 잠깐 쉬기" 반복.
+- `icon-192.png`/`icon-512.png`는 `generate_icons.py`(Pillow)로 위 SVG 좌표를 그대로 래스터화해서 생성 — 모양을 또 바꿀 일이 있으면 이 스크립트의 `BG`/`BALL`/`LINES` 상수만 고치고 재실행.
+
+**애니메이션(펼침/접힘) 구현 기법**: `display:none↔block` 토글에 열림/닫힘 애니메이션을 넣을 때, `transition:none`으로 끄고 시작 transform을 강제로 찍은 뒤 `void el.offsetHeight`로 리플로우, 그다음 `transition:''`(복원)+`open` 클래스 추가하는 순서를 반드시 지켜야 함. 처음엔 `void el.offsetWidth` 강제 리플로우만으로 될 거라 생각했는데, 두 클래스(앵커 클래스+open 클래스)를 같은 동기 틱에 붙이면 브라우저가 중간 상태를 건너뛰고 예전 위치를 트랜지션 시작값으로 써버리는 문제가 있었음 — `transition:none`+강제 리플로우+재활성화 조합만 안정적으로 동작함을 후원 패널(kofi-panel)에서 확인 후 팀 선택 팝업에도 동일 기법 적용. 후원 패널은 데스크톱에서 헤더 버튼 클릭 시 그 버튼 바로 아래(`left:50%;transform:translateX(-50%)`)에, 모바일에서는 기존 하단 플로팅 위치에 각각 다르게 앵커링됨(`positionKofiPanel()`이 어느 트리거가 보이는지로 분기).
+
+**footer 하단 고정**: 콘텐츠가 짧은 탭(승부차기 등)에서 footer가 화면 중간에 뜨는 문제 → `body{display:flex;flex-direction:column}` + `body>.container{flex:1 0 auto}` + `footer{flex-shrink:0}`로 해결. **주의**: `.container`가 `margin:0 auto`로 최대폭 중앙정렬을 하고 있었는데, flex item이 되면서 가로축(cross-axis) auto margin이 flex의 기본 stretch를 무효화해 컨텐츠 크기로 쪼그라드는 회귀가 발생했음(전 탭이 작은 박스로 보임) → `.container`에 `width:100%`를 명시해서 해결. flex 부모 밑에서 자식에게 `margin:auto` 중앙정렬을 쓸 때는 항상 이 상호작용을 의심할 것.
+
+**팀 선택 팝업(경기예측 탭) 최종 설계**: 이 UI 하나로 이번 세션에 가장 많은 시행착오가 있었음 — 기록해서 재작업 방지.
+- 트리거 버튼(`.select-trigger`)은 `max-width:480px; margin:0 auto`로 전역 팀 검색창(`.team-search-box`)과 동일 폭·중앙정렬. 팝업(`.team-popup`)도 480px + `left:50%;transform:translateX(-50%)`로 트리거와 같은 축에 정렬. 단 모바일(`≤768px`)은 팀박스 자체가 좁아서 중앙정렬하면 화면 밖으로 넘치므로 `left:0;transform:none;width:320px`로 되돌림.
+- 팝업이 열리면 아래 콘텐츠(예측 버튼/footer) 위로 **겹쳐서 덮는 방식**(z-index 200, 표준 드롭다운/자동완성과 동일 동작)으로 확정 — "페이지를 밀어서 안 겹치게" 하는 방식은 두 번 시도했으나 전부 폐기: (a) `team-selector`에 동적 margin을 주는 방식은 "다음 경기" 위젯 같은 비동기 콘텐츠 타이밍과 계산이 어긋나 오히려 더 크게 깨짐, (b) 예측 버튼 z-index를 팝업보다 올리는 방식은 버튼이 가로로 넓어서 팝업의 검색창 부분을 통째로 가려버림.
+- 대신 `.predict-selector-card` 자체에 **고정 `margin-bottom:315px`**을 상시 부여(팝업 최대 높이 실측값 301px + 여유)해서 페이지 자체를 항상 그만큼 길게 만들어두고, 팝업이 열려도 footer를 절대 못 넘게 함. 예측하기를 누르면(`showResult()`) 결과 카드 자체가 충분한 높이를 제공하므로 이 315px 여백을 16px로 즉시 되돌림(안 그러면 결과 카드 사이에 빈 공간이 생김) — **이 마진 축소는 `scrollIntoView` 호출보다 반드시 먼저 실행**해야 함(순서가 바뀌면 스크롤 목표 위치가 계산된 직후 레이아웃이 줄어들어 스크롤 자체가 무산됨 — 실제로 이 버그로 예측 결과 스크롤이 한동안 전혀 작동 안 하고 있었음).
+- 홈팀/원정팀 팝업은 서로 독립적으로 열고 닫힘(하나 열면 다른 쪽이 자동으로 안 닫힘) — 양쪽 다 열어두고 각각 선택 가능.
+- 팝업을 열면 `popup.scrollIntoView({block:'end'})`로 팝업 전체가 화면에 들어오도록 자동 스크롤.
+
+**테스트 시 주의**: 브라우저 자동화 탭이 백그라운드(비활성) 상태면 `requestAnimationFrame`과 `scrollIntoView` 스무스 애니메이션이 실제로 실행되지 않거나 씹힘 — 스크롤/애니메이션 관련 버그를 재현·검증할 땐 반드시 해당 탭을 `tabs_select`로 앞으로 가져온 뒤 테스트할 것(이걸 놓쳐서 정상 동작하는 코드를 "안 된다"고 오판한 전례 있음).
+
 ## 6. API 엔드포인트 (main.py)
 
 | Method | Path | 설명 |
@@ -204,6 +225,10 @@ python update_data.py
 - ~~자동 업데이트 워크플로우 커밋/푸시 간헐적 실패~~ → 2026-09-19에 `.github/workflows/update_data.yml` 수정. 원인: GitHub Actions 러너가 큐에서 오래 대기하다 실행되면(수 시간 지연도 발생 가능) 그 사이 다른 커밋이 먼저 push될 수 있는데, 기존 `git pull --rebase origin main || true`는 `update_data.py`가 이미 워킹트리를 건드려놓은 상태라 원격이 움직였을 때 항상 실패하고 그 에러가 `|| true`에 조용히 삼켜져서, 결국 낡은 베이스 위에 커밋 → `push --force-with-lease` 거절로 이어짐. `git fetch` + `git reset`(mixed) + 재시도 루프로 교체해 해결. (`--soft`로 하면 인덱스가 안 갱신돼서 체크아웃 이후 원격에 새로 추가된 파일이 다음 커밋에서 삭제된 것처럼 처리되는 별도 버그가 있으니 반드시 기본/`--mixed` reset을 쓸 것.)
 - ~~로컬 conda `fotdata` 환경에서 `import sklearn`이 아예 실패함~~ → 2026-09-22에 해결. 원인은 PyPI의 scipy 1.15.3 macOS arm64 공식 wheel 자체의 `_propack` 확장(`.so`)이 최신 macOS(26A428 이상)의 더 엄격해진 Mach-O `__thread_bss` 섹션 검증을 통과하지 못하는 문제였음 — `pip install --force-reinstall --no-cache-dir scipy`로 캐시를 지우고 새로 받아도 동일 wheel이라 재발(캐시 손상이 원인이 아니었음). **conda-forge 빌드(scipy 1.15.2)로 교체하니 정상 동작** — `conda install -n fotdata -c conda-forge scipy --force-reinstall -y`. 이후 `numpy 2.2.6 / scipy 1.15.2 / scikit-learn 1.7.2 / xgboost 3.2.0` 조합으로 `import main`, `update_data.py` 모두 정상 기동 확인. pkl 모델이 sklearn 1.9.1로 저장돼 지금 버전(1.7.2)과 다르다는 `InconsistentVersionWarning`이 뜨지만 실제 로드·예측은 정상 동작(기존 10번 항목의 `multi_class` 호환 패치와 같은 종류의 무해한 경고).
 - ~~`team_extra.json` 스쿼드에 등번호 중복이 광범위하게 발생(거의 모든 팀에서 2~5쌍)~~ → 2026-09-23에 원인 파악 및 해결. 근본 원인은 두 가지: (1) API-Football의 `/players/squads`가 무료 플랜에서도 1군과 유스/후보 선수를 구분 없이 한 리스트로 반환하는데, 이 유스 선수들이 1군과 등번호가 겹침 → `_clean_squad()`를 추가해 `team_info.json`(football-data.org 쪽 공식 1군 명단, 등번호는 없지만 노이즈 없음)의 이름을 화이트리스트로 삼아 성(姓) 매칭이 안 되는 선수를 걸러내고, 그래도 남는 충돌은 번호를 비워서 오정보를 피함. (2) `_search_af_team_id_query()`의 유스팀 제외 필터에 " U18"이 빠져 있어서 Newcastle이 통째로 "Newcastle United U18"(유스팀) ID로 매칭되는 전례가 있었음(스쿼드 2명, 이적 기록도 전부 U18 이적) — 나이대 필터를 정규식(`U15~U23` 전체)으로 교체. 로컬에서 재실행해 EPL 20팀 전부(기존 16팀 → 20팀) 스쿼드 재수집 완료, 중복 0건 확인.
+- ~~일정 탭 첫 진입 시 무한 로딩(다른 리그 탭을 누르면 정상화)~~ → 2026-09-23 해결. 원인: 홈/예측 탭이 백그라운드로 5대리그+UCL 일정을 전부 미리 캐싱(`fetchAllSchedules`, 빅매치/오늘의경기 위젯용)해두는데, 이 캐싱이 사용자가 일정 탭을 열기 전에 먼저 끝나버리면 `showPage`의 "이미 캐시됐으면 로드 스킵" 가드가 걸려 실제 렌더링 함수(`loadSchedule`)가 아예 호출되지 않고 정적 placeholder에서 멈춰 있었음(다른 리그 탭 클릭은 무조건 `loadSchedule`을 호출하는 별도 경로라 정상 동작했던 것). 캐시 여부와 무관하게 페이지 진입 시 항상 `loadSchedule` 호출하도록 수정(내부에서 이미 캐시 체크 후 필요시에만 fetch하므로 중복 네트워크 요청 없음).
+- ~~검색 단축키 힌트(⌘K)가 일부 환경(주로 Windows)에서 중국어처럼 보이는 깨진 글자로 표시~~ → 2026-09-23 해결. `⌘`(U+2318) 기호가 Mac 외 환경 폰트에서 CJK 폴백 폰트로 렌더링되던 문제 — `navigator.platform`으로 Mac 여부 감지해서 Mac 아니면 "Ctrl K"로 표시.
+- ~~순위예측 "시뮬레이션 시작" 버튼이 "계산 중..."으로 바뀔 때 텍스트가 짧아져 버튼 폭이 줄고 옆 슬라이더 영역이 늘었다 줄었다 함~~ → 2026-09-23 해결. 버튼에 `min-width:148px`+텍스트 중앙정렬 고정.
+- ~~예측 결과 "OO 최근 경기" 제목이 팀명 첫 단어만(예: "Aston", "AFC") 잘려서 표시~~ → 2026-09-23 해결. `renderForm()`에서 `fd.team.split(' ')[0]` 대신 `fd.team` 전체를 쓰도록 수정.
 
 ## 11. 시즌 전환 체크리스트 (매년 반복 작업)
 
@@ -217,6 +242,8 @@ python update_data.py
 
 ## 12. 다음 계획 / 수익화 로드맵
 
+- **football-data.org 4시즌 확장 검토**: 2026-09-23 실측으로 무료 플랜이 4시즌(2023~2026)까지 열려있음을 확인(3시즌 아니었음, 3. 데이터 소스 참고). `calculate_blended_stats`(5.1)의 3시즌 가중치 테이블을 4시즌용으로 재설계하면 즉시(추가 비용 없이) 예측 모델에 반영 가능 — 아직 미착수, 착수 시 가중치 표(현재 0~9/10~17/18+경기 구간별 %) 전체 재검토 필요.
+- **API-Football 유료 전환 검토(2026-09-23 조사)**: Pro($19/월, 7,500요청/일)로 올리면 (1) 요청 한도가 100→7,500/일로 늘어 지금 100/일 한도에 막혀 중단된 라리가 등 나머지 4개 리그 스쿼드/이적 수집을 즉시 끝낼 수 있고(가장 확실한 효과), (2) 득점왕/도움왕이 2024시즌 고정에서 최신 시즌(26-27)으로 풀릴 가능성이 높고, (3) `/fixtures/lineups`(선발 라인업)·`/injuries`(부상자)도 같은 "최신 시즌 제한" 패턴이라 같이 풀릴 가능성이 높음(단 (2)(3)은 오늘 rate limit 초과로 실제 호출 검증은 못 함 — 결제 직후 바로 재검증 권장). 결제해도 자동으로 기능이 생기진 않고 프론트/백엔드에 데이터를 붙이는 작업은 별도로 필요. GitHub Actions에 `API_FOOTBALL_KEY`를 안 넣어둔 이유(7번 항목)도 "유료 전환 시" 재검토 대상.
 - **기능**: 선수 스탯 기능 확장(현재 EPL 무료 플랜 한정 → API-Football Pro 결제 시 전체 리그/시즌 확장 가능), README 작성
 - **Stage 2**: YOLOv8 + ByteTrack 컴퓨터 비전 파이프라인 (맥북 M5는 MPS 가속 지원, `device='mps'`)
 - **수익화 단기**: 도네이션 버튼(Ko-fi), Google AdSense
