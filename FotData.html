@@ -386,7 +386,8 @@
 
     /* 예측 */
     .predict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .team-selector { display: grid; grid-template-columns: 1fr auto 1fr; align-items: start; gap: 24px; margin-bottom: 16px; transition: margin-bottom .32s cubic-bezier(.22,.68,0,1.01); }
+    .team-selector { display: grid; grid-template-columns: 1fr auto 1fr; align-items: start; gap: 24px; margin-bottom: 16px; }
+    .predict-btn, .error-msg, #model-accuracy-note { position: relative; z-index: 201; }
     .team-box { display: flex; flex-direction: column; align-items: center; gap: 8px; padding-top: 8px; }
     .team-box label { font-size: 12px; color: #8b949e; text-transform: uppercase; letter-spacing: 1px; }
     .team-logo-wrap { width: 80px; height: 80px; border-radius: 50%; background: #21262d; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 8px; flex-shrink: 0; border: 3px solid transparent; transition: border-color .4s ease, box-shadow .4s ease; }
@@ -1921,8 +1922,9 @@ function renderTeamGrid(side, leagueKey, search='') {
 }
 const teamPopupCloseTimers = {};
 function togglePopup(side) {
-  const popup=document.getElementById(`${side}-popup`), other=side==='home'?'away':'home';
-  closePopup(other);
+  // home/away 팝업을 서로 독립적으로 열고 닫을 수 있게 함 (한쪽을 열어도 다른
+  // 쪽을 자동으로 닫지 않음 — 둘 다 동시에 열어서 각각 선택 가능)
+  const popup=document.getElementById(`${side}-popup`);
   const wasOpen = popup.classList.contains('show');
   document.getElementById(`${side}-trigger`).classList.toggle('active');
   if (wasOpen) { closePopup(side); return; }
@@ -1930,20 +1932,9 @@ function togglePopup(side) {
   openTeamPopup(side, popup);
   document.getElementById(`${side}-search`).focus({ preventScroll: true });
 }
-function reserveTeamPopupSpace(popup) {
-  // 팝업이 카드 밖(버튼/푸터)으로 겹쳐 보이던 문제 방지 — 목록을 억지로 줄이는
-  // 대신 팝업이 필요로 하는 만큼 team-selector 아래 여백을 늘려서 페이지 자체를
-  // 길어지게 함 (겹침 없음, 필요하면 그냥 스크롤)
-  const selector = document.querySelector('.team-selector');
-  const selRect = selector.getBoundingClientRect();
-  const popRect = popup.getBoundingClientRect();
-  const extra = Math.max(0, popRect.bottom - selRect.bottom + 12);
-  selector.style.marginBottom = extra ? extra + 'px' : '';
-}
 function openTeamPopup(side, popup) {
   if (teamPopupCloseTimers[side]) { clearTimeout(teamPopupCloseTimers[side]); teamPopupCloseTimers[side] = null; }
   popup.style.display = 'block';
-  reserveTeamPopupSpace(popup);
   // transition을 잠깐 껐다가(시작 위치 강제 확정) 다시 켜야 첫 오픈부터 항상
   // 올바른 위치(위→아래)에서 애니메이션이 시작됨 (kofi-panel과 동일한 기법)
   const inner = popup.querySelector('.popup-inner');
@@ -1958,7 +1949,6 @@ function closePopup(side){
   const popup = document.getElementById(`${side}-popup`);
   popup.classList.remove('show');
   document.getElementById(`${side}-trigger`).classList.remove('active');
-  document.querySelector('.team-selector').style.marginBottom = '';
   if (teamPopupCloseTimers[side]) clearTimeout(teamPopupCloseTimers[side]);
   teamPopupCloseTimers[side] = setTimeout(() => { popup.style.display = 'none'; teamPopupCloseTimers[side] = null; }, 340);
 }
