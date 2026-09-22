@@ -42,8 +42,9 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="FotData">
   <link rel="manifest" href="/manifest.json">
-  <link rel="apple-touch-icon" href="/icon-192.png">
-  <link rel="icon" href="/icon-192.png">
+  <link rel="apple-touch-icon" href="/icon-512.png">
+  <link rel="icon" sizes="192x192" href="/icon-192.png">
+  <link rel="icon" sizes="512x512" href="/icon-512.png">
   <link rel="canonical" href="https://fotdata-api.vercel.app/">
   <title>FotData - AI 축구 분석 플랫폼</title>
   <script type="application/ld+json">
@@ -395,6 +396,8 @@
     .kofi-panel.open { opacity: 1; pointer-events: auto; }
     .kofi-panel-inner { width: 100%; height: 100%; background: #fff; display: flex; flex-direction: column; transform: translateY(100%); transition: transform .32s cubic-bezier(.22,.68,0,1.01); will-change: transform; }
     .kofi-panel.open .kofi-panel-inner { transform: translateY(0); }
+    .kofi-panel.kofi-anchor-top .kofi-panel-inner { transform: translateY(-100%); }
+    .kofi-panel.kofi-anchor-top.open .kofi-panel-inner { transform: translateY(0); }
     .kofi-panel-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: #f6f6f6; border-bottom: 1px solid #e5e5e5; font-size: 13px; font-weight: 700; color: #222; flex-shrink: 0; }
     .kofi-panel-header button { background: none; border: none; font-size: 18px; line-height: 1; cursor: pointer; color: #666; padding: 2px; }
     .kofi-panel-body { flex: 1; min-height: 0; }
@@ -869,12 +872,34 @@ window.addEventListener('load', () => window.scrollTo(0, 0));
 </div>
 <script>
 let kofiCloseTimer = null;
+function positionKofiPanel() {
+  const panel = document.getElementById('kofi-panel');
+  const navBtn = document.querySelector('.nav-donate-btn');
+  const anchorToNav = navBtn && getComputedStyle(navBtn).display !== 'none';
+  panel.classList.toggle('kofi-anchor-top', anchorToNav);
+  if (anchorToNav) {
+    const r = navBtn.getBoundingClientRect();
+    const top = r.bottom + 10;
+    panel.style.top = top + 'px';
+    panel.style.bottom = 'auto';
+    panel.style.right = Math.max(10, window.innerWidth - r.right) + 'px';
+    panel.style.left = 'auto';
+    panel.style.height = Math.min(560, window.innerHeight - top - 16) + 'px';
+  } else {
+    panel.style.top = '';
+    panel.style.bottom = '';
+    panel.style.right = '';
+    panel.style.left = '';
+    panel.style.height = '';
+  }
+}
 function toggleKofiPanel() {
   const panel = document.getElementById('kofi-panel');
   const body = document.getElementById('kofi-panel-body');
   const opening = !panel.classList.contains('open');
   if (kofiCloseTimer) { clearTimeout(kofiCloseTimer); kofiCloseTimer = null; }
   if (opening) {
+    positionKofiPanel();
     body.innerHTML = '<iframe src="https://ko-fi.com/fotdata/?hidefeed=true&widget=true&embed=true"></iframe>';
     panel.classList.add('open');
   } else {
@@ -882,6 +907,7 @@ function toggleKofiPanel() {
     kofiCloseTimer = setTimeout(() => { body.innerHTML = ''; kofiCloseTimer = null; }, 340);
   }
 }
+window.addEventListener('resize', () => { if (document.getElementById('kofi-panel').classList.contains('open')) positionKofiPanel(); });
 </script>
 </body>
 </html>
