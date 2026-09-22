@@ -51,6 +51,11 @@
     .nav-search-btn { flex-shrink: 0; display: flex; align-items: center; gap: 6px; margin-left: 8px; padding: 7px 10px; background: #21262d; border: 0.5px solid #30363d; border-radius: 8px; color: #8b949e; cursor: pointer; transition: all .15s; }
     .nav-search-btn:hover { border-color: #58a6ff; color: #e6edf3; }
     .nav-search-kbd { font-size: 10px; font-weight: 600; }
+    .nav-donate-btn { display: none; }
+    @media (min-width: 640px) {
+      .nav-donate-btn { flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-left: 8px; width: 34px; height: 34px; padding: 0; background: rgba(88,166,255,0.1); border: 0.5px solid rgba(88,166,255,0.4); border-radius: 8px; color: #58a6ff; cursor: pointer; transition: background .15s; }
+      .nav-donate-btn:hover { background: rgba(88,166,255,0.18); }
+    }
     @media (max-width: 480px) { .nav-search-kbd { display: none; } }
     .team-search-box { width: 480px; max-width: 92vw; max-height: 72vh; display: flex; flex-direction: column; align-items: stretch; }
     .track-record-box { width: 480px; max-width: 92vw; max-height: 80vh; display: flex; flex-direction: column; }
@@ -239,10 +244,11 @@
     .pwa-install-btn { background: linear-gradient(135deg, #58a6ff, #4090e8); color: #0d1117; border: none; font-size: 12px; font-weight: 700; padding: 8px 12px; border-radius: 7px; cursor: pointer; }
     .pwa-install-close { background: none; border: none; color: #8b949e; font-size: 18px; line-height: 1; cursor: pointer; padding: 4px; }
     @media (max-width: 480px) { .pwa-install-banner { left: 10px; right: 10px; bottom: 10px; padding: 10px 12px; } }
-    .kofi-float-btn { position: fixed; left: 16px; bottom: 16px; z-index: 400; display: inline-flex; align-items: center; gap: 8px; background: #58a6ff; color: #0d1117; font-size: 13px; font-weight: 700; padding: 11px 18px; border-radius: 999px; box-shadow: 0 8px 24px rgba(0,0,0,.35); border: none; cursor: pointer; font-family: inherit; }
+    .kofi-float-btn { position: fixed; left: 16px; bottom: 76px; z-index: 400; display: inline-flex; align-items: center; gap: 8px; background: #58a6ff; color: #0d1117; font-size: 13px; font-weight: 700; padding: 11px 18px; border-radius: 999px; box-shadow: 0 8px 24px rgba(0,0,0,.35); border: none; cursor: pointer; font-family: inherit; }
     .kofi-float-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
-    @media (max-width: 480px) { .kofi-float-btn { left: 10px; bottom: 10px; width: 44px; height: 44px; padding: 0; justify-content: center; gap: 0; } .kofi-float-btn .kofi-label { display: none; } }
-    .kofi-panel { position: fixed; left: 16px; bottom: 76px; width: 340px; max-width: 92vw; height: 560px; max-height: 70vh; border-radius: 14px; box-shadow: 0 16px 48px rgba(0,0,0,.45); overflow: hidden; z-index: 401; opacity: 0; pointer-events: none; transition: opacity .2s ease; will-change: transform, opacity; }
+    @media (max-width: 480px) { .kofi-float-btn { left: 10px; bottom: 76px; width: 44px; height: 44px; padding: 0; justify-content: center; gap: 0; } .kofi-float-btn .kofi-label { display: none; } }
+    .kofi-panel { position: fixed; left: 16px; bottom: 136px; width: 340px; max-width: 92vw; height: 560px; max-height: 70vh; border-radius: 14px; box-shadow: 0 16px 48px rgba(0,0,0,.45); overflow: hidden; z-index: 401; opacity: 0; pointer-events: none; transition: opacity .2s ease; will-change: transform, opacity; }
+    @media (min-width: 640px) { .kofi-float-btn { display: none; } }
     .kofi-panel.open { opacity: 1; pointer-events: auto; }
     .kofi-panel-inner { width: 100%; height: 100%; background: #fff; display: flex; flex-direction: column; transform: translateY(100%); transition: transform .32s cubic-bezier(.22,.68,0,1.01); will-change: transform; }
     .kofi-panel.open .kofi-panel-inner { transform: translateY(0); }
@@ -250,7 +256,7 @@
     .kofi-panel-header button { background: none; border: none; font-size: 18px; line-height: 1; cursor: pointer; color: #666; padding: 2px; }
     .kofi-panel-body { flex: 1; min-height: 0; }
     .kofi-panel-body iframe { width: 100%; height: 100%; border: none; display: block; }
-    @media (max-width: 480px) { .kofi-panel { left: 10px; bottom: 68px; } }
+    @media (max-width: 480px) { .kofi-panel { left: 10px; bottom: 136px; } }
     @media (max-width: 480px) {
       .player-hero { gap: 12px; padding: 14px 12px; }
       .player-hero-photo { width: 52px; height: 52px; }
@@ -645,6 +651,9 @@
   <button class="nav-search-btn" onclick="openTeamSearch()" aria-label="팀 검색" title="팀 검색 (Ctrl/Cmd+K)">
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
     <span class="nav-search-kbd">⌘K</span>
+  </button>
+  <button class="nav-donate-btn" onclick="toggleKofiPanel()" aria-label="후원하기" title="후원하기">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
   </button>
 </nav>
 
@@ -3585,11 +3594,11 @@ if(window.location.hash){setTimeout(()=>{const h=window.location.hash.replace('#
   <div style="display:flex;align-items:center;gap:9px">
     <div style="width:26px;height:26px;background:#58a6ff;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
       <div style="display:flex;align-items:flex-end;gap:2px;height:14px">
-        <div style="width:3px;height:6px;background:#0d1117;border-radius:1px"></div>
-        <div style="width:3px;height:10px;background:#0d1117;border-radius:1px"></div>
-        <div style="width:3px;height:5px;background:#0d1117;border-radius:1px"></div>
-        <div style="width:3px;height:12px;background:#0d1117;border-radius:1px"></div>
-        <div style="width:3px;height:7px;background:#0d1117;border-radius:1px"></div>
+        <div style="width:3px;height:6px;background:#0d1117;border-radius:1px 1px 0 0"></div>
+        <div style="width:3px;height:10px;background:#0d1117;border-radius:1px 1px 0 0"></div>
+        <div style="width:3px;height:5px;background:#0d1117;border-radius:1px 1px 0 0"></div>
+        <div style="width:3px;height:12px;background:#0d1117;border-radius:1px 1px 0 0"></div>
+        <div style="width:3px;height:7px;background:#0d1117;border-radius:1px 1px 0 0"></div>
       </div>
     </div>
     <div style="display:flex">
