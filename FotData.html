@@ -2388,7 +2388,12 @@ async function loadAccuracy(){
 // 결과와 대조해 적중 여부를 채워넣는다. 모델 로직을 중복 구현하지 않고 라이브 API를
 // 그대로 호출하기 때문에, 여기 나오는 예측은 항상 그 시점에 사용자가 실제로 봤을
 // 예측과 정확히 같다.
-const OUTCOME_LABEL = { home_win: '홈승', draw: '무승부', away_win: '원정승' };
+function outcomeTeamLabel(outcome, home, away) {
+  const shorten = n => cleanTeamName(n).replace(' FC', '').replace(' CF', '');
+  if (outcome === 'home_win') return `${shorten(home)} 승`;
+  if (outcome === 'away_win') return `${shorten(away)} 승`;
+  return '무승부';
+}
 
 // ── 누적 적중률 추이 차트 ──
 function buildAccuracyTrendSVG(trend) {
@@ -2464,7 +2469,7 @@ async function openTrackRecordModal() {
           <div class="tr-row-icon ${e.correct ? 'correct' : 'wrong'}">${e.correct ? '✓' : '✕'}</div>
           <div class="tr-row-info">
             <div class="tr-row-match">${e.home_team.replace(' FC','').replace(' CF','')} vs ${e.away_team.replace(' FC','').replace(' CF','')}</div>
-            <div class="tr-row-detail">예측: ${OUTCOME_LABEL[e.predicted] || e.predicted} · 실제: ${e.actual_score || ''} (${OUTCOME_LABEL[e.actual] || e.actual})</div>
+            <div class="tr-row-detail">예측: ${outcomeTeamLabel(e.predicted, e.home_team, e.away_team)} · 실제: ${e.actual_score || ''} (${outcomeTeamLabel(e.actual, e.home_team, e.away_team)})</div>
           </div>
           <div class="tr-row-date">${e.date ? e.date.slice(5,10).replace('-','.') : ''}</div>
         </div>
