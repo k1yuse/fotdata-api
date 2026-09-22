@@ -3642,14 +3642,24 @@ function positionKofiPanel() {
 }
 function toggleKofiPanel() {
   const panel = document.getElementById('kofi-panel');
+  const inner = panel.querySelector('.kofi-panel-inner');
   const body = document.getElementById('kofi-panel-body');
   const opening = !panel.classList.contains('open');
   if (kofiCloseTimer) { clearTimeout(kofiCloseTimer); kofiCloseTimer = null; }
   if (opening) {
     positionKofiPanel();
     body.innerHTML = '<iframe src="https://ko-fi.com/fotdata/?hidefeed=true&widget=true&embed=true"></iframe>';
-    void panel.offsetWidth; // 위치/앵커 클래스가 먼저 페인트되게 강제 리플로우 (없으면 첫 오픈 때만 이전 위치에서 시작해버림)
+    // 클래스 두 개(kofi-anchor-top + open)를 같은 틱에 붙이면 브라우저가 중간
+    // 상태를 건너뛰고 예전 위치를 트랜지션 시작값으로 써버리는 문제가 있었음.
+    // transition을 잠깐 꺼서 시작 위치를 강제로 확정(reflow)한 뒤 다시 켜야
+    // 첫 오픈부터 항상 올바른 위치에서 애니메이션이 시작됨.
+    const closedY = panel.classList.contains('kofi-anchor-top') ? '-100%' : '100%';
+    inner.style.transition = 'none';
+    inner.style.transform = `translateY(${closedY})`;
+    void inner.offsetHeight;
+    inner.style.transition = '';
     panel.classList.add('open');
+    inner.style.transform = '';
   } else {
     panel.classList.remove('open');
     kofiCloseTimer = setTimeout(() => { body.innerHTML = ''; kofiCloseTimer = null; }, 340);
