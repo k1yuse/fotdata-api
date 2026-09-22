@@ -901,31 +901,31 @@
       "status": "TIMED"
     },
     {
+      "date": "2026-11-06T20:00:00Z",
+      "matchday": 10,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Everton FC",
+      "away_team": "Coventry City FC",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-11-07T12:30:00Z",
+      "matchday": 10,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Leeds United FC",
+      "away_team": "Tottenham Hotspur FC",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
       "date": "2026-11-07T15:00:00Z",
       "matchday": 10,
       "stage": "REGULAR_SEASON",
       "home_team": "Arsenal FC",
       "away_team": "Hull City AFC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
-    },
-    {
-      "date": "2026-11-07T15:00:00Z",
-      "matchday": 10,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Nottingham Forest FC",
-      "away_team": "Manchester City FC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
-    },
-    {
-      "date": "2026-11-07T15:00:00Z",
-      "matchday": 10,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Leeds United FC",
-      "away_team": "Tottenham Hotspur FC",
       "home_goals": null,
       "away_goals": null,
       "status": "TIMED"
@@ -941,17 +941,17 @@
       "status": "TIMED"
     },
     {
-      "date": "2026-11-07T15:00:00Z",
+      "date": "2026-11-07T17:30:00Z",
       "matchday": 10,
       "stage": "REGULAR_SEASON",
-      "home_team": "Everton FC",
-      "away_team": "Coventry City FC",
+      "home_team": "Nottingham Forest FC",
+      "away_team": "Manchester City FC",
       "home_goals": null,
       "away_goals": null,
       "status": "TIMED"
     },
     {
-      "date": "2026-11-07T15:00:00Z",
+      "date": "2026-11-08T14:00:00Z",
       "matchday": 10,
       "stage": "REGULAR_SEASON",
       "home_team": "Crystal Palace FC",
@@ -961,7 +961,7 @@
       "status": "TIMED"
     },
     {
-      "date": "2026-11-07T15:00:00Z",
+      "date": "2026-11-08T14:00:00Z",
       "matchday": 10,
       "stage": "REGULAR_SEASON",
       "home_team": "Sunderland AFC",
@@ -971,7 +971,7 @@
       "status": "TIMED"
     },
     {
-      "date": "2026-11-07T15:00:00Z",
+      "date": "2026-11-08T14:00:00Z",
       "matchday": 10,
       "stage": "REGULAR_SEASON",
       "home_team": "Ipswich Town FC",
@@ -981,7 +981,7 @@
       "status": "TIMED"
     },
     {
-      "date": "2026-11-07T15:00:00Z",
+      "date": "2026-11-08T14:00:00Z",
       "matchday": 10,
       "stage": "REGULAR_SEASON",
       "home_team": "Brighton & Hove Albion FC",
@@ -991,11 +991,21 @@
       "status": "TIMED"
     },
     {
-      "date": "2026-11-07T15:00:00Z",
+      "date": "2026-11-08T16:30:00Z",
       "matchday": 10,
       "stage": "REGULAR_SEASON",
       "home_team": "Manchester United FC",
       "away_team": "Aston Villa FC",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-11-21T12:30:00Z",
+      "matchday": 11,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Manchester City FC",
+      "away_team": "Fulham FC",
       "home_goals": null,
       "away_goals": null,
       "status": "TIMED"
@@ -1014,38 +1024,8 @@
       "date": "2026-11-21T15:00:00Z",
       "matchday": 11,
       "stage": "REGULAR_SEASON",
-      "home_team": "Manchester City FC",
-      "away_team": "Fulham FC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
-    },
-    {
-      "date": "2026-11-21T15:00:00Z",
-      "matchday": 11,
-      "stage": "REGULAR_SEASON",
       "home_team": "Aston Villa FC",
       "away_team": "Sunderland AFC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
-    },
-    {
-      "date": "2026-11-21T15:00:00Z",
-      "matchday": 11,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Liverpool FC",
-      "away_team": "Manchester United FC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
-    },
-    {
-      "date": "2026-11-21T15:00:00Z",
-      "matchday": 11,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Hull City AFC",
-      "away_team": "Brighton & Hove Albion FC",
       "home_goals": null,
       "away_goals": null,
       "status": "TIMED"
@@ -1074,16 +1054,6 @@
       "date": "2026-11-21T15:00:00Z",
       "matchday": 11,
       "stage": "REGULAR_SEASON",
-      "home_team": "Brentford FC",
-      "away_team": "Everton FC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
-    },
-    {
-      "date": "2026-11-21T15:00:00Z",
-      "matchday": 11,
-      "stage": "REGULAR_SEASON",
       "home_team": "Coventry City FC",
       "away_team": "Crystal Palace FC",
       "home_goals": null,
@@ -1091,11 +1061,51 @@
       "status": "TIMED"
     },
     {
-      "date": "2026-11-21T15:00:00Z",
+      "date": "2026-11-21T17:30:00Z",
       "matchday": 11,
       "stage": "REGULAR_SEASON",
       "home_team": "Newcastle United FC",
       "away_team": "Arsenal FC",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-11-22T14:00:00Z",
+      "matchday": 11,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Hull City AFC",
+      "away_team": "Brighton & Hove Albion FC",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-11-22T16:30:00Z",
+      "matchday": 11,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Liverpool FC",
+      "away_team": "Manchester United FC",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-11-23T20:00:00Z",
+      "matchday": 11,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Brentford FC",
+      "away_team": "Everton FC",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-11-27T20:00:00Z",
+      "matchday": 12,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Nottingham Forest FC",
+      "away_team": "Chelsea FC",
       "home_goals": null,
       "away_goals": null,
       "status": "TIMED"
@@ -1114,26 +1124,6 @@
       "date": "2026-11-28T15:00:00Z",
       "matchday": 12,
       "stage": "REGULAR_SEASON",
-      "home_team": "Ipswich Town FC",
-      "away_team": "Aston Villa FC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
-    },
-    {
-      "date": "2026-11-28T15:00:00Z",
-      "matchday": 12,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Arsenal FC",
-      "away_team": "Manchester City FC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
-    },
-    {
-      "date": "2026-11-28T15:00:00Z",
-      "matchday": 12,
-      "stage": "REGULAR_SEASON",
       "home_team": "Manchester United FC",
       "away_team": "Brentford FC",
       "home_goals": null,
@@ -1141,7 +1131,17 @@
       "status": "TIMED"
     },
     {
-      "date": "2026-11-28T15:00:00Z",
+      "date": "2026-11-28T17:30:00Z",
+      "matchday": 12,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Ipswich Town FC",
+      "away_team": "Aston Villa FC",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-11-29T12:00:00Z",
       "matchday": 12,
       "stage": "REGULAR_SEASON",
       "home_team": "Everton FC",
@@ -1151,7 +1151,7 @@
       "status": "TIMED"
     },
     {
-      "date": "2026-11-28T15:00:00Z",
+      "date": "2026-11-29T14:05:00Z",
       "matchday": 12,
       "stage": "REGULAR_SEASON",
       "home_team": "Fulham FC",
@@ -1161,17 +1161,7 @@
       "status": "TIMED"
     },
     {
-      "date": "2026-11-28T15:00:00Z",
-      "matchday": 12,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Nottingham Forest FC",
-      "away_team": "Chelsea FC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
-    },
-    {
-      "date": "2026-11-28T15:00:00Z",
+      "date": "2026-11-29T14:05:00Z",
       "matchday": 12,
       "stage": "REGULAR_SEASON",
       "home_team": "Brighton & Hove Albion FC",
@@ -1181,7 +1171,7 @@
       "status": "TIMED"
     },
     {
-      "date": "2026-11-28T15:00:00Z",
+      "date": "2026-11-29T14:05:00Z",
       "matchday": 12,
       "stage": "REGULAR_SEASON",
       "home_team": "Sunderland AFC",
@@ -1191,11 +1181,21 @@
       "status": "TIMED"
     },
     {
-      "date": "2026-11-28T15:00:00Z",
+      "date": "2026-11-29T14:05:00Z",
       "matchday": 12,
       "stage": "REGULAR_SEASON",
       "home_team": "Crystal Palace FC",
       "away_team": "Hull City AFC",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-11-29T16:30:00Z",
+      "matchday": 12,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Arsenal FC",
+      "away_team": "Manchester City FC",
       "home_goals": null,
       "away_goals": null,
       "status": "TIMED"
@@ -4703,104 +4703,104 @@
       "status": "TIMED"
     },
     {
-      "date": "2026-10-25T00:00:00Z",
-      "matchday": 10,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Rayo Vallecano de Madrid",
-      "away_team": "Elche CF",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-10-25T00:00:00Z",
+      "date": "2026-10-23T19:00:00Z",
       "matchday": 10,
       "stage": "REGULAR_SEASON",
       "home_team": "Deportivo Alavés",
       "away_team": "Málaga CF",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2026-10-25T00:00:00Z",
+      "date": "2026-10-24T12:00:00Z",
       "matchday": 10,
       "stage": "REGULAR_SEASON",
-      "home_team": "Athletic Club",
-      "away_team": "Getafe CF",
+      "home_team": "Rayo Vallecano de Madrid",
+      "away_team": "Elche CF",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2026-10-25T00:00:00Z",
-      "matchday": 10,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Sevilla FC",
-      "away_team": "CA Osasuna",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-10-25T00:00:00Z",
-      "matchday": 10,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Valencia CF",
-      "away_team": "Villarreal CF",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-10-25T00:00:00Z",
-      "matchday": 10,
-      "stage": "REGULAR_SEASON",
-      "home_team": "FC Barcelona",
-      "away_team": "Real Madrid CF",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-10-25T00:00:00Z",
-      "matchday": 10,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Club Atlético de Madrid",
-      "away_team": "RC Deportivo La Coruña",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-10-25T00:00:00Z",
-      "matchday": 10,
-      "stage": "REGULAR_SEASON",
-      "home_team": "RC Celta de Vigo",
-      "away_team": "Real Betis Balompié",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-10-25T00:00:00Z",
-      "matchday": 10,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Real Sociedad de Fútbol",
-      "away_team": "Levante UD",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-10-25T00:00:00Z",
+      "date": "2026-10-24T14:15:00Z",
       "matchday": 10,
       "stage": "REGULAR_SEASON",
       "home_team": "Real Racing Club de Santander",
       "away_team": "RCD Espanyol de Barcelona",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-10-24T16:30:00Z",
+      "matchday": 10,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Valencia CF",
+      "away_team": "Villarreal CF",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-10-24T19:00:00Z",
+      "matchday": 10,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Club Atlético de Madrid",
+      "away_team": "RC Deportivo La Coruña",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-10-25T13:00:00Z",
+      "matchday": 10,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Athletic Club",
+      "away_team": "Getafe CF",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-10-25T15:15:00Z",
+      "matchday": 10,
+      "stage": "REGULAR_SEASON",
+      "home_team": "RC Celta de Vigo",
+      "away_team": "Real Betis Balompié",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-10-25T17:30:00Z",
+      "matchday": 10,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Real Sociedad de Fútbol",
+      "away_team": "Levante UD",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-10-25T20:00:00Z",
+      "matchday": 10,
+      "stage": "REGULAR_SEASON",
+      "home_team": "FC Barcelona",
+      "away_team": "Real Madrid CF",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-10-26T20:00:00Z",
+      "matchday": 10,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Sevilla FC",
+      "away_team": "CA Osasuna",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
     },
     {
       "date": "2026-11-01T00:00:00Z",
