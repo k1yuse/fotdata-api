@@ -2,12 +2,6 @@
   "AFC Bournemouth": {
     "squad": [
       {
-        "name": "K. Crampton",
-        "position": "Goalkeeper",
-        "shirtNumber": 1,
-        "photo": "https://media.api-sports.io/football/players/407034.png"
-      },
-      {
         "name": "M. Di Gregorio",
         "position": "Goalkeeper",
         "shirtNumber": 20,
@@ -28,13 +22,13 @@
       {
         "name": "M. Aarons",
         "position": "Defence",
-        "shirtNumber": 3,
+        "shirtNumber": null,
         "photo": "https://media.api-sports.io/football/players/19070.png"
       },
       {
         "name": "J. Araujo",
         "position": "Defence",
-        "shirtNumber": 22,
+        "shirtNumber": null,
         "photo": "https://media.api-sports.io/football/players/51051.png"
       },
       {
@@ -54,12 +48,6 @@
         "position": "Defence",
         "shirtNumber": 44,
         "photo": "https://media.api-sports.io/football/players/412719.png"
-      },
-      {
-        "name": "Juanlu Sánchez",
-        "position": "Midfield",
-        "shirtNumber": 24,
-        "photo": "https://media.api-sports.io/football/players/182772.png"
       },
       {
         "name": "António Silva",
@@ -82,7 +70,7 @@
       {
         "name": "A. Truffert",
         "position": "Defence",
-        "shirtNumber": 3,
+        "shirtNumber": null,
         "photo": "https://media.api-sports.io/football/players/162267.png"
       },
       {
@@ -106,20 +94,14 @@
       {
         "name": "Z. Christie",
         "position": "Midfield",
-        "shirtNumber": 4,
+        "shirtNumber": null,
         "photo": "https://media.api-sports.io/football/players/671665.png"
       },
       {
         "name": "L. Cook",
         "position": "Midfield",
-        "shirtNumber": 4,
+        "shirtNumber": null,
         "photo": "https://media.api-sports.io/football/players/18872.png"
-      },
-      {
-        "name": "Malcom Dacosta",
-        "position": "Midfield",
-        "shirtNumber": 10,
-        "photo": "https://media.api-sports.io/football/players/626383.png"
       },
       {
         "name": "A. Scott",
@@ -128,22 +110,10 @@
         "photo": "https://media.api-sports.io/football/players/304853.png"
       },
       {
-        "name": "C. Stevens",
-        "position": "Midfield",
-        "shirtNumber": 10,
-        "photo": "https://media.api-sports.io/football/players/573755.png"
-      },
-      {
         "name": "M. Tavernier",
         "position": "Midfield",
         "shirtNumber": 16,
         "photo": "https://media.api-sports.io/football/players/19245.png"
-      },
-      {
-        "name": "A. Tóth",
-        "position": "Midfield",
-        "shirtNumber": 27,
-        "photo": "https://media.api-sports.io/football/players/361485.png"
       },
       {
         "name": "D. Brooks",
@@ -178,7 +148,7 @@
       {
         "name": "E. Kroupi",
         "position": "Offence",
-        "shirtNumber": 22,
+        "shirtNumber": null,
         "photo": "https://media.api-sports.io/football/players/368030.png"
       },
       {
@@ -186,18 +156,6 @@
         "position": "Midfield",
         "shirtNumber": 37,
         "photo": "https://media.api-sports.io/football/players/407806.png"
-      },
-      {
-        "name": "Remy Rees-Dottin",
-        "position": "Offence",
-        "shirtNumber": 51,
-        "photo": "https://media.api-sports.io/football/players/402434.png"
-      },
-      {
-        "name": "Á. Rodríguez",
-        "position": "Offence",
-        "shirtNumber": 30,
-        "photo": "https://media.api-sports.io/football/players/343202.png"
       }
     ],
     "transfers": [
@@ -358,12 +316,6 @@
         "photo": "https://media.api-sports.io/football/players/20619.png"
       },
       {
-        "name": "K. Ranson",
-        "position": "Goalkeeper",
-        "shirtNumber": 13,
-        "photo": "https://media.api-sports.io/football/players/403221.png"
-      },
-      {
         "name": "David Raya",
         "position": "Goalkeeper",
         "shirtNumber": 1,
@@ -374,12 +326,6 @@
         "position": "Defence",
         "shirtNumber": 33,
         "photo": "https://media.api-sports.io/football/players/157052.png"
-      },
-      {
-        "name": "B. Clarke",
-        "position": "Defence",
-        "shirtNumber": 14,
-        "photo": "https://media.api-sports.io/football/players/348818.png"
       },
       {
         "name": "Gabriel Magalhães",
@@ -418,12 +364,6 @@
         "photo": "https://media.api-sports.io/football/players/22090.png"
       },
       {
-        "name": "M. Salmon",
-        "position": "Defence",
-        "shirtNumber": 89,
-        "photo": "https://media.api-sports.io/football/players/482903.png"
-      },
-      {
         "name": "J. Timber",
         "position": "Defence",
         "shirtNumber": 12,
@@ -442,28 +382,16 @@
         "photo": "https://media.api-sports.io/football/players/10135.png"
       },
       {
-        "name": "Louie George Copley",
-        "position": "Midfield",
-        "shirtNumber": 30,
-        "photo": "https://media.api-sports.io/football/players/409798.png"
-      },
-      {
         "name": "M. Dowman",
         "position": "Midfield",
-        "shirtNumber": 10,
+        "shirtNumber": null,
         "photo": "https://media.api-sports.io/football/players/442044.png"
       },
       {
         "name": "E. Eze",
         "position": "Midfield",
-        "shirtNumber": 10,
+        "shirtNumber": null,
         "photo": "https://media.api-sports.io/football/players/19586.png"
-      },
-      {
-        "name": "I. Ibrahim",
-        "position": "Midfield",
-        "shirtNumber": 44,
-        "photo": "https://media.api-sports.io/football/players/457730.png"
       },
       {
         "name": "Mikel Merino",
@@ -494,12 +422,6 @@
         "position": "Offence",
         "shirtNumber": 14,
         "photo": "https://media.api-sports.io/football/players/18979.png"
-      },
-      {
-        "name": "A. Annous",
-        "position": "Offence",
-        "shirtNumber": 9,
-        "photo": "https://media.api-sports.io/football/players/457731.png"
       },
       {
         "name": "K. Havertz",
@@ -684,12 +606,6 @@
         "photo": "https://media.api-sports.io/football/players/199578.png"
       },
       {
-        "name": "J. Wright",
-        "position": "Goalkeeper",
-        "shirtNumber": 42,
-        "photo": "https://media.api-sports.io/football/players/284390.png"
-      },
-      {
         "name": "L. Bogarde",
         "position": "Midfield",
         "shirtNumber": 26,
@@ -700,12 +616,6 @@
         "position": "Defence",
         "shirtNumber": 2,
         "photo": "https://media.api-sports.io/football/players/19298.png"
-      },
-      {
-        "name": "M. Cissé",
-        "position": "Defence",
-        "shirtNumber": 48,
-        "photo": "https://media.api-sports.io/football/players/478441.png"
       },
       {
         "name": "T. Harwood-Bellis",
@@ -762,27 +672,9 @@
         "photo": "https://media.api-sports.io/football/players/19071.png"
       },
       {
-        "name": "T. Carroll",
-        "position": "Midfield",
-        "shirtNumber": 4,
-        "photo": "https://media.api-sports.io/football/players/416250.png"
-      },
-      {
-        "name": "Theodore Carroll",
-        "position": "Midfield",
-        "shirtNumber": 71,
-        "photo": "https://media.api-sports.io/football/players/661146.png"
-      },
-      {
-        "name": "R. Fortes",
-        "position": "Midfield",
-        "shirtNumber": 3,
-        "photo": "https://media.api-sports.io/football/players/412084.png"
-      },
-      {
         "name": "L. Goretzka",
         "position": "Midfield",
-        "shirtNumber": 8,
+        "shirtNumber": null,
         "photo": "https://media.api-sports.io/football/players/511.png"
       },
       {
@@ -790,12 +682,6 @@
         "position": "Midfield",
         "shirtNumber": 53,
         "photo": "https://media.api-sports.io/football/players/364566.png"
-      },
-      {
-        "name": "J. Jimoh",
-        "position": "Midfield",
-        "shirtNumber": 6,
-        "photo": "https://media.api-sports.io/football/players/360268.png"
       },
       {
         "name": "João Gomes",
@@ -806,7 +692,7 @@
       {
         "name": "B. Kamara",
         "position": "Midfield",
-        "shirtNumber": 8,
+        "shirtNumber": null,
         "photo": "https://media.api-sports.io/football/players/1904.png"
       },
       {
@@ -834,12 +720,6 @@
         "photo": "https://media.api-sports.io/football/players/19194.png"
       },
       {
-        "name": "Alysson Edward",
-        "position": "Offence",
-        "shirtNumber": 47,
-        "photo": "https://media.api-sports.io/football/players/464004.png"
-      },
-      {
         "name": "A. Garnacho",
         "position": "Offence",
         "shirtNumber": 17,
@@ -856,18 +736,6 @@
         "position": "Offence",
         "shirtNumber": 39,
         "photo": "https://media.api-sports.io/football/players/514519.png"
-      },
-      {
-        "name": "I. Mbaye",
-        "position": "Midfield",
-        "shirtNumber": 19,
-        "photo": "https://media.api-sports.io/football/players/446249.png"
-      },
-      {
-        "name": "T. Mulley",
-        "position": "Offence",
-        "shirtNumber": 7,
-        "photo": "https://media.api-sports.io/football/players/408124.png"
       }
     ],
     "transfers": [
@@ -1028,12 +896,6 @@
         "photo": "https://media.api-sports.io/football/players/281.png"
       },
       {
-        "name": "A. Stokes",
-        "position": "Goalkeeper",
-        "shirtNumber": 1,
-        "photo": "https://media.api-sports.io/football/players/363998.png"
-      },
-      {
         "name": "H. Valdimarsson",
         "position": "Goalkeeper",
         "shirtNumber": 12,
@@ -1082,12 +944,6 @@
         "photo": "https://media.api-sports.io/football/players/36922.png"
       },
       {
-        "name": "Luka Bentt",
-        "position": "Midfield",
-        "shirtNumber": 48,
-        "photo": "https://media.api-sports.io/football/players/513316.png"
-      },
-      {
         "name": "Fábio Carvalho",
         "position": "Midfield",
         "shirtNumber": 14,
@@ -1130,18 +986,6 @@
         "photo": "https://media.api-sports.io/football/players/106725.png"
       },
       {
-        "name": "R. Owen",
-        "position": "Midfield",
-        "shirtNumber": 8,
-        "photo": "https://media.api-sports.io/football/players/327726.png"
-      },
-      {
-        "name": "M. Sangaré",
-        "position": "Midfield",
-        "shirtNumber": 18,
-        "photo": "https://media.api-sports.io/football/players/277306.png"
-      },
-      {
         "name": "K. Schade",
         "position": "Midfield",
         "shirtNumber": 7,
@@ -1168,7 +1012,7 @@
       {
         "name": "Kaye Iyowuna Furo",
         "position": "Offence",
-        "shirtNumber": 9,
+        "shirtNumber": null,
         "photo": "https://media.api-sports.io/football/players/393193.png"
       },
       {
@@ -1178,15 +1022,9 @@
         "photo": "https://media.api-sports.io/football/players/284797.png"
       },
       {
-        "name": "O. Shield",
-        "position": "Offence",
-        "shirtNumber": 7,
-        "photo": "https://media.api-sports.io/football/players/624708.png"
-      },
-      {
         "name": "Thiago",
         "position": "Offence",
-        "shirtNumber": 9,
+        "shirtNumber": null,
         "photo": "https://media.api-sports.io/football/players/196156.png"
       },
       {
@@ -1414,12 +1252,6 @@
         "photo": "https://media.api-sports.io/football/players/387521.png"
       },
       {
-        "name": "José María Andrés Baixauli",
-        "position": "Midfield",
-        "shirtNumber": 14,
-        "photo": "https://media.api-sports.io/football/players/388871.png"
-      },
-      {
         "name": "Y. Ayari",
         "position": "Midfield",
         "shirtNumber": 26,
@@ -1428,7 +1260,7 @@
       {
         "name": "O. Azeez",
         "position": "Midfield",
-        "shirtNumber": 11,
+        "shirtNumber": null,
         "photo": "https://media.api-sports.io/football/players/282637.png"
       },
       {
@@ -1456,24 +1288,6 @@
         "photo": "https://media.api-sports.io/football/players/579114.png"
       },
       {
-        "name": "J. Middleton",
-        "position": "Midfield",
-        "shirtNumber": 6,
-        "photo": "https://media.api-sports.io/football/players/570150.png"
-      },
-      {
-        "name": "S. Nti",
-        "position": "Midfield",
-        "shirtNumber": 8,
-        "photo": "https://media.api-sports.io/football/players/557377.png"
-      },
-      {
-        "name": "M. O&apos;Riley",
-        "position": "Midfield",
-        "shirtNumber": 33,
-        "photo": "https://media.api-sports.io/football/players/19030.png"
-      },
-      {
         "name": "M. Wieffer",
         "position": "Midfield",
         "shirtNumber": 27,
@@ -1486,12 +1300,6 @@
         "photo": "https://media.api-sports.io/football/players/410125.png"
       },
       {
-        "name": "P. David",
-        "position": "Offence",
-        "shirtNumber": 12,
-        "photo": "https://media.api-sports.io/football/players/313353.png"
-      },
-      {
         "name": "C. Kostoulas",
         "position": "Offence",
         "shirtNumber": 19,
@@ -1500,7 +1308,7 @@
       {
         "name": "Y. Minteh",
         "position": "Offence",
-        "shirtNumber": 11,
+        "shirtNumber": null,
         "photo": "https://media.api-sports.io/football/players/383685.png"
       },
       {
@@ -1508,12 +1316,6 @@
         "position": "Offence",
         "shirtNumber": 22,
         "photo": "https://media.api-sports.io/football/players/106835.png"
-      },
-      {
-        "name": "N. Oriola",
-        "position": "Offence",
-        "shirtNumber": 49,
-        "photo": "https://media.api-sports.io/football/players/553958.png"
       },
       {
         "name": "I. Osman",
@@ -1698,12 +1500,6 @@
         "photo": "https://media.api-sports.io/football/players/180940.png"
       },
       {
-        "name": "G. Słonina",
-        "position": "Goalkeeper",
-        "shirtNumber": 44,
-        "photo": "https://media.api-sports.io/football/players/64167.png"
-      },
-      {
         "name": "Joshua Kofi Acheampong",
         "position": "Defence",
         "shirtNumber": 34,
@@ -1800,22 +1596,10 @@
         "photo": "https://media.api-sports.io/football/players/19170.png"
       },
       {
-        "name": "R. Watson",
-        "position": "Midfield",
-        "shirtNumber": 31,
-        "photo": "https://media.api-sports.io/football/players/586131.png"
-      },
-      {
         "name": "E. Emegha",
         "position": "Offence",
         "shirtNumber": 22,
         "photo": "https://media.api-sports.io/football/players/203762.png"
-      },
-      {
-        "name": "Estêvão",
-        "position": "Offence",
-        "shirtNumber": 41,
-        "photo": "https://media.api-sports.io/football/players/425733.png"
       },
       {
         "name": "J. Bynoe-Gittens",
@@ -1994,110 +1778,308 @@
   "Coventry City FC": {
     "squad": [
       {
-        "name": "E. Meredith",
+        "name": "D. Bentley",
         "position": "Goalkeeper",
-        "shirtNumber": null,
-        "photo": "https://media.api-sports.io/football/players/459525.png"
+        "shirtNumber": 25,
+        "photo": "https://media.api-sports.io/football/players/19341.png"
       },
       {
-        "name": "Daniel Rachel",
+        "name": "C. Rushworth",
         "position": "Goalkeeper",
-        "shirtNumber": null,
-        "photo": "https://media.api-sports.io/football/players/459385.png"
+        "shirtNumber": 19,
+        "photo": "https://media.api-sports.io/football/players/278088.png"
       },
       {
-        "name": "B. Blakely",
+        "name": "B. Wilson",
+        "position": "Goalkeeper",
+        "shirtNumber": 13,
+        "photo": "https://media.api-sports.io/football/players/20484.png"
+      },
+      {
+        "name": "A. Amenda",
         "position": "Defence",
-        "shirtNumber": null,
-        "photo": "https://media.api-sports.io/football/players/459383.png"
+        "shirtNumber": 24,
+        "photo": "https://media.api-sports.io/football/players/162414.png"
       },
       {
-        "name": "D. Mantle",
+        "name": "J. Bidwell",
         "position": "Defence",
-        "shirtNumber": null,
-        "photo": "https://media.api-sports.io/football/players/459382.png"
+        "shirtNumber": 21,
+        "photo": "https://media.api-sports.io/football/players/19574.png"
       },
       {
-        "name": "J. Marshall",
+        "name": "J. Dasilva",
+        "position": "Midfield",
+        "shirtNumber": 3,
+        "photo": "https://media.api-sports.io/football/players/19260.png"
+      },
+      {
+        "name": "S. Mfuni",
         "position": "Defence",
-        "shirtNumber": null,
-        "photo": "https://media.api-sports.io/football/players/470045.png"
+        "shirtNumber": 12,
+        "photo": "https://media.api-sports.io/football/players/382358.png"
       },
       {
-        "name": "Callum Perry",
+        "name": "E. Pinnock",
         "position": "Defence",
-        "shirtNumber": null,
-        "photo": "https://media.api-sports.io/football/players/431121.png"
+        "shirtNumber": 2,
+        "photo": "https://media.api-sports.io/football/players/19789.png"
       },
       {
-        "name": "J. Smith",
+        "name": "B. Thomas",
         "position": "Defence",
-        "shirtNumber": null,
-        "photo": "https://media.api-sports.io/football/players/459291.png"
+        "shirtNumber": 4,
+        "photo": "https://media.api-sports.io/football/players/264437.png"
       },
       {
-        "name": "E. Betjemann",
+        "name": "L. Woolfenden",
+        "position": "Defence",
+        "shirtNumber": 26,
+        "photo": "https://media.api-sports.io/football/players/17714.png"
+      },
+      {
+        "name": "M. van Ewijk",
+        "position": "Defence",
+        "shirtNumber": 27,
+        "photo": "https://media.api-sports.io/football/players/37961.png"
+      },
+      {
+        "name": "J. Eccles",
         "position": "Midfield",
-        "shirtNumber": null,
-        "photo": "https://media.api-sports.io/football/players/459293.png"
+        "shirtNumber": 28,
+        "photo": "https://media.api-sports.io/football/players/19984.png"
       },
       {
-        "name": "J. James",
+        "name": "M. Grimes",
         "position": "Midfield",
-        "shirtNumber": null,
-        "photo": "https://media.api-sports.io/football/players/459386.png"
+        "shirtNumber": 6,
+        "photo": "https://media.api-sports.io/football/players/19328.png"
       },
       {
-        "name": "J. McCallum",
+        "name": "G. Hamer",
         "position": "Midfield",
-        "shirtNumber": null,
-        "photo": "https://media.api-sports.io/football/players/459290.png"
+        "shirtNumber": 38,
+        "photo": "https://media.api-sports.io/football/players/36929.png"
       },
       {
-        "name": "K. Nembhard",
+        "name": "J. Latibeaudiere",
+        "position": "Defence",
+        "shirtNumber": 22,
+        "photo": "https://media.api-sports.io/football/players/145538.png"
+      },
+      {
+        "name": "F. Onyeka",
         "position": "Midfield",
-        "shirtNumber": null,
-        "photo": "https://media.api-sports.io/football/players/459387.png"
+        "shirtNumber": 16,
+        "photo": "https://media.api-sports.io/football/players/15799.png"
       },
       {
-        "name": "L. Osaghae",
+        "name": "J. Rudoni",
         "position": "Midfield",
-        "shirtNumber": null,
-        "photo": "https://media.api-sports.io/football/players/459294.png"
+        "shirtNumber": 5,
+        "photo": "https://media.api-sports.io/football/players/20372.png"
       },
       {
-        "name": "Rylie Siddall",
+        "name": "T. Sakamoto",
         "position": "Midfield",
-        "shirtNumber": null,
-        "photo": "https://media.api-sports.io/football/players/459216.png"
+        "shirtNumber": 7,
+        "photo": "https://media.api-sports.io/football/players/33462.png"
       },
       {
-        "name": "Aidan Dausch",
+        "name": "V. Torp",
+        "position": "Midfield",
+        "shirtNumber": 29,
+        "photo": "https://media.api-sports.io/football/players/16046.png"
+      },
+      {
+        "name": "Caleb Marfo Yirenkyi",
+        "position": "Midfield",
+        "shirtNumber": 8,
+        "photo": "https://media.api-sports.io/football/players/475575.png"
+      },
+      {
+        "name": "T. Awoniyi",
         "position": "Offence",
-        "shirtNumber": null,
-        "photo": "https://media.api-sports.io/football/players/459218.png"
+        "shirtNumber": 14,
+        "photo": "https://media.api-sports.io/football/players/8598.png"
       },
       {
-        "name": "C. Panayiotou",
+        "name": "S. Cherif",
         "position": "Offence",
-        "shirtNumber": null,
-        "photo": "https://media.api-sports.io/football/players/459292.png"
+        "shirtNumber": 49,
+        "photo": "https://media.api-sports.io/football/players/421875.png"
+      },
+      {
+        "name": "E. Mason-Clark",
+        "position": "Midfield",
+        "shirtNumber": 10,
+        "photo": "https://media.api-sports.io/football/players/18404.png"
+      },
+      {
+        "name": "E. Simms",
+        "position": "Offence",
+        "shirtNumber": 9,
+        "photo": "https://media.api-sports.io/football/players/138786.png"
+      },
+      {
+        "name": "L. Tchaouna",
+        "position": "Offence",
+        "shirtNumber": 17,
+        "photo": "https://media.api-sports.io/football/players/161621.png"
+      },
+      {
+        "name": "B. Thomas-Asante",
+        "position": "Offence",
+        "shirtNumber": 23,
+        "photo": "https://media.api-sports.io/football/players/82090.png"
+      },
+      {
+        "name": "H. Wright",
+        "position": "Offence",
+        "shirtNumber": 11,
+        "photo": "https://media.api-sports.io/football/players/427.png"
       }
     ],
     "transfers": [
       {
-        "player": "L. Lines",
-        "date": "2025-07-10",
-        "type": "-",
-        "from": "Coventry City U18",
-        "to": "Norwich City U21"
+        "player": "R. Borges Rodrigues",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Coventry",
+        "to": "Burton Albion"
       },
       {
-        "player": "G. Burroughs",
-        "date": "2022-09-02",
+        "player": "L. Kitching",
+        "date": "2026-08-31",
         "type": "Loan",
-        "from": "Coventry City U18",
-        "to": "AFC Telford United"
+        "from": "Coventry",
+        "to": "Sheffield Utd"
+      },
+      {
+        "player": "O. Dovin",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Coventry",
+        "to": "Leyton Orient"
+      },
+      {
+        "player": "Y. Gboho",
+        "date": "2026-08-31",
+        "type": "Transfer",
+        "from": "Toulouse",
+        "to": "Coventry"
+      },
+      {
+        "player": "Y. Gboho",
+        "date": "2026-08-30",
+        "type": "Transfer",
+        "from": "Toulouse",
+        "to": "Coventry"
+      },
+      {
+        "player": "S. Mfuni",
+        "date": "2026-08-29",
+        "type": "Loan",
+        "from": "Manchester City",
+        "to": "Coventry"
+      },
+      {
+        "player": "Kai Andrews",
+        "date": "2026-08-27",
+        "type": "Loan",
+        "from": "Coventry",
+        "to": "Oxford United"
+      },
+      {
+        "player": "Miguel Brau",
+        "date": "2026-08-27",
+        "type": "Loan",
+        "from": "Coventry",
+        "to": "Academico Viseu"
+      },
+      {
+        "player": "E. Pinnock",
+        "date": "2026-08-25",
+        "type": "Transfer",
+        "from": "Brentford",
+        "to": "Coventry"
+      },
+      {
+        "player": "E. Pinnock",
+        "date": "2026-08-24",
+        "type": "Transfer",
+        "from": "Brentford",
+        "to": "Coventry"
+      },
+      {
+        "player": "D. Bentley",
+        "date": "2026-08-20",
+        "type": "Free agent",
+        "from": "Wolves",
+        "to": "Coventry"
+      },
+      {
+        "player": "S. Cherif",
+        "date": "2026-08-18",
+        "type": "Transfer",
+        "from": "Fenerbahçe",
+        "to": "Coventry"
+      },
+      {
+        "player": "S. Cherif",
+        "date": "2026-08-17",
+        "type": "Transfer",
+        "from": "Fenerbahçe",
+        "to": "Coventry"
+      },
+      {
+        "player": "T. Awoniyi",
+        "date": "2026-08-16",
+        "type": "Transfer",
+        "from": "Nottingham Forest",
+        "to": "Coventry"
+      },
+      {
+        "player": "T. Awoniyi",
+        "date": "2026-08-15",
+        "type": "Transfer",
+        "from": "Nottingham Forest",
+        "to": "Coventry"
+      },
+      {
+        "player": "H. Broad",
+        "date": "2026-08-13",
+        "type": "Loan",
+        "from": "Coventry",
+        "to": "AFC Fylde"
+      },
+      {
+        "player": "G. Hamer",
+        "date": "2026-08-11",
+        "type": "Transfer",
+        "from": "Sheffield Utd",
+        "to": "Coventry"
+      },
+      {
+        "player": "G. Hamer",
+        "date": "2026-08-10",
+        "type": "Transfer",
+        "from": "Sheffield Utd",
+        "to": "Coventry"
+      },
+      {
+        "player": "J. Markelo",
+        "date": "2026-08-07",
+        "type": "Transfer",
+        "from": "Coventry",
+        "to": "Shabab Al Ahli Dubai"
+      },
+      {
+        "player": "J. Markelo",
+        "date": "2026-08-06",
+        "type": "Transfer",
+        "from": "Coventry",
+        "to": "Shabab Al Ahli Dubai"
       }
     ]
   },
@@ -2128,12 +2110,6 @@
         "photo": "https://media.api-sports.io/football/players/453906.png"
       },
       {
-        "name": "D. Benamar",
-        "position": "Defence",
-        "shirtNumber": 7,
-        "photo": "https://media.api-sports.io/football/players/557414.png"
-      },
-      {
         "name": "J. Canvot",
         "position": "Defence",
         "shirtNumber": 6,
@@ -2150,12 +2126,6 @@
         "position": "Defence",
         "shirtNumber": 5,
         "photo": "https://media.api-sports.io/football/players/21998.png"
-      },
-      {
-        "name": "G. King",
-        "position": "Defence",
-        "shirtNumber": 5,
-        "photo": "https://media.api-sports.io/football/players/557584.png"
       },
       {
         "name": "Óscar Mingueza",
@@ -2192,12 +2162,6 @@
         "position": "Midfield",
         "shirtNumber": 28,
         "photo": "https://media.api-sports.io/football/players/3339.png"
-      },
-      {
-        "name": "J. Drakes-Thomas",
-        "position": "Midfield",
-        "shirtNumber": 10,
-        "photo": "https://media.api-sports.io/football/players/557413.png"
       },
       {
         "name": "W. Hughes",
@@ -2460,12 +2424,6 @@
         "photo": "https://media.api-sports.io/football/players/17661.png"
       },
       {
-        "name": "G. Finney",
-        "position": "Defence",
-        "shirtNumber": 14,
-        "photo": "https://media.api-sports.io/football/players/410421.png"
-      },
-      {
         "name": "M. Keane",
         "position": "Defence",
         "shirtNumber": 5,
@@ -2484,18 +2442,6 @@
         "photo": "https://media.api-sports.io/football/players/2165.png"
       },
       {
-        "name": "J. O&apos;Brien",
-        "position": "Defence",
-        "shirtNumber": 15,
-        "photo": "https://media.api-sports.io/football/players/270139.png"
-      },
-      {
-        "name": "W. Tamen",
-        "position": "Defence",
-        "shirtNumber": 4,
-        "photo": "https://media.api-sports.io/football/players/403066.png"
-      },
-      {
         "name": "J. Tarkowski",
         "position": "Defence",
         "shirtNumber": 6,
@@ -2512,18 +2458,6 @@
         "position": "Midfield",
         "shirtNumber": 45,
         "photo": "https://media.api-sports.io/football/players/405360.png"
-      },
-      {
-        "name": "K. Dewsbury-Hall",
-        "position": "Midfield",
-        "shirtNumber": 8,
-        "photo": "https://media.api-sports.io/football/players/148099.png"
-      },
-      {
-        "name": "H. Foster",
-        "position": "Midfield",
-        "shirtNumber": 6,
-        "photo": "https://media.api-sports.io/football/players/410423.png"
       },
       {
         "name": "J. Garner",
@@ -2550,12 +2484,6 @@
         "photo": "https://media.api-sports.io/football/players/30407.png"
       },
       {
-        "name": "Malik Olayiwola",
-        "position": "Midfield",
-        "shirtNumber": 16,
-        "photo": "https://media.api-sports.io/football/players/588468.png"
-      },
-      {
         "name": "M. Röhl",
         "position": "Midfield",
         "shirtNumber": 34,
@@ -2578,12 +2506,6 @@
         "position": "Offence",
         "shirtNumber": 19,
         "photo": "https://media.api-sports.io/football/players/334037.png"
-      },
-      {
-        "name": "B. Graham",
-        "position": "Offence",
-        "shirtNumber": 58,
-        "photo": "https://media.api-sports.io/football/players/413034.png"
       },
       {
         "name": "B. Johnson",
@@ -2786,12 +2708,6 @@
         "photo": "https://media.api-sports.io/football/players/19549.png"
       },
       {
-        "name": "B. Slade",
-        "position": "Defence",
-        "shirtNumber": 3,
-        "photo": "https://media.api-sports.io/football/players/380678.png"
-      },
-      {
         "name": "K. Tete",
         "position": "Defence",
         "shirtNumber": 2,
@@ -2840,18 +2756,6 @@
         "photo": "https://media.api-sports.io/football/players/335094.png"
       },
       {
-        "name": "Manuel Ángel",
-        "position": "Midfield",
-        "shirtNumber": 20,
-        "photo": "https://media.api-sports.io/football/players/313167.png"
-      },
-      {
-        "name": "C. Nwoko",
-        "position": "Midfield",
-        "shirtNumber": 8,
-        "photo": "https://media.api-sports.io/football/players/349684.png"
-      },
-      {
         "name": "César Palacios",
         "position": "Midfield",
         "shirtNumber": 8,
@@ -2890,20 +2794,14 @@
       {
         "name": "J. Kusi-Asare",
         "position": "Offence",
-        "shirtNumber": 9,
+        "shirtNumber": null,
         "photo": "https://media.api-sports.io/football/players/436443.png"
       },
       {
         "name": "Rodrigo Muniz",
         "position": "Offence",
-        "shirtNumber": 9,
+        "shirtNumber": null,
         "photo": "https://media.api-sports.io/football/players/195106.png"
-      },
-      {
-        "name": "M. Zepa",
-        "position": "Offence",
-        "shirtNumber": 7,
-        "photo": "https://media.api-sports.io/football/players/557473.png"
       }
     ],
     "transfers": [
@@ -3058,12 +2956,6 @@
         "photo": "https://media.api-sports.io/football/players/2930.png"
       },
       {
-        "name": "Archie Howard",
-        "position": "Goalkeeper",
-        "shirtNumber": 55,
-        "photo": "https://media.api-sports.io/football/players/615629.png"
-      },
-      {
         "name": "D. Phillips",
         "position": "Goalkeeper",
         "shirtNumber": 12,
@@ -3080,12 +2972,6 @@
         "position": "Defence",
         "shirtNumber": 6,
         "photo": "https://media.api-sports.io/football/players/2769.png"
-      },
-      {
-        "name": "S. Ashbee",
-        "position": "Defence",
-        "shirtNumber": 15,
-        "photo": "https://media.api-sports.io/football/players/395025.png"
       },
       {
         "name": "L. Coyle",
@@ -3166,12 +3052,6 @@
         "photo": "https://media.api-sports.io/football/players/282124.png"
       },
       {
-        "name": "J. Hjertø-Dahl",
-        "position": "Midfield",
-        "shirtNumber": 14,
-        "photo": "https://media.api-sports.io/football/players/396407.png"
-      },
-      {
         "name": "T. Iroegbunam",
         "position": "Midfield",
         "shirtNumber": 42,
@@ -3214,21 +3094,15 @@
         "photo": "https://media.api-sports.io/football/players/226765.png"
       },
       {
-        "name": "Óscar Steven Zambrano Preciado",
-        "position": "Midfield",
-        "shirtNumber": 20,
-        "photo": "https://media.api-sports.io/football/players/338046.png"
-      },
-      {
         "name": "Ilyas  Ansah",
         "position": "Offence",
-        "shirtNumber": 10,
+        "shirtNumber": null,
         "photo": "https://media.api-sports.io/football/players/380873.png"
       },
       {
         "name": "M. Belloumi",
         "position": "Midfield",
-        "shirtNumber": 10,
+        "shirtNumber": null,
         "photo": "https://media.api-sports.io/football/players/299923.png"
       },
       {
@@ -3236,12 +3110,6 @@
         "position": "Offence",
         "shirtNumber": 50,
         "photo": "https://media.api-sports.io/football/players/274312.png"
-      },
-      {
-        "name": "D. Daley",
-        "position": "Offence",
-        "shirtNumber": 16,
-        "photo": "https://media.api-sports.io/football/players/557455.png"
       },
       {
         "name": "J. Gelhardt",
@@ -3414,368 +3282,586 @@
   "Ipswich Town FC": {
     "squad": [
       {
-        "name": "W. Fletcher",
+        "name": "D. Button",
         "position": "Goalkeeper",
-        "shirtNumber": 13,
-        "photo": "https://media.api-sports.io/football/players/632099.png"
+        "shirtNumber": 27,
+        "photo": "https://media.api-sports.io/football/players/18958.png"
       },
       {
-        "name": "Harvey Ness",
+        "name": "A. Palmer",
+        "position": "Goalkeeper",
+        "shirtNumber": 1,
+        "photo": "https://media.api-sports.io/football/players/82097.png"
+      },
+      {
+        "name": "K. Scherpen",
+        "position": "Goalkeeper",
+        "shirtNumber": 37,
+        "photo": "https://media.api-sports.io/football/players/37276.png"
+      },
+      {
+        "name": "C. Walton",
+        "position": "Goalkeeper",
+        "shirtNumber": 28,
+        "photo": "https://media.api-sports.io/football/players/19541.png"
+      },
+      {
+        "name": "L. Davis",
         "position": "Defence",
         "shirtNumber": 3,
-        "photo": "https://media.api-sports.io/football/players/679755.png"
+        "photo": "https://media.api-sports.io/football/players/19119.png"
       },
       {
-        "name": "Daniel Ologho",
+        "name": "I. Diop",
         "position": "Defence",
-        "shirtNumber": null,
-        "photo": "https://media.api-sports.io/football/players/679756.png"
-      },
-      {
-        "name": "C. Stewart",
-        "position": "Defence",
-        "shirtNumber": null,
-        "photo": "https://media.api-sports.io/football/players/679076.png"
-      },
-      {
-        "name": "C. Atherton",
-        "position": "Midfield",
-        "shirtNumber": 17,
-        "photo": "https://media.api-sports.io/football/players/416984.png"
-      },
-      {
-        "name": "B. Buskell",
-        "position": "Midfield",
-        "shirtNumber": null,
-        "photo": "https://media.api-sports.io/football/players/625449.png"
-      },
-      {
-        "name": "M. Compton",
-        "position": "Midfield",
-        "shirtNumber": 8,
-        "photo": "https://media.api-sports.io/football/players/632094.png"
-      },
-      {
-        "name": "Ibrahim Msabah",
-        "position": "Midfield",
-        "shirtNumber": null,
-        "photo": "https://media.api-sports.io/football/players/679077.png"
-      },
-      {
-        "name": "B. Sains",
-        "position": "Midfield",
         "shirtNumber": 6,
-        "photo": "https://media.api-sports.io/football/players/632100.png"
+        "photo": "https://media.api-sports.io/football/players/18814.png"
       },
       {
-        "name": "C. Wood",
+        "name": "D. Furlong",
+        "position": "Defence",
+        "shirtNumber": 2,
+        "photo": "https://media.api-sports.io/football/players/19577.png"
+      },
+      {
+        "name": "J. Greaves",
+        "position": "Defence",
+        "shirtNumber": 24,
+        "photo": "https://media.api-sports.io/football/players/127579.png"
+      },
+      {
+        "name": "C. Kipré",
+        "position": "Defence",
+        "shirtNumber": 4,
+        "photo": "https://media.api-sports.io/football/players/19546.png"
+      },
+      {
+        "name": "J. Enciso",
+        "position": "Midfield",
+        "shirtNumber": 10,
+        "photo": "https://media.api-sports.io/football/players/70747.png"
+      },
+      {
+        "name": "Z. Flemming",
+        "position": "Offence",
+        "shirtNumber": 9,
+        "photo": "https://media.api-sports.io/football/players/36927.png"
+      },
+      {
+        "name": "Florentino",
         "position": "Midfield",
         "shirtNumber": 12,
-        "photo": "https://media.api-sports.io/football/players/625448.png"
+        "photo": "https://media.api-sports.io/football/players/575.png"
       },
       {
-        "name": "J. Adetiba",
-        "position": "Offence",
-        "shirtNumber": 7,
-        "photo": "https://media.api-sports.io/football/players/606628.png"
+        "name": "S. Lukić",
+        "position": "Midfield",
+        "shirtNumber": 23,
+        "photo": "https://media.api-sports.io/football/players/2823.png"
       },
       {
-        "name": "R. Burton-Yurevich",
-        "position": "Offence",
-        "shirtNumber": null,
-        "photo": "https://media.api-sports.io/football/players/625445.png"
+        "name": "A. Matusiwa",
+        "position": "Midfield",
+        "shirtNumber": 5,
+        "photo": "https://media.api-sports.io/football/players/37236.png"
       },
       {
-        "name": "J. Chukwu-Nsofor",
-        "position": "Offence",
-        "shirtNumber": null,
-        "photo": "https://media.api-sports.io/football/players/574768.png"
+        "name": "M. Núñez",
+        "position": "Midfield",
+        "shirtNumber": 32,
+        "photo": "https://media.api-sports.io/football/players/195121.png"
       },
       {
-        "name": "S. Eldred",
-        "position": "Offence",
-        "shirtNumber": 17,
-        "photo": "https://media.api-sports.io/football/players/627688.png"
+        "name": "A. Ouattara",
+        "position": "Defence",
+        "shirtNumber": 42,
+        "photo": "https://media.api-sports.io/football/players/358166.png"
       },
       {
-        "name": "S. Nicolaou",
-        "position": "Offence",
+        "name": "E. Palacios",
+        "position": "Midfield",
+        "shirtNumber": 25,
+        "photo": "https://media.api-sports.io/football/players/6002.png"
+      },
+      {
+        "name": "J. Taylor",
+        "position": "Midfield",
         "shirtNumber": 14,
-        "photo": "https://media.api-sports.io/football/players/648612.png"
+        "photo": "https://media.api-sports.io/football/players/18397.png"
       },
       {
-        "name": "W. Unadike",
+        "name": "C. Akpom",
         "position": "Offence",
-        "shirtNumber": null,
-        "photo": "https://media.api-sports.io/football/players/636163.png"
+        "shirtNumber": 29,
+        "photo": "https://media.api-sports.io/football/players/2380.png"
+      },
+      {
+        "name": "J. Clarke",
+        "position": "Offence",
+        "shirtNumber": 47,
+        "photo": "https://media.api-sports.io/football/players/19136.png"
+      },
+      {
+        "name": "S. Egeli",
+        "position": "Offence",
+        "shirtNumber": 8,
+        "photo": "https://media.api-sports.io/football/players/342654.png"
+      },
+      {
+        "name": "Emersonn",
+        "position": "Offence",
+        "shirtNumber": 19,
+        "photo": "https://media.api-sports.io/football/players/321648.png"
+      },
+      {
+        "name": "D. Maeda",
+        "position": "Offence",
+        "shirtNumber": 38,
+        "photo": "https://media.api-sports.io/football/players/33224.png"
+      },
+      {
+        "name": "K. McAteer",
+        "position": "Midfield",
+        "shirtNumber": 20,
+        "photo": "https://media.api-sports.io/football/players/283290.png"
+      },
+      {
+        "name": "A. Mehmeti",
+        "position": "Midfield",
+        "shirtNumber": 33,
+        "photo": "https://media.api-sports.io/football/players/286349.png"
+      },
+      {
+        "name": "J. Philogene",
+        "position": "Midfield",
+        "shirtNumber": 11,
+        "photo": "https://media.api-sports.io/football/players/138931.png"
       }
     ],
     "transfers": [
       {
-        "player": "J. Chukwu-Nsofor",
-        "date": "2025-12-30",
-        "type": "Return from loan",
-        "from": "Needham Market",
-        "to": "Ipswich Town U18"
+        "player": "N. Bilokapić",
+        "date": "2026-09-03",
+        "type": "Free agent",
+        "from": "Ipswich",
+        "to": "Derby"
       },
       {
-        "player": "B. Buskell",
-        "date": "2025-10-16",
-        "type": "-",
-        "from": "Ipswich Town U18",
-        "to": "Ipswich Town U18"
-      },
-      {
-        "player": "J. Chukwu-Nsofor",
-        "date": "2025-09-04",
+        "player": "C. Ogbene",
+        "date": "2026-08-31",
         "type": "Loan",
-        "from": "Ipswich Town U18",
-        "to": "Needham Market"
+        "from": "Ipswich",
+        "to": "Lincoln"
       },
       {
-        "player": "R. Domi",
-        "date": "2025-08-28",
+        "player": "C. Humphreys",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Ipswich",
+        "to": "Huddersfield"
+      },
+      {
+        "player": "Z. Flemming",
+        "date": "2026-08-31",
         "type": "Transfer",
-        "from": "Ipswich Town U18",
-        "to": "Milton Keynes Dons"
+        "from": "Burnley",
+        "to": "Ipswich"
       },
       {
-        "player": "I. Boakye-King",
-        "date": "2025-08-15",
-        "type": null,
-        "from": "Tomori Berat",
-        "to": "Ipswich Town U18"
+        "player": "T. Mendel-Idowu",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Ipswich",
+        "to": "Luton"
       },
       {
-        "player": "C. Wood",
-        "date": "2025-08-15",
+        "player": "Alex Noonan",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Shamrock Rovers",
+        "to": "Ipswich"
+      },
+      {
+        "player": "Z. Flemming",
+        "date": "2026-08-30",
         "type": "Transfer",
-        "from": "Needham Market",
-        "to": "Ipswich Town U18"
+        "from": "Burnley",
+        "to": "Ipswich"
       },
       {
-        "player": "J. Adetiba",
-        "date": "2025-07-01",
-        "type": "Free Transfer",
-        "from": "Arsenal U19",
-        "to": "Ipswich Town U18"
+        "player": "E. Palacios",
+        "date": "2026-08-26",
+        "type": "Transfer",
+        "from": "Bayer Leverkusen",
+        "to": "Ipswich"
       },
       {
-        "player": "Danny Cullum",
-        "date": "2024-02-05",
-        "type": "N/A",
-        "from": "Ipswich Town U18",
-        "to": "Ipswich Town U21"
+        "player": "Ali Al Hamadi",
+        "date": "2026-08-25",
+        "type": "Loan",
+        "from": "Ipswich",
+        "to": "Sheffield Wednesday"
       },
       {
-        "player": "H. Curtis",
-        "date": "2023-07-20",
-        "type": "Free",
-        "from": "Ipswich Town U18",
-        "to": "Chesterfield"
+        "player": "E. Palacios",
+        "date": "2026-08-25",
+        "type": "Transfer",
+        "from": "Bayer Leverkusen",
+        "to": "Ipswich"
       },
       {
-        "player": "C. Stewart",
-        "date": "2023-01-11",
-        "type": "N/A",
-        "from": "Ipswich Town U18",
-        "to": "Crusaders FC"
+        "player": "K. van Oevelen",
+        "date": "2026-08-23",
+        "type": "Loan",
+        "from": "Ipswich",
+        "to": "Valencia"
       },
       {
-        "player": "C. Cook",
-        "date": "2022-07-01",
-        "type": "N/A",
-        "from": "Ipswich Town U18",
-        "to": "Chesterfield"
+        "player": "E. I. Oyindamola Adebayo A.",
+        "date": "2026-08-21",
+        "type": "Free agent",
+        "from": "Ipswich",
+        "to": "Braintree"
       },
       {
-        "player": "E. Agbaje",
-        "date": "2020-09-20",
-        "type": "N/A",
-        "from": "Shamrock Rovers II",
-        "to": "Ipswich Town U18"
+        "player": "B. Johnson",
+        "date": "2026-08-20",
+        "type": "Loan",
+        "from": "Ipswich",
+        "to": "Stoke City"
       },
       {
-        "player": "Dylan Ruffles",
-        "date": "2020-08-19",
-        "type": "N/A",
-        "from": "Ipswich Town U18",
-        "to": "Ytterhogdal"
+        "player": "E. I. Oyindamola Adebayo A.",
+        "date": "2026-08-20",
+        "type": "Free agent",
+        "from": "Ipswich",
+        "to": "Braintree"
       },
       {
-        "player": "J. Marsden",
-        "date": "2014-06-29",
-        "type": "-",
-        "from": "Ipswich Town U18",
-        "to": "Ipswich U23"
+        "player": "G. Hirst",
+        "date": "2026-08-19",
+        "type": "Transfer",
+        "from": "Ipswich",
+        "to": "Stoke City"
+      },
+      {
+        "player": "G. Hirst",
+        "date": "2026-08-18",
+        "type": "Transfer",
+        "from": "Ipswich",
+        "to": "Stoke City"
+      },
+      {
+        "player": "J. Enciso",
+        "date": "2026-08-16",
+        "type": "Transfer",
+        "from": "Strasbourg",
+        "to": "Ipswich"
+      },
+      {
+        "player": "A. Ouattara",
+        "date": "2026-08-16",
+        "type": "Transfer",
+        "from": "Strasbourg",
+        "to": "Ipswich"
+      },
+      {
+        "player": "J. Enciso",
+        "date": "2026-08-15",
+        "type": "Transfer",
+        "from": "Strasbourg",
+        "to": "Ipswich"
+      },
+      {
+        "player": "A. Ouattara",
+        "date": "2026-08-15",
+        "type": "Transfer",
+        "from": "Strasbourg",
+        "to": "Ipswich"
       }
     ]
   },
   "Leeds United FC": {
     "squad": [
       {
-        "name": "A. Baird",
+        "name": "A. Cairns",
+        "position": "Goalkeeper",
+        "shirtNumber": 21,
+        "photo": "https://media.api-sports.io/football/players/20068.png"
+      },
+      {
+        "name": "J. Trafford",
         "position": "Goalkeeper",
         "shirtNumber": 1,
-        "photo": "https://media.api-sports.io/football/players/585356.png"
+        "photo": "https://media.api-sports.io/football/players/162489.png"
       },
       {
-        "name": "George Banks",
+        "name": "M. Zetterer",
         "position": "Goalkeeper",
-        "shirtNumber": 12,
-        "photo": "https://media.api-sports.io/football/players/588470.png"
-      },
-      {
-        "name": "Oliver Wood",
-        "position": "Goalkeeper",
-        "shirtNumber": 95,
-        "photo": "https://media.api-sports.io/football/players/588471.png"
-      },
-      {
-        "name": "Joshua Woolfrey",
-        "position": "Goalkeeper",
-        "shirtNumber": 12,
-        "photo": "https://media.api-sports.io/football/players/588472.png"
-      },
-      {
-        "name": "C. Bird",
-        "position": "Defence",
         "shirtNumber": 16,
-        "photo": "https://media.api-sports.io/football/players/557341.png"
+        "photo": "https://media.api-sports.io/football/players/7288.png"
       },
       {
-        "name": "W. Firth",
-        "position": "Defence",
-        "shirtNumber": 60,
-        "photo": "https://media.api-sports.io/football/players/557477.png"
-      },
-      {
-        "name": "Jacob Howard",
-        "position": "Defence",
-        "shirtNumber": 59,
-        "photo": "https://media.api-sports.io/football/players/586209.png"
-      },
-      {
-        "name": "Luke Matykiewicz",
-        "position": "Defence",
-        "shirtNumber": 13,
-        "photo": "https://media.api-sports.io/football/players/432440.png"
-      },
-      {
-        "name": "Samuel Alker",
+        "name": "E. Ampadu",
         "position": "Midfield",
-        "shirtNumber": 10,
-        "photo": "https://media.api-sports.io/football/players/588473.png"
+        "shirtNumber": 4,
+        "photo": "https://media.api-sports.io/football/players/2279.png"
       },
       {
-        "name": "K. Mensah",
+        "name": "M. Bard",
+        "position": "Defence",
+        "shirtNumber": 26,
+        "photo": "https://media.api-sports.io/football/players/162465.png"
+      },
+      {
+        "name": "J. Bijol",
+        "position": "Defence",
+        "shirtNumber": 15,
+        "photo": "https://media.api-sports.io/football/players/833.png"
+      },
+      {
+        "name": "J. Bogle",
         "position": "Midfield",
-        "shirtNumber": 10,
-        "photo": "https://media.api-sports.io/football/players/579127.png"
+        "shirtNumber": 2,
+        "photo": "https://media.api-sports.io/football/players/19201.png"
       },
       {
-        "name": "C. Mills",
+        "name": "N. Elvedi",
+        "position": "Defence",
+        "shirtNumber": 30,
+        "photo": "https://media.api-sports.io/football/players/2803.png"
+      },
+      {
+        "name": "G. Gudmundsson",
         "position": "Midfield",
-        "shirtNumber": 89,
-        "photo": "https://media.api-sports.io/football/players/579147.png"
+        "shirtNumber": 3,
+        "photo": "https://media.api-sports.io/football/players/47969.png"
       },
       {
-        "name": "Jack Morris",
+        "name": "J. Justin",
+        "position": "Defence",
+        "shirtNumber": 24,
+        "photo": "https://media.api-sports.io/football/players/19760.png"
+      },
+      {
+        "name": "T. Muharemović",
+        "position": "Defence",
+        "shirtNumber": 5,
+        "photo": "https://media.api-sports.io/football/players/271350.png"
+      },
+      {
+        "name": "J. Rodon",
+        "position": "Defence",
+        "shirtNumber": 6,
+        "photo": "https://media.api-sports.io/football/players/19321.png"
+      },
+      {
+        "name": "B. Aaronson",
+        "position": "Midfield",
+        "shirtNumber": 11,
+        "photo": "https://media.api-sports.io/football/players/50739.png"
+      },
+      {
+        "name": "J. Bahoya",
+        "position": "Offence",
+        "shirtNumber": 23,
+        "photo": "https://media.api-sports.io/football/players/369674.png"
+      },
+      {
+        "name": "I. Gruev",
+        "position": "Midfield",
+        "shirtNumber": 44,
+        "photo": "https://media.api-sports.io/football/players/129142.png"
+      },
+      {
+        "name": "D. James",
+        "position": "Offence",
+        "shirtNumber": 7,
+        "photo": "https://media.api-sports.io/football/players/19329.png"
+      },
+      {
+        "name": "S. Longstaff",
+        "position": "Midfield",
+        "shirtNumber": 8,
+        "photo": "https://media.api-sports.io/football/players/18901.png"
+      },
+      {
+        "name": "A. Stach",
         "position": "Midfield",
         "shirtNumber": 18,
-        "photo": "https://media.api-sports.io/football/players/446947.png"
+        "photo": "https://media.api-sports.io/football/players/177665.png"
       },
       {
-        "name": "Carrick Njinko",
+        "name": "A. Tanaka",
         "position": "Midfield",
-        "shirtNumber": 90,
-        "photo": "https://media.api-sports.io/football/players/588475.png"
+        "shirtNumber": 22,
+        "photo": "https://media.api-sports.io/football/players/32966.png"
       },
       {
-        "name": "Louie Philpott",
+        "name": "H. Wilson",
         "position": "Midfield",
-        "shirtNumber": 79,
-        "photo": "https://media.api-sports.io/football/players/568981.png"
+        "shirtNumber": 10,
+        "photo": "https://media.api-sports.io/football/players/19221.png"
       },
       {
-        "name": "O. Pickles",
-        "position": "Midfield",
-        "shirtNumber": 72,
-        "photo": "https://media.api-sports.io/football/players/557507.png"
+        "name": "D. Calvert-Lewin",
+        "position": "Offence",
+        "shirtNumber": 9,
+        "photo": "https://media.api-sports.io/football/players/18766.png"
       },
       {
-        "name": "J. Render",
-        "position": "Midfield",
-        "shirtNumber": 91,
-        "photo": "https://media.api-sports.io/football/players/412023.png"
-      },
-      {
-        "name": "Elton Simo",
-        "position": "Midfield",
+        "name": "L. Nmecha",
+        "position": "Offence",
         "shirtNumber": 14,
-        "photo": "https://media.api-sports.io/football/players/412020.png"
+        "photo": "https://media.api-sports.io/football/players/19461.png"
       },
       {
-        "name": "Aiden Thompson",
-        "position": "Midfield",
-        "shirtNumber": 15,
-        "photo": "https://media.api-sports.io/football/players/579102.png"
-      },
-      {
-        "name": "L. White",
-        "position": "Midfield",
-        "shirtNumber": 93,
-        "photo": "https://media.api-sports.io/football/players/545972.png"
-      },
-      {
-        "name": "L. Whitehead",
-        "position": "Midfield",
+        "name": "N. Okafor",
+        "position": "Offence",
         "shirtNumber": 19,
-        "photo": "https://media.api-sports.io/football/players/570117.png"
+        "photo": "https://media.api-sports.io/football/players/48389.png"
       }
     ],
     "transfers": [
       {
-        "player": "R. Mahady",
-        "date": "2026-05-30",
-        "type": "Return from loan",
-        "from": "Scunthorpe",
-        "to": "Leeds United U18"
-      },
-      {
-        "player": "Edward Ibrovic-Fletcher",
-        "date": "2026-02-03",
-        "type": "-",
-        "from": "Manchester United",
-        "to": "Leeds United U18"
-      },
-      {
-        "player": "R. Mahady",
-        "date": "2025-12-30",
-        "type": "Return from loan",
-        "from": "Scunthorpe",
-        "to": "Leeds United U18"
-      },
-      {
-        "player": "R. Mahady",
-        "date": "2025-09-30",
+        "player": "L. Ramazani",
+        "date": "2026-08-31",
         "type": "Loan",
-        "from": "Leeds United U18",
-        "to": "Scunthorpe"
+        "from": "Leeds",
+        "to": "Burnley"
       },
       {
-        "player": "Majid Balogun-Ajisafe",
-        "date": "2024-06-30",
-        "type": "-",
-        "from": "Leeds United U18",
-        "to": "West Ham United U18"
+        "player": "W. Gnonto",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Leeds",
+        "to": "Fiorentina"
       },
       {
-        "player": "Samuel Amissah",
-        "date": "2020-01-01",
-        "type": "N/A",
-        "from": "Leeds United U18",
-        "to": "FK Liepaja"
+        "player": "S. Chambers",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Leeds",
+        "to": "Northampton"
+      },
+      {
+        "player": "M. Bard",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Nice",
+        "to": "Leeds"
+      },
+      {
+        "player": "J. Bahoya",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Eintracht Frankfurt",
+        "to": "Leeds"
+      },
+      {
+        "player": "Lucas Perri",
+        "date": "2026-08-28",
+        "type": "Loan",
+        "from": "Leeds",
+        "to": "Torino"
+      },
+      {
+        "player": "M. Zetterer",
+        "date": "2026-08-28",
+        "type": "Transfer",
+        "from": "Eintracht Frankfurt",
+        "to": "Leeds"
+      },
+      {
+        "player": "M. Zetterer",
+        "date": "2026-08-27",
+        "type": "Transfer",
+        "from": "Eintracht Frankfurt",
+        "to": "Leeds"
+      },
+      {
+        "player": "S. Byram",
+        "date": "2026-08-23",
+        "type": "Free agent",
+        "from": "Leeds",
+        "to": "Middlesbrough"
+      },
+      {
+        "player": "J. Piroe",
+        "date": "2026-08-18",
+        "type": "Loan",
+        "from": "Leeds",
+        "to": "West Ham"
+      },
+      {
+        "player": "S. Bornauw",
+        "date": "2026-08-18",
+        "type": "Loan",
+        "from": "Leeds",
+        "to": "Hamburger SV"
+      },
+      {
+        "player": "N. Elvedi",
+        "date": "2026-08-18",
+        "type": "Transfer",
+        "from": "Borussia Mönchengladbach",
+        "to": "Leeds"
+      },
+      {
+        "player": "N. Elvedi",
+        "date": "2026-08-17",
+        "type": "Transfer",
+        "from": "Borussia Mönchengladbach",
+        "to": "Leeds"
+      },
+      {
+        "player": "J. Gelhardt",
+        "date": "2026-08-14",
+        "type": "Transfer",
+        "from": "Leeds",
+        "to": "Hull City"
+      },
+      {
+        "player": "L. Pirie",
+        "date": "2026-08-06",
+        "type": "Free agent",
+        "from": "Leeds",
+        "to": "Inverurie Loco Works"
+      },
+      {
+        "player": "J. Trafford",
+        "date": "2026-08-05",
+        "type": "Transfer",
+        "from": "Manchester City",
+        "to": "Leeds"
+      },
+      {
+        "player": "C. Crew",
+        "date": "2026-08-04",
+        "type": "Loan",
+        "from": "Leeds",
+        "to": "Walsall"
+      },
+      {
+        "player": "M. Wilson",
+        "date": "2026-08-03",
+        "type": "Free agent",
+        "from": "Leeds",
+        "to": "Cleethorpes Town"
+      },
+      {
+        "player": "J. Harrison",
+        "date": "2026-07-25",
+        "type": "Transfer",
+        "from": "Leeds",
+        "to": "New England Revolution"
+      },
+      {
+        "player": "M. Wöber",
+        "date": "2026-07-21",
+        "type": "Free agent",
+        "from": "Leeds",
+        "to": "FC Schalke 04"
       }
     ]
   },
@@ -3784,13 +3870,13 @@
       {
         "name": "Alisson Becker",
         "position": "Goalkeeper",
-        "shirtNumber": 1,
+        "shirtNumber": null,
         "photo": "https://media.api-sports.io/football/players/280.png"
       },
       {
         "name": "H. Davies",
         "position": "Goalkeeper",
-        "shirtNumber": 1,
+        "shirtNumber": null,
         "photo": "https://media.api-sports.io/football/players/180316.png"
       },
       {
@@ -3812,12 +3898,6 @@
         "photo": "https://media.api-sports.io/football/players/101814.png"
       },
       {
-        "name": "L. Chambers",
-        "position": "Defence",
-        "shirtNumber": 44,
-        "photo": "https://media.api-sports.io/football/players/284366.png"
-      },
-      {
         "name": "J. Gomez",
         "position": "Defence",
         "shirtNumber": 2,
@@ -3836,12 +3916,6 @@
         "photo": "https://media.api-sports.io/football/players/206254.png"
       },
       {
-        "name": "T. Ndiaye",
-        "position": "Defence",
-        "shirtNumber": 5,
-        "photo": "https://media.api-sports.io/football/players/606814.png"
-      },
-      {
         "name": "K. Tsimikas",
         "position": "Defence",
         "shirtNumber": 21,
@@ -3852,12 +3926,6 @@
         "position": "Defence",
         "shirtNumber": 4,
         "photo": "https://media.api-sports.io/football/players/290.png"
-      },
-      {
-        "name": "W. Endo",
-        "position": "Midfield",
-        "shirtNumber": 3,
-        "photo": "https://media.api-sports.io/football/players/8500.png"
       },
       {
         "name": "J. Frimpong",
@@ -3878,12 +3946,6 @@
         "photo": "https://media.api-sports.io/football/players/6716.png"
       },
       {
-        "name": "J. McConnell",
-        "position": "Midfield",
-        "shirtNumber": 53,
-        "photo": "https://media.api-sports.io/football/players/287109.png"
-      },
-      {
         "name": "T. Nyoni",
         "position": "Midfield",
         "shirtNumber": 42,
@@ -3902,12 +3964,6 @@
         "photo": "https://media.api-sports.io/football/players/203224.png"
       },
       {
-        "name": "Joshua Abe",
-        "position": "Offence",
-        "shirtNumber": 40,
-        "photo": "https://media.api-sports.io/football/players/588501.png"
-      },
-      {
         "name": "B. Barcola",
         "position": "Offence",
         "shirtNumber": 29,
@@ -3918,12 +3974,6 @@
         "position": "Offence",
         "shirtNumber": 14,
         "photo": "https://media.api-sports.io/football/players/30410.png"
-      },
-      {
-        "name": "J. Danns",
-        "position": "Offence",
-        "shirtNumber": 10,
-        "photo": "https://media.api-sports.io/football/players/314661.png"
       },
       {
         "name": "H. Ekitike",
@@ -3944,12 +3994,6 @@
         "photo": "https://media.api-sports.io/football/players/2864.png"
       },
       {
-        "name": "L. Koumas",
-        "position": "Offence",
-        "shirtNumber": 67,
-        "photo": "https://media.api-sports.io/football/players/328107.png"
-      },
-      {
         "name": "Víctor Muñoz",
         "position": "Offence",
         "shirtNumber": 23,
@@ -3960,18 +4004,6 @@
         "position": "Midfield",
         "shirtNumber": 73,
         "photo": "https://media.api-sports.io/football/players/452685.png"
-      },
-      {
-        "name": "J. Lambie",
-        "position": "Offence",
-        "shirtNumber": 16,
-        "photo": "https://media.api-sports.io/football/players/437561.png"
-      },
-      {
-        "name": "W. Wright",
-        "position": "Offence",
-        "shirtNumber": 9,
-        "photo": "https://media.api-sports.io/football/players/498377.png"
       }
     ],
     "transfers": [
@@ -4138,12 +4170,6 @@
         "photo": "https://media.api-sports.io/football/players/47296.png"
       },
       {
-        "name": "R. Aït-Nouri",
-        "position": "Midfield",
-        "shirtNumber": 21,
-        "photo": "https://media.api-sports.io/football/players/21138.png"
-      },
-      {
         "name": "Rúben Dias",
         "position": "Defence",
         "shirtNumber": 3,
@@ -4232,18 +4258,6 @@
         "position": "Midfield",
         "shirtNumber": 27,
         "photo": "https://media.api-sports.io/football/players/41621.png"
-      },
-      {
-        "name": "N. O&apos;Reilly",
-        "position": "Defence",
-        "shirtNumber": 33,
-        "photo": "https://media.api-sports.io/football/players/307123.png"
-      },
-      {
-        "name": "F. Samba",
-        "position": "Offence",
-        "shirtNumber": 75,
-        "photo": "https://media.api-sports.io/football/players/568008.png"
       },
       {
         "name": "J. Doku",
@@ -4446,12 +4460,6 @@
         "photo": "https://media.api-sports.io/football/players/403064.png"
       },
       {
-        "name": "Daniel Armer",
-        "position": "Defence",
-        "shirtNumber": 4,
-        "photo": "https://media.api-sports.io/football/players/407026.png"
-      },
-      {
         "name": "Diogo Dalot",
         "position": "Defence",
         "shirtNumber": 2,
@@ -4468,12 +4476,6 @@
         "position": "Defence",
         "shirtNumber": 26,
         "photo": "https://media.api-sports.io/football/players/402329.png"
-      },
-      {
-        "name": "J. Kamason",
-        "position": "Defence",
-        "shirtNumber": 2,
-        "photo": "https://media.api-sports.io/football/players/402330.png"
       },
       {
         "name": "H. Maguire",
@@ -4508,13 +4510,13 @@
       {
         "name": "Andrey Santos",
         "position": "Midfield",
-        "shirtNumber": 17,
+        "shirtNumber": null,
         "photo": "https://media.api-sports.io/football/players/305834.png"
       },
       {
         "name": "C. Baleba",
         "position": "Midfield",
-        "shirtNumber": 17,
+        "shirtNumber": null,
         "photo": "https://media.api-sports.io/football/players/356041.png"
       },
       {
@@ -4572,12 +4574,6 @@
         "photo": "https://media.api-sports.io/football/players/157997.png"
       },
       {
-        "name": "J. Gabriel",
-        "position": "Offence",
-        "shirtNumber": 77,
-        "photo": "https://media.api-sports.io/football/players/517227.png"
-      },
-      {
         "name": "S. Lacey",
         "position": "Midfield",
         "shirtNumber": 31,
@@ -4600,12 +4596,6 @@
         "position": "Offence",
         "shirtNumber": 30,
         "photo": "https://media.api-sports.io/football/players/115589.png"
-      },
-      {
-        "name": "T. Thompson",
-        "position": "Offence",
-        "shirtNumber": 17,
-        "photo": "https://media.api-sports.io/football/players/465942.png"
       },
       {
         "name": "J. Zirkzee",
@@ -4758,7 +4748,1199 @@
     ]
   },
   "Newcastle United FC": {
-    "squad": [],
-    "transfers": []
+    "squad": [
+      {
+        "name": "M. Gillespie",
+        "position": "Goalkeeper",
+        "shirtNumber": 29,
+        "photo": "https://media.api-sports.io/football/players/44912.png"
+      },
+      {
+        "name": "L. Horníček",
+        "position": "Goalkeeper",
+        "shirtNumber": 21,
+        "photo": "https://media.api-sports.io/football/players/269349.png"
+      },
+      {
+        "name": "E. Jaouen",
+        "position": "Goalkeeper",
+        "shirtNumber": 24,
+        "photo": "https://media.api-sports.io/football/players/329640.png"
+      },
+      {
+        "name": "N. Pope",
+        "position": "Goalkeeper",
+        "shirtNumber": 1,
+        "photo": "https://media.api-sports.io/football/players/18911.png"
+      },
+      {
+        "name": "S. Botman",
+        "position": "Defence",
+        "shirtNumber": 4,
+        "photo": "https://media.api-sports.io/football/players/38734.png"
+      },
+      {
+        "name": "D. Burn",
+        "position": "Defence",
+        "shirtNumber": 33,
+        "photo": "https://media.api-sports.io/football/players/18961.png"
+      },
+      {
+        "name": "A. Dedić",
+        "position": "Defence",
+        "shirtNumber": 37,
+        "photo": "https://media.api-sports.io/football/players/7318.png"
+      },
+      {
+        "name": "L. Hall",
+        "position": "Defence",
+        "shirtNumber": 3,
+        "photo": "https://media.api-sports.io/football/players/284492.png"
+      },
+      {
+        "name": "T. Livramento",
+        "position": "Defence",
+        "shirtNumber": 2,
+        "photo": "https://media.api-sports.io/football/players/158694.png"
+      },
+      {
+        "name": "F. Schär",
+        "position": "Defence",
+        "shirtNumber": 5,
+        "photo": "https://media.api-sports.io/football/players/2806.png"
+      },
+      {
+        "name": "M. Thiaw",
+        "position": "Defence",
+        "shirtNumber": 12,
+        "photo": "https://media.api-sports.io/football/players/163189.png"
+      },
+      {
+        "name": "A. Bamba",
+        "position": "Midfield",
+        "shirtNumber": 8,
+        "photo": "https://media.api-sports.io/football/players/453792.png"
+      },
+      {
+        "name": "Joelinton",
+        "position": "Midfield",
+        "shirtNumber": 7,
+        "photo": "https://media.api-sports.io/football/players/723.png"
+      },
+      {
+        "name": "L. Miley",
+        "position": "Defence",
+        "shirtNumber": 67,
+        "photo": "https://media.api-sports.io/football/players/328105.png"
+      },
+      {
+        "name": "J. Murphy",
+        "position": "Midfield",
+        "shirtNumber": 23,
+        "photo": "https://media.api-sports.io/football/players/19163.png"
+      },
+      {
+        "name": "J. Ramsey",
+        "position": "Midfield",
+        "shirtNumber": 41,
+        "photo": "https://media.api-sports.io/football/players/19192.png"
+      },
+      {
+        "name": "Sean Steur",
+        "position": "Midfield",
+        "shirtNumber": 14,
+        "photo": "https://media.api-sports.io/football/players/469321.png"
+      },
+      {
+        "name": "B. Touré",
+        "position": "Offence",
+        "shirtNumber": 17,
+        "photo": "https://media.api-sports.io/football/players/387643.png"
+      },
+      {
+        "name": "J. Willock",
+        "position": "Midfield",
+        "shirtNumber": 28,
+        "photo": "https://media.api-sports.io/football/players/1463.png"
+      },
+      {
+        "name": "H. Barnes",
+        "position": "Midfield",
+        "shirtNumber": 11,
+        "photo": "https://media.api-sports.io/football/players/18778.png"
+      },
+      {
+        "name": "A. Elanga",
+        "position": "Offence",
+        "shirtNumber": 19,
+        "photo": "https://media.api-sports.io/football/players/153430.png"
+      },
+      {
+        "name": "M. Fernandez-Pardo",
+        "position": "Midfield",
+        "shirtNumber": 20,
+        "photo": "https://media.api-sports.io/football/players/340077.png"
+      },
+      {
+        "name": "M. Mills",
+        "position": "Offence",
+        "shirtNumber": 77,
+        "photo": "https://media.api-sports.io/football/players/639204.png"
+      },
+      {
+        "name": "W. Osula",
+        "position": "Offence",
+        "shirtNumber": 10,
+        "photo": "https://media.api-sports.io/football/players/315237.png"
+      },
+      {
+        "name": "K. Thompson",
+        "position": "Offence",
+        "shirtNumber": 44,
+        "photo": "https://media.api-sports.io/football/players/568107.png"
+      },
+      {
+        "name": "Y. Wissa",
+        "position": "Offence",
+        "shirtNumber": 9,
+        "photo": "https://media.api-sports.io/football/players/20649.png"
+      }
+    ],
+    "transfers": [
+      {
+        "player": "L. Shahar",
+        "date": "2026-09-03",
+        "type": "Loan",
+        "from": "Newcastle",
+        "to": "Arouca"
+      },
+      {
+        "player": "N. Woltemade",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Newcastle",
+        "to": "Juventus"
+      },
+      {
+        "player": "M. Fernandez-Pardo",
+        "date": "2026-08-31",
+        "type": "Transfer",
+        "from": "Lille",
+        "to": "Newcastle"
+      },
+      {
+        "player": "S. Neave",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Newcastle",
+        "to": "Wolves"
+      },
+      {
+        "player": "M. Fernandez-Pardo",
+        "date": "2026-08-30",
+        "type": "Transfer",
+        "from": "Lille",
+        "to": "Newcastle"
+      },
+      {
+        "player": "J. Ruddy",
+        "date": "2026-08-26",
+        "type": "Free agent",
+        "from": "Newcastle",
+        "to": "Wolves"
+      },
+      {
+        "player": "Nico González",
+        "date": "2026-08-25",
+        "type": "Transfer",
+        "from": "Manchester City",
+        "to": "Newcastle"
+      },
+      {
+        "player": "Nico González",
+        "date": "2026-08-24",
+        "type": "Transfer",
+        "from": "Manchester City",
+        "to": "Newcastle"
+      },
+      {
+        "player": "A. Dedić",
+        "date": "2026-08-17",
+        "type": "Transfer",
+        "from": "Benfica",
+        "to": "Newcastle"
+      },
+      {
+        "player": "A. Dedić",
+        "date": "2026-08-16",
+        "type": "Transfer",
+        "from": "Benfica",
+        "to": "Newcastle"
+      },
+      {
+        "player": "A. Munda",
+        "date": "2026-08-16",
+        "type": "Loan",
+        "from": "Newcastle",
+        "to": "Swindon Town"
+      },
+      {
+        "player": "A. Harrison",
+        "date": "2026-08-14",
+        "type": "Loan",
+        "from": "Newcastle",
+        "to": "Malvern Town"
+      },
+      {
+        "player": "A. Harrison",
+        "date": "2026-08-12",
+        "type": "-",
+        "from": "Newcastle",
+        "to": "Wolves U21"
+      },
+      {
+        "player": "A. Harrison",
+        "date": "2026-08-11",
+        "type": "Free agent",
+        "from": "Newcastle",
+        "to": "Harrison Adam"
+      },
+      {
+        "player": "A. Harrison",
+        "date": "2026-08-11",
+        "type": "-",
+        "from": "Newcastle",
+        "to": "Wolves U21"
+      },
+      {
+        "player": "A. Murphy",
+        "date": "2026-08-10",
+        "type": "Loan",
+        "from": "Newcastle",
+        "to": "1. FC Kaiserslautern"
+      },
+      {
+        "player": "Bruno Guimarães",
+        "date": "2026-08-07",
+        "type": "Transfer",
+        "from": "Newcastle",
+        "to": "Arsenal"
+      },
+      {
+        "player": "Bruno Guimarães",
+        "date": "2026-08-06",
+        "type": "Transfer",
+        "from": "Newcastle",
+        "to": "Arsenal"
+      },
+      {
+        "player": "T. Bryant",
+        "date": "2026-08-06",
+        "type": "Free agent",
+        "from": "Newcastle",
+        "to": "Darlington 1883"
+      },
+      {
+        "player": "J. Taylor",
+        "date": "2026-08-06",
+        "type": "Free agent",
+        "from": "Newcastle",
+        "to": "Hemel Hempstead Town"
+      }
+    ]
+  },
+  "Nottingham Forest FC": {
+    "squad": [
+      {
+        "name": "S. Benda",
+        "position": "Goalkeeper",
+        "shirtNumber": 13,
+        "photo": "https://media.api-sports.io/football/players/19312.png"
+      },
+      {
+        "name": "John",
+        "position": "Goalkeeper",
+        "shirtNumber": 12,
+        "photo": "https://media.api-sports.io/football/players/70366.png"
+      },
+      {
+        "name": "M. Sels",
+        "position": "Goalkeeper",
+        "shirtNumber": 26,
+        "photo": "https://media.api-sports.io/football/players/2919.png"
+      },
+      {
+        "name": "O. Aina",
+        "position": "Defence",
+        "shirtNumber": 34,
+        "photo": "https://media.api-sports.io/football/players/2771.png"
+      },
+      {
+        "name": "Jair",
+        "position": "Defence",
+        "shirtNumber": 23,
+        "photo": "https://media.api-sports.io/football/players/362711.png"
+      },
+      {
+        "name": "O. Diomande",
+        "position": "Defence",
+        "shirtNumber": 2,
+        "photo": "https://media.api-sports.io/football/players/354753.png"
+      },
+      {
+        "name": "N. Milenković",
+        "position": "Defence",
+        "shirtNumber": 31,
+        "photo": "https://media.api-sports.io/football/players/2817.png"
+      },
+      {
+        "name": "D. Muñoz",
+        "position": "Midfield",
+        "shirtNumber": 27,
+        "photo": "https://media.api-sports.io/football/players/13736.png"
+      },
+      {
+        "name": "Murillo",
+        "position": "Defence",
+        "shirtNumber": 5,
+        "photo": "https://media.api-sports.io/football/players/363695.png"
+      },
+      {
+        "name": "L. Netz",
+        "position": "Defence",
+        "shirtNumber": 25,
+        "photo": "https://media.api-sports.io/football/players/163069.png"
+      },
+      {
+        "name": "N. Williams",
+        "position": "Midfield",
+        "shirtNumber": 3,
+        "photo": "https://media.api-sports.io/football/players/138780.png"
+      },
+      {
+        "name": "N. Domínguez",
+        "position": "Midfield",
+        "shirtNumber": 8,
+        "photo": "https://media.api-sports.io/football/players/6056.png"
+      },
+      {
+        "name": "M. Gibbs-White",
+        "position": "Midfield",
+        "shirtNumber": 10,
+        "photo": "https://media.api-sports.io/football/players/18746.png"
+      },
+      {
+        "name": "C. Hudson-Odoi",
+        "position": "Offence",
+        "shirtNumber": 7,
+        "photo": "https://media.api-sports.io/football/players/2298.png"
+      },
+      {
+        "name": "J. McAtee",
+        "position": "Midfield",
+        "shirtNumber": 24,
+        "photo": "https://media.api-sports.io/football/players/158697.png"
+      },
+      {
+        "name": "I. Sangaré",
+        "position": "Midfield",
+        "shirtNumber": 6,
+        "photo": "https://media.api-sports.io/football/players/22149.png"
+      },
+      {
+        "name": "X. Schlager",
+        "position": "Midfield",
+        "shirtNumber": 21,
+        "photo": "https://media.api-sports.io/football/players/1095.png"
+      },
+      {
+        "name": "R. Yates",
+        "position": "Midfield",
+        "shirtNumber": 22,
+        "photo": "https://media.api-sports.io/football/players/19305.png"
+      },
+      {
+        "name": "L. Delap",
+        "position": "Offence",
+        "shirtNumber": 19,
+        "photo": "https://media.api-sports.io/football/players/161948.png"
+      },
+      {
+        "name": "Igor Jesus",
+        "position": "Offence",
+        "shirtNumber": 11,
+        "photo": "https://media.api-sports.io/football/players/9366.png"
+      },
+      {
+        "name": "A. Kalimuendo",
+        "position": "Offence",
+        "shirtNumber": 15,
+        "photo": "https://media.api-sports.io/football/players/147831.png"
+      },
+      {
+        "name": "D. Ndoye",
+        "position": "Midfield",
+        "shirtNumber": 14,
+        "photo": "https://media.api-sports.io/football/players/48648.png"
+      },
+      {
+        "name": "C. Wood",
+        "position": "Offence",
+        "shirtNumber": 9,
+        "photo": "https://media.api-sports.io/football/players/18931.png"
+      }
+    ],
+    "transfers": [
+      {
+        "player": "Morato",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Nottingham Forest",
+        "to": "West Ham"
+      },
+      {
+        "player": "Joshua Alan Powell",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Nottingham Forest",
+        "to": "Northampton"
+      },
+      {
+        "player": "Z. Abbott",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Nottingham Forest",
+        "to": "Southampton"
+      },
+      {
+        "player": "O. Hutchinson",
+        "date": "2026-08-30",
+        "type": "Loan",
+        "from": "Nottingham Forest",
+        "to": "AC Milan"
+      },
+      {
+        "player": "D. Muñoz",
+        "date": "2026-08-30",
+        "type": "Transfer",
+        "from": "Crystal Palace",
+        "to": "Nottingham Forest"
+      },
+      {
+        "player": "Tyler Bindon",
+        "date": "2026-08-29",
+        "type": "Loan",
+        "from": "Nottingham Forest",
+        "to": "Charlton"
+      },
+      {
+        "player": "D. Muñoz",
+        "date": "2026-08-29",
+        "type": "Transfer",
+        "from": "Crystal Palace",
+        "to": "Nottingham Forest"
+      },
+      {
+        "player": "L. Delap",
+        "date": "2026-08-26",
+        "type": "Transfer",
+        "from": "Chelsea",
+        "to": "Nottingham Forest"
+      },
+      {
+        "player": "L. Sillah",
+        "date": "2026-08-26",
+        "type": "Loan",
+        "from": "Nottingham Forest",
+        "to": "Gillingham"
+      },
+      {
+        "player": "Eric Emanuel da Silva Moreira",
+        "date": "2026-08-25",
+        "type": "Loan",
+        "from": "Nottingham Forest",
+        "to": "Excelsior"
+      },
+      {
+        "player": "D. Bakwa",
+        "date": "2026-08-25",
+        "type": "Loan",
+        "from": "Nottingham Forest",
+        "to": "Lille"
+      },
+      {
+        "player": "O. Richards",
+        "date": "2026-08-20",
+        "type": "Transfer",
+        "from": "Nottingham Forest",
+        "to": "Aris Thessalonikis"
+      },
+      {
+        "player": "O. Richards",
+        "date": "2026-08-19",
+        "type": "Transfer",
+        "from": "Nottingham Forest",
+        "to": "Aris Thessalonikis"
+      },
+      {
+        "player": "T. Awoniyi",
+        "date": "2026-08-16",
+        "type": "Transfer",
+        "from": "Nottingham Forest",
+        "to": "Coventry"
+      },
+      {
+        "player": "T. Awoniyi",
+        "date": "2026-08-15",
+        "type": "Transfer",
+        "from": "Nottingham Forest",
+        "to": "Coventry"
+      },
+      {
+        "player": "S. Benda",
+        "date": "2026-08-14",
+        "type": "Free agent",
+        "from": "Fulham",
+        "to": "Nottingham Forest"
+      },
+      {
+        "player": "O. Grainger",
+        "date": "2026-08-14",
+        "type": "Free agent",
+        "from": "Nottingham Forest",
+        "to": "Portstewart"
+      },
+      {
+        "player": "O. Diomande",
+        "date": "2026-08-10",
+        "type": "Transfer",
+        "from": "Sporting CP",
+        "to": "Nottingham Forest"
+      },
+      {
+        "player": "O. Diomande",
+        "date": "2026-08-10",
+        "type": "Transfer",
+        "from": "Sporting CP",
+        "to": "Nottingham Forest"
+      },
+      {
+        "player": "O. Diomande",
+        "date": "2026-08-09",
+        "type": "Transfer",
+        "from": "Sporting CP",
+        "to": "Nottingham Forest"
+      }
+    ]
+  },
+  "Sunderland AFC": {
+    "squad": [
+      {
+        "name": "M. Ellborg",
+        "position": "Goalkeeper",
+        "shirtNumber": 31,
+        "photo": "https://media.api-sports.io/football/players/278454.png"
+      },
+      {
+        "name": "S. Moore",
+        "position": "Goalkeeper",
+        "shirtNumber": 21,
+        "photo": "https://media.api-sports.io/football/players/19089.png"
+      },
+      {
+        "name": "R. Roefs",
+        "position": "Goalkeeper",
+        "shirtNumber": 22,
+        "photo": "https://media.api-sports.io/football/players/194536.png"
+      },
+      {
+        "name": "O. Alderete",
+        "position": "Defence",
+        "shirtNumber": 15,
+        "photo": "https://media.api-sports.io/football/players/6168.png"
+      },
+      {
+        "name": "A. Alese",
+        "position": "Defence",
+        "shirtNumber": null,
+        "photo": "https://media.api-sports.io/football/players/141133.png"
+      },
+      {
+        "name": "D. Ballard",
+        "position": "Defence",
+        "shirtNumber": null,
+        "photo": "https://media.api-sports.io/football/players/55904.png"
+      },
+      {
+        "name": "K. Danso",
+        "position": "Defence",
+        "shirtNumber": 4,
+        "photo": "https://media.api-sports.io/football/players/25287.png"
+      },
+      {
+        "name": "T. Hume",
+        "position": "Defence",
+        "shirtNumber": 32,
+        "photo": "https://media.api-sports.io/football/players/119121.png"
+      },
+      {
+        "name": "Reinildo",
+        "position": "Defence",
+        "shirtNumber": 17,
+        "photo": "https://media.api-sports.io/football/players/22225.png"
+      },
+      {
+        "name": "D. Methalie",
+        "position": "Defence",
+        "shirtNumber": 6,
+        "photo": "https://media.api-sports.io/football/players/452697.png"
+      },
+      {
+        "name": "T. Meunier",
+        "position": "Midfield",
+        "shirtNumber": 12,
+        "photo": "https://media.api-sports.io/football/players/264.png"
+      },
+      {
+        "name": "N. Mukiele",
+        "position": "Defence",
+        "shirtNumber": 20,
+        "photo": "https://media.api-sports.io/football/players/1146.png"
+      },
+      {
+        "name": "Jules Ahoka",
+        "position": "Midfield",
+        "shirtNumber": 29,
+        "photo": "https://media.api-sports.io/football/players/662488.png"
+      },
+      {
+        "name": "A. Browne",
+        "position": "Midfield",
+        "shirtNumber": 8,
+        "photo": "https://media.api-sports.io/football/players/19446.png"
+      },
+      {
+        "name": "H. Diarra",
+        "position": "Midfield",
+        "shirtNumber": 19,
+        "photo": "https://media.api-sports.io/football/players/327631.png"
+      },
+      {
+        "name": "E. Le Fée",
+        "position": "Midfield",
+        "shirtNumber": 28,
+        "photo": "https://media.api-sports.io/football/players/20638.png"
+      },
+      {
+        "name": "C. Rigg",
+        "position": "Midfield",
+        "shirtNumber": 11,
+        "photo": "https://media.api-sports.io/football/players/339201.png"
+      },
+      {
+        "name": "N. Sadiki",
+        "position": "Midfield",
+        "shirtNumber": 27,
+        "photo": "https://media.api-sports.io/football/players/365331.png"
+      },
+      {
+        "name": "J. Bi",
+        "position": "Midfield",
+        "shirtNumber": null,
+        "photo": "https://media.api-sports.io/football/players/492528.png"
+      },
+      {
+        "name": "G. Xhaka",
+        "position": "Midfield",
+        "shirtNumber": 34,
+        "photo": "https://media.api-sports.io/football/players/1464.png"
+      },
+      {
+        "name": "J. Angulo",
+        "position": "Offence",
+        "shirtNumber": null,
+        "photo": "https://media.api-sports.io/football/players/646252.png"
+      },
+      {
+        "name": "N. Angulo",
+        "position": "Midfield",
+        "shirtNumber": 10,
+        "photo": "https://media.api-sports.io/football/players/311543.png"
+      },
+      {
+        "name": "B. Brobbey",
+        "position": "Offence",
+        "shirtNumber": null,
+        "photo": "https://media.api-sports.io/football/players/38750.png"
+      },
+      {
+        "name": "M. Fofana",
+        "position": "Offence",
+        "shirtNumber": 39,
+        "photo": "https://media.api-sports.io/football/players/361348.png"
+      },
+      {
+        "name": "W. Isidor",
+        "position": "Offence",
+        "shirtNumber": 18,
+        "photo": "https://media.api-sports.io/football/players/84087.png"
+      },
+      {
+        "name": "R. Mundle",
+        "position": "Offence",
+        "shirtNumber": 14,
+        "photo": "https://media.api-sports.io/football/players/284414.png"
+      },
+      {
+        "name": "C. Talbi",
+        "position": "Offence",
+        "shirtNumber": null,
+        "photo": "https://media.api-sports.io/football/players/336659.png"
+      }
+    ],
+    "transfers": [
+      {
+        "player": "B. Traoré",
+        "date": "2026-09-06",
+        "type": "Free agent",
+        "from": "Sunderland",
+        "to": "Wolves"
+      },
+      {
+        "player": "S. Adingra",
+        "date": "2026-09-01",
+        "type": "Loan",
+        "from": "Sunderland",
+        "to": "Ajax"
+      },
+      {
+        "player": "Luís Semedo",
+        "date": "2026-08-31",
+        "type": "Transfer",
+        "from": "Sunderland",
+        "to": "Clermont Foot"
+      },
+      {
+        "player": "K. Danso",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Tottenham",
+        "to": "Sunderland"
+      },
+      {
+        "player": "M. Fofana",
+        "date": "2026-08-31",
+        "type": "Transfer",
+        "from": "Lyon",
+        "to": "Sunderland"
+      },
+      {
+        "player": "J. Angulo",
+        "date": "2026-08-31",
+        "type": "Transfer",
+        "from": "Independiente del Valle",
+        "to": "Sunderland"
+      },
+      {
+        "player": "J. Seelt",
+        "date": "2026-08-26",
+        "type": "Loan",
+        "from": "Sunderland",
+        "to": "Swansea"
+      },
+      {
+        "player": "Jules Ahoka",
+        "date": "2026-08-23",
+        "type": "Transfer",
+        "from": "Antwerp",
+        "to": "Sunderland"
+      },
+      {
+        "player": "D. Methalie",
+        "date": "2026-08-20",
+        "type": "Transfer",
+        "from": "Toulouse",
+        "to": "Sunderland"
+      },
+      {
+        "player": "D. Cirkin",
+        "date": "2026-08-11",
+        "type": "Free agent",
+        "from": "Sunderland",
+        "to": "QPR"
+      },
+      {
+        "player": "L. Hjelde",
+        "date": "2026-08-10",
+        "type": "Transfer",
+        "from": "Sunderland",
+        "to": "KV Mechelen"
+      },
+      {
+        "player": "A. Patterson",
+        "date": "2026-08-10",
+        "type": "Transfer",
+        "from": "Sunderland",
+        "to": "Wrexham"
+      },
+      {
+        "player": "A. Masuaku",
+        "date": "2026-08-09",
+        "type": "Free agent",
+        "from": "Sunderland",
+        "to": "Konyaspor"
+      },
+      {
+        "player": "A. Masuaku",
+        "date": "2026-08-08",
+        "type": "Free agent",
+        "from": "Sunderland",
+        "to": "Konyaspor"
+      },
+      {
+        "player": "J. Waters",
+        "date": "2026-08-05",
+        "type": "Free agent",
+        "from": "Sunderland",
+        "to": "Hebburn Town"
+      },
+      {
+        "player": "A. Abdullahi",
+        "date": "2026-08-03",
+        "type": "Transfer",
+        "from": "Sunderland",
+        "to": "Eyüpspor"
+      },
+      {
+        "player": "T. Proctor",
+        "date": "2026-07-19",
+        "type": "-",
+        "from": "Sunderland",
+        "to": "Sunderland"
+      },
+      {
+        "player": "C. Dinsdale",
+        "date": "2026-07-19",
+        "type": "-",
+        "from": "Sunderland U21",
+        "to": "Sunderland"
+      },
+      {
+        "player": "B. Kindon",
+        "date": "2026-07-19",
+        "type": "-",
+        "from": "Sunderland U21",
+        "to": "Sunderland"
+      },
+      {
+        "player": "A. Lightfoot",
+        "date": "2026-07-19",
+        "type": "-",
+        "from": "Sunderland U21",
+        "to": "Sunderland"
+      }
+    ]
+  },
+  "Tottenham Hotspur FC": {
+    "squad": [
+      {
+        "name": "B. Austin",
+        "position": "Goalkeeper",
+        "shirtNumber": 40,
+        "photo": "https://media.api-sports.io/football/players/156428.png"
+      },
+      {
+        "name": "M. Dúbravka",
+        "position": "Goalkeeper",
+        "shirtNumber": 39,
+        "photo": "https://media.api-sports.io/football/players/18886.png"
+      },
+      {
+        "name": "A. Kinský",
+        "position": "Goalkeeper",
+        "shirtNumber": 31,
+        "photo": "https://media.api-sports.io/football/players/265826.png"
+      },
+      {
+        "name": "T. Adarabioyo",
+        "position": "Defence",
+        "shirtNumber": 4,
+        "photo": "https://media.api-sports.io/football/players/19145.png"
+      },
+      {
+        "name": "B. Davies",
+        "position": "Defence",
+        "shirtNumber": 33,
+        "photo": "https://media.api-sports.io/football/players/164.png"
+      },
+      {
+        "name": "A. Gray",
+        "position": "Defence",
+        "shirtNumber": 14,
+        "photo": "https://media.api-sports.io/football/players/328089.png"
+      },
+      {
+        "name": "Pedro Porro",
+        "position": "Defence",
+        "shirtNumber": 23,
+        "photo": "https://media.api-sports.io/football/players/47519.png"
+      },
+      {
+        "name": "A. Robertson",
+        "position": "Defence",
+        "shirtNumber": 3,
+        "photo": "https://media.api-sports.io/football/players/289.png"
+      },
+      {
+        "name": "M. Senesi",
+        "position": "Defence",
+        "shirtNumber": 5,
+        "photo": "https://media.api-sports.io/football/players/6610.png"
+      },
+      {
+        "name": "D. Udogie",
+        "position": "Defence",
+        "shirtNumber": 13,
+        "photo": "https://media.api-sports.io/football/players/204039.png"
+      },
+      {
+        "name": "J. van Hecke",
+        "position": "Defence",
+        "shirtNumber": 6,
+        "photo": "https://media.api-sports.io/football/players/38695.png"
+      },
+      {
+        "name": "M. van de Ven",
+        "position": "Defence",
+        "shirtNumber": 37,
+        "photo": "https://media.api-sports.io/football/players/152849.png"
+      },
+      {
+        "name": "R. Bentancur",
+        "position": "Midfield",
+        "shirtNumber": 30,
+        "photo": "https://media.api-sports.io/football/players/863.png"
+      },
+      {
+        "name": "L. Bergvall",
+        "position": "Midfield",
+        "shirtNumber": 15,
+        "photo": "https://media.api-sports.io/football/players/347316.png"
+      },
+      {
+        "name": "Mateus Fernandes",
+        "position": "Midfield",
+        "shirtNumber": 18,
+        "photo": "https://media.api-sports.io/football/players/336585.png"
+      },
+      {
+        "name": "C. Gallagher",
+        "position": "Midfield",
+        "shirtNumber": 8,
+        "photo": "https://media.api-sports.io/football/players/67972.png"
+      },
+      {
+        "name": "M. Kudus",
+        "position": "Midfield",
+        "shirtNumber": 20,
+        "photo": "https://media.api-sports.io/football/players/15911.png"
+      },
+      {
+        "name": "J. Maddison",
+        "position": "Midfield",
+        "shirtNumber": 10,
+        "photo": "https://media.api-sports.io/football/players/18784.png"
+      },
+      {
+        "name": "X. Simons",
+        "position": "Midfield",
+        "shirtNumber": 7,
+        "photo": "https://media.api-sports.io/football/players/162016.png"
+      },
+      {
+        "name": "S. Tonali",
+        "position": "Midfield",
+        "shirtNumber": 16,
+        "photo": "https://media.api-sports.io/football/players/31146.png"
+      },
+      {
+        "name": "Omar Marmoush",
+        "position": "Offence",
+        "shirtNumber": 22,
+        "photo": "https://media.api-sports.io/football/players/81573.png"
+      },
+      {
+        "name": "M. Mudryk",
+        "position": "Offence",
+        "shirtNumber": 27,
+        "photo": "https://media.api-sports.io/football/players/63577.png"
+      },
+      {
+        "name": "Richarlison",
+        "position": "Offence",
+        "shirtNumber": 9,
+        "photo": "https://media.api-sports.io/football/players/2413.png"
+      },
+      {
+        "name": "D. Solanke",
+        "position": "Offence",
+        "shirtNumber": 19,
+        "photo": "https://media.api-sports.io/football/players/18883.png"
+      },
+      {
+        "name": "Sávio",
+        "position": "Offence",
+        "shirtNumber": 17,
+        "photo": "https://media.api-sports.io/football/players/266657.png"
+      },
+      {
+        "name": "M. Tel",
+        "position": "Midfield",
+        "shirtNumber": 11,
+        "photo": "https://media.api-sports.io/football/players/270510.png"
+      }
+    ],
+    "transfers": [
+      {
+        "player": "D. Scarlett",
+        "date": "2026-08-31",
+        "type": "Free agent",
+        "from": "Tottenham",
+        "to": "Leyton Orient"
+      },
+      {
+        "player": "P. Sarr",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Tottenham",
+        "to": "Juventus"
+      },
+      {
+        "player": "K. Danso",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Tottenham",
+        "to": "Sunderland"
+      },
+      {
+        "player": "K. Takai",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Tottenham",
+        "to": "St. Truiden"
+      },
+      {
+        "player": "M. Mudryk",
+        "date": "2026-08-31",
+        "type": "Loan",
+        "from": "Chelsea",
+        "to": "Tottenham"
+      },
+      {
+        "player": "T. Adarabioyo",
+        "date": "2026-08-31",
+        "type": "Transfer",
+        "from": "Chelsea",
+        "to": "Tottenham"
+      },
+      {
+        "player": "Souza",
+        "date": "2026-08-30",
+        "type": "Loan",
+        "from": "Tottenham",
+        "to": "FC Porto"
+      },
+      {
+        "player": "M. Moore",
+        "date": "2026-08-30",
+        "type": "Loan",
+        "from": "Tottenham",
+        "to": "1. FC Köln"
+      },
+      {
+        "player": "J. Donley",
+        "date": "2026-08-28",
+        "type": "Loan",
+        "from": "Tottenham",
+        "to": "Luton"
+      },
+      {
+        "player": "Omar Marmoush",
+        "date": "2026-08-26",
+        "type": "Loan",
+        "from": "Manchester City",
+        "to": "Tottenham"
+      },
+      {
+        "player": "Sávio",
+        "date": "2026-08-24",
+        "type": "Transfer",
+        "from": "Manchester City",
+        "to": "Tottenham"
+      },
+      {
+        "player": "O. Irow",
+        "date": "2026-08-23",
+        "type": "Loan",
+        "from": "Tottenham",
+        "to": "Plymouth"
+      },
+      {
+        "player": "G. Vicario",
+        "date": "2026-08-17",
+        "type": "Loan",
+        "from": "Tottenham",
+        "to": "Juventus"
+      },
+      {
+        "player": "A. Phillips",
+        "date": "2026-08-14",
+        "type": "Transfer",
+        "from": "Tottenham",
+        "to": "Middlesbrough"
+      },
+      {
+        "player": "D. Spence",
+        "date": "2026-08-14",
+        "type": "Transfer",
+        "from": "Tottenham",
+        "to": "Inter"
+      },
+      {
+        "player": "C. Romero",
+        "date": "2026-08-14",
+        "type": "Transfer",
+        "from": "Tottenham",
+        "to": "Atletico Madrid"
+      },
+      {
+        "player": "Yang Min-Hyeok",
+        "date": "2026-08-11",
+        "type": "Loan",
+        "from": "Tottenham",
+        "to": "KVC Westerlo"
+      },
+      {
+        "player": "M. Solomon",
+        "date": "2026-08-09",
+        "type": "Transfer",
+        "from": "Tottenham",
+        "to": "West Ham"
+      },
+      {
+        "player": "R. Russell-Denny",
+        "date": "2026-08-06",
+        "type": "Loan",
+        "from": "Tottenham",
+        "to": "Bristol Rovers"
+      },
+      {
+        "player": "M. Melia",
+        "date": "2026-08-05",
+        "type": "Loan",
+        "from": "Tottenham",
+        "to": "Lincoln"
+      }
+    ]
   }
 }

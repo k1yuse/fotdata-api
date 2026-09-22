@@ -2,6 +2,7 @@
 import re
 import requests
 import time
+from collections import Counter
 import pandas as pd
 import numpy as np
 import joblib
@@ -473,7 +474,11 @@ def _search_af_team_id_query(query, country):
     for c in candidates:
         t = c.get("team", {})
         name = (t.get("name") or "")
-        if t.get("country") == country and not any(x in name.upper() for x in (" U21", " U23", " U19", " II", " B", " W")):
+        # 유스/리저브팀 제외: " U18" 하나가 빠져 있어서 Newcastle이 U18팀 ID로
+        # 잘못 매칭된 전례가 있었음(스쿼드가 전부 유스 선수로 채워짐) — 나이대 표기를
+        # 정규식으로 통째로 잡아서 앞으로 U15~U23 등 어떤 연령대가 와도 걸러지게 함.
+        if t.get("country") == country and not re.search(r"\bU1[5-9]\b|\bU2[0-3]\b", name.upper()) \
+                and not any(x in name.upper() for x in (" II", " B", " W", " RES.")):
             return t.get("id")
     return None
 
@@ -502,6 +507,34 @@ def _af_get(url, params):
         res = requests.get(url, headers=API_FOOTBALL_HEADERS, params=params)
         data = res.json()
     return data
+
+def _clean_squad(squad_raw, team_name, team_info):
+    """API-Football의 /players/squads는 무료 플랜에서도 1군 외에 유스/후보 선수까지
+    구분 없이 섞어서 반환하는데, 이 유스/후보 선수들이 1군과 등번호가 겹치는 경우가
+    실제로 다수 발견됨(예: Arsenal #1을 David Raya와 후보 골키퍼가 동시에 사용).
+    football-data.org 쪽 공식 스쿼드(team_info.json, 등번호는 없지만 1군만 깨끗하게
+    제공됨)의 선수 이름을 화이트리스트 삼아, 성(姓)이 그 목록에 없는 선수는 노이즈로
+    간주해 제외한다. 화이트리스트가 없는 팀(team_info 미수집)은 필터링 없이 그대로 둔다.
+    필터링 후에도 등번호가 겹치면(둘 다 화이트리스트에 있는 경우 등, 어느 쪽이 진짜
+    현재 1군 번호인지 판단할 근거가 없으므로) 틀린 번호를 확신 없이 보여주는 대신
+    해당 번호를 비워서 최소한 오정보는 피한다."""
+    whitelist = [p.get("name", "") for p in (team_info.get(team_name, {}) or {}).get("squad", [])]
+    if whitelist:
+        whitelist_lower = [n.lower() for n in whitelist]
+        filtered = []
+        for p in squad_raw:
+            name = p.get("name") or ""
+            tokens = name.split()
+            key = tokens[-1].lower() if tokens else name.lower()
+            if any(key in wl for wl in whitelist_lower):
+                filtered.append(p)
+        squad_raw = filtered
+
+    counts = Counter(p.get("shirtNumber") for p in squad_raw if p.get("shirtNumber") is not None)
+    for p in squad_raw:
+        if p.get("shirtNumber") is not None and counts[p["shirtNumber"]] > 1:
+            p["shirtNumber"] = None
+    return squad_raw
 
 def fetch_squad_transfers(league_code):
     """API-Football 무료 플랜으로 스쿼드(사진/등번호)+이적 기록 수집.
@@ -537,6 +570,12 @@ def fetch_squad_transfers(league_code):
         with open(extra_path, 'r', encoding='utf-8') as f:
             extra = json.load(f)
 
+    team_info_path = f"{MODEL_DIR}/team_info.json"
+    team_info = {}
+    if os.path.exists(team_info_path):
+        with open(team_info_path, 'r', encoding='utf-8') as f:
+            team_info = json.load(f)
+
     for team_name in our_teams:
         if extra.get(team_name, {}).get("squad"):
             continue  # 이미 처리됨 — 재실행 시 스킵
@@ -550,7 +589,7 @@ def fetch_squad_transfers(league_code):
         entry = extra.get(team_name, {})
         try:
             squad_raw = (_af_get(f"{API_FOOTBALL_URL}/players/squads", {"team": af_id}).get("response") or [{}])[0].get("players", [])
-            entry["squad"] = [
+            squad_clean = [
                 {
                     "name": p.get("name"),
                     "position": SQUAD_POSITION_MAP.get(p.get("position"), p.get("position")),
@@ -559,6 +598,7 @@ def fetch_squad_transfers(league_code):
                 }
                 for p in squad_raw
             ]
+            entry["squad"] = _clean_squad(squad_clean, team_name, team_info)
             time.sleep(7)
 
             transfers_raw = _af_get(f"{API_FOOTBALL_URL}/transfers", {"team": af_id}).get("response", [])

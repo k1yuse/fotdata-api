@@ -71,7 +71,7 @@ fotdata-api/
     ├── players.json               # 득점왕/도움왕 (현재 EPL만)
     ├── schedule.json              # 5대리그+UCL 26-27 시즌 전체 일정 (완료+예정) — 일정 탭 전용
     ├── team_info.json             # 팀 상세정보(홈구장/창단연도/구단색/감독/스쿼드) — 팀 클릭 정보 패널용
-    ├── team_extra.json            # API-Football 스쿼드 사진/등번호 + 이적 기록 (현재 EPL 20팀 중 16팀만, 2026-09-20 추가)
+    ├── team_extra.json            # API-Football 스쿼드 사진/등번호 + 이적 기록 (현재 EPL 20팀 전체, 2026-09-20 추가)
     └── prediction_log.json        # AI 예측 트랙레코드 로그 (2026-09-21 추가, 5.6 참고)
 ```
 
@@ -203,6 +203,7 @@ python update_data.py
 - 시즌 종료 배너(`FotData.html`/`landing.html`에 HTML 주석으로 비활성화됨)는 27-28 시즌 전환 시점에 재활성화 예정.
 - ~~자동 업데이트 워크플로우 커밋/푸시 간헐적 실패~~ → 2026-09-19에 `.github/workflows/update_data.yml` 수정. 원인: GitHub Actions 러너가 큐에서 오래 대기하다 실행되면(수 시간 지연도 발생 가능) 그 사이 다른 커밋이 먼저 push될 수 있는데, 기존 `git pull --rebase origin main || true`는 `update_data.py`가 이미 워킹트리를 건드려놓은 상태라 원격이 움직였을 때 항상 실패하고 그 에러가 `|| true`에 조용히 삼켜져서, 결국 낡은 베이스 위에 커밋 → `push --force-with-lease` 거절로 이어짐. `git fetch` + `git reset`(mixed) + 재시도 루프로 교체해 해결. (`--soft`로 하면 인덱스가 안 갱신돼서 체크아웃 이후 원격에 새로 추가된 파일이 다음 커밋에서 삭제된 것처럼 처리되는 별도 버그가 있으니 반드시 기본/`--mixed` reset을 쓸 것.)
 - ~~로컬 conda `fotdata` 환경에서 `import sklearn`이 아예 실패함~~ → 2026-09-22에 해결. 원인은 PyPI의 scipy 1.15.3 macOS arm64 공식 wheel 자체의 `_propack` 확장(`.so`)이 최신 macOS(26A428 이상)의 더 엄격해진 Mach-O `__thread_bss` 섹션 검증을 통과하지 못하는 문제였음 — `pip install --force-reinstall --no-cache-dir scipy`로 캐시를 지우고 새로 받아도 동일 wheel이라 재발(캐시 손상이 원인이 아니었음). **conda-forge 빌드(scipy 1.15.2)로 교체하니 정상 동작** — `conda install -n fotdata -c conda-forge scipy --force-reinstall -y`. 이후 `numpy 2.2.6 / scipy 1.15.2 / scikit-learn 1.7.2 / xgboost 3.2.0` 조합으로 `import main`, `update_data.py` 모두 정상 기동 확인. pkl 모델이 sklearn 1.9.1로 저장돼 지금 버전(1.7.2)과 다르다는 `InconsistentVersionWarning`이 뜨지만 실제 로드·예측은 정상 동작(기존 10번 항목의 `multi_class` 호환 패치와 같은 종류의 무해한 경고).
+- ~~`team_extra.json` 스쿼드에 등번호 중복이 광범위하게 발생(거의 모든 팀에서 2~5쌍)~~ → 2026-09-23에 원인 파악 및 해결. 근본 원인은 두 가지: (1) API-Football의 `/players/squads`가 무료 플랜에서도 1군과 유스/후보 선수를 구분 없이 한 리스트로 반환하는데, 이 유스 선수들이 1군과 등번호가 겹침 → `_clean_squad()`를 추가해 `team_info.json`(football-data.org 쪽 공식 1군 명단, 등번호는 없지만 노이즈 없음)의 이름을 화이트리스트로 삼아 성(姓) 매칭이 안 되는 선수를 걸러내고, 그래도 남는 충돌은 번호를 비워서 오정보를 피함. (2) `_search_af_team_id_query()`의 유스팀 제외 필터에 " U18"이 빠져 있어서 Newcastle이 통째로 "Newcastle United U18"(유스팀) ID로 매칭되는 전례가 있었음(스쿼드 2명, 이적 기록도 전부 U18 이적) — 나이대 필터를 정규식(`U15~U23` 전체)으로 교체. 로컬에서 재실행해 EPL 20팀 전부(기존 16팀 → 20팀) 스쿼드 재수집 완료, 중복 0건 확인.
 
 ## 11. 시즌 전환 체크리스트 (매년 반복 작업)
 
