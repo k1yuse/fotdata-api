@@ -15297,6 +15297,612 @@
       }
     ]
   },
+  "US Lecce": {
+    "venue": "Stadio Comunale Via Del Mare",
+    "founded": 1908,
+    "clubColors": "Yellow / Red / Navy Blue",
+    "coach": "Eusebio Di Francesco",
+    "squad": [
+      {
+        "name": "Marco Bleve",
+        "position": "Goalkeeper",
+        "nationality": "Italy",
+        "shirtNumber": null
+      },
+      {
+        "name": "Wladimiro Falcone",
+        "position": "Goalkeeper",
+        "nationality": "Italy",
+        "shirtNumber": null
+      },
+      {
+        "name": "Alexandru Borbei",
+        "position": "Goalkeeper",
+        "nationality": "Romania",
+        "shirtNumber": null
+      },
+      {
+        "name": "Plamen Penev",
+        "position": "Goalkeeper",
+        "nationality": "Bulgaria",
+        "shirtNumber": null
+      },
+      {
+        "name": "Antonino Gallo",
+        "position": "Defence",
+        "nationality": "Italy",
+        "shirtNumber": null
+      },
+      {
+        "name": "Gaby Jean",
+        "position": "Defence",
+        "nationality": "France",
+        "shirtNumber": null
+      },
+      {
+        "name": "Corrie Ndaba",
+        "position": "Defence",
+        "nationality": "Ireland",
+        "shirtNumber": null
+      },
+      {
+        "name": "Jamil Siebert",
+        "position": "Defence",
+        "nationality": "Germany",
+        "shirtNumber": null
+      },
+      {
+        "name": "Danilo Veiga",
+        "position": "Defence",
+        "nationality": "Portugal",
+        "shirtNumber": null
+      },
+      {
+        "name": "Ali Dembele",
+        "position": "Defence",
+        "nationality": "France",
+        "shirtNumber": null
+      },
+      {
+        "name": "Sebastian Esposito",
+        "position": "Defence",
+        "nationality": "Australia",
+        "shirtNumber": null
+      },
+      {
+        "name": "Kialonda Gaspar",
+        "position": "Defence",
+        "nationality": "Angola",
+        "shirtNumber": null
+      },
+      {
+        "name": "Tiago Gabriel",
+        "position": "Defence",
+        "nationality": "Portugal",
+        "shirtNumber": null
+      },
+      {
+        "name": "Elijah Scott",
+        "position": "Defence",
+        "nationality": "Germany",
+        "shirtNumber": null
+      },
+      {
+        "name": "Vernon Addo",
+        "position": "Defence",
+        "nationality": "Netherlands",
+        "shirtNumber": null
+      },
+      {
+        "name": "Marlon Ubani",
+        "position": "Defence",
+        "nationality": "Germany",
+        "shirtNumber": null
+      },
+      {
+        "name": "Lassana Coulibaly",
+        "position": "Midfield",
+        "nationality": "Mali",
+        "shirtNumber": null
+      },
+      {
+        "name": "Youssef Maleh",
+        "position": "Midfield",
+        "nationality": "Morocco",
+        "shirtNumber": null
+      },
+      {
+        "name": "Ivan Ilić",
+        "position": "Midfield",
+        "nationality": "Serbia",
+        "shirtNumber": null
+      },
+      {
+        "name": "Omri Gandelman",
+        "position": "Midfield",
+        "nationality": "Israel",
+        "shirtNumber": null
+      },
+      {
+        "name": "Mohamed Kaba",
+        "position": "Midfield",
+        "nationality": "France",
+        "shirtNumber": null
+      },
+      {
+        "name": "Sadik Fofana",
+        "position": "Midfield",
+        "nationality": "Togo",
+        "shirtNumber": null
+      },
+      {
+        "name": "Oumar Ngom",
+        "position": "Midfield",
+        "nationality": "Mauritania",
+        "shirtNumber": null
+      },
+      {
+        "name": "Medon Berisha",
+        "position": "Midfield",
+        "nationality": "Albania",
+        "shirtNumber": null
+      },
+      {
+        "name": "Olaf Gorter",
+        "position": "Midfield",
+        "nationality": "Netherlands",
+        "shirtNumber": null
+      },
+      {
+        "name": "Niko Kovač",
+        "position": "Midfield",
+        "nationality": "Bosnia-Herzegovina",
+        "shirtNumber": null
+      },
+      {
+        "name": "Willem Geubbels",
+        "position": "Offence",
+        "nationality": "France",
+        "shirtNumber": null
+      },
+      {
+        "name": "Santiago Pierotti",
+        "position": "Offence",
+        "nationality": "Argentina",
+        "shirtNumber": null
+      },
+      {
+        "name": "Nikola Štulić",
+        "position": "Offence",
+        "nationality": "Serbia",
+        "shirtNumber": null
+      },
+      {
+        "name": "Joel Monteiro",
+        "position": "Offence",
+        "nationality": "Switzerland",
+        "shirtNumber": null
+      },
+      {
+        "name": "Konan N'Dri",
+        "position": "Offence",
+        "nationality": "Ivory Coast",
+        "shirtNumber": null
+      },
+      {
+        "name": "Miloš Jović",
+        "position": "Offence",
+        "nationality": "Serbia",
+        "shirtNumber": null
+      },
+      {
+        "name": "Hjalte Laerke",
+        "position": "Offence",
+        "nationality": "Denmark",
+        "shirtNumber": null
+      },
+      {
+        "name": "Paco Esteban",
+        "position": "Offence",
+        "nationality": "Spain",
+        "shirtNumber": null
+      }
+    ]
+  },
+  "US Sassuolo Calcio": {
+    "venue": "Mapei Stadium - Città del Tricolore",
+    "founded": 1920,
+    "clubColors": "Green / Black",
+    "coach": "Alberto Aquilani",
+    "squad": [
+      {
+        "name": "Giacomo Satalino",
+        "position": "Goalkeeper",
+        "nationality": "Italy",
+        "shirtNumber": null
+      },
+      {
+        "name": "Stefano Turati",
+        "position": "Goalkeeper",
+        "nationality": "Italy",
+        "shirtNumber": null
+      },
+      {
+        "name": "Arijanet Muric",
+        "position": "Goalkeeper",
+        "nationality": "Kosovo",
+        "shirtNumber": null
+      },
+      {
+        "name": "Lorenzo Nyarko",
+        "position": "Goalkeeper",
+        "nationality": "Italy",
+        "shirtNumber": null
+      },
+      {
+        "name": "Duje Ćaleta-Car",
+        "position": "Defence",
+        "nationality": "Croatia",
+        "shirtNumber": null
+      },
+      {
+        "name": "Jay Idzes",
+        "position": "Defence",
+        "nationality": "Indonesia",
+        "shirtNumber": null
+      },
+      {
+        "name": "Sebastian Walukiewicz",
+        "position": "Defence",
+        "nationality": "Poland",
+        "shirtNumber": null
+      },
+      {
+        "name": "Fali Candé",
+        "position": "Defence",
+        "nationality": "Guinea-Bissau",
+        "shirtNumber": null
+      },
+      {
+        "name": "Josh Doig",
+        "position": "Defence",
+        "nationality": "Scotland",
+        "shirtNumber": null
+      },
+      {
+        "name": "Cas Odenthal",
+        "position": "Defence",
+        "nationality": "Netherlands",
+        "shirtNumber": null
+      },
+      {
+        "name": "Ignace Van Der Brempt",
+        "position": "Defence",
+        "nationality": "Belgium",
+        "shirtNumber": null
+      },
+      {
+        "name": "Fedde Leysen",
+        "position": "Defence",
+        "nationality": "Belgium",
+        "shirtNumber": null
+      },
+      {
+        "name": "Edoardo Pieragnolo",
+        "position": "Defence",
+        "nationality": "Italy",
+        "shirtNumber": null
+      },
+      {
+        "name": "Yeferson Paz",
+        "position": "Defence",
+        "nationality": "Colombia",
+        "shirtNumber": null
+      },
+      {
+        "name": "Rafa Obrador",
+        "position": "Defence",
+        "nationality": "Spain",
+        "shirtNumber": null
+      },
+      {
+        "name": "Giorgio Vezzosi",
+        "position": "Defence",
+        "nationality": "Italy",
+        "shirtNumber": null
+      },
+      {
+        "name": "Nemanja Matić",
+        "position": "Midfield",
+        "nationality": "Serbia",
+        "shirtNumber": null
+      },
+      {
+        "name": "Kristian Thorstvedt",
+        "position": "Midfield",
+        "nationality": "Norway",
+        "shirtNumber": null
+      },
+      {
+        "name": "Andrea Ghion",
+        "position": "Midfield",
+        "nationality": "Italy",
+        "shirtNumber": null
+      },
+      {
+        "name": "Daniel Boloca",
+        "position": "Midfield",
+        "nationality": "Italy",
+        "shirtNumber": null
+      },
+      {
+        "name": "Ismaël Koné",
+        "position": "Midfield",
+        "nationality": "Canada",
+        "shirtNumber": null
+      },
+      {
+        "name": "Vasilije Adzic",
+        "position": "Midfield",
+        "nationality": "Montenegro",
+        "shirtNumber": null
+      },
+      {
+        "name": "Ibrahim Sulemana",
+        "position": "Midfield",
+        "nationality": "Ghana",
+        "shirtNumber": null
+      },
+      {
+        "name": "Luca Lipani",
+        "position": "Midfield",
+        "nationality": "Italy",
+        "shirtNumber": null
+      },
+      {
+        "name": "Cristian Volpato",
+        "position": "Midfield",
+        "nationality": "Italy",
+        "shirtNumber": null
+      },
+      {
+        "name": "Darryl Bakola",
+        "position": "Midfield",
+        "nationality": "France",
+        "shirtNumber": null
+      },
+      {
+        "name": "Simone Cinquegrano",
+        "position": "Midfield",
+        "nationality": "Italy",
+        "shirtNumber": null
+      },
+      {
+        "name": "Domenico Berardi",
+        "position": "Offence",
+        "nationality": "Italy",
+        "shirtNumber": null
+      },
+      {
+        "name": "Nicholas Pierini",
+        "position": "Offence",
+        "nationality": "Italy",
+        "shirtNumber": null
+      },
+      {
+        "name": "Armand Lauriente",
+        "position": "Offence",
+        "nationality": "France",
+        "shirtNumber": null
+      },
+      {
+        "name": "Kieron Bowie",
+        "position": "Offence",
+        "nationality": "Scotland",
+        "shirtNumber": null
+      },
+      {
+        "name": "Sebastiano Esposito",
+        "position": "Offence",
+        "nationality": "Italy",
+        "shirtNumber": null
+      },
+      {
+        "name": "Benjamín Domínguez",
+        "position": "Offence",
+        "nationality": "Argentina",
+        "shirtNumber": null
+      },
+      {
+        "name": "Laurs Skjellerup",
+        "position": "Offence",
+        "nationality": "Denmark",
+        "shirtNumber": null
+      }
+    ]
+  },
+  "Udinese Calcio": {
+    "venue": "Dacia Arena",
+    "founded": 1896,
+    "clubColors": "White / Black",
+    "coach": "Kosta Runjaić",
+    "squad": [
+      {
+        "name": "Daniele Padelli",
+        "position": "Goalkeeper",
+        "nationality": "Italy",
+        "shirtNumber": null
+      },
+      {
+        "name": "Maduka Okoye",
+        "position": "Goalkeeper",
+        "nationality": "Nigeria",
+        "shirtNumber": null
+      },
+      {
+        "name": "Bartosz Mrozek",
+        "position": "Goalkeeper",
+        "nationality": "Poland",
+        "shirtNumber": null
+      },
+      {
+        "name": "Edoardo Piana",
+        "position": "Goalkeeper",
+        "nationality": "Italy",
+        "shirtNumber": null
+      },
+      {
+        "name": "Enzo Ebosse",
+        "position": "Defence",
+        "nationality": "Cameroon",
+        "shirtNumber": null
+      },
+      {
+        "name": "Hassane Kamara",
+        "position": "Defence",
+        "nationality": "Ivory Coast",
+        "shirtNumber": null
+      },
+      {
+        "name": "Alessandro Zanoli",
+        "position": "Defence",
+        "nationality": "Italy",
+        "shirtNumber": null
+      },
+      {
+        "name": "Christian Kabasele",
+        "position": "Defence",
+        "nationality": "Belgium",
+        "shirtNumber": null
+      },
+      {
+        "name": "Oumar Solet",
+        "position": "Defence",
+        "nationality": "France",
+        "shirtNumber": null
+      },
+      {
+        "name": "Mërgim Vojvoda",
+        "position": "Defence",
+        "nationality": "Kosovo",
+        "shirtNumber": null
+      },
+      {
+        "name": "Nicolo Bertola",
+        "position": "Defence",
+        "nationality": "Italy",
+        "shirtNumber": null
+      },
+      {
+        "name": "James Abankwah",
+        "position": "Defence",
+        "nationality": "Ireland",
+        "shirtNumber": null
+      },
+      {
+        "name": "Matteo Palma",
+        "position": "Defence",
+        "nationality": "Germany",
+        "shirtNumber": null
+      },
+      {
+        "name": "Jurgen Ekkelenkamp",
+        "position": "Midfield",
+        "nationality": "Netherlands",
+        "shirtNumber": null
+      },
+      {
+        "name": "Giorgi Chakvetadze",
+        "position": "Midfield",
+        "nationality": "Georgia",
+        "shirtNumber": null
+      },
+      {
+        "name": "Sandi Lovric",
+        "position": "Midfield",
+        "nationality": "Slovenia",
+        "shirtNumber": null
+      },
+      {
+        "name": "Jesper Karlström",
+        "position": "Midfield",
+        "nationality": "Sweden",
+        "shirtNumber": null
+      },
+      {
+        "name": "Jakub Piotrowski",
+        "position": "Midfield",
+        "nationality": "Poland",
+        "shirtNumber": null
+      },
+      {
+        "name": "Oier Zarraga",
+        "position": "Midfield",
+        "nationality": "Spain",
+        "shirtNumber": null
+      },
+      {
+        "name": "Lennon Miller",
+        "position": "Midfield",
+        "nationality": "Scotland",
+        "shirtNumber": null
+      },
+      {
+        "name": "Unai Gomez",
+        "position": "Midfield",
+        "nationality": "Spain",
+        "shirtNumber": null
+      },
+      {
+        "name": "Juan Arizala",
+        "position": "Midfield",
+        "nationality": "Colombia",
+        "shirtNumber": null
+      },
+      {
+        "name": "David Pejičić",
+        "position": "Midfield",
+        "nationality": "Slovenia",
+        "shirtNumber": null
+      },
+      {
+        "name": "Nicolò Zaniolo",
+        "position": "Offence",
+        "nationality": "Italy",
+        "shirtNumber": null
+      },
+      {
+        "name": "Keinan Davis",
+        "position": "Offence",
+        "nationality": "England",
+        "shirtNumber": null
+      },
+      {
+        "name": "Vakoun Issouf Bayo",
+        "position": "Offence",
+        "nationality": "Ivory Coast",
+        "shirtNumber": null
+      },
+      {
+        "name": "Lazar Jovanovic",
+        "position": "Offence",
+        "nationality": "Serbia",
+        "shirtNumber": null
+      },
+      {
+        "name": "Idrissa Guèye",
+        "position": "Offence",
+        "nationality": "Senegal",
+        "shirtNumber": null
+      },
+      {
+        "name": "Giulio Vinciati",
+        "position": "Offence",
+        "nationality": "Italy",
+        "shirtNumber": null
+      }
+    ]
+  },
   "Valencia CF": {
     "venue": "Estadio de Mestalla",
     "founded": 1919,
