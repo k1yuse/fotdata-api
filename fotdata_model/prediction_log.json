@@ -1513,5 +1513,50 @@
     "actual": null,
     "actual_score": null,
     "correct": null
+  },
+  "CL|VfB Stuttgart|Club Atlético de Madrid|2026-10-20": {
+    "league": "CL",
+    "home_team": "VfB Stuttgart",
+    "away_team": "Club Atlético de Madrid",
+    "date": "2026-10-20T19:00:00Z",
+    "predicted": "away_win",
+    "home_win_prob": 0.389,
+    "draw_prob": 0.181,
+    "away_win_prob": 0.43,
+    "predicted_score": "1-2",
+    "logged_at": "2026-09-25T21:17:18.084605",
+    "actual": null,
+    "actual_score": null,
+    "correct": null
+  },
+  "CL|Liverpool FC|Villarreal CF|2026-10-20": {
+    "league": "CL",
+    "home_team": "Liverpool FC",
+    "away_team": "Villarreal CF",
+    "date": "2026-10-20T19:00:00Z",
+    "predicted": "home_win",
+    "home_win_prob": 0.55,
+    "draw_prob": 0.212,
+    "away_win_prob": 0.238,
+    "predicted_score": "2-1",
+    "logged_at": "2026-09-25T21:17:18.084605",
+    "actual": null,
+    "actual_score": null,
+    "correct": null
+  },
+  "CL|Paris Saint-Germain FC|FC Barcelona|2026-10-20": {
+    "league": "CL",
+    "home_team": "Paris Saint-Germain FC",
+    "away_team": "FC Barcelona",
+    "date": "2026-10-20T19:00:00Z",
+    "predicted": "home_win",
+    "home_win_prob": 0.514,
+    "draw_prob": 0.184,
+    "away_win_prob": 0.302,
+    "predicted_score": "2-1",
+    "logged_at": "2026-09-25T21:17:18.084605",
+    "actual": null,
+    "actual_score": null,
+    "correct": null
   }
 }
