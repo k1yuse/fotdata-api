@@ -1205,13 +1205,18 @@ async function loadBigMatch() {
       return m.status !== 'FINISHED' && d > now && d <= horizon;
     });
     if (!upcoming.length) { banner.style.display = 'none'; return; }
+    // prestige는 "빅매치 자격이 있는가"만 거르는 기준으로 쓰고, 자격을 통과한
+    // 경기들 중에서는 가장 가까운 날짜를 보여줌 — 그래야 임박한 빅매치가 있는데
+    // 더 먼 미래의 "더 센" 매치업한테 밀려나는 일이 없고, 경기가 끝나면
+    // upcoming 필터에서 자동으로 빠지면서 바로 다음 빅매치로 넘어감
     const scored = upcoming.map(m => {
       const hp = teamPrestigeCache[m.home_team] ?? 0;
       const ap = teamPrestigeCache[m.away_team] ?? 0;
       return { ...m, matchScore: Math.min(hp, ap) };
-    }).sort((a, b) => b.matchScore - a.matchScore || new Date(a.date) - new Date(b.date));
+    }).filter(m => m.matchScore >= BIGMATCH_MIN_PRESTIGE)
+      .sort((a, b) => new Date(a.date) - new Date(b.date));
     const big = scored[0];
-    if (!big || big.matchScore < BIGMATCH_MIN_PRESTIGE) { banner.style.display = 'none'; return; }
+    if (!big) { banner.style.display = 'none'; return; }
     await renderBigMatchBanner(big);
     banner.style.display = 'block';
   } catch (e) {
