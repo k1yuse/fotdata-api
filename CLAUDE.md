@@ -48,10 +48,10 @@
 
 ```
 fotdata-api/
-├── main.py                 # FastAPI 백엔드 (515줄) — 전체 API 엔드포인트
-├── update_data.py          # 데이터 수집 + 피처 생성 + 모델 학습 + 파생 산출물 생성 (826줄)
-├── FotData.html            # 메인 웹앱 (예측/순위/UCL 토너먼트/선수/우승예측/승부차기 미니게임)
-├── landing.html             # 랜딩 페이지 원본
+├── main.py                 # FastAPI 백엔드 (769줄) — 전체 API 엔드포인트
+├── update_data.py          # 데이터 수집 + 피처 생성 + 모델 학습 + 파생 산출물 생성 (1,241줄)
+├── FotData.html            # 메인 웹앱 (3,730줄, 탭: 경기예측/순위예측/순위표(+UCL 리그스테이지·토너먼트)/일정/선수/승부차기, 모달: 팀정보(개요·순위·경기·스쿼드·플레이어통계(준비중)·팀통계·이적)/경기예측 미리보기/트랙레코드/전역 팀검색(Ctrl·⌘K)/토너먼트 대진, 위젯: 빅매치·오늘의(다음) 경기·내 팀(즐겨찾기, localStorage)·PWA 설치 배너·Ko-fi 후원)
+├── landing.html             # 랜딩 페이지 원본 (924줄 — 인트로 애니메이션(세션당 1회), 히어로+실시간 스탯(/accuracy·/teams), 리그별 1위 스트립, 예측 목업, EPL 순위 미리보기, 기능 소개)
 ├── index.html               # 루트(`/`)에서 서빙되는 파일 — landing.html의 사본 (아래 5.1 참고)
 ├── FotData_01.ipynb        # 초기 개발용 주피터 노트북 — 지금은 update_data.py가 대체, 참고용
 ├── manifest.json            # PWA 매니페스트
@@ -107,8 +107,10 @@ cp landing.html index.html
 - H2H 최근 10경기 홈팀 승률도 피처로 사용
 - 최종적으로 LogisticRegression 모델(`logistic_regression.pkl`)로 H/D/A 확률 산출
 
-### 5.4 우승 예측 (`simulate_season`, update_data.py)
-- 몬테카를로 시뮬레이션 1000회, 팀별 ELO에 매 경기 가우시안 노이즈(σ=50) 추가해 변동성 반영
+### 5.4 우승 예측 (순위 예측 탭)
+- **화면에 보이는 확률은 브라우저에서 계산됨** (FotData.html `runSimulation()`, "시뮬레이션 시작" 버튼, 기본 1,000회·슬라이더 최대 10,000회): ELO=`1500+(win_rate−0.33)×리그계수+prestige(+홈 70)`, 리그계수·시즌폼 노이즈가 리그별로 다름(PL/PD 650·SA 750·BL1 1300·FL1 1400 / 노이즈 160·150·150·90·60), 경기별 노이즈 σ40, 무승부 25% 고정.
+- 서버 `simulate_season`(update_data.py, 계수 1000·σ50)도 매일 `champion_predictions.json`을 만들지만 **그 확률 값은 화면에 쓰이지 않음** — `/predict/champion`은 팀 목록 + win_rate/prestige 공급용으로만 쓰임(2026-09-27 코드 확인).
+- 두 시뮬레이션 모두 **현재 승점을 반영하지 않고 38(34)경기 전체 시즌을 0점부터** 시뮬레이션함 — 시즌이 진행될수록 실제 순위와 괴리가 커짐(개선 백로그 12.1 참고).
 - 결과: 우승 확률 / TOP4 확률 / 강등 확률
 - 강등 확률 집계 인원수는 리그별로 다름(`RELEGATION_COUNT`): 18팀 리그(분데스리가/리그앙)는
   하위 2팀만 집계(16위 강등 PO 대상은 제외, FotData.html의 `runSimulation()` releCount와
@@ -141,7 +143,7 @@ cp landing.html index.html
 - 로딩 애니메이션: 배경 칩 없이 공만 노출, `@keyframes logoBallSpin`으로 1.6초 중 앞 40%(~0.64초)에 360° 회전 후 나머지는 정지 — "빠르게 한 바퀴 돌고 잠깐 쉬기" 반복.
 - `icon-192.png`/`icon-512.png`는 `generate_icons.py`(Pillow)로 위 SVG 좌표를 그대로 래스터화해서 생성 — 모양을 또 바꿀 일이 있으면 이 스크립트의 `BG`/`BALL`/`LINES` 상수만 고치고 재실행.
 
-**애니메이션(펼침/접힘) 구현 기법**: `display:none↔block` 토글에 열림/닫힘 애니메이션을 넣을 때, `transition:none`으로 끄고 시작 transform을 강제로 찍은 뒤 `void el.offsetHeight`로 리플로우, 그다음 `transition:''`(복원)+`open` 클래스 추가하는 순서를 반드시 지켜야 함. 처음엔 `void el.offsetWidth` 강제 리플로우만으로 될 거라 생각했는데, 두 클래스(앵커 클래스+open 클래스)를 같은 동기 틱에 붙이면 브라우저가 중간 상태를 건너뛰고 예전 위치를 트랜지션 시작값으로 써버리는 문제가 있었음 — `transition:none`+강제 리플로우+재활성화 조합만 안정적으로 동작함을 후원 패널(kofi-panel)에서 확인 후 팀 선택 팝업에도 동일 기법 적용. 후원 패널은 데스크톱에서 헤더 버튼 클릭 시 그 버튼 바로 아래(`left:50%;transform:translateX(-50%)`)에, 모바일에서는 기존 하단 플로팅 위치에 각각 다르게 앵커링됨(`positionKofiPanel()`이 어느 트리거가 보이는지로 분기).
+**애니메이션(펼침/접힘) 구현 기법**: `display:none↔block` 토글에 열림/닫힘 애니메이션을 넣을 때, `transition:none`으로 끄고 시작 transform을 강제로 찍은 뒤 `void el.offsetHeight`로 리플로우, 그다음 `transition:''`(복원)+`open` 클래스 추가하는 순서를 반드시 지켜야 함. 처음엔 `void el.offsetWidth` 강제 리플로우만으로 될 거라 생각했는데, 두 클래스(앵커 클래스+open 클래스)를 같은 동기 틱에 붙이면 브라우저가 중간 상태를 건너뛰고 예전 위치를 트랜지션 시작값으로 써버리는 문제가 있었음 — `transition:none`+강제 리플로우+재활성화 조합만 안정적으로 동작함을 후원 패널(kofi-panel)에서 확인 후 팀 선택 팝업에도 동일 기법 적용. 후원 패널은 데스크톱에서 헤더 버튼 클릭 시 그 버튼 바로 아래(버튼 오른쪽 끝에 맞춰 정렬, `right = innerWidth − 버튼.right`)에, 모바일에서는 기존 하단 플로팅 위치에 각각 다르게 앵커링됨(`positionKofiPanel()`이 어느 트리거가 보이는지로 분기).
 
 **footer 하단 고정**: 콘텐츠가 짧은 탭(승부차기 등)에서 footer가 화면 중간에 뜨는 문제 → `body{display:flex;flex-direction:column}` + `body>.container{flex:1 0 auto}` + `footer{flex-shrink:0}`로 해결. **주의**: `.container`가 `margin:0 auto`로 최대폭 중앙정렬을 하고 있었는데, flex item이 되면서 가로축(cross-axis) auto margin이 flex의 기본 stretch를 무효화해 컨텐츠 크기로 쪼그라드는 회귀가 발생했음(전 탭이 작은 박스로 보임) → `.container`에 `width:100%`를 명시해서 해결. flex 부모 밑에서 자식에게 `margin:auto` 중앙정렬을 쓸 때는 항상 이 상호작용을 의심할 것.
 
@@ -186,7 +188,7 @@ cp landing.html index.html
 2. **프론트엔드**: `git push` → Vercel 자동 재배포
 3. **일일 데이터 갱신**: GitHub Actions(`update_data.yml`, 매일 UTC 18:00)가 `update_data.py` 실행 → `fotdata_model/*` 변경분을 자동 커밋·푸시 (`자동 데이터 업데이트 YYYY-MM-DD`)
    - ⚠️ 이 워크플로우에는 `FOOTBALL_API_KEY`만 GitHub Secrets로 주입됨. `API_FOOTBALL_KEY`는 설정돼 있지 않아서, GitHub Actions 실행에서는 `fetch_top_scorers()`가 조용히 스킵된다 — 선수 데이터는 현재 **로컬에서 수동 실행할 때만** 갱신 가능. 자동화하려면 `API_FOOTBALL_KEY`도 GitHub Secrets에 추가해야 함.
-   - Render 무료 플랜은 아웃바운드 API 호출이 막혀 있어서, 모든 외부 데이터(football-data.org, API-Football)는 반드시 GitHub Actions/로컬에서 미리 fetch해 JSON/CSV 캐시로 만든 뒤 서빙해야 한다. Render 서버가 직접 외부 API를 호출하는 코드는 작동하지 않는다.
+   - 외부 데이터(football-data.org, API-Football)는 GitHub Actions/로컬에서 미리 fetch해 JSON/CSV 캐시로 만든 뒤 서빙하는 구조. (예전엔 "Render 무료 플랜은 아웃바운드 호출이 막혀 있다"고 적혀 있었으나 2026-09-27 확인 결과 틀림 — `/proxy/logo`가 Render에서 crests.football-data.org를 직접 받아와 200을 반환함. 캐시 구조를 유지하는 실제 이유는 API 키·요청 한도·콜드스타트 지연.)
    - `API_FOOTBALL_KEY`를 GitHub Secrets에 넣지 않은 것은 의도적인 선택이다: API-Football 무료 플랜은 2024 시즌 데이터만 제공해서, 자동화해도 최신 시즌 선수 스탯은 어차피 못 가져온다. 유료 플랜(Pro, $19/월)으로 업그레이드하기 전까지는 선수 데이터는 로컬에서 수동으로만 `python update_data.py`를 돌려 갱신한다.
    - `update_prediction_log()`(5.6)는 GitHub Actions 러너에서 **Render 배포 API로 직접 HTTP 요청**을 보낸다(로컬/러너 → Render는 인바운드라 문제 없음, Render 무료 플랜의 아웃바운드 제한과는 무관). 그 시점에 Render가 자고 있으면 첫 호출에서 콜드스타트(~50초)가 걸릴 수 있어 타임아웃을 60초로 넉넉히 잡아둠.
 
@@ -232,6 +234,14 @@ python update_data.py
 - ~~순위예측 "시뮬레이션 시작" 버튼이 "계산 중..."으로 바뀔 때 텍스트가 짧아져 버튼 폭이 줄고 옆 슬라이더 영역이 늘었다 줄었다 함~~ → 2026-09-23 해결. 버튼에 `min-width:148px`+텍스트 중앙정렬 고정.
 - ~~예측 결과 "OO 최근 경기" 제목이 팀명 첫 단어만(예: "Aston", "AFC") 잘려서 표시~~ → 2026-09-23 해결. `renderForm()`에서 `fd.team.split(' ')[0]` 대신 `fd.team` 전체를 쓰도록 수정.
 
+**2026-09-27 전체 코드 재검토에서 확인된 미해결 이슈** (전부 실제 호출/데이터로 검증함):
+- **UCL 경기 대부분 예측 불가**: `team_stats.csv`엔 5대 리그 팀만 있어서, 5대 리그 밖 팀(스포르팅, 갈라타사라이, 브뤼헤 등)이 낀 UCL 경기는 `/predict`가 404 — 남은 UCL 126경기 중 84경기. 화면엔 "서버 연결 오류"(경기예측 탭)나 "예측을 불러올 수 없어요"(일정 탭 모달)로 떠서 원인이 안 보이고, 트랙레코드에서도 조용히 빠짐. LEAGUE_DATA의 UCL 팀 목록엔 이 팀들이 선택 가능하게 들어 있음.
+- **scikit-learn 버전 불일치**: GitHub Actions(`update_data.yml`)는 `pip install scikit-learn`을 버전 고정 없이 설치해서 현재 모델이 **1.9.1로 저장**되는데, Render는 `requirements.txt`의 **1.7.2**로 로드함(로드 시 InconsistentVersionWarning). 지금은 돌아가지만 sklearn이 내부 구조를 바꾸면 서버가 모델 로드에 실패할 수 있음 — `main.py`의 `multi_class` 패치도 이 불일치 때문에 생긴 것. 워크플로우에서 requirements.txt와 같은 버전으로 고정해야 함.
+- **화면의 "AI 모델 정확도"가 실제 서빙 모델 정확도가 아님**: `accuracy.json`의 `best`는 LR/RF/XGB 중 최고값(현재 RF 54.9%)인데, 실제 예측은 LR(54.7%)만 씀. 랜딩 히어로 스탯도 같은 값을 씀.
+- **오프라인 정확도가 낙관적으로 나올 구조**: 학습 피처 중 팀 공격력/수비력/승률은 과거 경기에도 "전체 기간 합산 스탯"(미래 경기 포함)을 붙이고, 학습/검증도 시간순이 아닌 무작위 분할 — 54% 수치보다 실전 성능이 낮을 수 있음. 실제 성능은 트랙레코드(10/10 경기부터 결과 채워짐)로 판단할 것.
+- **players.json 덮어쓰기 위험**: `fetch_top_scorers()`는 API-Football이 요청 한도 초과 시 200 응답 + 빈 `response`를 주는 경우에도 그대로 저장해서, 로컬에서 한도가 찬 상태로 실행하면 득점왕/도움왕 데이터가 빈 배열로 덮어써짐(선수 탭 404).
+- 참고(버그 아님): 2026-09-27 기준 트랙레코드는 예측 104건 기록·결과 확정 0건 — 마지막 종료 경기가 9/20이고 기록 시작(9/22) 이후 A매치 휴식기라 첫 대상 경기가 10/10임. 정상.
+
 ## 11. 시즌 전환 체크리스트 (매년 반복 작업)
 
 새 시즌이 시작될 때마다 아래를 전부 수동 확인:
@@ -249,7 +259,9 @@ python update_data.py
 1. **4시즌 블렌딩** — 아래 "football-data.org 4시즌 확장 검토" 참고.
 2. **학습/서빙 ELO 불일치 해소** — 학습 피처(`build_features`)는 경기마다 갱신되는 실제 ELO(`calculate_elo_ratings`, K=20, 홈 +70)와 실제 최근 폼/최근 평균 득실점을 쓰는데, 서빙(`/predict`, main.py)은 이 값들을 저장해두지 않아서 블렌딩 승률로 ELO를 재구성(`1500+(win_rate−0.33)×1000`+prestige+감쇠 홈어드밴티지)하고 폼도 `win_rate×15`로 대신함 — 모델이 배운 입력과 실제 예측 때 받는 입력의 의미/스케일이 다름. `update_data.py`에서 팀별 최종 ELO(`final_elo`, 이미 반환만 되고 버려지는 중)와 실제 최근 폼·평균 득실점을 파일로 저장하고 `/predict`가 그걸 쓰도록 바꾸는 게 정확도 개선 여지가 가장 큼. 단 현재 서빙 쪽 보정(prestige, 전력차 홈어드밴티지 감쇠 — 5.3)은 비현실적 확률을 막으려고 일부러 넣은 것이라, 바꾼 뒤 트랙레코드/정확도로 전후 비교 필수.
 3. **맞대결 밑 빈 공간** — 화면에 아직 없는 정보로 채움: 두 팀의 현재 리그 순위·승점 + 홈팀의 이번 시즌 "홈 경기" 성적 vs 원정팀의 "원정 경기" 성적(현재 공격력/수비력은 홈·원정 구분 없는 블렌딩값이라 겹치지 않음). 모든 리그 데이터로 가능.
-4. **트랙레코드 노출 강화** — 지금은 예측 버튼 아래 작은 링크(모달)뿐. 홈에 "지난주 AI 예측 적중 N/M" 같은 카드를 두면 신뢰도 효과가 가장 큼.
+4. **트랙레코드 노출 강화** — 지금은 예측 버튼 아래 작은 링크(모달)뿐. 홈에 "지난주 AI 예측 적중 N/M" 같은 카드를 두면 신뢰도 효과가 가장 큼. (첫 결과는 10/10 경기부터라 카드는 그 이후에 의미 있음)
+5. **(2026-09-27 재검토로 추가) 운영 전 우선 수정 권장** — 10번 "미해결 이슈" 항목들: ① GitHub Actions의 scikit-learn 버전 고정(서버 다운 위험, 수정 간단) ② UCL 5대 리그 밖 팀 처리(최소한 "이 팀은 예측 데이터가 없어요" 안내, 더 나아가 UCL 경기로만 스탯 계산) ③ 표시 정확도를 실제 서빙 모델(LR) 값으로 ④ players.json 빈 응답 덮어쓰기 방지 ⑤ 순위 예측 시뮬레이션이 현재 승점+남은 일정 기준으로 돌도록(5.4).
+- 참고: 팀 정보 모달에 "팀 통계" 탭이 이미 있지만 블렌딩값(승률/공격/수비/체급)만 보여줌 — 3번(홈·원정 분리 성적)과 겹치지 않음을 코드로 확인.
 
 ### 12.2 랜딩페이지 스크롤 3D 연출 (2026-09-27 제안, 미착수)
 - 방향: 사실적 3D(선수 모델·경기장 렌더) 대신 브랜드(진한 남색 배경 + 파란 선 축구공)를 3D로 확장한 "와이어프레임 데이터 아트". 무겁지 않고 선수·구단 이미지 저작권 문제도 피함.
