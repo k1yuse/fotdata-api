@@ -931,40 +931,69 @@ def train_models(df_total):
     print(f"✅ accuracy.json 저장 완료")
     return accuracy_data
 
-def main():
-    print("=== FotData 자동 업데이트 시작 ===")
+# football-data.org 무료 플랜이 접근 가능한 시즌(최근 4시즌, 2022 이하는 403 — 2026-09-23 실측)
+MATCH_SEASONS = [2023, 2024, 2025, 2026]
+MATCH_COLUMNS = ['match_id', 'date', 'league', 'home_team', 'away_team',
+                 'home_goals', 'away_goals', 'matchday', 'result', 'season']
 
-    # 1. 데이터 수집 (24-25 + 25-26 + 26-27)
-    all_dfs = []
-    for season in [2024, 2025, 2026]:
+def collect_matches():
+    """전 시즌 경기를 매번 다시 받아서 기존 all_matches.csv와 합집합으로 병합해 저장.
+
+    예전엔 매일 받아오면서도 현재 시즌(2026-08-01 이후)만 새 데이터로 바꾸고 그 이전은 "기존 CSV
+    유지"라, 과거 어느 시점에 덜 받아진 24-25 시즌(BL1 272/306, FL1 255/306, PD·SA 323/380)과
+    23-24 시즌(BL1·SA·FL1 통째로 없음)이 그대로 굳어 있었음(2026-09-27 발견).
+    - 같은 경기(날짜+홈+원정)는 새로 받은 쪽을 우선
+    - 요청이 실패한 리그·시즌(한도 초과 등)은 기존 데이터를 그대로 유지 — 실패가 삭제로 이어지지 않게
+    """
+    fetched, failed = [], []
+    for season in MATCH_SEASONS:
         print(f"\n[{season}-{season+1} 시즌]")
         for code in LEAGUES_V2:
             df_s = fetch_matches(code, season)
-            if not df_s.empty:
+            if df_s.empty:
+                failed.append(f"{code} {season}")
+            else:
                 df_s['season'] = season
-                all_dfs.append(df_s)
+                fetched.append(df_s)
             time.sleep(6)
+    if failed:
+        print(f"⚠️ 수집 실패(기존 데이터 유지): {', '.join(failed)}")
 
-    df_total = pd.concat(all_dfs, ignore_index=True)
-    df_total = df_total.drop_duplicates(
-        subset=['date','home_team','away_team']
-    ).sort_values('date').reset_index(drop=True)
-    print(f"\n✅ 전체 데이터: {len(df_total)}경기")
-
-    # 2. 전체 경기 저장 (H2H, 폼용)
-    # 기존 데이터 불러오기
+    parts = fetched[:]
     existing_path = f"{MODEL_DIR}/all_matches.csv"
     if os.path.exists(existing_path):
         df_existing = pd.read_csv(existing_path)
         df_existing['date'] = pd.to_datetime(df_existing['date'])
-        # 26-27 이전 데이터는 기존 것 유지, 26-27만 새로 교체
-        df_old = df_existing[df_existing['date'] < '2026-08-01']
-        df_new_2627 = df_total[df_total['date'] >= '2026-08-01']
-        df_total = pd.concat([df_old, df_new_2627], ignore_index=True)
-        df_total = df_total.drop_duplicates(subset=['date','home_team','away_team']).sort_values('date').reset_index(drop=True)
-        print(f"✅ 기존 데이터 유지 + 26-27 업데이트: {len(df_total)}경기")
+        parts.append(df_existing)
+    if not parts:
+        raise RuntimeError("경기 데이터를 하나도 받지 못했고 기존 파일도 없음")
 
-    df_total.to_csv(f"{MODEL_DIR}/all_matches.csv", index=False, encoding='utf-8-sig')
+    df_total = pd.concat(parts, ignore_index=True)
+    df_total = df_total[[c for c in MATCH_COLUMNS if c in df_total.columns]]
+    df_total = df_total.drop_duplicates(subset=['date', 'home_team', 'away_team'], keep='first')
+
+    # match_id 없는 예전 행(초기 노트북 시절 데이터)은 "Bayern München"/"Inter Milan"/"RCD Espanyol"처럼
+    # 팀 이름 표기가 달라서 위 중복 제거에 안 걸리고 같은 경기가 두 번 들어가 있었음(24-25 BL1·PD·SA 237경기,
+    # 전부 같은 날·같은 스코어의 정식 경기가 따로 있음을 확인 — 2026-09-27). 정식 데이터(match_id 있음)가
+    # 있는 리그·시즌에서는 예전 행을 버림
+    season_year = df_total['date'].dt.year.where(df_total['date'].dt.month >= 7, df_total['date'].dt.year - 1)
+    has_id = df_total['match_id'].notna()
+    official = set(zip(df_total.loc[has_id, 'league'], season_year[has_id]))
+    legacy_dup = ~has_id & pd.Series([k in official for k in zip(df_total['league'], season_year)], index=df_total.index)
+    if legacy_dup.any():
+        print(f"🧹 이름 표기가 다른 예전 중복 행 {int(legacy_dup.sum())}개 제거")
+    df_total = df_total[~legacy_dup]
+    df_total = df_total.sort_values('date').reset_index(drop=True)
+    df_total['match_id'] = df_total['match_id'].astype('Int64')   # 예전 행은 match_id가 없어 float로 바뀌는 것 방지
+    df_total.to_csv(existing_path, index=False, encoding='utf-8-sig')
+    print(f"\n✅ 전체 경기 데이터: {len(df_total)}경기 (새로 받은 {sum(len(d) for d in fetched)}경기 + 기존 병합)")
+    return df_total
+
+def main():
+    print("=== FotData 자동 업데이트 시작 ===")
+
+    # 1~2. 경기 데이터 수집 + 기존 CSV와 병합 → all_matches.csv
+    df_total = collect_matches()
 
     # 3. 3시즌 혼합 스탯 (예측용) — 경기 수 구간별 가중치 + prestige 보정
     df_stats_current = calculate_blended_stats(df_total)
@@ -1223,4 +1252,9 @@ def fetch_top_scorers():
     print(f"  ✅ players.json 저장 완료")
 
 if __name__ == "__main__":
-    main()
+    import sys
+    if "--matches-only" in sys.argv:
+        # 경기 데이터만 다시 받아서 all_matches.csv 갱신(학습·다른 산출물은 건드리지 않음)
+        collect_matches()
+    else:
+        main()
