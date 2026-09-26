@@ -553,6 +553,97 @@ def get_team_form(team_name: str, n: int = 5):
 
     return {"team": team_name, "form": form}
 
+# ── 경기 분석 API (예측 결과 화면 맞대결 카드 아래: 순위·홈/원정 성적·경기 성향·파워 레이팅 추이) ──
+INSIGHT_N = 10   # 홈/원정 성적·경기 성향 집계 경기 수 (이번 시즌만 보면 홈 경기가 2~3개뿐이라 시즌을 넘어서 봄)
+
+def _team_goals(df, team):
+    """df의 각 경기에서 team 기준 (득점, 실점) 시리즈"""
+    is_home = df['home_team'] == team
+    gf = df['home_goals'].where(is_home, df['away_goals'])
+    ga = df['away_goals'].where(is_home, df['home_goals'])
+    return gf, ga
+
+def _team_current_league(team):
+    """가장 최근 리그(UCL 제외) 경기의 리그 코드"""
+    league_matches = df_matches_all[
+        (df_matches_all['league'] != 'CL') &
+        ((df_matches_all['home_team'] == team) | (df_matches_all['away_team'] == team))
+    ]
+    if league_matches.empty:
+        return None
+    return league_matches.sort_values('date').iloc[-1]['league']
+
+def _team_insight(team, venue):
+    league = _team_current_league(team)
+
+    standing = None
+    if league:
+        try:
+            table = get_standings(league)['standings']
+            row = next((r for r in table if r['team'] == team), None)
+            if row:
+                standing = {k: row[k] for k in ('rank', 'played', 'wins', 'draws', 'losses', 'points', 'gd')}
+                standing['total'] = len(table)
+        except HTTPException:
+            pass
+
+    # 홈팀은 최근 홈 리그 경기, 원정팀은 최근 원정 리그 경기
+    venue_df = df_matches_all[
+        (df_matches_all['league'] != 'CL') & (df_matches_all[f'{venue}_team'] == team)
+    ].sort_values('date').tail(INSIGHT_N)
+    gf, ga = _team_goals(venue_df, team)
+    venue_record = {
+        "n":        len(venue_df),
+        "wins":     int((gf > ga).sum()),
+        "draws":    int((gf == ga).sum()),
+        "losses":   int((gf < ga).sum()),
+        "scored":   round(float(gf.mean()), 2) if len(venue_df) else None,
+        "conceded": round(float(ga.mean()), 2) if len(venue_df) else None,
+    }
+
+    # 경기 성향: 대회 구분 없이 최근 경기
+    recent_df = df_matches_all[
+        (df_matches_all['home_team'] == team) | (df_matches_all['away_team'] == team)
+    ].sort_values('date').tail(INSIGHT_N)
+    rgf, rga = _team_goals(recent_df, team)
+    total = rgf + rga
+    tendency = {
+        "n":            len(recent_df),
+        "total_goals":  round(float(total.mean()), 2) if len(recent_df) else None,
+        "over_2_5":     int((total > 2.5).sum()),
+        "btts":         int(((rgf > 0) & (rga > 0)).sum()),
+        "clean_sheets": int((rga == 0).sum()),
+    }
+
+    state = team_state.get(team, {})
+    power = {
+        "elo":     state.get('elo'),
+        "history": [{"date": d, "elo": e} for d, e in state.get('elo_history', [])],
+    }
+
+    return {
+        "team":        team,
+        "league":      league,
+        "league_name": LEAGUE_MAP.get(league) if league else None,
+        "standing":    standing,
+        "venue":       venue_record,
+        "tendency":    tendency,
+        "power":       power,
+    }
+
+@app.get("/match/insights")
+def get_match_insights(home_team: str, away_team: str):
+    home_team = TEAM_NAME_MAP.get(home_team, home_team)
+    away_team = TEAM_NAME_MAP.get(away_team, away_team)
+    for t in (home_team, away_team):
+        if t not in team_state:
+            raise HTTPException(status_code=404, detail=f"팀을 찾을 수 없습니다: {t}")
+    return {
+        "home": _team_insight(home_team, 'home'),
+        "away": _team_insight(away_team, 'away'),
+        "window": INSIGHT_N,
+    }
+
     # ── 선수 데이터 API ──
 import json as _json
 

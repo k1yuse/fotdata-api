@@ -194,6 +194,7 @@ FEATURES = [
 ELO_K = 20
 ELO_HOME_ADVANTAGE = 70
 FORM_N, GOALS_N, STATS_N, H2H_N = 5, 10, 38, 10
+ELO_TRAIL_N = 20   # 예측 결과 화면 "파워 레이팅 추이" 그래프용으로 저장하는 최근 경기 수
 MIN_HISTORY = 5   # 이보다 경기 기록이 적은 팀이 낀 경기는 학습에서 제외
 
 def _team_snapshot(history):
@@ -228,6 +229,7 @@ def build_point_in_time_features(df):
     elo = {}
     history = {}   # team -> [{'gf','ga','pts','league'}]
     h2h = {}       # (팀A, 팀B) 정렬 튜플 -> [승리팀 또는 None]
+    elo_trail = {} # team -> [(날짜, 경기 후 ELO)]
 
     def initial_elo(league, date):
         # 데이터 첫 시즌 초반에 등장한 팀은 1500에서 시작. 이후 처음 등장하는 팀(승격팀 등)은
@@ -284,6 +286,9 @@ def build_point_in_time_features(df):
         history[away].append({'gf': m['away_goals'], 'ga': m['home_goals'], 'pts': away_pts, 'league': league})
         winner = home if m['result'] == 'H' else (away if m['result'] == 'A' else None)
         h2h.setdefault(tuple(sorted((home, away))), []).append(winner)
+        day = date.strftime('%Y-%m-%d')
+        elo_trail.setdefault(home, []).append((day, round(elo[home], 1)))
+        elo_trail.setdefault(away, []).append((day, round(elo[away], 1)))
 
     team_state = {}
     for team, hist in history.items():
@@ -294,6 +299,7 @@ def build_point_in_time_features(df):
             'elo': round(elo[team], 2),
             'games': len(hist),
             **{k: round(v, 4) for k, v in snap.items()},
+            'elo_history': elo_trail[team][-ELO_TRAIL_N:],
         }
     return pd.DataFrame(rows), team_state
 
