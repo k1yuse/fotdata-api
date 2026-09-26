@@ -10,8 +10,7 @@ import os
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler, LabelEncoder
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, log_loss
 from xgboost import XGBClassifier
 
 API_KEY = os.environ.get('FOOTBALL_API_KEY', '')
@@ -183,163 +182,120 @@ def calculate_blended_stats(df_total):
 
     return df_blended
 
-def get_recent_form(df, team, before_date, n=5):
-    """최근 N경기 승점 합"""
-    team_matches = df[
-        ((df['home_team']==team) | (df['away_team']==team)) &
-        (df['date'] < before_date)
-    ].tail(n)
-    points = 0
-    for _, row in team_matches.iterrows():
-        if row['home_team'] == team:
-            if row['result'] == 'H': points += 3
-            elif row['result'] == 'D': points += 1
-        else:
-            if row['result'] == 'A': points += 3
-            elif row['result'] == 'D': points += 1
-    return points
+FEATURES = [
+    'home_elo','away_elo','elo_diff',
+    'home_form','away_form','form_diff',
+    'home_avg_scored','away_avg_scored','home_avg_conceded','away_avg_conceded',
+    'home_attack','away_attack','home_defense','away_defense',
+    'home_win_rate','away_win_rate','win_rate_diff',
+    'h2h_home_rate'
+]
 
-def get_recent_goals(df, team, before_date, n=10):
-    """최근 N경기 평균 득점, 실점"""
-    team_matches = df[
-        ((df['home_team']==team) | (df['away_team']==team)) &
-        (df['date'] < before_date)
-    ].tail(n)
-    if len(team_matches) == 0:
-        return 1.0, 1.0
-    scored, conceded = 0, 0
-    for _, row in team_matches.iterrows():
-        if row['home_team'] == team:
-            scored += row['home_goals']
-            conceded += row['away_goals']
-        else:
-            scored += row['away_goals']
-            conceded += row['home_goals']
-    return scored / len(team_matches), conceded / len(team_matches)
+ELO_K = 20
+ELO_HOME_ADVANTAGE = 70
+FORM_N, GOALS_N, STATS_N, H2H_N = 5, 10, 38, 10
+MIN_HISTORY = 5   # 이보다 경기 기록이 적은 팀이 낀 경기는 학습에서 제외
 
-def get_h2h_rate(df, home, away, before_date, n=10):
-    """H2H 홈팀 승률"""
-    h2h = df[
-        ((df['home_team']==home) & (df['away_team']==away)) |
-        ((df['home_team']==away) & (df['away_team']==home))
-    ]
-    h2h = h2h[h2h['date'] < before_date].tail(n)
-    if len(h2h) == 0:
-        return 0.33
-    home_wins = len(h2h[((h2h['home_team']==home) & (h2h['result']=='H')) |
-                        ((h2h['away_team']==home) & (h2h['result']=='A'))])
-    return round(home_wins / len(h2h), 3)
+def _team_snapshot(history):
+    """팀의 "지금까지" 경기 기록으로 피처 값 계산 — 학습(경기 직전 시점)과
+    서빙(team_state.json, 오늘 시점)이 반드시 이 함수 하나를 같이 써야 함"""
+    form = history[-FORM_N:]
+    recent = history[-GOALS_N:]
+    season = history[-STATS_N:]
+    return {
+        'form':         sum(x['pts'] for x in form),
+        'avg_scored':   float(np.mean([x['gf'] for x in recent])),
+        'avg_conceded': float(np.mean([x['ga'] for x in recent])),
+        'attack':       float(np.mean([x['gf'] for x in season])),
+        'defense':      float(np.mean([x['ga'] for x in season])),
+        'win_rate':     float(np.mean([x['pts'] == 3 for x in season])),
+    }
 
-def calculate_elo_ratings(df, k=20, home_advantage=70):
-    """ELO 점수 계산 (시간 순서대로)"""
+def build_point_in_time_features(df):
+    """경기를 시간순으로 훑으면서 "그 경기 직전까지의 기록"만으로 피처를 만든다.
+
+    예전 build_features는 ELO·폼은 경기 직전 값을 썼지만 공격력/수비력/승률은
+    전체 기간 합산(미래 경기 포함)을 붙였고, 서빙(/predict)은 이 값들을 저장해두지
+    않아서 블렌딩 승률로 ELO와 폼을 재구성해 넣었다 — 모델이 배운 입력과 실제
+    예측 입력의 의미가 달랐음. 시간순 검증(2026-09-27)에서 이 방식이 정확도
+    48.9→50.8%(26.01~), 44.7→51.8%(25.08~), log loss도 모든 구간에서 개선됐고,
+    확률 보정(예측 확률 ≈ 실제 적중 비율)도 크게 좋아짐.
+
+    반환: (피처 DataFrame(date 포함), 팀별 최종 상태 dict — team_state.json용)
+    """
+    df = df.sort_values('date').reset_index(drop=True)
+    data_start = df['date'].min()
     elo = {}
-    elo_history = []
-    
-    df_sorted = df.sort_values('date').reset_index(drop=True)
-    
-    for _, match in df_sorted.iterrows():
-        home, away = match['home_team'], match['away_team']
-        
-        # 초기값 1500
-        if home not in elo: elo[home] = 1500
-        if away not in elo: elo[away] = 1500
-        
-        # 경기 전 ELO 저장
-        elo_history.append({
-            'date': match['date'],
-            'home_team': home,
-            'away_team': away,
-            'home_elo_before': elo[home],
-            'away_elo_before': elo[away],
-        })
-        
-        # 기대 승률 (홈 어드밴티지 적용)
-        home_elo_adj = elo[home] + home_advantage
-        away_elo_adj = elo[away]
-        expected_home = 1 / (1 + 10 ** ((away_elo_adj - home_elo_adj) / 400))
-        
-        # 실제 결과
-        if match['result'] == 'H':
-            actual_home = 1.0
-        elif match['result'] == 'D':
-            actual_home = 0.5
-        else:
-            actual_home = 0.0
-        
-        # ELO 업데이트
-        change = k * (actual_home - expected_home)
+    history = {}   # team -> [{'gf','ga','pts','league'}]
+    h2h = {}       # (팀A, 팀B) 정렬 튜플 -> [승리팀 또는 None]
+
+    def initial_elo(league, date):
+        # 데이터 첫 시즌 초반에 등장한 팀은 1500에서 시작. 이후 처음 등장하는 팀(승격팀 등)은
+        # 같은 리그 현재 하위 4팀 평균에서 시작 — 1500(중상위권)에서 시작하면 승격팀이
+        # 과대평가됨(실험에서 log loss 소폭 개선 확인)
+        if date < data_start + pd.Timedelta(days=60):
+            return 1500.0
+        league_elos = sorted(elo[t] for t, h in history.items() if h and h[-1]['league'] == league)
+        return float(np.mean(league_elos[:4])) if len(league_elos) >= 4 else 1400.0
+
+    rows = []
+    for _, m in df.iterrows():
+        home, away, date, league = m['home_team'], m['away_team'], m['date'], m['league']
+        for t in (home, away):
+            if t not in elo:
+                elo[t] = initial_elo(league, date)
+                history[t] = []
+
+        if len(history[home]) >= MIN_HISTORY and len(history[away]) >= MIN_HISTORY:
+            hs, as_ = _team_snapshot(history[home]), _team_snapshot(history[away])
+            rec = h2h.get(tuple(sorted((home, away))), [])[-H2H_N:]
+            rows.append({
+                'date':              date,
+                'home_elo':          elo[home],
+                'away_elo':          elo[away],
+                'elo_diff':          elo[home] - elo[away],
+                'home_form':         hs['form'],
+                'away_form':         as_['form'],
+                'form_diff':         hs['form'] - as_['form'],
+                'home_avg_scored':   hs['avg_scored'],
+                'away_avg_scored':   as_['avg_scored'],
+                'home_avg_conceded': hs['avg_conceded'],
+                'away_avg_conceded': as_['avg_conceded'],
+                'home_attack':       hs['attack'],
+                'away_attack':       as_['attack'],
+                'home_defense':      hs['defense'],
+                'away_defense':      as_['defense'],
+                'home_win_rate':     hs['win_rate'],
+                'away_win_rate':     as_['win_rate'],
+                'win_rate_diff':     hs['win_rate'] - as_['win_rate'],
+                'h2h_home_rate':     round(sum(w == home for w in rec) / len(rec), 3) if rec else 0.33,
+                'result':            m['result'],
+            })
+
+        # 결과 반영 (ELO: 홈 어드밴티지 포함 기대승률 대비 실제 결과)
+        expected_home = 1 / (1 + 10 ** ((elo[away] - (elo[home] + ELO_HOME_ADVANTAGE)) / 400))
+        actual_home = {'H': 1.0, 'D': 0.5, 'A': 0.0}[m['result']]
+        change = ELO_K * (actual_home - expected_home)
         elo[home] += change
         elo[away] -= change
-    
-    return pd.DataFrame(elo_history), elo
+        home_pts = {'H': 3, 'D': 1, 'A': 0}[m['result']]
+        away_pts = {'A': 3, 'D': 1, 'H': 0}[m['result']]
+        history[home].append({'gf': m['home_goals'], 'ga': m['away_goals'], 'pts': home_pts, 'league': league})
+        history[away].append({'gf': m['away_goals'], 'ga': m['home_goals'], 'pts': away_pts, 'league': league})
+        winner = home if m['result'] == 'H' else (away if m['result'] == 'A' else None)
+        h2h.setdefault(tuple(sorted((home, away))), []).append(winner)
 
-def build_features(df, df_stats):
-    """피처 생성 (ELO 포함)"""
-    print("ELO 계산 중...")
-    elo_df, final_elo = calculate_elo_ratings(df)
-    
-    # 빠른 조회를 위해 인덱스 설정
-    elo_lookup = {}
-    for _, row in elo_df.iterrows():
-        key = (row['date'], row['home_team'], row['away_team'])
-        elo_lookup[key] = (row['home_elo_before'], row['away_elo_before'])
-    
-    rows = []
-    df_sorted = df.sort_values('date').reset_index(drop=True)
-    
-    for _, match in df_sorted.iterrows():
-        home, away, date = match['home_team'], match['away_team'], match['date']
-        
-        # ELO
-        home_elo, away_elo = elo_lookup.get((date, home, away), (1500, 1500))
-        
-        # 폼
-        home_form = get_recent_form(df, home, date)
-        away_form = get_recent_form(df, away, date)
-
-        # 첫 경기는 데이터 없어서 건너뜀
-        if len(df[(df['date'] < date) & ((df['home_team']==home) | (df['away_team']==home))]) < 5:
+    team_state = {}
+    for team, hist in history.items():
+        if not hist:
             continue
-        if len(df[(df['date'] < date) & ((df['home_team']==away) | (df['away_team']==away))]) < 5:
-            continue
-        
-        # 최근 평균 득실점
-        home_avg_scored, home_avg_conceded = get_recent_goals(df, home, date)
-        away_avg_scored, away_avg_conceded = get_recent_goals(df, away, date)
-        
-        # H2H
-        h2h_rate = get_h2h_rate(df, home, away, date)
-        
-        # 팀 스탯
-        h_stats = df_stats[df_stats['team']==home]
-        a_stats = df_stats[df_stats['team']==away]
-        if h_stats.empty or a_stats.empty:
-            continue
-        h = h_stats.iloc[0]
-        a = a_stats.iloc[0]
-        
-        rows.append({
-            'home_elo':          home_elo,
-            'away_elo':          away_elo,
-            'elo_diff':          home_elo - away_elo,
-            'home_form':         home_form,
-            'away_form':         away_form,
-            'form_diff':         home_form - away_form,
-            'home_avg_scored':   home_avg_scored,
-            'away_avg_scored':   away_avg_scored,
-            'home_avg_conceded': home_avg_conceded,
-            'away_avg_conceded': away_avg_conceded,
-            'home_attack':       h['attack_strength'],
-            'away_attack':       a['attack_strength'],
-            'home_defense':      h['defense_strength'],
-            'away_defense':      a['defense_strength'],
-            'home_win_rate':     h['win_rate'],
-            'away_win_rate':     a['win_rate'],
-            'win_rate_diff':     h['win_rate'] - a['win_rate'],
-            'h2h_home_rate':     h2h_rate,
-            'result':            match['result'],
-        })
-    return pd.DataFrame(rows)
+        snap = _team_snapshot(hist)
+        team_state[team] = {
+            'elo': round(elo[team], 2),
+            'games': len(hist),
+            **{k: round(v, 4) for k, v in snap.items()},
+        }
+    return pd.DataFrame(rows), team_state
 
 def update_team_logos():
     """team_stats.csv에 있는 팀 중 로고 없는 팀을 자동으로 채워넣기"""
@@ -883,6 +839,92 @@ def fetch_ucl_tournament():
         json.dump(stages, f, ensure_ascii=False, indent=2)
     print(f"  ✅ UCL 토너먼트 저장 완료")
 
+def train_models(df_total):
+    """피처 생성 → 시간순 검증 → 전체 기간으로 서빙 모델 재학습 → 모델/team_state/accuracy 저장"""
+    # 4. Feature 생성 — 모든 피처를 "그 경기 직전까지의 기록"으로 계산(미래 정보 누수 없음).
+    # 서빙(/predict)은 같은 정의로 만든 팀별 최종 상태(team_state.json)를 그대로 읽어서 씀.
+    print("\nFeature 생성 중...")
+    df_features, team_state = build_point_in_time_features(df_total)
+    df_features = df_features.replace([np.inf, -np.inf], np.nan).dropna(subset=FEATURES).reset_index(drop=True)
+    print(f"학습 데이터: {len(df_features)}경기")
+
+    # 5. 시간순 검증 — 과거 80%로 학습하고 가장 최근 20% 경기로 채점. 예전의 무작위 분할은
+    # 미래 경기로 학습한 모델이 과거 경기를 맞히는 셈이라 정확도가 부풀려졌음(54.7% → 실제 약 51%)
+    split = int(len(df_features) * 0.8)
+    train_df, test_df = df_features.iloc[:split], df_features.iloc[split:]
+    X_train, y_train = train_df[FEATURES], train_df['result']
+    X_test, y_test = test_df[FEATURES], test_df['result']
+
+    scaler_eval = StandardScaler()
+    X_train_scaled = scaler_eval.fit_transform(X_train)
+    X_test_scaled  = scaler_eval.transform(X_test)
+
+    lr_eval = LogisticRegression(max_iter=2000, random_state=42, C=0.1, solver='lbfgs')
+    lr_eval.fit(X_train_scaled, y_train)
+    acc_lr = accuracy_score(y_test, lr_eval.predict(X_test_scaled))
+    logloss_lr = log_loss(y_test, lr_eval.predict_proba(X_test_scaled), labels=lr_eval.classes_)
+    print(f"✅ Logistic Regression: {acc_lr:.1%} (log loss {logloss_lr:.4f})")
+
+    def make_rf():
+        return RandomForestClassifier(n_estimators=300, max_depth=6, min_samples_leaf=5, random_state=42)
+    def make_xgb():
+        return XGBClassifier(n_estimators=500, max_depth=4, learning_rate=0.02,
+                             subsample=0.8, colsample_bytree=0.8, min_child_weight=5,
+                             random_state=42, eval_metric='mlogloss', verbosity=0)
+
+    acc_rf = accuracy_score(y_test, make_rf().fit(X_train, y_train).predict(X_test))
+    print(f"✅ Random Forest: {acc_rf:.1%}")
+
+    le = LabelEncoder()
+    le.fit(df_features['result'])
+    xgb_eval = make_xgb().fit(X_train, le.transform(y_train))
+    acc_xgb = accuracy_score(y_test, le.inverse_transform(xgb_eval.predict(X_test)))
+    print(f"✅ XGBoost: {acc_xgb:.1%}")
+
+    baseline_home = (y_test == 'H').mean()
+    print(f"   (기준선: 전부 홈승으로 찍으면 {baseline_home:.1%})")
+
+    # 6. 서빙용 모델은 전체 기간으로 다시 학습 (가장 최근 경기까지 반영). 화면에 표시하는
+    # 정확도는 위 시간순 검증 결과.
+    X_all, y_all = df_features[FEATURES], df_features['result']
+    scaler = StandardScaler()
+    lr = LogisticRegression(max_iter=2000, random_state=42, C=0.1, solver='lbfgs')
+    lr.fit(scaler.fit_transform(X_all), y_all)
+    rf = make_rf().fit(X_all, y_all)
+    xgb = make_xgb().fit(X_all, le.transform(y_all))
+
+    joblib.dump(lr,     f"{MODEL_DIR}/logistic_regression.pkl")
+    joblib.dump(rf,     f"{MODEL_DIR}/random_forest.pkl")
+    joblib.dump(xgb,    f"{MODEL_DIR}/xgboost.pkl")
+    joblib.dump(scaler, f"{MODEL_DIR}/scaler.pkl")
+    joblib.dump(le,     f"{MODEL_DIR}/label_encoder.pkl")
+
+    import json as _json
+    with open(f"{MODEL_DIR}/team_state.json", 'w', encoding='utf-8') as f:
+        _json.dump(team_state, f, ensure_ascii=False, indent=1)
+    print(f"✅ team_state.json 저장 완료 ({len(team_state)}팀)")
+
+    # 정확도 저장 (시간순 검증 결과)
+    accuracy_data = {
+        "logistic_regression": round(acc_lr * 100, 1),
+        "random_forest": round(acc_rf * 100, 1),
+        "xgboost": round(acc_xgb * 100, 1),
+        "best": round(max(acc_lr, acc_rf, acc_xgb) * 100, 1),
+        "log_loss": round(logloss_lr, 4),
+        "baseline_home_win": round(baseline_home * 100, 1),
+        "evaluation": "time_split",
+        "test_matches": len(test_df),
+        "test_from": test_df['date'].min().strftime('%Y-%m-%d'),
+        "test_to": test_df['date'].max().strftime('%Y-%m-%d'),
+        "total_matches": len(df_total),
+        "training_matches": len(df_features),
+        "updated_at": pd.Timestamp.now().isoformat(),
+    }
+    with open(f"{MODEL_DIR}/accuracy.json", 'w', encoding='utf-8') as f:
+        _json.dump(accuracy_data, f, ensure_ascii=False, indent=2)
+    print(f"✅ accuracy.json 저장 완료")
+    return accuracy_data
+
 def main():
     print("=== FotData 자동 업데이트 시작 ===")
 
@@ -922,65 +964,8 @@ def main():
     df_stats_current = calculate_blended_stats(df_total)
     df_stats_current.to_csv(f"{MODEL_DIR}/team_stats.csv", index=False, encoding='utf-8-sig')
     
-    # 4. Feature 생성 (전체 데이터로 학습)
-    df_stats_all = calculate_team_stats(df_total)
-    print("\nFeature 생성 중...")
-    df_features = build_features(df_total, df_stats_all)
-
-    FEATURES = [
-        'home_elo','away_elo','elo_diff',
-        'home_form','away_form','form_diff',
-        'home_avg_scored','away_avg_scored','home_avg_conceded','away_avg_conceded',
-        'home_attack','away_attack','home_defense','away_defense',
-        'home_win_rate','away_win_rate','win_rate_diff',
-        'h2h_home_rate'
-    ]
-
-    X = df_features[FEATURES].dropna()
-    y = df_features.loc[X.index, 'result']
-
-    # 무한대 값 제거
-    import numpy as np
-    X = X.replace([np.inf, -np.inf], np.nan).dropna()
-    y = y.loc[X.index]
-
-    # 이상치 확인
-    print(f"학습 데이터: {len(X)}경기")
-
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42, stratify=y
-    )
-
-    # 5. 모델 학습
-    scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled  = scaler.transform(X_test)
-
-    lr = LogisticRegression(max_iter=2000, random_state=42, C=0.1, solver='lbfgs')
-    lr.fit(X_train_scaled, y_train)
-    acc_lr = accuracy_score(y_test, lr.predict(X_test_scaled))
-    print(f"✅ Logistic Regression: {acc_lr:.1%}")
-
-    rf = RandomForestClassifier(n_estimators=300, max_depth=6, min_samples_leaf=5, random_state=42)
-    rf.fit(X_train, y_train)
-    acc_rf = accuracy_score(y_test, rf.predict(X_test))
-    print(f"✅ Random Forest: {acc_rf:.1%}")
-
-    le = LabelEncoder()
-    y_train_enc = le.fit_transform(y_train)
-    xgb = XGBClassifier(n_estimators=500, max_depth=4, learning_rate=0.02,
-                        subsample=0.8, colsample_bytree=0.8, min_child_weight=5,
-                        random_state=42, eval_metric='mlogloss', verbosity=0)
-    xgb.fit(X_train, y_train_enc)
-    acc_xgb = accuracy_score(y_test, le.inverse_transform(xgb.predict(X_test)))
-    print(f"✅ XGBoost: {acc_xgb:.1%}")
-
-    # 6. 모델 저장
-    joblib.dump(lr,     f"{MODEL_DIR}/logistic_regression.pkl")
-    joblib.dump(rf,     f"{MODEL_DIR}/random_forest.pkl")
-    joblib.dump(xgb,    f"{MODEL_DIR}/xgboost.pkl")
-    joblib.dump(scaler, f"{MODEL_DIR}/scaler.pkl")
-    joblib.dump(le,     f"{MODEL_DIR}/label_encoder.pkl")
+    # 4~6. 피처 생성 + 시간순 검증 + 서빙 모델 학습/저장 (+ team_state.json, accuracy.json)
+    accuracy_data = train_models(df_total)
 
 # UCL 토너먼트
     fetch_ucl_tournament()
@@ -1010,24 +995,9 @@ def main():
     # 우승 예측
     fetch_champion_predictions()
 
-    # 정확도 저장
-    import json as _json
-    accuracy_data = {
-        "logistic_regression": round(acc_lr * 100, 1),
-        "random_forest": round(acc_rf * 100, 1),
-        "xgboost": round(acc_xgb * 100, 1),
-        "best": round(max(acc_lr, acc_rf, acc_xgb) * 100, 1),
-        "total_matches": len(df_total),
-        "training_matches": len(X),
-        "updated_at": pd.Timestamp.now().isoformat(),
-    }
-    with open(f"{MODEL_DIR}/accuracy.json", 'w', encoding='utf-8') as f:
-        _json.dump(accuracy_data, f, ensure_ascii=False, indent=2)
-    print(f"✅ accuracy.json 저장 완료")
-    
     print(f"\n🏆 업데이트 완료!")
     print(f"   데이터: {len(df_total)}경기")
-    print(f"   최고 정확도: {max(acc_lr, acc_rf, acc_xgb):.1%}")
+    print(f"   서빙 모델(LR) 시간순 검증 정확도: {accuracy_data['logistic_regression']}%")
 
 # 강등 위험 집계 인원수. FotData.html의 runSimulation()이 쓰는 releCount와 동일 기준으로
 # 맞춰야 함 — 18팀 리그(분데스리가/리그앙)는 16위 강등 플레이오프 + 17·18위 직행강등이라

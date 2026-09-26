@@ -2607,7 +2607,11 @@ async function loadAccuracy(){
     // best는 LR/RF/XGB 비교용 최고값이라 실제 예측에 쓰는 LR의 정확도와 다를 수 있음
     const servedAcc=data.logistic_regression ?? data.best;
     if(servedAcc!=null){
-      note.textContent=`AI 모델 정확도 ${servedAcc}% · 최근 ${Number(data.total_matches).toLocaleString()}경기 기준 · 트랙레코드 보기`;
+      // test_matches: 학습에 쓰지 않은 가장 최근 경기들로 채점한 시간순 검증 경기 수
+      const basis=data.test_matches
+        ? `학습에 안 쓴 최근 ${Number(data.test_matches).toLocaleString()}경기로 검증`
+        : `최근 ${Number(data.total_matches).toLocaleString()}경기 기준`;
+      note.textContent=`AI 모델 정확도 ${servedAcc}% · ${basis} · 트랙레코드 보기`;
     }
   }catch(e){ /* 부가 정보라 실패해도 기능엔 지장 없음 */ }
 }

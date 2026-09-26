@@ -746,7 +746,7 @@
     document.getElementById('accuracy-stat').textContent = (data.logistic_regression ?? data.best) + '%';
     document.getElementById('matches-stat').textContent = Number(data.total_matches).toLocaleString();
   } catch(e) {
-    document.getElementById('accuracy-stat').textContent = '56%';
+    document.getElementById('accuracy-stat').textContent = '--';
     document.getElementById('matches-stat').textContent = '4,800+';
   }
   try {

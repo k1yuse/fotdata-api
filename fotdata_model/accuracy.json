@@ -1,9 +1,15 @@
 {
-  "logistic_regression": 54.7,
-  "random_forest": 54.9,
-  "xgboost": 52.0,
-  "best": 54.9,
+  "logistic_regression": 51.6,
+  "random_forest": 51.7,
+  "xgboost": 51.2,
+  "best": 51.7,
+  "log_loss": 0.991,
+  "baseline_home_win": 44.3,
+  "evaluation": "time_split",
+  "test_matches": 855,
+  "test_from": "2026-02-20",
+  "test_to": "2026-09-20",
   "total_matches": 4835,
   "training_matches": 4274,
-  "updated_at": "2026-09-25T21:47:19.348662"
+  "updated_at": "2026-09-27T03:28:41.873613"
 }

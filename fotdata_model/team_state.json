@@ -1,0 +1,1652 @@
+{
+ "Burnley FC": {
+  "elo": 1331.48,
+  "games": 76,
+  "form": 2,
+  "avg_scored": 0.6,
+  "avg_conceded": 1.9,
+  "attack": 1.0,
+  "defense": 1.9737,
+  "win_rate": 0.1053
+ },
+ "Manchester City FC": {
+  "elo": 1684.08,
+  "games": 150,
+  "form": 15,
+  "avg_scored": 2.3,
+  "avg_conceded": 0.8,
+  "attack": 1.9474,
+  "defense": 1.0789,
+  "win_rate": 0.6316
+ },
+ "Sevilla FC": {
+  "elo": 1451.5,
+  "games": 124,
+  "form": 7,
+  "avg_scored": 1.3,
+  "avg_conceded": 1.3,
+  "attack": 1.1842,
+  "defense": 1.5526,
+  "win_rate": 0.3421
+ },
+ "Valencia CF": {
+  "elo": 1452.71,
+  "games": 118,
+  "form": 3,
+  "avg_scored": 1.2,
+  "avg_conceded": 1.8,
+  "attack": 1.0789,
+  "defense": 1.4737,
+  "win_rate": 0.3158
+ },
+ "UD Almería": {
+  "elo": 1393.77,
+  "games": 38,
+  "form": 7,
+  "avg_scored": 1.6,
+  "avg_conceded": 1.8,
+  "attack": 1.1316,
+  "defense": 1.9737,
+  "win_rate": 0.0789
+ },
+ "Rayo Vallecano de Madrid": {
+  "elo": 1483.22,
+  "games": 118,
+  "form": 7,
+  "avg_scored": 1.6,
+  "avg_conceded": 1.8,
+  "attack": 1.1842,
+  "defense": 1.3158,
+  "win_rate": 0.3421
+ },
+ "Real Sociedad de Fútbol": {
+  "elo": 1463.56,
+  "games": 126,
+  "form": 10,
+  "avg_scored": 1.4,
+  "avg_conceded": 1.9,
+  "attack": 1.6053,
+  "defense": 1.6579,
+  "win_rate": 0.3421
+ },
+ "Girona FC": {
+  "elo": 1427.24,
+  "games": 119,
+  "form": 3,
+  "avg_scored": 0.8,
+  "avg_conceded": 1.2,
+  "attack": 1.0263,
+  "defense": 1.4474,
+  "win_rate": 0.2368
+ },
+ "AFC Bournemouth": {
+  "elo": 1539.65,
+  "games": 119,
+  "form": 3,
+  "avg_scored": 1.4,
+  "avg_conceded": 1.2,
+  "attack": 1.5263,
+  "defense": 1.5,
+  "win_rate": 0.2632
+ },
+ "West Ham United FC": {
+  "elo": 1448.05,
+  "games": 114,
+  "form": 6,
+  "avg_scored": 1.2,
+  "avg_conceded": 1.1,
+  "attack": 1.2105,
+  "defense": 1.7105,
+  "win_rate": 0.2632
+ },
+ "Arsenal FC": {
+  "elo": 1726.44,
+  "games": 159,
+  "form": 12,
+  "avg_scored": 1.7,
+  "avg_conceded": 1.0,
+  "attack": 1.7895,
+  "defense": 0.8421,
+  "win_rate": 0.6842
+ },
+ "Nottingham Forest FC": {
+  "elo": 1479.95,
+  "games": 119,
+  "form": 5,
+  "avg_scored": 1.6,
+  "avg_conceded": 1.1,
+  "attack": 1.2368,
+  "defense": 1.2368,
+  "win_rate": 0.2895
+ },
+ "Brighton & Hove Albion FC": {
+  "elo": 1541.15,
+  "games": 119,
+  "form": 10,
+  "avg_scored": 2.3,
+  "avg_conceded": 1.2,
+  "attack": 1.6316,
+  "defense": 1.1316,
+  "win_rate": 0.4211
+ },
+ "Luton Town FC": {
+  "elo": 1382.84,
+  "games": 38,
+  "form": 1,
+  "avg_scored": 1.1,
+  "avg_conceded": 2.6,
+  "attack": 1.3684,
+  "defense": 2.2368,
+  "win_rate": 0.1579
+ },
+ "Newcastle United FC": {
+  "elo": 1523.82,
+  "games": 137,
+  "form": 8,
+  "avg_scored": 1.6,
+  "avg_conceded": 1.5,
+  "attack": 1.7632,
+  "defense": 1.6579,
+  "win_rate": 0.3947
+ },
+ "Aston Villa FC": {
+  "elo": 1564.41,
+  "games": 132,
+  "form": 7,
+  "avg_scored": 1.6,
+  "avg_conceded": 1.8,
+  "attack": 1.5526,
+  "defense": 1.4211,
+  "win_rate": 0.5263
+ },
+ "Athletic Club": {
+  "elo": 1470.43,
+  "games": 125,
+  "form": 8,
+  "avg_scored": 1.0,
+  "avg_conceded": 1.4,
+  "attack": 1.1579,
+  "defense": 1.5263,
+  "win_rate": 0.3158
+ },
+ "Real Madrid CF": {
+  "elo": 1686.84,
+  "games": 160,
+  "form": 9,
+  "avg_scored": 2.5,
+  "avg_conceded": 1.1,
+  "attack": 2.2368,
+  "defense": 1.1053,
+  "win_rate": 0.7105
+ },
+ "UD Las Palmas": {
+  "elo": 1432.73,
+  "games": 55,
+  "form": 4,
+  "avg_scored": 0.7,
+  "avg_conceded": 1.6,
+  "attack": 0.9211,
+  "defense": 1.6316,
+  "win_rate": 0.1842
+ },
+ "RCD Mallorca": {
+  "elo": 1430.07,
+  "games": 111,
+  "form": 7,
+  "avg_scored": 1.4,
+  "avg_conceded": 1.2,
+  "attack": 1.2368,
+  "defense": 1.5,
+  "win_rate": 0.2895
+ },
+ "Everton FC": {
+  "elo": 1504.21,
+  "games": 119,
+  "form": 9,
+  "avg_scored": 1.3,
+  "avg_conceded": 1.4,
+  "attack": 1.2368,
+  "defense": 1.2632,
+  "win_rate": 0.3421
+ },
+ "Fulham FC": {
+  "elo": 1471.04,
+  "games": 119,
+  "form": 2,
+  "avg_scored": 0.9,
+  "avg_conceded": 1.3,
+  "attack": 1.2105,
+  "defense": 1.4211,
+  "win_rate": 0.3421
+ },
+ "Sheffield United FC": {
+  "elo": 1339.24,
+  "games": 38,
+  "form": 0,
+  "avg_scored": 1.1,
+  "avg_conceded": 3.0,
+  "attack": 0.9211,
+  "defense": 2.7368,
+  "win_rate": 0.0789
+ },
+ "Crystal Palace FC": {
+  "elo": 1466.48,
+  "games": 119,
+  "form": 4,
+  "avg_scored": 1.1,
+  "avg_conceded": 2.3,
+  "attack": 1.0789,
+  "defense": 1.5789,
+  "win_rate": 0.2632
+ },
+ "Villarreal CF": {
+  "elo": 1508.6,
+  "games": 127,
+  "form": 6,
+  "avg_scored": 2.0,
+  "avg_conceded": 1.8,
+  "attack": 1.7368,
+  "defense": 1.6579,
+  "win_rate": 0.4211
+ },
+ "Real Betis Balompié": {
+  "elo": 1590.9,
+  "games": 119,
+  "form": 13,
+  "avg_scored": 1.5,
+  "avg_conceded": 1.3,
+  "attack": 1.5263,
+  "defense": 1.2895,
+  "win_rate": 0.4474
+ },
+ "Brentford FC": {
+  "elo": 1528.15,
+  "games": 119,
+  "form": 9,
+  "avg_scored": 1.7,
+  "avg_conceded": 1.2,
+  "attack": 1.5526,
+  "defense": 1.2105,
+  "win_rate": 0.3947
+ },
+ "Tottenham Hotspur FC": {
+  "elo": 1437.43,
+  "games": 129,
+  "form": 2,
+  "avg_scored": 0.8,
+  "avg_conceded": 1.2,
+  "attack": 1.2105,
+  "defense": 1.7632,
+  "win_rate": 0.2368
+ },
+ "Chelsea FC": {
+  "elo": 1518.16,
+  "games": 129,
+  "form": 7,
+  "avg_scored": 1.5,
+  "avg_conceded": 2.2,
+  "attack": 1.5,
+  "defense": 1.7105,
+  "win_rate": 0.3421
+ },
+ "Liverpool FC": {
+  "elo": 1595.8,
+  "games": 142,
+  "form": 11,
+  "avg_scored": 1.5,
+  "avg_conceded": 1.4,
+  "attack": 1.7368,
+  "defense": 1.1316,
+  "win_rate": 0.4474
+ },
+ "RC Celta de Vigo": {
+  "elo": 1478.33,
+  "games": 118,
+  "form": 6,
+  "avg_scored": 1.2,
+  "avg_conceded": 1.0,
+  "attack": 1.4474,
+  "defense": 1.1842,
+  "win_rate": 0.3947
+ },
+ "CA Osasuna": {
+  "elo": 1428.08,
+  "games": 118,
+  "form": 4,
+  "avg_scored": 0.8,
+  "avg_conceded": 1.8,
+  "attack": 1.1842,
+  "defense": 1.4737,
+  "win_rate": 0.2895
+ },
+ "Getafe CF": {
+  "elo": 1440.9,
+  "games": 118,
+  "form": 5,
+  "avg_scored": 0.8,
+  "avg_conceded": 0.9,
+  "attack": 0.7368,
+  "defense": 0.9474,
+  "win_rate": 0.3684
+ },
+ "FC Barcelona": {
+  "elo": 1742.05,
+  "games": 155,
+  "form": 15,
+  "avg_scored": 4.0,
+  "avg_conceded": 1.2,
+  "attack": 2.8684,
+  "defense": 0.9737,
+  "win_rate": 0.8421
+ },
+ "Cádiz CF": {
+  "elo": 1434.2,
+  "games": 38,
+  "form": 7,
+  "avg_scored": 0.6,
+  "avg_conceded": 1.7,
+  "attack": 0.6842,
+  "defense": 1.4474,
+  "win_rate": 0.1579
+ },
+ "Deportivo Alavés": {
+  "elo": 1451.44,
+  "games": 118,
+  "form": 7,
+  "avg_scored": 1.4,
+  "avg_conceded": 0.8,
+  "attack": 1.2895,
+  "defense": 1.4474,
+  "win_rate": 0.3158
+ },
+ "Club Atlético de Madrid": {
+  "elo": 1593.22,
+  "games": 155,
+  "form": 9,
+  "avg_scored": 1.9,
+  "avg_conceded": 1.4,
+  "attack": 1.7368,
+  "defense": 1.3947,
+  "win_rate": 0.4737
+ },
+ "Granada CF": {
+  "elo": 1367.85,
+  "games": 38,
+  "form": 0,
+  "avg_scored": 0.8,
+  "avg_conceded": 2.1,
+  "attack": 1.0,
+  "defense": 2.0789,
+  "win_rate": 0.1053
+ },
+ "Manchester United FC": {
+  "elo": 1564.61,
+  "games": 126,
+  "form": 8,
+  "avg_scored": 2.1,
+  "avg_conceded": 1.2,
+  "attack": 1.9474,
+  "defense": 1.2368,
+  "win_rate": 0.5263
+ },
+ "Wolverhampton Wanderers FC": {
+  "elo": 1366.74,
+  "games": 114,
+  "form": 3,
+  "avg_scored": 0.9,
+  "avg_conceded": 1.7,
+  "attack": 0.7105,
+  "defense": 1.7895,
+  "win_rate": 0.0789
+ },
+ "Royal Antwerp FC": {
+  "elo": 1467.35,
+  "games": 6,
+  "form": 3,
+  "avg_scored": 1.0,
+  "avg_conceded": 2.8333,
+  "attack": 1.0,
+  "defense": 2.8333,
+  "win_rate": 0.1667
+ },
+ "FK Shakhtar Donetsk": {
+  "elo": 1475.87,
+  "games": 15,
+  "form": 4,
+  "avg_scored": 1.2,
+  "avg_conceded": 2.2,
+  "attack": 1.2667,
+  "defense": 1.9333,
+  "win_rate": 0.3333
+ },
+ "FC Porto": {
+  "elo": 1517.67,
+  "games": 9,
+  "form": 6,
+  "avg_scored": 2.0,
+  "avg_conceded": 1.6667,
+  "attack": 2.0,
+  "defense": 1.6667,
+  "win_rate": 0.5556
+ },
+ "FK Crvena Zvezda": {
+  "elo": 1429.77,
+  "games": 14,
+  "form": 6,
+  "avg_scored": 1.5,
+  "avg_conceded": 2.7,
+  "attack": 1.4286,
+  "defense": 2.6429,
+  "win_rate": 0.1429
+ },
+ "BSC Young Boys": {
+  "elo": 1407.15,
+  "games": 14,
+  "form": 0,
+  "avg_scored": 0.6,
+  "avg_conceded": 2.6,
+  "attack": 0.7143,
+  "defense": 2.6429,
+  "win_rate": 0.0714
+ },
+ "RB Leipzig": {
+  "elo": 1468.75,
+  "games": 87,
+  "form": 6,
+  "avg_scored": 2.0,
+  "avg_conceded": 2.0,
+  "attack": 2.0,
+  "defense": 1.3158,
+  "win_rate": 0.5789
+ },
+ "AC Milan": {
+  "elo": 1512.39,
+  "games": 94,
+  "form": 11,
+  "avg_scored": 1.5,
+  "avg_conceded": 1.2,
+  "attack": 1.4211,
+  "defense": 0.9474,
+  "win_rate": 0.5
+ },
+ "SS Lazio": {
+  "elo": 1489.34,
+  "games": 86,
+  "form": 13,
+  "avg_scored": 1.5,
+  "avg_conceded": 1.3,
+  "attack": 1.1053,
+  "defense": 1.0263,
+  "win_rate": 0.4211
+ },
+ "Paris Saint-Germain FC": {
+  "elo": 1660.74,
+  "games": 117,
+  "form": 10,
+  "avg_scored": 2.3,
+  "avg_conceded": 1.4,
+  "attack": 2.3947,
+  "defense": 1.1316,
+  "win_rate": 0.6579
+ },
+ "Borussia Dortmund": {
+  "elo": 1592.85,
+  "games": 108,
+  "form": 15,
+  "avg_scored": 2.2,
+  "avg_conceded": 0.9,
+  "attack": 2.0526,
+  "defense": 1.2105,
+  "win_rate": 0.6316
+ },
+ "Feyenoord Rotterdam": {
+  "elo": 1485.98,
+  "games": 19,
+  "form": 4,
+  "avg_scored": 1.6,
+  "avg_conceded": 2.4,
+  "attack": 1.6316,
+  "defense": 2.1579,
+  "win_rate": 0.3684
+ },
+ "Celtic FC": {
+  "elo": 1478.01,
+  "games": 16,
+  "form": 5,
+  "avg_scored": 1.5,
+  "avg_conceded": 1.7,
+  "attack": 1.25,
+  "defense": 2.0,
+  "win_rate": 0.25
+ },
+ "Sporting Clube de Braga": {
+  "elo": 1475.37,
+  "games": 6,
+  "form": 4,
+  "avg_scored": 1.0,
+  "avg_conceded": 2.0,
+  "attack": 1.0,
+  "defense": 2.0,
+  "win_rate": 0.1667
+ },
+ "SSC Napoli": {
+  "elo": 1523.31,
+  "games": 95,
+  "form": 4,
+  "avg_scored": 1.3,
+  "avg_conceded": 1.0,
+  "attack": 1.4211,
+  "defense": 1.0789,
+  "win_rate": 0.5
+ },
+ "FC Bayern München": {
+  "elo": 1703.06,
+  "games": 79,
+  "form": 13,
+  "avg_scored": 3.3,
+  "avg_conceded": 1.2,
+  "attack": 3.3947,
+  "defense": 1.2368,
+  "win_rate": 0.7632
+ },
+ "Galatasaray SK": {
+  "elo": 1475.82,
+  "games": 19,
+  "form": 6,
+  "avg_scored": 1.3,
+  "avg_conceded": 1.7,
+  "attack": 1.4737,
+  "defense": 1.8947,
+  "win_rate": 0.3158
+ },
+ "FC København": {
+  "elo": 1476.25,
+  "games": 16,
+  "form": 7,
+  "avg_scored": 1.4,
+  "avg_conceded": 2.7,
+  "attack": 1.375,
+  "defense": 2.1875,
+  "win_rate": 0.25
+ },
+ "1. FC Union Berlin": {
+  "elo": 1368.86,
+  "games": 44,
+  "form": 4,
+  "avg_scored": 1.6,
+  "avg_conceded": 2.8,
+  "attack": 1.2632,
+  "defense": 1.9737,
+  "win_rate": 0.2632
+ },
+ "Sport Lisboa e Benfica": {
+  "elo": 1471.18,
+  "games": 28,
+  "form": 6,
+  "avg_scored": 1.1,
+  "avg_conceded": 1.5,
+  "attack": 1.3929,
+  "defense": 1.6071,
+  "win_rate": 0.3214
+ },
+ "FC Red Bull Salzburg": {
+  "elo": 1425.57,
+  "games": 14,
+  "form": 3,
+  "avg_scored": 0.6,
+  "avg_conceded": 3.0,
+  "attack": 0.6429,
+  "defense": 2.5,
+  "win_rate": 0.1429
+ },
+ "PSV": {
+  "elo": 1501.04,
+  "games": 29,
+  "form": 4,
+  "avg_scored": 1.9,
+  "avg_conceded": 1.9,
+  "attack": 1.6897,
+  "defense": 1.8621,
+  "win_rate": 0.3103
+ },
+ "Racing Club de Lens": {
+  "elo": 1487.49,
+  "games": 77,
+  "form": 4,
+  "avg_scored": 1.8,
+  "avg_conceded": 1.4,
+  "attack": 2.0,
+  "defense": 1.1579,
+  "win_rate": 0.6053
+ },
+ "FC Internazionale Milano": {
+  "elo": 1618.18,
+  "games": 77,
+  "form": 10,
+  "avg_scored": 2.5,
+  "avg_conceded": 1.4,
+  "attack": 2.2368,
+  "defense": 1.1316,
+  "win_rate": 0.6316
+ },
+ "Le Havre AC": {
+  "elo": 1321.17,
+  "games": 70,
+  "form": 2,
+  "avg_scored": 1.2,
+  "avg_conceded": 1.4,
+  "attack": 0.9211,
+  "defense": 1.2632,
+  "win_rate": 0.1842
+ },
+ "Southampton FC": {
+  "elo": 1278.59,
+  "games": 38,
+  "form": 1,
+  "avg_scored": 0.6,
+  "avg_conceded": 1.8,
+  "attack": 0.6842,
+  "defense": 2.2632,
+  "win_rate": 0.0526
+ },
+ "Genoa CFC": {
+  "elo": 1329.73,
+  "games": 78,
+  "form": 1,
+  "avg_scored": 0.4,
+  "avg_conceded": 1.5,
+  "attack": 1.1053,
+  "defense": 1.4211,
+  "win_rate": 0.2632
+ },
+ "Inter Milan": {
+  "elo": 1516.41,
+  "games": 35,
+  "form": 10,
+  "avg_scored": 1.6,
+  "avg_conceded": 0.8,
+  "attack": 2.1143,
+  "defense": 0.9714,
+  "win_rate": 0.6286
+ },
+ "Parma Calcio 1913": {
+  "elo": 1361.75,
+  "games": 78,
+  "form": 4,
+  "avg_scored": 0.8,
+  "avg_conceded": 1.3,
+  "attack": 0.7632,
+  "defense": 1.2368,
+  "win_rate": 0.2895
+ },
+ "ACF Fiorentina": {
+  "elo": 1399.44,
+  "games": 78,
+  "form": 4,
+  "avg_scored": 0.9,
+  "avg_conceded": 1.7,
+  "attack": 1.1579,
+  "defense": 1.4737,
+  "win_rate": 0.2632
+ },
+ "AS Monaco FC": {
+  "elo": 1508.83,
+  "games": 90,
+  "form": 13,
+  "avg_scored": 1.8,
+  "avg_conceded": 1.4,
+  "attack": 1.5789,
+  "defense": 1.5,
+  "win_rate": 0.4737
+ },
+ "AS Saint-Étienne": {
+  "elo": 1330.24,
+  "games": 15,
+  "form": 1,
+  "avg_scored": 0.7,
+  "avg_conceded": 2.5,
+  "attack": 0.7333,
+  "defense": 2.9333,
+  "win_rate": 0.0
+ },
+ "Torino FC": {
+  "elo": 1356.63,
+  "games": 78,
+  "form": 4,
+  "avg_scored": 1.2,
+  "avg_conceded": 1.7,
+  "attack": 1.2368,
+  "defense": 1.6053,
+  "win_rate": 0.3158
+ },
+ "Ipswich Town FC": {
+  "elo": 1332.43,
+  "games": 43,
+  "form": 6,
+  "avg_scored": 1.0,
+  "avg_conceded": 2.2,
+  "attack": 1.0526,
+  "defense": 2.2368,
+  "win_rate": 0.1579
+ },
+ "CD Leganés": {
+  "elo": 1411.87,
+  "games": 17,
+  "form": 2,
+  "avg_scored": 0.7,
+  "avg_conceded": 1.6,
+  "attack": 0.8824,
+  "defense": 1.7059,
+  "win_rate": 0.0588
+ },
+ "Stade Brestois 29": {
+  "elo": 1375.54,
+  "games": 80,
+  "form": 5,
+  "avg_scored": 1.2,
+  "avg_conceded": 1.9,
+  "attack": 1.2368,
+  "defense": 1.5789,
+  "win_rate": 0.2895
+ },
+ "Olympique de Marseille": {
+  "elo": 1436.71,
+  "games": 78,
+  "form": 3,
+  "avg_scored": 1.2,
+  "avg_conceded": 1.5,
+  "attack": 1.6053,
+  "defense": 1.5789,
+  "win_rate": 0.4211
+ },
+ "Venezia FC": {
+  "elo": 1307.68,
+  "games": 22,
+  "form": 0,
+  "avg_scored": 0.7,
+  "avg_conceded": 1.9,
+  "attack": 0.6818,
+  "defense": 1.9545,
+  "win_rate": 0.0
+ },
+ "Hellas Verona FC": {
+  "elo": 1249.85,
+  "games": 73,
+  "form": 3,
+  "avg_scored": 0.3,
+  "avg_conceded": 1.2,
+  "attack": 0.6579,
+  "defense": 1.6053,
+  "win_rate": 0.0789
+ },
+ "AJ Auxerre": {
+  "elo": 1363.96,
+  "games": 70,
+  "form": 6,
+  "avg_scored": 1.8,
+  "avg_conceded": 1.9,
+  "attack": 1.0526,
+  "defense": 1.4737,
+  "win_rate": 0.2368
+ },
+ "OGC Nice": {
+  "elo": 1357.56,
+  "games": 70,
+  "form": 5,
+  "avg_scored": 0.6,
+  "avg_conceded": 1.0,
+  "attack": 1.0526,
+  "defense": 1.7105,
+  "win_rate": 0.2105
+ },
+ "Cagliari Calcio": {
+  "elo": 1396.79,
+  "games": 78,
+  "form": 12,
+  "avg_scored": 1.2,
+  "avg_conceded": 0.8,
+  "attack": 1.0526,
+  "defense": 1.3158,
+  "win_rate": 0.3421
+ },
+ "AS Roma": {
+  "elo": 1543.48,
+  "games": 79,
+  "form": 11,
+  "avg_scored": 2.6,
+  "avg_conceded": 0.6,
+  "attack": 1.7632,
+  "defense": 0.8684,
+  "win_rate": 0.5789
+ },
+ "Toulouse FC": {
+  "elo": 1387.44,
+  "games": 69,
+  "form": 5,
+  "avg_scored": 1.5,
+  "avg_conceded": 2.0,
+  "attack": 1.4211,
+  "defense": 1.4474,
+  "win_rate": 0.3421
+ },
+ "FC Nantes": {
+  "elo": 1289.26,
+  "games": 64,
+  "form": 4,
+  "avg_scored": 0.7,
+  "avg_conceded": 1.2,
+  "attack": 0.8947,
+  "defense": 1.4474,
+  "win_rate": 0.1579
+ },
+ "Stade Rennais FC 1901": {
+  "elo": 1463.81,
+  "games": 70,
+  "form": 10,
+  "avg_scored": 1.8,
+  "avg_conceded": 1.8,
+  "attack": 1.7368,
+  "defense": 1.5526,
+  "win_rate": 0.5
+ },
+ "Olympique Lyonnais": {
+  "elo": 1488.73,
+  "games": 70,
+  "form": 11,
+  "avg_scored": 2.0,
+  "avg_conceded": 1.3,
+  "attack": 1.6316,
+  "defense": 1.1053,
+  "win_rate": 0.5263
+ },
+ "Angers SCO": {
+  "elo": 1333.95,
+  "games": 70,
+  "form": 7,
+  "avg_scored": 1.0,
+  "avg_conceded": 1.4,
+  "attack": 0.8947,
+  "defense": 1.3947,
+  "win_rate": 0.2632
+ },
+ "Bologna FC 1909": {
+  "elo": 1404.43,
+  "games": 86,
+  "form": 2,
+  "avg_scored": 1.0,
+  "avg_conceded": 1.3,
+  "attack": 1.2368,
+  "defense": 1.2368,
+  "win_rate": 0.3684
+ },
+ "Udinese Calcio": {
+  "elo": 1368.95,
+  "games": 78,
+  "form": 4,
+  "avg_scored": 1.5,
+  "avg_conceded": 1.6,
+  "attack": 1.2632,
+  "defense": 1.3421,
+  "win_rate": 0.3421
+ },
+ "US Lecce": {
+  "elo": 1330.29,
+  "games": 78,
+  "form": 6,
+  "avg_scored": 1.1,
+  "avg_conceded": 1.4,
+  "attack": 0.7632,
+  "defense": 1.3158,
+  "win_rate": 0.3158
+ },
+ "Atalanta BC": {
+  "elo": 1455.04,
+  "games": 100,
+  "form": 6,
+  "avg_scored": 1.1,
+  "avg_conceded": 1.4,
+  "attack": 1.3684,
+  "defense": 1.2368,
+  "win_rate": 0.4474
+ },
+ "Leicester City FC": {
+  "elo": 1325.48,
+  "games": 38,
+  "form": 7,
+  "avg_scored": 0.8,
+  "avg_conceded": 1.8,
+  "attack": 0.8684,
+  "defense": 2.1053,
+  "win_rate": 0.1579
+ },
+ "Juventus FC": {
+  "elo": 1522.87,
+  "games": 98,
+  "form": 10,
+  "avg_scored": 1.2,
+  "avg_conceded": 0.9,
+  "attack": 1.7632,
+  "defense": 0.9737,
+  "win_rate": 0.5526
+ },
+ "Como 1907": {
+  "elo": 1513.5,
+  "games": 79,
+  "form": 12,
+  "avg_scored": 1.9,
+  "avg_conceded": 0.8,
+  "attack": 1.8684,
+  "defense": 0.8158,
+  "win_rate": 0.5789
+ },
+ "Borussia Mönchengladbach": {
+  "elo": 1338.51,
+  "games": 70,
+  "form": 3,
+  "avg_scored": 1.3,
+  "avg_conceded": 2.1,
+  "attack": 1.2632,
+  "defense": 1.8158,
+  "win_rate": 0.2368
+ },
+ "Bayer 04 Leverkusen": {
+  "elo": 1507.38,
+  "games": 92,
+  "form": 8,
+  "avg_scored": 2.0,
+  "avg_conceded": 1.3,
+  "attack": 1.8684,
+  "defense": 1.1842,
+  "win_rate": 0.4737
+ },
+ "Montpellier HSC": {
+  "elo": 1312.48,
+  "games": 15,
+  "form": 0,
+  "avg_scored": 0.3,
+  "avg_conceded": 1.9,
+  "attack": 0.2667,
+  "defense": 2.2,
+  "win_rate": 0.0667
+ },
+ "SC Freiburg": {
+  "elo": 1436.16,
+  "games": 70,
+  "form": 13,
+  "avg_scored": 2.2,
+  "avg_conceded": 1.3,
+  "attack": 1.6579,
+  "defense": 1.5789,
+  "win_rate": 0.4211
+ },
+ "VfB Stuttgart": {
+  "elo": 1462.81,
+  "games": 79,
+  "form": 6,
+  "avg_scored": 2.0,
+  "avg_conceded": 2.1,
+  "attack": 2.0789,
+  "defense": 1.5,
+  "win_rate": 0.5263
+ },
+ "Eintracht Frankfurt": {
+  "elo": 1387.06,
+  "games": 78,
+  "form": 6,
+  "avg_scored": 1.8,
+  "avg_conceded": 2.2,
+  "attack": 1.5,
+  "defense": 1.9474,
+  "win_rate": 0.2368
+ },
+ "Lille OSC": {
+  "elo": 1499.44,
+  "games": 81,
+  "form": 7,
+  "avg_scored": 1.3,
+  "avg_conceded": 1.0,
+  "attack": 1.5263,
+  "defense": 1.0789,
+  "win_rate": 0.5263
+ },
+ "1. FSV Mainz 05": {
+  "elo": 1406.0,
+  "games": 70,
+  "form": 10,
+  "avg_scored": 1.9,
+  "avg_conceded": 1.6,
+  "attack": 1.4211,
+  "defense": 1.5526,
+  "win_rate": 0.3158
+ },
+ "FC Union Berlin": {
+  "elo": 1372.0,
+  "games": 32,
+  "form": 6,
+  "avg_scored": 1.4,
+  "avg_conceded": 1.4,
+  "attack": 1.0,
+  "defense": 1.5625,
+  "win_rate": 0.2812
+ },
+ "Bochum": {
+  "elo": 1366.6,
+  "games": 16,
+  "form": 7,
+  "avg_scored": 0.9,
+  "avg_conceded": 1.3,
+  "attack": 0.9375,
+  "defense": 2.0,
+  "win_rate": 0.1875
+ },
+ "FC Augsburg": {
+  "elo": 1397.64,
+  "games": 70,
+  "form": 7,
+  "avg_scored": 2.2,
+  "avg_conceded": 1.6,
+  "attack": 1.4737,
+  "defense": 1.7632,
+  "win_rate": 0.3684
+ },
+ "Werder Bremen": {
+  "elo": 1406.51,
+  "games": 32,
+  "form": 9,
+  "avg_scored": 1.6,
+  "avg_conceded": 1.0,
+  "attack": 1.5625,
+  "defense": 1.7812,
+  "win_rate": 0.375
+ },
+ "RCD Espanyol": {
+  "elo": 1445.37,
+  "games": 35,
+  "form": 3,
+  "avg_scored": 1.2,
+  "avg_conceded": 0.9,
+  "attack": 1.0857,
+  "defense": 1.3143,
+  "win_rate": 0.3143
+ },
+ "TSG 1899 Hoffenheim": {
+  "elo": 1408.25,
+  "games": 70,
+  "form": 3,
+  "avg_scored": 1.7,
+  "avg_conceded": 2.1,
+  "attack": 1.8947,
+  "defense": 1.6316,
+  "win_rate": 0.5
+ },
+ "Holstein Kiel": {
+  "elo": 1362.97,
+  "games": 16,
+  "form": 5,
+  "avg_scored": 1.5,
+  "avg_conceded": 2.1,
+  "attack": 1.4375,
+  "defense": 2.3125,
+  "win_rate": 0.125
+ },
+ "Empoli": {
+  "elo": 1372.82,
+  "games": 17,
+  "form": 2,
+  "avg_scored": 1.1,
+  "avg_conceded": 2.2,
+  "attack": 1.1176,
+  "defense": 1.8235,
+  "win_rate": 0.1765
+ },
+ "RC Strasbourg Alsace": {
+  "elo": 1454.11,
+  "games": 70,
+  "form": 7,
+  "avg_scored": 2.2,
+  "avg_conceded": 2.0,
+  "attack": 1.7632,
+  "defense": 1.5,
+  "win_rate": 0.4211
+ },
+ "Real Valladolid CF": {
+  "elo": 1332.45,
+  "games": 17,
+  "form": 0,
+  "avg_scored": 0.9,
+  "avg_conceded": 3.3,
+  "attack": 0.8235,
+  "defense": 3.1176,
+  "win_rate": 0.0588
+ },
+ "VfL Wolfsburg": {
+  "elo": 1315.14,
+  "games": 66,
+  "form": 8,
+  "avg_scored": 1.2,
+  "avg_conceded": 1.6,
+  "attack": 1.2632,
+  "defense": 2.0,
+  "win_rate": 0.2105
+ },
+ "Bayern München": {
+  "elo": 1537.02,
+  "games": 32,
+  "form": 13,
+  "avg_scored": 2.7,
+  "avg_conceded": 1.2,
+  "attack": 2.75,
+  "defense": 0.9688,
+  "win_rate": 0.7188
+ },
+ "Stade de Reims": {
+  "elo": 1388.22,
+  "games": 15,
+  "form": 4,
+  "avg_scored": 0.7,
+  "avg_conceded": 1.2,
+  "attack": 1.0,
+  "defense": 1.2667,
+  "win_rate": 0.2667
+ },
+ "FC St. Pauli": {
+  "elo": 1331.31,
+  "games": 32,
+  "form": 3,
+  "avg_scored": 0.8,
+  "avg_conceded": 1.3,
+  "attack": 0.8125,
+  "defense": 1.2188,
+  "win_rate": 0.2188
+ },
+ "FC Heidenheim 1846": {
+  "elo": 1326.59,
+  "games": 32,
+  "form": 7,
+  "avg_scored": 1.0,
+  "avg_conceded": 1.4,
+  "attack": 1.1562,
+  "defense": 1.9062,
+  "win_rate": 0.25
+ },
+ "AC Monza": {
+  "elo": 1329.76,
+  "games": 22,
+  "form": 4,
+  "avg_scored": 1.2,
+  "avg_conceded": 2.3,
+  "attack": 1.0455,
+  "defense": 2.2273,
+  "win_rate": 0.1364
+ },
+ "GNK Dinamo Zagreb": {
+  "elo": 1472.95,
+  "games": 8,
+  "form": 7,
+  "avg_scored": 1.5,
+  "avg_conceded": 2.375,
+  "attack": 1.5,
+  "defense": 2.375,
+  "win_rate": 0.375
+ },
+ "Sporting Clube de Portugal": {
+  "elo": 1494.11,
+  "games": 23,
+  "form": 7,
+  "avg_scored": 1.8,
+  "avg_conceded": 1.2,
+  "attack": 1.6522,
+  "defense": 1.3478,
+  "win_rate": 0.4348
+ },
+ "AC Sparta Praha": {
+  "elo": 1372.89,
+  "games": 8,
+  "form": 0,
+  "avg_scored": 0.875,
+  "avg_conceded": 2.625,
+  "attack": 0.875,
+  "defense": 2.625,
+  "win_rate": 0.125
+ },
+ "Club Brugge KV": {
+  "elo": 1428.41,
+  "games": 23,
+  "form": 7,
+  "avg_scored": 1.7,
+  "avg_conceded": 2.6,
+  "attack": 1.4783,
+  "defense": 2.0,
+  "win_rate": 0.3478
+ },
+ "ŠK Slovan Bratislava": {
+  "elo": 1340.26,
+  "games": 9,
+  "form": 0,
+  "avg_scored": 0.8889,
+  "avg_conceded": 3.6667,
+  "attack": 0.8889,
+  "defense": 3.6667,
+  "win_rate": 0.0
+ },
+ "SK Sturm Graz": {
+  "elo": 1367.14,
+  "games": 8,
+  "form": 6,
+  "avg_scored": 0.625,
+  "avg_conceded": 1.75,
+  "attack": 0.625,
+  "defense": 1.75,
+  "win_rate": 0.25
+ },
+ "Real Oviedo": {
+  "elo": 1350.03,
+  "games": 38,
+  "form": 1,
+  "avg_scored": 0.8,
+  "avg_conceded": 1.6,
+  "attack": 0.6842,
+  "defense": 1.5789,
+  "win_rate": 0.1579
+ },
+ "Sunderland AFC": {
+  "elo": 1444.31,
+  "games": 43,
+  "form": 4,
+  "avg_scored": 1.2,
+  "avg_conceded": 1.8,
+  "attack": 1.1053,
+  "defense": 1.4211,
+  "win_rate": 0.3421
+ },
+ "Levante UD": {
+  "elo": 1411.06,
+  "games": 44,
+  "form": 5,
+  "avg_scored": 1.7,
+  "avg_conceded": 1.8,
+  "attack": 1.1842,
+  "defense": 1.5789,
+  "win_rate": 0.2895
+ },
+ "FC Metz": {
+  "elo": 1242.32,
+  "games": 34,
+  "form": 2,
+  "avg_scored": 1.0,
+  "avg_conceded": 2.3,
+  "attack": 0.9412,
+  "defense": 2.2353,
+  "win_rate": 0.0882
+ },
+ "FC Lorient": {
+  "elo": 1369.06,
+  "games": 39,
+  "form": 5,
+  "avg_scored": 1.5,
+  "avg_conceded": 1.3,
+  "attack": 1.3947,
+  "defense": 1.4737,
+  "win_rate": 0.3158
+ },
+ "RCD Espanyol de Barcelona": {
+  "elo": 1388.84,
+  "games": 45,
+  "form": 4,
+  "avg_scored": 1.5,
+  "avg_conceded": 1.2,
+  "attack": 1.1316,
+  "defense": 1.4737,
+  "win_rate": 0.2895
+ },
+ "Paris FC": {
+  "elo": 1416.85,
+  "games": 39,
+  "form": 11,
+  "avg_scored": 1.8,
+  "avg_conceded": 0.8,
+  "attack": 1.4474,
+  "defense": 1.3684,
+  "win_rate": 0.3684
+ },
+ "Elche CF": {
+  "elo": 1396.37,
+  "games": 45,
+  "form": 4,
+  "avg_scored": 1.4,
+  "avg_conceded": 2.0,
+  "attack": 1.3158,
+  "defense": 1.7895,
+  "win_rate": 0.2105
+ },
+ "Leeds United FC": {
+  "elo": 1463.43,
+  "games": 43,
+  "form": 9,
+  "avg_scored": 1.4,
+  "avg_conceded": 1.0,
+  "attack": 1.3684,
+  "defense": 1.3684,
+  "win_rate": 0.2895
+ },
+ "1. FC Heidenheim 1846": {
+  "elo": 1298.8,
+  "games": 34,
+  "form": 7,
+  "avg_scored": 1.9,
+  "avg_conceded": 1.9,
+  "attack": 1.2059,
+  "defense": 2.1176,
+  "win_rate": 0.1765
+ },
+ "SV Werder Bremen": {
+  "elo": 1326.41,
+  "games": 38,
+  "form": 7,
+  "avg_scored": 1.4,
+  "avg_conceded": 1.9,
+  "attack": 1.1842,
+  "defense": 1.7895,
+  "win_rate": 0.2632
+ },
+ "US Sassuolo Calcio": {
+  "elo": 1372.95,
+  "games": 43,
+  "form": 7,
+  "avg_scored": 1.4,
+  "avg_conceded": 1.5,
+  "attack": 1.2632,
+  "defense": 1.3421,
+  "win_rate": 0.3684
+ },
+ "FC St. Pauli 1910": {
+  "elo": 1275.24,
+  "games": 34,
+  "form": 1,
+  "avg_scored": 0.6,
+  "avg_conceded": 2.0,
+  "attack": 0.8529,
+  "defense": 1.7647,
+  "win_rate": 0.1765
+ },
+ "US Cremonese": {
+  "elo": 1293.14,
+  "games": 38,
+  "form": 6,
+  "avg_scored": 1.0,
+  "avg_conceded": 1.7,
+  "attack": 0.8421,
+  "defense": 1.5,
+  "win_rate": 0.2105
+ },
+ "Hamburger SV": {
+  "elo": 1339.23,
+  "games": 38,
+  "form": 4,
+  "avg_scored": 1.0,
+  "avg_conceded": 2.6,
+  "attack": 1.1053,
+  "defense": 1.7632,
+  "win_rate": 0.2632
+ },
+ "1. FC Köln": {
+  "elo": 1306.95,
+  "games": 38,
+  "form": 4,
+  "avg_scored": 1.5,
+  "avg_conceded": 2.3,
+  "attack": 1.4474,
+  "defense": 1.8947,
+  "win_rate": 0.2105
+ },
+ "AC Pisa 1909": {
+  "elo": 1227.32,
+  "games": 38,
+  "form": 0,
+  "avg_scored": 0.6,
+  "avg_conceded": 2.3,
+  "attack": 0.6842,
+  "defense": 1.8684,
+  "win_rate": 0.0526
+ },
+ "Royale Union Saint-Gilloise": {
+  "elo": 1387.09,
+  "games": 8,
+  "form": 6,
+  "avg_scored": 1.0,
+  "avg_conceded": 2.125,
+  "attack": 1.0,
+  "defense": 2.125,
+  "win_rate": 0.375
+ },
+ "Qarabağ Ağdam FK": {
+  "elo": 1370.84,
+  "games": 10,
+  "form": 3,
+  "avg_scored": 1.6,
+  "avg_conceded": 3.0,
+  "attack": 1.6,
+  "defense": 3.0,
+  "win_rate": 0.3
+ },
+ "AFC Ajax": {
+  "elo": 1353.97,
+  "games": 8,
+  "form": 6,
+  "avg_scored": 1.0,
+  "avg_conceded": 2.625,
+  "attack": 1.0,
+  "defense": 2.625,
+  "win_rate": 0.25
+ },
+ "SK Slavia Praha": {
+  "elo": 1336.15,
+  "games": 9,
+  "form": 1,
+  "avg_scored": 0.7778,
+  "avg_conceded": 2.4444,
+  "attack": 0.7778,
+  "defense": 2.4444,
+  "win_rate": 0.0
+ },
+ "FK Bodø/Glimt": {
+  "elo": 1415.46,
+  "games": 13,
+  "form": 9,
+  "avg_scored": 1.7,
+  "avg_conceded": 2.0,
+  "attack": 1.6923,
+  "defense": 2.0769,
+  "win_rate": 0.3846
+ },
+ "PAE Olympiakos SFP": {
+  "elo": 1382.43,
+  "games": 10,
+  "form": 10,
+  "avg_scored": 1.0,
+  "avg_conceded": 1.6,
+  "attack": 1.0,
+  "defense": 1.6,
+  "win_rate": 0.3
+ },
+ "Paphos FC": {
+  "elo": 1368.53,
+  "games": 8,
+  "form": 7,
+  "avg_scored": 1.0,
+  "avg_conceded": 1.375,
+  "attack": 1.0,
+  "defense": 1.375,
+  "win_rate": 0.25
+ },
+ "FK Kairat": {
+  "elo": 1313.12,
+  "games": 8,
+  "form": 0,
+  "avg_scored": 0.875,
+  "avg_conceded": 2.75,
+  "attack": 0.875,
+  "defense": 2.75,
+  "win_rate": 0.0
+ },
+ "Real Racing Club de Santander": {
+  "elo": 1366.29,
+  "games": 7,
+  "form": 6,
+  "avg_scored": 1.5714,
+  "avg_conceded": 3.0,
+  "attack": 1.5714,
+  "defense": 3.0,
+  "win_rate": 0.2857
+ },
+ "RC Deportivo La Coruña": {
+  "elo": 1379.61,
+  "games": 7,
+  "form": 8,
+  "avg_scored": 1.4286,
+  "avg_conceded": 1.1429,
+  "attack": 1.4286,
+  "defense": 1.1429,
+  "win_rate": 0.2857
+ },
+ "Málaga CF": {
+  "elo": 1335.49,
+  "games": 7,
+  "form": 2,
+  "avg_scored": 0.4286,
+  "avg_conceded": 1.7143,
+  "attack": 0.4286,
+  "defense": 1.7143,
+  "win_rate": 0.0
+ },
+ "Coventry City FC": {
+  "elo": 1309.43,
+  "games": 5,
+  "form": 3,
+  "avg_scored": 0.2,
+  "avg_conceded": 2.0,
+  "attack": 0.2,
+  "defense": 2.0,
+  "win_rate": 0.2
+ },
+ "ES Troyes AC": {
+  "elo": 1289.39,
+  "games": 5,
+  "form": 4,
+  "avg_scored": 0.8,
+  "avg_conceded": 2.2,
+  "attack": 0.8,
+  "defense": 2.2,
+  "win_rate": 0.2
+ },
+ "Le Mans FC": {
+  "elo": 1299.55,
+  "games": 5,
+  "form": 6,
+  "avg_scored": 1.8,
+  "avg_conceded": 1.8,
+  "attack": 1.8,
+  "defense": 1.8,
+  "win_rate": 0.2
+ },
+ "Hull City AFC": {
+  "elo": 1342.02,
+  "games": 5,
+  "form": 8,
+  "avg_scored": 1.2,
+  "avg_conceded": 0.8,
+  "attack": 1.2,
+  "defense": 0.8,
+  "win_rate": 0.4
+ },
+ "Frosinone Calcio": {
+  "elo": 1313.49,
+  "games": 5,
+  "form": 10,
+  "avg_scored": 1.8,
+  "avg_conceded": 0.8,
+  "attack": 1.8,
+  "defense": 0.8,
+  "win_rate": 0.6
+ },
+ "SC Paderborn 07": {
+  "elo": 1302.75,
+  "games": 4,
+  "form": 4,
+  "avg_scored": 0.75,
+  "avg_conceded": 1.25,
+  "attack": 0.75,
+  "defense": 1.25,
+  "win_rate": 0.25
+ },
+ "SV 07 Elversberg": {
+  "elo": 1321.69,
+  "games": 4,
+  "form": 7,
+  "avg_scored": 2.0,
+  "avg_conceded": 1.75,
+  "attack": 2.0,
+  "defense": 1.75,
+  "win_rate": 0.5
+ },
+ "FC Schalke 04": {
+  "elo": 1309.87,
+  "games": 4,
+  "form": 5,
+  "avg_scored": 0.75,
+  "avg_conceded": 1.0,
+  "attack": 0.75,
+  "defense": 1.0,
+  "win_rate": 0.25
+ },
+ "PAE AEK": {
+  "elo": 1346.36,
+  "games": 1,
+  "form": 3,
+  "avg_scored": 1.0,
+  "avg_conceded": 0.0,
+  "attack": 1.0,
+  "defense": 0.0,
+  "win_rate": 1.0
+ },
+ "LASK Linz": {
+  "elo": 1330.33,
+  "games": 1,
+  "form": 0,
+  "avg_scored": 0.0,
+  "avg_conceded": 1.0,
+  "attack": 0.0,
+  "defense": 1.0,
+  "win_rate": 0.0
+ },
+ "Viking FK": {
+  "elo": 1327.43,
+  "games": 1,
+  "form": 0,
+  "avg_scored": 1.0,
+  "avg_conceded": 3.0,
+  "attack": 1.0,
+  "defense": 3.0,
+  "win_rate": 0.0
+ },
+ "Fenerbahçe SK": {
+  "elo": 1330.67,
+  "games": 1,
+  "form": 1,
+  "avg_scored": 1.0,
+  "avg_conceded": 1.0,
+  "attack": 1.0,
+  "defense": 1.0,
+  "win_rate": 0.0
+ },
+ "Sabah FK": {
+  "elo": 1322.6,
+  "games": 1,
+  "form": 0,
+  "avg_scored": 0.0,
+  "avg_conceded": 4.0,
+  "attack": 0.0,
+  "defense": 4.0,
+  "win_rate": 0.0
+ }
+}

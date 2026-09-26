@@ -31,6 +31,10 @@ if not hasattr(lr_model, 'multi_class'):
     lr_model.multi_class = 'auto'
 scaler    = joblib.load(os.path.join(MODEL_DIR, "scaler.pkl"))
 df_stats  = pd.read_csv(os.path.join(MODEL_DIR, "team_stats.csv"))
+# 팀별 "오늘 시점" 모델 입력값(누적 ELO·최근 폼·최근 득실 등) — update_data.py의
+# build_point_in_time_features가 학습 피처와 같은 정의로 계산해서 저장한 것
+with open(os.path.join(MODEL_DIR, "team_state.json"), 'r', encoding='utf-8') as f:
+    team_state = json.load(f)
 
 # 팀 이름 매핑 (HTML → API)
 TEAM_NAME_MAP = {
@@ -97,7 +101,7 @@ def _home_away_gap(lambda_home, lambda_away):
 
 def _solve_lambdas(base_home, base_away, target_gap, iterations=25):
     """
-    승/무/패 예측 모델(ELO+prestige+홈어드밴티지 등 반영)이 내놓은 승률 격차와
+    승/무/패 예측 모델(누적 ELO·최근 폼 등 반영)이 내놓은 승률 격차와
     스코어 예측(포아송)이 내놓는 격차가 서로 다른 모델이라 어긋나는 문제를 보정한다.
     총 기대득점(base_home+base_away, 팀 득실점 스탯 기반의 "경기 페이스")은 그대로 유지한 채,
     홈/원정 배분 비율만 이분탐색으로 조정해서 "포아송이 내재적으로 함의하는 홈-원정 승률차"가
@@ -158,7 +162,7 @@ def predict_score(home_attack, away_defense, away_attack, home_defense, predicti
 # 5개 개념(전력차/최근폼/공격력/수비력/승률/상대전적)으로 묶어서 기여도를 합산한다.
 FEATURE_INDEX = {name: i for i, name in enumerate(scaler.feature_names_in_)}
 FACTOR_GROUPS = [
-    # ELO와 승률은 ELO 자체가 승률에서 파생된 값이라 서로 강하게 상관돼 있음 —
+    # ELO와 승률은 둘 다 경기 결과의 누적이라 서로 강하게 상관돼 있음 —
     # 따로 두면 모델이 같은 신호를 두 피처에 나눠 담으면서 계수 부호가 서로
     # 반대로 나오는 통계적 아티팩트(다중공선성)가 생겨 "ELO는 불리했다"처럼
     # 오해를 부르는 설명이 됨. 같은 개념(팀 전력)으로 묶어서 합산한다.
@@ -231,39 +235,32 @@ def predict_match(req: MatchRequest):
     else:
         h2h_rate = 0.33
 
-    # ELO 점수 추정 (승률 + prestige + 전력차 기반 홈 어드밴티지 감쇠)
-    home_prestige = h['prestige'] if 'prestige' in h.index and pd.notna(h['prestige']) else 0
-    away_prestige = a['prestige'] if 'prestige' in a.index and pd.notna(a['prestige']) else 0
-
-    base_home_elo = 1500 + (h['win_rate'] - 0.33) * 1000
-    base_away_elo = 1500 + (a['win_rate'] - 0.33) * 1000
-    elo_gap = abs(base_home_elo - base_away_elo)
-
-    home_advantage_base = 70
-    home_advantage_factor = max(0.4, 1 - elo_gap / 800)
-    home_advantage_bonus = home_advantage_base * home_advantage_factor
-
-    home_elo = base_home_elo + home_prestige + home_advantage_bonus
-    away_elo = base_away_elo + away_prestige
+    # 모델 입력은 학습 때와 같은 정의의 값(team_state.json)을 그대로 씀. 예전엔 여기서
+    # 블렌딩 승률로 ELO(+prestige+홈 어드밴티지 감쇠)와 폼을 재구성했는데, 모델이 학습한
+    # 입력과 의미가 달라서 강팀 홈경기를 과소평가하고 무승부를 과대평가했음(2026-09-27 수정)
+    hs, as_ = team_state.get(home_team), team_state.get(away_team)
+    if hs is None or as_ is None:
+        missing = home_team if hs is None else away_team
+        raise HTTPException(status_code=404, detail=f"예측 데이터가 없는 팀입니다: {missing}")
 
     input_data = pd.DataFrame([{
-        'home_elo':          home_elo,
-        'away_elo':          away_elo,
-        'elo_diff':          home_elo - away_elo,
-        'home_form':         h['win_rate'] * 15,
-        'away_form':         a['win_rate'] * 15,
-        'form_diff':         (h['win_rate'] - a['win_rate']) * 15,
-        'home_avg_scored':   h['attack_strength'],
-        'away_avg_scored':   a['attack_strength'],
-        'home_avg_conceded': h['defense_strength'],
-        'away_avg_conceded': a['defense_strength'],
-        'home_attack':       h['attack_strength'],
-        'away_attack':       a['attack_strength'],
-        'home_defense':      h['defense_strength'],
-        'away_defense':      a['defense_strength'],
-        'home_win_rate':     h['win_rate'],
-        'away_win_rate':     a['win_rate'],
-        'win_rate_diff':     h['win_rate'] - a['win_rate'],
+        'home_elo':          hs['elo'],
+        'away_elo':          as_['elo'],
+        'elo_diff':          hs['elo'] - as_['elo'],
+        'home_form':         hs['form'],
+        'away_form':         as_['form'],
+        'form_diff':         hs['form'] - as_['form'],
+        'home_avg_scored':   hs['avg_scored'],
+        'away_avg_scored':   as_['avg_scored'],
+        'home_avg_conceded': hs['avg_conceded'],
+        'away_avg_conceded': as_['avg_conceded'],
+        'home_attack':       hs['attack'],
+        'away_attack':       as_['attack'],
+        'home_defense':      hs['defense'],
+        'away_defense':      as_['defense'],
+        'home_win_rate':     hs['win_rate'],
+        'away_win_rate':     as_['win_rate'],
+        'win_rate_diff':     hs['win_rate'] - as_['win_rate'],
         'h2h_home_rate':     h2h_rate,
     }])
 
