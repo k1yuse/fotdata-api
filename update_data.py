@@ -1182,59 +1182,67 @@ def fetch_top_scorers():
         print("  ⚠️ API_FOOTBALL_KEY가 없어 건너뜀")
         return
     
+    # 기존 파일을 먼저 읽어두고, 새로 제대로 받아온 리그만 교체한다 — API-Football은
+    # 요청 한도 초과 시에도 200 응답에 errors + 빈 response를 주기 때문에, 받은 그대로
+    # 저장하면 멀쩡하던 득점왕/도움왕이 빈 배열로 덮어써짐(선수 탭 404)
+    players_path = f"{MODEL_DIR}/players.json"
     all_players = {"topscorers": {}, "topassists": {}}
-    
+    if os.path.exists(players_path):
+        with open(players_path, 'r', encoding='utf-8') as f:
+            all_players = json.load(f)
+        all_players.setdefault("topscorers", {})
+        all_players.setdefault("topassists", {})
+
     # 무료 플랜은 24-25 시즌만 가능
     SEASON = 2024
-    
+    updated = False
+
+    def fetch_ranking(endpoint, label, league_id, league_name):
+        print(f"  [{league_name}] {label} 수집 중...")
+        try:
+            res = requests.get(
+                f"{API_FOOTBALL_URL}/players/{endpoint}",
+                headers=API_FOOTBALL_HEADERS,
+                params={"league": league_id, "season": SEASON}
+            )
+            if res.status_code != 200:
+                print(f"    ❌ 오류: {res.status_code} — 기존 데이터 유지")
+                return None
+            data = res.json()
+            players = data.get("response") or []
+            if data.get("errors") or not players:
+                print(f"    ⚠️ 빈 응답/오류({data.get('errors')}) — 기존 데이터 유지")
+                return None
+            print(f"    ✅ {len(players)}명")
+            return players
+        except Exception as e:
+            print(f"    ❌ 예외: {e} — 기존 데이터 유지")
+            return None
+
     for code, league_id in LEAGUE_IDS.items():
         league_name = LEAGUES_V2.get(code, code)
-        
+
         # 무료 플랜은 EPL만 가능 (다른 리그는 유료)
         if code != "PL":
             print(f"  [{league_name}] 무료 플랜 미지원, 건너뜀")
             continue
-        
-        # 득점왕
-        print(f"  [{league_name}] 득점왕 수집 중...")
-        try:
-            res = requests.get(
-                f"{API_FOOTBALL_URL}/players/topscorers",
-                headers=API_FOOTBALL_HEADERS,
-                params={"league": league_id, "season": SEASON}
-            )
-            if res.status_code == 200:
-                data = res.json()
-                all_players["topscorers"][code] = data.get("response", [])
-                print(f"    ✅ {len(data.get('response', []))}명")
-            else:
-                print(f"    ❌ 오류: {res.status_code}")
-        except Exception as e:
-            print(f"    ❌ 예외: {e}")
-        
+
+        scorers = fetch_ranking("topscorers", "득점왕", league_id, league_name)
+        if scorers is not None:
+            all_players["topscorers"][code] = scorers
+            updated = True
         time.sleep(2)
-        
-        # 도움왕
-        print(f"  [{league_name}] 도움왕 수집 중...")
-        try:
-            res = requests.get(
-                f"{API_FOOTBALL_URL}/players/topassists",
-                headers=API_FOOTBALL_HEADERS,
-                params={"league": league_id, "season": SEASON}
-            )
-            if res.status_code == 200:
-                data = res.json()
-                all_players["topassists"][code] = data.get("response", [])
-                print(f"    ✅ {len(data.get('response', []))}명")
-            else:
-                print(f"    ❌ 오류: {res.status_code}")
-        except Exception as e:
-            print(f"    ❌ 예외: {e}")
-        
+
+        assists = fetch_ranking("topassists", "도움왕", league_id, league_name)
+        if assists is not None:
+            all_players["topassists"][code] = assists
+            updated = True
         time.sleep(2)
-    
-    # 파일 저장
-    with open(f"{MODEL_DIR}/players.json", 'w', encoding='utf-8') as f:
+
+    if not updated:
+        print("  ⚠️ 새로 받은 선수 데이터 없음 — players.json 그대로 둠")
+        return
+    with open(players_path, 'w', encoding='utf-8') as f:
         json.dump(all_players, f, ensure_ascii=False, indent=2)
     print(f"  ✅ players.json 저장 완료")
 

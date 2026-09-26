@@ -742,7 +742,8 @@
   try {
     const res = await fetch('https://fotdata-api.onrender.com/accuracy');
     const data = await res.json();
-    document.getElementById('accuracy-stat').textContent = data.best + '%';
+    // best는 모델 비교용 최고값 — 실제 예측에 쓰는 로지스틱 회귀 정확도를 표시
+    document.getElementById('accuracy-stat').textContent = (data.logistic_regression ?? data.best) + '%';
     document.getElementById('matches-stat').textContent = Number(data.total_matches).toLocaleString();
   } catch(e) {
     document.getElementById('accuracy-stat').textContent = '56%';
