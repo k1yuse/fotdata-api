@@ -11810,8 +11810,8 @@
       "date": "2026-11-22T11:30:00Z",
       "matchday": 12,
       "stage": "REGULAR_SEASON",
-      "home_team": "US Sassuolo Calcio",
-      "away_team": "Genoa CFC",
+      "home_team": "Juventus FC",
+      "away_team": "Venezia FC",
       "home_goals": null,
       "away_goals": null,
       "status": "TIMED"
@@ -11820,8 +11820,18 @@
       "date": "2026-11-22T14:00:00Z",
       "matchday": 12,
       "stage": "REGULAR_SEASON",
-      "home_team": "AC Milan",
-      "away_team": "Frosinone Calcio",
+      "home_team": "Bologna FC 1909",
+      "away_team": "Udinese Calcio",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-11-22T14:00:00Z",
+      "matchday": 12,
+      "stage": "REGULAR_SEASON",
+      "home_team": "US Sassuolo Calcio",
+      "away_team": "Genoa CFC",
       "home_goals": null,
       "away_goals": null,
       "status": "TIMED"
@@ -11830,8 +11840,8 @@
       "date": "2026-11-22T17:00:00Z",
       "matchday": 12,
       "stage": "REGULAR_SEASON",
-      "home_team": "Bologna FC 1909",
-      "away_team": "Udinese Calcio",
+      "home_team": "AC Milan",
+      "away_team": "Frosinone Calcio",
       "home_goals": null,
       "away_goals": null,
       "status": "TIMED"
@@ -11847,724 +11857,714 @@
       "status": "TIMED"
     },
     {
-      "date": "2026-11-23T17:30:00Z",
-      "matchday": 12,
-      "stage": "REGULAR_SEASON",
-      "home_team": "AC Monza",
-      "away_team": "ACF Fiorentina",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
-    },
-    {
       "date": "2026-11-23T19:45:00Z",
       "matchday": 12,
       "stage": "REGULAR_SEASON",
+      "home_team": "AC Monza",
+      "away_team": "ACF Fiorentina",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-11-27T19:45:00Z",
+      "matchday": 13,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Venezia FC",
+      "away_team": "Bologna FC 1909",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-11-28T14:00:00Z",
+      "matchday": 13,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Frosinone Calcio",
+      "away_team": "Parma Calcio 1913",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-11-28T17:00:00Z",
+      "matchday": 13,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Torino FC",
+      "away_team": "SS Lazio",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-11-28T19:45:00Z",
+      "matchday": 13,
+      "stage": "REGULAR_SEASON",
+      "home_team": "FC Internazionale Milano",
+      "away_team": "Genoa CFC",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-11-29T11:30:00Z",
+      "matchday": 13,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Udinese Calcio",
+      "away_team": "ACF Fiorentina",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-11-29T14:00:00Z",
+      "matchday": 13,
+      "stage": "REGULAR_SEASON",
+      "home_team": "US Sassuolo Calcio",
+      "away_team": "SSC Napoli",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-11-29T17:00:00Z",
+      "matchday": 13,
+      "stage": "REGULAR_SEASON",
+      "home_team": "AS Roma",
+      "away_team": "AC Monza",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-11-29T19:45:00Z",
+      "matchday": 13,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Como 1907",
+      "away_team": "Juventus FC",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-11-30T17:30:00Z",
+      "matchday": 13,
+      "stage": "REGULAR_SEASON",
+      "home_team": "US Lecce",
+      "away_team": "Atalanta BC",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-11-30T19:45:00Z",
+      "matchday": 13,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Cagliari Calcio",
+      "away_team": "AC Milan",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-12-04T19:45:00Z",
+      "matchday": 14,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Bologna FC 1909",
+      "away_team": "AS Roma",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-12-05T14:00:00Z",
+      "matchday": 14,
+      "stage": "REGULAR_SEASON",
+      "home_team": "AC Monza",
+      "away_team": "Como 1907",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-12-05T17:00:00Z",
+      "matchday": 14,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Frosinone Calcio",
+      "away_team": "FC Internazionale Milano",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-12-05T19:45:00Z",
+      "matchday": 14,
+      "stage": "REGULAR_SEASON",
+      "home_team": "SSC Napoli",
+      "away_team": "US Lecce",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-12-06T11:30:00Z",
+      "matchday": 14,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Genoa CFC",
+      "away_team": "Torino FC",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-12-06T14:00:00Z",
+      "matchday": 14,
+      "stage": "REGULAR_SEASON",
+      "home_team": "SS Lazio",
+      "away_team": "Atalanta BC",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-12-06T17:00:00Z",
+      "matchday": 14,
+      "stage": "REGULAR_SEASON",
       "home_team": "Juventus FC",
+      "away_team": "Udinese Calcio",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-12-06T19:45:00Z",
+      "matchday": 14,
+      "stage": "REGULAR_SEASON",
+      "home_team": "AC Milan",
+      "away_team": "Parma Calcio 1913",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-12-07T17:30:00Z",
+      "matchday": 14,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Venezia FC",
+      "away_team": "US Sassuolo Calcio",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-12-07T19:45:00Z",
+      "matchday": 14,
+      "stage": "REGULAR_SEASON",
+      "home_team": "ACF Fiorentina",
+      "away_team": "Cagliari Calcio",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-12-11T19:45:00Z",
+      "matchday": 15,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Udinese Calcio",
+      "away_team": "Frosinone Calcio",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-12-12T14:00:00Z",
+      "matchday": 15,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Cagliari Calcio",
       "away_team": "Venezia FC",
       "home_goals": null,
       "away_goals": null,
       "status": "TIMED"
     },
     {
-      "date": "2026-11-29T00:00:00Z",
-      "matchday": 13,
-      "stage": "REGULAR_SEASON",
-      "home_team": "US Sassuolo Calcio",
-      "away_team": "SSC Napoli",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-11-29T00:00:00Z",
-      "matchday": 13,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Cagliari Calcio",
-      "away_team": "AC Milan",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-11-29T00:00:00Z",
-      "matchday": 13,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Como 1907",
-      "away_team": "Juventus FC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-11-29T00:00:00Z",
-      "matchday": 13,
-      "stage": "REGULAR_SEASON",
-      "home_team": "AS Roma",
-      "away_team": "AC Monza",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-11-29T00:00:00Z",
-      "matchday": 13,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Frosinone Calcio",
-      "away_team": "Parma Calcio 1913",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-11-29T00:00:00Z",
-      "matchday": 13,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Torino FC",
-      "away_team": "SS Lazio",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-11-29T00:00:00Z",
-      "matchday": 13,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Venezia FC",
-      "away_team": "Bologna FC 1909",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-11-29T00:00:00Z",
-      "matchday": 13,
-      "stage": "REGULAR_SEASON",
-      "home_team": "US Lecce",
-      "away_team": "Atalanta BC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-11-29T00:00:00Z",
-      "matchday": 13,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Udinese Calcio",
-      "away_team": "ACF Fiorentina",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-11-29T00:00:00Z",
-      "matchday": 13,
-      "stage": "REGULAR_SEASON",
-      "home_team": "FC Internazionale Milano",
-      "away_team": "Genoa CFC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-12-06T00:00:00Z",
-      "matchday": 14,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Genoa CFC",
-      "away_team": "Torino FC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-12-06T00:00:00Z",
-      "matchday": 14,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Juventus FC",
-      "away_team": "Udinese Calcio",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-12-06T00:00:00Z",
-      "matchday": 14,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Frosinone Calcio",
-      "away_team": "FC Internazionale Milano",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-12-06T00:00:00Z",
-      "matchday": 14,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Bologna FC 1909",
-      "away_team": "AS Roma",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-12-06T00:00:00Z",
-      "matchday": 14,
-      "stage": "REGULAR_SEASON",
-      "home_team": "ACF Fiorentina",
-      "away_team": "Cagliari Calcio",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-12-06T00:00:00Z",
-      "matchday": 14,
-      "stage": "REGULAR_SEASON",
-      "home_team": "SS Lazio",
-      "away_team": "Atalanta BC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-12-06T00:00:00Z",
-      "matchday": 14,
-      "stage": "REGULAR_SEASON",
-      "home_team": "AC Milan",
-      "away_team": "Parma Calcio 1913",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-12-06T00:00:00Z",
-      "matchday": 14,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Venezia FC",
-      "away_team": "US Sassuolo Calcio",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-12-06T00:00:00Z",
-      "matchday": 14,
-      "stage": "REGULAR_SEASON",
-      "home_team": "AC Monza",
-      "away_team": "Como 1907",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-12-06T00:00:00Z",
-      "matchday": 14,
-      "stage": "REGULAR_SEASON",
-      "home_team": "SSC Napoli",
-      "away_team": "US Lecce",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-12-13T00:00:00Z",
-      "matchday": 15,
-      "stage": "REGULAR_SEASON",
-      "home_team": "SSC Napoli",
-      "away_team": "AC Milan",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-12-13T00:00:00Z",
-      "matchday": 15,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Como 1907",
-      "away_team": "Bologna FC 1909",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-12-13T00:00:00Z",
-      "matchday": 15,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Udinese Calcio",
-      "away_team": "Frosinone Calcio",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-12-13T00:00:00Z",
+      "date": "2026-12-12T17:00:00Z",
       "matchday": 15,
       "stage": "REGULAR_SEASON",
       "home_team": "US Lecce",
       "away_team": "US Sassuolo Calcio",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2026-12-13T00:00:00Z",
+      "date": "2026-12-12T19:45:00Z",
       "matchday": 15,
       "stage": "REGULAR_SEASON",
-      "home_team": "Parma Calcio 1913",
-      "away_team": "ACF Fiorentina",
+      "home_team": "Como 1907",
+      "away_team": "Bologna FC 1909",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2026-12-13T00:00:00Z",
-      "matchday": 15,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Cagliari Calcio",
-      "away_team": "Venezia FC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-12-13T00:00:00Z",
-      "matchday": 15,
-      "stage": "REGULAR_SEASON",
-      "home_team": "FC Internazionale Milano",
-      "away_team": "Torino FC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-12-13T00:00:00Z",
-      "matchday": 15,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Juventus FC",
-      "away_team": "AC Monza",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-12-13T00:00:00Z",
-      "matchday": 15,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Atalanta BC",
-      "away_team": "Genoa CFC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-12-13T00:00:00Z",
+      "date": "2026-12-13T11:30:00Z",
       "matchday": 15,
       "stage": "REGULAR_SEASON",
       "home_team": "SS Lazio",
       "away_team": "AS Roma",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2026-12-20T00:00:00Z",
-      "matchday": 16,
+      "date": "2026-12-13T14:00:00Z",
+      "matchday": 15,
       "stage": "REGULAR_SEASON",
-      "home_team": "AC Milan",
-      "away_team": "Como 1907",
+      "home_team": "FC Internazionale Milano",
+      "away_team": "Torino FC",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2026-12-20T00:00:00Z",
-      "matchday": 16,
+      "date": "2026-12-13T17:00:00Z",
+      "matchday": 15,
       "stage": "REGULAR_SEASON",
-      "home_team": "US Sassuolo Calcio",
-      "away_team": "Parma Calcio 1913",
+      "home_team": "Parma Calcio 1913",
+      "away_team": "ACF Fiorentina",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2026-12-20T00:00:00Z",
-      "matchday": 16,
+      "date": "2026-12-13T19:45:00Z",
+      "matchday": 15,
       "stage": "REGULAR_SEASON",
-      "home_team": "AS Roma",
-      "away_team": "Juventus FC",
+      "home_team": "SSC Napoli",
+      "away_team": "AC Milan",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2026-12-20T00:00:00Z",
+      "date": "2026-12-14T17:30:00Z",
+      "matchday": 15,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Atalanta BC",
+      "away_team": "Genoa CFC",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-12-14T19:45:00Z",
+      "matchday": 15,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Juventus FC",
+      "away_team": "AC Monza",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-12-18T17:30:00Z",
       "matchday": 16,
       "stage": "REGULAR_SEASON",
       "home_team": "Frosinone Calcio",
       "away_team": "SS Lazio",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2026-12-20T00:00:00Z",
-      "matchday": 16,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Atalanta BC",
-      "away_team": "SSC Napoli",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-12-20T00:00:00Z",
-      "matchday": 16,
-      "stage": "REGULAR_SEASON",
-      "home_team": "ACF Fiorentina",
-      "away_team": "Bologna FC 1909",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-12-20T00:00:00Z",
-      "matchday": 16,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Genoa CFC",
-      "away_team": "Udinese Calcio",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2026-12-20T00:00:00Z",
+      "date": "2026-12-18T19:45:00Z",
       "matchday": 16,
       "stage": "REGULAR_SEASON",
       "home_team": "US Lecce",
       "away_team": "FC Internazionale Milano",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2026-12-20T00:00:00Z",
+      "date": "2026-12-19T14:00:00Z",
+      "matchday": 16,
+      "stage": "REGULAR_SEASON",
+      "home_team": "US Sassuolo Calcio",
+      "away_team": "Parma Calcio 1913",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-12-19T17:00:00Z",
+      "matchday": 16,
+      "stage": "REGULAR_SEASON",
+      "home_team": "AC Milan",
+      "away_team": "Como 1907",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-12-19T19:45:00Z",
+      "matchday": 16,
+      "stage": "REGULAR_SEASON",
+      "home_team": "AS Roma",
+      "away_team": "Juventus FC",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-12-20T11:30:00Z",
+      "matchday": 16,
+      "stage": "REGULAR_SEASON",
+      "home_team": "ACF Fiorentina",
+      "away_team": "Bologna FC 1909",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2026-12-20T14:00:00Z",
       "matchday": 16,
       "stage": "REGULAR_SEASON",
       "home_team": "Torino FC",
       "away_team": "Cagliari Calcio",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2026-12-20T00:00:00Z",
+      "date": "2026-12-20T14:00:00Z",
       "matchday": 16,
       "stage": "REGULAR_SEASON",
       "home_team": "Venezia FC",
       "away_team": "AC Monza",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2027-01-03T00:00:00Z",
-      "matchday": 17,
+      "date": "2026-12-20T17:00:00Z",
+      "matchday": 16,
       "stage": "REGULAR_SEASON",
-      "home_team": "Udinese Calcio",
-      "away_team": "Atalanta BC",
+      "home_team": "Genoa CFC",
+      "away_team": "Udinese Calcio",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2027-01-03T00:00:00Z",
-      "matchday": 17,
+      "date": "2026-12-20T19:45:00Z",
+      "matchday": 16,
       "stage": "REGULAR_SEASON",
-      "home_team": "Como 1907",
-      "away_team": "US Lecce",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2027-01-03T00:00:00Z",
-      "matchday": 17,
-      "stage": "REGULAR_SEASON",
-      "home_team": "AS Roma",
-      "away_team": "Frosinone Calcio",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2027-01-03T00:00:00Z",
-      "matchday": 17,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Parma Calcio 1913",
+      "home_team": "Atalanta BC",
       "away_team": "SSC Napoli",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2027-01-03T00:00:00Z",
+      "date": "2027-01-02T11:30:00Z",
       "matchday": 17,
       "stage": "REGULAR_SEASON",
       "home_team": "Cagliari Calcio",
       "away_team": "Genoa CFC",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2027-01-03T00:00:00Z",
+      "date": "2027-01-02T14:00:00Z",
       "matchday": 17,
       "stage": "REGULAR_SEASON",
       "home_team": "Torino FC",
       "away_team": "Venezia FC",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2027-01-03T00:00:00Z",
-      "matchday": 17,
-      "stage": "REGULAR_SEASON",
-      "home_team": "AC Monza",
-      "away_team": "AC Milan",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2027-01-03T00:00:00Z",
-      "matchday": 17,
-      "stage": "REGULAR_SEASON",
-      "home_team": "FC Internazionale Milano",
-      "away_team": "US Sassuolo Calcio",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2027-01-03T00:00:00Z",
-      "matchday": 17,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Bologna FC 1909",
-      "away_team": "Juventus FC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2027-01-03T00:00:00Z",
+      "date": "2027-01-02T14:00:00Z",
       "matchday": 17,
       "stage": "REGULAR_SEASON",
       "home_team": "ACF Fiorentina",
       "away_team": "SS Lazio",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2027-01-06T00:00:00Z",
-      "matchday": 18,
+      "date": "2027-01-02T17:00:00Z",
+      "matchday": 17,
       "stage": "REGULAR_SEASON",
-      "home_team": "Frosinone Calcio",
-      "away_team": "Bologna FC 1909",
+      "home_team": "AS Roma",
+      "away_team": "Frosinone Calcio",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2027-01-06T00:00:00Z",
-      "matchday": 18,
+      "date": "2027-01-02T19:45:00Z",
+      "matchday": 17,
       "stage": "REGULAR_SEASON",
-      "home_team": "US Sassuolo Calcio",
-      "away_team": "Udinese Calcio",
+      "home_team": "AC Monza",
+      "away_team": "AC Milan",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2027-01-06T00:00:00Z",
+      "date": "2027-01-03T11:30:00Z",
+      "matchday": 17,
+      "stage": "REGULAR_SEASON",
+      "home_team": "FC Internazionale Milano",
+      "away_team": "US Sassuolo Calcio",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2027-01-03T14:00:00Z",
+      "matchday": 17,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Udinese Calcio",
+      "away_team": "Atalanta BC",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2027-01-03T14:00:00Z",
+      "matchday": 17,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Como 1907",
+      "away_team": "US Lecce",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2027-01-03T17:00:00Z",
+      "matchday": 17,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Parma Calcio 1913",
+      "away_team": "SSC Napoli",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2027-01-03T19:45:00Z",
+      "matchday": 17,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Bologna FC 1909",
+      "away_team": "Juventus FC",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2027-01-05T17:30:00Z",
       "matchday": 18,
       "stage": "REGULAR_SEASON",
       "home_team": "Genoa CFC",
       "away_team": "AC Monza",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2027-01-06T00:00:00Z",
+      "date": "2027-01-05T17:30:00Z",
       "matchday": 18,
       "stage": "REGULAR_SEASON",
       "home_team": "Venezia FC",
       "away_team": "AS Roma",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2027-01-06T00:00:00Z",
-      "matchday": 18,
-      "stage": "REGULAR_SEASON",
-      "home_team": "SSC Napoli",
-      "away_team": "Cagliari Calcio",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2027-01-06T00:00:00Z",
+      "date": "2027-01-05T19:45:00Z",
       "matchday": 18,
       "stage": "REGULAR_SEASON",
       "home_team": "AC Milan",
       "away_team": "ACF Fiorentina",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2027-01-06T00:00:00Z",
+      "date": "2027-01-06T11:30:00Z",
       "matchday": 18,
       "stage": "REGULAR_SEASON",
       "home_team": "Juventus FC",
       "away_team": "Torino FC",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2027-01-06T00:00:00Z",
+      "date": "2027-01-06T14:00:00Z",
       "matchday": 18,
       "stage": "REGULAR_SEASON",
-      "home_team": "Atalanta BC",
-      "away_team": "Como 1907",
+      "home_team": "Frosinone Calcio",
+      "away_team": "Bologna FC 1909",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2027-01-06T00:00:00Z",
-      "matchday": 18,
-      "stage": "REGULAR_SEASON",
-      "home_team": "SS Lazio",
-      "away_team": "FC Internazionale Milano",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2027-01-06T00:00:00Z",
+      "date": "2027-01-06T14:00:00Z",
       "matchday": 18,
       "stage": "REGULAR_SEASON",
       "home_team": "US Lecce",
       "away_team": "Parma Calcio 1913",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2027-01-10T00:00:00Z",
-      "matchday": 19,
+      "date": "2027-01-06T17:00:00Z",
+      "matchday": 18,
       "stage": "REGULAR_SEASON",
-      "home_team": "ACF Fiorentina",
-      "away_team": "US Lecce",
+      "home_team": "Atalanta BC",
+      "away_team": "Como 1907",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2027-01-10T00:00:00Z",
-      "matchday": 19,
+      "date": "2027-01-06T19:45:00Z",
+      "matchday": 18,
       "stage": "REGULAR_SEASON",
-      "home_team": "Udinese Calcio",
-      "away_team": "SSC Napoli",
+      "home_team": "SS Lazio",
+      "away_team": "FC Internazionale Milano",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2027-01-10T00:00:00Z",
-      "matchday": 19,
+      "date": "2027-01-07T17:30:00Z",
+      "matchday": 18,
       "stage": "REGULAR_SEASON",
-      "home_team": "Torino FC",
-      "away_team": "Atalanta BC",
+      "home_team": "US Sassuolo Calcio",
+      "away_team": "Udinese Calcio",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2027-01-10T00:00:00Z",
+      "date": "2027-01-07T19:45:00Z",
+      "matchday": 18,
+      "stage": "REGULAR_SEASON",
+      "home_team": "SSC Napoli",
+      "away_team": "Cagliari Calcio",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2027-01-09T14:00:00Z",
       "matchday": 19,
       "stage": "REGULAR_SEASON",
       "home_team": "AC Monza",
       "away_team": "Frosinone Calcio",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
     },
     {
-      "date": "2027-01-10T00:00:00Z",
-      "matchday": 19,
-      "stage": "REGULAR_SEASON",
-      "home_team": "FC Internazionale Milano",
-      "away_team": "Juventus FC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2027-01-10T00:00:00Z",
-      "matchday": 19,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Parma Calcio 1913",
-      "away_team": "Venezia FC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2027-01-10T00:00:00Z",
-      "matchday": 19,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Bologna FC 1909",
-      "away_team": "Genoa CFC",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2027-01-10T00:00:00Z",
-      "matchday": 19,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Cagliari Calcio",
-      "away_team": "US Sassuolo Calcio",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2027-01-10T00:00:00Z",
-      "matchday": 19,
-      "stage": "REGULAR_SEASON",
-      "home_team": "Como 1907",
-      "away_team": "SS Lazio",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "SCHEDULED"
-    },
-    {
-      "date": "2027-01-10T00:00:00Z",
+      "date": "2027-01-09T17:00:00Z",
       "matchday": 19,
       "stage": "REGULAR_SEASON",
       "home_team": "AS Roma",
       "away_team": "AC Milan",
       "home_goals": null,
       "away_goals": null,
-      "status": "SCHEDULED"
+      "status": "TIMED"
+    },
+    {
+      "date": "2027-01-09T19:45:00Z",
+      "matchday": 19,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Bologna FC 1909",
+      "away_team": "Genoa CFC",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2027-01-10T11:30:00Z",
+      "matchday": 19,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Como 1907",
+      "away_team": "SS Lazio",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2027-01-10T14:00:00Z",
+      "matchday": 19,
+      "stage": "REGULAR_SEASON",
+      "home_team": "ACF Fiorentina",
+      "away_team": "US Lecce",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2027-01-10T14:00:00Z",
+      "matchday": 19,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Parma Calcio 1913",
+      "away_team": "Venezia FC",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2027-01-10T17:00:00Z",
+      "matchday": 19,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Torino FC",
+      "away_team": "Atalanta BC",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2027-01-10T19:45:00Z",
+      "matchday": 19,
+      "stage": "REGULAR_SEASON",
+      "home_team": "FC Internazionale Milano",
+      "away_team": "Juventus FC",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2027-01-11T17:30:00Z",
+      "matchday": 19,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Cagliari Calcio",
+      "away_team": "US Sassuolo Calcio",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
+    },
+    {
+      "date": "2027-01-11T19:45:00Z",
+      "matchday": 19,
+      "stage": "REGULAR_SEASON",
+      "home_team": "Udinese Calcio",
+      "away_team": "SSC Napoli",
+      "home_goals": null,
+      "away_goals": null,
+      "status": "TIMED"
     },
     {
       "date": "2027-01-17T00:00:00Z",
