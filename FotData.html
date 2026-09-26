@@ -1186,10 +1186,23 @@ async function loadTodayMatches() {
 }
 
 // ── 빅매치 카운트다운 배너 ──
-// "빅매치" = 향후 21일 내 예정된 경기 중, 두 팀 모두 prestige(체급 지표)가 높은 매치업.
-// 한쪽만 강한 매치(상위팀 vs 하위팀)는 빅매치로 안 치고, 양팀 다 강해야 후보로 삼는다.
-const BIGMATCH_HORIZON_DAYS = 21;
-const BIGMATCH_MIN_PRESTIGE = 50;
+// "빅매치" = 두 팀 모두 BIG_CLUBS(리그별 인기·시청률 상위 구단)에 속한 경기.
+// prestige는 최근 2시즌 승률만 반영해서 Man Utd/Juventus처럼 부진한 인기 구단은
+// 낮게, Lens/Lille 같은 중위권은 높게 나오는 등 "관심도"를 못 담기 때문에
+// 후보 자격은 이 리스트로 거르고, prestige 합(데이터상 전력)이 기준 미만인 경기도 제외.
+// 남은 후보 중 가장 이른 경기일 기준 +3일(같은 라운드/주말) 안에서 최강 매치를 보여줌 —
+// 먼 미래의 더 센 경기가 임박한 빅매치를 밀어내지 않고, 경기 시작 시간이 지나면
+// 후보에서 빠져 바로 다음 빅매치로 순서대로 넘어감.
+const BIG_CLUBS = new Set([
+  'Manchester City FC', 'Liverpool FC', 'Arsenal FC', 'Manchester United FC', 'Chelsea FC', 'Tottenham Hotspur FC',
+  'Real Madrid CF', 'FC Barcelona', 'Club Atlético de Madrid',
+  'FC Bayern München', 'Borussia Dortmund',
+  'FC Internazionale Milano', 'AC Milan', 'Juventus FC', 'SSC Napoli', 'AS Roma',
+  'Paris Saint-Germain FC', 'Olympique de Marseille',
+]);
+const BIGMATCH_MIN_SCORE = 80;
+const BIGMATCH_CLUSTER_DAYS = 3;
+const BIGMATCH_HORIZON_DAYS = 30;
 let bigMatchTimer = null;
 
 async function loadBigMatch() {
@@ -1198,25 +1211,22 @@ async function loadBigMatch() {
   try {
     await ensureTeamPrestigeLoaded();
     const all = await fetchAllSchedules();
+    const DAY = 24 * 60 * 60 * 1000;
     const now = new Date();
-    const horizon = new Date(now.getTime() + BIGMATCH_HORIZON_DAYS * 24 * 60 * 60 * 1000);
-    const upcoming = all.filter(m => {
+    const horizon = new Date(now.getTime() + BIGMATCH_HORIZON_DAYS * DAY);
+    const candidates = all.filter(m => {
       const d = new Date(m.date);
-      return m.status !== 'FINISHED' && d > now && d <= horizon;
-    });
-    if (!upcoming.length) { banner.style.display = 'none'; return; }
-    // prestige는 "빅매치 자격이 있는가"만 거르는 기준으로 쓰고, 자격을 통과한
-    // 경기들 중에서는 가장 가까운 날짜를 보여줌 — 그래야 임박한 빅매치가 있는데
-    // 더 먼 미래의 "더 센" 매치업한테 밀려나는 일이 없고, 경기가 끝나면
-    // upcoming 필터에서 자동으로 빠지면서 바로 다음 빅매치로 넘어감
-    const scored = upcoming.map(m => {
-      const hp = teamPrestigeCache[m.home_team] ?? 0;
-      const ap = teamPrestigeCache[m.away_team] ?? 0;
-      return { ...m, matchScore: Math.min(hp, ap) };
-    }).filter(m => m.matchScore >= BIGMATCH_MIN_PRESTIGE)
+      return m.status !== 'FINISHED' && d > now && d <= horizon && BIG_CLUBS.has(m.home_team) && BIG_CLUBS.has(m.away_team);
+    }).map(m => ({
+      ...m,
+      matchScore: (teamPrestigeCache[m.home_team] ?? 0) + (teamPrestigeCache[m.away_team] ?? 0),
+    })).filter(m => m.matchScore >= BIGMATCH_MIN_SCORE)
       .sort((a, b) => new Date(a.date) - new Date(b.date));
-    const big = scored[0];
-    if (!big) { banner.style.display = 'none'; return; }
+    if (!candidates.length) { banner.style.display = 'none'; return; }
+    const clusterEnd = new Date(candidates[0].date).getTime() + BIGMATCH_CLUSTER_DAYS * DAY;
+    const big = candidates
+      .filter(m => new Date(m.date).getTime() <= clusterEnd)
+      .sort((a, b) => b.matchScore - a.matchScore || new Date(a.date) - new Date(b.date))[0];
     await renderBigMatchBanner(big);
     banner.style.display = 'block';
   } catch (e) {
@@ -1278,7 +1288,7 @@ async function renderBigMatchBanner(m) {
     const diff = new Date(m.date) - new Date();
     const el = document.getElementById('bigmatch-countdown');
     if (!el) { clearInterval(bigMatchTimer); return; }
-    if (diff <= 0) { loadBigMatch(); return; }
+    if (diff <= 0) { clearInterval(bigMatchTimer); loadBigMatch(); return; }
     const days = Math.floor(diff / 86400000);
     const hours = Math.floor(diff % 86400000 / 3600000);
     const mins = Math.floor(diff % 3600000 / 60000);
