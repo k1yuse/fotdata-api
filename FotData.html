@@ -559,7 +559,7 @@
     .mi-delta { font-size: 10px; font-weight: 600; margin-left: 3px; }
     .mi-delta.up { color: #3fb950; } .mi-delta.down { color: #f85149; } .mi-delta.flat { color: #8b949e; }
     /* 차트는 카드 실제 폭(px)으로 1:1로 그림 — viewBox로 늘리면 넓은 화면에서 글자까지 커짐 */
-    .mi-chart { width: 100%; }
+    .mi-chart { width: 100%; max-width: 100%; }
     .mi-chart svg { display: block; overflow: visible; }
     .mi-chart.static .line { animation: none; stroke-dashoffset: 0; }
     .mi-chart.static .pt { animation: none; opacity: 1; }
@@ -3066,8 +3066,10 @@ function drawPowerChart(animate, tries = 0) {
   const w = Math.floor(el.clientWidth);
   // 결과 영역이 아직 display:none이면(showResult가 렌더 후 표시) 폭이 0 — 보일 때까지 잠깐 재시도
   if (!w) { if (tries < 20) setTimeout(() => drawPowerChart(animate, tries + 1), 50); return; }
-  if (w === Number(el.dataset.w)) return;
-  el.dataset.w = w;
+  // 주의: data-w는 막대 애니메이션(renderMatchInsights)이 "폭 %"로 쓰는 속성이라 여기선 다른 이름을 씀 —
+  // 같은 이름을 썼다가 차트 영역 폭이 646%로 늘어나 페이지 전체에 가로 스크롤이 생긴 적 있음
+  if (w === Number(el.dataset.drawnW)) return;
+  el.dataset.drawnW = w;
   el.classList.toggle('static', !animate);
   el.innerHTML = miPowerChart(miPowerData.home, miPowerData.away, w);
   if (typeof fitMoreCard === 'function') fitMoreCard();
