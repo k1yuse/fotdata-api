@@ -187,8 +187,10 @@
 
     /* 빅매치 카운트다운 배너 */
     .bigmatch-banner { position: relative; padding: 22px 24px; border-radius: 14px; background: linear-gradient(135deg, rgba(88,166,255,0.18), rgba(163,113,247,0.06)); border: 0.5px solid rgba(88,166,255,0.4); box-shadow: 0 6px 24px rgba(88,166,255,0.12); margin-bottom: 8px; }
-    .bigmatch-label { font-size: 12px; font-weight: 700; color: #58a6ff; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 6px; }
-    .bigmatch-label img { width: 22px; height: 22px; object-fit: contain; }
+    .bigmatch-label { font-size: 13px; font-weight: 700; color: #58a6ff; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 6px; }
+    .bigmatch-label img { width: 32px; height: 32px; object-fit: contain; }
+    /* PL 원본은 정사각형 캔버스 가운데 가로 띠에만 로고가 있어서(위아래 여백 ~55%) 정사각형 박스로는 작게 보임 — 가로로 넓은 박스에 cover로 여백만 잘라냄 */
+    .bigmatch-label img.wide { width: 72px; object-fit: cover; }
     .bigmatch-venue { text-align: center; font-size: 11px; color: #6e7681; margin-bottom: 18px; display: flex; align-items: center; justify-content: center; gap: 4px; }
     .bigmatch-venue svg { width: 11px; height: 11px; flex-shrink: 0; }
     .bigmatch-teams { display: flex; align-items: center; justify-content: center; gap: 28px; margin-bottom: 20px; }
@@ -1113,7 +1115,7 @@ function skeletonRows(n, opts = {}) {
 }
 
 const TODAY_LEAGUE_INFO = {
-  PL: { name: 'EPL', logo: 'https://crests.football-data.org/PL.png', invert: true },
+  PL: { name: 'EPL', logo: 'https://crests.football-data.org/PL.png', invert: true, wide: true },
   PD: { name: '라리가', logo: 'https://crests.football-data.org/laliga.png' },
   BL1: { name: '분데스리가', logo: 'https://crests.football-data.org/BL1.png' },
   SA: { name: '세리에A', logo: 'https://crests.football-data.org/c111.png' },
@@ -1268,7 +1270,7 @@ async function renderBigMatchBanner(m) {
   } catch (e) { /* 구장 정보 없으면 그냥 생략 */ }
 
   banner.innerHTML = `
-    <div class="bigmatch-label"><img src="${li.logo}" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">빅매치 · ${li.name} · ${dateLabel}</div>
+    <div class="bigmatch-label"><img src="${li.logo}" class="${li.wide ? 'wide' : ''}" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">빅매치 · ${li.name} · ${dateLabel}</div>
     ${venueHtml}
     <div class="bigmatch-teams">
       <div class="bigmatch-team">
