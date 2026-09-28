@@ -387,6 +387,65 @@
       .preview p, .standings-preview p { word-break: keep-all; line-height: 1.6; }
       footer { flex-direction: column; gap: 8px; text-align: center; }
     }
+    /* ── STORY: 스크롤 3D 연출 (landing-story.js) ── 히어로 다음에 화면을 고정한 채 스크롤로 장면 전환 */
+    #story-canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; opacity: 0; }
+    .story { position: relative; height: 560vh; border-bottom: 0.5px solid var(--border); }
+    .story[hidden] { display: none; }
+    .story-pin { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+    .story-steps { position: absolute; top: 60px; bottom: 0; left: 50%; width: 100%; max-width: 1180px; transform: translateX(-50%); }
+    .story-step { position: absolute; top: 50%; left: 56px; width: min(440px, 40%); translate: 0 -50%; opacity: 0; will-change: opacity, transform; }
+    .story-kicker { font-size: 12px; color: var(--blue); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 14px; font-weight: 600; }
+    .story-step h2 { font-size: 42px; font-weight: 800; line-height: 1.15; letter-spacing: -1px; margin-bottom: 16px; word-break: keep-all; }
+    .story-step h2 em { color: var(--blue); font-style: normal; }
+    .story-step p { font-size: 15px; color: var(--muted); line-height: 1.75; word-break: keep-all; }
+    .story-counter { margin-top: 26px; font-size: 58px; font-weight: 800; letter-spacing: -1.5px; font-variant-numeric: tabular-nums; line-height: 1; }
+    .story-counter small { font-size: 14px; color: var(--muted); font-weight: 500; letter-spacing: 0; margin-left: 10px; }
+    .story-match { margin-top: 24px; background: rgba(22,27,34,0.72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 0.5px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+    .story-match-when { font-size: 11px; color: var(--muted); margin-bottom: 10px; }
+    .story-match-teams { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 15px; margin-bottom: 14px; }
+    .story-match-teams span { display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
+    .story-match-teams b { font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .story-match-teams i { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+    .story-match-teams .h i { background: #58a6ff; box-shadow: 0 0 10px rgba(88,166,255,0.7); }
+    .story-match-teams .a i { background: #f0883e; box-shadow: 0 0 10px rgba(240,136,62,0.7); }
+    .story-match-teams .vs { font-size: 11px; color: var(--muted); }
+    .story-bars .row { display: grid; grid-template-columns: 110px 1fr 40px; align-items: center; gap: 10px; margin-top: 8px; font-size: 12px; color: var(--muted); }
+    .story-bars .row span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .story-bars .bg { height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
+    .story-bars i { display: block; height: 100%; width: 0; border-radius: 3px; }
+    .story-bars i.h { background: #58a6ff; } .story-bars i.d { background: #d29922; } .story-bars i.a { background: #f0883e; }
+    .story-bars b { text-align: right; color: var(--text); font-weight: 700; font-variant-numeric: tabular-nums; }
+    .story-sim-list { list-style: none; margin-top: 20px; display: flex; flex-direction: column; gap: 8px; }
+    .story-sim-list li { display: grid; grid-template-columns: 22px 1fr auto; gap: 10px; align-items: center; font-size: 14px; }
+    .story-sim-list .rk { color: var(--muted); font-weight: 700; text-align: center; } .story-sim-list .rk.first { color: #f0c040; }
+    .story-sim-list .pc { font-weight: 700; color: var(--blue); font-variant-numeric: tabular-nums; }
+    .story:not(.static) .story-sim-list { display: none; }   /* 애니메이션 모드에선 3D 막대 위 라벨로 보여줌 */
+    .story-step .btn-primary { margin-top: 24px; }
+    .story-bar-labels { position: absolute; inset: 0; pointer-events: none; opacity: 0; }
+    .story-bar-label { position: absolute; left: 0; top: 0; text-align: center; white-space: nowrap; }
+    .story-bar-label b { display: block; font-size: 16px; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; }
+    .story-bar-label.first b { color: #f0c040; }
+    .story-bar-label span { display: block; font-size: 11px; color: var(--muted); }
+    .hero, .story { isolation: auto; }
+    @media (max-width: 768px) {
+      .story { height: 520vh; }
+      .story-step { top: 24px; left: 20px; right: 20px; width: auto; translate: none; }
+      .story-step h2 { font-size: 28px; margin-bottom: 10px; }
+      .story-step p { font-size: 13px; line-height: 1.65; }
+      .story-counter { font-size: 40px; margin-top: 14px; }
+      .story-match { margin-top: 14px; padding: 12px 14px; }
+      .story-bars .row { grid-template-columns: 90px 1fr 36px; }
+      .story-bar-label b { font-size: 13px; } .story-bar-label span { font-size: 10px; }
+    }
+    /* 정적 모드: 모션 최소화 설정·WebGL 미지원 — 화면 고정 없이 문구와 목록만 */
+    .story.static { height: auto; }
+    .story.static #story-canvas, .story.static .story-bar-labels { display: none; }
+    .story.static .story-pin { position: static; height: auto; overflow: visible; }
+    .story.static .story-steps { position: static; transform: none; margin: 0 auto; padding: 72px 48px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 48px; }
+    .story.static .story-step { position: static; opacity: 1 !important; transform: none !important; translate: none; width: auto; }
+    .story.static .story-step h2 { font-size: 30px; }
+    .story.static .story-bars i { width: var(--target) !important; }
+    @media (max-width: 768px) { .story.static .story-steps { padding: 48px 24px; } }
     .kofi-float-btn { position: fixed; left: 16px; bottom: 92px; z-index: 400; display: inline-flex; align-items: center; gap: 8px; background: var(--blue); color: #0d1117; font-size: 13px; font-weight: 700; padding: 11px 18px; border-radius: 999px; box-shadow: 0 8px 24px rgba(0,0,0,.35); border: none; cursor: pointer; font-family: inherit; }
     .kofi-float-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
     @media (max-width: 768px) { .kofi-float-btn { bottom: 120px; } .kofi-panel { bottom: 180px; } }
@@ -464,6 +523,48 @@
   <div class="leaders-label"><span class="live-dot"></span>지금 이 순간, 각 리그 1위</div>
   <div class="leaders-strip" id="landing-leaders-strip">
     <div class="mini-loader-row" style="color:var(--muted);font-size:12px;padding:10px 0"><svg class="logo-bars animate" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg>불러오는 중...</div>
+  </div>
+</section>
+
+<!-- 스크롤 3D 연출 (landing-story.js) — 공개 전 미리보기: ?story=1 일 때만 표시 -->
+<section class="story" id="story" hidden aria-label="FotData가 경기를 예측하는 방법">
+  <canvas id="story-canvas" aria-hidden="true"></canvas>
+  <div class="story-pin">
+    <div class="story-steps">
+      <div class="story-step">
+        <div class="story-kicker">01 · 데이터</div>
+        <h2>공 하나가<br><em><span id="story-total">6,024</span>경기</em>의 데이터로</h2>
+        <p>최근 4시즌, 5대 리그와 챔피언스리그의 모든 경기 결과가 점 하나하나로 쌓여 AI 모델의 기억이 돼요.</p>
+        <div class="story-counter"><span id="story-count">6,024</span><small>경기 학습</small></div>
+      </div>
+      <div class="story-step">
+        <div class="story-kicker">02 · 예측</div>
+        <h2>데이터가<br><em>예측</em>이 되다</h2>
+        <p>누적 ELO 전력, 최근 폼, 득실, 맞대결까지 — 경기 직전까지의 기록만으로 승·무·패 확률을 계산해요.</p>
+        <div class="story-match">
+          <div class="story-match-when" id="story-when">다가오는 빅매치</div>
+          <div class="story-match-teams"><span class="h"><i></i><b id="story-home">Liverpool</b></span><span class="vs">vs</span><span class="a"><b id="story-away">Manchester City</b><i></i></span></div>
+          <div class="story-bars">
+            <div class="row"><span id="story-home-label">홈 승</span><div class="bg"><i id="story-bar-h" class="h"></i></div><b id="story-bar-h-val">-</b></div>
+            <div class="row"><span>무승부</span><div class="bg"><i id="story-bar-d" class="d"></i></div><b id="story-bar-d-val">-</b></div>
+            <div class="row"><span id="story-away-label">원정 승</span><div class="bg"><i id="story-bar-a" class="a"></i></div><b id="story-bar-a-val">-</b></div>
+          </div>
+        </div>
+      </div>
+      <div class="story-step">
+        <div class="story-kicker">03 · 시뮬레이션</div>
+        <h2>한 시즌을<br><em>1,000번</em> 치르다</h2>
+        <p>현재 승점에서 출발해 남은 <span id="story-remaining">330</span>경기를 1,000번 시뮬레이션해요. 막대 높이가 곧 EPL 우승 확률이에요.</p>
+        <ol class="story-sim-list" id="story-sim-list"></ol>
+      </div>
+      <div class="story-step">
+        <div class="story-kicker">FotData</div>
+        <h2>그리고 이 모든 게,<br><em>버튼 하나로</em></h2>
+        <p>두 팀만 고르면 AI가 확률, 예상 스코어, 근거까지 보여줘요.</p>
+        <a href="FotData.html" class="btn-primary">경기 예측하기</a>
+      </div>
+    </div>
+    <div class="story-bar-labels" id="story-bar-labels" aria-hidden="true"></div>
   </div>
 </section>
 
@@ -570,7 +671,7 @@
       <ul class="check-list">
         <li>팀별 공격력 · 수비력 실시간 분석</li>
         <li>최근 5경기 폼 자동 반영</li>
-        <li>최근 3시즌 H2H 맞대 기록</li>
+        <li>최근 4시즌 H2H 맞대 기록</li>
         <li>홈 어드밴티지 자동 계산</li>
       </ul>
     </div>
@@ -669,7 +770,7 @@
       <div class="feat-card reveal">
         <div class="feat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4L3 12l6 8M15 4l6 8-6 8"/></svg></div>
         <h3>H2H 맞대 기록</h3>
-        <p>두 팀의 최근 3시즌 맞대 기록과 상세 경기 결과.</p>
+        <p>두 팀의 최근 4시즌 맞대 기록과 상세 경기 결과.</p>
       </div>
       <div class="feat-card reveal">
         <div class="feat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V11M10 20V4M16 20V14M22 20V8"/></svg></div>
@@ -694,7 +795,7 @@
       <div class="feat-card reveal">
         <div class="feat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v3a4 4 0 01-4 4 4 4 0 01-4-4V4z"/><path d="M8 5H5a3 3 0 003 3M16 5h3a3 3 0 01-3 3"/><path d="M12 11v4M9 20h6M10 17h4v3h-4z"/></svg></div>
         <h3>우승 확률 예측</h3>
-        <p>몬테카를로 시뮬레이션 1000회로 계산한 우승·TOP4·강등 확률을 확인하세요.</p>
+        <p>현재 승점에서 출발해 남은 경기를 1,000번 시뮬레이션한 우승·UCL권·강등 확률을 확인하세요.</p>
       </div>
       <div class="feat-card reveal">
         <div class="feat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6M9 12l2 2 4-4"/></svg></div>
@@ -921,5 +1022,6 @@ function toggleKofiPanel() {
 }
 window.addEventListener('resize', () => { if (document.getElementById('kofi-panel').classList.contains('open')) positionKofiPanel(); });
 </script>
+<script type="module" src="landing-story.js"></script>
 </body>
 </html>
