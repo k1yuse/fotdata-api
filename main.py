@@ -36,6 +36,26 @@ df_stats  = pd.read_csv(os.path.join(MODEL_DIR, "team_stats.csv"))
 with open(os.path.join(MODEL_DIR, "team_state.json"), 'r', encoding='utf-8') as f:
     team_state = json.load(f)
 
+# ── 5대 리그 밖 UCL 팀 (2026-09-28) ──
+# 이 팀들은 데이터가 UCL 경기뿐이라, 올 시즌 UCL 일정에 있고 UCL 경기 기록이 8경기 이상인 팀만 예측을 열어줌
+# (1경기뿐인 첫 출전 팀은 "예측 데이터 없음" 유지). 이런 경기는 모델이 확률을 과신해서 — 24-25·25-26 UCL
+# 110경기 백테스트에서 모델 그대로는 log loss 1.083으로 "리그 평균 비율로만 찍기"(1.038)보다도 나빴음 —
+# 확률을 평균 쪽으로 30% 당김(λ=0.3 → 1.024, 정확도 53.6% vs 홈승만 49.1%). 화면엔 "참고용" 표시.
+UCL_ONLY_MIN_MATCHES = 8
+UCL_ONLY_SHRINK = 0.30
+MATCH_BASE_RATES = (0.44, 0.25, 0.31)   # 홈승/무/원정승 리그 평균 비율
+def _load_ucl_only_teams():
+    try:
+        with open(os.path.join(MODEL_DIR, "schedule.json"), 'r', encoding='utf-8') as f:
+            cl = json.load(f).get("CL", [])
+    except Exception:
+        return set()
+    league_teams = set(df_stats['team'])
+    cl_teams = {t for m in cl for t in (m["home_team"], m["away_team"])}
+    return {t for t in cl_teams - league_teams
+            if team_state.get(t, {}).get("games", 0) >= UCL_ONLY_MIN_MATCHES}
+ucl_only_teams = _load_ucl_only_teams()
+
 # 팀 이름 매핑 (HTML → API)
 TEAM_NAME_MAP = {
     "Inter Milan": "FC Internazionale Milano",
@@ -204,7 +224,8 @@ def root():
 def get_teams():
     """사용 가능한 팀 목록 반환"""
     teams = sorted(df_stats['team'].tolist())
-    return {"teams": teams, "count": len(teams)}
+    # ucl_teams: 5대 리그 밖이지만 UCL 경기 기록으로 예측 가능한 팀(참고용 예측)
+    return {"teams": teams, "count": len(teams), "ucl_teams": sorted(ucl_only_teams)}
 
 # ── 모델 입력 생성 (/predict와 순위 예측이 같이 씀) ──
 _h2h_cache = None
@@ -249,6 +270,18 @@ def _predict_hda(pairs):
     cols = [list(lr_model.classes_).index(c) for c in ('H', 'D', 'A')]
     return P[:, cols]
 
+def _display_stats(team):
+    """결과 화면·스코어 예측용 공격/수비/승률. 5대 리그 팀은 블렌딩 값(team_stats.csv),
+    UCL 전용 팀은 team_state의 최근 경기(=UCL 경기) 값. 둘 다 아니면 None"""
+    row = df_stats[df_stats['team'] == team]
+    if not row.empty:
+        r = row.iloc[0]
+        return {'attack_strength': r['attack_strength'], 'defense_strength': r['defense_strength'], 'win_rate': r['win_rate']}
+    if team in ucl_only_teams:
+        s = team_state[team]
+        return {'attack_strength': s['attack'], 'defense_strength': s['defense'], 'win_rate': s['win_rate']}
+    return None
+
 @app.post("/predict")
 def predict_match(req: MatchRequest):
     """경기 결과 예측"""
@@ -256,15 +289,12 @@ def predict_match(req: MatchRequest):
     home_team = TEAM_NAME_MAP.get(req.home_team, req.home_team)
     away_team = TEAM_NAME_MAP.get(req.away_team, req.away_team)
     
-    h = df_stats[df_stats['team'] == home_team]
-    a = df_stats[df_stats['team'] == away_team]
-
-    if h.empty:
+    h, a = _display_stats(home_team), _display_stats(away_team)
+    if h is None:
         raise HTTPException(status_code=404, detail=f"팀을 찾을 수 없습니다: {home_team}")
-    if a.empty:
+    if a is None:
         raise HTTPException(status_code=404, detail=f"팀을 찾을 수 없습니다: {away_team}")
-
-    h, a = h.iloc[0], a.iloc[0]
+    limited = home_team in ucl_only_teams or away_team in ucl_only_teams
 
     # 모델 입력은 학습 때와 같은 정의의 값(team_state.json)을 그대로 씀. 예전엔 여기서
     # 블렌딩 승률로 ELO(+prestige+홈 어드밴티지 감쇠)와 폼을 재구성했는데, 모델이 학습한
@@ -278,6 +308,9 @@ def predict_match(req: MatchRequest):
     proba = lr_model.predict_proba(input_scaled)[0]
     classes = lr_model.classes_
     proba_dict = dict(zip(classes, proba))
+    if limited:   # UCL 경기 기록만 있는 팀 — 과신 보정(위 UCL_ONLY_SHRINK 설명)
+        base = dict(zip(('H', 'D', 'A'), MATCH_BASE_RATES))
+        proba_dict = {c: (1 - UCL_ONLY_SHRINK) * p + UCL_ONLY_SHRINK * base[c] for c, p in proba_dict.items()}
 
     h_prob = round(float(proba_dict.get('H', 0)), 3)
     d_prob = round(float(proba_dict.get('D', 0)), 3)
@@ -309,6 +342,8 @@ def predict_match(req: MatchRequest):
         },
         "score_prediction": score_prediction,
         "explanation": explanation,
+        # True면 한쪽 이상이 5대 리그 밖 팀이라 UCL 경기 기록만으로 계산한 참고용 예측
+        "limited": limited,
         "home_stats": {
             "attack":   round(float(h['attack_strength']), 3),
             "defense":  round(float(h['defense_strength']), 3),

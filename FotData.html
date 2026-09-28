@@ -499,6 +499,10 @@
     .h2h-score.W { color: #238636; }
     .h2h-score.D { color: #8b949e; }
     .h2h-score.L { color: #da3633; }
+    /* 5대 리그 밖 UCL 팀이 낀 예측 — UCL 경기 기록만으로 계산한 참고용 */
+    .limited-note { display: flex; align-items: center; gap: 6px; width: fit-content; max-width: 100%; margin: 10px auto 0; padding: 6px 10px; border-radius: 8px; font-size: 11px; line-height: 1.4; color: #d29922; background: rgba(210,153,34,0.1); border: 0.5px solid rgba(210,153,34,0.35); }
+    .limited-note b { font-weight: 700; }
+    .limited-note svg { width: 14px; height: 14px; flex-shrink: 0; }
     /* ── 경기 분석(맞대결 카드 아래): 순위·홈/원정·경기 성향·파워 레이팅 ── */
     .mi-section { margin-top: 18px; padding-top: 18px; border-top: 0.5px solid #30363d; }
     .mi-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
@@ -1007,6 +1011,7 @@
             <div class="result-team" id="result-away-team"><img id="result-away-logo" src="" alt=""><div class="result-team-name" id="result-away-name"></div></div>
           </div>
           <div class="prediction-badge"><span class="badge" id="pred-badge"></span></div>
+          <div class="limited-note" id="limited-note" style="display:none"></div>
           <div class="prob-bars">
             <div class="prob-row" style="grid-template-columns:120px 1fr 45px"><span class="prob-label" id="prob-label-home">홈승</span><div class="prob-bar-bg"><div class="prob-bar home" id="bar-home" style="width:0%"></div></div><span class="prob-value" id="val-home"></span></div>
             <div class="prob-row" style="grid-template-columns:120px 1fr 45px"><span class="prob-label">무승부</span><div class="prob-bar-bg"><div class="prob-bar draw" id="bar-draw" style="width:0%"></div></div><span class="prob-value" id="val-draw"></span></div>
@@ -1180,24 +1185,31 @@ function wakingUpHtml(attempt, retries) {
 }
 
 let logos = {};
-// 예측 모델에 스탯이 있는 팀(= team_stats.csv, 5대 리그 팀만). UCL에만 나오는 5대 리그 밖
-// 팀(스포르팅, 갈라타사라이 등)은 여기 없어서 /predict가 404 — 미리 알고 안내하기 위함
+// 예측 가능한 팀 = 5대 리그 팀 + UCL 경기 기록이 8경기 이상인 5대 리그 밖 UCL 팀(서버 /teams의 ucl_teams).
+// UCL 첫 출전 팀처럼 기록이 부족한 팀은 /predict가 404 — 미리 알고 안내하기 위함
 let predictableTeams = null;
+let uclOnlyTeams = new Set();   // 5대 리그 밖이라 UCL 경기 기록만으로 "참고용" 예측하는 팀
 function unpredictableTeamsIn(...teams) {
   if (!predictableTeams) return [];
   return teams.filter(t => t && !predictableTeams.has(t));
 }
 function unpredictableMessage(teams) {
   // 팀 목록을 못 불러와 서버 404로만 알게 된 경우엔 두 팀 중 어느 쪽이 문제인지 모르므로 이름 없이 안내
-  if (!teams) return '이 경기엔 5대 리그 밖 팀이 있어서 아직 예측 데이터가 없어요. (UCL 경기는 5대 리그 팀끼리만 예측할 수 있어요)';
+  if (!teams) return '이 경기엔 경기 기록이 부족한 팀이 있어서 아직 예측 데이터가 없어요.';
   const names = teams.map(t => cleanTeamName(t).replace(' FC', '').replace(' CF', '')).join(', ');
-  return `${names}은(는) 5대 리그 밖 팀이라 아직 예측 데이터가 없어요. (UCL 경기는 5대 리그 팀끼리만 예측할 수 있어요)`;
+  return `${names}은(는) 아직 UCL 경기 기록이 적어서(8경기 미만) 예측 데이터가 없어요.`;
+}
+function limitedNoteHtml(home, away) {
+  const outs = [home, away].filter(t => uclOnlyTeams.has(t)).map(t => shortTeamName(t));
+  const who = outs.length ? `${outs.join(', ')}은(는) 5대 리그 밖 팀이라 ` : '5대 리그 밖 팀이 있어 ';
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><circle cx="12" cy="8" r="0.6" fill="currentColor"/></svg><span><b>참고용 예측</b> · ${who}UCL 경기 기록만으로 계산했어요</span>`;
 }
 async function loadPredictableTeams() {
   try {
     const res = await fetchWithRetry(`${API}/teams`);
     const data = await res.json();
-    predictableTeams = new Set(data.teams || []);
+    uclOnlyTeams = new Set(data.ucl_teams || []);
+    predictableTeams = new Set([...(data.teams || []), ...uclOnlyTeams]);
   } catch (e) { /* 못 불러오면 안내 없이 기존처럼 동작 */ }
 }
 let selectedTeams = { home: '', away: '' };
@@ -1908,6 +1920,7 @@ async function openMatchPredictModal(home, away) {
     const sp = data.score_prediction;
     body.innerHTML = `
       <div class="prediction-badge"><span class="badge ${badgeClass}">${badgeText}</span></div>
+      ${data.limited ? `<div class="limited-note" style="margin-bottom:12px">${limitedNoteHtml(home, away)}</div>` : ''}
       <div class="prob-bars">
         <div class="prob-row" style="grid-template-columns:78px 1fr 40px"><span class="prob-label">${homeShort}</span><div class="prob-bar-bg"><div class="prob-bar home" style="width:${hw}%"></div></div><span class="prob-value">${hw}%</span></div>
         <div class="prob-row" style="grid-template-columns:78px 1fr 40px"><span class="prob-label">무승부</span><div class="prob-bar-bg"><div class="prob-bar draw" style="width:${dw}%"></div></div><span class="prob-value">${dw}%</span></div>
@@ -3268,6 +3281,8 @@ function showResult(data,h2h,homeForm,awayForm,home,away,insights){
   if(data.prediction==='home_win'){badge.textContent=`${home} 승리 예측`;badge.className='badge home';}
   else if(data.prediction==='away_win'){badge.textContent=`${away} 승리 예측`;badge.className='badge away';}
   else{badge.textContent='무승부 예측';badge.className='badge draw';}
+  const limitedNote=document.getElementById('limited-note');
+  if(data.limited){limitedNote.innerHTML=limitedNoteHtml(home,away);limitedNote.style.display='';}else{limitedNote.style.display='none';}
   const hw=Math.round(prob.home_win*100),dw=Math.round(prob.draw*100),aw=Math.round(prob.away_win*100);
   document.getElementById('bar-home').style.width=hw+'%';document.getElementById('bar-draw').style.width=dw+'%';document.getElementById('bar-away').style.width=aw+'%';
   animateCountUp(document.getElementById('val-home'), hw, {suffix:'%'});
