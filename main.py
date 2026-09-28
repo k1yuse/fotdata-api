@@ -473,7 +473,19 @@ def _standings(league_code: str, season: str):
     merged['gf']     = merged['home_gf'] + merged['away_gf']
     merged['ga']     = merged['home_ga'] + merged['away_ga']
     merged['gd']     = merged['gf'] - merged['ga']
-    merged = merged.sort_values(['points','gd','gf'], ascending=False).reset_index(drop=True)
+    # 끝난 시즌: 공식 기록(영문 위키백과 시즌 표 — update_data.py fetch_season_zones)의 승점 감점·최종 순위·유럽 대항전/강등 구역
+    # (23-24 에버턴 −8·노팅엄 −4, 라리가·세리에A는 동률이면 맞대결 우선이라 득실차 정렬과 순서가 다를 수 있음)
+    official = ((_load_json("season_zones.json") or {}).get(league_code.upper()) or {}).get(str(yr))
+    zones = {}
+    if official:
+        for t, pts in official.get("adjust", {}).items():
+            merged.loc[merged['team'] == t, 'points'] += pts
+        pos = {t: v["pos"] for t, v in official["teams"].items()}
+        zones = {t: v.get("zone") for t, v in official["teams"].items()}
+        merged['_pos'] = merged['team'].map(pos).fillna(99)
+        merged = merged.sort_values(['_pos', 'points', 'gd', 'gf'], ascending=[True, False, False, False]).reset_index(drop=True)
+    else:
+        merged = merged.sort_values(['points','gd','gf'], ascending=False).reset_index(drop=True)
 
     rows = []
     for i, row in merged.iterrows():
@@ -505,8 +517,13 @@ def _standings(league_code: str, season: str):
             "gd":     int(row['gd']),
             "form":   form,
         })
+        if official:
+            rows[-1]["zone"] = zones.get(team)
+            if official.get("adjust", {}).get(team):
+                rows[-1]["deduction"] = official["adjust"][team]
 
-    return {"league": league_name, "standings": rows}
+    return {"league": league_name, "standings": rows, "official": bool(official),
+            "source": official.get("source") if official else None}
 
 # ── UCL 토너먼트 API ──
 CURRENT_SEASON_YEAR = 2026   # 시즌 전환 때 같이 바꿀 것(11번 체크리스트)
@@ -535,6 +552,49 @@ def get_ucl_tournament(season: str = "current"):
         return {"season": int(yr), "available": sorted(seasons), "stages": None}
     return {"season": int(yr), "available": sorted(seasons), "stages": stages, **stages}
    
+@app.get("/ucl/groups")
+def get_ucl_groups(season: str = "2023"):
+    """23-24까지의 챔스 조별리그 순위표(조마다 4팀) — update_data.py가 ucl_tournament.json에 GROUPS로 저장한 경기로 계산.
+    순위는 UEFA 규정대로 승점 → 맞대결 승점·득실·득점 → 전체 득실·득점. 1·2위 16강, 3위 유로파리그"""
+    data = _load_json("ucl_tournament.json") or {}
+    seasons = data.get("seasons", {})
+    yr = str(_season_year(season))
+    groups = (seasons.get(yr) or {}).get("GROUPS")
+    if not groups:
+        return {"season": int(yr), "groups": None}
+    logos = _load_json("team_logos.json") or {}
+    out = {}
+    for g, ms in groups.items():
+        done = [m for m in ms if m.get("home_goals") is not None]
+        teams = sorted({t for m in ms for t in (m["home_team"], m["away_team"])})
+        def table(sub, only=None):
+            st = {t: {"played": 0, "wins": 0, "draws": 0, "losses": 0, "gf": 0, "ga": 0, "points": 0, "form": []} for t in (only or teams)}
+            for m in sub:
+                h, a, hg, ag = m["home_team"], m["away_team"], m["home_goals"], m["away_goals"]
+                if only and (h not in only or a not in only):
+                    continue
+                for t, f, ag_ in ((h, hg, ag), (a, ag, hg)):
+                    r = st[t]; r["played"] += 1; r["gf"] += f; r["ga"] += ag_
+                    res = "W" if f > ag_ else "D" if f == ag_ else "L"
+                    r["wins" if res == "W" else "draws" if res == "D" else "losses"] += 1
+                    r["points"] += 3 if res == "W" else 1 if res == "D" else 0
+                    r["form"].append(res)
+            return st
+        full = table(done)
+        def key(t):
+            tied = [x for x in teams if full[x]["points"] == full[t]["points"]]
+            h2h = table(done, tied)[t] if len(tied) > 1 else {"points": 0, "gf": 0, "ga": 0}
+            return (-full[t]["points"], -h2h["points"], -(h2h["gf"] - h2h["ga"]), -h2h["gf"],
+                    -(full[t]["gf"] - full[t]["ga"]), -full[t]["gf"])
+        rows = []
+        for i, t in enumerate(sorted(teams, key=key)):
+            r = full[t]
+            rows.append({"rank": i + 1, "team": t, "logo": logos.get(t, ""), **{k: r[k] for k in ("played", "wins", "draws", "losses", "gf", "ga", "points")},
+                         "gd": r["gf"] - r["ga"], "form": r["form"][-6:],
+                         "zone": "ko" if i < 2 else "el" if i == 2 else None})
+        out[g] = rows
+    return {"season": int(yr), "groups": out}
+
 # ── H2H API ──
 @app.get("/h2h")
 def get_h2h(home_team: str, away_team: str, limit: int = 10):
@@ -1086,6 +1146,19 @@ def get_team_info(team_name: str):
     wiki = (_load_json("team_wiki.json") or {}).get(team_name)
     if wiki:
         info = {**info, "wiki": wiki}
+    # 주요 라이벌(수동 관리 rivals.json) + 우리 데이터에 있는 맞대결 전적(최근 4시즌 전 대회)
+    rivals = (_load_json("rivals.json") or {}).get(team_name)
+    if rivals:
+        logos = _load_json("team_logos.json") or {}
+        out = []
+        for r in rivals:
+            opp = r["opponent"]
+            h = df_matches_all[((df_matches_all.home_team == team_name) & (df_matches_all.away_team == opp)) |
+                               ((df_matches_all.home_team == opp) & (df_matches_all.away_team == team_name))]
+            gf, ga = _team_goals(h, team_name) if len(h) else (pd.Series(dtype=float), pd.Series(dtype=float))
+            out.append({**r, "logo": logos.get(opp, ""), "played": len(h),
+                        "wins": int((gf > ga).sum()), "draws": int((gf == ga).sum()), "losses": int((gf < ga).sum())})
+        info = {**info, "rivals": out}
 
     return info
 

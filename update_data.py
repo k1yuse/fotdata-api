@@ -51,22 +51,32 @@ def _match_goals(m):
     pen = sc.get("penalties") or {}
     if sc.get("duration") == "PENALTY_SHOOTOUT" and pen.get("home") is not None and hg is not None:
         return hg - pen["home"], ag - pen["away"], (pen["home"], pen["away"])
+    if m.get("status") == "AWARDED":
+        # 판정 결과(몰수 등): 점수가 없거나 경기장 점수라 판정과 안 맞으면 판정 승자 기준 표준 점수(승 2-0, 무 0-0)
+        w = sc.get("winner")
+        ok = hg is not None and ((w == "HOME_TEAM" and hg > ag) or (w == "AWAY_TEAM" and ag > hg) or (w == "DRAW" and hg == ag))
+        if not ok and w in ("HOME_TEAM", "AWAY_TEAM", "DRAW"):
+            return {"HOME_TEAM": (2, 0), "AWAY_TEAM": (0, 2), "DRAW": (0, 0)}[w] + (None,)
     return hg, ag, None
 
 def fetch_matches(league_code, season):
     url = f"{BASE_URL}/competitions/{league_code}/matches"
-    params = {"season": season, "status": "FINISHED"}
+    # 상태 필터 없이 받아서 FINISHED + AWARDED(몰수·판정승 — 공식 순위에 포함됨)만 남김. 예전엔 FINISHED만 받아서
+    # 24-25 우니온–보훔(관중석 물체 투척으로 보훔 판정승) 같은 경기가 빠져 공식 순위표와 1경기씩 달랐음(2026-09-29)
+    params = {"season": season}
     name = LEAGUES_V2.get(league_code, league_code)
     print(f"  [{name}] 수집 중...")
     res = requests.get(url, headers=HEADERS, params=params)
     if res.status_code != 200:
         print(f"  ❌ 오류: {res.status_code}")
         return pd.DataFrame()
-    matches = res.json().get("matches", [])
+    matches = [m for m in res.json().get("matches", []) if m.get("status") in ("FINISHED", "AWARDED")]
     print(f"  ✅ {len(matches)}경기")
     rows = []
     for m in matches:
         hg, ag, _ = _match_goals(m)
+        if hg is None:
+            continue
         rows.append({
             "match_id":   m["id"],
             "date":       m["utcDate"][:10],
@@ -425,9 +435,60 @@ def fetch_team_info():
     if missing:
         print(f"  ⚠️ ID 못 찾은 팀: {missing}")
 
+    # 현재 팀만 새로 받고, 예전 시즌 팀(강등팀·지난 챔스 팀 — fetch_history_teams가 채움)은 그대로 둠.
+    # 예전엔 매일 현재 팀만으로 파일을 새로 써서 그 팀들의 정보가 사라졌음(2026-09-29)
+    old_info = {}
+    if os.path.exists(f"{MODEL_DIR}/team_info.json"):
+        with open(f"{MODEL_DIR}/team_info.json", 'r', encoding='utf-8') as f:
+            old_info = json.load(f)
+    team_info = {**{k: v for k, v in old_info.items() if k not in team_info}, **team_info}
     with open(f"{MODEL_DIR}/team_info.json", 'w', encoding='utf-8') as f:
         json.dump(team_info, f, ensure_ascii=False, indent=2)
     print(f"  ✅ team_info.json 저장 완료 ({len(team_info)}팀)")
+
+def fetch_history_teams():
+    """지난 시즌(23-24~) 리그·챔스에 나왔던 팀의 로고·팀 정보 채우기 — 강등팀·지난 챔스 팀은 로고가 없어서 순위표·대진표에 빈칸이었음.
+    /competitions/{리그}/teams?season=연도 한 번에 로고(crest)·홈구장·창단·구단 색이 같이 와서 팀별 호출이 필요 없음(리그 6 × 시즌 4 = 24회).
+    스쿼드는 그 시즌 기준이라 헷갈리지 않게 현재 시즌에 나온 팀만 넣음. 이미 있는 팀 정보는 안 건드림."""
+    import json
+    print("\n[지난 시즌 팀 로고·정보]")
+    logo_path, info_path = f"{MODEL_DIR}/team_logos.json", f"{MODEL_DIR}/team_info.json"
+    logos = json.load(open(logo_path, encoding='utf-8')) if os.path.exists(logo_path) else {}
+    info = json.load(open(info_path, encoding='utf-8')) if os.path.exists(info_path) else {}
+    added_logo, added_info = 0, 0
+    for code in LEAGUES_V2:
+        for yr in MATCH_SEASONS:
+            res = requests.get(f"{BASE_URL}/competitions/{code}/teams", headers=HEADERS, params={"season": yr})
+            time.sleep(6)
+            if res.status_code != 200:
+                print(f"  ❌ {code} {yr}: {res.status_code}"); continue
+            for t in res.json().get("teams", []):
+                name = t.get("name")
+                if not name:
+                    continue
+                if not logos.get(name) and t.get("crest"):
+                    logos[name] = t["crest"]; added_logo += 1
+                if name not in info:
+                    coach = t.get("coach") or {}
+                    info[name] = {"venue": t.get("venue"), "founded": t.get("founded"), "clubColors": t.get("clubColors"),
+                                  "coach": coach.get("name"), "squad": [], "last_season": yr}
+                    added_info += 1
+                if yr == max(MATCH_SEASONS) and not info[name].get("squad") and t.get("squad"):
+                    info[name]["squad"] = sorted([{"name": p.get("name"), "position": p.get("position"), "nationality": p.get("nationality"),
+                                                   "shirtNumber": p.get("shirtNumber")} for p in t["squad"]],
+                                                 key=lambda p: POSITION_ORDER.get(p["position"], 99))
+    with open(logo_path, 'w', encoding='utf-8') as f:
+        json.dump(logos, f, ensure_ascii=False, indent=2)
+    with open(info_path, 'w', encoding='utf-8') as f:
+        json.dump(info, f, ensure_ascii=False, indent=2)
+    print(f"  ✅ 로고 {added_logo}개, 팀 정보 {added_info}개 추가")
+
+def _history_missing():
+    """경기 데이터에 있는데 로고가 없는 팀이 있으면 True(매일 실행 때 그때만 fetch_history_teams)"""
+    import json
+    df = pd.read_csv(f"{MODEL_DIR}/all_matches.csv")
+    logos = json.load(open(f"{MODEL_DIR}/team_logos.json", encoding='utf-8')) if os.path.exists(f"{MODEL_DIR}/team_logos.json") else {}
+    return any(not logos.get(t) for t in set(df.home_team) | set(df.away_team))
 
 SQUAD_POSITION_MAP = {"Goalkeeper": "Goalkeeper", "Defender": "Defence", "Midfielder": "Midfield", "Attacker": "Offence"}
 
@@ -786,6 +847,101 @@ def _parse_record_transfers(w, prefer_eur=False):
             best.pop("_v"); best.pop("_rank")
             out[kind] = best
     return out
+
+# ── 지난 시즌 공식 최종 순위·유럽 대항전 진출·강등·승점 감점 (영문 위키백과 시즌 문서의 Sports table) — 순위표 (2026-09-29) ──
+# 순위표의 존 색을 "표준 배정(LEAGUE_ZONES)"이 아니라 그 시즌 실제 결과로: 컵 우승 팀의 유로파행(예: 23-24 맨유 8위 → 유로파),
+# 리그컵 우승 팀 자리가 6위로 내려간 것 등. 승점 감점(23-24 에버턴 −8·노팅엄 −4)도 여기서 받아 서버 순위표에 반영.
+SEASON_ZONE_TITLE = {"PL": "Premier League", "PD": "La Liga", "BL1": "Bundesliga", "SA": "Serie A", "FL1": "Ligue 1"}
+
+def _zone_of(text):
+    t = re.sub(r"\[\[[^\]|]*\|([^\]]*)\]\]", r"\1", text or "")
+    t = re.sub(r"\{\{nowrap\|(.*)\}\}", r"\1", t)
+    if re.search(r"relegation play-?off", t, re.I): return "rel-po"
+    if re.search(r"^\W*relegat", t, re.I): return "rel"
+    if re.search(r"Champions League", t):
+        return "cl-q" if re.search(r"qualifying|play-?off", t, re.I) else "cl"
+    if re.search(r"Europa League", t): return "el"
+    if re.search(r"Conference League", t): return "ecl"
+    return None
+
+def _norm_club(n):
+    import unicodedata
+    n = unicodedata.normalize("NFD", n or "").encode("ascii", "ignore").decode().lower()
+    n = re.sub(r"\b(f\.?c\.?|c\.?f\.?|a\.?f\.?c\.?|s\.?c\.?|a\.?c\.?|calcio|club|de|futbol|football|u\.?d\.?|ssc|ss|as|us|rc|rcd|ca|sv|vfl|vfb|tsg|1899|1909|1913|1907|1901|1848|63|29|05|04|07|98|1919|hsc|ogc|osc|aj|es|sco|ac)\b", " ", n)
+    return re.sub(r"[^a-z0-9]+", " ", n).strip()
+
+def fetch_season_zones():
+    import json
+    path = f"{MODEL_DIR}/season_zones.json"
+    out = {}
+    if os.path.exists(path):
+        with open(path, 'r', encoding='utf-8') as f:
+            out = json.load(f)
+    df = pd.read_csv(f"{MODEL_DIR}/all_matches.csv")
+    wiki = {}
+    if os.path.exists(f"{MODEL_DIR}/team_wiki.json"):
+        with open(f"{MODEL_DIR}/team_wiki.json", 'r', encoding='utf-8') as f:
+            wiki = json.load(f)
+    by_title = {v.get("en_title"): t for t, v in wiki.items() if v.get("en_title")}
+    print("\n[지난 시즌 공식 순위 구역]")
+    for code, name in SEASON_ZONE_TITLE.items():
+        for yr in [y for y in MATCH_SEASONS if y < max(MATCH_SEASONS)]:   # 끝난 시즌만
+            title = f"{yr}–{str(yr + 1)[2:]} {name}"
+            try:
+                page = _wiki_get("https://en.wikipedia.org/w/api.php", {"action": "parse", "page": title, "prop": "wikitext", "format": "json", "redirects": 1})
+                w = page["parse"]["wikitext"]["*"]
+            except Exception as e:
+                print(f"  ❌ {title}: {e}"); continue
+            m = re.search(r"\{\{#invoke:\s*Sports table.*?(?=</onlyinclude>|\n==)", w, re.S)
+            if not m:   # 라리가·분데스·세리에·리그앙 시즌 문서는 표를 {{2023–24 La Liga table}} 틀로 따로 둠
+                tpl = re.search(r"\{\{\s*(\d{4}–\d{2} [^{}|]*? table)\s*\}\}", w)
+                if tpl:
+                    try:
+                        tw = _wiki_get("https://en.wikipedia.org/w/api.php", {"action": "parse", "page": "Template:" + tpl.group(1),
+                                                                                 "prop": "wikitext", "format": "json", "redirects": 1})["parse"]["wikitext"]["*"]
+                        m = re.search(r"\{\{#invoke:\s*Sports table.*?(?=</onlyinclude>|\n==|$)", tw, re.S)
+                    except Exception:
+                        m = None
+            if not m:
+                print(f"  ⚠️ {title}: 표 없음"); continue
+            tb = m.group(0)
+            order = [x.strip() for x in re.search(r"\|\s*team_order\s*=\s*([^|\n]+)", tb).group(1).split(",") if x.strip()]
+            results = {int(k): v.strip() for k, v in re.findall(r"\|\s*result(\d+)\s*=\s*([^|\s]+)", tb)}
+            texts = {k: v for k, v in re.findall(r"\|\s*text_([^\s=|]+)\s*=\s*([^\n]+)", tb)}
+            names = {k: re.findall(r"\[\[([^\]|]+)", v) for k, v in re.findall(r"\|\s*name_([^\s=|]+)\s*=\s*([^\n]+)", tb)}
+            adjust = {k: int(v) for k, v in re.findall(r"\|\s*adjust_points_([^\s=|]+)\s*=\s*([+-]?\d+)", tb)}
+            ours = sorted(set(df[(df.league == code) & (df.season == yr)].home_team))
+            norm_ours = {_norm_club(t): t for t in ours}
+            def match(abbr, pos):
+                for tgt in names.get(abbr, []):
+                    if tgt in by_title and by_title[tgt] in ours:
+                        return by_title[tgt]
+                    n = _norm_club(tgt)
+                    if n in norm_ours:
+                        return norm_ours[n]
+                    cand = [t for k, t in norm_ours.items() if k and (k in n or n in k)]
+                    if len(cand) == 1:
+                        return cand[0]
+                return None
+            zones, adj, unmatched = {}, {}, []
+            for i, abbr in enumerate(order, start=1):
+                team = match(abbr, i)
+                if not team:
+                    unmatched.append(abbr); continue
+                code_r = results.get(i)
+                z = _zone_of(texts.get(code_r, "")) if code_r else None
+                zones[team] = {"pos": i, "zone": z}
+                if abbr in adjust:
+                    adj[team] = adjust[abbr]
+            if unmatched or len(zones) != len(ours):
+                print(f"  ⚠️ {title}: 매칭 안 된 팀 {unmatched} (우리 {len(ours)}팀 / 위키 {len(order)}팀)")
+                if len(zones) < len(ours) - 1:
+                    continue
+            out.setdefault(code, {})[str(yr)] = {"teams": zones, "adjust": adj,
+                                                  "source": f"https://en.wikipedia.org/wiki/{requests.utils.quote(title.replace(' ', '_'))}"}
+            print(f"  ✅ {title}: {len(zones)}팀, 감점 {adj or '없음'}")
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(out, f, ensure_ascii=False, indent=1, sort_keys=True)
 
 def _wiki_sections(title):
     return _wiki_get("https://en.wikipedia.org/w/api.php", {"action": "parse", "page": title, "prop": "sections",
@@ -1303,9 +1459,16 @@ UCL_KO_STAGES = ["PLAYOFFS", "LAST_16", "QUARTER_FINALS", "SEMI_FINALS", "FINAL"
 def _ucl_bracket(matches, logos):
     """한 시즌 CL 경기 → 라운드별 대진(두 경기 합산, 승부차기 반영, 실제 대진표 순서)"""
     stages = {s: [] for s in UCL_KO_STAGES}
+    groups = {}   # 23-24까지 조별리그(GROUP_STAGE, group "GROUP_A") — 조별 순위표용
     agg = {}
     for m in matches:
         stage = m.get("stage", "")
+        if stage == "GROUP_STAGE" and m.get("group"):
+            hg, ag, _ = _match_goals(m)
+            groups.setdefault(m["group"].replace("GROUP_", ""), []).append({
+                "home_team": m["homeTeam"].get("name"), "away_team": m["awayTeam"].get("name"),
+                "home_goals": hg, "away_goals": ag, "date": m.get("utcDate"), "status": m.get("status")})
+            continue
         if stage not in stages:
             continue
         home, away = m["homeTeam"].get("name"), m["awayTeam"].get("name")
@@ -1343,7 +1506,10 @@ def _ucl_bracket(matches, logos):
             "team1_logo": logos.get(t1, ""), "team2_logo": logos.get(t2, ""),
             "winner": winner, "status": v["status"], "legs": v["legs"], "pens": v["pens"],
         })
-    return reconstruct_bracket_order(stages)
+    out = reconstruct_bracket_order(stages)
+    if groups:
+        out["GROUPS"] = {g: sorted(v, key=lambda x: x["date"] or "") for g, v in sorted(groups.items())}
+    return out
 
 def fetch_ucl_tournament():
     """시즌별 UCL 토너먼트(23-24~26-27) → ucl_tournament.json {"seasons": {"2026": {...}, ...}}
@@ -1553,11 +1719,22 @@ def main():
     # 팀 상세정보 (홈구장/스쿼드 등)
     fetch_team_info()
 
+    # 지난 시즌 팀 중 로고 없는 팀이 있으면 그때만(보통 새 시즌 첫날 한 번)
+    try:
+        if _history_missing():
+            fetch_history_teams()
+    except Exception as e:
+        print(f"  ⚠️ 지난 시즌 팀 로고·정보 실패(기존 유지): {e}")
+
     # 구단 소개·별칭·홈구장 수용 인원·감독(위키백과/위키데이터, 키 불필요, 오래된 팀만)
     try:
         fetch_team_wiki()
     except Exception as e:
         print(f"  ⚠️ 구단 소개 갱신 실패(기존 유지): {e}")
+    try:
+        fetch_season_zones()
+    except Exception as e:
+        print(f"  ⚠️ 지난 시즌 순위 구역 갱신 실패(기존 유지): {e}")
 
     # 스쿼드 사진/등번호 + 이적 기록 (API-Football, 현재는 PL만 — 요청 한도 때문에 리그별로 점진 확대 예정)
     fetch_squad_transfers('PL')
@@ -1647,8 +1824,16 @@ if __name__ == "__main__":
     if "--matches-only" in sys.argv:
         # 경기 데이터만 다시 받아서 all_matches.csv 갱신(학습·다른 산출물은 건드리지 않음)
         collect_matches()
+    elif "--zones-only" in sys.argv:
+        fetch_season_zones()
     elif "--wiki-only" in sys.argv:
         fetch_team_wiki(force="--force" in sys.argv)
+    elif "--history" in sys.argv:
+        # 한 번만: 지난 시즌 팀 로고·정보 + 챔스 조별리그(23-24) + 새 팀들 구단 소개 + 지난 시즌 공식 순위 구역
+        fetch_history_teams()
+        fetch_ucl_tournament()
+        fetch_team_wiki()
+        fetch_season_zones()
     elif "--ucl-only" in sys.argv:
         fetch_ucl_tournament()
     elif "--transfers-only" in sys.argv:

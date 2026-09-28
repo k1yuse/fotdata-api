@@ -1,0 +1,1259 @@
+{
+ "BL1": {
+  "2023": {
+   "adjust": {},
+   "source": "https://en.wikipedia.org/wiki/2023%E2%80%9324_Bundesliga",
+   "teams": {
+    "1. FC Heidenheim 1846": {
+     "pos": 8,
+     "zone": "ecl"
+    },
+    "1. FC Köln": {
+     "pos": 17,
+     "zone": "rel"
+    },
+    "1. FC Union Berlin": {
+     "pos": 15,
+     "zone": null
+    },
+    "1. FSV Mainz 05": {
+     "pos": 13,
+     "zone": null
+    },
+    "Bayer 04 Leverkusen": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Borussia Dortmund": {
+     "pos": 5,
+     "zone": "cl"
+    },
+    "Borussia Mönchengladbach": {
+     "pos": 14,
+     "zone": null
+    },
+    "Eintracht Frankfurt": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "FC Augsburg": {
+     "pos": 11,
+     "zone": null
+    },
+    "FC Bayern München": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "RB Leipzig": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "SC Freiburg": {
+     "pos": 10,
+     "zone": null
+    },
+    "SV Darmstadt 98": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "SV Werder Bremen": {
+     "pos": 9,
+     "zone": null
+    },
+    "TSG 1899 Hoffenheim": {
+     "pos": 7,
+     "zone": "el"
+    },
+    "VfB Stuttgart": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "VfL Bochum 1848": {
+     "pos": 16,
+     "zone": "rel-po"
+    },
+    "VfL Wolfsburg": {
+     "pos": 12,
+     "zone": null
+    }
+   }
+  },
+  "2024": {
+   "adjust": {},
+   "source": "https://en.wikipedia.org/wiki/2024%E2%80%9325_Bundesliga",
+   "teams": {
+    "1. FC Heidenheim 1846": {
+     "pos": 16,
+     "zone": "rel-po"
+    },
+    "1. FC Union Berlin": {
+     "pos": 13,
+     "zone": null
+    },
+    "1. FSV Mainz 05": {
+     "pos": 6,
+     "zone": "ecl"
+    },
+    "Bayer 04 Leverkusen": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Borussia Dortmund": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "Borussia Mönchengladbach": {
+     "pos": 10,
+     "zone": null
+    },
+    "Eintracht Frankfurt": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "FC Augsburg": {
+     "pos": 12,
+     "zone": null
+    },
+    "FC Bayern München": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "FC St. Pauli 1910": {
+     "pos": 14,
+     "zone": null
+    },
+    "Holstein Kiel": {
+     "pos": 17,
+     "zone": "rel"
+    },
+    "RB Leipzig": {
+     "pos": 7,
+     "zone": null
+    },
+    "SC Freiburg": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "SV Werder Bremen": {
+     "pos": 8,
+     "zone": null
+    },
+    "TSG 1899 Hoffenheim": {
+     "pos": 15,
+     "zone": null
+    },
+    "VfB Stuttgart": {
+     "pos": 9,
+     "zone": "el"
+    },
+    "VfL Bochum 1848": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "VfL Wolfsburg": {
+     "pos": 11,
+     "zone": null
+    }
+   }
+  },
+  "2025": {
+   "adjust": {},
+   "source": "https://en.wikipedia.org/wiki/2025%E2%80%9326_Bundesliga",
+   "teams": {
+    "1. FC Heidenheim 1846": {
+     "pos": 17,
+     "zone": "rel"
+    },
+    "1. FC Köln": {
+     "pos": 14,
+     "zone": null
+    },
+    "1. FC Union Berlin": {
+     "pos": 11,
+     "zone": null
+    },
+    "1. FSV Mainz 05": {
+     "pos": 10,
+     "zone": null
+    },
+    "Bayer 04 Leverkusen": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Borussia Dortmund": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Borussia Mönchengladbach": {
+     "pos": 12,
+     "zone": null
+    },
+    "Eintracht Frankfurt": {
+     "pos": 8,
+     "zone": null
+    },
+    "FC Augsburg": {
+     "pos": 9,
+     "zone": null
+    },
+    "FC Bayern München": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "FC St. Pauli 1910": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Hamburger SV": {
+     "pos": 13,
+     "zone": null
+    },
+    "RB Leipzig": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "SC Freiburg": {
+     "pos": 7,
+     "zone": "ecl"
+    },
+    "SV Werder Bremen": {
+     "pos": 15,
+     "zone": null
+    },
+    "TSG 1899 Hoffenheim": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "VfB Stuttgart": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "VfL Wolfsburg": {
+     "pos": 16,
+     "zone": "rel-po"
+    }
+   }
+  }
+ },
+ "FL1": {
+  "2023": {
+   "adjust": {
+    "Montpellier HSC": -1
+   },
+   "source": "https://en.wikipedia.org/wiki/2023%E2%80%9324_Ligue_1",
+   "teams": {
+    "AS Monaco FC": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Clermont Foot 63": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "FC Lorient": {
+     "pos": 17,
+     "zone": "rel"
+    },
+    "FC Metz": {
+     "pos": 16,
+     "zone": "rel-po"
+    },
+    "FC Nantes": {
+     "pos": 14,
+     "zone": null
+    },
+    "Le Havre AC": {
+     "pos": 15,
+     "zone": null
+    },
+    "Lille OSC": {
+     "pos": 4,
+     "zone": "cl-q"
+    },
+    "Montpellier HSC": {
+     "pos": 12,
+     "zone": null
+    },
+    "OGC Nice": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Olympique Lyonnais": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Olympique de Marseille": {
+     "pos": 8,
+     "zone": null
+    },
+    "Paris Saint-Germain FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "RC Strasbourg Alsace": {
+     "pos": 13,
+     "zone": null
+    },
+    "Racing Club de Lens": {
+     "pos": 7,
+     "zone": "ecl"
+    },
+    "Stade Brestois 29": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Stade Rennais FC 1901": {
+     "pos": 10,
+     "zone": null
+    },
+    "Stade de Reims": {
+     "pos": 9,
+     "zone": null
+    },
+    "Toulouse FC": {
+     "pos": 11,
+     "zone": null
+    }
+   }
+  },
+  "2024": {
+   "adjust": {},
+   "source": "https://en.wikipedia.org/wiki/2024%E2%80%9325_Ligue_1",
+   "teams": {
+    "AJ Auxerre": {
+     "pos": 11,
+     "zone": null
+    },
+    "AS Monaco FC": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "AS Saint-Étienne": {
+     "pos": 17,
+     "zone": "rel"
+    },
+    "Angers SCO": {
+     "pos": 14,
+     "zone": null
+    },
+    "FC Nantes": {
+     "pos": 13,
+     "zone": null
+    },
+    "Le Havre AC": {
+     "pos": 15,
+     "zone": null
+    },
+    "Lille OSC": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Montpellier HSC": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "OGC Nice": {
+     "pos": 4,
+     "zone": "cl-q"
+    },
+    "Olympique Lyonnais": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Olympique de Marseille": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Paris Saint-Germain FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "RC Strasbourg Alsace": {
+     "pos": 7,
+     "zone": "ecl"
+    },
+    "Racing Club de Lens": {
+     "pos": 8,
+     "zone": null
+    },
+    "Stade Brestois 29": {
+     "pos": 9,
+     "zone": null
+    },
+    "Stade Rennais FC 1901": {
+     "pos": 12,
+     "zone": null
+    },
+    "Stade de Reims": {
+     "pos": 16,
+     "zone": "rel-po"
+    },
+    "Toulouse FC": {
+     "pos": 10,
+     "zone": null
+    }
+   }
+  },
+  "2025": {
+   "adjust": {},
+   "source": "https://en.wikipedia.org/wiki/2025%E2%80%9326_Ligue_1",
+   "teams": {
+    "AJ Auxerre": {
+     "pos": 15,
+     "zone": null
+    },
+    "AS Monaco FC": {
+     "pos": 7,
+     "zone": "ecl"
+    },
+    "Angers SCO": {
+     "pos": 13,
+     "zone": null
+    },
+    "FC Lorient": {
+     "pos": 10,
+     "zone": null
+    },
+    "FC Metz": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "FC Nantes": {
+     "pos": 17,
+     "zone": "rel"
+    },
+    "Le Havre AC": {
+     "pos": 14,
+     "zone": null
+    },
+    "Lille OSC": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "OGC Nice": {
+     "pos": 16,
+     "zone": "rel-po"
+    },
+    "Olympique Lyonnais": {
+     "pos": 4,
+     "zone": "cl-q"
+    },
+    "Olympique de Marseille": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Paris FC": {
+     "pos": 11,
+     "zone": null
+    },
+    "Paris Saint-Germain FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "RC Strasbourg Alsace": {
+     "pos": 8,
+     "zone": null
+    },
+    "Racing Club de Lens": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Stade Brestois 29": {
+     "pos": 12,
+     "zone": null
+    },
+    "Stade Rennais FC 1901": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Toulouse FC": {
+     "pos": 9,
+     "zone": null
+    }
+   }
+  }
+ },
+ "PD": {
+  "2023": {
+   "adjust": {},
+   "source": "https://en.wikipedia.org/wiki/2023%E2%80%9324_La_Liga",
+   "teams": {
+    "Athletic Club": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "CA Osasuna": {
+     "pos": 11,
+     "zone": null
+    },
+    "Club Atlético de Madrid": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "Cádiz CF": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Deportivo Alavés": {
+     "pos": 10,
+     "zone": null
+    },
+    "FC Barcelona": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Getafe CF": {
+     "pos": 12,
+     "zone": null
+    },
+    "Girona FC": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Granada CF": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "RC Celta de Vigo": {
+     "pos": 13,
+     "zone": null
+    },
+    "RCD Mallorca": {
+     "pos": 15,
+     "zone": null
+    },
+    "Rayo Vallecano de Madrid": {
+     "pos": 17,
+     "zone": null
+    },
+    "Real Betis Balompié": {
+     "pos": 7,
+     "zone": "ecl"
+    },
+    "Real Madrid CF": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Real Sociedad de Fútbol": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Sevilla FC": {
+     "pos": 14,
+     "zone": null
+    },
+    "UD Almería": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "UD Las Palmas": {
+     "pos": 16,
+     "zone": null
+    },
+    "Valencia CF": {
+     "pos": 9,
+     "zone": null
+    },
+    "Villarreal CF": {
+     "pos": 8,
+     "zone": null
+    }
+   }
+  },
+  "2024": {
+   "adjust": {},
+   "source": "https://en.wikipedia.org/wiki/2024%E2%80%9325_La_Liga",
+   "teams": {
+    "Athletic Club": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "CA Osasuna": {
+     "pos": 9,
+     "zone": null
+    },
+    "CD Leganés": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Club Atlético de Madrid": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Deportivo Alavés": {
+     "pos": 15,
+     "zone": null
+    },
+    "FC Barcelona": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Getafe CF": {
+     "pos": 13,
+     "zone": null
+    },
+    "Girona FC": {
+     "pos": 16,
+     "zone": null
+    },
+    "RC Celta de Vigo": {
+     "pos": 7,
+     "zone": "el"
+    },
+    "RCD Espanyol de Barcelona": {
+     "pos": 14,
+     "zone": null
+    },
+    "RCD Mallorca": {
+     "pos": 10,
+     "zone": null
+    },
+    "Rayo Vallecano de Madrid": {
+     "pos": 8,
+     "zone": "ecl"
+    },
+    "Real Betis Balompié": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Real Madrid CF": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Real Sociedad de Fútbol": {
+     "pos": 11,
+     "zone": null
+    },
+    "Real Valladolid CF": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Sevilla FC": {
+     "pos": 17,
+     "zone": null
+    },
+    "UD Las Palmas": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Valencia CF": {
+     "pos": 12,
+     "zone": null
+    },
+    "Villarreal CF": {
+     "pos": 5,
+     "zone": "cl"
+    }
+   }
+  },
+  "2025": {
+   "adjust": {},
+   "source": "https://en.wikipedia.org/wiki/2025%E2%80%9326_La_Liga",
+   "teams": {
+    "Athletic Club": {
+     "pos": 12,
+     "zone": null
+    },
+    "CA Osasuna": {
+     "pos": 17,
+     "zone": null
+    },
+    "Club Atlético de Madrid": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "Deportivo Alavés": {
+     "pos": 14,
+     "zone": null
+    },
+    "Elche CF": {
+     "pos": 15,
+     "zone": null
+    },
+    "FC Barcelona": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Getafe CF": {
+     "pos": 7,
+     "zone": "ecl"
+    },
+    "Girona FC": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Levante UD": {
+     "pos": 16,
+     "zone": null
+    },
+    "RC Celta de Vigo": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "RCD Espanyol de Barcelona": {
+     "pos": 11,
+     "zone": null
+    },
+    "RCD Mallorca": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Rayo Vallecano de Madrid": {
+     "pos": 8,
+     "zone": null
+    },
+    "Real Betis Balompié": {
+     "pos": 5,
+     "zone": "cl"
+    },
+    "Real Madrid CF": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Real Oviedo": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Real Sociedad de Fútbol": {
+     "pos": 10,
+     "zone": "el"
+    },
+    "Sevilla FC": {
+     "pos": 13,
+     "zone": null
+    },
+    "Valencia CF": {
+     "pos": 9,
+     "zone": null
+    },
+    "Villarreal CF": {
+     "pos": 3,
+     "zone": "cl"
+    }
+   }
+  }
+ },
+ "PL": {
+  "2023": {
+   "adjust": {
+    "Everton FC": -8,
+    "Nottingham Forest FC": -4
+   },
+   "source": "https://en.wikipedia.org/wiki/2023%E2%80%9324_Premier_League",
+   "teams": {
+    "AFC Bournemouth": {
+     "pos": 12,
+     "zone": null
+    },
+    "Arsenal FC": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Aston Villa FC": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "Brentford FC": {
+     "pos": 16,
+     "zone": null
+    },
+    "Brighton & Hove Albion FC": {
+     "pos": 11,
+     "zone": null
+    },
+    "Burnley FC": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Chelsea FC": {
+     "pos": 6,
+     "zone": "ecl"
+    },
+    "Crystal Palace FC": {
+     "pos": 10,
+     "zone": null
+    },
+    "Everton FC": {
+     "pos": 15,
+     "zone": null
+    },
+    "Fulham FC": {
+     "pos": 13,
+     "zone": null
+    },
+    "Liverpool FC": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Luton Town FC": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Manchester City FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Manchester United FC": {
+     "pos": 8,
+     "zone": "el"
+    },
+    "Newcastle United FC": {
+     "pos": 7,
+     "zone": null
+    },
+    "Nottingham Forest FC": {
+     "pos": 17,
+     "zone": null
+    },
+    "Sheffield United FC": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Tottenham Hotspur FC": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "West Ham United FC": {
+     "pos": 9,
+     "zone": null
+    },
+    "Wolverhampton Wanderers FC": {
+     "pos": 14,
+     "zone": null
+    }
+   }
+  },
+  "2024": {
+   "adjust": {},
+   "source": "https://en.wikipedia.org/wiki/2024%E2%80%9325_Premier_League",
+   "teams": {
+    "AFC Bournemouth": {
+     "pos": 9,
+     "zone": null
+    },
+    "Arsenal FC": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Aston Villa FC": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Brentford FC": {
+     "pos": 10,
+     "zone": null
+    },
+    "Brighton & Hove Albion FC": {
+     "pos": 8,
+     "zone": null
+    },
+    "Chelsea FC": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "Crystal Palace FC": {
+     "pos": 12,
+     "zone": "ecl"
+    },
+    "Everton FC": {
+     "pos": 13,
+     "zone": null
+    },
+    "Fulham FC": {
+     "pos": 11,
+     "zone": null
+    },
+    "Ipswich Town FC": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Leicester City FC": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Liverpool FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Manchester City FC": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Manchester United FC": {
+     "pos": 15,
+     "zone": null
+    },
+    "Newcastle United FC": {
+     "pos": 5,
+     "zone": "cl"
+    },
+    "Nottingham Forest FC": {
+     "pos": 7,
+     "zone": "el"
+    },
+    "Southampton FC": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Tottenham Hotspur FC": {
+     "pos": 17,
+     "zone": "cl"
+    },
+    "West Ham United FC": {
+     "pos": 14,
+     "zone": null
+    },
+    "Wolverhampton Wanderers FC": {
+     "pos": 16,
+     "zone": null
+    }
+   }
+  },
+  "2025": {
+   "adjust": {},
+   "source": "https://en.wikipedia.org/wiki/2025%E2%80%9326_Premier_League",
+   "teams": {
+    "AFC Bournemouth": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Arsenal FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Aston Villa FC": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "Brentford FC": {
+     "pos": 9,
+     "zone": null
+    },
+    "Brighton & Hove Albion FC": {
+     "pos": 8,
+     "zone": "ecl"
+    },
+    "Burnley FC": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Chelsea FC": {
+     "pos": 10,
+     "zone": null
+    },
+    "Crystal Palace FC": {
+     "pos": 15,
+     "zone": "el"
+    },
+    "Everton FC": {
+     "pos": 13,
+     "zone": null
+    },
+    "Fulham FC": {
+     "pos": 11,
+     "zone": null
+    },
+    "Leeds United FC": {
+     "pos": 14,
+     "zone": null
+    },
+    "Liverpool FC": {
+     "pos": 5,
+     "zone": "cl"
+    },
+    "Manchester City FC": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Manchester United FC": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Newcastle United FC": {
+     "pos": 12,
+     "zone": null
+    },
+    "Nottingham Forest FC": {
+     "pos": 16,
+     "zone": null
+    },
+    "Sunderland AFC": {
+     "pos": 7,
+     "zone": "el"
+    },
+    "Tottenham Hotspur FC": {
+     "pos": 17,
+     "zone": null
+    },
+    "West Ham United FC": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Wolverhampton Wanderers FC": {
+     "pos": 20,
+     "zone": "rel"
+    }
+   }
+  }
+ },
+ "SA": {
+  "2023": {
+   "adjust": {},
+   "source": "https://en.wikipedia.org/wiki/2023%E2%80%9324_Serie_A",
+   "teams": {
+    "AC Milan": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "AC Monza": {
+     "pos": 12,
+     "zone": null
+    },
+    "ACF Fiorentina": {
+     "pos": 8,
+     "zone": "ecl"
+    },
+    "AS Roma": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Atalanta BC": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "Bologna FC 1909": {
+     "pos": 5,
+     "zone": "cl"
+    },
+    "Cagliari Calcio": {
+     "pos": 16,
+     "zone": null
+    },
+    "Empoli FC": {
+     "pos": 17,
+     "zone": null
+    },
+    "FC Internazionale Milano": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Frosinone Calcio": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Genoa CFC": {
+     "pos": 11,
+     "zone": null
+    },
+    "Hellas Verona FC": {
+     "pos": 13,
+     "zone": null
+    },
+    "Juventus FC": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "SS Lazio": {
+     "pos": 7,
+     "zone": "el"
+    },
+    "SSC Napoli": {
+     "pos": 10,
+     "zone": null
+    },
+    "Torino FC": {
+     "pos": 9,
+     "zone": null
+    },
+    "US Lecce": {
+     "pos": 14,
+     "zone": null
+    },
+    "US Salernitana 1919": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "US Sassuolo Calcio": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Udinese Calcio": {
+     "pos": 15,
+     "zone": null
+    }
+   }
+  },
+  "2024": {
+   "adjust": {},
+   "source": "https://en.wikipedia.org/wiki/2024%E2%80%9325_Serie_A",
+   "teams": {
+    "AC Milan": {
+     "pos": 8,
+     "zone": null
+    },
+    "AC Monza": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "ACF Fiorentina": {
+     "pos": 6,
+     "zone": "ecl"
+    },
+    "AS Roma": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Atalanta BC": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Bologna FC 1909": {
+     "pos": 9,
+     "zone": "el"
+    },
+    "Cagliari Calcio": {
+     "pos": 15,
+     "zone": null
+    },
+    "Como 1907": {
+     "pos": 10,
+     "zone": null
+    },
+    "Empoli FC": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "FC Internazionale Milano": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Genoa CFC": {
+     "pos": 13,
+     "zone": null
+    },
+    "Hellas Verona FC": {
+     "pos": 14,
+     "zone": null
+    },
+    "Juventus FC": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "Parma Calcio 1913": {
+     "pos": 16,
+     "zone": null
+    },
+    "SS Lazio": {
+     "pos": 7,
+     "zone": null
+    },
+    "SSC Napoli": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Torino FC": {
+     "pos": 11,
+     "zone": null
+    },
+    "US Lecce": {
+     "pos": 17,
+     "zone": null
+    },
+    "Udinese Calcio": {
+     "pos": 12,
+     "zone": null
+    },
+    "Venezia FC": {
+     "pos": 19,
+     "zone": "rel"
+    }
+   }
+  },
+  "2025": {
+   "adjust": {},
+   "source": "https://en.wikipedia.org/wiki/2025%E2%80%9326_Serie_A",
+   "teams": {
+    "AC Milan": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "AC Pisa 1909": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "ACF Fiorentina": {
+     "pos": 15,
+     "zone": null
+    },
+    "AS Roma": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Atalanta BC": {
+     "pos": 7,
+     "zone": "ecl"
+    },
+    "Bologna FC 1909": {
+     "pos": 8,
+     "zone": null
+    },
+    "Cagliari Calcio": {
+     "pos": 14,
+     "zone": null
+    },
+    "Como 1907": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "FC Internazionale Milano": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Genoa CFC": {
+     "pos": 16,
+     "zone": null
+    },
+    "Hellas Verona FC": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Juventus FC": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Parma Calcio 1913": {
+     "pos": 13,
+     "zone": null
+    },
+    "SS Lazio": {
+     "pos": 9,
+     "zone": null
+    },
+    "SSC Napoli": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Torino FC": {
+     "pos": 12,
+     "zone": null
+    },
+    "US Cremonese": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "US Lecce": {
+     "pos": 17,
+     "zone": null
+    },
+    "US Sassuolo Calcio": {
+     "pos": 11,
+     "zone": null
+    },
+    "Udinese Calcio": {
+     "pos": 10,
+     "zone": null
+    }
+   }
+  }
+ }
+}

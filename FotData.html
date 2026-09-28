@@ -336,7 +336,25 @@
     .st-table tr.zone-cl, .st-table tr.zone-cl-q, .st-table tr.zone-el, .st-table tr.zone-ecl, .st-table tr.zone-rel-po, .st-table tr.zone-rel, .st-table tr.zone-ucl-ko, .st-table tr.zone-ucl-po { border-left: none; }
     .st-rank { display: inline-flex; align-items: center; justify-content: center; min-width: 26px; height: 22px; border-radius: 7px; font-size: 12px; font-weight: 700; color: #c9d1d9; font-variant-numeric: tabular-nums; }
     .st-table tr[class*="zone-"] .st-rank { color: var(--zc); background: color-mix(in srgb, var(--zc) 13%, transparent); }
-    .st-table tr.champ td { background: linear-gradient(90deg, rgba(227,179,65,0.11), rgba(227,179,65,0.02) 60%, transparent); }
+    .st-table tr.champ td { background: rgba(227,179,65,0.085); border-bottom-color: rgba(227,179,65,0.25); }
+    .st-table tr.champ td:first-child { border-radius: 10px 0 0 10px; }
+    .st-table tr.champ td:last-child { border-radius: 0 10px 10px 0; }
+    .st-table tr.champ:hover td { background: rgba(227,179,65,0.13); }
+    .st-ded { display: inline-block; margin-left: 4px; font-size: 10px; font-weight: 700; color: #ff7b72; background: rgba(248,81,73,0.12); border-radius: 5px; padding: 1px 4px; vertical-align: 1px; cursor: help; }
+    .st-rank small { font-size: 9px; color: #7d8590; font-weight: 500; margin-left: 1px; }
+    .st-table.sort-gf .col-gf, .st-table.sort-ga .col-ga { color: #79b8ff; font-weight: 700; background: rgba(88,166,255,0.06); }
+    .st-sortbar { max-width: 1100px; margin: -4px auto 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; font-size: 12px; color: #79b8ff; background: rgba(88,166,255,0.07); border: 0.5px solid rgba(88,166,255,0.3); border-radius: 10px; padding: 7px 10px; }
+    .st-sortbar button { background: none; border: 0.5px solid rgba(88,166,255,0.45); color: #79b8ff; border-radius: 7px; padding: 4px 10px; font-size: 11.5px; font-family: inherit; cursor: pointer; }
+    .st-sortbar button:hover { background: rgba(88,166,255,0.14); }
+    button.st-sum { text-align: left; font-family: inherit; cursor: pointer; transition: border-color .2s, transform .2s, box-shadow .2s; }
+    button.st-sum:hover { border-color: rgba(88,166,255,0.55); transform: translateY(-2px); box-shadow: 0 8px 22px rgba(0,0,0,0.3); }
+    .st-sum-team b, .st-sum-rel b { transition: color .2s ease; }
+    .st-sum:hover .st-sum-team b, .st-sum-rel span:hover b { color: #58a6ff; }
+    button.st-sum.on { border-color: #58a6ff; box-shadow: 0 0 0 1px #58a6ff inset, 0 6px 20px rgba(31,111,235,0.25); }
+    button.st-sum.on .st-sum-team b { color: #79b8ff; }
+    .st-sum-rel b { font-weight: 500; }
+    .st-legend-note a { color: #7d8590; } .st-legend-note a:hover { color: #c9d1d9; }
+    @media (max-width: 768px) { .st-table.sort-gf .col-gf, .st-table.sort-ga .col-ga { display: table-cell; } }
     .st-crown { display: inline-flex; color: #e3b341; margin-left: -2px; }
     .st-crown svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
     .st-gd.pos { color: #3fb950; } .st-gd.neg { color: #f85149; } .st-gd { color: #8b949e; font-variant-numeric: tabular-nums; }
@@ -354,6 +372,28 @@
       .st-pts { min-width: 28px; padding: 2px 6px; font-size: 12px; }
     }
 
+    /* 챔스 조별리그(23-24) */
+    .grp-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; max-width: 1100px; margin: 0 auto; }
+    .grp-card { border: 0.5px solid #30363d; border-radius: 12px; background: rgba(13,17,23,0.4); overflow: hidden; }
+    .grp-title { font-size: 14px; font-weight: 800; color: #e6edf3; padding: 11px 14px; border-bottom: 0.5px solid #21262d; }
+    .grp-table { width: 100%; border-collapse: collapse; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+    .grp-table th { font-size: 10.5px; font-weight: 500; color: #7d8590; padding: 8px 4px; text-align: center; }
+    .grp-table th.grp-team-h { text-align: left; } .grp-table th.grp-form-h { text-align: left; padding-left: 8px; }
+    .grp-table td { padding: 8px 4px; text-align: center; color: #c9d1d9; border-top: 0.5px solid #21262d; }
+    .grp-table td:first-child { position: relative; width: 30px; }
+    .grp-table tr.grp-ko td:first-child::before, .grp-table tr.grp-el td:first-child::before { content: ''; position: absolute; left: 0; top: 7px; bottom: 7px; width: 3px; border-radius: 2px; }
+    .grp-table tr.grp-ko td:first-child::before { background: #3fb950; } .grp-table tr.grp-el td:first-child::before { background: #d29922; }
+    .grp-rank { font-weight: 700; color: #8b949e; }
+    .grp-table .team-cell { gap: 8px; } .grp-table .team-cell img { width: 20px; height: 20px; }
+    .grp-table .team-cell span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 130px; }
+    .grp-table td:nth-child(2) { text-align: left; }
+    .grp-pts { color: #e6edf3; }
+    .grp-form { display: flex; gap: 3px; padding-left: 4px; }
+    .gf { width: 20px; height: 20px; border-radius: 5px; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #fff; }
+    .gf.W { background: #238636; } .gf.D { background: #6e7681; } .gf.L { background: #da3633; }
+    .gf.last { box-shadow: 0 2px 0 0 #e6edf3; }
+    @media (max-width: 900px) { .grp-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 480px) { .grp-form .gf:nth-child(-n+3) { display: none; } .grp-table td, .grp-table th { padding: 7px 2px; } }
     /* ── UCL 토너먼트 대진표 (2026-09-29 리디자인: 실제 대진 배치, 좌·우 절반이 가운데 결승에서 만남) ── */
     .ko-wrap { overflow-x: auto; padding: 4px 2px 10px; }
     .ko-bracket { position: relative; display: flex; justify-content: space-between; gap: 18px; min-width: 900px; }
@@ -523,6 +563,16 @@
     .rec-main span { font-size: 11px; color: #8b949e; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .rec-fee { font-size: 12.5px; font-weight: 700; color: #e6edf3; white-space: nowrap; }
     @media (max-width: 640px) { .tr-wrap { grid-template-columns: 1fr; } }
+    .rv-card { border: 0.5px solid #30363d; border-radius: 12px; padding: 12px 14px; background: rgba(13,17,23,0.4); margin-bottom: 12px; }
+    .tr-icon.rv { background: rgba(248,81,73,0.12); color: #ff7b72; }
+    .rv-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; }
+    .rv-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 10px; background: rgba(139,148,158,0.07); border: 0.5px solid transparent; transition: border-color .15s, transform .15s; }
+    .rv-item.link { cursor: pointer; } .rv-item.link:hover { border-color: rgba(248,81,73,0.45); transform: translateY(-1px); }
+    .rv-item img { width: 32px; height: 32px; object-fit: contain; flex-shrink: 0; }
+    .rv-main { display: flex; flex-direction: column; min-width: 0; }
+    .rv-derby { font-size: 10.5px; font-weight: 700; color: #ff7b72; }
+    .rv-main b { font-size: 14px; color: #e6edf3; }
+    .rv-rec { font-size: 11px; color: #8b949e; } .rv-rec b { font-size: 11px; } .rv-rec b.w { color: #56d364; } .rv-rec b.l { color: #ff7b72; }
     .ti-facts2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 8px; }
     .ti-fact2 { display: flex; align-items: center; gap: 11px; border: 0.5px solid #21262d; border-radius: 10px; padding: 10px 12px; background: rgba(13,17,23,0.4); }
     .ti-fact2-icon { width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: rgba(88,166,255,0.1); color: #79b8ff; }
@@ -1605,12 +1655,11 @@ function loadCL() {
   document.querySelectorAll('#league-tabs .league-tab').forEach(t => t.classList.remove('active'));
   document.querySelector('[data-league="CL"]').classList.add('active');
   document.getElementById('ucl-subtabs').style.display = 'flex';
-  // 23-24는 조별리그 방식이라 한 줄 리그 스테이지 순위표가 없어서 토너먼트로 바로(리그 스테이지 버튼은 잠금)
+  // 23-24까지는 조별리그(4팀×8조) — 첫 버튼이 "조별리그"가 되고 조별 순위표를 보여줌
   const groupEra = currentStandingsSeason === '2023';
   const stBtn = document.querySelector('#ucl-subtabs [data-view="standings"]');
-  stBtn.disabled = groupEra;
-  stBtn.title = groupEra ? '23-24 시즌은 조별리그 방식이라 리그 스테이지 순위표가 없어요' : '';
-  showUCLTab(groupEra ? 'tournament' : uclView);
+  stBtn.lastChild.textContent = groupEra ? '조별리그' : '리그 스테이지';
+  showUCLTab(uclView);
 }
 function showUCLTab(tab) {
   uclView = tab;
@@ -1619,7 +1668,33 @@ function showUCLTab(tab) {
   document.getElementById('standings-content').style.display = isT ? 'none' : 'block';
   document.getElementById('ucl-tournament-content').style.display = isT ? 'block' : 'none';
   if (isT) { document.getElementById('st-summary').innerHTML = ''; loadTournament(); }
+  else if (currentStandingsSeason === '2023') loadUclGroups();
   else loadStandings('CL');
+}
+// ── 챔스 조별리그(23-24) — 조마다 4팀 표, 1·2위 16강(초록)·3위 유로파리그(노랑), 기록은 최근 경기부터 ──
+async function loadUclGroups() {
+  const content = document.getElementById('standings-content'), season = currentStandingsSeason;
+  document.getElementById('st-summary').innerHTML = '';
+  content.innerHTML = skeletonRows(8);
+  try {
+    const res = await fetchWithRetry(`${API}/ucl/groups?season=${season}`, {}, { onRetry: (a, r) => { content.innerHTML = wakingUpHtml(a, r); } });
+    const data = await res.json();
+    if (season !== currentStandingsSeason || uclView !== 'standings') return;
+    if (!data.groups) { content.innerHTML = '<div class="ko-empty"><b>조별리그 데이터를 준비 중이에요</b><span>다음 자동 업데이트(매일 새벽 3시) 후에 표시돼요</span></div>'; return; }
+    const RES_KO = { W: '승', D: '무', L: '패' };
+    content.innerHTML = `<div class="grp-grid">${Object.entries(data.groups).map(([g, rows]) => `<div class="grp-card">
+      <div class="grp-title">${g}조</div>
+      <table class="grp-table"><thead><tr><th>#</th><th class="grp-team-h">팀</th><th>경기</th><th>승</th><th>무</th><th>패</th><th class="hide-mobile">득실</th><th>+/-</th><th>승점</th><th class="grp-form-h">기록</th></tr></thead><tbody>
+      ${rows.map(r => `<tr class="${r.zone ? 'grp-' + r.zone : ''}">
+        <td><span class="grp-rank">${r.rank}</span></td>
+        <td><div class="team-cell clickable-team" onclick="openTeamInfo('${escJs(r.team)}')"><img src="${r.logo || logos[r.team] || ''}" alt="" onerror="this.style.visibility='hidden'"><span>${shortName(r.team)}</span></div></td>
+        <td>${r.played}</td><td>${r.wins}</td><td>${r.draws}</td><td>${r.losses}</td><td class="hide-mobile">${r.gf}-${r.ga}</td>
+        <td class="st-gd ${r.gd > 0 ? 'pos' : r.gd < 0 ? 'neg' : ''}">${r.gd > 0 ? '+' : ''}${r.gd}</td><td><b class="grp-pts">${r.points}</b></td>
+        <td><div class="grp-form">${r.form.map((f, i, arr) => `<span class="gf ${f} ${i === arr.length - 1 ? 'last' : ''}">${RES_KO[f]}</span>`).join('')}</div></td>
+      </tr>`).join('')}
+      </tbody></table></div>`).join('')}</div>
+      <div class="st-legend"><span><i style="background:#3fb950"></i>16강 진출 (1·2위)</span><span><i style="background:#d29922"></i>유로파리그 녹아웃 플레이오프 (3위)</span><span class="st-legend-note">기록은 왼쪽부터 조별리그 1~6차전 · 밑줄은 마지막 경기</span></div>`;
+  } catch (e) { content.innerHTML = '<div class="loading">데이터를 불러올 수 없어요. 잠시 후 다시 시도해주세요.</div>'; }
 }
 async function loadTournament() {
   const root = document.getElementById('bracket-root');
@@ -2032,11 +2107,10 @@ function renderTournament(data, season) {
   const finalHtml = `<div class="ko-col ko-final-col"><div class="ko-label gold">결승</div><div class="ko-stack n1">
     <div class="ko-final ${fin && fin.winner ? 'done' : ''}" data-key="FINAL">
       <div class="ko-trophy">${TROPHY_ICON}</div>
-      ${fin ? `<button class="tie final" onclick="openTModal('${escJs(fin.team1)}','${escJs(fin.team2)}')">
+      ${fin ? `${fin.winner ? `<div class="ko-champ"><img src="${logos[fin.winner] || ''}" alt="" onerror="this.style.display='none'"><span><small>우승</small>${shortName(fin.winner)}</span></div>` : ''}<button class="tie final" onclick="openTModal('${escJs(fin.team1)}','${escJs(fin.team2)}')">
         ${[[fin.team1, fin.team1_logo, fin.team1_goals, 1], [fin.team2, fin.team2_logo, fin.team2_goals, 2]].map(([t, lg, g, sd]) => `<div class="tie-row ${fw === sd ? 'win' : fw ? 'lose' : ''}"><img src="${lg || logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'"><span class="tie-name">${shortName(t)}</span>${fin.pens && fw === sd ? '<span class="tie-pk">PK</span>' : ''}<span class="tie-score">${fin.status === 'UPCOMING' ? '' : g}</span></div>`).join('')}
         ${fin.pens ? `<div class="tie-foot">승부차기 ${fin.pens[0]}-${fin.pens[1]}</div>` : ''}
-      </button>
-      ${fin.winner ? `<div class="ko-champ"><img src="${logos[fin.winner] || ''}" alt="" onerror="this.style.display='none'"><span><small>우승</small>${shortName(fin.winner)}</span></div>` : ''}`
+      </button>`
       : `<div class="tie tbd"><div class="tie-row"><span class="tie-name">미정</span></div><div class="tie-row"><span class="tie-name">미정</span></div></div>`}
     </div></div></div>`;
   const left = rounds.map(([k, l]) => col(k, l, 0)).join('');
@@ -2091,8 +2165,10 @@ function openTModal(t1, t2) {
   if (!m) return;
   const isW1=m.winner?m.winner===m.team1:m.team1_goals>m.team2_goals, isW2=m.winner?m.winner===m.team2:m.team2_goals>m.team1_goals;
   document.getElementById('t-modal-title').textContent = m.team1+' vs '+m.team2;
-  document.getElementById('t-logo1').src = m.team1_logo;
-  document.getElementById('t-logo2').src = m.team2_logo;
+  // 처음 페이지를 열 때 빈 src로 onerror가 한 번 불려 숨겨진 채로 남아 있었음 → 열 때마다 다시 보이게
+  [['t-logo1', m.team1_logo || logos[m.team1]], ['t-logo2', m.team2_logo || logos[m.team2]]].forEach(([id, src]) => {
+    const img = document.getElementById(id); img.style.display = src ? '' : 'none'; img.src = src || '';
+  });
   document.getElementById('t-name1').textContent = m.team1;
   document.getElementById('t-name1').className = 'modal-team-name';
   document.getElementById('t-name1').style.color = isW1?'#58a6ff':m.winner?'#8b949e':'#e6edf3';
@@ -2110,7 +2186,7 @@ function openTModal(t1, t2) {
       legsHtml += `<div class="leg-item"><div class="leg-ttl">${m.legs.length === 1 ? '단판' : (i+1)+'차전'} (${shortName(leg.home_team)} 홈)</div><div class="leg-tbd">${d ? `${d.getMonth()+1}.${d.getDate()} ${d.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit',hour12:false})} 예정` : '미진행'}</div></div>`;
       return;
     }
-    legsHtml += `<div class="leg-item"><div class="leg-ttl">${m.legs.length === 1 ? '단판' : (i+1)+'차전'} (${shortName(leg.home_team)} 홈)</div><div class="leg-row"><span style="flex:1;font-size:12px;color:${hw?'#e6edf3':'#8b949e'};font-weight:${hw?'600':'400'}">${leg.home_team}</span><span style="font-size:13px;font-weight:700;color:#e6edf3;padding:0 8px">${leg.home_goals} - ${leg.away_goals}</span><span style="flex:1;font-size:12px;color:${aw?'#e6edf3':'#8b949e'};font-weight:${aw?'600':'400'};text-align:right">${leg.away_team}</span></div></div>`;  });
+    legsHtml += `<div class="leg-item"><div class="leg-ttl">${m.legs.length === 1 ? '단판' : (i+1)+'차전'} (${shortName(leg.home_team)} 홈)</div><div class="leg-row"><span style="flex:1;font-size:12px;color:${hw?'#e6edf3':'#8b949e'};font-weight:${hw?'600':'400'};display:flex;align-items:center;gap:6px"><img src="${logos[leg.home_team]||''}" style="width:18px;height:18px;object-fit:contain" onerror="this.style.display='none'">${shortName(leg.home_team)}</span><span style="font-size:13px;font-weight:700;color:#e6edf3;padding:0 8px">${leg.home_goals} - ${leg.away_goals}</span><span style="flex:1;font-size:12px;color:${aw?'#e6edf3':'#8b949e'};font-weight:${aw?'600':'400'};text-align:right;display:flex;align-items:center;justify-content:flex-end;gap:6px">${shortName(leg.away_team)}<img src="${logos[leg.away_team]||''}" style="width:18px;height:18px;object-fit:contain" onerror="this.style.display='none'"></span></div></div>`;  });
   if (m.pens) legsHtml += `<div class="leg-item"><div class="leg-ttl">승부차기</div><div class="leg-row" style="justify-content:center;font-weight:700;color:#e6edf3">${m.pens[0]} - ${m.pens[1]}</div></div>`;
   if (m.status==='UPCOMING' && m.legs.length<2) legsHtml += `<div class="leg-item"><div class="leg-ttl">${m.legs.length+1}차전</div><div class="leg-tbd">미진행</div></div>`;
   document.getElementById('t-legs').innerHTML = legsHtml;
@@ -2555,6 +2631,7 @@ function renderTiOverview(team, code, info) {
     ${about}
     <div class="ti-season" id="ti-season"></div>
     ${(w.honours || w.records) ? `<div class="tr-wrap">${tiTrophiesHtml(w, code)}${tiRecordsHtml(w)}</div>` : ''}
+    ${tiRivalsHtml(info.rivals)}
     <div class="ti-facts2">${facts.map(f => `<div class="ti-fact2">
       <span class="ti-fact2-icon">${tiIcon(f.k)}</span>
       <div class="ti-fact2-body"><div class="ti-fact-label">${f.label}</div><div class="ti-fact-value">${f.raw ? f.value : esc(f.value)}${f.sub ? ` <span class="ti-fact2-sub">${f.sub}</span>` : ''}</div></div>
@@ -2789,6 +2866,19 @@ function tiRecordsHtml(w) {
   </div>`;
 }
 
+// 개요: 주요 라이벌(fotdata_model/rivals.json 수동 관리) + 최근 4시즌 맞대결 전적(전 대회)
+function tiRivalsHtml(rivals) {
+  if (!rivals || !rivals.length) return '';
+  return `<div class="rv-card"><div class="tr-head"><span class="tr-icon rv">${'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 17.5 3 6V3h3l11.5 11.5M13 19l6-6M16 16l4 4M19 21l2-2M9.5 17.5 21 6V3h-3L6.5 14.5M11 19l-6-6M8 16l-4 4M5 21l-2-2"/></svg>'}</span><span class="tr-title">라이벌</span></div>
+    <div class="rv-list">${rivals.map(r => {
+      const known = !!(r.logo || logos[r.opponent]);
+      const rec = r.played ? `최근 4시즌 ${r.played}경기 · <b class="w">${r.wins}승</b> ${r.draws}무 <b class="l">${r.losses}패</b>` : '최근 4시즌 맞대결 없음(다른 리그)';
+      return `<div class="rv-item ${known ? 'link' : ''}" ${known ? `onclick="openTeamInfo('${escJs(r.opponent)}')"` : ''}>
+        <img src="${r.logo || logos[r.opponent] || ''}" alt="" onerror="this.style.visibility='hidden'">
+        <div class="rv-main"><span class="rv-derby">${r.name}</span><b>${shortName(r.opponent)}</b><span class="rv-rec">${rec}</span></div>
+      </div>`;
+    }).join('')}</div></div>`;
+}
 // ── 팀 정보 · 이적 탭 ──
 // 한 줄 = 선수 사진 + 이름 + [영입/방출] / 원래 구단 로고·이름 → 새 구단 로고·이름 / 유형(이적·임대·FA)·날짜.
 // 예전 기록(2026-09-29 전 수집)엔 사진·로고·방향이 없어서 화면에서 채움: 방향 = 이 팀 목록에 가장 많이 나오는 구단명이 이 팀,
@@ -3015,7 +3105,8 @@ function refreshCurrentTab() {
       job = loadTournament();
     } else {
       const activeLeagueTab = document.querySelector('#league-tabs .league-tab.active');
-      job = loadStandings(activeLeagueTab ? activeLeagueTab.dataset.league : 'PL');
+      const lg = activeLeagueTab ? activeLeagueTab.dataset.league : 'PL';
+      job = lg === 'CL' ? (uclView === 'standings' && currentStandingsSeason === '2023' ? loadUclGroups() : loadStandings('CL')) : loadStandings(lg);
     }
   } else if (page === 'schedule') {
     job = loadSchedule(currentScheduleLeague);
@@ -3460,54 +3551,77 @@ function getZoneClass(leagueCode, i, totalTeams) {
   return '';
 }
 
-// 순위표 위 시즌 요약: 끝난 시즌은 우승·최다 득점·최소 실점·강등, 진행 중인 시즌은 선두·최다 득점·최소 실점·라운드
-function standingsSummaryHtml(rows, leagueCode, finished) {
+// 순위표 위 시즌 요약: 끝난 시즌은 우승·최다 득점·최소 실점·강등, 진행 중인 시즌은 선두·최다 득점·최소 실점·라운드.
+// 최다 득점/최소 실점 칸을 누르면 표가 득점/실점 순으로 바뀌고, 우승(선두) 칸을 누르면 원래 순위로
+let standingsView = { data: null, leagueCode: null, sort: 'rank' };
+const ZONE_CLASS = { cl: 'zone-cl', 'cl-q': 'zone-cl-q', el: 'zone-el', ecl: 'zone-ecl', 'rel-po': 'zone-rel-po', rel: 'zone-rel' };
+function standingsSummaryHtml(rows, leagueCode, finished, official) {
   if (!rows.length) return '';
   const top = rows[0], most = rows.reduce((a, b) => b.gf > a.gf ? b : a), least = rows.reduce((a, b) => b.ga < a.ga ? b : a);
+  const isCL = leagueCode === 'CL', sort = standingsView.sort;
   const z = LEAGUE_ZONES[leagueCode];
-  const rel = finished && z ? rows.slice(rows.length - z.rel) : [];
-  const card = (cls, label, t, sub) => `<div class="st-sum ${cls}"><span class="st-sum-label">${label}</span><div class="st-sum-team" onclick="openTeamInfo('${escJs(t.team)}')"><img src="${t.logo}" alt="" onerror="this.style.display='none'"><b>${cleanTeamName(t.team)}</b></div><span class="st-sum-sub">${sub}</span></div>`;
+  const rel = !finished || isCL ? [] : official ? rows.filter(r => r.zone === 'rel') : z ? rows.slice(rows.length - z.rel) : [];
+  const card = (cls, key, label, t, sub, hint) => `<button class="st-sum ${cls} ${sort === key ? 'on' : ''}" onclick="setStandingsSort('${key}')" title="${hint}">
+    <span class="st-sum-label">${label}</span>
+    <span class="st-sum-team"><img src="${t.logo}" alt="" onerror="this.style.display='none'"><b>${cleanTeamName(t.team)}</b></span>
+    <span class="st-sum-sub">${sub}</span></button>`;
   const played = Math.max(...rows.map(r => r.played));
-  let html = card(finished ? 'champ' : 'lead', finished ? (leagueCode === 'CL' ? '리그 스테이지 1위' : '우승') : '선두', top, `${top.points}점 · ${top.wins}승 ${top.draws}무 ${top.losses}패`)
-    + card('', '최다 득점', most, `${most.gf}골 · 경기당 ${(most.gf / most.played).toFixed(2)}`)
-    + card('', '최소 실점', least, `${least.ga}실점 · 경기당 ${(least.ga / least.played).toFixed(2)}`);
-  if (rel.length) html += `<div class="st-sum rel"><span class="st-sum-label">강등</span><div class="st-sum-rel">${rel.map(t => `<span onclick="openTeamInfo('${escJs(t.team)}')"><img src="${t.logo}" alt="" onerror="this.style.display='none'">${cleanTeamName(t.team)}</span>`).join('')}</div><span class="st-sum-sub">하위 ${z.rel}팀</span></div>`;
-  else html += `<div class="st-sum"><span class="st-sum-label">${finished ? '시즌' : '진행'}</span><div class="st-sum-team"><b>${finished ? '종료' : played + '라운드'}</b></div><span class="st-sum-sub">${rows.length}팀${finished ? '' : ' · 매일 새벽 갱신'}</span></div>`;
+  const topLabel = isCL ? (finished ? '리그 스테이지 1위' : '리그 스테이지 선두') : finished ? '우승' : '선두';
+  let html = card(finished && !isCL ? 'champ' : 'lead', 'rank', topLabel, top, `${top.points}점 · ${top.wins}승 ${top.draws}무 ${top.losses}패`, '순위표 순서로 보기')
+    + card('', 'gf', '최다 득점', most, `${most.gf}골 · 경기당 ${(most.gf / most.played).toFixed(2)}`, '득점 순으로 보기')
+    + card('', 'ga', '최소 실점', least, `${least.ga}실점 · 경기당 ${(least.ga / least.played).toFixed(2)}`, '실점 적은 순으로 보기');
+  if (rel.length) html += `<div class="st-sum rel"><span class="st-sum-label">강등</span><div class="st-sum-rel">${rel.map(t => `<span onclick="openTeamInfo('${escJs(t.team)}')"><img src="${t.logo}" alt="" onerror="this.style.display='none'"><b>${cleanTeamName(t.team)}</b></span>`).join('')}</div><span class="st-sum-sub">${official ? '그 시즌 실제 강등' : `하위 ${z.rel}팀`}</span></div>`;
+  else html += `<div class="st-sum"><span class="st-sum-label">${finished ? '시즌' : '진행'}</span><span class="st-sum-team"><b>${finished ? '종료' : played + '라운드'}</b></span><span class="st-sum-sub">${rows.length}팀${finished ? '' : ' · 매일 새벽 갱신'}</span></div>`;
   return `<div class="st-summary">${html}</div>`;
 }
+function setStandingsSort(key) {
+  standingsView.sort = standingsView.sort === key && key !== 'rank' ? 'rank' : key;   // 같은 칸을 다시 누르면 원래대로
+  if (standingsView.data) renderStandings(standingsView.data, standingsView.leagueCode, true);
+}
 
-function renderStandings(data, leagueCode) {
+function renderStandings(data, leagueCode, keepSort) {
+  if (!keepSort || standingsView.leagueCode !== leagueCode) standingsView.sort = 'rank';
+  standingsView.data = data; standingsView.leagueCode = leagueCode;
   const rows = data.standings, totalTeams = rows.length, content = document.getElementById('standings-content'), isCL = leagueCode === 'CL';
-  const finished = currentStandingsSeason !== 'current';
-  document.getElementById('st-summary').innerHTML = standingsSummaryHtml(rows, leagueCode, finished);
-  let html = `<div class="st-table-wrap"><table class="standings-table st-table"><thead><tr><th style="width:44px">#</th><th>팀</th><th class="center">경기</th><th class="center">승</th><th class="center">무</th><th class="center">패</th><th class="center hide-mobile">득점</th><th class="center hide-mobile">실점</th><th class="center">득실</th><th class="center hide-mobile">최근 5경기</th><th class="center">승점</th></tr></thead><tbody>`;
-  rows.forEach((team, i) => {
+  const finished = currentStandingsSeason !== 'current', official = !!data.official, sort = standingsView.sort;
+  document.getElementById('st-summary').innerHTML = standingsSummaryHtml(rows, leagueCode, finished, official);
+  // 정렬: 순위(기본) / 득점 많은 순 / 실점 적은 순(동률은 원래 순위)
+  const shown = sort === 'gf' ? rows.slice().sort((a, b) => b.gf - a.gf || a.rank - b.rank)
+    : sort === 'ga' ? rows.slice().sort((a, b) => a.ga - b.ga || a.rank - b.rank) : rows;
+  const sortBar = sort !== 'rank' ? `<div class="st-sortbar"><span>${sort === 'gf' ? '득점 많은 순' : '실점 적은 순'}으로 보는 중 · 왼쪽 숫자는 ${sort === 'gf' ? '득점' : '실점'} 순위, 괄호는 리그 순위</span><button onclick="setStandingsSort('rank')">순위표로 돌아가기</button></div>` : '';
+  let html = `${sortBar}<div class="st-table-wrap"><table class="standings-table st-table sort-${sort}"><thead><tr><th style="width:44px">#</th><th>팀</th><th class="center">경기</th><th class="center">승</th><th class="center">무</th><th class="center">패</th><th class="center hide-mobile col-gf">득점</th><th class="center hide-mobile col-ga">실점</th><th class="center">득실</th><th class="center hide-mobile">최근 5경기</th><th class="center">승점</th></tr></thead><tbody>`;
+  shown.forEach((team, i) => {
+    const idx = team.rank - 1;
     let zc = '';
-    if (isCL) { if (i < 8) zc = 'zone-ucl-ko'; else if (i < 24) zc = 'zone-ucl-po'; }
-    else zc = getZoneClass(leagueCode, i, totalTeams);
+    if (isCL) { if (idx < 8) zc = 'zone-ucl-ko'; else if (idx < 24) zc = 'zone-ucl-po'; }
+    else if (official) zc = ZONE_CLASS[team.zone] || '';   // 끝난 시즌: 그 시즌 실제 진출·강등(컵 우승 팀 포함)
+    else zc = getZoneClass(leagueCode, idx, totalTeams);
     const fb = team.form.map(f => `<div class="form-badge ${f}">${f}</div>`).join('');
-    const champ = finished && i === 0;
+    const champ = finished && !isCL && team.rank === 1;   // 챔스 리그 스테이지 1위는 우승이 아님
+    const num = sort === 'rank' ? team.rank : `${i + 1}<small>(${team.rank})</small>`;
     html += `<tr class="st-row ${zc} ${champ ? 'champ' : ''} row-enter" style="animation-delay:${Math.min(i * 35, 600)}ms">
-      <td><span class="st-rank">${team.rank}</span></td>
-      <td><div class="team-cell clickable-team" onclick="openTeamInfo('${escJs(team.team)}')"><img src="${team.logo}" width="24" height="24" style="object-fit:contain" onerror="this.style.display='none'"><span>${cleanTeamName(team.team)}</span>${champ ? `<span class="st-crown" title="우승">${TROPHY_ICON}</span>` : ''}</div></td>
+      <td><span class="st-rank">${num}</span></td>
+      <td><div class="team-cell clickable-team" onclick="openTeamInfo('${escJs(team.team)}')"><img src="${team.logo}" width="24" height="24" style="object-fit:contain" onerror="this.style.visibility='hidden'"><span>${cleanTeamName(team.team)}</span>${champ ? `<span class="st-crown" title="우승">${TROPHY_ICON}</span>` : ''}</div></td>
       <td class="center">${team.played}</td><td class="center">${team.wins}</td><td class="center">${team.draws}</td><td class="center">${team.losses}</td>
-      <td class="center hide-mobile">${team.gf}</td><td class="center hide-mobile">${team.ga}</td>
+      <td class="center hide-mobile col-gf">${team.gf}</td><td class="center hide-mobile col-ga">${team.ga}</td>
       <td class="center st-gd ${team.gd > 0 ? 'pos' : team.gd < 0 ? 'neg' : ''}">${team.gd > 0 ? '+' : ''}${team.gd}</td>
       <td class="center hide-mobile"><div class="form-badges">${fb}</div></td>
-      <td class="center"><span class="st-pts">${team.points}</span></td></tr>`;
+      <td class="center"><span class="st-pts">${team.points}</span>${team.deduction ? `<span class="st-ded" title="승점 ${-team.deduction}점 감점(공식 징계)">${team.deduction}</span>` : ''}</td></tr>`;
   });
   html += '</tbody></table></div><div class="st-legend">';
   const legendItem = (color, label) => `<span><i style="background:${color}"></i>${label}</span>`;
   if (isCL) html += legendItem('#f0c040', '16강 직행 (1~8위)') + legendItem('#f0883e', '플레이오프 (9~24위)');
   else {
     const z = LEAGUE_ZONES[leagueCode] || {};
+    const has = k => official ? rows.some(r => r.zone === k) : true;
     html += legendItem('#58a6ff', '챔피언스리그');
-    if (z.cl > z.clDirect) html += legendItem('#a371f7', '챔피언스리그 예선');
-    if (z.el) html += legendItem('#f0883e', '유로파리그');
-    if (z.ecl) html += legendItem('#3fb950', '컨퍼런스리그');
-    if (z.relPlayoff) html += legendItem('#d29922', '강등 플레이오프');
+    if (official ? has('cl-q') : z.cl > z.clDirect) html += legendItem('#a371f7', '챔피언스리그 예선');
+    if (has('el') && (official || z.el)) html += legendItem('#f0883e', '유로파리그');
+    if (has('ecl') && (official || z.ecl)) html += legendItem('#3fb950', '컨퍼런스리그');
+    if (official ? has('rel-po') : z.relPlayoff) html += legendItem('#d29922', '강등 플레이오프');
     html += legendItem('#da3633', '강등');
-    if (finished) html += '<span class="st-legend-note">유럽 대항전 구역은 2026-27 배정 기준 표시</span>';
+    if (official) html += `<span class="st-legend-note">그 시즌 실제 결과(컵 우승 팀 진출·승점 감점 포함) · <a href="${data.source}" target="_blank" rel="noopener">공식 순위 출처 ↗</a></span>`;
+    else if (finished) html += '<span class="st-legend-note">유럽 대항전 구역은 표준 배정 기준</span>';
   }
   html += '</div>'; content.innerHTML = html;
   initScrollFade(content.querySelector('.st-table-wrap') || content);
