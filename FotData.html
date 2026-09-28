@@ -711,6 +711,14 @@
     .ct-pts small { display: block; font-size: 10px; font-weight: 500; color: #6e7681; margin-top: 1px; }
     .ct-cell { height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
     .ct-cell.none { color: #484f58; font-weight: 500; }
+    .ct-cell.wait { border: 0.5px dashed #30363d; }
+    .ct-pts.wait { color: #484f58; font-weight: 500; }
+    .ct-row { background: #161b22; position: relative; }
+    .ct-row.reveal .ct-cell, .ct-row.reveal .ct-pts { animation: ctPop .4s cubic-bezier(.2,.8,.2,1) both; animation-delay: var(--d, 0ms); }
+    @keyframes ctPop { from { opacity: 0; transform: scale(.82); } to { opacity: 1; transform: none; } }
+    #sim-btn.pulse { animation: simPulse 1.8s ease-in-out infinite; }
+    @keyframes simPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(88,166,255,.45); } 50% { box-shadow: 0 0 0 7px rgba(88,166,255,0); } }
+    @media (prefers-reduced-motion: reduce) { .ct-row.reveal .ct-cell, .ct-row.reveal .ct-pts, #sim-btn.pulse { animation: none; } }
     .ct-legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 14px; font-size: 11px; color: #8b949e; }
     .ct-meta { font-size: 12px; color: #8b949e; margin-bottom: 12px; }
     .ct-meta b { color: #e6edf3; font-weight: 600; }
@@ -2282,7 +2290,7 @@ function runSimulation() {
       }
     }
 
-    const pct = v => Math.round(v / nSim * 1000) / 10;
+    const pct = v => v / nSim * 100;   // 반올림 안 함 — 표시 단계에서 "0번"과 "1% 미만"을 구분하려고
     const results = teams.map((t, i) => ({
       team: t.team, logo: t.logo, played: t.played, points: t.points,
       exp_pts: sumPts[i] / nSim, avg_rank: sumRank[i] / nSim,
@@ -2326,46 +2334,85 @@ async function loadChampion(league, btn) {
     });
     const data = await res.json();
     currentChampionData = data;
-    runSimulation();
+    renderChampionPending(data);
   } catch (e) {
     content.innerHTML = '<div style="color:#da3633;padding:12px">불러오기 실패. 잠시 후 다시 시도해주세요.</div>';
   }
 }
 
+const CT_HEAD = `<div class="ct-head"><span>#</span><span>팀</span><span>예상 승점</span><span>우승</span><span>UCL권</span><span>강등</span></div>`;
+
+function ctRowHtml(t, i, T, cells, ptsHtml) {
+  const zone = MI_ZONE_INFO[getZoneClass(currentLeagueCode, i, T)];
+  return `<div class="ct-row" data-team="${t.team.replace(/"/g, '&quot;')}">
+    <div class="ct-rank" style="${zone ? `color:${zone.color}` : ''}">${i + 1}</div>
+    <div class="ct-team">
+      <img src="${t.logo}" onerror="this.style.visibility='hidden'" onclick="openTeamInfo('${escJs(t.team)}')" alt="">
+      <div style="min-width:0">
+        <div class="ct-name clickable-team" onclick="openTeamInfo('${escJs(t.team)}')">${cleanTeamName(t.team)}</div>
+        <div class="ct-sub">현재 ${t.points}점 · ${t.played}경기</div>
+      </div>
+    </div>
+    ${ptsHtml}${cells}
+  </div>`;
+}
+
+// 진입 직후: 현재 순위표 순서 + 빈 확률 칸, 버튼으로 시뮬레이션 유도
+function renderChampionPending(data) {
+  const content = document.getElementById('champion-content');
+  const teams = data.teams, T = teams.length;   // 서버가 현재 순위 순으로 줌
+  const wait = '<div class="ct-cell wait"></div>'.repeat(3);
+  content.innerHTML = `<div class="ct-meta">지금은 <b>현재 순위</b>예요 · <b>시뮬레이션 시작</b>을 누르면 남은 ${data.remaining}경기를 돌려 우승·UCL권·강등 확률을 계산해요</div>` +
+    CT_HEAD + teams.map((t, i) => ctRowHtml(t, i, T, wait, '<div class="ct-pts wait">–</div>')).join('');
+  document.getElementById('sim-btn')?.classList.add('pulse');
+}
+
 function renderChampionResults(data) {
   const content = document.getElementById('champion-content');
   const teams = data.teams, T = teams.length;
-  // 확률이 클수록 진하게 — 우승 금색, UCL권 파랑, 강등 빨강
-  const cell = (p, rgb) => p < 0.05
+  // 확률이 클수록 진하게 — 우승 금색, UCL권 파랑, 강등 빨강. "–"는 시뮬레이션에서 한 번도 안 나온 경우만
+  const cell = (p, rgb) => p === 0
     ? `<div class="ct-cell none">–</div>`
     : `<div class="ct-cell" style="background:rgba(${rgb},${(0.08 + Math.min(p, 100) / 100 * 0.55).toFixed(3)});color:${p >= 50 ? '#fff' : `rgb(${rgb})`}">${p >= 99.95 ? '100' : p < 1 ? '<1' : Math.round(p)}%</div>`;
 
-  let html = `<div class="ct-meta">남은 <b>${data.remaining}경기</b>를 <b>${data.nSim.toLocaleString()}번</b> 시뮬레이션한 결과 · 예상 순위 순</div>
-    <div class="ct-head"><span>#</span><span>팀</span><span>예상 승점</span><span>우승</span><span>UCL권</span><span>강등</span></div>`;
-  teams.forEach((t, i) => {
-    const zone = MI_ZONE_INFO[getZoneClass(currentLeagueCode, i, T)];
-    html += `<div class="ct-row">
-      <div class="ct-rank" style="${zone ? `color:${zone.color}` : ''}">${i + 1}</div>
-      <div class="ct-team">
-        <img src="${t.logo}" onerror="this.style.visibility='hidden'" onclick="openTeamInfo('${escJs(t.team)}')" alt="">
-        <div style="min-width:0">
-          <div class="ct-name clickable-team" onclick="openTeamInfo('${escJs(t.team)}')">${cleanTeamName(t.team)}</div>
-          <div class="ct-sub">현재 ${t.points}점 · ${t.played}경기</div>
-        </div>
-      </div>
-      <div class="ct-pts">${Math.round(t.exp_pts)}<small>+${Math.round(t.exp_pts - t.points)}</small></div>
-      ${cell(t.champion_prob, '240,192,64')}
-      ${cell(t.ucl_prob, '88,166,255')}
-      ${cell(t.relegation_prob, '248,81,73')}
-    </div>`;
-  });
+  // 행 이동 애니메이션(FLIP): 그리기 전 팀별 위치 기억
+  const before = {};
+  content.querySelectorAll('.ct-row').forEach(r => { before[r.dataset.team] = r.getBoundingClientRect().top; });
+
   const releNote = (currentLeagueCode === 'BL1' || currentLeagueCode === 'FL1') ? ' (16위 승강 PO 제외)' : '';
-  html += `<div class="ct-legend">
-    <span>예상 승점 = 시뮬레이션 평균 최종 승점 (아래 +는 남은 경기에서 더할 승점)</span>
-    <span>UCL권 = ${data.uclSpots}위 이내</span>
-    <span>강등 = 하위 ${data.releSpots}팀${releNote}</span>
-  </div>`;
-  content.innerHTML = html;
+  content.innerHTML = `<div class="ct-meta">남은 <b>${data.remaining}경기</b>를 <b>${data.nSim.toLocaleString()}번</b> 시뮬레이션한 결과 · 예상 순위 순</div>` + CT_HEAD +
+    teams.map((t, i) => ctRowHtml(t, i, T,
+      cell(t.champion_prob, '240,192,64') + cell(t.ucl_prob, '88,166,255') + cell(t.relegation_prob, '248,81,73'),
+      `<div class="ct-pts">${Math.round(t.exp_pts)}<small>+${Math.round(t.exp_pts - t.points)}</small></div>`)).join('') +
+    `<div class="ct-legend">
+      <span>예상 승점 = 시뮬레이션 평균 최종 승점 (아래 +는 남은 경기에서 더할 승점)</span>
+      <span>UCL권 = ${data.uclSpots}위 이내 · 강등 = 하위 ${data.releSpots}팀${releNote}</span>
+      <span>&lt;1% = 1% 미만으로 일어남 (예: ${data.nSim.toLocaleString()}번 중 ${Math.max(1, Math.floor(data.nSim / 100) - 1).toLocaleString()}번 이하) · – = 한 번도 안 일어남</span>
+    </div>`;
+  document.getElementById('sim-btn')?.classList.remove('pulse');
+
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const rows = [...content.querySelectorAll('.ct-row')];
+  rows.forEach((r, i) => {
+    r.style.setProperty('--d', `${Math.min(i * 35, 600)}ms`);
+    r.classList.add('reveal');
+    const prev = before[r.dataset.team];
+    if (reduce || prev == null) return;
+    const dy = prev - r.getBoundingClientRect().top;
+    if (!dy) return;
+    r.style.transition = 'none';
+    r.style.transform = `translateY(${dy}px)`;
+    r.style.zIndex = Math.abs(dy) > 60 ? 2 : 1;
+  });
+  if (!reduce) {
+    void content.offsetHeight;
+    rows.forEach(r => {
+      if (!r.style.transform) return;
+      r.style.transition = 'transform .7s cubic-bezier(.2,.8,.2,1)';
+      r.style.transform = '';
+      r.addEventListener('transitionend', () => { r.style.zIndex = ''; r.style.transition = ''; }, { once: true });
+    });
+  }
 }
 
 async function loadPlayers() {
