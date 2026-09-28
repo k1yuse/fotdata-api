@@ -839,6 +839,45 @@ def get_champion_prediction(league_code: str):
         "sigma":     SEASON_SIM_SIGMA,
     }
 
+# ── 빅매치 API (경기예측 탭 배너 + 랜딩 3D 연출이 같이 씀 — 페이지마다 다른 경기가 뜨지 않게 한 곳에서 결정) ──
+# "빅매치" = 두 팀 모두 BIG_CLUBS(리그별 인기·시청률 상위 구단)에 속한 경기 중 **가장 가까운 경기**.
+# 킥오프가 같으면 prestige 합이 큰 쪽. 경기 시작 시각이 지나면 후보에서 빠져 다음 빅매치로 넘어감.
+# 예전 규칙(프론트): prestige 합 ≥80 + 가장 이른 경기일 +3일 안 최강 매치 → prestige가 최근 2시즌 승률만
+# 반영해서 맨유(5.9)+토트넘(−60) 같은 부진한 인기 구단 경기가 빠지고 하루 뒤 리버풀–맨시티가 떴음.
+# 사용자 결정(2026-09-28): 인기 구단끼리면 가까운 경기부터 순서대로.
+BIG_CLUBS = {
+    'Manchester City FC', 'Liverpool FC', 'Arsenal FC', 'Manchester United FC', 'Chelsea FC', 'Tottenham Hotspur FC',
+    'Real Madrid CF', 'FC Barcelona', 'Club Atlético de Madrid',
+    'FC Bayern München', 'Borussia Dortmund',
+    'FC Internazionale Milano', 'AC Milan', 'Juventus FC', 'SSC Napoli', 'AS Roma',
+    'Paris Saint-Germain FC', 'Olympique de Marseille',
+}
+BIGMATCH_HORIZON_DAYS = 30
+
+@app.get("/bigmatch")
+def get_bigmatch():
+    with open(os.path.join(MODEL_DIR, "schedule.json"), 'r', encoding='utf-8') as f:
+        schedule = json.load(f)
+    now = pd.Timestamp.now(tz='UTC')
+    horizon = now + pd.Timedelta(days=BIGMATCH_HORIZON_DAYS)
+    prestige = dict(zip(df_stats['team'], df_stats['prestige'].fillna(0)))
+    cands = []
+    for league, matches in schedule.items():
+        for m in matches:
+            d = pd.Timestamp(m['date'])
+            if (m.get('status') != 'FINISHED' and now < d <= horizon
+                    and m['home_team'] in BIG_CLUBS and m['away_team'] in BIG_CLUBS):
+                score = prestige.get(m['home_team'], 0) + prestige.get(m['away_team'], 0)
+                cands.append((d, -score, league, m))
+    if not cands:
+        return {"match": None}
+    d, _, league, m = min(cands, key=lambda c: (c[0], c[1]))
+    return {"match": {
+        "date": m['date'], "league": league, "matchday": m.get('matchday'),
+        "home_team": m['home_team'], "away_team": m['away_team'],
+        "home_logo": team_logos_cache.get(m['home_team'], ''), "away_logo": team_logos_cache.get(m['away_team'], ''),
+    }}
+
 # ── 전체 일정 API ──
 @app.get("/schedule/{league_code}")
 def get_schedule(league_code: str):

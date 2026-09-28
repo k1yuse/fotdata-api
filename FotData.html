@@ -1369,47 +1369,18 @@ async function loadTodayMatches() {
 }
 
 // ── 빅매치 카운트다운 배너 ──
-// "빅매치" = 두 팀 모두 BIG_CLUBS(리그별 인기·시청률 상위 구단)에 속한 경기.
-// prestige는 최근 2시즌 승률만 반영해서 Man Utd/Juventus처럼 부진한 인기 구단은
-// 낮게, Lens/Lille 같은 중위권은 높게 나오는 등 "관심도"를 못 담기 때문에
-// 후보 자격은 이 리스트로 거르고, prestige 합(데이터상 전력)이 기준 미만인 경기도 제외.
-// 남은 후보 중 가장 이른 경기일 기준 +3일(같은 라운드/주말) 안에서 최강 매치를 보여줌 —
-// 먼 미래의 더 센 경기가 임박한 빅매치를 밀어내지 않고, 경기 시작 시간이 지나면
-// 후보에서 빠져 바로 다음 빅매치로 순서대로 넘어감.
-const BIG_CLUBS = new Set([
-  'Manchester City FC', 'Liverpool FC', 'Arsenal FC', 'Manchester United FC', 'Chelsea FC', 'Tottenham Hotspur FC',
-  'Real Madrid CF', 'FC Barcelona', 'Club Atlético de Madrid',
-  'FC Bayern München', 'Borussia Dortmund',
-  'FC Internazionale Milano', 'AC Milan', 'Juventus FC', 'SSC Napoli', 'AS Roma',
-  'Paris Saint-Germain FC', 'Olympique de Marseille',
-]);
-const BIGMATCH_MIN_SCORE = 80;
-const BIGMATCH_CLUSTER_DAYS = 3;
-const BIGMATCH_HORIZON_DAYS = 30;
+// 어떤 경기를 빅매치로 띄울지는 서버 /bigmatch가 결정(BIG_CLUBS끼리 가장 가까운 경기 — main.py 설명 참고).
+// 랜딩 3D 연출도 같은 엔드포인트를 써서 두 페이지가 항상 같은 경기를 보여줌. 경기 시작 시각이 지나면
+// 카운트다운이 0에서 다시 불러와 다음 빅매치로 넘어감.
 let bigMatchTimer = null;
 
 async function loadBigMatch() {
   const banner = document.getElementById('bigmatch-banner');
   if (!banner) return;
   try {
-    await ensureTeamPrestigeLoaded();
-    const all = await fetchAllSchedules();
-    const DAY = 24 * 60 * 60 * 1000;
-    const now = new Date();
-    const horizon = new Date(now.getTime() + BIGMATCH_HORIZON_DAYS * DAY);
-    const candidates = all.filter(m => {
-      const d = new Date(m.date);
-      return m.status !== 'FINISHED' && d > now && d <= horizon && BIG_CLUBS.has(m.home_team) && BIG_CLUBS.has(m.away_team);
-    }).map(m => ({
-      ...m,
-      matchScore: (teamPrestigeCache[m.home_team] ?? 0) + (teamPrestigeCache[m.away_team] ?? 0),
-    })).filter(m => m.matchScore >= BIGMATCH_MIN_SCORE)
-      .sort((a, b) => new Date(a.date) - new Date(b.date));
-    if (!candidates.length) { banner.style.display = 'none'; return; }
-    const clusterEnd = new Date(candidates[0].date).getTime() + BIGMATCH_CLUSTER_DAYS * DAY;
-    const big = candidates
-      .filter(m => new Date(m.date).getTime() <= clusterEnd)
-      .sort((a, b) => b.matchScore - a.matchScore || new Date(a.date) - new Date(b.date))[0];
+    const res = await fetchWithRetry(`${API}/bigmatch`);
+    const big = (await res.json()).match;
+    if (!big) { banner.style.display = 'none'; return; }
     await renderBigMatchBanner(big);
     banner.style.display = 'block';
   } catch (e) {

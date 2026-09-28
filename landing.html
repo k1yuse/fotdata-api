@@ -405,9 +405,11 @@
     .story-match-teams { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 15px; margin-bottom: 14px; }
     .story-match-teams span { display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
     .story-match-teams b { font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .story-match-teams i { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
-    .story-match-teams .h i { background: #58a6ff; box-shadow: 0 0 10px rgba(88,166,255,0.7); }
-    .story-match-teams .a i { background: #f0883e; box-shadow: 0 0 10px rgba(240,136,62,0.7); }
+    /* 구단 로고를 경기장 위 원형과 같은 색 링으로 감쌈(홈 파랑/원정 주황) */
+    .story-match-teams .crest { width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; background: #eef2f6; }   /* 밝은 배지 — 남색 엠블럼(토트넘 등)이 어두운 배경에 묻히지 않게 */
+    .story-match-teams .crest img { width: 22px; height: 22px; object-fit: contain; }
+    .story-match-teams .h .crest { border: 1.5px solid #58a6ff; box-shadow: 0 0 12px rgba(88,166,255,0.45); }
+    .story-match-teams .a .crest { border: 1.5px solid #f0883e; box-shadow: 0 0 12px rgba(240,136,62,0.45); }
     .story-match-teams .vs { font-size: 11px; color: var(--muted); }
     .story-bars .row { display: grid; grid-template-columns: 110px 1fr 40px; align-items: center; gap: 10px; margin-top: 8px; font-size: 12px; color: var(--muted); }
     .story-bars .row span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -418,15 +420,19 @@
     .story-sim-list { list-style: none; margin-top: 20px; display: flex; flex-direction: column; gap: 8px; }
     .story-sim-list li { display: grid; grid-template-columns: 22px 1fr auto; gap: 10px; align-items: center; font-size: 14px; }
     .story-sim-list .rk { color: var(--muted); font-weight: 700; text-align: center; } .story-sim-list .rk.first { color: #f0c040; }
+    .story-sim-list .nm { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .story-sim-list .nm img { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
     .story-sim-list .pc { font-weight: 700; color: var(--blue); font-variant-numeric: tabular-nums; }
     .story:not(.static) .story-sim-list { display: none; }   /* 애니메이션 모드에선 3D 막대 위 라벨로 보여줌 */
     .story-step .btn-primary { margin-top: 24px; }
     .story-bar-labels { position: absolute; inset: 0; pointer-events: none; opacity: 0; }
     .story-bar-label { position: absolute; left: 0; top: 0; text-align: center; white-space: nowrap; }
+    .story-bar-label img { display: block; width: 28px; height: 28px; object-fit: contain; margin: 0 auto 4px; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5)); }
     .story-bar-label b { display: block; font-size: 16px; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; }
     .story-bar-label.first b { color: #f0c040; }
     .story-bar-label span { display: block; font-size: 11px; color: var(--muted); }
-    .hero, .story { isolation: auto; }
+    /* 3D 연출이 켜졌을 때: 회색 띠 섹션 배경을 걷어 캔버스가 가로로 잘리지 않게(섹션 구분은 기존 경계선) */
+    body.story-on .preview, body.story-on .leagues { background: transparent; }
     @media (max-width: 768px) {
       .story { height: 520vh; }
       .story-step { top: 24px; left: 20px; right: 20px; width: auto; translate: none; }
@@ -436,6 +442,8 @@
       .story-match { margin-top: 14px; padding: 12px 14px; }
       .story-bars .row { grid-template-columns: 90px 1fr 36px; }
       .story-bar-label b { font-size: 13px; } .story-bar-label span { font-size: 10px; }
+      .story-bar-label img { width: 22px; height: 22px; }
+      .story-match-teams .crest { width: 30px; height: 30px; } .story-match-teams .crest img { width: 19px; height: 19px; }
     }
     /* 정적 모드: 모션 최소화 설정·WebGL 미지원 — 화면 고정 없이 문구와 목록만 */
     .story.static { height: auto; }
@@ -543,7 +551,7 @@
         <p>누적 ELO 전력, 최근 폼, 득실, 맞대결까지 — 경기 직전까지의 기록만으로 승·무·패 확률을 계산해요.</p>
         <div class="story-match">
           <div class="story-match-when" id="story-when">다가오는 빅매치</div>
-          <div class="story-match-teams"><span class="h"><i></i><b id="story-home">Liverpool</b></span><span class="vs">vs</span><span class="a"><b id="story-away">Manchester City</b><i></i></span></div>
+          <div class="story-match-teams"><span class="h"><i class="crest"><img id="story-home-logo" src="https://crests.football-data.org/66.png" alt=""></i><b id="story-home">Manchester United</b></span><span class="vs">vs</span><span class="a"><b id="story-away">Tottenham Hotspur</b><i class="crest"><img id="story-away-logo" src="https://crests.football-data.org/73.png" alt=""></i></span></div>
           <div class="story-bars">
             <div class="row"><span id="story-home-label">홈 승</span><div class="bg"><i id="story-bar-h" class="h"></i></div><b id="story-bar-h-val">-</b></div>
             <div class="row"><span>무승부</span><div class="bg"><i id="story-bar-d" class="d"></i></div><b id="story-bar-d-val">-</b></div>
@@ -554,7 +562,7 @@
       <div class="story-step">
         <div class="story-kicker">03 · 시뮬레이션</div>
         <h2>한 시즌을<br><em>1,000번</em> 치르다</h2>
-        <p>현재 승점에서 출발해 남은 <span id="story-remaining">330</span>경기를 1,000번 시뮬레이션해요. 막대 높이가 곧 EPL 우승 확률이에요.</p>
+        <p>현재 승점에서 출발해 남은 <span id="story-remaining">330</span>경기를 1,000번 시뮬레이션해요. 막대 높이가 곧 리그 우승 확률이에요.</p>
         <ol class="story-sim-list" id="story-sim-list"></ol>
       </div>
       <div class="story-step">

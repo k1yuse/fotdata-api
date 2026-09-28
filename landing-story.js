@@ -6,13 +6,15 @@
 //   3 막대: 점들이 빛줄기처럼 날아가 우승 확률 막대로 쌓임 — 실제 순위 예측 시뮬레이션 결과
 // 구조: 점마다 네 장면의 목표 위치/색을 attribute로 미리 넣어두고, 셰이더가 (A→B, t)로 보간 — 수천 개 점도 GPU에서 가볍게 움직임.
 // 문구는 전부 실제 HTML(검색 노출). 모션 최소화 설정·WebGL 미지원이면 고정 없이 문구+목록만 보여주는 정적 모드.
-// 구단 엠블럼은 연출에 쓰지 않음(팀은 이름 텍스트 + 중립 원형) — 마케팅 연출의 상표 리스크 회피.
+// 3D 연출 속 팀은 중립 원형(홈 파랑/원정 주황)으로만 표현하고, 구단 로고는 옆 HTML 카드(실제 데이터 표시)에만 씀.
 
 const API = 'https://fotdata-api.onrender.com';
 const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js';
-const BIG_PL = new Set(['Manchester City FC', 'Liverpool FC', 'Arsenal FC', 'Manchester United FC', 'Chelsea FC', 'Tottenham Hotspur FC']);
-const COLORS = { blue: [0.345, 0.651, 1.0], orange: [0.941, 0.533, 0.243], gold: [0.941, 0.753, 0.251], line: [0.55, 0.72, 1.0], dim: [0.35, 0.5, 0.75] };
+const LEAGUE_KO = { PL: 'EPL', PD: '라리가', BL1: '분데스리가', SA: '세리에A', FL1: '리그앙', CL: 'UCL' };
+const SIM_LEAGUES = new Set(['PL', 'PD', 'BL1', 'SA', 'FL1']);
+const COLORS = { blue: [0.345, 0.651, 1.0], orange: [0.941, 0.533, 0.243], gold: [0.941, 0.753, 0.251], line: [0.55, 0.72, 1.0], dim: [0.35, 0.5, 0.75], face: [0.5, 0.7, 1.0] };
 const TOPK = 5;
+const BALL_R = 2.2;
 
 const story = document.getElementById('story');
 // 공개 전 미리보기: ?story=1 로 접속했을 때만 켬(확인 후 기본 공개로 전환 예정)
@@ -21,10 +23,12 @@ const ENABLED = story && (new URLSearchParams(location.search).has('story') || s
 // ── 표시 데이터 (API 실패 시 이 값으로 연출이 계속 돌아감) ──
 const data = {
   total: 6024,
-  match: { home: 'Liverpool FC', away: 'Manchester City FC', p: [0.37, 0.21, 0.42], when: '' },
+  match: { home: 'Manchester United FC', away: 'Tottenham Hotspur FC', p: [0.66, 0.21, 0.13], when: '', league: 'PL',
+    homeLogo: 'https://crests.football-data.org/66.png', awayLogo: 'https://crests.football-data.org/73.png' },
   sim: { remaining: 330, top: [
-    { team: 'Arsenal FC', prob: 0.47 }, { team: 'Manchester City FC', prob: 0.46 }, { team: 'Liverpool FC', prob: 0.03 },
-    { team: 'Brighton & Hove Albion FC', prob: 0.02 }, { team: 'Manchester United FC', prob: 0.01 }] },
+    { team: 'Arsenal FC', prob: 0.47, logo: 'https://crests.football-data.org/57.png' }, { team: 'Manchester City FC', prob: 0.46, logo: 'https://crests.football-data.org/65.png' },
+    { team: 'Liverpool FC', prob: 0.03, logo: 'https://crests.football-data.org/64.png' }, { team: 'Brighton & Hove Albion FC', prob: 0.02, logo: 'https://crests.football-data.org/397.png' },
+    { team: 'Manchester United FC', prob: 0.01, logo: 'https://crests.football-data.org/66.png' }] },
 };
 
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
@@ -42,6 +46,8 @@ if (!story) {
   story.remove();
 } else {
   story.hidden = false;
+  // 연출이 켜지면 기존 섹션의 회색 띠 배경을 걷어서 페이지 전체를 하나의 어두운 공간으로(회색 띠가 공을 가로로 자르던 문제)
+  document.body.classList.add('story-on');
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const webgl = (() => { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch (e) { return false; } })();
   renderText();
@@ -62,6 +68,11 @@ function renderText() {
   $('story-count').textContent = data.total.toLocaleString();
   $('story-home').textContent = shortName(m.home);
   $('story-away').textContent = shortName(m.away);
+  for (const [id, src] of [['story-home-logo', m.homeLogo], ['story-away-logo', m.awayLogo]]) {
+    const img = $(id);
+    if (src && img.getAttribute('src') !== src) { img.src = src; img.style.visibility = ''; }
+    else if (!src) img.style.visibility = 'hidden';
+  }
   $('story-when').textContent = m.when ? `다가오는 빅매치 · ${m.when}` : '다가오는 빅매치';
   const labels = ['story-bar-h', 'story-bar-d', 'story-bar-a'];
   m.p.forEach((v, i) => {
@@ -74,7 +85,7 @@ function renderText() {
   $('story-away-label').textContent = shortName(m.away) + ' 승';
   $('story-remaining').textContent = data.sim.remaining;
   $('story-sim-list').innerHTML = data.sim.top.map((t, i) =>
-    `<li><span class="rk${i === 0 ? ' first' : ''}">${i + 1}</span><span class="nm">${shortName(t.team)}</span><span class="pc">${Math.round(t.prob * 100)}%</span></li>`).join('');
+    `<li><span class="rk${i === 0 ? ' first' : ''}">${i + 1}</span><span class="nm">${t.logo ? `<img src="${t.logo}" alt="" onerror="this.style.display='none'">` : ''}${shortName(t.team)}</span><span class="pc">${Math.round(t.prob * 100)}%</span></li>`).join('');
 }
 
 // ── 실제 데이터 불러오기 ──
@@ -84,24 +95,24 @@ async function loadData() {
   renderText();
   onDataChange();
   try {
-    // 다가오는 EPL 빅매치(빅6끼리 가장 가까운 경기) → 실제 /predict 확률
-    const sch = await get('/schedule/PL');
-    const now = Date.now();
-    const up = sch.matches.filter(m => m.status !== 'FINISHED' && new Date(m.date).getTime() > now)
-      .sort((a, b) => new Date(a.date) - new Date(b.date));
-    const pick = up.find(m => BIG_PL.has(m.home_team) && BIG_PL.has(m.away_team)) || up[0];
-    if (pick) {
-      const p = await fetch(API + '/predict', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ home_team: pick.home_team, away_team: pick.away_team }) }).then(r => r.json());
-      const d = new Date(pick.date);
-      data.match = { home: pick.home_team, away: pick.away_team, p: [p.probabilities.home_win, p.probabilities.draw, p.probabilities.away_win],
-        when: `EPL ${d.getMonth() + 1}.${d.getDate()}` };
+    // 빅매치는 경기예측 탭 배너와 같은 서버 규칙(/bigmatch: BIG_CLUBS끼리 가장 가까운 경기)으로 — 두 페이지가 항상 같은 경기
+    const big = (await get('/bigmatch')).match;
+    if (big) {
+      const p = await fetch(API + '/predict', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ home_team: big.home_team, away_team: big.away_team }) }).then(r => r.json());
+      const d = new Date(big.date), wd = ['일', '월', '화', '수', '목', '금', '토'][d.getDay()];
+      const hm = d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false });
+      data.match = { home: big.home_team, away: big.away_team, league: big.league, homeLogo: big.home_logo, awayLogo: big.away_logo,
+        p: [p.probabilities.home_win, p.probabilities.draw, p.probabilities.away_win],
+        when: `${LEAGUE_KO[big.league] || big.league} · ${d.getMonth() + 1}.${d.getDate()} (${wd}) ${hm}` };
     }
   } catch (e) {}
   renderText();
   onDataChange();
   try {
     // 순위 예측과 같은 방식(현재 승점 + 남은 경기 × 모델 확률)으로 1,000번 시뮬레이션
-    const champ = await get('/predict/champion/PL');
+    // 빅매치가 열리는 리그의 우승 경쟁으로 이어짐(UCL 빅매치면 EPL)
+    const league = SIM_LEAGUES.has(data.match.league) ? data.match.league : 'PL';
+    const champ = await get('/predict/champion/' + league);
     data.sim = { remaining: champ.remaining, top: simulateTitle(champ, 1000) };
   } catch (e) {}
   renderText();
@@ -124,18 +135,18 @@ function simulateTitle(d, n) {
     let best = 0; for (let i = 1; i < T; i++) if (pts[i] > pts[best]) best = i;
     wins[best]++;
   }
-  return d.teams.map((t, i) => ({ team: t.team, prob: wins[i] / n })).sort((a, b) => b.prob - a.prob).slice(0, TOPK);
+  return d.teams.map((t, i) => ({ team: t.team, logo: t.logo, prob: wins[i] / n })).sort((a, b) => b.prob - a.prob).slice(0, TOPK);
 }
 
 // ── 장면 기하 ──
-function ballEdges() {
+function ballGeometry() {
   // 정이십면체 꼭짓점 → 모서리를 1/3·2/3로 자른 점들로 깎은 정이십면체(축구공) 90개 모서리
   const f = (1 + Math.sqrt(5)) / 2;
   const V = [[0, 1, f], [0, 1, -f], [0, -1, f], [0, -1, -f], [1, f, 0], [1, -f, 0], [-1, f, 0], [-1, -f, 0], [f, 0, 1], [f, 0, -1], [-f, 0, 1], [-f, 0, -1]];
   const d2 = (a, b) => (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 + (a[2] - b[2]) ** 2;
   const lerp = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
   const nb = V.map((v, i) => V.map((w, j) => j).filter(j => j !== i && Math.abs(d2(V[i], V[j]) - 4) < 1e-6));
-  const edges = [];
+  const edges = [], pentas = [];
   for (let i = 0; i < 12; i++) for (const j of nb[i]) if (i < j) edges.push([lerp(V[i], V[j], 1 / 3), lerp(V[i], V[j], 2 / 3)]);
   for (let i = 0; i < 12; i++) {
     const v = V[i], pts = nb[i].map(j => lerp(v, V[j], 1 / 3));
@@ -147,9 +158,11 @@ function ballEdges() {
     const ang = p => { const q = p.map((x, k) => x - v[k]); return Math.atan2(dot(cross(ref, q), n), dot(ref, q)); };
     pts.sort((a, b) => ang(a) - ang(b));
     for (let k = 0; k < 5; k++) edges.push([pts[k], pts[(k + 1) % 5]]);
+    pentas.push({ c: v, v: pts });
   }
-  return edges;   // 90개
+  return { edges, pentas };   // 모서리 90개, 오각형 면 12개
 }
+const ballEdges = () => ballGeometry().edges;
 const onSphere = (a, b, t, R) => { const p = [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t]; const l = Math.hypot(...p); return [p[0] / l * R, p[1] / l * R, p[2] / l * R]; };
 
 function pitchSegments() {
@@ -174,13 +187,22 @@ function buildTargets(N) {
   const C = [new Float32Array(N * 3), new Float32Array(N * 3), new Float32Array(N * 3), new Float32Array(N * 3)];
   const seed = new Float32Array(N);
   const set = (arr, i, v) => { arr[i * 3] = v[0]; arr[i * 3 + 1] = v[1]; arr[i * 3 + 2] = v[2]; };
-  const R = 2.2, edges = ballEdges();
-  // 0 공: 90개 모서리(구면 위 호)를 따라 고르게
+  const R = BALL_R, { edges, pentas } = ballGeometry(), nFace = Math.floor(N * 0.22);
+  // 0 공: 90개 모서리(구면 위 호)를 따라 고르게 + 12개 오각형 면은 점으로 은은하게 채움(클래식 축구공 무늬)
   for (let i = 0; i < N; i++) {
     seed[i] = Math.random();
-    const e = edges[i % edges.length], t = Math.random();
-    set(P[0], i, onSphere(e[0], e[1], t, R));
-    set(C[0], i, COLORS.blue);
+    if (i < nFace) {
+      const pe = pentas[i % 12], k = Math.floor(Math.random() * 5), a = pe.v[k], b = pe.v[(k + 1) % 5];
+      let u = Math.random(), w = Math.random(); if (u + w > 1) { u = 1 - u; w = 1 - w; }
+      const q = [0, 1, 2].map(j => pe.c[j] + (a[j] - pe.c[j]) * u + (b[j] - pe.c[j]) * w);
+      const l = Math.hypot(...q);
+      set(P[0], i, [q[0] / l * R * 0.995, q[1] / l * R * 0.995, q[2] / l * R * 0.995]);
+      set(C[0], i, COLORS.face);
+    } else {
+      const e = edges[i % edges.length], t = Math.random();
+      set(P[0], i, onSphere(e[0], e[1], t, R));
+      set(C[0], i, COLORS.blue);
+    }
   }
   // 1 구름: 납작한 가우시안 은하
   for (let i = 0; i < N; i++) {
@@ -212,7 +234,7 @@ function buildTargets(N) {
 function barLayout() {
   const top = data.sim.top, max = Math.max(...top.map(t => t.prob), 0.01);
   const gap = 1.05, x0 = -gap * (top.length - 1) / 2, H = 2.7, base = -1.45;
-  return top.map((t, i) => ({ team: t.team, prob: t.prob, x: x0 + gap * i, h: Math.max(0.06, H * t.prob / max), base }));
+  return top.map((t, i) => ({ team: t.team, logo: t.logo, prob: t.prob, x: x0 + gap * i, h: Math.max(0.06, H * t.prob / max), base }));
 }
 function fillBars(P, C, N) {
   const bars = barLayout(), sum = bars.reduce((a, b) => a + Math.max(b.prob, 0.004), 0);
@@ -247,15 +269,16 @@ function initScene(THREE) {
   geo.setAttribute('position', new THREE.BufferAttribute(P[0], 3));   // three.js 필수 attribute(경계 계산용)
   geo.setAttribute('seed', new THREE.BufferAttribute(seed, 1));
   const uniforms = { uA: { value: 0 }, uB: { value: 0 }, uT: { value: 0 }, uTime: { value: 0 }, uSize: { value: mobile ? 2.6 : 2.5 },
-    uPR: { value: renderer.getPixelRatio() }, uOpacity: { value: 1 } };
+    uPR: { value: renderer.getPixelRatio() }, uOpacity: { value: 1 }, uBall: { value: 1 } };
   const mat = new THREE.ShaderMaterial({
     uniforms, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
     vertexShader: `
       attribute vec3 p0; attribute vec3 p1; attribute vec3 p2; attribute vec3 p3;
       attribute vec3 c0; attribute vec3 c1; attribute vec3 c2; attribute vec3 c3;
       attribute float seed;
-      uniform float uA, uB, uT, uTime, uSize, uPR;
+      uniform float uA, uB, uT, uTime, uSize, uPR, uBall;
       varying vec3 vColor;
+      varying float vFace;
       vec3 pick(float i, vec3 a, vec3 b, vec3 c, vec3 d) { return i < 0.5 ? a : (i < 1.5 ? b : (i < 2.5 ? c : d)); }
       void main() {
         float t = clamp((uT - seed * 0.35) / 0.65, 0.0, 1.0);
@@ -266,34 +289,76 @@ function initScene(THREE) {
         pos += 0.012 * vec3(sin(uTime * 1.3 + seed * 40.0), cos(uTime * 1.1 + seed * 31.0), sin(uTime * 0.9 + seed * 17.0));
         vColor = mix(pick(uA, c0, c1, c2, c3), pick(uB, c0, c1, c2, c3), t);
         vec4 mv = modelViewMatrix * vec4(pos, 1.0);
+        // 공 모양일 때: 카메라 쪽을 향한 앞면은 밝게, 뒷면은 흐리게 — 뒤쪽 무늬가 앞과 겹쳐 철망처럼 보이던 문제
+        float facing = dot(normalize(normalMatrix * normalize(p0)), normalize(-mv.xyz));
+        vFace = mix(1.0, 0.16 + 0.84 * smoothstep(-0.2, 0.35, facing), uBall);
         gl_PointSize = uSize * uPR * (8.0 / -mv.z);
         gl_Position = projectionMatrix * mv;
       }`,
     fragmentShader: `
       uniform float uOpacity;
       varying vec3 vColor;
+      varying float vFace;
       void main() {
         float d = length(gl_PointCoord - 0.5);
         if (d > 0.5) discard;
-        gl_FragColor = vec4(vColor, smoothstep(0.5, 0.05, d) * 0.85 * uOpacity);
+        gl_FragColor = vec4(vColor, smoothstep(0.5, 0.05, d) * 0.85 * uOpacity * vFace);
       }`,
   });
   const points = new THREE.Points(geo, mat);
   points.frustumCulled = false;
   group.add(points);
 
-  // 공 와이어(선) — 공 장면에서만 보임
+  // 공 와이어(선) — 공 장면에서만 보임. 점과 같이 뒷면은 흐리게
   const wirePos = [];
-  for (const e of ballEdges()) for (let k = 0; k < 8; k++) wirePos.push(...onSphere(e[0], e[1], k / 8, 2.2), ...onSphere(e[0], e[1], (k + 1) / 8, 2.2));
+  for (const e of ballEdges()) for (let k = 0; k < 10; k++) wirePos.push(...onSphere(e[0], e[1], k / 10, BALL_R), ...onSphere(e[0], e[1], (k + 1) / 10, BALL_R));
   const wireGeo = new THREE.BufferGeometry(); wireGeo.setAttribute('position', new THREE.Float32BufferAttribute(wirePos, 3));
-  const wireMat = new THREE.LineBasicMaterial({ color: 0x58a6ff, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending, depthWrite: false });
+  const wireMat = new THREE.ShaderMaterial({
+    uniforms: { uOp: { value: 0.55 }, uColor: { value: new THREE.Color(0x58a6ff) } },
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+    vertexShader: `
+      varying float vF;
+      void main() {
+        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        float f = dot(normalize(normalMatrix * normalize(position)), normalize(-mv.xyz));
+        vF = 0.1 + 0.9 * smoothstep(-0.15, 0.35, f);
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader: `
+      uniform float uOp; uniform vec3 uColor; varying float vF;
+      void main() { gl_FragColor = vec4(uColor, uOp * vF); }`,
+  });
   group.add(new THREE.LineSegments(wireGeo, wireMat));
+
+  // 공 윤곽 원(로고의 바깥 원) + 은은한 빛번짐 — 항상 카메라를 향하고, 원근을 고려해 실제 구의 외곽선과 맞춤
+  const ringPts = [];
+  for (let k = 0; k <= 160; k++) { const a = k / 160 * Math.PI * 2; ringPts.push(Math.cos(a), Math.sin(a), 0); }
+  const ringGeo = new THREE.BufferGeometry(); ringGeo.setAttribute('position', new THREE.Float32BufferAttribute(ringPts, 3));
+  const ringMat = new THREE.LineBasicMaterial({ color: 0x78b8ff, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending, depthWrite: false });
+  const ring = new THREE.Line(ringGeo, ringMat); scene.add(ring);
+  const glowCanvas = document.createElement('canvas'); glowCanvas.width = glowCanvas.height = 256;
+  const gctx = glowCanvas.getContext('2d'), grad = gctx.createRadialGradient(128, 128, 0, 128, 128, 128);
+  // 가운데는 거의 비우고 테두리 바로 바깥만 은은하게(넓고 진하면 공 뒤에 회색 원판이 깔린 것처럼 보임)
+  grad.addColorStop(0, 'rgba(88,166,255,0.05)'); grad.addColorStop(0.72, 'rgba(88,166,255,0.05)');
+  grad.addColorStop(0.83, 'rgba(88,166,255,0.13)'); grad.addColorStop(1, 'rgba(88,166,255,0)');
+  gctx.fillStyle = grad; gctx.fillRect(0, 0, 256, 256);
+  const glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(glowCanvas), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
+  scene.add(glow);
+  function placeRim(w0) {
+    // 구를 보는 원뿔의 접선 반지름: 중심을 지나는 평면에서 R·d/√(d²−R²)
+    const d = camera.position.distanceTo(group.position);
+    const r = BALL_R * d / Math.sqrt(Math.max(d * d - BALL_R * BALL_R, 0.01));
+    ring.quaternion.copy(camera.quaternion); ring.scale.setScalar(r);
+    glow.scale.setScalar(r * 2.3);
+    ringMat.opacity = 0.62 * w0; glow.material.opacity = w0;
+    ring.visible = glow.visible = w0 > 0.01;
+  }
 
   const labelsWrap = $('story-bar-labels');
   let barLabelEls = [];
   function buildBarLabels() {
     labelsWrap.innerHTML = barLayout().map((b, i) =>
-      `<div class="story-bar-label${i === 0 ? ' first' : ''}"><b>${Math.round(b.prob * 100)}%</b><span>${compactName(b.team)}</span></div>`).join('');
+      `<div class="story-bar-label${i === 0 ? ' first' : ''}">${b.logo ? `<img src="${b.logo}" alt="" onerror="this.style.display='none'">` : ''}<b>${Math.round(b.prob * 100)}%</b><span>${compactName(b.team)}</span></div>`).join('');
     barLabelEls = [...labelsWrap.children];
   }
 
@@ -342,7 +407,7 @@ function initScene(THREE) {
   const steps = [...story.querySelectorAll('.story-step')];
   const count = $('story-count');
   // 스토리 구간 진행도 p(0~1)에 따른 장면: [시작 p, 끝 p, A, B]  (A=B면 머무름)
-  const SEG = [[0, 0.10, 0, 0], [0.10, 0.30, 0, 1], [0.30, 0.40, 1, 1], [0.40, 0.55, 1, 2], [0.55, 0.64, 2, 2], [0.64, 0.80, 2, 3], [0.80, 0.87, 3, 3], [0.87, 1.0, 3, 0]];
+  const SEG = [[0, 0.10, 0, 0], [0.10, 0.30, 0, 1], [0.30, 0.40, 1, 1], [0.40, 0.55, 1, 2], [0.55, 0.64, 2, 2], [0.64, 0.80, 2, 3], [0.80, 0.87, 3, 3], [0.87, 0.95, 3, 0], [0.95, 1.0, 0, 0]];
   // 문구 단계별 보이는 구간
   const STEP_RANGE = [[0.08, 0.36], [0.40, 0.62], [0.66, 0.86], [0.90, 1.01]];
   const fade = (p, a, b, w = 0.035) => clamp(Math.min((p - a) / w, (b - p) / w));
@@ -352,14 +417,15 @@ function initScene(THREE) {
     if (sr.top > 0) {   // 히어로 구간: 공
       const k = clamp(1 - sr.top / H);
       Object.assign(state, { A: 0, B: 0, T: 0, heroMode: true, p: 0, opacity: 0.3 + 0.7 * k, shift: ease(k) });
-    } else if (sr.bottom > H * 0.35) {   // 스토리 구간
+    } else if (sr.bottom > H * 0.7) {   // 스토리 구간
       const p = clamp(-sr.top / (sr.height - H));
       const s = SEG.find(g => p >= g[0] && p <= g[1]) || SEG[SEG.length - 1];
       Object.assign(state, { A: s[2], B: s[3], T: s[2] === s[3] ? 0 : ease(clamp((p - s[0]) / (s[1] - s[0]))), heroMode: false, p,
-        opacity: clamp((sr.bottom - H * 0.35) / (H * 0.5)), shift: 1 });
+        // 스토리가 끝나 다음 섹션이 올라오면 글과 겹치기 전에 공이 먼저 사라짐
+        opacity: clamp((sr.bottom - H * 0.7) / (H * 0.3)), shift: 1 });
     } else {
       const cr = cta ? cta.getBoundingClientRect() : { top: 1e9 };
-      const c = clamp((H - cr.top) / (H * 0.55));   // 마지막 CTA: 구름 → 공으로 합쳐짐
+      const c = clamp((H - cr.top) / (H * 0.42));   // 마지막 CTA: 구름 → 공으로 합쳐짐(화면 중간쯤에서 완성)
       Object.assign(state, { A: 1, B: 0, T: c, heroMode: false, p: 1, opacity: c > 0 ? 0.35 + 0.35 * c : 0, shift: 0 });
     }
     // 문구·카운터·막대 채우기
@@ -390,12 +456,17 @@ function initScene(THREE) {
     group.rotation.y = spin;
     group.rotation.x = state.heroMode ? 0.18 : 0.12 * spinning;
     const w0 = (state.A === 0 ? 1 - state.T : 0) + (state.B === 0 ? state.T : 0);   // 공 장면 비중
-    wireMat.opacity = 0.55 * w0;
+    // 선·윤곽은 점들이 거의 다 모였을 때 나타남(모이는 중에 선이 먼저 보이면 공이 찌그러져 보임)
+    const formed = Math.pow(clamp((w0 - 0.55) / 0.45), 1.5);
+    uniforms.uBall.value = w0;
+    wireMat.uniforms.uOp.value = 0.5 * formed;
     applyShift(state.shift);
 
     tmpA.set(...CAM[state.A][0]); tmpB.set(...CAM[state.B][0]); camPos.lerpVectors(tmpA, tmpB, state.T);
     tmpA.set(...CAM[state.A][1]); tmpB.set(...CAM[state.B][1]); camLook.lerpVectors(tmpA, tmpB, state.T);
     camera.position.copy(camPos).sub(camLook).multiplyScalar(camDist).add(camLook); camera.lookAt(camLook);
+    group.updateMatrixWorld();
+    placeRim(formed);
     renderer.render(scene, camera);
 
     // 막대 위 라벨: 3D 막대 꼭대기를 화면 좌표로 투영
