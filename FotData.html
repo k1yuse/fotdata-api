@@ -2295,7 +2295,11 @@ function runSimulation() {
       team: t.team, logo: t.logo, played: t.played, points: t.points,
       exp_pts: sumPts[i] / nSim, avg_rank: sumRank[i] / nSim,
       champion_prob: pct(champ[i]), ucl_prob: pct(ucl[i]), relegation_prob: pct(rele[i]),
-    })).sort((a, b) => a.avg_rank - b.avg_rank);
+    }))
+    // 화면에 보이는 숫자와 순서가 모순되지 않게: 예상 승점(반올림 값) → 우승 → UCL권 → 강등(낮을수록 위) 순.
+    // 예전엔 평균 순위로만 정렬해서, 예상 승점이 같은 두 팀 중 우승 확률이 낮은 팀이 위에 오는 경우가 있었음
+    .sort((a, b) => Math.round(b.exp_pts) - Math.round(a.exp_pts) || b.champion_prob - a.champion_prob ||
+      b.ucl_prob - a.ucl_prob || a.relegation_prob - b.relegation_prob || a.avg_rank - b.avg_rank);
 
     renderChampionResults({ teams: results, nSim, remaining: F, uclSpots: z.cl, releSpots: z.rel });
     if (simBtn) { simBtn.textContent = '시뮬레이션 시작'; simBtn.style.background = '#1f6feb'; }
@@ -2380,7 +2384,7 @@ function renderChampionResults(data) {
   content.querySelectorAll('.ct-row').forEach(r => { before[r.dataset.team] = r.getBoundingClientRect().top; });
 
   const releNote = (currentLeagueCode === 'BL1' || currentLeagueCode === 'FL1') ? ' (16위 승강 PO 제외)' : '';
-  content.innerHTML = `<div class="ct-meta">남은 <b>${data.remaining}경기</b>를 <b>${data.nSim.toLocaleString()}번</b> 시뮬레이션한 결과 · 예상 순위 순</div>` + CT_HEAD +
+  content.innerHTML = `<div class="ct-meta">남은 <b>${data.remaining}경기</b>를 <b>${data.nSim.toLocaleString()}번</b> 시뮬레이션한 결과 · 예상 승점 순</div>` + CT_HEAD +
     teams.map((t, i) => ctRowHtml(t, i, T,
       cell(t.champion_prob, '240,192,64') + cell(t.ucl_prob, '88,166,255') + cell(t.relegation_prob, '248,81,73'),
       `<div class="ct-pts">${Math.round(t.exp_pts)}<small>+${Math.round(t.exp_pts - t.points)}</small></div>`)).join('') +
