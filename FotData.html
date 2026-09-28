@@ -336,13 +336,19 @@
     .st-table tr.zone-cl, .st-table tr.zone-cl-q, .st-table tr.zone-el, .st-table tr.zone-ecl, .st-table tr.zone-rel-po, .st-table tr.zone-rel, .st-table tr.zone-ucl-ko, .st-table tr.zone-ucl-po { border-left: none; }
     .st-rank { display: inline-flex; align-items: center; justify-content: center; min-width: 26px; height: 22px; border-radius: 7px; font-size: 12px; font-weight: 700; color: #c9d1d9; font-variant-numeric: tabular-nums; }
     .st-table tr[class*="zone-"] .st-rank { color: var(--zc); background: color-mix(in srgb, var(--zc) 13%, transparent); }
-    .st-table tr.champ td { background: rgba(227,179,65,0.085); border-bottom-color: rgba(227,179,65,0.25); }
+    .st-table tr.champ td { background: rgba(227,179,65,0.085); }
     .st-table tr.champ td:first-child { border-radius: 10px 0 0 10px; }
     .st-table tr.champ td:last-child { border-radius: 0 10px 10px 0; }
     .st-table tr.champ:hover td { background: rgba(227,179,65,0.13); }
-    .st-ded { display: inline-block; margin-left: 4px; font-size: 10px; font-weight: 700; color: #ff7b72; background: rgba(248,81,73,0.12); border-radius: 5px; padding: 1px 4px; vertical-align: 1px; cursor: help; }
+    /* 승점은 칸 가운데 그대로, 감점은 그 오른쪽에 붙임(흐름 밖이라 승점 위치가 안 밀림) */
+    .st-pts-wrap { position: relative; display: inline-block; }
+    .st-ded { position: absolute; left: 100%; top: 50%; transform: translateY(-50%); margin-left: 5px; font-size: 10px; font-weight: 700; color: #ff7b72; background: rgba(248,81,73,0.12); border-radius: 5px; padding: 1px 4px; cursor: help; white-space: nowrap; }
     .st-rank small { font-size: 9px; color: #7d8590; font-weight: 500; margin-left: 1px; }
-    .st-table.sort-gf .col-gf, .st-table.sort-ga .col-ga { color: #79b8ff; font-weight: 700; background: rgba(88,166,255,0.06); }
+    .st-table.sort-gf td.col-gf, .st-table.sort-ga td.col-ga { color: #79b8ff; font-weight: 700; background: rgba(88,166,255,0.06); }
+    /* 우승 줄에선 금색 바탕을 그대로 두고 글자만 파랗게(파란 칸이 금색 줄을 끊어 보이던 문제) */
+    .st-table.sort-gf tr.champ td.col-gf, .st-table.sort-ga tr.champ td.col-ga { background: rgba(227,179,65,0.085); }
+    /* 머리글은 불투명 바탕 — 반투명이면 스크롤할 때 아래 숫자가 비쳐 "득점 77"처럼 겹쳤음 */
+    .st-table.sort-gf th.col-gf, .st-table.sort-ga th.col-ga { color: #79b8ff; background: linear-gradient(rgba(88,166,255,0.1), rgba(88,166,255,0.1)), #161b22; }
     .st-sortbar { max-width: 1100px; margin: -4px auto 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; font-size: 12px; color: #79b8ff; background: rgba(88,166,255,0.07); border: 0.5px solid rgba(88,166,255,0.3); border-radius: 10px; padding: 7px 10px; }
     .st-sortbar button { background: none; border: 0.5px solid rgba(88,166,255,0.45); color: #79b8ff; border-radius: 7px; padding: 4px 10px; font-size: 11.5px; font-family: inherit; cursor: pointer; }
     .st-sortbar button:hover { background: rgba(88,166,255,0.14); }
@@ -393,7 +399,17 @@
     .gf.W { background: #238636; } .gf.D { background: #6e7681; } .gf.L { background: #da3633; }
     .gf.last { box-shadow: 0 2px 0 0 #e6edf3; }
     @media (max-width: 900px) { .grp-grid { grid-template-columns: 1fr; } }
-    @media (max-width: 480px) { .grp-form .gf:nth-child(-n+3) { display: none; } .grp-table td, .grp-table th { padding: 7px 2px; } }
+    .grp-table th { white-space: nowrap; }
+    .grp-table td:first-child { padding-left: 10px; }
+    @media (max-width: 768px) {
+      .grp-table .hide-mobile { display: none; }
+      .grp-table { font-size: 12px; }
+      .grp-table td, .grp-table th { padding: 7px 3px; }
+      .grp-table .team-cell span { max-width: 92px; }
+      .gf { width: 18px; height: 18px; font-size: 9.5px; border-radius: 4px; }
+    }
+    @media (max-width: 480px) { .grp-table th:nth-child(3), .grp-table td:nth-child(3) { display: none; } /* 경기 수는 조별리그라 전부 6 */
+      .grp-form .gf:nth-child(-n+3) { display: none; } .grp-table .team-cell img { width: 18px; height: 18px; } .grp-table .team-cell { gap: 6px; } .grp-table .team-cell span { max-width: 76px; } }
     /* ── UCL 토너먼트 대진표 (2026-09-29 리디자인: 실제 대진 배치, 좌·우 절반이 가운데 결승에서 만남) ── */
     .ko-wrap { overflow-x: auto; padding: 4px 2px 10px; }
     .ko-bracket { position: relative; display: flex; justify-content: space-between; gap: 18px; min-width: 900px; }
@@ -417,7 +433,9 @@
     .tie-row.lose { opacity: .45; }
     .tie.tbd .tie-name { color: #6e7681; font-style: italic; }
     .tie-foot { margin-top: 3px; padding-top: 3px; border-top: 0.5px solid #21262d; font-size: 9.5px; color: #7d8590; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .ko-final { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    /* 결승 카드만 흐름에 두고(= 4강 카드와 같은 높이) 트로피·우승 배지는 그 위로 띄움 */
+    .ko-final { position: relative; display: flex; flex-direction: column; align-items: center; }
+    .ko-final-top { position: absolute; bottom: calc(100% + 12px); left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 10px; width: max-content; }
     .ko-trophy { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #e3b341; background: radial-gradient(circle, rgba(227,179,65,0.22), rgba(227,179,65,0.04) 70%); box-shadow: 0 0 24px rgba(227,179,65,0.25); }
     .ko-trophy svg, .ko-empty svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
     .tie.final { border-color: rgba(227,179,65,0.5); padding: 8px 10px; }
@@ -2054,7 +2072,7 @@ const SHORT_NAMES = {
   'AC Sparta Praha': 'Sparta Praha', 'FC Red Bull Salzburg': 'Salzburg', 'SK Sturm Graz': 'Sturm Graz', 'PAE Olympiakos SFP': 'Olympiakos',
   'PAE AEK': 'AEK', 'Royale Union Saint-Gilloise': 'Union SG', 'Royal Antwerp FC': 'Antwerp', 'FK Bodø/Glimt': 'Bodø/Glimt',
   'ŠK Slovan Bratislava': 'Slovan', 'Galatasaray SK': 'Galatasaray', 'Fenerbahçe SK': 'Fenerbahçe', 'LASK Linz': 'LASK',
-  'FC København': 'København', 'Racing Club de Lens': 'Lens', 'Bologna FC 1909': 'Bologna', '1. FC Union Berlin': 'Union Berlin',
+  'FC København': 'København', 'SS Lazio': 'Lazio', 'AS Roma': 'Roma', 'SSC Napoli': 'Napoli', 'Racing Club de Lens': 'Lens', 'Bologna FC 1909': 'Bologna', '1. FC Union Berlin': 'Union Berlin',
   'Brighton & Hove Albion FC': 'Brighton', 'Nottingham Forest FC': 'Forest', 'Wolverhampton Wanderers FC': 'Wolves', 'West Ham United FC': 'West Ham',
   'Borussia Mönchengladbach': 'Gladbach', 'TSG 1899 Hoffenheim': 'Hoffenheim', 'SV Werder Bremen': 'Bremen', 'Rayo Vallecano de Madrid': 'Rayo',
   'RCD Espanyol de Barcelona': 'Espanyol', 'RC Celta de Vigo': 'Celta', 'Real Racing Club de Santander': 'Racing', 'Stade Rennais FC 1901': 'Rennes',
@@ -2106,8 +2124,8 @@ function renderTournament(data, season) {
   const fw = tieWinnerSide(fin);
   const finalHtml = `<div class="ko-col ko-final-col"><div class="ko-label gold">결승</div><div class="ko-stack n1">
     <div class="ko-final ${fin && fin.winner ? 'done' : ''}" data-key="FINAL">
-      <div class="ko-trophy">${TROPHY_ICON}</div>
-      ${fin ? `${fin.winner ? `<div class="ko-champ"><img src="${logos[fin.winner] || ''}" alt="" onerror="this.style.display='none'"><span><small>우승</small>${shortName(fin.winner)}</span></div>` : ''}<button class="tie final" onclick="openTModal('${escJs(fin.team1)}','${escJs(fin.team2)}')">
+      <div class="ko-final-top"><div class="ko-trophy">${TROPHY_ICON}</div>${fin && fin.winner ? `<div class="ko-champ"><img src="${logos[fin.winner] || ''}" alt="" onerror="this.style.display='none'"><span><small>우승</small>${shortName(fin.winner)}</span></div>` : ''}</div>
+      ${fin ? `<button class="tie final" onclick="openTModal('${escJs(fin.team1)}','${escJs(fin.team2)}')">
         ${[[fin.team1, fin.team1_logo, fin.team1_goals, 1], [fin.team2, fin.team2_logo, fin.team2_goals, 2]].map(([t, lg, g, sd]) => `<div class="tie-row ${fw === sd ? 'win' : fw ? 'lose' : ''}"><img src="${lg || logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'"><span class="tie-name">${shortName(t)}</span>${fin.pens && fw === sd ? '<span class="tie-pk">PK</span>' : ''}<span class="tie-score">${fin.status === 'UPCOMING' ? '' : g}</span></div>`).join('')}
         ${fin.pens ? `<div class="tie-foot">승부차기 ${fin.pens[0]}-${fin.pens[1]}</div>` : ''}
       </button>`
@@ -3606,7 +3624,7 @@ function renderStandings(data, leagueCode, keepSort) {
       <td class="center hide-mobile col-gf">${team.gf}</td><td class="center hide-mobile col-ga">${team.ga}</td>
       <td class="center st-gd ${team.gd > 0 ? 'pos' : team.gd < 0 ? 'neg' : ''}">${team.gd > 0 ? '+' : ''}${team.gd}</td>
       <td class="center hide-mobile"><div class="form-badges">${fb}</div></td>
-      <td class="center"><span class="st-pts">${team.points}</span>${team.deduction ? `<span class="st-ded" title="승점 ${-team.deduction}점 감점(공식 징계)">${team.deduction}</span>` : ''}</td></tr>`;
+      <td class="center"><span class="st-pts-wrap"><span class="st-pts">${team.points}</span>${team.deduction ? `<span class="st-ded" title="승점 ${-team.deduction}점 감점(공식 징계)">${team.deduction}</span>` : ''}</span></td></tr>`;
   });
   html += '</tbody></table></div><div class="st-legend">';
   const legendItem = (color, label) => `<span><i style="background:${color}"></i>${label}</span>`;

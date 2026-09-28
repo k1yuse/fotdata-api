@@ -588,6 +588,12 @@ WIKI_TITLE_OVERRIDE = {
     "TSG 1899 Hoffenheim": "TSG Hoffenheim",
     "Venezia FC": "Venezia FC",
     "Newcastle United FC": "Newcastle United F.C.",   # 호주 Newcastle Jets가 잡힘
+    "PAE Olympiakos SFP": "Olympiacos F.C.",          # football-data 표기(PAE … SFP)로는 검색이 안 됨
+    "Galatasaray SK": "Galatasaray S.K. (football)",   # 본문서는 종합 스포츠 클럽(농구·휠체어농구 우승까지 섞임)
+    "Fenerbahçe SK": "Fenerbahçe S.K. (football)",
+    "Sport Lisboa e Benfica": "S.L. Benfica",
+    "Sporting Clube de Portugal": "Sporting CP",       # "Atlético Clube de Portugal"이 잡힘
+    "Feyenoord Rotterdam": "Feyenoord",                # 같은 도시 Excelsior Rotterdam이 잡힘
 }
 _WIKI_SKIP_TITLE = re.compile(r"(\sII\b|\s[BC]$|\b(reserves?|women|femenino|féminin|frauen|femminile|u-?\d\d|under-\d\d|youth|academy|primavera)\b)", re.I)
 WIKI_NAME_KO_OVERRIDE = {"Venezia FC": "베네치아 FC"}   # 위키데이터 한국어 이름이 옛 명칭인 경우
@@ -655,7 +661,7 @@ def _wd_city(qid, depth=0):
 # 최고 이적료: "List of … records and statistics" 문서의 paid/received 표 — 순위 칸이 있으면 1위, 없으면 최고액.
 # 대회 이름 → 분류 (순서 중요: 하위 리그·UEFA를 먼저 거름)
 _HON_RULES = [
-    ("skip", r"(?i:women|femenin|féminin|frauen|femminile|Reina|ladies)|Catalunya|Catalan|Catalonia|Galici|Cantabri|Gipuzkoa|Guipúzcoa|Biscay|Vizcaya|Levante Championship|Valencian|Andalusia|Castil|Madrid Cup|Madrid Championship|Alsace|Dordogne|Brittany|Bretagne|Bezirksliga|Kreisliga|Verbandsliga|Landesliga|Gauliga|Oberliga|Southern German|South German|West German|North German|Berlin|Hessen|Hesse|Baden|Württemberg|Bavaria|Bayern Cup|Saarland|Westphalia|Lombard|Piedmont|Tuscan|Campania|Sicil|Sardin|Emilia|Veneto|Liguria|Lazio Cup|Ile-de-France|Paris Cup|Coupe de Paris|Normandie|Provence|Nord|Centenary Trophy|Western (Football )?League|patronages|Sheriff of London|Football League Super Cup|Hallenpokal|Screen Sport|Under[- ]?\d\d|Junior|Juvenil|Allievi|Gambardella|Intertoto|Fairs Cup|Youth|Reserve|Women|Primavera|U-?\d\d|Regional|Sussex|Lancashire|Liverpool Senior|Kent|Isthmian|Southern League|Premier League 2|Premier League Asia|Emirates Cup|Joan Gamper|Amsterdam|Teresa Herrera|Ramón de Carranza|Trofeo|Torneo|Coppa delle Alpi|Mitropa|Latin Cup|Pequeña|Anglo|Watney|Texaco|Full Members|Zenith|Simod|Mercantile|Wartime|War Cup|League North|League South|Coppa Italia (Serie C|Lega Pro|Serie D)|Supercoppa (di Serie C|Lega Pro)|Copa Federación|Copa Eva|Copa de Oro|Ligapokal Pre|Supercoppa di Serie"),
+    ("skip", r"Istanbul|Ankara|İzmir|Izmir|Athens|Attica|Piraeus|Lisbon Championship|Porto Championship|(?i:women|femenin|féminin|frauen|femminile|Reina|ladies)|Catalunya|Catalan|Catalonia|Galici|Cantabri|Gipuzkoa|Guipúzcoa|Biscay|Vizcaya|Levante Championship|Valencian|Andalusia|Castil|Madrid Cup|Madrid Championship|Alsace|Dordogne|Brittany|Bretagne|Bezirksliga|Kreisliga|Verbandsliga|Landesliga|Gauliga|Oberliga|Southern German|South German|West German|North German|Berlin|Hessen|Hesse|Baden|Württemberg|Bavaria|Bayern Cup|Saarland|Westphalia|Lombard|Piedmont|Tuscan|Campania|Sicil|Sardin|Emilia|Veneto|Liguria|Lazio Cup|Ile-de-France|Paris Cup|Coupe de Paris|Normandie|Provence|Nord|Centenary Trophy|Western (Football )?League|patronages|Sheriff of London|Football League Super Cup|Hallenpokal|Screen Sport|Under[- ]?\d\d|Junior|Juvenil|Allievi|Gambardella|Intertoto|Fairs Cup|Youth|Reserve|Women|Primavera|U-?\d\d|Regional|Sussex|Lancashire|Liverpool Senior|Kent|Isthmian|Southern League|Premier League 2|Premier League Asia|Emirates Cup|Joan Gamper|Amsterdam|Teresa Herrera|Ramón de Carranza|Trofeo|Torneo|Coppa delle Alpi|Mitropa|Latin Cup|Pequeña|Anglo|Watney|Texaco|Full Members|Zenith|Simod|Mercantile|Wartime|War Cup|League North|League South|Coppa Italia (Serie C|Lega Pro|Serie D)|Supercoppa (di Serie C|Lega Pro)|Copa Federación|Copa Eva|Copa de Oro|Ligapokal Pre|Supercoppa di Serie"),
     ("uecl", r"Conference League"),
     ("l3", r"Third Division|Fourth Division|League One|League Two|Serie C|Serie D|3\. Liga|Regionalliga|Oberliga|Segunda División B|Segunda Federación|Tercera|Primera Federación|Championnat National|National 2|CFA|Lega Pro|Prima Divisione|Seconda Divisione|Division 3|Division d'Honneur|Football Conference|National League|Amateur"),
     ("ucl", r"UEFA Champions League|European Cup(?! Winners)|European Champion Clubs"),
@@ -665,14 +671,21 @@ _HON_RULES = [
     ("uecl", r"Conference League"),
     ("world", r"Intercontinental Cup|Club World Cup|FIFA Club World"),
     ("l2", r"Second Division|EFL Championship|Football League Championship|^\W*Championship|Segunda División|Segunda Division|2\. Bundesliga|Serie B|Ligue 2|Division 2|Zweite"),
-    ("lcup", r"League Cup|EFL Cup|Football League Cup|Coupe de la Ligue|Copa de la Liga|Ligapokal"),
+    ("lcup", r"League Cup|EFL Cup|Football League Cup|Coupe de la Ligue|Copa de la Liga|Ligapokal|Taça da Liga"),
     ("super", r"Community Shield|Charity Shield|Supercopa|DFL-Supercup|DFB-Supercup|German Super ?Cup|Supercoppa|Trophée des [Cc]hampions|Super Cup"),
-    ("cup", r"FA Cup|Copa del Rey|Copa del Generalísimo|Copa de España|DFB-Pokal|German Cup|Tschammer|Coppa Italia|Coupe de France|Copa del Presidente"),
-    ("league", r"Premier League|First Division|La Liga|Primera División|Primera Division|Bundesliga|German (football )?champ|Serie A|Italian (football )?champ|Ligue 1|Division 1|French (football )?champ|Championnat de France|English champions|Spanish champ|Football League(?! Cup| Trophy)|Scudetto|Divisione Nazionale"),
+    # 5대 리그 밖(챔스에 나오는 네덜란드·포르투갈·튀르키예·그리스·스코틀랜드 등) 자국 컵·리그도 인식(2026-09-29)
+    ("cup", r"FA Cup|Copa del Rey|Copa del Generalísimo|Copa de España|DFB-Pokal|German Cup|Tschammer|Coppa Italia|Coupe de France|Copa del Presidente"
+            r"|KNVB Cup|Taça de Portugal|Turkish Cup|Türkiye Kupası|Greek (Football )?Cup|Scottish Cup|Belgian Cup|Austrian Cup|ÖFB|Swiss Cup|Czech Cup|Danish Cup"
+            r"|DBU Pokalen|Ukrainian Cup|Croatian (Football )?Cup|Serbian Cup|Norwegian (Football )?Cup|Kazakhstan Cup|Cypriot Cup|Azerbaijan Cup|Slovak Cup|Soviet Cup|Yugoslav Cup"),
+    ("league", r"Premier League|First Division|La Liga|Primera División|Primera Division|Bundesliga|German (football )?champ|Serie A|Italian (football )?champ|Ligue 1|Division 1|French (football )?champ|Championnat de France|English champions|Spanish champ|Football League(?! Cup| Trophy)|Scudetto|Divisione Nazionale"
+               r"|Eredivisie|Netherlands Football League Championship|Dutch champ|Primeira Liga|Primeira Divisão|Portuguese champ|Süper Lig|Turkish (Football )?Championship|Super League Greece|Alpha Ethniki|Panhellenic Championship|Greek champ"
+               r"|Scottish Premiership|Scottish Premier League|Scottish (Football )?League(?! Cup)|Scottish champ|Belgian Pro League|Belgian First Division|Belgian champ|Austrian (Football )?Bundesliga|Austrian champ"
+               r"|Swiss Super League|Nationalliga A|Swiss champ|Czech First League|Czechoslovak First League|Danish Superliga|Danish champ|Ukrainian Premier League|Soviet Top League|Croatian First (Football )?League|Prva HNL|HNL"
+               r"|Serbian SuperLiga|Yugoslav First League|Eliteserien|Norwegian champ|Kazakhstan Premier League|Azerbaijan Premier League|Slovak (First Football League|Super Liga)|Niké liga|Fortuna liga"),
 ]
 _HON_SEASON = re.compile(r"(?<![\d/])((?:18|19|20)\d\d(?:\s*[–\-/]\s*(?:\d{4}|\d{2}))?)(?!\d)")
 
-_HON_CUT = re.compile(r"^={2,4}\s*(Youth|Reserve|Academy|Women|Ladies|Doubles|Trebles|Regional|Friendly|Friendlies|Minor|Invitational|Other|Pre-season|Individual|Awards|Records|Unofficial|Amateur|Junior|B team|II team|Futsal|Basketball|Handball|Esports|Feminine|Femenino|Reserves|Second team|Minor titles|Minor trophies|Other titles|Other competitions)", re.I | re.M)
+_HON_CUT = re.compile(r"^={2,4}\s*(European (Achievements|record|results|history)|Record in|Seasons|League history|Youth|Reserve|Academy|Women|Ladies|Doubles|Trebles|Regional|Friendly|Friendlies|Minor|Invitational|Other|Pre-season|Individual|Awards|Records|Unofficial|Amateur|Junior|B team|II team|Futsal|Basketball|Handball|Esports|Feminine|Femenino|Reserves|Second team|Minor titles|Minor trophies|Other titles|Other competitions)", re.I | re.M)
 
 def _hon_strip(w):
     # 유스·2군·여자팀·더블·지역 대회·친선 대회 소제목은 그 소제목 구간만 버림(다음 같은/상위 단계 소제목 전까지)
@@ -689,6 +702,8 @@ def _hon_strip(w):
             out.append(line)
     w = "\n".join(out)
     w = re.sub(r"<sup[^>]*>.*?</sup>", "", w, flags=re.S)
+    # 메달 아이콘 같은 그림 링크 제거 — "[[File:Gold medal icon.svg]] Winners (1): …"에서 File:의 콜론 때문에 줄이 잘못 나뉘었음(칼리아리·슬로반)
+    w = re.sub(r"\[\[(?:File|Image):[^\[\]]*(?:\[\[[^\]]*\]\][^\[\]]*)*\]\]", "", w)
     w = re.sub(r"\{\{(?:lang|nowrap|nobr)\|(?:[a-z-]+\|)?([^{}|]*(?:\[\[[^\]]*\]\][^{}|]*)*)[^{}]*\}\}", r"\1", w)
     w = re.sub(r"<ref[^>]*/>", "", w)
     w = re.sub(r"<ref[^>]*>.*?</ref>", "", w, flags=re.S)
@@ -728,6 +743,8 @@ def _parse_honours(wikitext):
     found = []
     # 1) 표: 행마다 대회(! 셀) + 횟수(숫자만 있는 셀) + 시즌
     for table in re.findall(r"\{\|.*?\n\|\}", w, flags=re.S):
+        if not re.search(r"Titles|Winners|Competition|Honou?rs|Trophies", table[:800], re.I):
+            continue   # 우승 기록 표만(브뤼헤처럼 같은 절에 시즌별 순위 표가 같이 있는 경우 제외)
         for row in re.split(r"\n\|-[^\n]*", table):
             cells = [c.strip() for c in re.split(r"\n[!|]|\|\||!!", "\n" + row) if c.strip()]
             comp = None; n = None; seasons = ""
@@ -735,10 +752,10 @@ def _parse_honours(wikitext):
                 val = c.split("|", 1)[-1] if re.match(r'^\s*(style|scope|align|rowspan|colspan|class|width|bgcolor|data-sort-value)', c) else c
                 val = val.strip()
                 t = _hon_link_text(val).strip()
-                if comp is None and re.search(r"[A-Za-z]{3}", t) and not re.fullmatch(r"(Domestic|Continental|International|European|Worldwide|Regional|National|Type|Competition|Titles|Seasons|Friendly|Other)s?\W*", t, re.I):
+                if comp is None and re.search(r"[A-Za-z]{3}", t) and not re.match(r"\s*(18|19|20)\d\d", t) and not re.fullmatch(r"(Domestic|Continental|International|European|Worldwide|Regional|National|Type|Competition|Titles|Seasons|Friendly|Other)s?\W*", t, re.I):
                     if _hon_classify(t) or re.search(r"Cup|League|Liga|Champion|Serie|Pokal|Coppa|Coupe|Copa|Shield|Trophy|Division|Bundesliga", t):
                         comp = t; continue
-                if comp and n is None and re.fullmatch(r"\d{1,3}", t):
+                if comp and n is None and re.fullmatch(r"\d{1,2}", t):   # 우승 횟수는 두 자리까지(연도·시즌 표 숫자 오인 방지 — 브뤼헤 1645회)
                     n = int(t); continue
                 if comp and n is None and re.match(r"^\W*(Winners|Champions)\W*:?", t, re.I) and ":" in t:
                     n = _hon_count(t.split(":", 1)[1]); continue
@@ -753,17 +770,22 @@ def _parse_honours(wikitext):
             m = re.match(r"^\*\s*(?!\*)(.*)", line)
             if m:
                 comp = _hon_link_text(m.group(1)).strip()
+                comp_done = False   # 대회 줄에서 이미 횟수를 셌으면 아래 줄(시즌 목록)은 안 셈 — 스포르팅 컵위너스컵 2회로 이중 계산됐었음
                 # "* [[FA Cup]]: 1965, 1974" 같이 한 줄에 우승 시즌이 같이 있는 형식(준우승 줄이 따로 있으면 그쪽은 무시)
                 rest = re.split(r":(?![^\[]*\]\])", m.group(1), maxsplit=1)   # 링크 안의 콜론은 제외
                 if len(rest) == 2 and not re.search(r"runner|finalist|second", rest[0], re.I):
                     k = _hon_count(rest[1])
+                    num = re.fullmatch(r"\W*(\d{1,2})\W*", rest[1].strip())
+                    if not k and num:   # 대회 줄에 "대회: 21" 횟수만 있고 시즌은 다음 줄(스포르팅 형식)
+                        k = int(num.group(1))
                     if k and not re.search(r"runner", rest[1], re.I):
                         found.append((comp, _hon_classify(comp), k, "inline", k))
+                        comp_done = True
                 continue
-            m = re.match(r"^\*\*+\s*(.*)", line)
-            if m and comp:
+            m = re.match(r"^(?:\*\*+|:+)\s*(.*)", line)   # "** Winners: …" 또는 ": Winners (19): …"(페네르바흐체 형식)
+            if m and comp and not comp_done:
                 sub = m.group(1)
-                head = _hon_link_text(sub.split(":", 1)[0]) if ":" in sub else _hon_link_text(sub)
+                head = _hon_display(sub.split(":", 1)[0]) if ":" in sub else _hon_display(sub)   # 링크 대상 제목의 "Winners' Cup"을 우승 줄로 오인하지 않게 보이는 글자만
                 if re.search(r"winner|champion", head, re.I) and not re.search(r"runner|play-?off", head, re.I):
                     k = _hon_count(sub.split(":", 1)[1] if ":" in sub else sub)
                     if k:
@@ -1110,7 +1132,7 @@ def fetch_team_wiki(force=False):
                 prev = wiki.get(t, {})
                 # 우승 횟수는 줄어들 수 없음 — 위키 편집으로 표 형식이 바뀌어 적게 읽히면 이전 값을 유지
                 old_h, new_h = prev.get("honours") or {}, info.get("honours")
-                if old_h and (new_h is None or any(new_h.get(k, 0) < v for k, v in old_h.items())):
+                if old_h and not force and (new_h is None or any(new_h.get(k, 0) < v for k, v in old_h.items())):   # --force(파서 수정 후 재수집)면 새 값
                     print(f"  ⚠️ {t} 우승 기록이 줄어들게 읽힘 → 이전 값 유지 ({old_h} → {new_h})")
                     info["honours"] = old_h
                     info["honours_url"] = prev.get("honours_url", info.get("honours_url"))
