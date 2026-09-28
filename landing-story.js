@@ -380,8 +380,9 @@ function initScene(THREE) {
   const camPos = new THREE.Vector3(), camLook = new THREE.Vector3(), tmpA = new THREE.Vector3(), tmpB = new THREE.Vector3();
 
 
-  const state = { A: 0, B: 0, T: 0, opacity: 0.55, heroMode: true, p: 0, shift: 0 };
-  let W = 0, H = 0, camDist = 1, appliedShift = -1;
+  const cta = document.querySelector('.cta-section');
+  const state = { A: 0, B: 0, T: 0, opacity: 0.55, heroMode: true, p: 0, shift: 0, dy: 0, zoom: 1 };
+  let W = 0, H = 0, camDist = 1, appliedShift = -1, appliedDy = 0;
   function resize() {
     W = window.innerWidth; H = window.innerHeight;
     renderer.setSize(W, H, false);
@@ -389,21 +390,30 @@ function initScene(THREE) {
     // 세로로 긴 화면(모바일)은 가로 시야가 좁아 장면이 넘치므로 카메라를 비율만큼 뒤로 뺌
     camDist = Math.max(1, 1 / camera.aspect);
     appliedShift = -1;   // 비율이 바뀌었으니 투영 행렬은 무조건 다시 계산
-    applyShift(state.shift);
+    applyShift(state.shift, state.dy);
+    fitCta();
+  }
+  // 마지막 CTA 섹션을 "화면 − 상단 메뉴 − 푸터" 높이로 늘림: 맨 아래까지 내리면 위 섹션(지원하는 리그)은
+  // 화면 밖으로 빠지고 공 + "지금 바로 시작하세요"만 보이게
+  function fitCta() {
+    if (!cta) return;
+    const nav = document.querySelector('nav'), foot = document.querySelector('footer');
+    cta.style.minHeight = Math.max(420, H - (nav ? nav.offsetHeight : 0) - (foot ? foot.offsetHeight : 0)) + 'px';
   }
   // 장면 위치: 히어로·CTA에선 가운데(헤드라인 뒤), 스토리 구간에선 글과 안 겹치게
   // 데스크톱은 오른쪽, 모바일은 아래로 — shift(0~1)로 부드럽게 이동
-  function applyShift(k) {
-    if (Math.abs(k - appliedShift) < 0.002 && appliedShift >= 0) return;
-    appliedShift = k;
-    if (W > 768) camera.setViewOffset(W, H, -W * 0.2 * k, 0, W, H); else camera.setViewOffset(W, H, 0, -H * 0.2 * k, W, H);
+  // dy: 장면을 세로로 옮길 픽셀(CTA에선 섹션 중심을 따라 공이 같이 움직이게)
+  function applyShift(k, dy = 0) {
+    if (Math.abs(k - appliedShift) < 0.002 && Math.abs(dy - appliedDy) < 0.5 && appliedShift >= 0) return;
+    appliedShift = k; appliedDy = dy;
+    if (W > 768) camera.setViewOffset(W, H, -W * 0.2 * k, -dy, W, H); else camera.setViewOffset(W, H, 0, -H * 0.2 * k - dy, W, H);
     camera.updateProjectionMatrix();
   }
   resize();
   window.addEventListener('resize', resize);
 
   // ── 스크롤 → 장면 상태 ──
-  const hero = document.querySelector('.hero'), cta = document.querySelector('.cta-section');
+  const hero = document.querySelector('.hero');
   const steps = [...story.querySelectorAll('.story-step')];
   const count = $('story-count');
   // 스토리 구간 진행도 p(0~1)에 따른 장면: [시작 p, 끝 p, A, B]  (A=B면 머무름)
@@ -416,17 +426,19 @@ function initScene(THREE) {
     const sr = story.getBoundingClientRect();
     if (sr.top > 0) {   // 히어로 구간: 공
       const k = clamp(1 - sr.top / H);
-      Object.assign(state, { A: 0, B: 0, T: 0, heroMode: true, p: 0, opacity: 0.3 + 0.7 * k, shift: ease(k) });
+      Object.assign(state, { A: 0, B: 0, T: 0, heroMode: true, p: 0, opacity: 0.3 + 0.7 * k, shift: ease(k), dy: 0, zoom: 1 });
     } else if (sr.bottom > H * 0.7) {   // 스토리 구간
       const p = clamp(-sr.top / (sr.height - H));
       const s = SEG.find(g => p >= g[0] && p <= g[1]) || SEG[SEG.length - 1];
       Object.assign(state, { A: s[2], B: s[3], T: s[2] === s[3] ? 0 : ease(clamp((p - s[0]) / (s[1] - s[0]))), heroMode: false, p,
         // 스토리가 끝나 다음 섹션이 올라오면 글과 겹치기 전에 공이 먼저 사라짐
-        opacity: clamp((sr.bottom - H * 0.7) / (H * 0.3)), shift: 1 });
+        opacity: clamp((sr.bottom - H * 0.7) / (H * 0.3)), shift: 1, dy: 0, zoom: 1 });
     } else {
-      const cr = cta ? cta.getBoundingClientRect() : { top: 1e9 };
+      const cr = cta ? cta.getBoundingClientRect() : { top: 1e9, height: 0 };
       const c = clamp((H - cr.top) / (H * 0.42));   // 마지막 CTA: 구름 → 공으로 합쳐짐(화면 중간쯤에서 완성)
-      Object.assign(state, { A: 1, B: 0, T: c, heroMode: false, p: 1, opacity: c > 0 ? 0.35 + 0.35 * c : 0, shift: 0 });
+      // 공이 CTA 섹션 중심을 따라 움직여 글 뒤 정중앙에 자리 잡음
+      Object.assign(state, { A: 1, B: 0, T: c, heroMode: false, p: 1, opacity: c > 0 ? 0.35 + 0.35 * c : 0, shift: 0,
+        dy: clamp(cr.top + cr.height / 2 - H / 2, -H, H), zoom: W > 768 ? 1.22 : 0.92 });   // CTA 영역(메뉴~푸터)에 맞춤 — 데스크톱은 조금 작게, 세로 화면은 폭 기준이라 조금 크게
     }
     // 문구·카운터·막대 채우기
     steps.forEach((el, i) => { const o = fade(state.p, ...STEP_RANGE[i]); el.style.opacity = o; el.style.transform = `translateY(${(1 - o) * 18}px)`; el.style.pointerEvents = o > 0.5 ? 'auto' : 'none'; });
@@ -460,11 +472,11 @@ function initScene(THREE) {
     const formed = Math.pow(clamp((w0 - 0.55) / 0.45), 1.5);
     uniforms.uBall.value = w0;
     wireMat.uniforms.uOp.value = 0.5 * formed;
-    applyShift(state.shift);
+    applyShift(state.shift, state.dy);
 
     tmpA.set(...CAM[state.A][0]); tmpB.set(...CAM[state.B][0]); camPos.lerpVectors(tmpA, tmpB, state.T);
     tmpA.set(...CAM[state.A][1]); tmpB.set(...CAM[state.B][1]); camLook.lerpVectors(tmpA, tmpB, state.T);
-    camera.position.copy(camPos).sub(camLook).multiplyScalar(camDist).add(camLook); camera.lookAt(camLook);
+    camera.position.copy(camPos).sub(camLook).multiplyScalar(camDist * state.zoom).add(camLook); camera.lookAt(camLook);
     group.updateMatrixWorld();
     placeRim(formed);
     renderer.render(scene, camera);

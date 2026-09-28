@@ -433,6 +433,8 @@
     .story-bar-label span { display: block; font-size: 11px; color: var(--muted); }
     /* 3D 연출이 켜졌을 때: 회색 띠 섹션 배경을 걷어 캔버스가 가로로 잘리지 않게(섹션 구분은 기존 경계선) */
     body.story-on .preview, body.story-on .leagues { background: transparent; }
+    /* 마지막 CTA: 높이는 landing-story.js fitCta()가 화면에 맞춤, 글은 세로 가운데(공 중심과 일치) */
+    body.story-on .cta-section { display: flex; flex-direction: column; align-items: center; justify-content: center; border-top: 0.5px solid var(--border); }
     @media (max-width: 768px) {
       .story { height: 520vh; }
       .story-step { top: 24px; left: 20px; right: 20px; width: auto; translate: none; }
