@@ -1,6 +1,0 @@
-{
-  "version": "0.0.1",
-  "configurations": [
-    { "name": "landing", "runtimeExecutable": "/opt/miniconda3/envs/fotdata/bin/python", "runtimeArgs": ["-m", "http.server", "5600"], "port": 5600 }
-  ]
-}

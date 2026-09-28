@@ -3,3 +3,6 @@ __pycache__/
 *.pyc
 .DS_Store
 .env
+
+# 로컬 미리보기 서버 설정(Claude 테스트용) — 커밋하지 않음
+.claude/launch.json
