@@ -762,6 +762,12 @@ def get_top_assists(league_code: str):
 # 따로 놀았음. 24-25·25-26 시즌 5개 리그 백테스트(5/10/19/28라운드 시점)에서 새 방식이 우승 확률 Brier
 # 0.537→0.333, 강등 0.096→0.044, 평균 순위 오차 3.02→1.88위로 개선(2026-09-28).
 SEASON_SIM_SIGMA = 0.15   # 시뮬레이션마다 팀별 전력 변동(로짓 단위) — 같은 백테스트에서 σ 0.1~0.2가 최적
+# 순위 시뮬레이션용 경기 확률만 리그 평균 결과 비율 쪽으로 10% 당김. 경기 하나 예측은 보정이 잘 맞지만,
+# 시즌 초 폼(예: 바르사 7전 전승 → 남은 31경기 평균 승리확률 79% → 예상 98점)이 남은 시즌 전체에 그대로
+# 곱해지면서 상위 팀 최종 승점을 +1.6점 과대평가했음. 백테스트에서 λ=0.1이 편향 −0.1점으로 가장 중립적이고
+# 승점 오차·우승 Brier도 소폭 개선(λ 0~0.3, 온도 보정 1.1~1.5와 비교 — 2026-09-28)
+SEASON_SIM_SHRINK = 0.10
+SEASON_SIM_BASE = (0.44, 0.25, 0.31)   # 홈승/무/원정승 리그 평균 비율
 SIM_LEAGUES = ("PL", "PD", "BL1", "SA", "FL1")
 
 @app.get("/predict/champion/{league_code}")
@@ -786,6 +792,7 @@ def get_champion_prediction(league_code: str):
     probs = [[0.44, 0.25, 0.31]] * len(pairs)   # 데이터 없는 팀(거의 없음)은 리그 평균 결과 비율
     if known:
         P = _predict_hda([pairs[i] for i in known])
+        P = (1 - SEASON_SIM_SHRINK) * P + SEASON_SIM_SHRINK * np.array(SEASON_SIM_BASE)
         for i, p in zip(known, P):
             probs[i] = [round(float(x), 4) for x in p]
 

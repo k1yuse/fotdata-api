@@ -2268,6 +2268,7 @@ function runSimulation() {
     const basePts = teams.map(t => t.points), gd = teams.map(t => t.gd);
     const champ = new Float64Array(T), ucl = new Float64Array(T), rele = new Float64Array(T), sumPts = new Float64Array(T), sumRank = new Float64Array(T);
     const pts = new Float64Array(T), delta = new Float64Array(T), order = [...Array(T).keys()], key = new Float64Array(T);
+    const allPts = Array.from({ length: T }, () => new Uint16Array(nSim));   // 팀별 시뮬레이션 최종 승점(범위 계산용)
 
     for (let s = 0; s < nSim; s++) {
       for (let i = 0; i < T; i++) { pts[i] = basePts[i]; delta[i] = gaussRandom() * sigma; }
@@ -2283,7 +2284,7 @@ function runSimulation() {
       order.sort((x, y) => key[y] - key[x]);
       for (let r = 0; r < T; r++) {
         const i = order[r];
-        sumPts[i] += pts[i]; sumRank[i] += r;
+        sumPts[i] += pts[i]; sumRank[i] += r; allPts[i][s] = pts[i];
         if (r === 0) champ[i]++;
         if (r < z.cl) ucl[i]++;
         if (r >= T - z.rel) rele[i]++;
@@ -2291,9 +2292,11 @@ function runSimulation() {
     }
 
     const pct = v => v / nSim * 100;   // 반올림 안 함 — 표시 단계에서 "0번"과 "1% 미만"을 구분하려고
+    // 예상 승점 범위 = 시뮬레이션 최종 승점의 가운데 80%(하위 10%·상위 10% 제외)
+    const range = i => { const a = allPts[i].slice().sort(); return [a[Math.floor(nSim * 0.1)], a[Math.min(nSim - 1, Math.ceil(nSim * 0.9) - 1)]]; };
     const results = teams.map((t, i) => ({
       team: t.team, logo: t.logo, played: t.played, points: t.points,
-      exp_pts: sumPts[i] / nSim, avg_rank: sumRank[i] / nSim,
+      exp_pts: sumPts[i] / nSim, avg_rank: sumRank[i] / nSim, pts_range: range(i),
       champion_prob: pct(champ[i]), ucl_prob: pct(ucl[i]), relegation_prob: pct(rele[i]),
     }))
     // 화면에 보이는 숫자와 순서가 모순되지 않게: 예상 승점(반올림 값) → 우승 → UCL권 → 강등(낮을수록 위) 순.
@@ -2387,9 +2390,9 @@ function renderChampionResults(data) {
   content.innerHTML = `<div class="ct-meta">남은 <b>${data.remaining}경기</b>를 <b>${data.nSim.toLocaleString()}번</b> 시뮬레이션한 결과 · 예상 승점 순</div>` + CT_HEAD +
     teams.map((t, i) => ctRowHtml(t, i, T,
       cell(t.champion_prob, '240,192,64') + cell(t.ucl_prob, '88,166,255') + cell(t.relegation_prob, '248,81,73'),
-      `<div class="ct-pts">${Math.round(t.exp_pts)}<small>+${Math.round(t.exp_pts - t.points)}</small></div>`)).join('') +
+      `<div class="ct-pts">${Math.round(t.exp_pts)}<small>${t.pts_range[0]}~${t.pts_range[1]}</small></div>`)).join('') +
     `<div class="ct-legend">
-      <span>예상 승점 = 시뮬레이션 평균 최종 승점 (아래 +는 남은 경기에서 더할 승점)</span>
+      <span>예상 승점 = 시뮬레이션 평균 최종 승점 · 아래 범위 = 시뮬레이션 10번 중 8번이 들어오는 최종 승점 구간</span>
       <span>UCL권 = ${data.uclSpots}위 이내 · 강등 = 하위 ${data.releSpots}팀${releNote}</span>
       <span>&lt;1% = 1% 미만으로 일어남 (예: ${data.nSim.toLocaleString()}번 중 ${Math.max(1, Math.floor(data.nSim / 100) - 1).toLocaleString()}번 이하) · – = 한 번도 안 일어남</span>
     </div>`;
