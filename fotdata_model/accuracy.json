@@ -1,15 +1,15 @@
 {
-  "logistic_regression": 51.1,
-  "random_forest": 51.5,
-  "xgboost": 49.6,
-  "best": 51.5,
-  "log_loss": 0.9996,
-  "baseline_home_win": 44.4,
+  "logistic_regression": 50.9,
+  "random_forest": 50.8,
+  "xgboost": 49.7,
+  "best": 50.9,
+  "log_loss": 1.0011,
+  "baseline_home_win": 44.2,
   "evaluation": "time_split",
-  "test_matches": 1100,
+  "test_matches": 1101,
   "test_from": "2026-01-20",
   "test_to": "2026-09-20",
-  "total_matches": 6024,
-  "training_matches": 5500,
-  "updated_at": "2026-09-28T16:41:13.139101"
+  "total_matches": 6027,
+  "training_matches": 5503,
+  "updated_at": "2026-09-28T23:04:06.306705"
 }

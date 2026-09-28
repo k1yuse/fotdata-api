@@ -1,4 +1,568 @@
 {
+  "Wolverhampton Wanderers FC": {
+    "venue": "Molineux Stadium",
+    "founded": 1877,
+    "clubColors": "Black / Gold",
+    "coach": "César Peixoto",
+    "squad": [],
+    "last_season": 2023
+  },
+  "Burnley FC": {
+    "venue": "Turf Moor",
+    "founded": 1881,
+    "clubColors": "Claret / Sky Blue",
+    "coach": "Nicky Hayen",
+    "squad": [],
+    "last_season": 2023
+  },
+  "Sheffield United FC": {
+    "venue": "Bramall Lane",
+    "founded": null,
+    "clubColors": "Red / White / Black",
+    "coach": "Chris Wilder",
+    "squad": [],
+    "last_season": 2023
+  },
+  "Luton Town FC": {
+    "venue": "Kenilworth Road Stadium",
+    "founded": 1885,
+    "clubColors": "White / Navy Blue / Orange",
+    "coach": "Jack Wilshere",
+    "squad": [],
+    "last_season": 2023
+  },
+  "West Ham United FC": {
+    "venue": "London Stadium",
+    "founded": 1895,
+    "clubColors": "Claret / Sky Blue",
+    "coach": "Nuno Espírito Santo",
+    "squad": [],
+    "last_season": 2023
+  },
+  "Leicester City FC": {
+    "venue": "King Power Stadium",
+    "founded": 1884,
+    "clubColors": "Royal Blue / White",
+    "coach": "Russell Martin",
+    "squad": [],
+    "last_season": 2024
+  },
+  "Southampton FC": {
+    "venue": "St. Mary's Stadium",
+    "founded": 1885,
+    "clubColors": "Red / White / Black",
+    "coach": "Tonda Eckert",
+    "squad": [],
+    "last_season": 2024
+  },
+  "Granada CF": {
+    "venue": "Estadio Nuevo Los Cármenes",
+    "founded": 1931,
+    "clubColors": "Red / White",
+    "coach": "Pacheta",
+    "squad": [],
+    "last_season": 2023
+  },
+  "RCD Mallorca": {
+    "venue": "Iberostar Estadi",
+    "founded": 1916,
+    "clubColors": "Red / Black",
+    "coach": "Luis García",
+    "squad": [],
+    "last_season": 2023
+  },
+  "Cádiz CF": {
+    "venue": "Estadio Ramón de Carranza",
+    "founded": 1910,
+    "clubColors": "Yellow / Blue",
+    "coach": "Albert Celades",
+    "squad": [],
+    "last_season": 2023
+  },
+  "UD Almería": {
+    "venue": "Estadio de los Juegos Mediterráneos",
+    "founded": 1989,
+    "clubColors": "Red / White",
+    "coach": "Garcia Pimienta",
+    "squad": [],
+    "last_season": 2023
+  },
+  "UD Las Palmas": {
+    "venue": "Estadio de Gran Canaria",
+    "founded": 1949,
+    "clubColors": "Yellow / Blue",
+    "coach": "Rubén de la Barrera",
+    "squad": [],
+    "last_season": 2023
+  },
+  "Girona FC": {
+    "venue": "Estadi Municipal de Montilivi",
+    "founded": 1930,
+    "clubColors": "Red / White / Blue",
+    "coach": "Quique Álvarez",
+    "squad": [],
+    "last_season": 2023
+  },
+  "Real Valladolid CF": {
+    "venue": "Estadio Municipal José Zorrilla",
+    "founded": 1928,
+    "clubColors": "Violet / White",
+    "coach": "Fran Escribá",
+    "squad": [],
+    "last_season": 2024
+  },
+  "CD Leganés": {
+    "venue": "Estadio Municipal de Butarque",
+    "founded": 1928,
+    "clubColors": "Blue / White",
+    "coach": "Rubén Albés",
+    "squad": [],
+    "last_season": 2024
+  },
+  "Real Oviedo": {
+    "venue": "Estadio Nuevo Carlos Tartiere",
+    "founded": 1926,
+    "clubColors": "Blue / White",
+    "coach": "Julián Calero",
+    "squad": [],
+    "last_season": 2025
+  },
+  "VfL Wolfsburg": {
+    "venue": "Volkswagen Arena",
+    "founded": 1945,
+    "clubColors": "Green / White",
+    "coach": "Tobias Strobl",
+    "squad": [],
+    "last_season": 2023
+  },
+  "VfL Bochum 1848": {
+    "venue": "Vonovia Ruhrstadion",
+    "founded": 1849,
+    "clubColors": "Blue / White",
+    "coach": "Uwe Rösler",
+    "squad": [],
+    "last_season": 2023
+  },
+  "1. FC Heidenheim 1846": {
+    "venue": "Voith-Arena",
+    "founded": 1846,
+    "clubColors": "Blue / Red / White",
+    "coach": "Frank Schmidt",
+    "squad": [],
+    "last_season": 2023
+  },
+  "SV Darmstadt 98": {
+    "venue": "Merck-Stadion am Böllenfalltor",
+    "founded": 1898,
+    "clubColors": "Blue / White",
+    "coach": "Florian Kohfeldt",
+    "squad": [],
+    "last_season": 2023
+  },
+  "FC St. Pauli 1910": {
+    "venue": "Millerntor-Stadion",
+    "founded": 1910,
+    "clubColors": "Brown / White",
+    "coach": "Marcel Rapp",
+    "squad": [],
+    "last_season": 2024
+  },
+  "Holstein Kiel": {
+    "venue": "Holstein-Stadion",
+    "founded": 1844,
+    "clubColors": "Blue / Red / White",
+    "coach": "Tim Walter",
+    "squad": [],
+    "last_season": 2024
+  },
+  "Empoli FC": {
+    "venue": "Stadio Carlo Castellani",
+    "founded": 1920,
+    "clubColors": "Blue / White",
+    "coach": "Guido Pagliuca",
+    "squad": [],
+    "last_season": 2023
+  },
+  "Hellas Verona FC": {
+    "venue": "Stadio Marc'Antonio Bentegodi",
+    "founded": 1903,
+    "clubColors": "Yellow / Blue",
+    "coach": "Marco Baroni",
+    "squad": [],
+    "last_season": 2023
+  },
+  "US Salernitana 1919": {
+    "venue": "Stadio Arechi",
+    "founded": 1919,
+    "clubColors": null,
+    "coach": null,
+    "squad": [],
+    "last_season": 2023
+  },
+  "US Cremonese": {
+    "venue": "Stadio Giovanni Zin",
+    "founded": 1903,
+    "clubColors": "Red / Grey",
+    "coach": "Marco Giampaolo",
+    "squad": [],
+    "last_season": 2025
+  },
+  "AC Pisa 1909": {
+    "venue": "Arena Garibaldi - Stadio Romeo Anconetani",
+    "founded": 1909,
+    "clubColors": "Blue / Black",
+    "coach": "Paolo Bianco",
+    "squad": [],
+    "last_season": 2025
+  },
+  "Montpellier HSC": {
+    "venue": "Stade de la Mosson",
+    "founded": 1970,
+    "clubColors": "Blue / Orange",
+    "coach": "Zoumana Camara",
+    "squad": [],
+    "last_season": 2023
+  },
+  "Clermont Foot 63": {
+    "venue": "Stade Gabriel Montpied",
+    "founded": 1911,
+    "clubColors": "Red / Blue",
+    "coach": "David Guion",
+    "squad": [],
+    "last_season": 2023
+  },
+  "FC Nantes": {
+    "venue": "Stade de la Beaujoire - Louis Fonteneau",
+    "founded": 1943,
+    "clubColors": "Green / Yellow",
+    "coach": "Grégory Poirier",
+    "squad": [],
+    "last_season": 2023
+  },
+  "FC Metz": {
+    "venue": "Stade Saint-Symphorien",
+    "founded": 1919,
+    "clubColors": "Red / Blue",
+    "coach": "Luc Holtz",
+    "squad": [],
+    "last_season": 2023
+  },
+  "Stade de Reims": {
+    "venue": "Stade Auguste-Delaune II",
+    "founded": 1909,
+    "clubColors": "Red / White / Cyan",
+    "coach": "Nicolas Usaï",
+    "squad": [],
+    "last_season": 2023
+  },
+  "AS Saint-Étienne": {
+    "venue": "Stade Geoffroy-Guichard",
+    "founded": 1919,
+    "clubColors": "Green / White",
+    "coach": "Ian Cathro",
+    "squad": [],
+    "last_season": 2024
+  },
+  "FC Porto": {
+    "venue": "Estádio Do Dragão",
+    "founded": 1893,
+    "clubColors": "Blue / White",
+    "coach": "Francesco Farioli",
+    "squad": [],
+    "last_season": 2023
+  },
+  "Galatasaray SK": {
+    "venue": "Türk Telekom Arena",
+    "founded": 1905,
+    "clubColors": "Red / Yellow",
+    "coach": "Okan Buruk",
+    "squad": [],
+    "last_season": 2023
+  },
+  "PSV": {
+    "venue": "Philips Stadion",
+    "founded": 1913,
+    "clubColors": "Red / White",
+    "coach": "Peter Bosz",
+    "squad": [],
+    "last_season": 2023
+  },
+  "Feyenoord Rotterdam": {
+    "venue": "Stadion Feijenoord",
+    "founded": 1908,
+    "clubColors": "Red / White / Black",
+    "coach": "Giovanni van Bronckhorst",
+    "squad": [],
+    "last_season": 2023
+  },
+  "Celtic FC": {
+    "venue": "Celtic Park",
+    "founded": 1887,
+    "clubColors": "Green / White",
+    "coach": "Martin O'Neill",
+    "squad": [],
+    "last_season": 2023
+  },
+  "Royal Antwerp FC": {
+    "venue": "Bosuilstadion",
+    "founded": 1880,
+    "clubColors": "Red / White",
+    "coach": null,
+    "squad": [],
+    "last_season": 2023
+  },
+  "BSC Young Boys": {
+    "venue": "Wankdorfstadion",
+    "founded": 1898,
+    "clubColors": "Yellow / Black",
+    "coach": "Gerardo Seoane",
+    "squad": [],
+    "last_season": 2023
+  },
+  "FC København": {
+    "venue": "Telia Parken",
+    "founded": 1992,
+    "clubColors": "White / Blue",
+    "coach": "Bo Svensson",
+    "squad": [],
+    "last_season": 2023
+  },
+  "FC Red Bull Salzburg": {
+    "venue": "Red Bull Arena",
+    "founded": 1933,
+    "clubColors": "White / Red",
+    "coach": "Danny Röhl",
+    "squad": [],
+    "last_season": 2023
+  },
+  "FK Shakhtar Donetsk": {
+    "venue": "Oblasny SportKomplex Metalist",
+    "founded": 1936,
+    "clubColors": "Orange / Black",
+    "coach": null,
+    "squad": [],
+    "last_season": 2023
+  },
+  "Sport Lisboa e Benfica": {
+    "venue": "Estádio do Sport Lisboa e Benfica",
+    "founded": 1904,
+    "clubColors": null,
+    "coach": "Marco Silva",
+    "squad": [],
+    "last_season": 2023
+  },
+  "Sporting Clube de Braga": {
+    "venue": "Estádio Municipal de Braga",
+    "founded": 1921,
+    "clubColors": "Red / White",
+    "coach": "Carlos Vicens",
+    "squad": [],
+    "last_season": 2023
+  },
+  "FK Crvena Zvezda": {
+    "venue": "Stadion Rajko Mitić",
+    "founded": 1945,
+    "clubColors": "Red / White",
+    "coach": null,
+    "squad": [],
+    "last_season": 2023
+  },
+  "Sporting Clube de Portugal": {
+    "venue": "Estádio José Alvalade",
+    "founded": 1906,
+    "clubColors": "Green / White",
+    "coach": "Rui Borges",
+    "squad": [],
+    "last_season": 2024
+  },
+  "GNK Dinamo Zagreb": {
+    "venue": "Stadion Maksimir",
+    "founded": 1903,
+    "clubColors": "Blue / White",
+    "coach": "Mario Kovačević",
+    "squad": [],
+    "last_season": 2024
+  },
+  "Club Brugge KV": {
+    "venue": "Jan Breydelstadion",
+    "founded": 1894,
+    "clubColors": "Blue / Black",
+    "coach": "Ivan Leko",
+    "squad": [],
+    "last_season": 2024
+  },
+  "AC Sparta Praha": {
+    "venue": "Generali Arena",
+    "founded": 1893,
+    "clubColors": "Blue / Yellow / Red",
+    "coach": null,
+    "squad": [],
+    "last_season": 2024
+  },
+  "SK Sturm Graz": {
+    "venue": "Merkur Arena",
+    "founded": 1909,
+    "clubColors": "Black / White",
+    "coach": "Fabio Ingolitsch",
+    "squad": [],
+    "last_season": 2024
+  },
+  "ŠK Slovan Bratislava": {
+    "venue": "Štadión Tehelné pole",
+    "founded": 1919,
+    "clubColors": "Light Blue / White",
+    "coach": null,
+    "squad": [],
+    "last_season": 2024
+  },
+  "Qarabağ Ağdam FK": {
+    "venue": "Tofiq Bəhramov adına Respublika stadionu",
+    "founded": 1951,
+    "clubColors": "Black / White",
+    "coach": null,
+    "squad": [],
+    "last_season": 2025
+  },
+  "PAE Olympiakos SFP": {
+    "venue": "Stadio Georgios Karaiskáki",
+    "founded": 1925,
+    "clubColors": "Red / White",
+    "coach": null,
+    "squad": [],
+    "last_season": 2025
+  },
+  "AFC Ajax": {
+    "venue": "Johan Cruyff ArenA",
+    "founded": 1900,
+    "clubColors": "Red / White",
+    "coach": "Michel",
+    "squad": [],
+    "last_season": 2025
+  },
+  "SK Slavia Praha": {
+    "venue": "Sinobo Stadium",
+    "founded": 1892,
+    "clubColors": "Red / White",
+    "coach": null,
+    "squad": [
+      {
+        "name": "Wiktor Nowak",
+        "position": "Midfield",
+        "nationality": "Poland",
+        "shirtNumber": null
+      },
+      {
+        "name": "David Barčot",
+        "position": null,
+        "nationality": "Czech Republic",
+        "shirtNumber": null
+      },
+      {
+        "name": "Karel Belžík",
+        "position": null,
+        "nationality": "Czech Republic",
+        "shirtNumber": null
+      },
+      {
+        "name": "Emmanuel Ayaosi",
+        "position": null,
+        "nationality": "Nigeria",
+        "shirtNumber": null
+      },
+      {
+        "name": "Pavel Kačor",
+        "position": null,
+        "nationality": "Czech Republic",
+        "shirtNumber": null
+      },
+      {
+        "name": "Oskar Kubiak",
+        "position": null,
+        "nationality": "Poland",
+        "shirtNumber": null
+      }
+    ],
+    "last_season": 2025
+  },
+  "Royale Union Saint-Gilloise": {
+    "venue": "Stade Joseph Mariën",
+    "founded": 1897,
+    "clubColors": "Blue / Yellow",
+    "coach": "David Hubert",
+    "squad": [],
+    "last_season": 2025
+  },
+  "FK Bodø/Glimt": {
+    "venue": "Aspmyra Stadion",
+    "founded": 1916,
+    "clubColors": "Yellow / Black",
+    "coach": "Kjetil Knutsen",
+    "squad": [],
+    "last_season": 2025
+  },
+  "FK Kairat": {
+    "venue": null,
+    "founded": null,
+    "clubColors": null,
+    "coach": null,
+    "squad": [],
+    "last_season": 2025
+  },
+  "Paphos FC": {
+    "venue": "Alphamega Stadium",
+    "founded": null,
+    "clubColors": null,
+    "coach": null,
+    "squad": [],
+    "last_season": 2025
+  },
+  "Fenerbahçe SK": {
+    "venue": "Ülker Stadyumu Fenerbahçe Şükrü Saracoğlu Spor Kompleksi",
+    "founded": 1907,
+    "clubColors": "Yellow / Blue",
+    "coach": "İsmail Kartal",
+    "squad": [],
+    "last_season": 2026
+  },
+  "PAE AEK": {
+    "venue": "Olympiako Stadio Spyros Louis",
+    "founded": 1924,
+    "clubColors": "Yellow / Black",
+    "coach": null,
+    "squad": [],
+    "last_season": 2026
+  },
+  "LASK Linz": {
+    "venue": "Raiffeisen Arena",
+    "founded": 1908,
+    "clubColors": "Black / White",
+    "coach": "Dietmar Kühbauer",
+    "squad": [],
+    "last_season": 2026
+  },
+  "Viking FK": {
+    "venue": "SR-Bank Arena",
+    "founded": 1899,
+    "clubColors": "Dark Blue / White",
+    "coach": "Morten Jensen",
+    "squad": [],
+    "last_season": 2026
+  },
+  "Sabah FK": {
+    "venue": null,
+    "founded": null,
+    "clubColors": null,
+    "coach": null,
+    "squad": [
+      {
+        "name": "Rauf Rüstəmli",
+        "position": null,
+        "nationality": "Azerbaijan",
+        "shirtNumber": null
+      }
+    ],
+    "last_season": 2026
+  },
   "1. FC Köln": {
     "venue": "RheinEnergieSTADION",
     "founded": 1948,
@@ -16660,569 +17224,5 @@
         "shirtNumber": null
       }
     ]
-  },
-  "Wolverhampton Wanderers FC": {
-    "venue": "Molineux Stadium",
-    "founded": 1877,
-    "clubColors": "Black / Gold",
-    "coach": "César Peixoto",
-    "squad": [],
-    "last_season": 2023
-  },
-  "Burnley FC": {
-    "venue": "Turf Moor",
-    "founded": 1881,
-    "clubColors": "Claret / Sky Blue",
-    "coach": "Nicky Hayen",
-    "squad": [],
-    "last_season": 2023
-  },
-  "Sheffield United FC": {
-    "venue": "Bramall Lane",
-    "founded": null,
-    "clubColors": "Red / White / Black",
-    "coach": "Chris Wilder",
-    "squad": [],
-    "last_season": 2023
-  },
-  "Luton Town FC": {
-    "venue": "Kenilworth Road Stadium",
-    "founded": 1885,
-    "clubColors": "White / Navy Blue / Orange",
-    "coach": "Jack Wilshere",
-    "squad": [],
-    "last_season": 2023
-  },
-  "West Ham United FC": {
-    "venue": "London Stadium",
-    "founded": 1895,
-    "clubColors": "Claret / Sky Blue",
-    "coach": "Nuno Espírito Santo",
-    "squad": [],
-    "last_season": 2023
-  },
-  "Leicester City FC": {
-    "venue": "King Power Stadium",
-    "founded": 1884,
-    "clubColors": "Royal Blue / White",
-    "coach": "Russell Martin",
-    "squad": [],
-    "last_season": 2024
-  },
-  "Southampton FC": {
-    "venue": "St. Mary's Stadium",
-    "founded": 1885,
-    "clubColors": "Red / White / Black",
-    "coach": "Tonda Eckert",
-    "squad": [],
-    "last_season": 2024
-  },
-  "Granada CF": {
-    "venue": "Estadio Nuevo Los Cármenes",
-    "founded": 1931,
-    "clubColors": "Red / White",
-    "coach": "Pacheta",
-    "squad": [],
-    "last_season": 2023
-  },
-  "RCD Mallorca": {
-    "venue": "Iberostar Estadi",
-    "founded": 1916,
-    "clubColors": "Red / Black",
-    "coach": "Luis García",
-    "squad": [],
-    "last_season": 2023
-  },
-  "Cádiz CF": {
-    "venue": "Estadio Ramón de Carranza",
-    "founded": 1910,
-    "clubColors": "Yellow / Blue",
-    "coach": "Albert Celades",
-    "squad": [],
-    "last_season": 2023
-  },
-  "UD Almería": {
-    "venue": "Estadio de los Juegos Mediterráneos",
-    "founded": 1989,
-    "clubColors": "Red / White",
-    "coach": "Garcia Pimienta",
-    "squad": [],
-    "last_season": 2023
-  },
-  "UD Las Palmas": {
-    "venue": "Estadio de Gran Canaria",
-    "founded": 1949,
-    "clubColors": "Yellow / Blue",
-    "coach": "Rubén de la Barrera",
-    "squad": [],
-    "last_season": 2023
-  },
-  "Girona FC": {
-    "venue": "Estadi Municipal de Montilivi",
-    "founded": 1930,
-    "clubColors": "Red / White / Blue",
-    "coach": "Quique Álvarez",
-    "squad": [],
-    "last_season": 2023
-  },
-  "Real Valladolid CF": {
-    "venue": "Estadio Municipal José Zorrilla",
-    "founded": 1928,
-    "clubColors": "Violet / White",
-    "coach": "Fran Escribá",
-    "squad": [],
-    "last_season": 2024
-  },
-  "CD Leganés": {
-    "venue": "Estadio Municipal de Butarque",
-    "founded": 1928,
-    "clubColors": "Blue / White",
-    "coach": "Rubén Albés",
-    "squad": [],
-    "last_season": 2024
-  },
-  "Real Oviedo": {
-    "venue": "Estadio Nuevo Carlos Tartiere",
-    "founded": 1926,
-    "clubColors": "Blue / White",
-    "coach": "Julián Calero",
-    "squad": [],
-    "last_season": 2025
-  },
-  "VfL Wolfsburg": {
-    "venue": "Volkswagen Arena",
-    "founded": 1945,
-    "clubColors": "Green / White",
-    "coach": "Tobias Strobl",
-    "squad": [],
-    "last_season": 2023
-  },
-  "VfL Bochum 1848": {
-    "venue": "Vonovia Ruhrstadion",
-    "founded": 1849,
-    "clubColors": "Blue / White",
-    "coach": "Uwe Rösler",
-    "squad": [],
-    "last_season": 2023
-  },
-  "1. FC Heidenheim 1846": {
-    "venue": "Voith-Arena",
-    "founded": 1846,
-    "clubColors": "Blue / Red / White",
-    "coach": "Frank Schmidt",
-    "squad": [],
-    "last_season": 2023
-  },
-  "SV Darmstadt 98": {
-    "venue": "Merck-Stadion am Böllenfalltor",
-    "founded": 1898,
-    "clubColors": "Blue / White",
-    "coach": "Florian Kohfeldt",
-    "squad": [],
-    "last_season": 2023
-  },
-  "FC St. Pauli 1910": {
-    "venue": "Millerntor-Stadion",
-    "founded": 1910,
-    "clubColors": "Brown / White",
-    "coach": "Marcel Rapp",
-    "squad": [],
-    "last_season": 2024
-  },
-  "Holstein Kiel": {
-    "venue": "Holstein-Stadion",
-    "founded": 1844,
-    "clubColors": "Blue / Red / White",
-    "coach": "Tim Walter",
-    "squad": [],
-    "last_season": 2024
-  },
-  "Empoli FC": {
-    "venue": "Stadio Carlo Castellani",
-    "founded": 1920,
-    "clubColors": "Blue / White",
-    "coach": "Guido Pagliuca",
-    "squad": [],
-    "last_season": 2023
-  },
-  "Hellas Verona FC": {
-    "venue": "Stadio Marc'Antonio Bentegodi",
-    "founded": 1903,
-    "clubColors": "Yellow / Blue",
-    "coach": "Marco Baroni",
-    "squad": [],
-    "last_season": 2023
-  },
-  "US Salernitana 1919": {
-    "venue": "Stadio Arechi",
-    "founded": 1919,
-    "clubColors": null,
-    "coach": null,
-    "squad": [],
-    "last_season": 2023
-  },
-  "US Cremonese": {
-    "venue": "Stadio Giovanni Zin",
-    "founded": 1903,
-    "clubColors": "Red / Grey",
-    "coach": "Marco Giampaolo",
-    "squad": [],
-    "last_season": 2025
-  },
-  "AC Pisa 1909": {
-    "venue": "Arena Garibaldi - Stadio Romeo Anconetani",
-    "founded": 1909,
-    "clubColors": "Blue / Black",
-    "coach": "Paolo Bianco",
-    "squad": [],
-    "last_season": 2025
-  },
-  "Montpellier HSC": {
-    "venue": "Stade de la Mosson",
-    "founded": 1970,
-    "clubColors": "Blue / Orange",
-    "coach": "Zoumana Camara",
-    "squad": [],
-    "last_season": 2023
-  },
-  "Clermont Foot 63": {
-    "venue": "Stade Gabriel Montpied",
-    "founded": 1911,
-    "clubColors": "Red / Blue",
-    "coach": "David Guion",
-    "squad": [],
-    "last_season": 2023
-  },
-  "FC Nantes": {
-    "venue": "Stade de la Beaujoire - Louis Fonteneau",
-    "founded": 1943,
-    "clubColors": "Green / Yellow",
-    "coach": "Grégory Poirier",
-    "squad": [],
-    "last_season": 2023
-  },
-  "FC Metz": {
-    "venue": "Stade Saint-Symphorien",
-    "founded": 1919,
-    "clubColors": "Red / Blue",
-    "coach": "Luc Holtz",
-    "squad": [],
-    "last_season": 2023
-  },
-  "Stade de Reims": {
-    "venue": "Stade Auguste-Delaune II",
-    "founded": 1909,
-    "clubColors": "Red / White / Cyan",
-    "coach": "Nicolas Usaï",
-    "squad": [],
-    "last_season": 2023
-  },
-  "AS Saint-Étienne": {
-    "venue": "Stade Geoffroy-Guichard",
-    "founded": 1919,
-    "clubColors": "Green / White",
-    "coach": "Ian Cathro",
-    "squad": [],
-    "last_season": 2024
-  },
-  "FC Porto": {
-    "venue": "Estádio Do Dragão",
-    "founded": 1893,
-    "clubColors": "Blue / White",
-    "coach": "Francesco Farioli",
-    "squad": [],
-    "last_season": 2023
-  },
-  "Galatasaray SK": {
-    "venue": "Türk Telekom Arena",
-    "founded": 1905,
-    "clubColors": "Red / Yellow",
-    "coach": "Okan Buruk",
-    "squad": [],
-    "last_season": 2023
-  },
-  "PSV": {
-    "venue": "Philips Stadion",
-    "founded": 1913,
-    "clubColors": "Red / White",
-    "coach": "Peter Bosz",
-    "squad": [],
-    "last_season": 2023
-  },
-  "Feyenoord Rotterdam": {
-    "venue": "Stadion Feijenoord",
-    "founded": 1908,
-    "clubColors": "Red / White / Black",
-    "coach": "Giovanni van Bronckhorst",
-    "squad": [],
-    "last_season": 2023
-  },
-  "Celtic FC": {
-    "venue": "Celtic Park",
-    "founded": 1887,
-    "clubColors": "Green / White",
-    "coach": "Martin O'Neill",
-    "squad": [],
-    "last_season": 2023
-  },
-  "Royal Antwerp FC": {
-    "venue": "Bosuilstadion",
-    "founded": 1880,
-    "clubColors": "Red / White",
-    "coach": null,
-    "squad": [],
-    "last_season": 2023
-  },
-  "BSC Young Boys": {
-    "venue": "Wankdorfstadion",
-    "founded": 1898,
-    "clubColors": "Yellow / Black",
-    "coach": "Gerardo Seoane",
-    "squad": [],
-    "last_season": 2023
-  },
-  "FC København": {
-    "venue": "Telia Parken",
-    "founded": 1992,
-    "clubColors": "White / Blue",
-    "coach": "Bo Svensson",
-    "squad": [],
-    "last_season": 2023
-  },
-  "FC Red Bull Salzburg": {
-    "venue": "Red Bull Arena",
-    "founded": 1933,
-    "clubColors": "White / Red",
-    "coach": "Danny Röhl",
-    "squad": [],
-    "last_season": 2023
-  },
-  "FK Shakhtar Donetsk": {
-    "venue": "Oblasny SportKomplex Metalist",
-    "founded": 1936,
-    "clubColors": "Orange / Black",
-    "coach": null,
-    "squad": [],
-    "last_season": 2023
-  },
-  "Sport Lisboa e Benfica": {
-    "venue": "Estádio do Sport Lisboa e Benfica",
-    "founded": 1904,
-    "clubColors": null,
-    "coach": "Marco Silva",
-    "squad": [],
-    "last_season": 2023
-  },
-  "Sporting Clube de Braga": {
-    "venue": "Estádio Municipal de Braga",
-    "founded": 1921,
-    "clubColors": "Red / White",
-    "coach": "Carlos Vicens",
-    "squad": [],
-    "last_season": 2023
-  },
-  "FK Crvena Zvezda": {
-    "venue": "Stadion Rajko Mitić",
-    "founded": 1945,
-    "clubColors": "Red / White",
-    "coach": null,
-    "squad": [],
-    "last_season": 2023
-  },
-  "Sporting Clube de Portugal": {
-    "venue": "Estádio José Alvalade",
-    "founded": 1906,
-    "clubColors": "Green / White",
-    "coach": "Rui Borges",
-    "squad": [],
-    "last_season": 2024
-  },
-  "GNK Dinamo Zagreb": {
-    "venue": "Stadion Maksimir",
-    "founded": 1903,
-    "clubColors": "Blue / White",
-    "coach": "Mario Kovačević",
-    "squad": [],
-    "last_season": 2024
-  },
-  "Club Brugge KV": {
-    "venue": "Jan Breydelstadion",
-    "founded": 1894,
-    "clubColors": "Blue / Black",
-    "coach": "Ivan Leko",
-    "squad": [],
-    "last_season": 2024
-  },
-  "AC Sparta Praha": {
-    "venue": "Generali Arena",
-    "founded": 1893,
-    "clubColors": "Blue / Yellow / Red",
-    "coach": null,
-    "squad": [],
-    "last_season": 2024
-  },
-  "SK Sturm Graz": {
-    "venue": "Merkur Arena",
-    "founded": 1909,
-    "clubColors": "Black / White",
-    "coach": "Fabio Ingolitsch",
-    "squad": [],
-    "last_season": 2024
-  },
-  "ŠK Slovan Bratislava": {
-    "venue": "Štadión Tehelné pole",
-    "founded": 1919,
-    "clubColors": "Light Blue / White",
-    "coach": null,
-    "squad": [],
-    "last_season": 2024
-  },
-  "Qarabağ Ağdam FK": {
-    "venue": "Tofiq Bəhramov adına Respublika stadionu",
-    "founded": 1951,
-    "clubColors": "Black / White",
-    "coach": null,
-    "squad": [],
-    "last_season": 2025
-  },
-  "PAE Olympiakos SFP": {
-    "venue": "Stadio Georgios Karaiskáki",
-    "founded": 1925,
-    "clubColors": "Red / White",
-    "coach": null,
-    "squad": [],
-    "last_season": 2025
-  },
-  "AFC Ajax": {
-    "venue": "Johan Cruyff ArenA",
-    "founded": 1900,
-    "clubColors": "Red / White",
-    "coach": "Michel",
-    "squad": [],
-    "last_season": 2025
-  },
-  "SK Slavia Praha": {
-    "venue": "Sinobo Stadium",
-    "founded": 1892,
-    "clubColors": "Red / White",
-    "coach": null,
-    "squad": [
-      {
-        "name": "Wiktor Nowak",
-        "position": "Midfield",
-        "nationality": "Poland",
-        "shirtNumber": null
-      },
-      {
-        "name": "David Barčot",
-        "position": null,
-        "nationality": "Czech Republic",
-        "shirtNumber": null
-      },
-      {
-        "name": "Karel Belžík",
-        "position": null,
-        "nationality": "Czech Republic",
-        "shirtNumber": null
-      },
-      {
-        "name": "Emmanuel Ayaosi",
-        "position": null,
-        "nationality": "Nigeria",
-        "shirtNumber": null
-      },
-      {
-        "name": "Pavel Kačor",
-        "position": null,
-        "nationality": "Czech Republic",
-        "shirtNumber": null
-      },
-      {
-        "name": "Oskar Kubiak",
-        "position": null,
-        "nationality": "Poland",
-        "shirtNumber": null
-      }
-    ],
-    "last_season": 2025
-  },
-  "Royale Union Saint-Gilloise": {
-    "venue": "Stade Joseph Mariën",
-    "founded": 1897,
-    "clubColors": "Blue / Yellow",
-    "coach": "David Hubert",
-    "squad": [],
-    "last_season": 2025
-  },
-  "FK Bodø/Glimt": {
-    "venue": "Aspmyra Stadion",
-    "founded": 1916,
-    "clubColors": "Yellow / Black",
-    "coach": "Kjetil Knutsen",
-    "squad": [],
-    "last_season": 2025
-  },
-  "FK Kairat": {
-    "venue": null,
-    "founded": null,
-    "clubColors": null,
-    "coach": null,
-    "squad": [],
-    "last_season": 2025
-  },
-  "Paphos FC": {
-    "venue": "Alphamega Stadium",
-    "founded": null,
-    "clubColors": null,
-    "coach": null,
-    "squad": [],
-    "last_season": 2025
-  },
-  "Fenerbahçe SK": {
-    "venue": "Ülker Stadyumu Fenerbahçe Şükrü Saracoğlu Spor Kompleksi",
-    "founded": 1907,
-    "clubColors": "Yellow / Blue",
-    "coach": "İsmail Kartal",
-    "squad": [],
-    "last_season": 2026
-  },
-  "PAE AEK": {
-    "venue": "Olympiako Stadio Spyros Louis",
-    "founded": 1924,
-    "clubColors": "Yellow / Black",
-    "coach": null,
-    "squad": [],
-    "last_season": 2026
-  },
-  "LASK Linz": {
-    "venue": "Raiffeisen Arena",
-    "founded": 1908,
-    "clubColors": "Black / White",
-    "coach": "Dietmar Kühbauer",
-    "squad": [],
-    "last_season": 2026
-  },
-  "Viking FK": {
-    "venue": "SR-Bank Arena",
-    "founded": 1899,
-    "clubColors": "Dark Blue / White",
-    "coach": "Morten Jensen",
-    "squad": [],
-    "last_season": 2026
-  },
-  "Sabah FK": {
-    "venue": null,
-    "founded": null,
-    "clubColors": null,
-    "coach": null,
-    "squad": [
-      {
-        "name": "Rauf Rüstəmli",
-        "position": null,
-        "nationality": "Azerbaijan",
-        "shirtNumber": null
-      }
-    ],
-    "last_season": 2026
   }
 }
