@@ -1,4 +1,22 @@
 {
+ "1. FC Heidenheim 1846": {
+  "capacity": 10001,
+  "city": "하이덴하임안데어브렌츠",
+  "coach": "Frank Schmidt",
+  "en_title": "1. FC Heidenheim",
+  "extract": "1. FC 하이덴하임 1846(1. FC Heidenheim 1846)은 독일 바덴뷔르템베르크주의 도시 하이덴하임안데어브렌츠을 연고로 하는 축구 클럽이다. 현재 2. 분데스리가에 참가하고 있다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "l2": 1
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/1._FC_Heidenheim#Honours",
+  "lang": "ko",
+  "name_ko": "1. FC 하이덴하임 1846",
+  "qid": "Q162251",
+  "stadium": "Voith-Arena",
+  "title": "1. FC 하이덴하임",
+  "url": "https://ko.wikipedia.org/wiki/1._FC_%ED%95%98%EC%9D%B4%EB%8D%B4%ED%95%98%EC%9E%84"
+ },
  "1. FC Köln": {
   "capacity": 46195,
   "city": "쾰른",
@@ -98,6 +116,40 @@
   "title": "AC 몬차",
   "url": "https://ko.wikipedia.org/wiki/AC_%EB%AA%AC%EC%B0%A8"
  },
+ "AC Pisa 1909": {
+  "capacity": 10442,
+  "city": "피사",
+  "coach": "Paolo Bianco",
+  "en_title": "Pisa SC",
+  "extract": "피사 SC(이탈리아어: Pisa Sporting Club)는 1909년에 창단된 이탈리아의 축구 클럽으로 토스카나주 피사를 연고지로 하며 현재 세리에 B에서 활동 중이다.\n1968-69 시즌에서 처음으로 세리에 A로 승격되었지만 한 시즌만에 강등되었고 1970년대에는 대부분 세리에 C에서 지냈다. 미트로파컵에서 2번(1986년 1988년) 우승했고 1980년대부터 4번(1982-83 1985-86 1987-88 1990-91 시즌)이나 세리에 A로 승격되었지만 모두 1•2시즌 만에 강등되었고 1990-91 시즌이 끝나면서 세리에 B로 강등된다. 2년 후에는 세리에 C로 강등되었고 구단이 재정 파탄에 빠지면서 파산된다.\n1994년 구단이 재건되면서 세리에 D에서 다시 출발했고 1996년 세리에 C2로 승격했다. 그 후 1996년부터 2007년까지 11년 동안 세리에 C에서 지냈고 2007-08 시즌에서 세리에 B로 승격되었다. 2009년 세리에 B 시즌이 끝난 직후 구단이 재정난을 겪고 있다는 사실이 밝혀져 프로 리그 등록이 무효로 처리되었고 팀은 세리에 D로 강등된다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "l2": 2
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/Pisa_SC#Honours",
+  "lang": "ko",
+  "name_ko": "AC 피사 1909",
+  "qid": "Q289613",
+  "stadium": "Arena Garibaldi – Stadio Romeo Anconetani",
+  "title": "피사 SC",
+  "url": "https://ko.wikipedia.org/wiki/%ED%94%BC%EC%82%AC_SC"
+ },
+ "AC Sparta Praha": {
+  "capacity": 19416,
+  "city": "프라하",
+  "coach": "Brian Priske",
+  "en_title": "AC Sparta Prague",
+  "extract": "AC 스파르타 프라하(Athletic Club Sparta Praha, [ˈaː ˈtsɛː ˈsparta ˈpraɦa])는 1893년에 창단된 체코의 수도 프라하의 축구 클럽으로 스타디온 레트나를 홈구장으로 한다.\n1992년 유러피언 컵 (오늘날의 UEFA 챔피언스 리그) 준결승, 1973년 UEFA 컵위너스컵 준결승 진출과 더불어 중앙 유럽 컵(미트로파컵이라고도 알려진)을 3차례 우승을 하며 체코에서 가장 성공적인 축구팀이자 중부 유럽에서 가장 성공적인 축구팀 중 하나이다. 스파르타는 또한 1969년에 FIFA 클럽 월드컵의 전신인 스몰 클럽 월드컵을 하며 국제 대회에서도 성공을 거뒀다.\n스파르타는 38번의 국내 리그, 16번의 체코 컵 (과거 체코슬로바키아 컵), 2번의 체코 슈퍼컵 우승 트로피를 들어올렸다.",
+  "fetched": "2026-09-29",
+  "honours": {},
+  "honours_url": "https://en.wikipedia.org/wiki/AC_Sparta_Prague#Honours",
+  "lang": "ko",
+  "name_ko": "AC 스파르타 프라하",
+  "qid": "Q193481",
+  "stadium": "스타디온 레트나",
+  "title": "AC 스파르타 프라하",
+  "url": "https://ko.wikipedia.org/wiki/AC_%EC%8A%A4%ED%8C%8C%EB%A5%B4%ED%83%80_%ED%94%84%EB%9D%BC%ED%95%98"
+ },
  "ACF Fiorentina": {
   "capacity": 43325,
   "city": "피렌체",
@@ -118,6 +170,28 @@
   "stadium": "스타디오 아르테미오 프란키",
   "title": "ACF 피오렌티나",
   "url": "https://ko.wikipedia.org/wiki/ACF_%ED%94%BC%EC%98%A4%EB%A0%8C%ED%8B%B0%EB%82%98"
+ },
+ "AFC Ajax": {
+  "capacity": 54990,
+  "city": "암스테르담",
+  "coach": "Miguel Ángel Sánchez Muñoz",
+  "en_title": "AFC Ajax",
+  "extract": "암스테르담스허 풋볼 클럽 아약스(네덜란드어: Amsterdamsche Football Club Ajax ˈaːjɑks[*]) 혹은 AFC 아약스(AFC Ajax), 아약스 암스테르담(Ajax Amsterdam)은 암스테르담을 연고지로 하는 네덜란드의 프로 축구 클럽이다. 역사적으로 아약스(전설적인 그리스 영웅의 이름을 따 명명)는 네덜란드의 가장 성공적인 클럽으로, 에레디비시를 36회 우승하였고, KNVB컵을 20회 우승하였다. PSV 에인트호번과 페예노르트와 더불어, 이 클럽은 네덜란드 축구를 지배한 \"빅3\"를 형성하며, 1부 리그에서 강등된 적이 없는 3팀 중 하나이다.\n아약스는 세계에서 가장 성공적인 클럽들 중 하나이다; IFFHS에 의하면, 아약스는 20세기에 7번째로 성공적인 유럽 클럽이다. 이 클럽은 유러피언컵의 영구 소유 유럽 챔피언 클럽 컵을 가진 5개의 클럽들 중 하나로, 명예 배지를 착용할 권한도 가지고 있다. 아약스는 1971년부터 1973년까지 연속으로 유러피언컵을 제패하였다. 1972년에는 에레디비시, KNVB컵, 그리고 유러피언컵을 우승하며 대륙 트레블을 달성하였다. 아약스가 획득한 마지막 국제대회 트로피는 1995년 인터콘티넨털컵과 결승전에서 밀란을 격파하고 획득한 UEFA 챔피언스리그 1994-95의 우승 트로피이다. 아약스는 유벤투스와의 UEFA 챔피언스리그 1995-96 결승전에서 승부차기 끝에 패하였다. 아약스는 대륙 트레블과 인터콘티넨털컵 우승을 같은 해에 달성한 3팀 중 하나이다. 이 업적은 1971-72 시즌에 달성하였다. 아약스는 유벤투스, 바이에른 뮌헨, 그리고 첼시와 더불어 3개의 UEFA 주요 클럽 대회에서 모두 우승을 차지한 적이 있는 네 클럽들 중 하나이다. 아약스는 인터콘티넨털컵을 두 차례 우승하였고, 1991-92년 UEFA컵도 우승하였으며, 1962년에는 UEFA 인터토토컵의 전신인 칼 라판 컵도 우승하였다. 아약스의 홈구장은 1996년에 개장한 요한 크라위프 아레나이며 그 이전에는 더 메이르 스타디온과 암스테르담 올림픽 경기장 (국제 경기)에서 홈경기를 개최했다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "cwc": 1,
+   "ucl": 4,
+   "uel": 1,
+   "usc": 2,
+   "world": 2
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/AFC_Ajax#Honours",
+  "lang": "ko",
+  "name_ko": "AFC 아약스",
+  "qid": "Q81888",
+  "stadium": "암스테르담 아레나",
+  "title": "AFC 아약스",
+  "url": "https://ko.wikipedia.org/wiki/AFC_%EC%95%84%EC%95%BD%EC%8A%A4"
  },
  "AFC Bournemouth": {
   "capacity": 12000,
@@ -219,6 +293,28 @@
   "stadium": "스타디오 올림피코",
   "title": "AS 로마",
   "url": "https://ko.wikipedia.org/wiki/AS_%EB%A1%9C%EB%A7%88"
+ },
+ "AS Saint-Étienne": {
+  "capacity": 41965,
+  "city": "L'Étrat",
+  "coach": "Ian Cathro",
+  "en_title": "AS Saint-Étienne",
+  "extract": "AS 생테티엔(프랑스어: Association Sportive Saint-Étienne Loire)은 생테티엔을 연고로 하는 프랑스의 축구 클럽으로 줄여서 생테티엔, ASSE라고도 불린다. 1933년 6월 26일에 창단 되었으며 현재 프랑스 2부 리그인 리그 2에 참가하고 있다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "cup": 6,
+   "l2": 3,
+   "lcup": 1,
+   "league": 10,
+   "super": 5
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/AS_Saint-%C3%89tienne#Honours",
+  "lang": "ko",
+  "name_ko": "AS 생테티엔",
+  "qid": "Q19521",
+  "stadium": "스타드 조프루아 기샤르",
+  "title": "AS 생테티엔",
+  "url": "https://ko.wikipedia.org/wiki/AS_%EC%83%9D%ED%85%8C%ED%8B%B0%EC%97%94"
  },
  "Angers SCO": {
   "capacity": 18000,
@@ -340,6 +436,24 @@
   "stadium": "산 마메스",
   "title": "아틀레틱 빌바오",
   "url": "https://ko.wikipedia.org/wiki/%EC%95%84%ED%8B%80%EB%A0%88%ED%8B%B1_%EB%B9%8C%EB%B0%94%EC%98%A4"
+ },
+ "BSC Young Boys": {
+  "capacity": 32000,
+  "city": "베른",
+  "coach": "Gerardo Seoane",
+  "en_title": "BSC Young Boys",
+  "extract": "BSC 영 보이스(Berner Sport Club Young Boys)는 스위스의 축구 클럽으로 1898년에 창단되어 수도인 베른을 연고지로 삼고 있는 클럽이다.\nBSC 영 보이스는 축구팀 외에도 볼링 하키팀도 보유하고 있으나 축구로 잘 알려져 있다. BSC 영 보이스는 스위스 슈퍼리그 17회 우승 기록을 가지고 있고 스위스컵을 8회 우승하였다.\n유럽에서는 UEFA 챔피언스리그에 여섯번 출전하였는데 1957-58시즌에 첫 출전하여 16강에 올랐고 1958-59시즌의 유러피언컵에서 4강에까지 올랐으나 프랑스의 스타드 드 랭스에 패하고 말았다. 그리고 그 후 네번을 더 나갔으나 별다른 성적을 기록하진 못하였다. UEFA 컵 위너스컵에는 단 세번을 출전하여 1987-88시즌의 8강이 최고기록이다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "lcup": 1
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/BSC_Young_Boys#Honours",
+  "lang": "ko",
+  "name_ko": "BSC 영 보이즈",
+  "qid": "Q190526",
+  "stadium": "스타드 드 스위스",
+  "title": "BSC 영 보이스",
+  "url": "https://ko.wikipedia.org/wiki/BSC_%EC%98%81_%EB%B3%B4%EC%9D%B4%EC%8A%A4"
  },
  "Bayer 04 Leverkusen": {
   "capacity": 30210,
@@ -519,6 +633,28 @@
   "title": "브라이턴 & 호브 앨비언 FC",
   "url": "https://ko.wikipedia.org/wiki/%EB%B8%8C%EB%9D%BC%EC%9D%B4%ED%84%B4_%26_%ED%98%B8%EB%B8%8C_%EC%95%A8%EB%B9%84%EC%96%B8_FC"
  },
+ "Burnley FC": {
+  "capacity": 22546,
+  "city": "번리",
+  "coach": "Nicky Hayen",
+  "en_title": "Burnley F.C.",
+  "extract": "번리 FC(Burnley Football Club)는 잉글랜드 번리에 연고로 하는 프로 축구 클럽으로 1882년에 창단하여 1888년에 설립된 풋볼 리그에 가입했다.\n1920-21 시즌과 1959-60 시즌에 1부리그 우승을 차지한 적이 있으며 1914년 리버풀을 꺾고 FA컵 우승도 차지했다. 또한 1부 리그에서 4부 리그까지 잉글랜드 프로 축구 모든 레벨에서의 우승 기록을 가지고 있는 5개의 클럽(포츠머스, 울버햄프턴, 프레스턴, 셰필드 유나이티드) 중 하나이기도 하며 유럽 대회에서의 최고 성적은 1960-61년 유러피언컵 (현 UEFA 챔피언스리그) 8강에 오른 것이다.\n1976년 강등 이후 하부 리그에서만 머물다 2008-09 시즌 풋볼 리그 챔피언십에서 5위를 기록하여 승격 플레이오프에 진출했고 셰필드 유나이티드를 꺾고 프리미어리그 승격에 성공한다. 그러나 2009-10 시즌 19위를 기록해 1시즌만에 강등되어 2013-14 시즌까지 풋볼 리그 챔피언십에 참여 했는데 그 후로 2014-15 시즌에 프리미어리그로 승격 하지만 2015-16 시즌 다시 풋볼 리그 챔피언십으로 강등 되었다. 2015-16 시즌 챔피언십에서 우승하면서 2016-17시즌 다시 프리미어리그로 복귀했다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "cup": 1,
+   "l2": 4,
+   "league": 2,
+   "super": 2
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/Burnley_F.C.#Honours",
+  "lang": "ko",
+  "name_ko": "번리 FC",
+  "nickname": "The Clarets",
+  "qid": "Q19458",
+  "stadium": "터프 무어",
+  "title": "번리 FC",
+  "url": "https://ko.wikipedia.org/wiki/%EB%B2%88%EB%A6%AC_FC"
+ },
  "CA Osasuna": {
   "capacity": 23576,
   "city": "팜플로나",
@@ -537,6 +673,24 @@
   "title": "CA 오사수나",
   "url": "https://ko.wikipedia.org/wiki/CA_%EC%98%A4%EC%82%AC%EC%88%98%EB%82%98"
  },
+ "CD Leganés": {
+  "capacity": 11454,
+  "city": "레가네스",
+  "coach": "Rubén Albés",
+  "en_title": "CD Leganés",
+  "extract": "CD 레가네스(CD Leganés)은 스페인 마드리드 지방 레가네스의 축구 클럽으로 2017-18 시즌 코파 델 레이에서 4강 진출이라는 구단 역사상 FA컵 역대 최고 성적을 거두었다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "l2": 1
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/CD_Legan%C3%A9s#Honours",
+  "lang": "ko",
+  "name_ko": "CD 레가네스",
+  "qid": "Q856119",
+  "stadium": "에스타디오 무니시팔 데 부타르케",
+  "title": "CD 레가네스",
+  "url": "https://ko.wikipedia.org/wiki/CD_%EB%A0%88%EA%B0%80%EB%84%A4%EC%8A%A4"
+ },
  "Cagliari Calcio": {
   "capacity": 16416,
   "city": "칼리아리",
@@ -552,6 +706,43 @@
   "stadium": "유니폴 도무스",
   "title": "칼리아리 칼초",
   "url": "https://ko.wikipedia.org/wiki/%EC%B9%BC%EB%A6%AC%EC%95%84%EB%A6%AC_%EC%B9%BC%EC%B4%88"
+ },
+ "Celtic FC": {
+  "capacity": 60355,
+  "city": "글래스고",
+  "coach": "마틴 오닐",
+  "en_title": "Celtic F.C.",
+  "extract": "셀틱 FC(Celtic Football Club)는 스코틀랜드 글래스고에 기반한진 프로 축구 구단이다. 1887년에 창단한 축구 구단으로 세계에서 가장 오래된 축구 구단 중 하나이다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "lcup": 22,
+   "ucl": 1
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/Celtic_F.C.#Honours",
+  "lang": "ko",
+  "name_ko": "셀틱 FC",
+  "qid": "Q19593",
+  "records": {
+   "paid": {
+    "club": "Bodø/Glimt",
+    "club_ko": "FK 보되/글림트",
+    "fee": "£11m",
+    "player": "Kasper Høgh",
+    "year": "2026"
+   },
+   "received": {
+    "club": "Brighton & Hove Albion",
+    "club_ko": "브라이턴 & 호브 앨비언 FC",
+    "fee": "£30m",
+    "player": "Matt O'Riley",
+    "player_ko": "맷 오라일리",
+    "year": "2024"
+   }
+  },
+  "records_url": "https://en.wikipedia.org/wiki/List_of_Celtic_F.C._records_and_statistics",
+  "stadium": "셀틱 파크",
+  "title": "셀틱 FC",
+  "url": "https://ko.wikipedia.org/wiki/%EC%85%80%ED%8B%B1_FC"
  },
  "Chelsea FC": {
   "capacity": 41875,
@@ -601,6 +792,22 @@
   "title": "첼시 FC",
   "url": "https://ko.wikipedia.org/wiki/%EC%B2%BC%EC%8B%9C_FC"
  },
+ "Clermont Foot 63": {
+  "capacity": 11980,
+  "city": "클레르몽페랑",
+  "coach": "David Guion",
+  "en_title": "Clermont Foot 63",
+  "extract": "클레르몽 푸트 오베르뉴 63(Clermont Foot Auvergne 63)는 1911년에 창단된 프랑스 클레르몽페랑의 축구 클럽으로, 현재 리그 2에서 활동하고 있다.",
+  "fetched": "2026-09-29",
+  "honours": {},
+  "honours_url": "https://en.wikipedia.org/wiki/Clermont_Foot_63#Honours",
+  "lang": "ko",
+  "name_ko": "클레르몽 푸트",
+  "qid": "Q870182",
+  "stadium": "Stade Gabriel Montpied",
+  "title": "클레르몽 푸트",
+  "url": "https://ko.wikipedia.org/wiki/%ED%81%B4%EB%A0%88%EB%A5%B4%EB%AA%BD_%ED%91%B8%ED%8A%B8"
+ },
  "Club Atlético de Madrid": {
   "capacity": 70813,
   "city": "마드리드",
@@ -625,6 +832,26 @@
   "stadium": "메트로폴리탄 스타디움",
   "title": "아틀레티코 마드리드",
   "url": "https://ko.wikipedia.org/wiki/%EC%95%84%ED%8B%80%EB%A0%88%ED%8B%B0%EC%BD%94_%EB%A7%88%EB%93%9C%EB%A6%AC%EB%93%9C"
+ },
+ "Club Brugge KV": {
+  "capacity": 29062,
+  "city": "브뤼허",
+  "coach": "이반 레코",
+  "en_title": "Club Brugge KV",
+  "extract": "클뤼프 브뤼허 KV(네덜란드어: Club Brugge Koninklijke Voetbalvereniging)는 벨기에의 축구 클럽으로 브뤼허에 연고를 두고 있다. 이 팀은 1891년에 창단되었고 홈 경기장은 얀 브레이델 경기장으로 약 3만명을 수용할 수 있다.\n최대의 라이벌인 안데를레흐트 다음으로 많은 19번의 벨기에 프로리그 챔피언 자리에 올랐고 같은 지역을 연고로 하는 세르클러 브뤼허 KSV와 홈 경기장을 공유하며 두 팀 간의 경기를 브뤼허 더비라고 부른다.\n클뤼프 브뤼허는 벨기에 클럽 가운데 유러피언컵 (현재의 UEFA 챔피언스리그) 결승에 올라간 유일한 팀으로 1977-78 시즌의 결승전에서 리버풀에 1-0으로 패하였다. 또한 1975-76시즌의 UEFA컵 결승에도 올라갔는데 이 때에도 리버풀에 합계 4-3으로 패하였다. 클뤼프 브뤼허는 UEFA컵에 16회 연속으로 참가한 기록을 지니고 있다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "l2": 285,
+   "league": 1461,
+   "super": 18
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/Club_Brugge_KV#Honours",
+  "lang": "ko",
+  "name_ko": "클뤼프 브뤼허 KV",
+  "qid": "Q190916",
+  "stadium": "얀 브레이덜 스타디온",
+  "title": "클뤼프 브뤼허 KV",
+  "url": "https://ko.wikipedia.org/wiki/%ED%81%B4%EB%A4%BC%ED%94%84_%EB%B8%8C%EB%A4%BC%ED%97%88_KV"
  },
  "Como 1907": {
   "capacity": 13602,
@@ -724,6 +951,25 @@
   "title": "크리스털 팰리스 FC",
   "url": "https://ko.wikipedia.org/wiki/%ED%81%AC%EB%A6%AC%EC%8A%A4%ED%84%B8_%ED%8C%B0%EB%A6%AC%EC%8A%A4_FC"
  },
+ "Cádiz CF": {
+  "capacity": 26000,
+  "city": "카디스",
+  "coach": "알베르트 셀라데스",
+  "en_title": "Cádiz CF",
+  "extract": "카디스 CF(Cádiz Club de Fútbol, S.A.D.)는 스페인 안달루시아 지방의 도시 카디스를 연고로 하는 축구 클럽이다. 이 클럽은 1910년에 창단 되었으며 현재 세군다 디비시온에서 활동하고 있다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "l2": 9,
+   "league": 6
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/C%C3%A1diz_CF#Honours",
+  "lang": "ko",
+  "name_ko": "카디스 CF",
+  "qid": "Q460448",
+  "stadium": "에스타디오 누에보 미란디야",
+  "title": "카디스 CF",
+  "url": "https://ko.wikipedia.org/wiki/%EC%B9%B4%EB%94%94%EC%8A%A4_CF"
+ },
  "Deportivo Alavés": {
   "capacity": 19840,
   "city": "비토리아",
@@ -817,6 +1063,24 @@
   "stadium": "에스타디오 마누엘 마르티네스 발레로",
   "title": "엘체 CF",
   "url": "https://ko.wikipedia.org/wiki/%EC%97%98%EC%B2%B4_CF"
+ },
+ "Empoli FC": {
+  "capacity": 19847,
+  "city": "엠폴리",
+  "coach": "Fabio Caserta",
+  "en_title": "Empoli FC",
+  "extract": "엠폴리 풋볼 클래브(이탈리아어: Empoli Football Club S.p.A.)는 토스카나주 엠폴리에 위치한 스타디오 카를로 카스텔라니 경기장을 근거로 하는 이탈리아의 축구 클럽이고 1920년에 창단 되었으며 1921년에 첫 경기를 치렀다.\n팀은 최근 10년간을 세리에 A와 세리에 B 사이를 왔다 갔다를 하며 대부분의 시간을 보냈다. 가장 최근에는 엠폴리가 2004년에 강등 되었지만 다음 시즌에 세리에 A로의 승격권을 확보 했으며 세리에 B에서 1위를 하고 승격 후에 리그에서 7위를 기록하여 클럽 역사상 첫 유럽 대항전 출전권을 획득했다. 엠폴리는 2013-14 시즌에 리보르노에게 승격 플레이오프 결승전에서 패배한 이후 팔레르모에 뒤를 이어 준우승을 차지하며 2014-15 시즌 세리에 A 승격권을 확보했다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "l2": 3
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/Empoli_FC#Honours",
+  "lang": "ko",
+  "name_ko": "엠폴리 FC",
+  "qid": "Q6703",
+  "stadium": "스타디오 카를로 카스텔라니",
+  "title": "엠폴리 FC",
+  "url": "https://ko.wikipedia.org/wiki/%EC%97%A0%ED%8F%B4%EB%A6%AC_FC"
  },
  "Everton FC": {
   "capacity": 52769,
@@ -987,6 +1251,25 @@
   "title": "FC 인테르나치오날레 밀라노",
   "url": "https://ko.wikipedia.org/wiki/FC_%EC%9D%B8%ED%85%8C%EB%A5%B4%EB%82%98%EC%B9%98%EC%98%A4%EB%82%A0%EB%A0%88_%EB%B0%80%EB%9D%BC%EB%85%B8"
  },
+ "FC København": {
+  "capacity": 38065,
+  "city": "코펜하겐",
+  "coach": "Jacob Neestrup",
+  "en_title": "F.C. Copenhagen",
+  "extract": "FC 코펜하겐(덴마크어: Football Club København, 발음 [kʰøpm̩ˈhɑwˀn]) 또는 FC 쾨벤하운(덴마크어: FC København)은 코펜하겐을 연고지로 하는 덴마크 축구 클럽이다.\nFC 코펜하겐은 덴마크 축구 선수권 대회에서 15번의 공동 기록과 9번의 덴마크 컵에서 우승했다. 유럽 축구에서 FC 코펜하겐은 다른 어떤 덴마크 클럽보다도 UEFA 챔피언스리그와 UEFA 유로파리그의 조별 리그에 더 많이 진출했으며, 챔피언스리그의 토너먼트 단계에 진출한 유일한 덴마크 클럽이다. 2022년 12월, 기준으로 코펜하겐은 UEFA 팀 순위 목록에서 가장 높은 순위를 차지한 스칸디나비아 클럽이다.\n코펜하겐은 덴마크 국가대표팀 경기가 열리는 파르켄에서 경기를 치른다. FCK는 창단 이후 브뢴비 IF와 치열한 라이벌 관계를 발전시켜 왔다. 양측의 코펜하겐 더비 경기는 덴마크 축구 역사상 가장 많은 관중을 끌어모았다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "lcup": 1,
+   "super": 3
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/F.C._Copenhagen#Honours",
+  "lang": "ko",
+  "name_ko": "FC 쾨벤하운",
+  "qid": "Q188430",
+  "stadium": "파르켄",
+  "title": "FC 코펜하겐",
+  "url": "https://ko.wikipedia.org/wiki/FC_%EC%BD%94%ED%8E%9C%ED%95%98%EA%B2%90"
+ },
  "FC Lorient": {
   "capacity": 18500,
   "city": "로리앙",
@@ -1005,6 +1288,86 @@
   "stadium": "Stade du Moustoir",
   "title": "FC 로리앙",
   "url": "https://ko.wikipedia.org/wiki/FC_%EB%A1%9C%EB%A6%AC%EC%95%99"
+ },
+ "FC Metz": {
+  "capacity": 26671,
+  "city": "메스",
+  "coach": "뤼크 홀츠",
+  "en_title": "FC Metz",
+  "extract": "풋볼 클뢰브 드 메스(Football Club de Metz)는 메스에 위치한 스타드 뮈니시팔 생 심포리앵 경기장을 홈 구장으로 하는 프랑스의 축구 클럽이다.\n이 축구단은 1932년에 창단 되었으며 1987년 포항제철 아톰즈와 자매 결연을 맺었고 그 해 6월 24일(포항), 6월 26일(잠실) 친선 경기를 벌였다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "cup": 2,
+   "l2": 4,
+   "lcup": 2
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/FC_Metz#Honours",
+  "lang": "ko",
+  "name_ko": "FC 메스",
+  "qid": "Q221525",
+  "stadium": "Stade Saint-Symphorien",
+  "title": "FC 메스",
+  "url": "https://ko.wikipedia.org/wiki/FC_%EB%A9%94%EC%8A%A4"
+ },
+ "FC Nantes": {
+  "capacity": 35318,
+  "city": "라샤펠쉬르에르드르",
+  "coach": "Grégory Poirier",
+  "en_title": "FC Nantes",
+  "extract": "풋볼 클뢰브 드 낭트(프랑스어: Football Club de Nantes)는 프랑스의 축구 클럽으로 루아르아틀랑티크주 낭트를 연고로 하며, 현재 리그 2에서 경기하고 있다. 인상적인 역사가 있는 클럽 가운데 하나로, 프랑스 축구에선 리그 1에서 8번의 우승, 쿠프 드 프랑스에서 3번의 우승 경력을 가지고 있다. 그와 더불어 유럽 무대에선 UEFA컵 위너스컵 1979-1980과 UEFA 챔피언스리그 1995-96에서 준결승전까지 오른 적이 있다.\n또한 이 팀의 유스 시스템에서 성장한 선수로는 마르셀 드사이, 디디에 데샹, 크리스티앙 카랑뵈, 이용재와 같은 선수들이 있다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "cup": 4,
+   "lcup": 1,
+   "league": 8,
+   "super": 3
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/FC_Nantes#Honours",
+  "lang": "ko",
+  "name_ko": "FC 낭트",
+  "qid": "Q192071",
+  "stadium": "스타드 드 라 보주아르",
+  "title": "FC 낭트",
+  "url": "https://ko.wikipedia.org/wiki/FC_%EB%82%AD%ED%8A%B8"
+ },
+ "FC Porto": {
+  "capacity": 50033,
+  "city": "포르투",
+  "coach": "Francesco Farioli",
+  "en_title": "FC Porto",
+  "extract": "푸트볼 클루브 두 포르투(Futebol Clube do Porto, 유로넥스트: FCP) 또는 흔히 알려진 FC 포르투, 포르투, 혹은 FCP는 북부 포르투갈의 포르투를 연고로 한 종합 스포츠 클럽이다. 다른 스포츠 영역에서도 성공적인 모습을 보이는 포르투이지만, 포르투는 축구 팀으로 더 유명하다. 1893년 9월 28일 창단되어, 현재 SL 벤피카, 스포르팅 CP와 더불어 \"트레스 그랑드스\" (Três Grandes, 빅3)중 하나로, 이 두 클럽과 라이벌 관계를 가진다. 포르투의 서포터들은 \"포르티스타\" (Portistas) 혹은 \"용\" (Dragões)으로 불린다.\n포르투갈 클럽으로는 국제대회에서 가장 성공적인 클럽 (포르투갈 클럽 최다 타이틀 개수, 총 7개)이며, 국내에서는 71개의 타이틀로, 81개의 타이틀을 가진 SL 벤피카에 이어 두 번째로 성공적인 클럽이다.\n국내 리그에서는, 포르투갈 리가 7연패의 기록을 가지고 있고, 현재 29개의 리그 타이틀을 가지고 있다. 다른 국내 타이틀로는 타사 드 포르투갈 17회 우승과, 수페르타사 칸디두 드 올리베이라 21회 우승의 타이틀을 가지고 있다. FC 포르투는 2010/11시즌 리그 30경기를 무패 우승의 업적을 이뤄내어, 무패로 리그를 마친 두 팀 중에 하나로 기록되었다. (다른 팀은 1972-73시즌의 SL 벤피카) 2010-11 시즌, FC 포르투는 2위 SL 벤피카와 21점의 승점 격차를 내며, 2위와의 최다 승점격차를 낸 우승으로 기록되었다.\n포르투는 국제적으로도 명성이 높은 팀으로, 포르투갈 최다인 7개의 국제 타이틀을 보유하고 있다: 1986-87 유로피언 컵, 1987년 인터콘티넨털컵, 1987년 UEFA 슈퍼컵 (포르투갈 유일의 UEFA 슈퍼컵 타이틀)을 획득하여 3개의 국제대회 타이틀을 한번에 거미쥔 몇 안되는 클럽임과 동시에, 포르투갈 유일의 클럽이다. 2002-03 UEFA 컵, 2003-04 UEFA 챔피언스리그, 2004년 인터콘티넨털컵 (포르투갈 내에서는 FC 포르투만이 인터콘티넨털컵 타이틀을 가지고 있다.), 그리고 UEFA 유로파리그 2010-11 (포르투갈의 첫 UEFA 유로파리그 타이틀)이다. 더 나아가서, 포르투는 1983-84 UEFA 컵 위너스 컵에서 준우승을 거두었고, 2003년 UEFA 슈퍼컵과 2004년 UEFA 슈퍼컵에서도 준우승을 거두었다.\nFC 포르투는 1933년 포르투갈 리가의 원년 멤버로, SL 벤피카, 스포르팅 CP와 더불어 항상 1부리그를 지켰다. FC 포르투는 현재 해체된 G-14의 원년 회원임과 동시에 포르투갈 유일클럽었고, 현재 유럽 클럽 협회의 원년 회원이었다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "ucl": 2,
+   "uel": 2,
+   "usc": 1,
+   "world": 2
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/FC_Porto#Honours",
+  "lang": "ko",
+  "name_ko": "FC 포르투",
+  "qid": "Q128446",
+  "stadium": "이스타디우 두 드라강",
+  "title": "FC 포르투",
+  "url": "https://ko.wikipedia.org/wiki/FC_%ED%8F%AC%EB%A5%B4%ED%88%AC"
+ },
+ "FC Red Bull Salzburg": {
+  "capacity": 31895,
+  "city": "잘츠부르크",
+  "coach": "Danny Röhl",
+  "en_title": "FC Red Bull Salzburg",
+  "extract": "FC 레드불 잘츠부르크(Fußball Club Red Bull Salzburg)는 잘츠부르크를 연고로 하는 오스트리아의 축구 클럽이다. 홈 구장은 레드불 아레나이고 스폰서 제한으로 FC 잘츠부르크라는 이름으로도 알려져있으며 UEFA 주관 대회에서는 수정된 문양이 새겨진 유니폼을 입는다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "league": 17
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/FC_Red_Bull_Salzburg#Honours",
+  "lang": "ko",
+  "name_ko": "FC 레드불 잘츠부르크",
+  "qid": "Q994811",
+  "stadium": "레드불 아레나",
+  "title": "FC 레드불 잘츠부르크",
+  "url": "https://ko.wikipedia.org/wiki/FC_%EB%A0%88%EB%93%9C%EB%B6%88_%EC%9E%98%EC%B8%A0%EB%B6%80%EB%A5%B4%ED%81%AC"
  },
  "FC Schalke 04": {
   "capacity": 62271,
@@ -1027,6 +1390,135 @@
   "stadium": "펠틴스 아레나",
   "title": "FC 샬케 04",
   "url": "https://ko.wikipedia.org/wiki/FC_%EC%83%AC%EC%BC%80_04"
+ },
+ "FC St. Pauli 1910": {
+  "capacity": 29546,
+  "city": "함부르크",
+  "coach": "Marcel Rapp",
+  "en_title": "FC St. Pauli",
+  "extract": "FC 장크트파울리(Fußball-Club St. Pauli)는 독일 함부르크의 축구 클럽으로, 현재 2. 분데스리가에서 활동하고 있다. 구단 명칭의 장크트파울리는 함부르크 내의 지역명이다. FC 장크트파울리는 축구 외에도 럭비와 미식축구, 야구와 볼링, 권투와 체스, 사이클과 핸드볼, 스키틀과 소프트볼, 탁구 등 다른 스포츠 팀도 운영하고 있다. 이 팀은 2002-03 2 푸스볼-분데스리가에서 17위를 기록하면서 당시 독일의 3부 리그였던 레기오날리가 북부 리그로 강등당했다. 그 후 2006-07 레기오날리가 북부 리그에서 1위를 차지하면서 2. 분데스리가로 승격되었으며 2009-10 시즌에서 2위를 차지하면서 분데스리가로 승격되었다. 그러나 분데스리가 2010-11에서 18위를 기록하면서 다시 2. 분데스리가로 강등되었다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "l2": 6
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/FC_St._Pauli#Honours",
+  "lang": "ko",
+  "name_ko": "FC 장크트파울리",
+  "qid": "Q6463",
+  "stadium": "Millerntor-Stadion",
+  "title": "FC 장크트파울리",
+  "url": "https://ko.wikipedia.org/wiki/FC_%EC%9E%A5%ED%81%AC%ED%8A%B8%ED%8C%8C%EC%9A%B8%EB%A6%AC"
+ },
+ "FK Bodø/Glimt": {
+  "capacity": 7354,
+  "city": "보되",
+  "coach": "Kjetil Knutsen",
+  "en_title": "FK Bodø/Glimt",
+  "extract": "FK 보되/글림트(FK Bodø/Glimt)는 1916년 9월 19일에 창단된 노르웨이 보되의 축구 클럽이다.",
+  "fetched": "2026-09-29",
+  "honours": {},
+  "honours_url": "https://en.wikipedia.org/wiki/FK_Bod%C3%B8/Glimt#Honours",
+  "lang": "ko",
+  "name_ko": "FK 보되/글림트",
+  "qid": "Q478167",
+  "stadium": "Aspmyra Stadion",
+  "title": "FK 보되/글림트",
+  "url": "https://ko.wikipedia.org/wiki/FK_%EB%B3%B4%EB%90%98/%EA%B8%80%EB%A6%BC%ED%8A%B8"
+ },
+ "FK Crvena Zvezda": {
+  "capacity": 55538,
+  "city": "베오그라드",
+  "coach": "데얀 스탄코비치",
+  "en_title": "Red Star Belgrade",
+  "extract": "FK 츠르베나 즈베즈다(세르비아어: Фудбалски клуб Црвена звезда, Fudbalski Klub Crvena Zvezda)는 베오그라드를 연고로 하는 세르비아의 축구 클럽이다. 클럽 이름의 츠르베나 즈베즈다는 세르비아어로 \"붉은 별\"을 뜻하며 영어 이름 레드 스타 베오그라드(Red Star Belgrade)라는 이름으로 불리기도 한다.\n이 팀들의 서포터들은 영웅을 의미하는 델리예(Delije)로 불리는데 세르비아 내 라이벌은 같은 베오그라드를 연고로 두는 파르티잔 베오그라드와 OFK 베오그라드가 있다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "lcup": 1,
+   "super": 2,
+   "ucl": 1,
+   "world": 1
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/Red_Star_Belgrade#Honours",
+  "lang": "ko",
+  "name_ko": "FK 츠르베나 즈베즈다",
+  "qid": "Q173009",
+  "stadium": "스타디온 츠르베나 즈베즈다",
+  "title": "FK 츠르베나 즈베즈다",
+  "url": "https://ko.wikipedia.org/wiki/FK_%EC%B8%A0%EB%A5%B4%EB%B2%A0%EB%82%98_%EC%A6%88%EB%B2%A0%EC%A6%88%EB%8B%A4"
+ },
+ "FK Kairat": {
+  "capacity": 5800,
+  "city": "아그담",
+  "coach": "Gurban Gurbanov",
+  "en_title": "Qarabağ FK",
+  "extract": "가라바흐 FK(아제르바이잔어: Qarabağ FK)는 아제르바이잔의 축구 팀이다. 이 팀은 1951년에 창립했으며, 현재 아제르바이잔 프리미어리그에 출전하고 있다. 원래 연고지는 아그담이지만 1993년 나고르노카라바흐 전쟁의 여파로 인해 바쿠로 옮기면서 오늘에 이른다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "league": 12
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/Qaraba%C4%9F_FK#Honours",
+  "lang": "ko",
+  "name_ko": "카라바흐 FK",
+  "qid": "Q723476",
+  "stadium": "Azersun Arena",
+  "title": "가라바흐 FK",
+  "url": "https://ko.wikipedia.org/wiki/%EA%B0%80%EB%9D%BC%EB%B0%94%ED%9D%90_FK"
+ },
+ "FK Shakhtar Donetsk": {
+  "capacity": 52518,
+  "city": "도네츠크",
+  "coach": "아르다 투란",
+  "en_title": "FC Shakhtar Donetsk",
+  "extract": "푸트볼니 클루브 샤흐타르 도네츠크(우크라이나어: Футбольний клуб Шахта́р Доне́цьк fʊdˈbolʲnɨj kɫup ʂäxˈtär doˈnɛt͡sʲk[*])는 도네츠크 시를 연고로 하는 우크라이나의 프로축구 클럽이다. 샤흐타르 도네츠크는 우크라이나에서 2번째로 큰 규모의 서포터를 보유하고 있다. 이 클럽은 돈바스 지역의 축구 팬들이 지지하는 유일한 클럽이기도 하다.\n샤흐타르는 여러 차례 유럽 대항전에 참가하였고, 현재 UEFA 챔피언스리그의 단골 참가팀이다. 이 클럽은 2009년에 유로파리그로 개칭 전의 마지막 UEFA컵을 우승하면서 독립 우크라이나에서는 최초로 유럽대항전을 우승하였다. FC 샤흐타르 도네츠크는 디나모 키이우와 더불어 UEFA 주요 대회에서 우승을 거둔 유이한 우크라이나 클럽들이다.\n클럽의 역사는 소련 축구 리그의 시작 당시로 거슬러 올라가며, 우크라이나에서 가장 오래된 클럽들 중 하나이다. 이 클럽은 소비에트 연방 스포츠 자원봉사회를 뜻하는 샤흐툐르(Shakhtyor)의 일원이었으며, 카라간다(카자흐스탄), 살리호르스크(벨라루스) 등등의 다른 소비에트 클럽들과 연계되었다. 소비에트 말기, 샤흐타르는 소비에트 연방 1부 리그의 중하위권 팀으로 취급되었고, 1961년과 1962년에 소비에트 컵을 두 차례 연속으로 우승한 컵 대회 전문 클럽이기도 하였다.\n이 팀은 다음 이름을 달고 존속하였었다: 스타하노베츠(Stakhanovets, 1936-1946), 샤흐툐르(Shakhtyor, 1946-1992), 그리고 FC 샤흐타르(1992-)",
+  "fetched": "2026-09-29",
+  "honours": {
+   "league": 16,
+   "super": 10,
+   "uel": 1
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/FC_Shakhtar_Donetsk#Honours",
+  "lang": "ko",
+  "name_ko": "FC 샤흐타르 도네츠크",
+  "qid": "Q172969",
+  "stadium": "돈바스 아레나",
+  "title": "FC 샤흐타르 도네츠크",
+  "url": "https://ko.wikipedia.org/wiki/FC_%EC%83%A4%ED%9D%90%ED%83%80%EB%A5%B4_%EB%8F%84%EB%84%A4%EC%B8%A0%ED%81%AC"
+ },
+ "Fenerbahçe SK": {
+  "capacity": 50530,
+  "city": "카디쾨이",
+  "coach": "이스마일 카르탈",
+  "en_title": "Fenerbahçe S.K. (football)",
+  "extract": "페네르바흐체 스포르 쿨뤼뷔(튀르키예어: Fenerbahçe Spor Kulübü, 페네르바흐체 스포츠 클럽)는 튀르키예 이스탄불을 연고로 하는 스포츠 클럽이다. 페네르바흐체는 이스탄불의 페네르바흐체 구역에 연고를 두고 있다. 이 구역의 이름과 스포츠 클럽은 그 지역에 위치한 등대에서 그 유래를 찾는다('페네르'는 튀르키예어로 등대를 의미하며, '바흐체'는 정원을 의미). 축구팀이 가장 유명하지만, 농구, 배구, 권투, 수영, 탁구등에도 팀을 운영한다. 페네르바흐체의 축구 팀은 현재 튀르키예 축구 리그의 1부 리그에 해당하는 쉬페르리그에서 경기를 치르고 있다. 페네르바흐체는 Sari Kanaryalar(노란 카나리아)라는 닉네임으로 불리며 그들의 홈 구장은 카드쾨이에 위치한 쉬크뤼 사라졸루 경기장이다. 2006년 10월 4일에, 페네르바흐체의 홈 구장 쉬크뤼 사라졸루 경기장은 UEFA의 수많은 시찰이 있은 뒤에 2009년 UEFA컵 결승전 개최 장소로 선정되었다. UEFA 챔피언스리그 2007-08 시즌에는 팀 역사상 최초로 챔피언스리그 8강에 진출하는 영광을 누렸다.",
+  "fetched": "2026-09-29",
+  "honours": {},
+  "honours_url": "https://en.wikipedia.org/wiki/Fenerbah%C3%A7e_S.K._%28football%29#Honours",
+  "lang": "ko",
+  "name_ko": "페네르바흐체 SK",
+  "qid": "Q6601875",
+  "stadium": "쉬크뤼 사라졸루 스타디움",
+  "title": "페네르바흐체 SK (축구)",
+  "url": "https://ko.wikipedia.org/wiki/%ED%8E%98%EB%84%A4%EB%A5%B4%EB%B0%94%ED%9D%90%EC%B2%B4_SK_(%EC%B6%95%EA%B5%AC)"
+ },
+ "Feyenoord Rotterdam": {
+  "capacity": 51577,
+  "city": "로테르담",
+  "coach": "지오바니 판 브롱크호르스트",
+  "en_title": "Feyenoord",
+  "extract": "페예노르트 로테르담(네덜란드어: Feyenoord Rotterdam)은 네덜란드의 로테르담을 연고로 하는 프로 축구 클럽으로, 에레디비시에 속해 있다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "ucl": 1,
+   "uel": 2,
+   "world": 1
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/Feyenoord#Honours",
+  "lang": "ko",
+  "name_ko": "페예노르트",
+  "qid": "Q134241",
+  "stadium": "스타디온 페예노르트",
+  "title": "페예노르트",
+  "url": "https://ko.wikipedia.org/wiki/%ED%8E%98%EC%98%88%EB%85%B8%EB%A5%B4%ED%8A%B8"
  },
  "Frosinone Calcio": {
   "capacity": 16227,
@@ -1084,6 +1576,46 @@
   "title": "풀럼 FC",
   "url": "https://ko.wikipedia.org/wiki/%ED%92%80%EB%9F%BC_FC"
  },
+ "GNK Dinamo Zagreb": {
+  "capacity": 60000,
+  "city": "자그레브",
+  "coach": "Mario Kovačević",
+  "en_title": "GNK Dinamo Zagreb",
+  "extract": "GNK 디나모 자그레브(Građanski nogometni klub Dinamo Zagreb)는 자그레브를 연고로 하는 크로아티아의 축구 클럽이다. 현재는 프르바 HNL에 참가하고 있다.\n클럽이 공식적으로 창단된 해는 1945년도지만 HŠK 그라잔스키 자그레브(HŠK Građanski Zagreb)를 전신으로 한다. 크로아티아에서는 HŠK 그라잔스키 자그레브가 창단된 날인 1911년 4월 26일부터 디나모 자그레브의 창단일로 본다. NK 자그레브와 라이벌 관계에 있다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "league": 26,
+   "super": 8
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/GNK_Dinamo_Zagreb#Honours",
+  "lang": "ko",
+  "name_ko": "GNK 디나모 자그레브",
+  "qid": "Q172803",
+  "stadium": "스타디온 마크시미르",
+  "title": "GNK 디나모 자그레브",
+  "url": "https://ko.wikipedia.org/wiki/GNK_%EB%94%94%EB%82%98%EB%AA%A8_%EC%9E%90%EA%B7%B8%EB%A0%88%EB%B8%8C"
+ },
+ "Galatasaray SK": {
+  "capacity": 52652,
+  "city": "이스탄불",
+  "coach": "오칸 부루크",
+  "en_title": "Galatasaray S.K. (football)",
+  "extract": "갈라타사라이 스포르 쿨뤼뷔(튀르키예어: Galatasaray Spor Kulübü)는 흔히 갈라타사라이(Galatasaray)로 알려진 튀르키예의 이스탄불을 연고로 하는 튀르키예의 프로 축구 클럽이다. 갈라타사라이 SK에 소속되어 있는 축구부이며 이 스포츠 클럽은 갈라타사라이 대학교와 갈라타사라이 고등학교와 더불어 갈라타사라이 공동체에 소속되어 있다.\n갈라타사라이는 46개의 국내대회 우승 타이틀을 보유하고 있는데 쉬페르리그를 역대 최다인 19회 튀르키예 쿠파스도 14회로 역대 최다 쉬페르쿠파도 13회로 최다 우승팀이다. 이스탄불 축구 리그가 해체되면서 1959년에 새로 출범한 쉬페르리그에서 모든 시즌에 개근한 세 개의 클럽들 중 하나이며 쉬페르리그 4연패 경험이 있는 유일한 클럽이다.\n국제대회에서 갈라타사라이는 2000년에 UEFA컵과 UEFA 슈퍼컵을 획득 하면서 유럽 대항전 타이틀을 획득한 첫 튀르키예팀이 되었고 1999-2000년 UEFA컵에서는 무패우승을 거두며 UEFA가 주관하는 주요 대회에서 무패우승을 거둔 몇 안되는 팀으로 기록되었다. 1999-2000 시즌에는 쉬페르리그 튀르키예 쿠파스 UEFA컵 UEFA 슈퍼컵을 모두 한 시즌안에 우승 하면서 쿼드러플을 달성 하였다. 갈라타사라이는 튀르키예 클럽 역사상 IFFHS 세계 랭킹 1위를 기록한 경험이 있는 유일한 클럽이다.\n2011년을 기점으로 갈라타사라이는 이스탄불의 세이란테프에 위치한 람스파크를 홈구장으로 사용한다. 그 전에 갈라타사라이는 알리 사미 옌 경기장을 홈으로 사용하였고 한때 베식타시 JK와 페네르바흐체 SK의 홈구장인 타크심 경기장이나 BJK 이뇌뉘 경기장을 공유하기도 하였다.\n갈라타사라이는 다른 이스탄불의 주요 클럽들인 베식타시 JK 페네르바흐체 SK와 라이벌 관계를 가지고 있다. 갈라타사라이와 페네르바흐체와의 더비는 이스탄불의 보스포루스 해협을 사이에 둔 유럽 연고팀(갈라타사라이)과 아시아 연고팀(페네르바흐체)간의 경기임에 따라 크탈라르 아라스 데르비 (대륙간 더비)로 명명되었다.\n갈라타사라이는 튀르키예에서 팬이 가장 많은 클럽이며 전 세계에 2,500만 명에 달하는 팬이 존재한다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "league": 15,
+   "super": 17,
+   "uel": 1,
+   "usc": 1
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/Galatasaray_S.K._%28football%29#Honours",
+  "lang": "ko",
+  "name_ko": "갈라타사라이 SK",
+  "qid": "Q495299",
+  "stadium": "튀르크 텔레콤 아레나",
+  "title": "갈라타사라이 SK (축구)",
+  "url": "https://ko.wikipedia.org/wiki/%EA%B0%88%EB%9D%BC%ED%83%80%EC%82%AC%EB%9D%BC%EC%9D%B4_SK_(%EC%B6%95%EA%B5%AC)"
+ },
  "Genoa CFC": {
   "capacity": 33205,
   "city": "제노바",
@@ -1119,6 +1651,40 @@
   "title": "헤타페 CF",
   "url": "https://ko.wikipedia.org/wiki/%ED%97%A4%ED%83%80%ED%8E%98_CF"
  },
+ "Girona FC": {
+  "capacity": 14624,
+  "city": "지로나",
+  "coach": "Quique Álvarez",
+  "en_title": "Girona FC",
+  "extract": "지로나 FC(Girona Futbol Club, S.A.D.)는 스페인 카탈루냐 지방의 도시 지로나를 연고로 하는 축구 클럽으로 현재 세군다 디비시온에서 활동하고 있다.",
+  "fetched": "2026-09-29",
+  "honours": {},
+  "honours_url": "https://en.wikipedia.org/wiki/Girona_FC#Honours",
+  "lang": "ko",
+  "name_ko": "지로나 FC",
+  "qid": "Q11945",
+  "stadium": "에스타디 무니시팔 데 몬틸리비",
+  "title": "지로나 FC",
+  "url": "https://ko.wikipedia.org/wiki/%EC%A7%80%EB%A1%9C%EB%82%98_FC"
+ },
+ "Granada CF": {
+  "capacity": 19436,
+  "city": "그라나다",
+  "coach": "Pacheta",
+  "en_title": "Granada CF",
+  "extract": "그라나다 클루브 데 푸트볼(스페인어: Granada Club de Fútbol)은 스페인 안달루시아 지방의 도시 그라나다를 연고로 하는 축구 클럽이다. 이 클럽은 1931년 4월 14일에 창단 되었으며 현재 세군다 디비시온에서 활동하고 있다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "l2": 4
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/Granada_CF#Honours",
+  "lang": "ko",
+  "name_ko": "그라나다 CF",
+  "qid": "Q8812",
+  "stadium": "누에보 에스타디오 데 로스 카르메네스",
+  "title": "그라나다 CF",
+  "url": "https://ko.wikipedia.org/wiki/%EA%B7%B8%EB%9D%BC%EB%82%98%EB%8B%A4_CF"
+ },
  "Hamburger SV": {
   "capacity": 57000,
   "city": "함부르크",
@@ -1140,6 +1706,44 @@
   "stadium": "폴크스파르크슈타디온",
   "title": "함부르거 SV",
   "url": "https://ko.wikipedia.org/wiki/%ED%95%A8%EB%B6%80%EB%A5%B4%EA%B1%B0_SV"
+ },
+ "Hellas Verona FC": {
+  "capacity": 31045,
+  "city": "베로나",
+  "coach": "Paolo Sammarco",
+  "en_title": "Hellas Verona FC",
+  "extract": "엘라스 베로나 풋볼 클레브(Hellas Verona Football Club S.p.A.)은 이탈리아 베네토주 베로나를 연고지로 하는 이탈리아의 축구 클럽이다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "l2": 3,
+   "league": 1
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/Hellas_Verona_FC#Honours",
+  "lang": "ko",
+  "name_ko": "엘라스 베로나 FC",
+  "qid": "Q8639",
+  "stadium": "스타디오 마르크안토니오 벤테고디",
+  "title": "엘라스 베로나 FC",
+  "url": "https://ko.wikipedia.org/wiki/%EC%97%98%EB%9D%BC%EC%8A%A4_%EB%B2%A0%EB%A1%9C%EB%82%98_FC"
+ },
+ "Holstein Kiel": {
+  "capacity": 15034,
+  "city": "킬",
+  "coach": "Tim Walter",
+  "en_title": "Holstein Kiel",
+  "extract": "홀슈타인 킬(독일어: Holstein Kiel)은 독일 슐레스비히홀슈타인주의 도시인 킬의 축구 클럽으로 현재 2. 분데스리가에 참가하고 있다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "l2": 1,
+   "league": 7
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/Holstein_Kiel#Honours",
+  "lang": "ko",
+  "name_ko": "홀슈타인 킬",
+  "qid": "Q157828",
+  "stadium": "Holstein-Stadion",
+  "title": "홀슈타인 킬",
+  "url": "https://ko.wikipedia.org/wiki/%ED%99%80%EC%8A%88%ED%83%80%EC%9D%B8_%ED%82%AC"
  },
  "Hull City AFC": {
   "capacity": 25400,
@@ -1224,6 +1828,25 @@
   "title": "유벤투스 FC",
   "url": "https://ko.wikipedia.org/wiki/%EC%9C%A0%EB%B2%A4%ED%88%AC%EC%8A%A4_FC"
  },
+ "LASK Linz": {
+  "capacity": 18000,
+  "city": "린츠",
+  "coach": "Dietmar Kühbauer",
+  "en_title": "LASK",
+  "extract": "LASK(독일어: Linzer Athletik-Sport-Klub 린처 아틀레티크-슈포르트-클루프[*])는 1908년 8월 7일에 창단된 오스트리아 린츠의 축구 클럽이다. 현재 오스트리아 분데스리가에서 활동하고 있다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "l2": 5,
+   "league": 2
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/LASK#Honours",
+  "lang": "ko",
+  "name_ko": "LASK",
+  "qid": "Q392310",
+  "stadium": "린처 슈타다온",
+  "title": "LASK",
+  "url": "https://ko.wikipedia.org/wiki/LASK"
+ },
  "Le Havre AC": {
   "capacity": 25178,
   "city": "르아브르",
@@ -1282,6 +1905,29 @@
   "stadium": "엘런드 로드",
   "title": "리즈 유나이티드 FC",
   "url": "https://ko.wikipedia.org/wiki/%EB%A6%AC%EC%A6%88_%EC%9C%A0%EB%82%98%EC%9D%B4%ED%8B%B0%EB%93%9C_FC"
+ },
+ "Leicester City FC": {
+  "capacity": 32261,
+  "city": "레스터",
+  "coach": "Gary Rowett",
+  "en_title": "Leicester City F.C.",
+  "extract": "레스터 시티 풋볼 클럽(영어: Leicester City Football Club, 레스터 시티 축구단)은 레스터를 연고지로 하는 잉글랜드의 프로축구 클럽이다. 현재 잉글랜드 축구의 2부리그 EFL 리그 원에 참가하고 있으며 2015-16 시즌에는 구단 역사상 처음으로 프리미어리그 우승을 기록했고 2020-21 시즌에는 첼시를 꺾어 구단 역사상 첫 번째 FA컵 우승을 달성했다. 풋볼 리그 컵에서는 3번 우승했고 풋볼 리그 챔피언십으로 개편되기 전의 2부 리그에서는 6회의 우승 기록을 가지고 있다.\n레스터 시티는 1884년에 레스터 파스(Leicester Fosse)라는 이름으로 만들어졌고, 파스 로드(Fosse Road) 근처의 경기장에서 경기를 하였다. 1891년에 필버트 스트리트(Filbert Street) 구장으로 옮겨 거의 111년간 홈구장으로 사용해왔다. 2002년에는 근처의 워커스 스타디움(Walkers Stadium)으로 옮겼고, 해당 구장은 2011년 구단 소유권 이전에 따라 킹 파워 스타디움으로 이름을 바꾸었다.\n현재 감독은 게리 로웻이며 주장은 히카르두 페레이라이다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "cup": 1,
+   "l2": 8,
+   "lcup": 3,
+   "league": 1,
+   "super": 2
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/Leicester_City_F.C.#Honours",
+  "lang": "ko",
+  "name_ko": "레스터 시티 FC",
+  "nickname": "The Foxes",
+  "qid": "Q19481",
+  "stadium": "킹 파워 스타디움",
+  "title": "레스터 시티 FC",
+  "url": "https://ko.wikipedia.org/wiki/%EB%A0%88%EC%8A%A4%ED%84%B0_%EC%8B%9C%ED%8B%B0_FC"
  },
  "Levante UD": {
   "capacity": 26354,
@@ -1368,6 +2014,44 @@
   "stadium": "안필드",
   "title": "리버풀 FC",
   "url": "https://ko.wikipedia.org/wiki/%EB%A6%AC%EB%B2%84%ED%92%80_FC"
+ },
+ "Luton Town FC": {
+  "capacity": 10356,
+  "city": "루턴",
+  "coach": "잭 윌셔",
+  "en_title": "Luton Town F.C.",
+  "extract": "루턴 타운 FC(영어: Luton Town Football Club, Luton Town F.C.)는 1885년 4월 11일에 창단된 잉글랜드 루턴의 축구 클럽이다. 현재, 2025-26 시즌에 EFL 리그 원에 참가하고 있다. 2009-10 시즌에서는 2위를 차지하였으나 승강 플레이오프에서 탈락하여 풋볼 리그 2에 참가하지 못했다. 또한 2010-11 시즌에서는 플레이오프 결승전까지 올랐지만, AFC 윔블던에게 승부차기까지 가는 접전 끝에 4:3으로 패배하여 강등 이후 2년 연속 프로 리그 승격에 실패하였다. 허나 2012-13 시즌에 FA컵 32강에서 노리치 시티를 꺾는 대이변을 일으키며 1986년 이후 최초로 아마추어 팀이 프로 1부 리그 팀을 이긴 기록을 세우게 되었다. 현재 홈구장은 케닐워스 로드 경기장이다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "l2": 1,
+   "lcup": 1,
+   "league": 2
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/Luton_Town_F.C.#Honours",
+  "lang": "ko",
+  "name_ko": "루턴 타운 FC",
+  "nickname": "The Ηatters",
+  "qid": "Q18520",
+  "records": {
+   "paid": {
+    "club": "Carlton Morris",
+    "fee": "£1.8m",
+    "player": "Barnsley F.C.",
+    "player_ko": "반즐리 FC",
+    "year": "2022"
+   },
+   "received": {
+    "club": "James Justin",
+    "fee": "£8m",
+    "player": "Leicester City",
+    "player_ko": "레스터 시티 FC",
+    "year": "2019"
+   }
+  },
+  "records_url": "https://en.wikipedia.org/wiki/List_of_Luton_Town_F.C._records_and_statistics",
+  "stadium": "Kenilworth Road",
+  "title": "루턴 타운 FC",
+  "url": "https://ko.wikipedia.org/wiki/%EB%A3%A8%ED%84%B4_%ED%83%80%EC%9A%B4_FC"
  },
  "Manchester City FC": {
   "capacity": 52900,
@@ -1461,6 +2145,26 @@
   "stadium": "올드 트래퍼드",
   "title": "맨체스터 유나이티드 FC",
   "url": "https://ko.wikipedia.org/wiki/%EB%A7%A8%EC%B2%B4%EC%8A%A4%ED%84%B0_%EC%9C%A0%EB%82%98%EC%9D%B4%ED%8B%B0%EB%93%9C_FC"
+ },
+ "Montpellier HSC": {
+  "capacity": 32900,
+  "city": "몽펠리에",
+  "coach": "주마나 카마라",
+  "en_title": "Montpellier HSC",
+  "extract": "몽펠리에 에로 스포르 클뢰브(프랑스어: Montpellier Hérault Sport Club)는 프랑스의 몽펠리에를 연고로 하는 리그 2의 축구 클럽이다. 본래의 클럽은 1919년에 창단되었지만 현재의 모습은 1974년 합병을 통해 세워진 것이다. 회장은 로랑 니콜랭(Laurent Nicollin)이며, 2009년 5월 29일] 홈 경기장 스타드 드 라 모송(Stade de la Mosson)에서 RC 스트라스부르를 2-1로 꺾고 리그 1 승격을 확정지었다.\n이 팀을 거쳐간 유명 선수로는 로랑 블랑, 에리크 캉토나, 카를로스 발데라마, 알료사 아사노비치, 로제 밀라, 올리비에 지루 등이 있다. 2011-12 시즌 모두의 예상을 깨고 첫 우승을 달성하며 이변의 주인공이 되었다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "cup": 2,
+   "l2": 3,
+   "league": 1
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/Montpellier_HSC#Honours",
+  "lang": "ko",
+  "name_ko": "몽펠리에 HSC",
+  "qid": "Q19513",
+  "stadium": "스타드 드 라 모송",
+  "title": "몽펠리에 HSC",
+  "url": "https://ko.wikipedia.org/wiki/%EB%AA%BD%ED%8E%A0%EB%A6%AC%EC%97%90_HSC"
  },
  "Málaga CF": {
   "capacity": 30778,
@@ -1612,6 +2316,59 @@
   "title": "올랭피크 드 마르세유",
   "url": "https://ko.wikipedia.org/wiki/%EC%98%AC%EB%9E%AD%ED%94%BC%ED%81%AC_%EB%93%9C_%EB%A7%88%EB%A5%B4%EC%84%B8%EC%9C%A0"
  },
+ "PAE AEK": {
+  "capacity": 16003,
+  "city": "아테네",
+  "coach": "Jacob Neestrup",
+  "en_title": "Panathinaikos F.C.",
+  "extract": "파나티나이코스 아틀리티코스 오밀로스(그리스어: Παναθηναϊκός Αθλητικός Όμιλος, \"범(汎)아테네 체육 클럽\")는 아테네를 연고로 하는 그리스의 프로 축구 클럽이다. 파나티나이코스는 \"범(汎)아테네\"로 해석이 된다.\n1908년에 창단된 이 클럽은 수페르리가 엘라다에 속해 있으며 가장 오래되었으며 동시에 가장 성공적인 그리스 축구 클럽으로 손꼽힌다. 이 클럽은 그리스 리그를 20차례 그리스 컵을 20차례 그리스 슈퍼컵을 5차례 (비공식 2회 공식 3회) 우승했으며, 1번의 트레블과 8차례 더블을 달성했다. 그 외에도 범그리스 리그 (1927년 이전에 개최된 알파 에트니키의 전신)을 6번 SEGAS 컵을 2번 우승했다. 파나티나이코스는 유럽대항전 성과를 기준으로 가장 성공적인 그리스 클럽이다. 파나티나이코스는 유럽피언컵 (UEFA 챔피언스리그의 전신) 결승전에 진출한 경험이 있는 유일한 그리스 클럽이며 준결승전에도 1984-85 시즌과 1995-96 시즌에 두 차례 진출했었다. 또한 1971년에 인터콘티넨털컵에 참가했던 유일한 그리스 클럽이기도 하다. 더 나아가서 UEFA 챔피언스리그에서 8강을 두 차례 더 (1991-92 시즌과 2001-02 시즌) 진출했고 UEFA컵 8강도 두 차례 (1987-88 시즌과 2002-03 시즌) 올랐다. 1977년 파나티나이코스는 발칸컵을 우승했다.\n다수의 연구 및 설문 조사 결과에 따르면 파나티나이코스는 그리스에서 두번째로 인기 있는 클럽이다.\n파나티나이코스 FC는 아테네를 연고로 하는 종합 스포츠 클럽인 파나티나이코스 아틀리티코스 오밀로스 (ΠΑΟ)의 축구 부서이다. 1979년 축구 부서는 프로팀이 되어 독립했다. 파나티나이코스는 홈경기를 전통적인 홈구장으로 간주되는 아포스톨로스 니콜라이디스 경기장에서 치렀다.\n클럽은 오랜 기간 동안 올림피아코스와 라이벌 관계를 유지하고 있으며 두 팀간의 더비전은 \"영원한 적들의 더비\"로 불린다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "super": 3
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/Panathinaikos_F.C.#Honours",
+  "lang": "ko",
+  "name_ko": "파나티나이코스 FC",
+  "qid": "Q4122219",
+  "stadium": "아포스톨로스 니콜라이디스 경기장",
+  "title": "파나티나이코스 FC",
+  "url": "https://ko.wikipedia.org/wiki/%ED%8C%8C%EB%82%98%ED%8B%B0%EB%82%98%EC%9D%B4%EC%BD%94%EC%8A%A4_FC"
+ },
+ "PSV": {
+  "capacity": 36500,
+  "city": "에인트호번",
+  "coach": "페터르 보스즈",
+  "en_title": "PSV Eindhoven",
+  "extract": "필립스 스포르트 퍼레이니힝(네덜란드어: Philips Sport Vereniging) 또는 필립스 스포츠 연합은 흔히 PSV 에인트호번 또는 PSV로 알려져 있으며, 네덜란드 노르트브라반트주 에인트호번에 근거지를 둔 축구 팀으로 1913년 8월 31일에 에인트호번에 본사를 둔 세계적 전자기기 업체인 필립스사의 직원들에 의해 창단되었다. 구단은 1956년 이후로부터 줄곧 네덜란드 최상위 리그인 에레디비시에서 활약하고 있다. 팬들은 스스로를 부런(네덜란드어: Boeren)이라고도 칭하며, 이는 농부들이라는 뜻을 지니고 있다. 구단의 연고지인 노르트브라반트주와 에인트호번은 대도시와 거리가 먼 곳인 만큼, 이 별칭은 팬들이 그들의 지역에 대한 자부심을 드러낸 것이다.\n네덜란드의 축구 리그인 에레디비시에서 AFC 아약스, 페예노르트와 함께 ‘빅3’로 불린다. 2017년 현재까지 총 23회의 리그 우승컵을 들어올렸으며, 1988년 현재의 UEFA 챔피언스리그의 전신인 유러피언컵에서 우승하였다.\n2004-05 시즌에는 리그 우승을 차지함과 동시에 UEFA 챔피언스리그에서 4강까지 진출하였지만 4강전에서 AC 밀란에게 원정 다득점 원칙에 의해 아쉽게 결승 진출이 좌절되기도 하였다. 2004-05 시즌부터 2007-08 시즌까지 리그 4연패를 달성한 후에는 7시즌 동안 우승컵을 들지 못하였으나 2014-15 시즌에는 우승, 2015-16 시즌에도 우승을 하며 리그 2연패를 달성하였다. 2017-18 시즌에는 아약스와의 경기에서 이기고 우승을 확정하였다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "ucl": 1,
+   "uel": 1
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/PSV_Eindhoven#Honours",
+  "lang": "ko",
+  "name_ko": "PSV 에인트호번",
+  "qid": "Q11938",
+  "stadium": "필립스 스타디온",
+  "title": "PSV 에인트호번",
+  "url": "https://ko.wikipedia.org/wiki/PSV_%EC%97%90%EC%9D%B8%ED%8A%B8%ED%98%B8%EB%B2%88"
+ },
+ "Paphos FC": {
+  "city": "파포스",
+  "coach": "Andreas Michaelides",
+  "en_title": "AEP Paphos FC",
+  "extract": "AEP Paphos (Greek: Αθλητική Ένωση Πάφος, Athlitiki Enosi Pafos; \"Athletic Union Paphos\") was a Cypriot football club based in Paphos. The club was formed in 2000 after the merger of the two clubs of Paphos, APOP and Evagoras. AEP Paphos was dissolved on 9 June 2014, in order to be merged with AEK Kouklia and create a new team, Pafos FC.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "l2": 2
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/AEP_Paphos_FC#Titles",
+  "lang": "en",
+  "name_ko": null,
+  "qid": "Q291559",
+  "title": "AEP Paphos FC",
+  "url": "https://en.wikipedia.org/wiki/AEP_Paphos_FC"
+ },
  "Paris FC": {
   "capacity": 20000,
   "city": "파리",
@@ -1695,6 +2452,24 @@
   "stadium": "스타디오 엔니오 타르디니",
   "title": "파르마 칼초 1913",
   "url": "https://ko.wikipedia.org/wiki/%ED%8C%8C%EB%A5%B4%EB%A7%88_%EC%B9%BC%EC%B4%88_1913"
+ },
+ "Qarabağ Ağdam FK": {
+  "capacity": 5800,
+  "city": "아그담",
+  "coach": "Gurban Gurbanov",
+  "en_title": "Qarabağ FK",
+  "extract": "가라바흐 FK(아제르바이잔어: Qarabağ FK)는 아제르바이잔의 축구 팀이다. 이 팀은 1951년에 창립했으며, 현재 아제르바이잔 프리미어리그에 출전하고 있다. 원래 연고지는 아그담이지만 1993년 나고르노카라바흐 전쟁의 여파로 인해 바쿠로 옮기면서 오늘에 이른다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "league": 12
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/Qaraba%C4%9F_FK#Honours",
+  "lang": "ko",
+  "name_ko": "카라바흐 FK",
+  "qid": "Q723476",
+  "stadium": "Azersun Arena",
+  "title": "가라바흐 FK",
+  "url": "https://ko.wikipedia.org/wiki/%EA%B0%80%EB%9D%BC%EB%B0%94%ED%9D%90_FK"
  },
  "RB Leipzig": {
   "capacity": 42000,
@@ -1793,6 +2568,26 @@
   "stadium": "에스타디 코르네야-엘 프라트",
   "title": "RCD 에스파뇰",
   "url": "https://ko.wikipedia.org/wiki/RCD_%EC%97%90%EC%8A%A4%ED%8C%8C%EB%87%B0"
+ },
+ "RCD Mallorca": {
+  "capacity": 25736,
+  "city": "팔마데마요르카",
+  "coach": "루이스 가르시아 페르난데스",
+  "en_title": "RCD Mallorca",
+  "extract": "RCD 마요르카(스페인어: Real Club Deportivo Mallorca)는 마요르카 섬에 있는 손 모시 경기장을 홈 구장으로 하는 스페인의 축구 클럽이다. 현재 감독은 하고바 아라사테이다.\n이 축구단은 1916년 창단되었다. 2002-03 코파 델 레이에서 우승을 차지했으며 최고 성적은 1998-99, 2000-01 시즌에서 기록한 3위이다. 현재 라리가에 속해 있다. 2009-10 시즌에서 5위를 차지해 유로파리그 진출권을 획득하였지만, 부채 문제로 인하여 참여하지 못하였다. 결국 부채 문제는 다음 시즌의 대재앙으로 이어졌다. 마지막 라운드까지 하위권을 맴돌았고 최종 라운드에서 아틀레티코 마드리드에 4-3으로 패해 1부리그 자력 잔류에 실패하였지만 발렌시아 CF가 데포르티보 라 코루냐를 2-0으로 꺾으며 간신히 강등을 면했다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "cup": 1,
+   "l2": 2,
+   "super": 1
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/RCD_Mallorca#Honours",
+  "lang": "ko",
+  "name_ko": "RCD 마요르카",
+  "qid": "Q8835",
+  "stadium": "이베로스타 에스타디오",
+  "title": "RCD 마요르카",
+  "url": "https://ko.wikipedia.org/wiki/RCD_%EB%A7%88%EC%9A%94%EB%A5%B4%EC%B9%B4"
  },
  "Racing Club de Lens": {
   "capacity": 38223,
@@ -1898,6 +2693,22 @@
   "title": "레알 마드리드 CF",
   "url": "https://ko.wikipedia.org/wiki/%EB%A0%88%EC%95%8C_%EB%A7%88%EB%93%9C%EB%A6%AC%EB%93%9C_CF"
  },
+ "Real Oviedo": {
+  "capacity": 30500,
+  "city": "Oviedo City",
+  "coach": "Julián Calero Fernández",
+  "en_title": "Real Oviedo",
+  "extract": "레알 오비에도(Real Oviedo)는 스페인의 축구 클럽으로, 아스투리아스 지방의 오비에도를 연고지로 한다. 현재 세군다 디비시온에 참가하고 있다.",
+  "fetched": "2026-09-29",
+  "honours": {},
+  "honours_url": "https://en.wikipedia.org/wiki/Real_Oviedo#Honours",
+  "lang": "ko",
+  "name_ko": "레알 오비에도",
+  "qid": "Q271574",
+  "stadium": "에스타디오 카를로스 타르티에레",
+  "title": "레알 오비에도",
+  "url": "https://ko.wikipedia.org/wiki/%EB%A0%88%EC%95%8C_%EC%98%A4%EB%B9%84%EC%97%90%EB%8F%84"
+ },
  "Real Racing Club de Santander": {
   "capacity": 21700,
   "city": "산탄데르",
@@ -1937,6 +2748,65 @@
   "title": "레알 소시에다드",
   "url": "https://ko.wikipedia.org/wiki/%EB%A0%88%EC%95%8C_%EC%86%8C%EC%8B%9C%EC%97%90%EB%8B%A4%EB%93%9C"
  },
+ "Real Valladolid CF": {
+  "capacity": 27618,
+  "city": "바야돌리드",
+  "coach": "프란 에스크리바",
+  "en_title": "Real Valladolid",
+  "extract": "레알 바야돌리드 CF(스페인어: Real Valladolid Club de Fútbol, S.A.D.)는 바야돌리드에 위치한 에스타디오 호세 소리야 경기장을 근거로 하는 스페인의 축구 클럽이다.\n이 축구단은 1928년 클루브 데포르티보 에스파뇰(Club Deportivo Español)과 레알 우니온 데포르티바(Real Unión Deportiva)를 통합하여 창단했고 현재 세군다 디비시온에 속해 있다.\n2006-07 시즌은 세군다 디비시온에서 1위로 마감하여 프리메라리가로 승격했고 2009-10 시즌에 18위로 강등 되었다가 2011-12시즌에서 세군다 디비시온 3위로 다시 승격했다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "l2": 5,
+   "lcup": 1,
+   "league": 1
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/Real_Valladolid#Honours",
+  "lang": "ko",
+  "name_ko": "레알 바야돌리드",
+  "qid": "Q10319",
+  "stadium": "에스타디오 호세 소리야",
+  "title": "레알 바야돌리드",
+  "url": "https://ko.wikipedia.org/wiki/%EB%A0%88%EC%95%8C_%EB%B0%94%EC%95%BC%EB%8F%8C%EB%A6%AC%EB%93%9C"
+ },
+ "Royal Antwerp FC": {
+  "capacity": 5350,
+  "city": "안트베르펜",
+  "en_title": "Royal Antwerp FC",
+  "extract": "로열 앤트워프 FC(Royal Antwerp Football Club)는 안트베르펜을 연고지로 하는 벨기에의 축구 클럽이다. 벨기에 왕립 축구 협회가 만들어지기 15년 전에, 안트베르펜에 거주하는 잉글랜드인 학생들이 1880년에 앤트워프 크리켓 클럽 (Antwerp Cricket Club)이라는 명칭으로 창단된, 앤트워프는 벨기에에서 가장 오래된 축구 팀으로 여겨진다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "l2": 2,
+   "league": 5,
+   "super": 1
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/Royal_Antwerp_FC#Honours",
+  "lang": "ko",
+  "name_ko": "로열 앤트워프 FC",
+  "qid": "Q732002",
+  "stadium": "Stadion Broodstraat",
+  "title": "로열 앤트워프 FC",
+  "url": "https://ko.wikipedia.org/wiki/%EB%A1%9C%EC%97%B4_%EC%95%A4%ED%8A%B8%EC%9B%8C%ED%94%84_FC"
+ },
+ "Royale Union Saint-Gilloise": {
+  "capacity": 5100,
+  "city": "생질",
+  "coach": "다비드 위베르",
+  "en_title": "Royale Union Saint-Gilloise",
+  "extract": "루아얄 위니옹 생질루아즈(Royale Union Saint-Gilloise)는 위니옹 SG(Union SG)로 불리기도 하며 벨기에 브뤼셀 수도권 지역의 생질에 기반을 둔 축구 클럽이다. 경기장은 인근 포레에 위치한 '스타드 조제프 마리앵'이다.\n위니옹 SG는 과거 벨기에 축구 역사에서 가장 성공적인 클럽 중 하나였지만 불과 2010년대 초반까지 아마추어 리그에 참가했다. 1904년부터 1935년까지 벨기에 1부 리그에서 11회 우승하며 2차 세계대전 전까지 벨기에의 대표 클럽이었다. 1933년부터 1935년까지 60경기 무패 행진을 기록했는데, 이는 현재까지도 깨지지 않은 벨기에 기록이다.\n팀의 상징색은 파란색과 노란색이며 전통적으로 브뤼셀의 플람스어와 프랑스어권 주민들에게 인기가 있다.\n2020-21 시즌 프록시무스 리그를 우승하며 58년만에 1부 리그로 승격했다. 승격 첫 해에는 곧바로 정규 리그에서 1위를 차지하며 승격팀으로서는 최초의 기록을 세웠다. 하지만 플레이오프에서 2위로 밀리며 준우승에 머물렀으나 UEFA 챔피언스리그 3차 예선 진출권을 따내면서 58년만에 유럽 대항전에 진출했다. 위니옹은 2022년, 2023년, 2024년에도 아쉽게 우승을 놓쳤지만, 2025년에는 90년 만의 리그 우승이라는 유럽 축구 역사상 가장 긴 우승 가뭄을 끝내며 12번째 리그 우승을 거머쥐었다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "l2": 4,
+   "league": 12,
+   "super": 2
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/Royale_Union_Saint-Gilloise#Honours",
+  "lang": "ko",
+  "name_ko": "로얄 위니옹 생질루아즈",
+  "qid": "Q196160",
+  "stadium": "Joseph Marien Stadium",
+  "title": "루아얄 위니옹 생질루아즈",
+  "url": "https://ko.wikipedia.org/wiki/%EB%A3%A8%EC%95%84%EC%96%84_%EC%9C%84%EB%8B%88%EC%98%B9_%EC%83%9D%EC%A7%88%EB%A3%A8%EC%95%84%EC%A6%88"
+ },
  "SC Freiburg": {
   "capacity": 24000,
   "city": "프라이부르크",
@@ -1968,6 +2838,40 @@
   "stadium": "Home Deluxe Arena",
   "title": "SC 파더보른 07",
   "url": "https://ko.wikipedia.org/wiki/SC_%ED%8C%8C%EB%8D%94%EB%B3%B4%EB%A5%B8_07"
+ },
+ "SK Slavia Praha": {
+  "capacity": 20800,
+  "city": "프라하",
+  "coach": "인드르지흐 트르피쇼프스키",
+  "en_title": "SK Slavia Prague",
+  "extract": "SK 슬라비아 프라하(체코어: Sportovní klub Slavia Praha 발음 [ˈslaːvɪja ˈpraɦa][*]))는 프라하를 연고로 하는 체코의 축구 클럽이다. 1993년에 분리 독립한 이후로, 두 번째로 가장 좋은 성적을 내고 있는 체코내 축구팀이다.\n슬라비아 프라하와 AC 스파르타 프라하간의 경기는 프라하 더비로 유명하며, 체코 축구에서 가장 중요한 더비이다.\n홈구장은 포르투나 아레나이다. 1892년 창단되었다.",
+  "fetched": "2026-09-29",
+  "honours": {},
+  "honours_url": "https://en.wikipedia.org/wiki/SK_Slavia_Prague#Honours",
+  "lang": "ko",
+  "name_ko": "SK 슬라비아 프라하",
+  "qid": "Q194393",
+  "stadium": "에덴 아레나",
+  "title": "SK 슬라비아 프라하",
+  "url": "https://ko.wikipedia.org/wiki/SK_%EC%8A%AC%EB%9D%BC%EB%B9%84%EC%95%84_%ED%94%84%EB%9D%BC%ED%95%98"
+ },
+ "SK Sturm Graz": {
+  "capacity": 15400,
+  "city": "그라츠",
+  "coach": "Fabio Ingolitsch",
+  "en_title": "SK Sturm Graz",
+  "extract": "SK 슈투름 그라츠(SK Sturm Graz)는 1909년에 창단된 오스트리아 슈타이어마르크주 그라츠의 축구 클럽으로, 현재 오스트리아 분데스리가에서 활동하고 있다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "league": 5
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/SK_Sturm_Graz#Honours",
+  "lang": "ko",
+  "name_ko": "SK 슈투름 그라츠",
+  "qid": "Q124007617",
+  "stadium": "Merkur Arena",
+  "title": "SK 슈투름 그라츠",
+  "url": "https://ko.wikipedia.org/wiki/SK_%EC%8A%88%ED%88%AC%EB%A6%84_%EA%B7%B8%EB%9D%BC%EC%B8%A0"
  },
  "SS Lazio": {
   "capacity": 70634,
@@ -2029,6 +2933,24 @@
   "title": "SV 엘페르스베르크",
   "url": "https://ko.wikipedia.org/wiki/SV_%EC%97%98%ED%8E%98%EB%A5%B4%EC%8A%A4%EB%B2%A0%EB%A5%B4%ED%81%AC"
  },
+ "SV Darmstadt 98": {
+  "capacity": 19000,
+  "city": "다름슈타트",
+  "coach": "플로리안 코펠트",
+  "en_title": "SV Darmstadt 98",
+  "extract": "SV 다름슈타트 98(SV Darmstadt 98, (독일어 발음: [ˌdaʁmʃtat ʔaxtʔʊntˈnɔɪ̯nt͡sɪç] ( )))은 독일 헤센주 다름슈타트의 축구 클럽으로 현재 2. 분데스리가에 참가하고 있다. 1898년 5월 22일 FC 올림피아 다름슈타트(FC Olympia Darmstadt)라는 이름으로 창단 되었으며 1911년 다름슈타터 SC(Darmstädter SC)를 합병했다. 1978년과 1981년 푸스발-분데스리가에 참가하기도 했지만 레기오날리가로 강등된 이후부터 침체의 길을 걷게 된다. 2004년 오버리가 헤센 리그, 2008년 레기오날리가 남부 리그로 각각 승격 되었으며 2011년 3. 리가로 승격 되었다. 2014년 2부 리가, 2015년 1부 리그로 승격 되었고 2017년 2부 리그로 강등되었다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "l2": 3
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/SV_Darmstadt_98#Honours",
+  "lang": "ko",
+  "name_ko": "SV 다름슈타트 98",
+  "qid": "Q479351",
+  "stadium": "Stadion am Böllenfalltor",
+  "title": "SV 다름슈타트 98",
+  "url": "https://ko.wikipedia.org/wiki/SV_%EB%8B%A4%EB%A6%84%EC%8A%88%ED%83%80%ED%8A%B8_98"
+ },
  "SV Werder Bremen": {
   "capacity": 42500,
   "city": "브레멘",
@@ -2052,6 +2974,24 @@
   "title": "SV 베르더 브레멘",
   "url": "https://ko.wikipedia.org/wiki/SV_%EB%B2%A0%EB%A5%B4%EB%8D%94_%EB%B8%8C%EB%A0%88%EB%A9%98"
  },
+ "Sabah FK": {
+  "capacity": 13000,
+  "city": "바쿠",
+  "coach": "Valdas Dambrauskas",
+  "en_title": "Sabah FK (Azerbaijan)",
+  "extract": "Sabah Futbol Klubu (pronounced [sɑbɑh], lit. 'Tomorrow Football Club') is a professional football club based in Masazir, Azerbaijan. The team has played in the Azerbaijan Premier League, the top tier of Azerbaijani football league system, since the 2018–19 season. Its home ground is the Bank Respublika Arena in Masazir.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "league": 1
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/Sabah_FK_%28Azerbaijan%29#Honours",
+  "lang": "en",
+  "name_ko": null,
+  "qid": "Q43082535",
+  "stadium": "Bank Respublika Arena",
+  "title": "Sabah FK (Azerbaijan)",
+  "url": "https://en.wikipedia.org/wiki/Sabah_FK_(Azerbaijan)"
+ },
  "Sevilla FC": {
   "capacity": 43751,
   "city": "세비야",
@@ -2074,6 +3014,112 @@
   "stadium": "에스타디오 라몬 산체스 피스후안",
   "title": "세비야 FC",
   "url": "https://ko.wikipedia.org/wiki/%EC%84%B8%EB%B9%84%EC%95%BC_FC"
+ },
+ "Sheffield United FC": {
+  "city": "셰필드",
+  "en_title": "Sheffield F.C.",
+  "extract": "셰필드 FC(Sheffield F.C.)는 잉글랜드 셰필드를 연고로 하는 축구 클럽으로 1857년 창단되어 FIFA에 의해 세계에서 가장 오래된 축구 클럽으로 인정 받고 있다. 현재 잉글랜드 8부리그에 있다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "lcup": 3,
+   "league": 1
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/Sheffield_F.C.#Honours",
+  "lang": "ko",
+  "name_ko": "셰필드 FC",
+  "nickname": "The Club",
+  "qid": "Q18491",
+  "title": "셰필드 FC",
+  "url": "https://ko.wikipedia.org/wiki/%EC%85%B0%ED%95%84%EB%93%9C_FC"
+ },
+ "Southampton FC": {
+  "capacity": 32589,
+  "city": "사우샘프턴",
+  "coach": "Tonda Eckert",
+  "en_title": "Southampton F.C.",
+  "extract": "사우샘프턴 축구 클럽(영어: Southampton Football Club)은 잉글랜드의 프로 축구 팀으로 잉글랜드 남부의 햄프셔주에 있는 사우샘프턴을 연고지로 하고 있다. 2005년에 프리미어리그에서 강등된 이후로 풋볼 리그 챔피언십에서 플레이하였으나, 2009년에 풋볼 리그 1으로 강등되었다. 그러나 2011년에 다시 챔피언십으로 승격하고, 2011-12 시즌 풋볼 리그 챔피언십에서 준우승을 하면서 프리미어리그로 다시 승격했다. 그리고 2022-23 시즌에 프리미어리그에서 최하위인 20위를 기록하면서 강등되었다. 그러나 2023-24시즌 EFL 촘피언십에서 리그 4위를 기록하며 플레이오프를 거쳐 바로 승격에 성공하였다.\n홈구장은 세인트 메리스 스타디움으로, 2001년에 더 델에서 이전하였다. 클럽의 별칭은 성인들이란 뜻의 세인츠(영어: Saints)로, 1885년에 창단된 클럽의 모태가 교회 축구 팀이었던 것에서 유래되었다. 당시 이름은 세인트 메리스 청년 협회로 그때부터 빨간색과 하얀색의 유니폼을 입기 시작하였다. 클럽의 오래된 라이벌로는 포츠머스가 있으며, 두 팀 모두 남해안에 인접해 있기 때문이다. 두 팀의 더비 경기를 남해안 더비라고 부른다.\n사우샘프턴은 1976년에 FA컵 1회 우승 기록이 있고, 리그 최고 성적은 1부 디비전 준우승이다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "cup": 1
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/Southampton_F.C.#Honours",
+  "lang": "ko",
+  "name_ko": "사우샘프턴 FC",
+  "nickname": "The Saints",
+  "qid": "Q18732",
+  "stadium": "세인트 메리스 스타디움",
+  "title": "사우샘프턴 FC",
+  "url": "https://ko.wikipedia.org/wiki/%EC%82%AC%EC%9A%B0%EC%83%98%ED%94%84%ED%84%B4_FC"
+ },
+ "Sport Lisboa e Benfica": {
+  "capacity": 68100,
+  "city": "리스본",
+  "coach": "마르쿠 실바",
+  "en_title": "S.L. Benfica",
+  "extract": "스포르트 리스보아 이 벤피카(포르투갈어: Sport Lisboa e Benfica; 유로넥스트: SLBEN), 혹은 단순하게 줄여서 벤피카(Benfica) 또는 벤피카 리스본(Benfica Lisbon)은 리스본을 연고로 하는 포르투갈의 종합 스포츠 클럽이다. 그들은 다양한 스포츠 부를 두고 있지만, 벤피카는 축구팀으로 가장 유명하다. 1904년 2월 28일, 리스본에서 창단되어, 최대 라이벌들인 FC 포르투와 스포르팅 CP와 더불어 \"트레즈 그랑데즈\"(Três Grandes, 빅3)를 이루고 있다. 벤피카는 14만명에 달하는 클럽 회원을 보유하고 있다. 벤피카의 서포터들은 \"벤피퀴스타즈\" (Benfiquistas) 로 불린다. 벤피카는 IFFHS로부터 20세기 유럽 축구 클럽 중 9번째로 가장 성공적인 클럽으로 선정하였으며, FIFA로부터는 12번째 가장 성공적인 20세기 축구 클럽으로 선정되었다.\n현재 85개의 국내 타이틀을 보유하고 있으며, 이는 포르투갈 클럽팀 중 최다이다. 벤피카는 1933년, FC 포르투, 스포르팅 CP와 더불어 포르투갈 리그의 창단 멤버로, 이들과 더불어 2부리그 강등 경험이 전무하다.\n1904년 2월 28일, 스포르 리스보아 에 벤피카 (창단 당시 클럽명은 그루푸 스포르 리스보아 (Grupo Sport Lisboa, 리스본 스포츠 그룹) )는 리스본 서남부의 코스메 다미앙을 비롯한 젊은이 24명에 의해 창단되었다. 이 회의의 결과로, 포르투갈 최고 인기 클럽이자 가장 성공적인 클럽이 창단되었다.\n국내에서 벤피카는 38번의 리그, 26번의 FA컵, 7번의 리그컵, 8번의 슈퍼컵 우승을 경험하였다. 벤피카는 2010-11 시즌의 FC 포르투와 더불어 1972-73 시즌에 리그 최다 연승(29) 기록을 세우며 포르투갈 리가 30경기 무패우승을 경험한 팀이다.\n국제 대회에서, 벤피카는 1960-61 시즌과 1961-62 시즌에 UEFA 챔피언스리그 우승을 하였다. 그와 더불어 1961년과 1962년에 인터콘티넨털컵 준우승을 하였고, 1962–63, 1964–65, 1967-68, 1987–88, 그리고 1989-90 시즌에는 유러피언 컵 준우승을, 1982-83 시즌에는 UEFA 컵 준우승을 하였다.\n종합 스포츠 클럽임에 따라, 벤피카는 풋살, 농구, 롤러 하키, 핸드볼, 배구, 럭비, 사이클, 육상, 비치사커, 유도, 트라이애슬론, 수영, 권투, 체조, 탁구, 양궁, 골프 부도 운영하고 있다. 축구 클럽의 인기와 성공에 따라, 벤피카는 포르투갈 내의 \"트레즈 그랑데즈\" (벤피카, FC 포르투, 스포르팅 CP) 중에서 가장 많은 팬층을 보유하고 있다. 벤피카는 국제적으로도 많은 팬들을 보유하고 있다. 포르투갈 국경 밖의 안도라, 앙골라, 오스트레일리아, 벨기에, 브라질, 캐나다, 카보베르데, 크로아티아, 프랑스, 독일, 기니비사우, 영국, 룩셈부르크, 멕시코, 스위스, 네덜란드, 미국에 다수의 팬을 보유하고 있다. 현재, 벤피카는 포르투갈 팀 중 가장 많은 1400만명의 해외 팬들을 보유하고 있다.\n2006년 11월 9일, 벤피카는 가장 많은 유료 회원인 160,398명이 등록됨에 따라 기네스북에 등재되었다.\n2009년 9월 30일, 벤피카는 200,000 번째 유료 회원이 등록되었다고 발표되었다. 2004년 5월, 벤피카는 94,714 명에서 200,000 명으로 회원을 늘리기 위해 소시오 정책을 실시하였다. 그 결과로 5년 후, 벤피카는 기존의 94,714명의 회원에서 105,000 명이 넘는 신규 유료 회원을 추가하여, 회원수가 두 배 이상 증가하였다. 벤피카는 국제적으로 가장 영향력 있는 클럽으로 손꼽힌다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "ucl": 2
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/S.L._Benfica#Honours",
+  "lang": "ko",
+  "name_ko": "SL 벤피카",
+  "qid": "Q131499",
+  "records": {
+   "paid": {
+    "club": "Feyenoord",
+    "club_ko": "페예노르트",
+    "fee": "€25m",
+    "player": "Orkun Kökçü",
+    "player_ko": "오르쿤 쾩취",
+    "year": "2023"
+   },
+   "received": {
+    "club": "Atlético Madrid",
+    "club_ko": "아틀레티코 마드리드",
+    "fee": "€126m",
+    "player": "João Félix",
+    "player_ko": "주앙 펠릭스",
+    "year": "2019"
+   }
+  },
+  "records_url": "https://en.wikipedia.org/wiki/List_of_S.L._Benfica_records_and_statistics",
+  "stadium": "이스타디우 다 루스",
+  "title": "SL 벤피카",
+  "url": "https://ko.wikipedia.org/wiki/SL_%EB%B2%A4%ED%94%BC%EC%B9%B4"
+ },
+ "Sporting Clube de Braga": {
+  "capacity": 30286,
+  "city": "브라가",
+  "coach": "Carlos Vicens",
+  "en_title": "S.C. Braga",
+  "extract": "흔히 SC 브라가 또는 브라가로 불리는 스포르팅 클루브 드 브라가(Sporting Clube de Braga)는 포르투갈의 축구 클럽으로 1921년 1월 19일에 창단 되었다. 현재 프리메이라리가에 속해 있으며 포르투갈의 도시 브라가를 연고로 한다.",
+  "fetched": "2026-09-29",
+  "honours": {},
+  "honours_url": "https://en.wikipedia.org/wiki/S.C._Braga#Honours",
+  "lang": "ko",
+  "name_ko": "SC 브라가",
+  "qid": "Q75684",
+  "stadium": "이스타디우 무니시팔 드 브라가",
+  "title": "SC 브라가",
+  "url": "https://ko.wikipedia.org/wiki/SC_%EB%B8%8C%EB%9D%BC%EA%B0%80"
+ },
+ "Sporting Clube de Portugal": {
+  "capacity": 4000,
+  "city": "리스본",
+  "en_title": "Atlético Clube de Portugal",
+  "extract": "아틀레티코 클루베 데 포르투갈(Atlético Clube de Portugal)은 리스본, 정확히는 Alcântara 교구에 위치한 포르투갈 클럽이다. 1942년 9월 18일 Alcântara(Carcavelinhos Football Club)와 Santo Amaro(União Foot-Ball Lisboa)의 두 클럽이 합병하여 설립되었다. 축구 외에도 클럽에는 풋살 및 농구부도 존재한다. 과거에 클럽에는 필드 하키, 수영, 스포츠 낚시, 사이클 투어링, 탁구, 럭비, 배구, 체조, 트라이애슬론 및 핸드볼 또한 존재 했었다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "l2": 1
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/Atl%C3%A9tico_Clube_de_Portugal#Honours",
+  "lang": "ko",
+  "name_ko": "아틀레티코 클루베 데 포르투갈",
+  "qid": "Q757422",
+  "stadium": "Estádio da Tapadinha",
+  "title": "아틀레티코 클루베 데 포르투갈",
+  "url": "https://ko.wikipedia.org/wiki/%EC%95%84%ED%8B%80%EB%A0%88%ED%8B%B0%EC%BD%94_%ED%81%B4%EB%A3%A8%EB%B2%A0_%EB%8D%B0_%ED%8F%AC%EB%A5%B4%ED%88%AC%EA%B0%88"
  },
  "Stade Brestois 29": {
   "capacity": 15097,
@@ -2112,6 +3158,28 @@
   "stadium": "로아종 파르크",
   "title": "스타드 렌 FC",
   "url": "https://ko.wikipedia.org/wiki/%EC%8A%A4%ED%83%80%EB%93%9C_%EB%A0%8C_FC"
+ },
+ "Stade de Reims": {
+  "capacity": 21684,
+  "city": "Bétheny",
+  "coach": "Nicolas Usaï",
+  "en_title": "Stade de Reims",
+  "extract": "스타드 드 랭스(Stade de Reims) 또는 스타드 랭스(Stade Reims)는 랭스를 연고로 하는 프랑스의 축구 클럽이다. 1910년에 Société Sportive du Parc Pommery라는 이름으로 창단됐고 프랑스의 2부리그 리그 2에 참가하고 있다. 랭스는 연고지 내 오래된 경기장을 보수한 스타드 오귀스트 드로네를 홈 경기장으로 사용한다.\n랭스는 리그 1 6회 우승, 트로페 데 샹피옹 5회 우승, 쿠프 드 프랑스 2회 우승 등을 지닌 프랑스 내 가장 성공적인 클럽 중 하나이다. 또한 유럽 대항전 무대에서도 1953년 라틴컵 우승, 1956년, 1959년 유러피언컵 준결승, 1977년 코파 델레 알피 우승을 거두며 준수한 성적을 거뒀다. 그러나 1980년대 이래 정점을 찍은 이후 내리막이 시작됐다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "cup": 2,
+   "l2": 2,
+   "lcup": 1,
+   "league": 6,
+   "super": 4
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/Stade_de_Reims#Honours",
+  "lang": "ko",
+  "name_ko": "스타드 드 랭스",
+  "qid": "Q208228",
+  "stadium": "Stade Auguste Delaune",
+  "title": "스타드 드 랭스",
+  "url": "https://ko.wikipedia.org/wiki/%EC%8A%A4%ED%83%80%EB%93%9C_%EB%93%9C_%EB%9E%AD%EC%8A%A4"
  },
  "Sunderland AFC": {
   "capacity": 48339,
@@ -2252,6 +3320,56 @@
   "title": "툴루즈 FC",
   "url": "https://ko.wikipedia.org/wiki/%ED%88%B4%EB%A3%A8%EC%A6%88_FC"
  },
+ "UD Almería": {
+  "capacity": 22000,
+  "city": "알메리아",
+  "coach": "García Pimienta",
+  "en_title": "UD Almería",
+  "extract": "UD 알메리아(스페인어: Unión Deportiva Almería)는 스페인 남부 안달루시아 지방에 지중해를 낀 항구도시 알메리아를 연고한 축구 클럽이다. 파워 호스 스타디움을 홈 구장으로 사용하고 있다.\n1989년에 창설해 유럽의 클럽치고는 역사가 짧은 편이다. 창설 당시 알메리아 CF(Almería CF)로 출범 했으나 2001년 6월에 폴리데포르티보 알메리리아(Polideportivo Almería)와 합병 하면서 현재의 상태를 유지하게 되었다.\n빠른 성장세를 기록하던 UD 알메리아는 2006-07시즌 프리메라리가에 처음으로 입성한 후, 2014-15 시즌까지 프리메라리가에 속해 있다가 19위로 세군다 디비시온으로 강등 되었다.\n2021-22시즌 세군다 디비시온에서 우승하여 7시즌 만에 1부 리그로 승격했다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "l2": 1
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/UD_Almer%C3%ADa#Honours",
+  "lang": "ko",
+  "name_ko": "UD 알메리아",
+  "qid": "Q10407",
+  "stadium": "에스타디오 데 로스 후에고스 메디테라네오스",
+  "title": "UD 알메리아",
+  "url": "https://ko.wikipedia.org/wiki/UD_%EC%95%8C%EB%A9%94%EB%A6%AC%EC%95%84"
+ },
+ "UD Las Palmas": {
+  "capacity": 32392,
+  "city": "라스팔마스 데 그란 카나리아",
+  "coach": "루이스 가르시아 페르난데스",
+  "en_title": "UD Las Palmas",
+  "extract": "UD 라스팔마스(스페인어: Unión Deportiva Las Palmas, S.A.D.)는 스페인 카나리아 제도의 도시 라스팔마스를 연고로 하는 축구 클럽이다. 이 클럽은 1949년 8월 22일에 창단 되었으며 현재 라리가 2에서 활동하고 있다. 같은 카나리아 제도의 연고팀 CD 테네리페와 라이벌 관계이며 이 두 팀이 맞붙는 경기를 카나리아 더비라고 하기도 한다.",
+  "fetched": "2026-09-29",
+  "honours": {},
+  "honours_url": "https://en.wikipedia.org/wiki/UD_Las_Palmas#Honours",
+  "lang": "ko",
+  "name_ko": "UD 라스팔마스",
+  "qid": "Q11979",
+  "stadium": "에스타디오 그란 카나리아",
+  "title": "UD 라스팔마스",
+  "url": "https://ko.wikipedia.org/wiki/UD_%EB%9D%BC%EC%8A%A4%ED%8C%94%EB%A7%88%EC%8A%A4"
+ },
+ "US Cremonese": {
+  "capacity": 15191,
+  "city": "크레모나",
+  "coach": "position not filled",
+  "en_title": "US Cremonese",
+  "extract": "우니오네 스포르티바 크레모네세(이탈리아어: Unione Sportiva Cremonese S.p.A.)는 1903년에 창단된 이탈리아 롬바르디아주 크레모나에 위치한 스타디오 조반니 치니 경기장을 근거로 하는 이탈리아의 축구 클럽으로 현재 세리에 B에 소속되어 있다.",
+  "fetched": "2026-09-29",
+  "honours": {},
+  "honours_url": "https://en.wikipedia.org/wiki/US_Cremonese#Honours",
+  "lang": "ko",
+  "name_ko": "US 크레모네세",
+  "qid": "Q759482",
+  "stadium": "Stadio Giovanni Zini",
+  "title": "US 크레모네세",
+  "url": "https://ko.wikipedia.org/wiki/US_%ED%81%AC%EB%A0%88%EB%AA%A8%EB%84%A4%EC%84%B8"
+ },
  "US Lecce": {
   "capacity": 31461,
   "city": "레체",
@@ -2269,6 +3387,22 @@
   "stadium": "스타디오 비아 델 마레",
   "title": "US 레체",
   "url": "https://ko.wikipedia.org/wiki/US_%EB%A0%88%EC%B2%B4"
+ },
+ "US Salernitana 1919": {
+  "capacity": 37245,
+  "city": "살레르노",
+  "coach": "Pasquale Marino",
+  "en_title": "US Salernitana 1919",
+  "extract": "우니오네 스포르티바 살레르니타나 1919(이탈리아어: Unione Sportiva Salernitana 1919)는 1919년에 창단된 이탈리아의 축구 클럽으로, 캄파니아주 살레르노를 연고지로 한다. 현재 세리에 C에서 활약하고 있다.",
+  "fetched": "2026-09-29",
+  "honours": {},
+  "honours_url": "https://en.wikipedia.org/wiki/US_Salernitana_1919#Honours",
+  "lang": "ko",
+  "name_ko": "US 살레르니타나 1919",
+  "qid": "Q847587",
+  "stadium": "스튜디오_아레치",
+  "title": "US 살레르니타나 1919",
+  "url": "https://ko.wikipedia.org/wiki/US_%EC%82%B4%EB%A0%88%EB%A5%B4%EB%8B%88%ED%83%80%EB%82%98_1919"
  },
  "US Sassuolo Calcio": {
   "capacity": 21525,
@@ -2370,6 +3504,60 @@
   "title": "VfB 슈투트가르트",
   "url": "https://ko.wikipedia.org/wiki/VfB_%EC%8A%88%ED%88%AC%ED%8A%B8%EA%B0%80%EB%A5%B4%ED%8A%B8"
  },
+ "VfL Bochum 1848": {
+  "capacity": 29299,
+  "city": "보훔",
+  "coach": "우베 뢰슬러",
+  "en_title": "VfL Bochum",
+  "extract": "VfL 보훔(Verein für Leibesübungen Bochum 1848 Fußballgemeinschaft e. V.)는 독일 보훔의 스포츠클럽으로 루르슈타디온을 홈구장으로 축구클럽이다.\n1938년 보훔 지역의 세 스포르츠 클럽(Turnverein Bochum 48, Germania 06, TuS Bochum)을 합병하여 창단했다. 이 가운데 투른페어아인 보훔 48 (Turnverein Bochum 48)은 역사가 깊은 체육 단체이다. 축구클럽 VfL 보훔은 1948년 이 단체에서 축구 부문이 독립하여 \"VfL Bochum 1848 Fußballgemeinschaft e. V\" 라는 명칭으로 공식 창단했다.\nVfL 보훔은 축구 외에도 배드민턴, 농구, e스포츠, 핸드볼, 하키, 육상, 수영, 댄스스포츠, 테니스, 탁구, 체조, 배구 등 다양한 종목을 운영하고 있다. 이 종목들은 각각 독립된 소규모 협회로 구성되어 있고, \"VfL 보훔 1848 e. V.\" 이라는 조직을 중심으로협력하는 구조로 운영된다.\n2025년 7월 기준으로 회원 수는 약 3만 2천 명으로, 독일 내에서도 회원이 많은 스포츠 클럽 중 하나지만 2025/26 시즌에는 2부 리그로 강등되었다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "l2": 8
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/VfL_Bochum#Honours",
+  "lang": "ko",
+  "name_ko": "VfL 보훔",
+  "qid": "Q105861",
+  "stadium": "Ruhrstadion",
+  "title": "VfL 보훔",
+  "url": "https://ko.wikipedia.org/wiki/VfL_%EB%B3%B4%ED%9B%94"
+ },
+ "VfL Wolfsburg": {
+  "capacity": 30000,
+  "city": "볼프스부르크",
+  "coach": "디터 헤킹",
+  "en_title": "VfL Wolfsburg",
+  "extract": "페어라인 퓌어 라이베스위붕엔 볼프스부르크(Verein für Leibesübungen Wolfsburg)는 흔히 VfL 볼프스부르크(VfL Wolfsburg)로 알려진 독일의 축구 클럽으로 니더작센주 볼프스부르크를 연고로 한다. 이 팀은 현재 2. 분데스리가에 속해 있으며, 2008-09 시즌에 한 차례 분데스리가 우승을 거두었다. 그 외에도 볼프스부르크는 1995년에 DFB-포칼 준우승을 거두기도 하였다. 현재 감독은 플로리안 코펠트이다. 이 클럽은 볼프스부르크의 폭스바겐 노동자들에 의해 종합 스포츠 클럽으로 성장하였고, 현재 폭스바겐 그룹의 자회사이다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "cup": 1,
+   "league": 1,
+   "super": 1
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/VfL_Wolfsburg#Honours",
+  "lang": "ko",
+  "name_ko": "VfL 볼프스부르크",
+  "qid": "Q101859",
+  "stadium": "폴크스바겐 아레나",
+  "title": "VfL 볼프스부르크",
+  "url": "https://ko.wikipedia.org/wiki/VfL_%EB%B3%BC%ED%94%84%EC%8A%A4%EB%B6%80%EB%A5%B4%ED%81%AC"
+ },
+ "Viking FK": {
+  "capacity": 15400,
+  "city": "Stavanger",
+  "coach": "비아르테 루네 오르스헤임",
+  "en_title": "Viking FK",
+  "extract": "비킹 FK(노르웨이어: Viking Fotballklubb)는 노르웨이의 축구 클럽으로 스타방에르를 연고지로 하여 1899년에 설립 되었다. 비킹은 노르웨이에서 성공적인 클럽 가운데 하나로 노르웨이 프리미어리그 8회 우승에 노르웨이 컵 5회 우승 기록을 가지고 있다.",
+  "fetched": "2026-09-29",
+  "honours": {},
+  "honours_url": "https://en.wikipedia.org/wiki/Viking_FK#Honours",
+  "lang": "ko",
+  "name_ko": "바이킹 FK",
+  "qid": "Q211177",
+  "stadium": "Lyse Arena",
+  "title": "비킹 FK",
+  "url": "https://ko.wikipedia.org/wiki/%EB%B9%84%ED%82%B9_FK"
+ },
  "Villarreal CF": {
   "capacity": 24891,
   "city": "비야레알",
@@ -2387,5 +3575,85 @@
   "stadium": "에스타디오 데 라 세라미카",
   "title": "비야레알 CF",
   "url": "https://ko.wikipedia.org/wiki/%EB%B9%84%EC%95%BC%EB%A0%88%EC%95%8C_CF"
+ },
+ "West Ham United FC": {
+  "capacity": 62500,
+  "city": "런던",
+  "coach": "누누 에스피리투 산투",
+  "en_title": "West Ham United F.C.",
+  "extract": "웨스트햄 유나이티드 축구 클럽(West Ham United Football Club)은 동런던에 위치한 런던 스타디움을 근거로 하는 잉글랜드의 축구 구단이다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "cup": 3,
+   "cwc": 1,
+   "l2": 2,
+   "super": 1,
+   "uecl": 1
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/West_Ham_United_F.C.#Honours",
+  "lang": "ko",
+  "name_ko": "웨스트햄 유나이티드 FC",
+  "nickname": "The Irons",
+  "qid": "Q18747",
+  "stadium": "런던 스타디움",
+  "title": "웨스트햄 유나이티드 FC",
+  "url": "https://ko.wikipedia.org/wiki/%EC%9B%A8%EC%8A%A4%ED%8A%B8%ED%96%84_%EC%9C%A0%EB%82%98%EC%9D%B4%ED%8B%B0%EB%93%9C_FC"
+ },
+ "Wolverhampton Wanderers FC": {
+  "capacity": 30852,
+  "city": "울버햄프턴",
+  "coach": "세자르 페이소투",
+  "en_title": "Wolverhampton Wanderers F.C.",
+  "extract": "울버햄프턴 원더러스 축구 클럽(영어: Wolverhampton Wanderers Football Club)은 잉글랜드의 울버햄프턴을 연고로 하는 축구 클럽으로, 간단히 줄여서 울브스라고도 부른다.",
+  "fetched": "2026-09-29",
+  "honours": {
+   "cup": 4,
+   "l2": 4,
+   "lcup": 2,
+   "league": 3,
+   "super": 4
+  },
+  "honours_url": "https://en.wikipedia.org/wiki/Wolverhampton_Wanderers_F.C.#Honours",
+  "lang": "ko",
+  "name_ko": "울버햄프턴 원더러스 FC",
+  "qid": "Q19500",
+  "records": {
+   "paid": {
+    "club": "Atlético Madrid",
+    "club_ko": "아틀레티코 마드리드",
+    "fee": "£44m",
+    "player": "Matheus Cunha",
+    "player_ko": "마테우스 쿠냐",
+    "year": "2023"
+   },
+   "received": {
+    "club": "Chelsea",
+    "club_ko": "첼시 FC",
+    "fee": "£54m",
+    "player": "Pedro Neto",
+    "player_ko": "페드루 네투",
+    "year": "2024"
+   }
+  },
+  "records_url": "https://en.wikipedia.org/wiki/List_of_Wolverhampton_Wanderers_F.C._records_and_statistics",
+  "stadium": "몰리뉴 스타디움",
+  "title": "울버햄프턴 원더러스 FC",
+  "url": "https://ko.wikipedia.org/wiki/%EC%9A%B8%EB%B2%84%ED%96%84%ED%94%84%ED%84%B4_%EC%9B%90%EB%8D%94%EB%9F%AC%EC%8A%A4_FC"
+ },
+ "ŠK Slovan Bratislava": {
+  "capacity": 13000,
+  "city": "브라티슬라바",
+  "coach": "야야 투레",
+  "en_title": "ŠK Slovan Bratislava",
+  "extract": "ŠK 슬로반 브라티슬라바(ŠK Slovan Bratislava)는 브라티슬라바를 연고로 하는 슬로바키아의 축구 클럽이다. 현재 수페리가에 참가하고 있으며 수페르리가에서 16회, 체코슬로바키아 1부 리그에서 8회 우승하며 슬로바키아의 축구 클럽 가운데 가장 많은 우승 기록을 보유하고 있다.\n1969년 UEFA 컵위너스컵 결승전에서 스페인의 명문 클럽인 FC 바르셀로나를 누르고 우승을 차지하는 파란을 연출 했으며 1976년 유고슬라비아에서 열린 유럽 축구 선수권대회에서 우승을 차지한 체코슬로바키아 대표팀 선수 7명이 이 클럽 소속으로 뛰기도 했다. FC 스파르타크 트르나바와 라이벌 관계에 있는 팀이다.",
+  "fetched": "2026-09-29",
+  "honours": {},
+  "honours_url": "https://en.wikipedia.org/wiki/%C5%A0K_Slovan_Bratislava#Honours",
+  "lang": "ko",
+  "name_ko": "ŠK 슬로반 브라티슬라바",
+  "qid": "Q192253",
+  "stadium": "Štadión Pasienky",
+  "title": "ŠK 슬로반 브라티슬라바",
+  "url": "https://ko.wikipedia.org/wiki/%C5%A0K_%EC%8A%AC%EB%A1%9C%EB%B0%98_%EB%B8%8C%EB%9D%BC%ED%8B%B0%EC%8A%AC%EB%9D%BC%EB%B0%94"
  }
 }

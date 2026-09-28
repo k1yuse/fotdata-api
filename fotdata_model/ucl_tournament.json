@@ -1061,7 +1061,793 @@
           ],
           "pens": null
         }
-      ]
+      ],
+      "GROUPS": {
+        "A": [
+          {
+            "home_team": "Galatasaray SK",
+            "away_team": "FC København",
+            "home_goals": 2,
+            "away_goals": 2,
+            "date": "2023-09-20T16:45:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "FC Bayern München",
+            "away_team": "Manchester United FC",
+            "home_goals": 4,
+            "away_goals": 3,
+            "date": "2023-09-20T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "FC København",
+            "away_team": "FC Bayern München",
+            "home_goals": 1,
+            "away_goals": 2,
+            "date": "2023-10-03T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Manchester United FC",
+            "away_team": "Galatasaray SK",
+            "home_goals": 2,
+            "away_goals": 3,
+            "date": "2023-10-03T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Galatasaray SK",
+            "away_team": "FC Bayern München",
+            "home_goals": 1,
+            "away_goals": 3,
+            "date": "2023-10-24T16:45:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Manchester United FC",
+            "away_team": "FC København",
+            "home_goals": 1,
+            "away_goals": 0,
+            "date": "2023-10-24T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "FC Bayern München",
+            "away_team": "Galatasaray SK",
+            "home_goals": 2,
+            "away_goals": 1,
+            "date": "2023-11-08T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "FC København",
+            "away_team": "Manchester United FC",
+            "home_goals": 4,
+            "away_goals": 3,
+            "date": "2023-11-08T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Galatasaray SK",
+            "away_team": "Manchester United FC",
+            "home_goals": 3,
+            "away_goals": 3,
+            "date": "2023-11-29T17:45:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "FC Bayern München",
+            "away_team": "FC København",
+            "home_goals": 0,
+            "away_goals": 0,
+            "date": "2023-11-29T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Manchester United FC",
+            "away_team": "FC Bayern München",
+            "home_goals": 0,
+            "away_goals": 1,
+            "date": "2023-12-12T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "FC København",
+            "away_team": "Galatasaray SK",
+            "home_goals": 1,
+            "away_goals": 0,
+            "date": "2023-12-12T20:00:00Z",
+            "status": "FINISHED"
+          }
+        ],
+        "B": [
+          {
+            "home_team": "Sevilla FC",
+            "away_team": "Racing Club de Lens",
+            "home_goals": 1,
+            "away_goals": 1,
+            "date": "2023-09-20T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Arsenal FC",
+            "away_team": "PSV",
+            "home_goals": 4,
+            "away_goals": 0,
+            "date": "2023-09-20T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Racing Club de Lens",
+            "away_team": "Arsenal FC",
+            "home_goals": 2,
+            "away_goals": 1,
+            "date": "2023-10-03T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "PSV",
+            "away_team": "Sevilla FC",
+            "home_goals": 2,
+            "away_goals": 2,
+            "date": "2023-10-03T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Sevilla FC",
+            "away_team": "Arsenal FC",
+            "home_goals": 1,
+            "away_goals": 2,
+            "date": "2023-10-24T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Racing Club de Lens",
+            "away_team": "PSV",
+            "home_goals": 1,
+            "away_goals": 1,
+            "date": "2023-10-24T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Arsenal FC",
+            "away_team": "Sevilla FC",
+            "home_goals": 2,
+            "away_goals": 0,
+            "date": "2023-11-08T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "PSV",
+            "away_team": "Racing Club de Lens",
+            "home_goals": 1,
+            "away_goals": 0,
+            "date": "2023-11-08T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Sevilla FC",
+            "away_team": "PSV",
+            "home_goals": 2,
+            "away_goals": 3,
+            "date": "2023-11-29T17:45:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Arsenal FC",
+            "away_team": "Racing Club de Lens",
+            "home_goals": 6,
+            "away_goals": 0,
+            "date": "2023-11-29T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "PSV",
+            "away_team": "Arsenal FC",
+            "home_goals": 1,
+            "away_goals": 1,
+            "date": "2023-12-12T17:45:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Racing Club de Lens",
+            "away_team": "Sevilla FC",
+            "home_goals": 2,
+            "away_goals": 1,
+            "date": "2023-12-12T17:45:00Z",
+            "status": "FINISHED"
+          }
+        ],
+        "C": [
+          {
+            "home_team": "Real Madrid CF",
+            "away_team": "1. FC Union Berlin",
+            "home_goals": 1,
+            "away_goals": 0,
+            "date": "2023-09-20T16:45:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Sporting Clube de Braga",
+            "away_team": "SSC Napoli",
+            "home_goals": 1,
+            "away_goals": 2,
+            "date": "2023-09-20T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "1. FC Union Berlin",
+            "away_team": "Sporting Clube de Braga",
+            "home_goals": 2,
+            "away_goals": 3,
+            "date": "2023-10-03T16:45:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "SSC Napoli",
+            "away_team": "Real Madrid CF",
+            "home_goals": 2,
+            "away_goals": 3,
+            "date": "2023-10-03T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "1. FC Union Berlin",
+            "away_team": "SSC Napoli",
+            "home_goals": 0,
+            "away_goals": 1,
+            "date": "2023-10-24T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Sporting Clube de Braga",
+            "away_team": "Real Madrid CF",
+            "home_goals": 1,
+            "away_goals": 2,
+            "date": "2023-10-24T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "SSC Napoli",
+            "away_team": "1. FC Union Berlin",
+            "home_goals": 1,
+            "away_goals": 1,
+            "date": "2023-11-08T17:45:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Real Madrid CF",
+            "away_team": "Sporting Clube de Braga",
+            "home_goals": 3,
+            "away_goals": 0,
+            "date": "2023-11-08T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Sporting Clube de Braga",
+            "away_team": "1. FC Union Berlin",
+            "home_goals": 1,
+            "away_goals": 1,
+            "date": "2023-11-29T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Real Madrid CF",
+            "away_team": "SSC Napoli",
+            "home_goals": 4,
+            "away_goals": 2,
+            "date": "2023-11-29T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "1. FC Union Berlin",
+            "away_team": "Real Madrid CF",
+            "home_goals": 2,
+            "away_goals": 3,
+            "date": "2023-12-12T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "SSC Napoli",
+            "away_team": "Sporting Clube de Braga",
+            "home_goals": 2,
+            "away_goals": 0,
+            "date": "2023-12-12T20:00:00Z",
+            "status": "FINISHED"
+          }
+        ],
+        "D": [
+          {
+            "home_team": "Real Sociedad de Fútbol",
+            "away_team": "FC Internazionale Milano",
+            "home_goals": 1,
+            "away_goals": 1,
+            "date": "2023-09-20T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Sport Lisboa e Benfica",
+            "away_team": "FC Red Bull Salzburg",
+            "home_goals": 0,
+            "away_goals": 2,
+            "date": "2023-09-20T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "FC Red Bull Salzburg",
+            "away_team": "Real Sociedad de Fútbol",
+            "home_goals": 0,
+            "away_goals": 2,
+            "date": "2023-10-03T16:45:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "FC Internazionale Milano",
+            "away_team": "Sport Lisboa e Benfica",
+            "home_goals": 1,
+            "away_goals": 0,
+            "date": "2023-10-03T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "FC Internazionale Milano",
+            "away_team": "FC Red Bull Salzburg",
+            "home_goals": 2,
+            "away_goals": 1,
+            "date": "2023-10-24T16:45:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Sport Lisboa e Benfica",
+            "away_team": "Real Sociedad de Fútbol",
+            "home_goals": 0,
+            "away_goals": 1,
+            "date": "2023-10-24T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Real Sociedad de Fútbol",
+            "away_team": "Sport Lisboa e Benfica",
+            "home_goals": 3,
+            "away_goals": 1,
+            "date": "2023-11-08T17:45:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "FC Red Bull Salzburg",
+            "away_team": "FC Internazionale Milano",
+            "home_goals": 0,
+            "away_goals": 1,
+            "date": "2023-11-08T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Sport Lisboa e Benfica",
+            "away_team": "FC Internazionale Milano",
+            "home_goals": 3,
+            "away_goals": 3,
+            "date": "2023-11-29T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Real Sociedad de Fútbol",
+            "away_team": "FC Red Bull Salzburg",
+            "home_goals": 0,
+            "away_goals": 0,
+            "date": "2023-11-29T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "FC Internazionale Milano",
+            "away_team": "Real Sociedad de Fútbol",
+            "home_goals": 0,
+            "away_goals": 0,
+            "date": "2023-12-12T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "FC Red Bull Salzburg",
+            "away_team": "Sport Lisboa e Benfica",
+            "home_goals": 1,
+            "away_goals": 3,
+            "date": "2023-12-12T20:00:00Z",
+            "status": "FINISHED"
+          }
+        ],
+        "E": [
+          {
+            "home_team": "SS Lazio",
+            "away_team": "Club Atlético de Madrid",
+            "home_goals": 1,
+            "away_goals": 1,
+            "date": "2023-09-19T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Feyenoord Rotterdam",
+            "away_team": "Celtic FC",
+            "home_goals": 2,
+            "away_goals": 0,
+            "date": "2023-09-19T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Club Atlético de Madrid",
+            "away_team": "Feyenoord Rotterdam",
+            "home_goals": 3,
+            "away_goals": 2,
+            "date": "2023-10-04T16:45:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Celtic FC",
+            "away_team": "SS Lazio",
+            "home_goals": 1,
+            "away_goals": 2,
+            "date": "2023-10-04T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Feyenoord Rotterdam",
+            "away_team": "SS Lazio",
+            "home_goals": 3,
+            "away_goals": 1,
+            "date": "2023-10-25T16:45:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Celtic FC",
+            "away_team": "Club Atlético de Madrid",
+            "home_goals": 2,
+            "away_goals": 2,
+            "date": "2023-10-25T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Club Atlético de Madrid",
+            "away_team": "Celtic FC",
+            "home_goals": 6,
+            "away_goals": 0,
+            "date": "2023-11-07T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "SS Lazio",
+            "away_team": "Feyenoord Rotterdam",
+            "home_goals": 1,
+            "away_goals": 0,
+            "date": "2023-11-07T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "SS Lazio",
+            "away_team": "Celtic FC",
+            "home_goals": 2,
+            "away_goals": 0,
+            "date": "2023-11-28T17:45:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Feyenoord Rotterdam",
+            "away_team": "Club Atlético de Madrid",
+            "home_goals": 1,
+            "away_goals": 3,
+            "date": "2023-11-28T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Club Atlético de Madrid",
+            "away_team": "SS Lazio",
+            "home_goals": 2,
+            "away_goals": 0,
+            "date": "2023-12-13T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Celtic FC",
+            "away_team": "Feyenoord Rotterdam",
+            "home_goals": 2,
+            "away_goals": 1,
+            "date": "2023-12-13T20:00:00Z",
+            "status": "FINISHED"
+          }
+        ],
+        "F": [
+          {
+            "home_team": "AC Milan",
+            "away_team": "Newcastle United FC",
+            "home_goals": 0,
+            "away_goals": 0,
+            "date": "2023-09-19T16:45:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Paris Saint-Germain FC",
+            "away_team": "Borussia Dortmund",
+            "home_goals": 2,
+            "away_goals": 0,
+            "date": "2023-09-19T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Borussia Dortmund",
+            "away_team": "AC Milan",
+            "home_goals": 0,
+            "away_goals": 0,
+            "date": "2023-10-04T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Newcastle United FC",
+            "away_team": "Paris Saint-Germain FC",
+            "home_goals": 4,
+            "away_goals": 1,
+            "date": "2023-10-04T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Paris Saint-Germain FC",
+            "away_team": "AC Milan",
+            "home_goals": 3,
+            "away_goals": 0,
+            "date": "2023-10-25T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Newcastle United FC",
+            "away_team": "Borussia Dortmund",
+            "home_goals": 0,
+            "away_goals": 1,
+            "date": "2023-10-25T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Borussia Dortmund",
+            "away_team": "Newcastle United FC",
+            "home_goals": 2,
+            "away_goals": 0,
+            "date": "2023-11-07T17:45:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "AC Milan",
+            "away_team": "Paris Saint-Germain FC",
+            "home_goals": 2,
+            "away_goals": 1,
+            "date": "2023-11-07T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "AC Milan",
+            "away_team": "Borussia Dortmund",
+            "home_goals": 1,
+            "away_goals": 3,
+            "date": "2023-11-28T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Paris Saint-Germain FC",
+            "away_team": "Newcastle United FC",
+            "home_goals": 1,
+            "away_goals": 1,
+            "date": "2023-11-28T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Newcastle United FC",
+            "away_team": "AC Milan",
+            "home_goals": 1,
+            "away_goals": 2,
+            "date": "2023-12-13T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Borussia Dortmund",
+            "away_team": "Paris Saint-Germain FC",
+            "home_goals": 1,
+            "away_goals": 1,
+            "date": "2023-12-13T20:00:00Z",
+            "status": "FINISHED"
+          }
+        ],
+        "G": [
+          {
+            "home_team": "BSC Young Boys",
+            "away_team": "RB Leipzig",
+            "home_goals": 1,
+            "away_goals": 3,
+            "date": "2023-09-19T16:45:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Manchester City FC",
+            "away_team": "FK Crvena Zvezda",
+            "home_goals": 3,
+            "away_goals": 1,
+            "date": "2023-09-19T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "FK Crvena Zvezda",
+            "away_team": "BSC Young Boys",
+            "home_goals": 2,
+            "away_goals": 2,
+            "date": "2023-10-04T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "RB Leipzig",
+            "away_team": "Manchester City FC",
+            "home_goals": 1,
+            "away_goals": 3,
+            "date": "2023-10-04T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "BSC Young Boys",
+            "away_team": "Manchester City FC",
+            "home_goals": 1,
+            "away_goals": 3,
+            "date": "2023-10-25T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "RB Leipzig",
+            "away_team": "FK Crvena Zvezda",
+            "home_goals": 3,
+            "away_goals": 1,
+            "date": "2023-10-25T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Manchester City FC",
+            "away_team": "BSC Young Boys",
+            "home_goals": 3,
+            "away_goals": 0,
+            "date": "2023-11-07T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "FK Crvena Zvezda",
+            "away_team": "RB Leipzig",
+            "home_goals": 1,
+            "away_goals": 2,
+            "date": "2023-11-07T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "BSC Young Boys",
+            "away_team": "FK Crvena Zvezda",
+            "home_goals": 2,
+            "away_goals": 0,
+            "date": "2023-11-28T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Manchester City FC",
+            "away_team": "RB Leipzig",
+            "home_goals": 3,
+            "away_goals": 2,
+            "date": "2023-11-28T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "RB Leipzig",
+            "away_team": "BSC Young Boys",
+            "home_goals": 2,
+            "away_goals": 1,
+            "date": "2023-12-13T17:45:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "FK Crvena Zvezda",
+            "away_team": "Manchester City FC",
+            "home_goals": 2,
+            "away_goals": 3,
+            "date": "2023-12-13T17:45:00Z",
+            "status": "FINISHED"
+          }
+        ],
+        "H": [
+          {
+            "home_team": "FC Barcelona",
+            "away_team": "Royal Antwerp FC",
+            "home_goals": 5,
+            "away_goals": 0,
+            "date": "2023-09-19T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "FK Shakhtar Donetsk",
+            "away_team": "FC Porto",
+            "home_goals": 1,
+            "away_goals": 3,
+            "date": "2023-09-19T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Royal Antwerp FC",
+            "away_team": "FK Shakhtar Donetsk",
+            "home_goals": 2,
+            "away_goals": 3,
+            "date": "2023-10-04T16:45:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "FC Porto",
+            "away_team": "FC Barcelona",
+            "home_goals": 0,
+            "away_goals": 1,
+            "date": "2023-10-04T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "FC Barcelona",
+            "away_team": "FK Shakhtar Donetsk",
+            "home_goals": 2,
+            "away_goals": 1,
+            "date": "2023-10-25T16:45:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Royal Antwerp FC",
+            "away_team": "FC Porto",
+            "home_goals": 1,
+            "away_goals": 4,
+            "date": "2023-10-25T19:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "FK Shakhtar Donetsk",
+            "away_team": "FC Barcelona",
+            "home_goals": 1,
+            "away_goals": 0,
+            "date": "2023-11-07T17:45:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "FC Porto",
+            "away_team": "Royal Antwerp FC",
+            "home_goals": 2,
+            "away_goals": 0,
+            "date": "2023-11-07T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "FK Shakhtar Donetsk",
+            "away_team": "Royal Antwerp FC",
+            "home_goals": 1,
+            "away_goals": 0,
+            "date": "2023-11-28T17:45:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "FC Barcelona",
+            "away_team": "FC Porto",
+            "home_goals": 2,
+            "away_goals": 1,
+            "date": "2023-11-28T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "Royal Antwerp FC",
+            "away_team": "FC Barcelona",
+            "home_goals": 3,
+            "away_goals": 2,
+            "date": "2023-12-13T20:00:00Z",
+            "status": "FINISHED"
+          },
+          {
+            "home_team": "FC Porto",
+            "away_team": "FK Shakhtar Donetsk",
+            "home_goals": 5,
+            "away_goals": 3,
+            "date": "2023-12-13T20:00:00Z",
+            "status": "FINISHED"
+          }
+        ]
+      }
     },
     "2024": {
       "PLAYOFFS": [
@@ -1232,7 +2018,7 @@
           "team2": "FC Bayern München",
           "team1_goals": 2,
           "team2_goals": 3,
-          "team1_logo": "",
+          "team1_logo": "https://crests.football-data.org/732.png",
           "team2_logo": "https://crests.football-data.org/5.png",
           "winner": "FC Bayern München",
           "status": "FINISHED",

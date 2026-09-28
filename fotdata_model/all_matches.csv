@@ -2687,6 +2687,7 @@
 498081,2024-12-13,FL1,Toulouse FC,AS Saint-Étienne,2,1,15.0,H,2024.0
 498781,2024-12-13,PD,Real Valladolid CF,Valencia CF,1,0,17.0,H,2024.0
 503196,2024-12-13,SA,Empoli FC,Torino FC,0,1,16.0,A,2024.0
+502494,2024-12-14,BL1,1. FC Union Berlin,VfL Bochum 1848,0,2,14.0,A,2024.0
 502492,2024-12-14,BL1,1. FSV Mainz 05,FC Bayern München,2,1,14.0,H,2024.0
 502493,2024-12-14,BL1,Borussia Mönchengladbach,Holstein Kiel,4,1,14.0,H,2024.0
 502496,2024-12-14,BL1,FC Augsburg,Bayer 04 Leverkusen,0,2,14.0,A,2024.0
@@ -3358,6 +3359,7 @@
 502604,2025-03-16,BL1,1. FC Heidenheim 1846,Holstein Kiel,3,1,26.0,H,2024.0
 502596,2025-03-16,BL1,VfB Stuttgart,Bayer 04 Leverkusen,3,4,26.0,A,2024.0
 502599,2025-03-16,BL1,VfL Bochum 1848,Eintracht Frankfurt,1,3,26.0,A,2024.0
+498178,2025-03-16,FL1,Montpellier HSC,AS Saint-Étienne,0,2,26.0,A,2024.0
 498180,2025-03-16,FL1,Olympique Lyonnais,Le Havre AC,4,2,26.0,H,2024.0
 498176,2025-03-16,FL1,Paris Saint-Germain FC,Olympique de Marseille,3,1,26.0,H,2024.0
 498182,2025-03-16,FL1,RC Strasbourg Alsace,Toulouse FC,2,1,26.0,H,2024.0
@@ -5688,6 +5690,7 @@
 540705,2026-05-16,BL1,SC Freiburg,RB Leipzig,4,1,34.0,H,2025.0
 540703,2026-05-16,BL1,SV Werder Bremen,Borussia Dortmund,0,2,34.0,A,2025.0
 542703,2026-05-17,FL1,FC Lorient,Le Havre AC,0,2,34.0,A,2025.0
+542704,2026-05-17,FL1,FC Nantes,Toulouse FC,0,0,34.0,D,2025.0
 542709,2026-05-17,FL1,Lille OSC,AJ Auxerre,0,2,34.0,A,2025.0
 542706,2026-05-17,FL1,OGC Nice,FC Metz,0,0,34.0,D,2025.0
 542707,2026-05-17,FL1,Olympique Lyonnais,Racing Club de Lens,0,4,34.0,A,2025.0
