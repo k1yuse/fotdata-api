@@ -3,6 +3,8 @@
 //   - 화면 전체가 아니라 공 영역 크기의 작은 캔버스, 점 ~1,800개(랜딩의 30%), 30fps 제한, 해상도 최대 1.5배
 //   - 탭이 숨겨지면 멈춤, 모션 최소화 설정·WebGL 미지원이면 정지 SVG(bg-ball.svg) 그대로
 //   - Three.js는 첫 화면 이후 여유 있을 때 불러오고, 준비되면 정지 SVG에서 자연스럽게 바뀜
+// 반응(window.fotBg): burst() 예측 중 — 빨라지고 점이 흩어지며 밝아짐 / settle() 결과가 나오면 다시 모임(최소 0.8초 유지)
+//                   turn() 탭 전환 때 약 100° 돌아감. 움직이는 동안만 60fps, 평소 30fps
 import { BALL_R, ballGeometry, onSphere, pointInPenta, wirePositions, WIRE_VERTEX, WIRE_FRAGMENT, rimRadius } from './ball-geometry.js';
 
 const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js';
@@ -32,25 +34,33 @@ function init(THREE) {
 
   // 점: 모서리 78% + 오각형 면 22% (랜딩 공과 같은 비율)
   const N = mobile ? 1200 : 1800, { edges, pentas } = ballGeometry();
-  const pos = new Float32Array(N * 3), col = new Float32Array(N * 3);
+  const pos = new Float32Array(N * 3), col = new Float32Array(N * 3), dir = new Float32Array(N * 3), seed = new Float32Array(N);
   const nFace = Math.floor(N * 0.22);
   for (let i = 0; i < N; i++) {
     const p = i < nFace ? pointInPenta(pentas[i % 12], BALL_R) : (e => onSphere(e[0], e[1], Math.random(), BALL_R))(edges[i % edges.length]);
     pos.set(p, i * 3);
     col.set(i < nFace ? [0.5, 0.7, 1.0] : [0.345, 0.651, 1.0], i * 3);
+    // 흩어질 방향: 바깥(법선) 쪽 + 약간의 무작위
+    const l = Math.hypot(...p), r = [Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5];
+    dir.set([p[0] / l + r[0] * 0.8, p[1] / l + r[1] * 0.8, p[2] / l + r[2] * 0.8], i * 3);
+    seed[i] = Math.random();
   }
   const geo = new THREE.BufferGeometry();
   geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   geo.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  geo.setAttribute('aDir', new THREE.BufferAttribute(dir, 3));
+  geo.setAttribute('aSeed', new THREE.BufferAttribute(seed, 1));
   const pointMat = new THREE.ShaderMaterial({
-    uniforms: { uSize: { value: 2.4 }, uPR: { value: renderer.getPixelRatio() } },
+    uniforms: { uSize: { value: 2.4 }, uPR: { value: renderer.getPixelRatio() }, uScatter: { value: 0 } },
     transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, vertexColors: true,
     vertexShader: `
-      uniform float uSize, uPR; varying vec3 vColor; varying float vFace;
+      attribute vec3 aDir; attribute float aSeed;
+      uniform float uSize, uPR, uScatter; varying vec3 vColor; varying float vFace;
       void main() {
-        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        vec3 p = position + aDir * uScatter * (0.35 + aSeed * 1.4);
+        vec4 mv = modelViewMatrix * vec4(p, 1.0);
         float f = dot(normalize(normalMatrix * normalize(position)), normalize(-mv.xyz));
-        vFace = 0.16 + 0.84 * smoothstep(-0.2, 0.35, f);
+        vFace = mix(0.16 + 0.84 * smoothstep(-0.2, 0.35, f), 1.0, uScatter) * (1.0 + uScatter * 0.7);
         vColor = color;
         gl_PointSize = uSize * uPR * (9.0 / -mv.z);
         gl_Position = projectionMatrix * mv;
@@ -66,10 +76,11 @@ function init(THREE) {
   const points = new THREE.Points(geo, pointMat); points.frustumCulled = false; group.add(points);
 
   const wireGeo = new THREE.BufferGeometry(); wireGeo.setAttribute('position', new THREE.Float32BufferAttribute(wirePositions(BALL_R), 3));
-  group.add(new THREE.LineSegments(wireGeo, new THREE.ShaderMaterial({
+  const wireMat = new THREE.ShaderMaterial({
     uniforms: { uOp: { value: 0.5 }, uColor: { value: new THREE.Color(0x58a6ff) } },
     transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, vertexShader: WIRE_VERTEX, fragmentShader: WIRE_FRAGMENT,
-  })));
+  });
+  group.add(new THREE.LineSegments(wireGeo, wireMat));
 
   // 윤곽 원(로고의 바깥 원) — 카메라 정면이라 회전과 무관, 원근 보정 반지름으로 실제 외곽에 맞춤
   const ringPts = [];
@@ -87,20 +98,43 @@ function init(THREE) {
   resize();
   window.addEventListener('resize', resize);
 
-  // 30fps 제한 렌더 루프 — 탭이 숨겨지면 멈춤
-  let running = false, last = 0;
+  // ── 반응 상태 ──
+  let scatter = 0, scatterTarget = 0, speed = 0.16, speedTarget = 0.16, turnLeft = 0, yaw = 0, burstAt = 0, settleTimer = null;
+  window.fotBg = {
+    burst() {
+      clearTimeout(settleTimer); burstAt = performance.now();
+      scatterTarget = 1; speedTarget = 1.6; root.classList.add('bg3d-busy'); play();
+    },
+    settle() {
+      const wait = Math.max(0, 800 - (performance.now() - burstAt));   // 너무 빨리 끝나 안 보이는 일 없게
+      clearTimeout(settleTimer);
+      settleTimer = setTimeout(() => { scatterTarget = 0; speedTarget = 0.16; root.classList.remove('bg3d-busy'); }, wait);
+    },
+    turn() { turnLeft += Math.PI * 0.55; play(); },
+  };
+
+  // 렌더 루프: 움직이는 동안 60fps, 평소 30fps — 탭이 숨겨지면 멈춤
+  let running = false, last = 0, prev = performance.now();
   const t0 = performance.now();
   function frame(now) {
     if (!running) return;
     requestAnimationFrame(frame);
-    if (now - last < 1000 / 30) return;
-    last = now;
+    const busy = scatter > 0.01 || scatterTarget > 0 || turnLeft > 0.01 || Math.abs(speed - speedTarget) > 0.01;
+    if (now - last < 1000 / (busy ? 60 : 30)) return;
+    const dt = Math.min(0.1, (now - prev) / 1000); prev = now; last = now;
+    scatter += (scatterTarget - scatter) * Math.min(1, dt * (scatterTarget > scatter ? 5 : 3.2));
+    speed += (speedTarget - speed) * Math.min(1, dt * 3);
+    const step = turnLeft * Math.min(1, dt * 2.8); turnLeft -= step;
+    yaw += speed * dt + step;
     const t = (now - t0) / 1000;
-    group.rotation.y = t * 0.16;
+    group.rotation.y = yaw;
     group.rotation.x = -0.28 + Math.sin(t * 0.21) * 0.06;   // 살짝 기울어진 채 천천히 흔들림
+    pointMat.uniforms.uScatter.value = scatter;
+    wireMat.uniforms.uOp.value = 0.5 * (1 - scatter * 0.85);
+    ring.material.opacity = 0.6 * (1 - scatter * 0.7);
     renderer.render(scene, camera);
   }
-  const play = () => { if (!running && !document.hidden) { running = true; requestAnimationFrame(frame); } };
+  const play = () => { if (!running && !document.hidden) { running = true; prev = performance.now(); requestAnimationFrame(frame); } };
   document.addEventListener('visibilitychange', () => { if (document.hidden) running = false; else play(); });
   play();
   // 첫 프레임이 그려진 뒤 정지 SVG → 3D 캔버스로 교차 전환

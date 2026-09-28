@@ -77,49 +77,60 @@ def on_sphere(a, b, t):
     return tuple(x * R for x in unit(lerp(a, b, t)))
 
 
-level = lambda o: min(LEVELS - 1, int(o * LEVELS))
-segs = [[] for _ in range(LEVELS)]
-dots = [[] for _ in range(LEVELS)]
+def primitives(n_edge_dots=520, n_face_dots=260, seed=SEED):
+    """투영된 공 요소: (선분 [(x0,y0,x1,y1,불투명도)], 점 [(x,y,r,불투명도)], 윤곽 반지름) — SIZE 좌표계.
+    generate_og_image.py(링크 공유 썸네일)도 같은 그림을 쓰려고 함수로 뺌"""
+    rnd = random.Random(seed)
+    segs, dots = [], []
+    for a, b in edges:
+        for k in range(10):
+            p0, p1 = rotate(on_sphere(a, b, k / 10)), rotate(on_sphere(a, b, (k + 1) / 10))
+            mid = tuple((p0[i] + p1[i]) / 2 for i in range(3))
+            (x0, y0), (x1, y1) = project(p0), project(p1)
+            segs.append((x0, y0, x1, y1, facing(mid)))
+    for _ in range(n_edge_dots):   # 모서리를 따라 흩뿌린 점
+        a, b = rnd.choice(edges)
+        p = rotate(on_sphere(a, b, rnd.random()))
+        x, y = project(p); dots.append((x, y, 1.9, facing(p)))
+    for _ in range(n_face_dots):   # 오각형 면 채움
+        c, pts = rnd.choice(pentas)
+        k = rnd.randrange(5)
+        u, w = rnd.random(), rnd.random()
+        if u + w > 1:
+            u, w = 1 - u, 1 - w
+        q = tuple(c[j] + (pts[k][j] - c[j]) * u + (pts[(k + 1) % 5][j] - c[j]) * w for j in range(3))
+        p = rotate(tuple(x * R * 0.995 for x in unit(q)))
+        x, y = project(p); dots.append((x, y, 1.6, facing(p)))
+    return segs, dots, RIM
 
-for a, b in edges:
-    for k in range(10):
-        p0, p1 = rotate(on_sphere(a, b, k / 10)), rotate(on_sphere(a, b, (k + 1) / 10))
-        mid = tuple((p0[i] + p1[i]) / 2 for i in range(3))
-        (x0, y0), (x1, y1) = project(p0), project(p1)
-        segs[level(facing(mid))].append(f'M{x0:.1f} {y0:.1f}L{x1:.1f} {y1:.1f}')
 
-def dot_path(p, r):
-    x, y = project(p)
-    return f'M{x - r:.1f} {y:.1f}a{r} {r} 0 1 0 {2 * r} 0a{r} {r} 0 1 0 {-2 * r} 0'
+def write_svg():
+    segs_all, dots_all, _ = primitives()
+    level = lambda o: min(LEVELS - 1, int(o * LEVELS))
+    segs = [[] for _ in range(LEVELS)]
+    dots = [[] for _ in range(LEVELS)]
+    for x0, y0, x1, y1, o in segs_all:
+        segs[level(o)].append(f'M{x0:.1f} {y0:.1f}L{x1:.1f} {y1:.1f}')
+    for x, y, r, o in dots_all:
+        dots[level(o)].append(f'M{x - r:.1f} {y:.1f}a{r} {r} 0 1 0 {2 * r} 0a{r} {r} 0 1 0 {-2 * r} 0')
+    out = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {SIZE} {SIZE}" width="{SIZE}" height="{SIZE}">',
+           '<defs><radialGradient id="g" cx="50%" cy="50%" r="50%">'
+           '<stop offset="0" stop-color="#58a6ff" stop-opacity="0.05"/>'
+           '<stop offset="0.78" stop-color="#58a6ff" stop-opacity="0.05"/>'
+           '<stop offset="0.88" stop-color="#58a6ff" stop-opacity="0.14"/>'
+           '<stop offset="1" stop-color="#58a6ff" stop-opacity="0"/></radialGradient></defs>',
+           f'<circle cx="{SIZE / 2}" cy="{SIZE / 2}" r="{RIM * 1.15:.1f}" fill="url(#g)"/>']
+    for lv in range(LEVELS):   # 뒷면(흐린 단계)부터 그려서 앞면이 위에 오게
+        op = (lv + 0.5) / LEVELS
+        if segs[lv]:
+            out.append(f'<path d="{"".join(segs[lv])}" stroke="{BLUE}" stroke-opacity="{op * 0.85:.2f}" stroke-width="2.2" stroke-linecap="round" fill="none"/>')
+        if dots[lv]:
+            out.append(f'<path d="{"".join(dots[lv])}" fill="#8ec3ff" fill-opacity="{op * 0.9:.2f}"/>')
+    out.append(f'<circle cx="{SIZE / 2}" cy="{SIZE / 2}" r="{RIM:.1f}" fill="none" stroke="#78b8ff" stroke-opacity="0.7" stroke-width="2.4"/>')
+    out.append('</svg>')
+    open(OUT, 'w').write('\n'.join(out))
+    print(OUT, sum(len(s) for s in out) // 1024, 'KB')
 
-for _ in range(520):   # 모서리를 따라 흩뿌린 점
-    a, b = random.choice(edges)
-    p = rotate(on_sphere(a, b, random.random()))
-    dots[level(facing(p))].append(dot_path(p, 1.9))
-for _ in range(260):   # 오각형 면 채움
-    c, pts = random.choice(pentas)
-    k = random.randrange(5)
-    u, w = random.random(), random.random()
-    if u + w > 1:
-        u, w = 1 - u, 1 - w
-    q = tuple(c[j] + (pts[k][j] - c[j]) * u + (pts[(k + 1) % 5][j] - c[j]) * w for j in range(3))
-    p = rotate(tuple(x * R * 0.995 for x in unit(q)))
-    dots[level(facing(p))].append(dot_path(p, 1.6))
 
-out = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {SIZE} {SIZE}" width="{SIZE}" height="{SIZE}">',
-       '<defs><radialGradient id="g" cx="50%" cy="50%" r="50%">'
-       '<stop offset="0" stop-color="#58a6ff" stop-opacity="0.05"/>'
-       '<stop offset="0.78" stop-color="#58a6ff" stop-opacity="0.05"/>'
-       '<stop offset="0.88" stop-color="#58a6ff" stop-opacity="0.14"/>'
-       '<stop offset="1" stop-color="#58a6ff" stop-opacity="0"/></radialGradient></defs>',
-       f'<circle cx="{SIZE / 2}" cy="{SIZE / 2}" r="{RIM * 1.15:.1f}" fill="url(#g)"/>']
-for lv in range(LEVELS):   # 뒷면(흐린 단계)부터 그려서 앞면이 위에 오게
-    op = (lv + 0.5) / LEVELS
-    if segs[lv]:
-        out.append(f'<path d="{"".join(segs[lv])}" stroke="{BLUE}" stroke-opacity="{op * 0.85:.2f}" stroke-width="2.2" stroke-linecap="round" fill="none"/>')
-    if dots[lv]:
-        out.append(f'<path d="{"".join(dots[lv])}" fill="#8ec3ff" fill-opacity="{op * 0.9:.2f}"/>')
-out.append(f'<circle cx="{SIZE / 2}" cy="{SIZE / 2}" r="{RIM:.1f}" fill="none" stroke="#78b8ff" stroke-opacity="0.7" stroke-width="2.4"/>')
-out.append('</svg>')
-open(OUT, 'w').write('\n'.join(out))
-print(OUT, sum(len(s) for s in out) // 1024, 'KB')
+if __name__ == '__main__':
+    write_svg()
