@@ -1,558 +1,1714 @@
 {
-  "PLAYOFFS": [
-    {
-      "team1": "AS Monaco FC",
-      "team2": "Paris Saint-Germain FC",
-      "team1_goals": 4,
-      "team2_goals": 5,
-      "team1_logo": "https://crests.football-data.org/548.png",
-      "team2_logo": "https://crests.football-data.org/524.png",
-      "winner": "Paris Saint-Germain FC",
-      "status": "FINISHED",
-      "legs": [
+  "seasons": {
+    "2025": {
+      "PLAYOFFS": [
         {
-          "home_team": "AS Monaco FC",
-          "away_team": "Paris Saint-Germain FC",
-          "home_goals": 2,
-          "away_goals": 3
+          "team1": "AS Monaco FC",
+          "team2": "Paris Saint-Germain FC",
+          "team1_goals": 4,
+          "team2_goals": 5,
+          "team1_logo": "https://crests.football-data.org/548.png",
+          "team2_logo": "https://crests.football-data.org/524.png",
+          "winner": "Paris Saint-Germain FC",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "AS Monaco FC",
+              "away_team": "Paris Saint-Germain FC",
+              "home_goals": 2,
+              "away_goals": 3,
+              "date": "2026-02-17T20:00:00Z"
+            },
+            {
+              "home_team": "Paris Saint-Germain FC",
+              "away_team": "AS Monaco FC",
+              "home_goals": 2,
+              "away_goals": 2,
+              "date": "2026-02-25T20:00:00Z"
+            }
+          ],
+          "pens": null
         },
         {
-          "home_team": "Paris Saint-Germain FC",
-          "away_team": "AS Monaco FC",
-          "home_goals": 2,
-          "away_goals": 2
+          "team1": "Galatasaray SK",
+          "team2": "Juventus FC",
+          "team1_goals": 7,
+          "team2_goals": 5,
+          "team1_logo": "https://crests.football-data.org/610.png",
+          "team2_logo": "https://crests.football-data.org/109.png",
+          "winner": "Galatasaray SK",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Galatasaray SK",
+              "away_team": "Juventus FC",
+              "home_goals": 5,
+              "away_goals": 2,
+              "date": "2026-02-17T17:45:00Z"
+            },
+            {
+              "home_team": "Juventus FC",
+              "away_team": "Galatasaray SK",
+              "home_goals": 3,
+              "away_goals": 2,
+              "date": "2026-02-25T20:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Sport Lisboa e Benfica",
+          "team2": "Real Madrid CF",
+          "team1_goals": 1,
+          "team2_goals": 3,
+          "team1_logo": "https://crests.football-data.org/1903.png",
+          "team2_logo": "https://crests.football-data.org/86.png",
+          "winner": "Real Madrid CF",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Sport Lisboa e Benfica",
+              "away_team": "Real Madrid CF",
+              "home_goals": 0,
+              "away_goals": 1,
+              "date": "2026-02-17T20:00:00Z"
+            },
+            {
+              "home_team": "Real Madrid CF",
+              "away_team": "Sport Lisboa e Benfica",
+              "home_goals": 2,
+              "away_goals": 1,
+              "date": "2026-02-25T20:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Borussia Dortmund",
+          "team2": "Atalanta BC",
+          "team1_goals": 3,
+          "team2_goals": 4,
+          "team1_logo": "https://crests.football-data.org/4.png",
+          "team2_logo": "https://crests.football-data.org/102.png",
+          "winner": "Atalanta BC",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Borussia Dortmund",
+              "away_team": "Atalanta BC",
+              "home_goals": 2,
+              "away_goals": 0,
+              "date": "2026-02-17T20:15:00Z"
+            },
+            {
+              "home_team": "Atalanta BC",
+              "away_team": "Borussia Dortmund",
+              "home_goals": 4,
+              "away_goals": 1,
+              "date": "2026-02-25T17:45:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Qarabağ Ağdam FK",
+          "team2": "Newcastle United FC",
+          "team1_goals": 3,
+          "team2_goals": 9,
+          "team1_logo": "https://crests.football-data.org/611.png",
+          "team2_logo": "https://crests.football-data.org/67.png",
+          "winner": "Newcastle United FC",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Qarabağ Ağdam FK",
+              "away_team": "Newcastle United FC",
+              "home_goals": 1,
+              "away_goals": 6,
+              "date": "2026-02-18T17:45:00Z"
+            },
+            {
+              "home_team": "Newcastle United FC",
+              "away_team": "Qarabağ Ağdam FK",
+              "home_goals": 3,
+              "away_goals": 2,
+              "date": "2026-02-24T20:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Club Brugge KV",
+          "team2": "Club Atlético de Madrid",
+          "team1_goals": 4,
+          "team2_goals": 7,
+          "team1_logo": "https://crests.football-data.org/851.png",
+          "team2_logo": "https://crests.football-data.org/78.png",
+          "winner": "Club Atlético de Madrid",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Club Brugge KV",
+              "away_team": "Club Atlético de Madrid",
+              "home_goals": 3,
+              "away_goals": 3,
+              "date": "2026-02-18T20:00:00Z"
+            },
+            {
+              "home_team": "Club Atlético de Madrid",
+              "away_team": "Club Brugge KV",
+              "home_goals": 4,
+              "away_goals": 1,
+              "date": "2026-02-24T17:45:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "FK Bodø/Glimt",
+          "team2": "FC Internazionale Milano",
+          "team1_goals": 5,
+          "team2_goals": 2,
+          "team1_logo": "https://crests.football-data.org/5721.png",
+          "team2_logo": "https://crests.football-data.org/108.png",
+          "winner": "FK Bodø/Glimt",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "FK Bodø/Glimt",
+              "away_team": "FC Internazionale Milano",
+              "home_goals": 3,
+              "away_goals": 1,
+              "date": "2026-02-18T20:00:00Z"
+            },
+            {
+              "home_team": "FC Internazionale Milano",
+              "away_team": "FK Bodø/Glimt",
+              "home_goals": 1,
+              "away_goals": 2,
+              "date": "2026-02-24T20:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "PAE Olympiakos SFP",
+          "team2": "Bayer 04 Leverkusen",
+          "team1_goals": 0,
+          "team2_goals": 2,
+          "team1_logo": "https://crests.football-data.org/654.png",
+          "team2_logo": "https://crests.football-data.org/3.png",
+          "winner": "Bayer 04 Leverkusen",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "PAE Olympiakos SFP",
+              "away_team": "Bayer 04 Leverkusen",
+              "home_goals": 0,
+              "away_goals": 2,
+              "date": "2026-02-18T20:00:00Z"
+            },
+            {
+              "home_team": "Bayer 04 Leverkusen",
+              "away_team": "PAE Olympiakos SFP",
+              "home_goals": 0,
+              "away_goals": 0,
+              "date": "2026-02-24T20:00:00Z"
+            }
+          ],
+          "pens": null
+        }
+      ],
+      "LAST_16": [
+        {
+          "team1": "Paris Saint-Germain FC",
+          "team2": "Chelsea FC",
+          "team1_goals": 8,
+          "team2_goals": 2,
+          "team1_logo": "https://crests.football-data.org/524.png",
+          "team2_logo": "https://crests.football-data.org/61.png",
+          "winner": "Paris Saint-Germain FC",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Paris Saint-Germain FC",
+              "away_team": "Chelsea FC",
+              "home_goals": 5,
+              "away_goals": 2,
+              "date": "2026-03-11T20:00:00Z"
+            },
+            {
+              "home_team": "Chelsea FC",
+              "away_team": "Paris Saint-Germain FC",
+              "home_goals": 0,
+              "away_goals": 3,
+              "date": "2026-03-17T20:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Galatasaray SK",
+          "team2": "Liverpool FC",
+          "team1_goals": 1,
+          "team2_goals": 4,
+          "team1_logo": "https://crests.football-data.org/610.png",
+          "team2_logo": "https://crests.football-data.org/64.png",
+          "winner": "Liverpool FC",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Galatasaray SK",
+              "away_team": "Liverpool FC",
+              "home_goals": 1,
+              "away_goals": 0,
+              "date": "2026-03-10T17:45:00Z"
+            },
+            {
+              "home_team": "Liverpool FC",
+              "away_team": "Galatasaray SK",
+              "home_goals": 4,
+              "away_goals": 0,
+              "date": "2026-03-18T20:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Real Madrid CF",
+          "team2": "Manchester City FC",
+          "team1_goals": 5,
+          "team2_goals": 1,
+          "team1_logo": "https://crests.football-data.org/86.png",
+          "team2_logo": "https://crests.football-data.org/65.png",
+          "winner": "Real Madrid CF",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Real Madrid CF",
+              "away_team": "Manchester City FC",
+              "home_goals": 3,
+              "away_goals": 0,
+              "date": "2026-03-11T20:00:00Z"
+            },
+            {
+              "home_team": "Manchester City FC",
+              "away_team": "Real Madrid CF",
+              "home_goals": 1,
+              "away_goals": 2,
+              "date": "2026-03-17T20:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Atalanta BC",
+          "team2": "FC Bayern München",
+          "team1_goals": 2,
+          "team2_goals": 10,
+          "team1_logo": "https://crests.football-data.org/102.png",
+          "team2_logo": "https://crests.football-data.org/5.png",
+          "winner": "FC Bayern München",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Atalanta BC",
+              "away_team": "FC Bayern München",
+              "home_goals": 1,
+              "away_goals": 6,
+              "date": "2026-03-10T20:00:00Z"
+            },
+            {
+              "home_team": "FC Bayern München",
+              "away_team": "Atalanta BC",
+              "home_goals": 4,
+              "away_goals": 1,
+              "date": "2026-03-18T20:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Newcastle United FC",
+          "team2": "FC Barcelona",
+          "team1_goals": 3,
+          "team2_goals": 8,
+          "team1_logo": "https://crests.football-data.org/67.png",
+          "team2_logo": "https://crests.football-data.org/81.png",
+          "winner": "FC Barcelona",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Newcastle United FC",
+              "away_team": "FC Barcelona",
+              "home_goals": 1,
+              "away_goals": 1,
+              "date": "2026-03-10T20:00:00Z"
+            },
+            {
+              "home_team": "FC Barcelona",
+              "away_team": "Newcastle United FC",
+              "home_goals": 7,
+              "away_goals": 2,
+              "date": "2026-03-18T17:45:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Club Atlético de Madrid",
+          "team2": "Tottenham Hotspur FC",
+          "team1_goals": 7,
+          "team2_goals": 5,
+          "team1_logo": "https://crests.football-data.org/78.png",
+          "team2_logo": "https://crests.football-data.org/73.png",
+          "winner": "Club Atlético de Madrid",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Club Atlético de Madrid",
+              "away_team": "Tottenham Hotspur FC",
+              "home_goals": 5,
+              "away_goals": 2,
+              "date": "2026-03-10T20:00:00Z"
+            },
+            {
+              "home_team": "Tottenham Hotspur FC",
+              "away_team": "Club Atlético de Madrid",
+              "home_goals": 3,
+              "away_goals": 2,
+              "date": "2026-03-18T20:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "FK Bodø/Glimt",
+          "team2": "Sporting Clube de Portugal",
+          "team1_goals": 3,
+          "team2_goals": 5,
+          "team1_logo": "https://crests.football-data.org/5721.png",
+          "team2_logo": "https://crests.football-data.org/498.png",
+          "winner": "Sporting Clube de Portugal",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "FK Bodø/Glimt",
+              "away_team": "Sporting Clube de Portugal",
+              "home_goals": 3,
+              "away_goals": 0,
+              "date": "2026-03-11T20:00:00Z"
+            },
+            {
+              "home_team": "Sporting Clube de Portugal",
+              "away_team": "FK Bodø/Glimt",
+              "home_goals": 5,
+              "away_goals": 0,
+              "date": "2026-03-17T17:45:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Bayer 04 Leverkusen",
+          "team2": "Arsenal FC",
+          "team1_goals": 1,
+          "team2_goals": 3,
+          "team1_logo": "https://crests.football-data.org/3.png",
+          "team2_logo": "https://crests.football-data.org/57.png",
+          "winner": "Arsenal FC",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Bayer 04 Leverkusen",
+              "away_team": "Arsenal FC",
+              "home_goals": 1,
+              "away_goals": 1,
+              "date": "2026-03-11T17:45:00Z"
+            },
+            {
+              "home_team": "Arsenal FC",
+              "away_team": "Bayer 04 Leverkusen",
+              "home_goals": 2,
+              "away_goals": 0,
+              "date": "2026-03-17T20:00:00Z"
+            }
+          ],
+          "pens": null
+        }
+      ],
+      "QUARTER_FINALS": [
+        {
+          "team1": "Paris Saint-Germain FC",
+          "team2": "Liverpool FC",
+          "team1_goals": 4,
+          "team2_goals": 0,
+          "team1_logo": "https://crests.football-data.org/524.png",
+          "team2_logo": "https://crests.football-data.org/64.png",
+          "winner": "Paris Saint-Germain FC",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Paris Saint-Germain FC",
+              "away_team": "Liverpool FC",
+              "home_goals": 2,
+              "away_goals": 0,
+              "date": "2026-04-08T19:00:00Z"
+            },
+            {
+              "home_team": "Liverpool FC",
+              "away_team": "Paris Saint-Germain FC",
+              "home_goals": 0,
+              "away_goals": 2,
+              "date": "2026-04-14T19:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Real Madrid CF",
+          "team2": "FC Bayern München",
+          "team1_goals": 4,
+          "team2_goals": 6,
+          "team1_logo": "https://crests.football-data.org/86.png",
+          "team2_logo": "https://crests.football-data.org/5.png",
+          "winner": "FC Bayern München",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Real Madrid CF",
+              "away_team": "FC Bayern München",
+              "home_goals": 1,
+              "away_goals": 2,
+              "date": "2026-04-07T19:00:00Z"
+            },
+            {
+              "home_team": "FC Bayern München",
+              "away_team": "Real Madrid CF",
+              "home_goals": 4,
+              "away_goals": 3,
+              "date": "2026-04-15T19:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "FC Barcelona",
+          "team2": "Club Atlético de Madrid",
+          "team1_goals": 2,
+          "team2_goals": 3,
+          "team1_logo": "https://crests.football-data.org/81.png",
+          "team2_logo": "https://crests.football-data.org/78.png",
+          "winner": "Club Atlético de Madrid",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "FC Barcelona",
+              "away_team": "Club Atlético de Madrid",
+              "home_goals": 0,
+              "away_goals": 2,
+              "date": "2026-04-08T19:00:00Z"
+            },
+            {
+              "home_team": "Club Atlético de Madrid",
+              "away_team": "FC Barcelona",
+              "home_goals": 1,
+              "away_goals": 2,
+              "date": "2026-04-14T19:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Sporting Clube de Portugal",
+          "team2": "Arsenal FC",
+          "team1_goals": 0,
+          "team2_goals": 1,
+          "team1_logo": "https://crests.football-data.org/498.png",
+          "team2_logo": "https://crests.football-data.org/57.png",
+          "winner": "Arsenal FC",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Sporting Clube de Portugal",
+              "away_team": "Arsenal FC",
+              "home_goals": 0,
+              "away_goals": 1,
+              "date": "2026-04-07T19:00:00Z"
+            },
+            {
+              "home_team": "Arsenal FC",
+              "away_team": "Sporting Clube de Portugal",
+              "home_goals": 0,
+              "away_goals": 0,
+              "date": "2026-04-15T19:00:00Z"
+            }
+          ],
+          "pens": null
+        }
+      ],
+      "SEMI_FINALS": [
+        {
+          "team1": "Paris Saint-Germain FC",
+          "team2": "FC Bayern München",
+          "team1_goals": 6,
+          "team2_goals": 5,
+          "team1_logo": "https://crests.football-data.org/524.png",
+          "team2_logo": "https://crests.football-data.org/5.png",
+          "winner": "Paris Saint-Germain FC",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Paris Saint-Germain FC",
+              "away_team": "FC Bayern München",
+              "home_goals": 5,
+              "away_goals": 4,
+              "date": "2026-04-28T19:00:00Z"
+            },
+            {
+              "home_team": "FC Bayern München",
+              "away_team": "Paris Saint-Germain FC",
+              "home_goals": 1,
+              "away_goals": 1,
+              "date": "2026-05-06T19:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Club Atlético de Madrid",
+          "team2": "Arsenal FC",
+          "team1_goals": 1,
+          "team2_goals": 2,
+          "team1_logo": "https://crests.football-data.org/78.png",
+          "team2_logo": "https://crests.football-data.org/57.png",
+          "winner": "Arsenal FC",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Club Atlético de Madrid",
+              "away_team": "Arsenal FC",
+              "home_goals": 1,
+              "away_goals": 1,
+              "date": "2026-04-29T19:00:00Z"
+            },
+            {
+              "home_team": "Arsenal FC",
+              "away_team": "Club Atlético de Madrid",
+              "home_goals": 1,
+              "away_goals": 0,
+              "date": "2026-05-05T19:00:00Z"
+            }
+          ],
+          "pens": null
+        }
+      ],
+      "FINAL": [
+        {
+          "team1": "Paris Saint-Germain FC",
+          "team2": "Arsenal FC",
+          "team1_goals": 1,
+          "team2_goals": 1,
+          "team1_logo": "https://crests.football-data.org/524.png",
+          "team2_logo": "https://crests.football-data.org/57.png",
+          "winner": "Paris Saint-Germain FC",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Paris Saint-Germain FC",
+              "away_team": "Arsenal FC",
+              "home_goals": 1,
+              "away_goals": 1,
+              "date": "2026-05-30T16:00:00Z",
+              "penalties": [
+                4,
+                3
+              ]
+            }
+          ],
+          "pens": [
+            4,
+            3
+          ]
         }
       ]
     },
-    {
-      "team1": "Galatasaray SK",
-      "team2": "Juventus FC",
-      "team1_goals": 7,
-      "team2_goals": 5,
-      "team1_logo": "https://crests.football-data.org/610.png",
-      "team2_logo": "https://crests.football-data.org/109.png",
-      "winner": "Galatasaray SK",
-      "status": "FINISHED",
-      "legs": [
+    "2023": {
+      "PLAYOFFS": [],
+      "LAST_16": [
         {
-          "home_team": "Galatasaray SK",
-          "away_team": "Juventus FC",
-          "home_goals": 5,
-          "away_goals": 2
+          "team1": "FC Internazionale Milano",
+          "team2": "Club Atlético de Madrid",
+          "team1_goals": 2,
+          "team2_goals": 2,
+          "team1_logo": "https://crests.football-data.org/108.png",
+          "team2_logo": "https://crests.football-data.org/78.png",
+          "winner": "Club Atlético de Madrid",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "FC Internazionale Milano",
+              "away_team": "Club Atlético de Madrid",
+              "home_goals": 1,
+              "away_goals": 0,
+              "date": "2024-02-20T20:00:00Z"
+            },
+            {
+              "home_team": "Club Atlético de Madrid",
+              "away_team": "FC Internazionale Milano",
+              "home_goals": 2,
+              "away_goals": 1,
+              "date": "2024-03-13T20:00:00Z",
+              "penalties": [
+                3,
+                2
+              ]
+            }
+          ],
+          "pens": [
+            2,
+            3
+          ]
         },
         {
-          "home_team": "Juventus FC",
-          "away_team": "Galatasaray SK",
-          "home_goals": 3,
-          "away_goals": 2
+          "team1": "PSV",
+          "team2": "Borussia Dortmund",
+          "team1_goals": 1,
+          "team2_goals": 3,
+          "team1_logo": "https://crests.football-data.org/674.png",
+          "team2_logo": "https://crests.football-data.org/4.png",
+          "winner": "Borussia Dortmund",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "PSV",
+              "away_team": "Borussia Dortmund",
+              "home_goals": 1,
+              "away_goals": 1,
+              "date": "2024-02-20T20:00:00Z"
+            },
+            {
+              "home_team": "Borussia Dortmund",
+              "away_team": "PSV",
+              "home_goals": 2,
+              "away_goals": 0,
+              "date": "2024-03-13T20:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Paris Saint-Germain FC",
+          "team2": "Real Sociedad de Fútbol",
+          "team1_goals": 4,
+          "team2_goals": 1,
+          "team1_logo": "https://crests.football-data.org/524.png",
+          "team2_logo": "https://crests.football-data.org/92.png",
+          "winner": "Paris Saint-Germain FC",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Paris Saint-Germain FC",
+              "away_team": "Real Sociedad de Fútbol",
+              "home_goals": 2,
+              "away_goals": 0,
+              "date": "2024-02-14T20:00:00Z"
+            },
+            {
+              "home_team": "Real Sociedad de Fútbol",
+              "away_team": "Paris Saint-Germain FC",
+              "home_goals": 1,
+              "away_goals": 2,
+              "date": "2024-03-05T20:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "SSC Napoli",
+          "team2": "FC Barcelona",
+          "team1_goals": 2,
+          "team2_goals": 4,
+          "team1_logo": "https://crests.football-data.org/113.png",
+          "team2_logo": "https://crests.football-data.org/81.png",
+          "winner": "FC Barcelona",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "SSC Napoli",
+              "away_team": "FC Barcelona",
+              "home_goals": 1,
+              "away_goals": 1,
+              "date": "2024-02-21T20:00:00Z"
+            },
+            {
+              "home_team": "FC Barcelona",
+              "away_team": "SSC Napoli",
+              "home_goals": 3,
+              "away_goals": 1,
+              "date": "2024-03-12T20:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "FC Porto",
+          "team2": "Arsenal FC",
+          "team1_goals": 1,
+          "team2_goals": 1,
+          "team1_logo": "https://crests.football-data.org/503.png",
+          "team2_logo": "https://crests.football-data.org/57.png",
+          "winner": "Arsenal FC",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "FC Porto",
+              "away_team": "Arsenal FC",
+              "home_goals": 1,
+              "away_goals": 0,
+              "date": "2024-02-21T20:00:00Z"
+            },
+            {
+              "home_team": "Arsenal FC",
+              "away_team": "FC Porto",
+              "home_goals": 1,
+              "away_goals": 0,
+              "date": "2024-03-12T20:00:00Z",
+              "penalties": [
+                4,
+                2
+              ]
+            }
+          ],
+          "pens": [
+            2,
+            4
+          ]
+        },
+        {
+          "team1": "SS Lazio",
+          "team2": "FC Bayern München",
+          "team1_goals": 1,
+          "team2_goals": 3,
+          "team1_logo": "https://crests.football-data.org/110.png",
+          "team2_logo": "https://crests.football-data.org/5.png",
+          "winner": "FC Bayern München",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "SS Lazio",
+              "away_team": "FC Bayern München",
+              "home_goals": 1,
+              "away_goals": 0,
+              "date": "2024-02-14T20:00:00Z"
+            },
+            {
+              "home_team": "FC Bayern München",
+              "away_team": "SS Lazio",
+              "home_goals": 3,
+              "away_goals": 0,
+              "date": "2024-03-05T20:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "RB Leipzig",
+          "team2": "Real Madrid CF",
+          "team1_goals": 1,
+          "team2_goals": 2,
+          "team1_logo": "https://crests.football-data.org/721.png",
+          "team2_logo": "https://crests.football-data.org/86.png",
+          "winner": "Real Madrid CF",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "RB Leipzig",
+              "away_team": "Real Madrid CF",
+              "home_goals": 0,
+              "away_goals": 1,
+              "date": "2024-02-13T20:00:00Z"
+            },
+            {
+              "home_team": "Real Madrid CF",
+              "away_team": "RB Leipzig",
+              "home_goals": 1,
+              "away_goals": 1,
+              "date": "2024-03-06T20:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "FC København",
+          "team2": "Manchester City FC",
+          "team1_goals": 2,
+          "team2_goals": 6,
+          "team1_logo": "https://crests.football-data.org/1876.png",
+          "team2_logo": "https://crests.football-data.org/65.png",
+          "winner": "Manchester City FC",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "FC København",
+              "away_team": "Manchester City FC",
+              "home_goals": 1,
+              "away_goals": 3,
+              "date": "2024-02-13T20:00:00Z"
+            },
+            {
+              "home_team": "Manchester City FC",
+              "away_team": "FC København",
+              "home_goals": 3,
+              "away_goals": 1,
+              "date": "2024-03-06T20:00:00Z"
+            }
+          ],
+          "pens": null
+        }
+      ],
+      "QUARTER_FINALS": [
+        {
+          "team1": "Club Atlético de Madrid",
+          "team2": "Borussia Dortmund",
+          "team1_goals": 4,
+          "team2_goals": 5,
+          "team1_logo": "https://crests.football-data.org/78.png",
+          "team2_logo": "https://crests.football-data.org/4.png",
+          "winner": "Borussia Dortmund",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Club Atlético de Madrid",
+              "away_team": "Borussia Dortmund",
+              "home_goals": 2,
+              "away_goals": 1,
+              "date": "2024-04-10T19:00:00Z"
+            },
+            {
+              "home_team": "Borussia Dortmund",
+              "away_team": "Club Atlético de Madrid",
+              "home_goals": 4,
+              "away_goals": 2,
+              "date": "2024-04-16T19:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Paris Saint-Germain FC",
+          "team2": "FC Barcelona",
+          "team1_goals": 6,
+          "team2_goals": 4,
+          "team1_logo": "https://crests.football-data.org/524.png",
+          "team2_logo": "https://crests.football-data.org/81.png",
+          "winner": "Paris Saint-Germain FC",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Paris Saint-Germain FC",
+              "away_team": "FC Barcelona",
+              "home_goals": 2,
+              "away_goals": 3,
+              "date": "2024-04-10T19:00:00Z"
+            },
+            {
+              "home_team": "FC Barcelona",
+              "away_team": "Paris Saint-Germain FC",
+              "home_goals": 1,
+              "away_goals": 4,
+              "date": "2024-04-16T19:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Arsenal FC",
+          "team2": "FC Bayern München",
+          "team1_goals": 2,
+          "team2_goals": 3,
+          "team1_logo": "https://crests.football-data.org/57.png",
+          "team2_logo": "https://crests.football-data.org/5.png",
+          "winner": "FC Bayern München",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Arsenal FC",
+              "away_team": "FC Bayern München",
+              "home_goals": 2,
+              "away_goals": 2,
+              "date": "2024-04-09T19:00:00Z"
+            },
+            {
+              "home_team": "FC Bayern München",
+              "away_team": "Arsenal FC",
+              "home_goals": 1,
+              "away_goals": 0,
+              "date": "2024-04-17T19:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Real Madrid CF",
+          "team2": "Manchester City FC",
+          "team1_goals": 4,
+          "team2_goals": 4,
+          "team1_logo": "https://crests.football-data.org/86.png",
+          "team2_logo": "https://crests.football-data.org/65.png",
+          "winner": "Real Madrid CF",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Real Madrid CF",
+              "away_team": "Manchester City FC",
+              "home_goals": 3,
+              "away_goals": 3,
+              "date": "2024-04-09T19:00:00Z"
+            },
+            {
+              "home_team": "Manchester City FC",
+              "away_team": "Real Madrid CF",
+              "home_goals": 1,
+              "away_goals": 1,
+              "date": "2024-04-17T19:00:00Z",
+              "penalties": [
+                3,
+                4
+              ]
+            }
+          ],
+          "pens": [
+            4,
+            3
+          ]
+        }
+      ],
+      "SEMI_FINALS": [
+        {
+          "team1": "Borussia Dortmund",
+          "team2": "Paris Saint-Germain FC",
+          "team1_goals": 2,
+          "team2_goals": 0,
+          "team1_logo": "https://crests.football-data.org/4.png",
+          "team2_logo": "https://crests.football-data.org/524.png",
+          "winner": "Borussia Dortmund",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Borussia Dortmund",
+              "away_team": "Paris Saint-Germain FC",
+              "home_goals": 1,
+              "away_goals": 0,
+              "date": "2024-05-01T19:00:00Z"
+            },
+            {
+              "home_team": "Paris Saint-Germain FC",
+              "away_team": "Borussia Dortmund",
+              "home_goals": 0,
+              "away_goals": 1,
+              "date": "2024-05-07T19:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "FC Bayern München",
+          "team2": "Real Madrid CF",
+          "team1_goals": 3,
+          "team2_goals": 4,
+          "team1_logo": "https://crests.football-data.org/5.png",
+          "team2_logo": "https://crests.football-data.org/86.png",
+          "winner": "Real Madrid CF",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "FC Bayern München",
+              "away_team": "Real Madrid CF",
+              "home_goals": 2,
+              "away_goals": 2,
+              "date": "2024-04-30T19:00:00Z"
+            },
+            {
+              "home_team": "Real Madrid CF",
+              "away_team": "FC Bayern München",
+              "home_goals": 2,
+              "away_goals": 1,
+              "date": "2024-05-08T19:00:00Z"
+            }
+          ],
+          "pens": null
+        }
+      ],
+      "FINAL": [
+        {
+          "team1": "Borussia Dortmund",
+          "team2": "Real Madrid CF",
+          "team1_goals": 0,
+          "team2_goals": 2,
+          "team1_logo": "https://crests.football-data.org/4.png",
+          "team2_logo": "https://crests.football-data.org/86.png",
+          "winner": "Real Madrid CF",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Borussia Dortmund",
+              "away_team": "Real Madrid CF",
+              "home_goals": 0,
+              "away_goals": 2,
+              "date": "2024-06-01T19:00:00Z"
+            }
+          ],
+          "pens": null
         }
       ]
     },
-    {
-      "team1": "Sport Lisboa e Benfica",
-      "team2": "Real Madrid CF",
-      "team1_goals": 1,
-      "team2_goals": 3,
-      "team1_logo": "https://crests.football-data.org/1903.png",
-      "team2_logo": "https://crests.football-data.org/86.png",
-      "winner": "Real Madrid CF",
-      "status": "FINISHED",
-      "legs": [
+    "2024": {
+      "PLAYOFFS": [
         {
-          "home_team": "Sport Lisboa e Benfica",
-          "away_team": "Real Madrid CF",
-          "home_goals": 0,
-          "away_goals": 1
+          "team1": "Juventus FC",
+          "team2": "PSV",
+          "team1_goals": 3,
+          "team2_goals": 4,
+          "team1_logo": "https://crests.football-data.org/109.png",
+          "team2_logo": "https://crests.football-data.org/674.png",
+          "winner": "PSV",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Juventus FC",
+              "away_team": "PSV",
+              "home_goals": 2,
+              "away_goals": 1,
+              "date": "2025-02-11T20:00:00Z"
+            },
+            {
+              "home_team": "PSV",
+              "away_team": "Juventus FC",
+              "home_goals": 3,
+              "away_goals": 1,
+              "date": "2025-02-19T20:00:00Z"
+            }
+          ],
+          "pens": null
         },
         {
-          "home_team": "Real Madrid CF",
-          "away_team": "Sport Lisboa e Benfica",
-          "home_goals": 2,
-          "away_goals": 1
+          "team1": "Manchester City FC",
+          "team2": "Real Madrid CF",
+          "team1_goals": 3,
+          "team2_goals": 6,
+          "team1_logo": "https://crests.football-data.org/65.png",
+          "team2_logo": "https://crests.football-data.org/86.png",
+          "winner": "Real Madrid CF",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Manchester City FC",
+              "away_team": "Real Madrid CF",
+              "home_goals": 2,
+              "away_goals": 3,
+              "date": "2025-02-11T20:00:00Z"
+            },
+            {
+              "home_team": "Real Madrid CF",
+              "away_team": "Manchester City FC",
+              "home_goals": 3,
+              "away_goals": 1,
+              "date": "2025-02-19T20:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Stade Brestois 29",
+          "team2": "Paris Saint-Germain FC",
+          "team1_goals": 0,
+          "team2_goals": 10,
+          "team1_logo": "https://crests.football-data.org/512.png",
+          "team2_logo": "https://crests.football-data.org/524.png",
+          "winner": "Paris Saint-Germain FC",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Stade Brestois 29",
+              "away_team": "Paris Saint-Germain FC",
+              "home_goals": 0,
+              "away_goals": 3,
+              "date": "2025-02-11T17:45:00Z"
+            },
+            {
+              "home_team": "Paris Saint-Germain FC",
+              "away_team": "Stade Brestois 29",
+              "home_goals": 7,
+              "away_goals": 0,
+              "date": "2025-02-19T20:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Club Brugge KV",
+          "team2": "Atalanta BC",
+          "team1_goals": 5,
+          "team2_goals": 2,
+          "team1_logo": "https://crests.football-data.org/851.png",
+          "team2_logo": "https://crests.football-data.org/102.png",
+          "winner": "Club Brugge KV",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Club Brugge KV",
+              "away_team": "Atalanta BC",
+              "home_goals": 2,
+              "away_goals": 1,
+              "date": "2025-02-12T17:45:00Z"
+            },
+            {
+              "home_team": "Atalanta BC",
+              "away_team": "Club Brugge KV",
+              "home_goals": 1,
+              "away_goals": 3,
+              "date": "2025-02-18T20:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "AS Monaco FC",
+          "team2": "Sport Lisboa e Benfica",
+          "team1_goals": 3,
+          "team2_goals": 4,
+          "team1_logo": "https://crests.football-data.org/548.png",
+          "team2_logo": "https://crests.football-data.org/1903.png",
+          "winner": "Sport Lisboa e Benfica",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "AS Monaco FC",
+              "away_team": "Sport Lisboa e Benfica",
+              "home_goals": 0,
+              "away_goals": 1,
+              "date": "2025-02-12T20:00:00Z"
+            },
+            {
+              "home_team": "Sport Lisboa e Benfica",
+              "away_team": "AS Monaco FC",
+              "home_goals": 3,
+              "away_goals": 3,
+              "date": "2025-02-18T20:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Sporting Clube de Portugal",
+          "team2": "Borussia Dortmund",
+          "team1_goals": 0,
+          "team2_goals": 3,
+          "team1_logo": "https://crests.football-data.org/498.png",
+          "team2_logo": "https://crests.football-data.org/4.png",
+          "winner": "Borussia Dortmund",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Sporting Clube de Portugal",
+              "away_team": "Borussia Dortmund",
+              "home_goals": 0,
+              "away_goals": 3,
+              "date": "2025-02-11T20:00:00Z"
+            },
+            {
+              "home_team": "Borussia Dortmund",
+              "away_team": "Sporting Clube de Portugal",
+              "home_goals": 0,
+              "away_goals": 0,
+              "date": "2025-02-19T17:45:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Celtic FC",
+          "team2": "FC Bayern München",
+          "team1_goals": 2,
+          "team2_goals": 3,
+          "team1_logo": "",
+          "team2_logo": "https://crests.football-data.org/5.png",
+          "winner": "FC Bayern München",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Celtic FC",
+              "away_team": "FC Bayern München",
+              "home_goals": 1,
+              "away_goals": 2,
+              "date": "2025-02-12T20:00:00Z"
+            },
+            {
+              "home_team": "FC Bayern München",
+              "away_team": "Celtic FC",
+              "home_goals": 1,
+              "away_goals": 1,
+              "date": "2025-02-18T20:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Feyenoord Rotterdam",
+          "team2": "AC Milan",
+          "team1_goals": 2,
+          "team2_goals": 1,
+          "team1_logo": "https://crests.football-data.org/675.png",
+          "team2_logo": "https://crests.football-data.org/98.png",
+          "winner": "Feyenoord Rotterdam",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Feyenoord Rotterdam",
+              "away_team": "AC Milan",
+              "home_goals": 1,
+              "away_goals": 0,
+              "date": "2025-02-12T20:00:00Z"
+            },
+            {
+              "home_team": "AC Milan",
+              "away_team": "Feyenoord Rotterdam",
+              "home_goals": 1,
+              "away_goals": 1,
+              "date": "2025-02-18T17:45:00Z"
+            }
+          ],
+          "pens": null
+        }
+      ],
+      "LAST_16": [
+        {
+          "team1": "PSV",
+          "team2": "Arsenal FC",
+          "team1_goals": 3,
+          "team2_goals": 9,
+          "team1_logo": "https://crests.football-data.org/674.png",
+          "team2_logo": "https://crests.football-data.org/57.png",
+          "winner": "Arsenal FC",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "PSV",
+              "away_team": "Arsenal FC",
+              "home_goals": 1,
+              "away_goals": 7,
+              "date": "2025-03-04T20:00:00Z"
+            },
+            {
+              "home_team": "Arsenal FC",
+              "away_team": "PSV",
+              "home_goals": 2,
+              "away_goals": 2,
+              "date": "2025-03-12T20:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Real Madrid CF",
+          "team2": "Club Atlético de Madrid",
+          "team1_goals": 2,
+          "team2_goals": 2,
+          "team1_logo": "https://crests.football-data.org/86.png",
+          "team2_logo": "https://crests.football-data.org/78.png",
+          "winner": "Real Madrid CF",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Real Madrid CF",
+              "away_team": "Club Atlético de Madrid",
+              "home_goals": 2,
+              "away_goals": 1,
+              "date": "2025-03-04T20:00:00Z"
+            },
+            {
+              "home_team": "Club Atlético de Madrid",
+              "away_team": "Real Madrid CF",
+              "home_goals": 1,
+              "away_goals": 0,
+              "date": "2025-03-12T20:00:00Z",
+              "penalties": [
+                2,
+                4
+              ]
+            }
+          ],
+          "pens": [
+            4,
+            2
+          ]
+        },
+        {
+          "team1": "Paris Saint-Germain FC",
+          "team2": "Liverpool FC",
+          "team1_goals": 1,
+          "team2_goals": 1,
+          "team1_logo": "https://crests.football-data.org/524.png",
+          "team2_logo": "https://crests.football-data.org/64.png",
+          "winner": "Paris Saint-Germain FC",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Paris Saint-Germain FC",
+              "away_team": "Liverpool FC",
+              "home_goals": 0,
+              "away_goals": 1,
+              "date": "2025-03-05T20:00:00Z"
+            },
+            {
+              "home_team": "Liverpool FC",
+              "away_team": "Paris Saint-Germain FC",
+              "home_goals": 0,
+              "away_goals": 1,
+              "date": "2025-03-11T20:00:00Z",
+              "penalties": [
+                1,
+                4
+              ]
+            }
+          ],
+          "pens": [
+            4,
+            1
+          ]
+        },
+        {
+          "team1": "Club Brugge KV",
+          "team2": "Aston Villa FC",
+          "team1_goals": 1,
+          "team2_goals": 6,
+          "team1_logo": "https://crests.football-data.org/851.png",
+          "team2_logo": "https://crests.football-data.org/58.png",
+          "winner": "Aston Villa FC",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Club Brugge KV",
+              "away_team": "Aston Villa FC",
+              "home_goals": 1,
+              "away_goals": 3,
+              "date": "2025-03-04T17:45:00Z"
+            },
+            {
+              "home_team": "Aston Villa FC",
+              "away_team": "Club Brugge KV",
+              "home_goals": 3,
+              "away_goals": 0,
+              "date": "2025-03-12T20:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Sport Lisboa e Benfica",
+          "team2": "FC Barcelona",
+          "team1_goals": 1,
+          "team2_goals": 4,
+          "team1_logo": "https://crests.football-data.org/1903.png",
+          "team2_logo": "https://crests.football-data.org/81.png",
+          "winner": "FC Barcelona",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Sport Lisboa e Benfica",
+              "away_team": "FC Barcelona",
+              "home_goals": 0,
+              "away_goals": 1,
+              "date": "2025-03-05T20:00:00Z"
+            },
+            {
+              "home_team": "FC Barcelona",
+              "away_team": "Sport Lisboa e Benfica",
+              "home_goals": 3,
+              "away_goals": 1,
+              "date": "2025-03-11T17:45:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Borussia Dortmund",
+          "team2": "Lille OSC",
+          "team1_goals": 3,
+          "team2_goals": 2,
+          "team1_logo": "https://crests.football-data.org/4.png",
+          "team2_logo": "https://crests.football-data.org/521.png",
+          "winner": "Borussia Dortmund",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Borussia Dortmund",
+              "away_team": "Lille OSC",
+              "home_goals": 1,
+              "away_goals": 1,
+              "date": "2025-03-04T20:00:00Z"
+            },
+            {
+              "home_team": "Lille OSC",
+              "away_team": "Borussia Dortmund",
+              "home_goals": 1,
+              "away_goals": 2,
+              "date": "2025-03-12T17:45:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "FC Bayern München",
+          "team2": "Bayer 04 Leverkusen",
+          "team1_goals": 5,
+          "team2_goals": 0,
+          "team1_logo": "https://crests.football-data.org/5.png",
+          "team2_logo": "https://crests.football-data.org/3.png",
+          "winner": "FC Bayern München",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "FC Bayern München",
+              "away_team": "Bayer 04 Leverkusen",
+              "home_goals": 3,
+              "away_goals": 0,
+              "date": "2025-03-05T20:00:00Z"
+            },
+            {
+              "home_team": "Bayer 04 Leverkusen",
+              "away_team": "FC Bayern München",
+              "home_goals": 0,
+              "away_goals": 2,
+              "date": "2025-03-11T20:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Feyenoord Rotterdam",
+          "team2": "FC Internazionale Milano",
+          "team1_goals": 1,
+          "team2_goals": 4,
+          "team1_logo": "https://crests.football-data.org/675.png",
+          "team2_logo": "https://crests.football-data.org/108.png",
+          "winner": "FC Internazionale Milano",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Feyenoord Rotterdam",
+              "away_team": "FC Internazionale Milano",
+              "home_goals": 0,
+              "away_goals": 2,
+              "date": "2025-03-05T17:45:00Z"
+            },
+            {
+              "home_team": "FC Internazionale Milano",
+              "away_team": "Feyenoord Rotterdam",
+              "home_goals": 2,
+              "away_goals": 1,
+              "date": "2025-03-11T20:00:00Z"
+            }
+          ],
+          "pens": null
+        }
+      ],
+      "QUARTER_FINALS": [
+        {
+          "team1": "Arsenal FC",
+          "team2": "Real Madrid CF",
+          "team1_goals": 5,
+          "team2_goals": 1,
+          "team1_logo": "https://crests.football-data.org/57.png",
+          "team2_logo": "https://crests.football-data.org/86.png",
+          "winner": "Arsenal FC",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Arsenal FC",
+              "away_team": "Real Madrid CF",
+              "home_goals": 3,
+              "away_goals": 0,
+              "date": "2025-04-08T19:00:00Z"
+            },
+            {
+              "home_team": "Real Madrid CF",
+              "away_team": "Arsenal FC",
+              "home_goals": 1,
+              "away_goals": 2,
+              "date": "2025-04-16T19:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "Paris Saint-Germain FC",
+          "team2": "Aston Villa FC",
+          "team1_goals": 5,
+          "team2_goals": 4,
+          "team1_logo": "https://crests.football-data.org/524.png",
+          "team2_logo": "https://crests.football-data.org/58.png",
+          "winner": "Paris Saint-Germain FC",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Paris Saint-Germain FC",
+              "away_team": "Aston Villa FC",
+              "home_goals": 3,
+              "away_goals": 1,
+              "date": "2025-04-09T19:00:00Z"
+            },
+            {
+              "home_team": "Aston Villa FC",
+              "away_team": "Paris Saint-Germain FC",
+              "home_goals": 3,
+              "away_goals": 2,
+              "date": "2025-04-15T19:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "FC Barcelona",
+          "team2": "Borussia Dortmund",
+          "team1_goals": 5,
+          "team2_goals": 3,
+          "team1_logo": "https://crests.football-data.org/81.png",
+          "team2_logo": "https://crests.football-data.org/4.png",
+          "winner": "FC Barcelona",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "FC Barcelona",
+              "away_team": "Borussia Dortmund",
+              "home_goals": 4,
+              "away_goals": 0,
+              "date": "2025-04-09T19:00:00Z"
+            },
+            {
+              "home_team": "Borussia Dortmund",
+              "away_team": "FC Barcelona",
+              "home_goals": 3,
+              "away_goals": 1,
+              "date": "2025-04-15T19:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "FC Bayern München",
+          "team2": "FC Internazionale Milano",
+          "team1_goals": 3,
+          "team2_goals": 4,
+          "team1_logo": "https://crests.football-data.org/5.png",
+          "team2_logo": "https://crests.football-data.org/108.png",
+          "winner": "FC Internazionale Milano",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "FC Bayern München",
+              "away_team": "FC Internazionale Milano",
+              "home_goals": 1,
+              "away_goals": 2,
+              "date": "2025-04-08T19:00:00Z"
+            },
+            {
+              "home_team": "FC Internazionale Milano",
+              "away_team": "FC Bayern München",
+              "home_goals": 2,
+              "away_goals": 2,
+              "date": "2025-04-16T19:00:00Z"
+            }
+          ],
+          "pens": null
+        }
+      ],
+      "SEMI_FINALS": [
+        {
+          "team1": "Arsenal FC",
+          "team2": "Paris Saint-Germain FC",
+          "team1_goals": 1,
+          "team2_goals": 3,
+          "team1_logo": "https://crests.football-data.org/57.png",
+          "team2_logo": "https://crests.football-data.org/524.png",
+          "winner": "Paris Saint-Germain FC",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Arsenal FC",
+              "away_team": "Paris Saint-Germain FC",
+              "home_goals": 0,
+              "away_goals": 1,
+              "date": "2025-04-29T19:00:00Z"
+            },
+            {
+              "home_team": "Paris Saint-Germain FC",
+              "away_team": "Arsenal FC",
+              "home_goals": 2,
+              "away_goals": 1,
+              "date": "2025-05-07T19:00:00Z"
+            }
+          ],
+          "pens": null
+        },
+        {
+          "team1": "FC Barcelona",
+          "team2": "FC Internazionale Milano",
+          "team1_goals": 6,
+          "team2_goals": 7,
+          "team1_logo": "https://crests.football-data.org/81.png",
+          "team2_logo": "https://crests.football-data.org/108.png",
+          "winner": "FC Internazionale Milano",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "FC Barcelona",
+              "away_team": "FC Internazionale Milano",
+              "home_goals": 3,
+              "away_goals": 3,
+              "date": "2025-04-30T19:00:00Z"
+            },
+            {
+              "home_team": "FC Internazionale Milano",
+              "away_team": "FC Barcelona",
+              "home_goals": 4,
+              "away_goals": 3,
+              "date": "2025-05-06T19:00:00Z"
+            }
+          ],
+          "pens": null
+        }
+      ],
+      "FINAL": [
+        {
+          "team1": "Paris Saint-Germain FC",
+          "team2": "FC Internazionale Milano",
+          "team1_goals": 5,
+          "team2_goals": 0,
+          "team1_logo": "https://crests.football-data.org/524.png",
+          "team2_logo": "https://crests.football-data.org/108.png",
+          "winner": "Paris Saint-Germain FC",
+          "status": "FINISHED",
+          "legs": [
+            {
+              "home_team": "Paris Saint-Germain FC",
+              "away_team": "FC Internazionale Milano",
+              "home_goals": 5,
+              "away_goals": 0,
+              "date": "2025-05-31T19:00:00Z"
+            }
+          ],
+          "pens": null
         }
       ]
     },
-    {
-      "team1": "Borussia Dortmund",
-      "team2": "Atalanta BC",
-      "team1_goals": 3,
-      "team2_goals": 4,
-      "team1_logo": "https://crests.football-data.org/4.png",
-      "team2_logo": "https://crests.football-data.org/102.png",
-      "winner": "Atalanta BC",
-      "status": "FINISHED",
-      "legs": [
-        {
-          "home_team": "Borussia Dortmund",
-          "away_team": "Atalanta BC",
-          "home_goals": 2,
-          "away_goals": 0
-        },
-        {
-          "home_team": "Atalanta BC",
-          "away_team": "Borussia Dortmund",
-          "home_goals": 4,
-          "away_goals": 1
-        }
-      ]
-    },
-    {
-      "team1": "Qarabağ Ağdam FK",
-      "team2": "Newcastle United FC",
-      "team1_goals": 3,
-      "team2_goals": 9,
-      "team1_logo": "https://crests.football-data.org/611.png",
-      "team2_logo": "https://crests.football-data.org/67.png",
-      "winner": "Newcastle United FC",
-      "status": "FINISHED",
-      "legs": [
-        {
-          "home_team": "Qarabağ Ağdam FK",
-          "away_team": "Newcastle United FC",
-          "home_goals": 1,
-          "away_goals": 6
-        },
-        {
-          "home_team": "Newcastle United FC",
-          "away_team": "Qarabağ Ağdam FK",
-          "home_goals": 3,
-          "away_goals": 2
-        }
-      ]
-    },
-    {
-      "team1": "Club Brugge KV",
-      "team2": "Club Atlético de Madrid",
-      "team1_goals": 4,
-      "team2_goals": 7,
-      "team1_logo": "https://crests.football-data.org/851.png",
-      "team2_logo": "https://crests.football-data.org/78.png",
-      "winner": "Club Atlético de Madrid",
-      "status": "FINISHED",
-      "legs": [
-        {
-          "home_team": "Club Brugge KV",
-          "away_team": "Club Atlético de Madrid",
-          "home_goals": 3,
-          "away_goals": 3
-        },
-        {
-          "home_team": "Club Atlético de Madrid",
-          "away_team": "Club Brugge KV",
-          "home_goals": 4,
-          "away_goals": 1
-        }
-      ]
-    },
-    {
-      "team1": "FK Bodø/Glimt",
-      "team2": "FC Internazionale Milano",
-      "team1_goals": 5,
-      "team2_goals": 2,
-      "team1_logo": "https://crests.football-data.org/5721.png",
-      "team2_logo": "https://crests.football-data.org/108.png",
-      "winner": "FK Bodø/Glimt",
-      "status": "FINISHED",
-      "legs": [
-        {
-          "home_team": "FK Bodø/Glimt",
-          "away_team": "FC Internazionale Milano",
-          "home_goals": 3,
-          "away_goals": 1
-        },
-        {
-          "home_team": "FC Internazionale Milano",
-          "away_team": "FK Bodø/Glimt",
-          "home_goals": 1,
-          "away_goals": 2
-        }
-      ]
-    },
-    {
-      "team1": "PAE Olympiakos SFP",
-      "team2": "Bayer 04 Leverkusen",
-      "team1_goals": 0,
-      "team2_goals": 2,
-      "team1_logo": "https://crests.football-data.org/654.png",
-      "team2_logo": "https://crests.football-data.org/3.png",
-      "winner": "Bayer 04 Leverkusen",
-      "status": "FINISHED",
-      "legs": [
-        {
-          "home_team": "PAE Olympiakos SFP",
-          "away_team": "Bayer 04 Leverkusen",
-          "home_goals": 0,
-          "away_goals": 2
-        },
-        {
-          "home_team": "Bayer 04 Leverkusen",
-          "away_team": "PAE Olympiakos SFP",
-          "home_goals": 0,
-          "away_goals": 0
-        }
-      ]
+    "2026": {
+      "PLAYOFFS": [],
+      "LAST_16": [],
+      "QUARTER_FINALS": [],
+      "SEMI_FINALS": [],
+      "FINAL": []
     }
-  ],
-  "LAST_16": [
-    {
-      "team1": "Paris Saint-Germain FC",
-      "team2": "Chelsea FC",
-      "team1_goals": 8,
-      "team2_goals": 2,
-      "team1_logo": "https://crests.football-data.org/524.png",
-      "team2_logo": "https://crests.football-data.org/61.png",
-      "winner": "Paris Saint-Germain FC",
-      "status": "FINISHED",
-      "legs": [
-        {
-          "home_team": "Paris Saint-Germain FC",
-          "away_team": "Chelsea FC",
-          "home_goals": 5,
-          "away_goals": 2
-        },
-        {
-          "home_team": "Chelsea FC",
-          "away_team": "Paris Saint-Germain FC",
-          "home_goals": 0,
-          "away_goals": 3
-        }
-      ]
-    },
-    {
-      "team1": "Galatasaray SK",
-      "team2": "Liverpool FC",
-      "team1_goals": 1,
-      "team2_goals": 4,
-      "team1_logo": "https://crests.football-data.org/610.png",
-      "team2_logo": "https://crests.football-data.org/64.png",
-      "winner": "Liverpool FC",
-      "status": "FINISHED",
-      "legs": [
-        {
-          "home_team": "Galatasaray SK",
-          "away_team": "Liverpool FC",
-          "home_goals": 1,
-          "away_goals": 0
-        },
-        {
-          "home_team": "Liverpool FC",
-          "away_team": "Galatasaray SK",
-          "home_goals": 4,
-          "away_goals": 0
-        }
-      ]
-    },
-    {
-      "team1": "Real Madrid CF",
-      "team2": "Manchester City FC",
-      "team1_goals": 5,
-      "team2_goals": 1,
-      "team1_logo": "https://crests.football-data.org/86.png",
-      "team2_logo": "https://crests.football-data.org/65.png",
-      "winner": "Real Madrid CF",
-      "status": "FINISHED",
-      "legs": [
-        {
-          "home_team": "Real Madrid CF",
-          "away_team": "Manchester City FC",
-          "home_goals": 3,
-          "away_goals": 0
-        },
-        {
-          "home_team": "Manchester City FC",
-          "away_team": "Real Madrid CF",
-          "home_goals": 1,
-          "away_goals": 2
-        }
-      ]
-    },
-    {
-      "team1": "Atalanta BC",
-      "team2": "FC Bayern München",
-      "team1_goals": 2,
-      "team2_goals": 10,
-      "team1_logo": "https://crests.football-data.org/102.png",
-      "team2_logo": "https://crests.football-data.org/5.png",
-      "winner": "FC Bayern München",
-      "status": "FINISHED",
-      "legs": [
-        {
-          "home_team": "Atalanta BC",
-          "away_team": "FC Bayern München",
-          "home_goals": 1,
-          "away_goals": 6
-        },
-        {
-          "home_team": "FC Bayern München",
-          "away_team": "Atalanta BC",
-          "home_goals": 4,
-          "away_goals": 1
-        }
-      ]
-    },
-    {
-      "team1": "Newcastle United FC",
-      "team2": "FC Barcelona",
-      "team1_goals": 3,
-      "team2_goals": 8,
-      "team1_logo": "https://crests.football-data.org/67.png",
-      "team2_logo": "https://crests.football-data.org/81.png",
-      "winner": "FC Barcelona",
-      "status": "FINISHED",
-      "legs": [
-        {
-          "home_team": "Newcastle United FC",
-          "away_team": "FC Barcelona",
-          "home_goals": 1,
-          "away_goals": 1
-        },
-        {
-          "home_team": "FC Barcelona",
-          "away_team": "Newcastle United FC",
-          "home_goals": 7,
-          "away_goals": 2
-        }
-      ]
-    },
-    {
-      "team1": "Club Atlético de Madrid",
-      "team2": "Tottenham Hotspur FC",
-      "team1_goals": 7,
-      "team2_goals": 5,
-      "team1_logo": "https://crests.football-data.org/78.png",
-      "team2_logo": "https://crests.football-data.org/73.png",
-      "winner": "Club Atlético de Madrid",
-      "status": "FINISHED",
-      "legs": [
-        {
-          "home_team": "Club Atlético de Madrid",
-          "away_team": "Tottenham Hotspur FC",
-          "home_goals": 5,
-          "away_goals": 2
-        },
-        {
-          "home_team": "Tottenham Hotspur FC",
-          "away_team": "Club Atlético de Madrid",
-          "home_goals": 3,
-          "away_goals": 2
-        }
-      ]
-    },
-    {
-      "team1": "FK Bodø/Glimt",
-      "team2": "Sporting Clube de Portugal",
-      "team1_goals": 3,
-      "team2_goals": 5,
-      "team1_logo": "https://crests.football-data.org/5721.png",
-      "team2_logo": "https://crests.football-data.org/498.png",
-      "winner": "Sporting Clube de Portugal",
-      "status": "FINISHED",
-      "legs": [
-        {
-          "home_team": "FK Bodø/Glimt",
-          "away_team": "Sporting Clube de Portugal",
-          "home_goals": 3,
-          "away_goals": 0
-        },
-        {
-          "home_team": "Sporting Clube de Portugal",
-          "away_team": "FK Bodø/Glimt",
-          "home_goals": 5,
-          "away_goals": 0
-        }
-      ]
-    },
-    {
-      "team1": "Bayer 04 Leverkusen",
-      "team2": "Arsenal FC",
-      "team1_goals": 1,
-      "team2_goals": 3,
-      "team1_logo": "https://crests.football-data.org/3.png",
-      "team2_logo": "https://crests.football-data.org/57.png",
-      "winner": "Arsenal FC",
-      "status": "FINISHED",
-      "legs": [
-        {
-          "home_team": "Bayer 04 Leverkusen",
-          "away_team": "Arsenal FC",
-          "home_goals": 1,
-          "away_goals": 1
-        },
-        {
-          "home_team": "Arsenal FC",
-          "away_team": "Bayer 04 Leverkusen",
-          "home_goals": 2,
-          "away_goals": 0
-        }
-      ]
-    }
-  ],
-  "QUARTER_FINALS": [
-    {
-      "team1": "Paris Saint-Germain FC",
-      "team2": "Liverpool FC",
-      "team1_goals": 4,
-      "team2_goals": 0,
-      "team1_logo": "https://crests.football-data.org/524.png",
-      "team2_logo": "https://crests.football-data.org/64.png",
-      "winner": "Paris Saint-Germain FC",
-      "status": "FINISHED",
-      "legs": [
-        {
-          "home_team": "Paris Saint-Germain FC",
-          "away_team": "Liverpool FC",
-          "home_goals": 2,
-          "away_goals": 0
-        },
-        {
-          "home_team": "Liverpool FC",
-          "away_team": "Paris Saint-Germain FC",
-          "home_goals": 0,
-          "away_goals": 2
-        }
-      ]
-    },
-    {
-      "team1": "Real Madrid CF",
-      "team2": "FC Bayern München",
-      "team1_goals": 4,
-      "team2_goals": 6,
-      "team1_logo": "https://crests.football-data.org/86.png",
-      "team2_logo": "https://crests.football-data.org/5.png",
-      "winner": "FC Bayern München",
-      "status": "FINISHED",
-      "legs": [
-        {
-          "home_team": "Real Madrid CF",
-          "away_team": "FC Bayern München",
-          "home_goals": 1,
-          "away_goals": 2
-        },
-        {
-          "home_team": "FC Bayern München",
-          "away_team": "Real Madrid CF",
-          "home_goals": 4,
-          "away_goals": 3
-        }
-      ]
-    },
-    {
-      "team1": "FC Barcelona",
-      "team2": "Club Atlético de Madrid",
-      "team1_goals": 2,
-      "team2_goals": 3,
-      "team1_logo": "https://crests.football-data.org/81.png",
-      "team2_logo": "https://crests.football-data.org/78.png",
-      "winner": "Club Atlético de Madrid",
-      "status": "FINISHED",
-      "legs": [
-        {
-          "home_team": "FC Barcelona",
-          "away_team": "Club Atlético de Madrid",
-          "home_goals": 0,
-          "away_goals": 2
-        },
-        {
-          "home_team": "Club Atlético de Madrid",
-          "away_team": "FC Barcelona",
-          "home_goals": 1,
-          "away_goals": 2
-        }
-      ]
-    },
-    {
-      "team1": "Sporting Clube de Portugal",
-      "team2": "Arsenal FC",
-      "team1_goals": 0,
-      "team2_goals": 1,
-      "team1_logo": "https://crests.football-data.org/498.png",
-      "team2_logo": "https://crests.football-data.org/57.png",
-      "winner": "Arsenal FC",
-      "status": "FINISHED",
-      "legs": [
-        {
-          "home_team": "Sporting Clube de Portugal",
-          "away_team": "Arsenal FC",
-          "home_goals": 0,
-          "away_goals": 1
-        },
-        {
-          "home_team": "Arsenal FC",
-          "away_team": "Sporting Clube de Portugal",
-          "home_goals": 0,
-          "away_goals": 0
-        }
-      ]
-    }
-  ],
-  "SEMI_FINALS": [
-    {
-      "team1": "Paris Saint-Germain FC",
-      "team2": "FC Bayern München",
-      "team1_goals": 6,
-      "team2_goals": 5,
-      "team1_logo": "https://crests.football-data.org/524.png",
-      "team2_logo": "https://crests.football-data.org/5.png",
-      "winner": "Paris Saint-Germain FC",
-      "status": "FINISHED",
-      "legs": [
-        {
-          "home_team": "Paris Saint-Germain FC",
-          "away_team": "FC Bayern München",
-          "home_goals": 5,
-          "away_goals": 4
-        },
-        {
-          "home_team": "FC Bayern München",
-          "away_team": "Paris Saint-Germain FC",
-          "home_goals": 1,
-          "away_goals": 1
-        }
-      ]
-    },
-    {
-      "team1": "Club Atlético de Madrid",
-      "team2": "Arsenal FC",
-      "team1_goals": 1,
-      "team2_goals": 2,
-      "team1_logo": "https://crests.football-data.org/78.png",
-      "team2_logo": "https://crests.football-data.org/57.png",
-      "winner": "Arsenal FC",
-      "status": "FINISHED",
-      "legs": [
-        {
-          "home_team": "Club Atlético de Madrid",
-          "away_team": "Arsenal FC",
-          "home_goals": 1,
-          "away_goals": 1
-        },
-        {
-          "home_team": "Arsenal FC",
-          "away_team": "Club Atlético de Madrid",
-          "home_goals": 1,
-          "away_goals": 0
-        }
-      ]
-    }
-  ],
-  "FINAL": [
-    {
-      "team1": "Paris Saint-Germain FC",
-      "team2": "Arsenal FC",
-      "team1_goals": 5,
-      "team2_goals": 4,
-      "team1_logo": "https://crests.football-data.org/524.png",
-      "team2_logo": "https://crests.football-data.org/57.png",
-      "winner": "Paris Saint-Germain FC",
-      "status": "FINISHED",
-      "legs": [
-        {
-          "home_team": "Paris Saint-Germain FC",
-          "away_team": "Arsenal FC",
-          "home_goals": 5,
-          "away_goals": 4
-        }
-      ]
-    }
-  ]
+  }
 }
