@@ -41,6 +41,18 @@ LEAGUES_V2 = {
     "CL":  "챔피언스리그",
 }
 
+def _match_goals(m):
+    """football-data 경기 → (홈 득점, 원정 득점, 승부차기 (홈, 원정) 또는 None).
+    승부차기로 끝난 경기는 fullTime에 승부차기 골까지 더해져 옴(예: 아스널–포르투 1-0 + 승부차기 4-2 → fullTime 5-2)
+    — 그대로 쓰면 결과·ELO·맞대결이 틀려서(리버풀 1-0 승리가 1-5 패배로 기록됐었음, 2026-09-29 발견) 승부차기 골을 뺌"""
+    sc = m.get("score") or {}
+    ft = sc.get("fullTime") or {}
+    hg, ag = ft.get("home"), ft.get("away")
+    pen = sc.get("penalties") or {}
+    if sc.get("duration") == "PENALTY_SHOOTOUT" and pen.get("home") is not None and hg is not None:
+        return hg - pen["home"], ag - pen["away"], (pen["home"], pen["away"])
+    return hg, ag, None
+
 def fetch_matches(league_code, season):
     url = f"{BASE_URL}/competitions/{league_code}/matches"
     params = {"season": season, "status": "FINISHED"}
@@ -54,15 +66,15 @@ def fetch_matches(league_code, season):
     print(f"  ✅ {len(matches)}경기")
     rows = []
     for m in matches:
-        ft = m["score"]["fullTime"]
+        hg, ag, _ = _match_goals(m)
         rows.append({
             "match_id":   m["id"],
             "date":       m["utcDate"][:10],
             "league":     league_code,
             "home_team":  m["homeTeam"]["name"],
             "away_team":  m["awayTeam"]["name"],
-            "home_goals": ft.get("home"),
-            "away_goals": ft.get("away"),
+            "home_goals": hg,
+            "away_goals": ag,
             "matchday":   m.get("matchday"),
         })
     df = pd.DataFrame(rows)
@@ -575,7 +587,252 @@ def _wd_city(qid, depth=0):
     up = _wd_current(ent.get("claims", {}), "P131")
     return _wd_city(up["id"], depth + 1) if up else None
 
-def _wiki_one(team_name):
+# ── 우승 기록·구단 최고 이적료 파서(영문 위키백과) — 팀 정보 개요 탭 (2026-09-29) ──
+# 우승 기록: 구단 문서 "Honours" 절의 표(대회·횟수·시즌) 또는 목록(* 대회 / ** Winners: 시즌…)을 읽어 주요 대회별 횟수로.
+#   유스·2군·여자팀·지역 대회·친선 대회는 제외, "(level 2)" 표기는 이름보다 우선(잉글랜드 1992~2004 "First Division"은 2부).
+#   2026-09-29 96팀 전부 출력을 원문과 대조해 규칙을 다듬음(시즌 링크 이중 계산, {{lang}}/<sup> 속 숫자, 소제목 단위 제외 등).
+# 최고 이적료: "List of … records and statistics" 문서의 paid/received 표 — 순위 칸이 있으면 1위, 없으면 최고액.
+# 대회 이름 → 분류 (순서 중요: 하위 리그·UEFA를 먼저 거름)
+_HON_RULES = [
+    ("skip", r"(?i:women|femenin|féminin|frauen|femminile|Reina|ladies)|Catalunya|Catalan|Catalonia|Galici|Cantabri|Gipuzkoa|Guipúzcoa|Biscay|Vizcaya|Levante Championship|Valencian|Andalusia|Castil|Madrid Cup|Madrid Championship|Alsace|Dordogne|Brittany|Bretagne|Bezirksliga|Kreisliga|Verbandsliga|Landesliga|Gauliga|Oberliga|Southern German|South German|West German|North German|Berlin|Hessen|Hesse|Baden|Württemberg|Bavaria|Bayern Cup|Saarland|Westphalia|Lombard|Piedmont|Tuscan|Campania|Sicil|Sardin|Emilia|Veneto|Liguria|Lazio Cup|Ile-de-France|Paris Cup|Coupe de Paris|Normandie|Provence|Nord|Centenary Trophy|Western (Football )?League|patronages|Sheriff of London|Football League Super Cup|Hallenpokal|Screen Sport|Under[- ]?\d\d|Junior|Juvenil|Allievi|Gambardella|Intertoto|Fairs Cup|Youth|Reserve|Women|Primavera|U-?\d\d|Regional|Sussex|Lancashire|Liverpool Senior|Kent|Isthmian|Southern League|Premier League 2|Premier League Asia|Emirates Cup|Joan Gamper|Amsterdam|Teresa Herrera|Ramón de Carranza|Trofeo|Torneo|Coppa delle Alpi|Mitropa|Latin Cup|Pequeña|Anglo|Watney|Texaco|Full Members|Zenith|Simod|Mercantile|Wartime|War Cup|League North|League South|Coppa Italia (Serie C|Lega Pro|Serie D)|Supercoppa (di Serie C|Lega Pro)|Copa Federación|Copa Eva|Copa de Oro|Ligapokal Pre|Supercoppa di Serie"),
+    ("uecl", r"Conference League"),
+    ("l3", r"Third Division|Fourth Division|League One|League Two|Serie C|Serie D|3\. Liga|Regionalliga|Oberliga|Segunda División B|Segunda Federación|Tercera|Primera Federación|Championnat National|National 2|CFA|Lega Pro|Prima Divisione|Seconda Divisione|Division 3|Division d'Honneur|Football Conference|National League|Amateur"),
+    ("ucl", r"UEFA Champions League|European Cup(?! Winners)|European Champion Clubs"),
+    ("cwc", r"Cup Winners'? Cup"),
+    ("usc", r"UEFA Super Cup|European Super Cup"),
+    ("uel", r"UEFA Europa League(?! Conference)|UEFA Cup(?! Winners)"),
+    ("uecl", r"Conference League"),
+    ("world", r"Intercontinental Cup|Club World Cup|FIFA Club World"),
+    ("l2", r"Second Division|EFL Championship|Football League Championship|^\W*Championship|Segunda División|Segunda Division|2\. Bundesliga|Serie B|Ligue 2|Division 2|Zweite"),
+    ("lcup", r"League Cup|EFL Cup|Football League Cup|Coupe de la Ligue|Copa de la Liga|Ligapokal"),
+    ("super", r"Community Shield|Charity Shield|Supercopa|DFL-Supercup|DFB-Supercup|German Super ?Cup|Supercoppa|Trophée des [Cc]hampions|Super Cup"),
+    ("cup", r"FA Cup|Copa del Rey|Copa del Generalísimo|Copa de España|DFB-Pokal|German Cup|Tschammer|Coppa Italia|Coupe de France|Copa del Presidente"),
+    ("league", r"Premier League|First Division|La Liga|Primera División|Primera Division|Bundesliga|German (football )?champ|Serie A|Italian (football )?champ|Ligue 1|Division 1|French (football )?champ|Championnat de France|English champions|Spanish champ|Football League(?! Cup| Trophy)|Scudetto|Divisione Nazionale"),
+]
+_HON_SEASON = re.compile(r"(?<![\d/])((?:18|19|20)\d\d(?:\s*[–\-/]\s*(?:\d{4}|\d{2}))?)(?!\d)")
+
+_HON_CUT = re.compile(r"^={2,4}\s*(Youth|Reserve|Academy|Women|Ladies|Doubles|Trebles|Regional|Friendly|Friendlies|Minor|Invitational|Other|Pre-season|Individual|Awards|Records|Unofficial|Amateur|Junior|B team|II team|Futsal|Basketball|Handball|Esports|Feminine|Femenino|Reserves|Second team|Minor titles|Minor trophies|Other titles|Other competitions)", re.I | re.M)
+
+def _hon_strip(w):
+    # 유스·2군·여자팀·더블·지역 대회·친선 대회 소제목은 그 소제목 구간만 버림(다음 같은/상위 단계 소제목 전까지)
+    out, skip_level = [], None
+    for line in w.split("\n"):
+        h = re.match(r"^(={2,5})\s*(.*?)\s*\1\s*$", line)
+        if h:
+            lv = len(h.group(1))
+            if skip_level is not None and lv <= skip_level:
+                skip_level = None
+            if skip_level is None and _HON_CUT.match(line):
+                skip_level = lv
+        if skip_level is None:
+            out.append(line)
+    w = "\n".join(out)
+    w = re.sub(r"<sup[^>]*>.*?</sup>", "", w, flags=re.S)
+    w = re.sub(r"\{\{(?:lang|nowrap|nobr)\|(?:[a-z-]+\|)?([^{}|]*(?:\[\[[^\]]*\]\][^{}|]*)*)[^{}]*\}\}", r"\1", w)
+    w = re.sub(r"<ref[^>]*/>", "", w)
+    w = re.sub(r"<ref[^>]*>.*?</ref>", "", w, flags=re.S)
+    w = re.sub(r"<!--.*?-->", "", w, flags=re.S)
+    return w
+
+def _hon_link_text(s):
+    # [[A|B]] → "A B" (분류는 대상·표시 둘 다로), 템플릿 제거
+    s = re.sub(r"\{\{(?:flagicon|fbaicon|nowrap|sort|small|refn|efn|sfn|abbr)[^{}]*\}\}", " ", s)
+    s = re.sub(r"\[\[([^\]|]*)\|([^\]]*)\]\]", r"\1 / \2", s)
+    s = re.sub(r"\[\[([^\]]*)\]\]", r"\1", s)
+    return re.sub(r"'''?|\{\{[^{}]*\}\}|style=\"[^\"]*\"|scope=\"?\w+\"?|align=\"?\w+\"?", " ", s)
+
+def _hon_classify(name):
+    lv = re.search(r"(?:level|tier)\s*(\d)|\((I{2,4}|IV|V)\)", name, re.I)
+    if lv:   # "(level 2)" 표기가 있으면 이름보다 우선(잉글랜드 1992~2004 "First Division"은 2부였음)
+        n = int(lv.group(1)) if lv.group(1) else {"II": 2, "III": 3, "IIII": 4, "IV": 4, "V": 5}[lv.group(2)]
+        if n >= 2 and not re.search(r"UEFA|European|Cup", name):
+            return "l2" if n == 2 else "l3"
+    for cat, rx in _HON_RULES:
+        if re.search(rx, name):
+            return cat
+    return None
+
+def _hon_display(s):
+    # 링크는 보이는 글자만([[1993–94 Coupe de France|1994]] → 1994) — 대상 제목의 시즌까지 세면 두 번 셌음
+    s = re.sub(r"\[\[[^\]|]*\|([^\]]*)\]\]", r"\1", s)
+    s = re.sub(r"\[\[([^\]]*)\]\]", r"\1", s)
+    return re.sub(r"\{\{[^{}]*\}\}", " ", s)
+
+def _hon_count(text):
+    return len(set(m.group(1).replace(' ', '') for m in _HON_SEASON.finditer(_hon_display(text))))
+
+def _parse_honours(wikitext):
+    """→ {분류: 우승 횟수}, [(대회명, 분류, 횟수, 방식)] — 표(대회·횟수·시즌) 또는 목록(* 대회 / ** Winners: 시즌…)"""
+    w = _hon_strip(wikitext)
+    found = []
+    # 1) 표: 행마다 대회(! 셀) + 횟수(숫자만 있는 셀) + 시즌
+    for table in re.findall(r"\{\|.*?\n\|\}", w, flags=re.S):
+        for row in re.split(r"\n\|-[^\n]*", table):
+            cells = [c.strip() for c in re.split(r"\n[!|]|\|\||!!", "\n" + row) if c.strip()]
+            comp = None; n = None; seasons = ""
+            for c in cells:
+                val = c.split("|", 1)[-1] if re.match(r'^\s*(style|scope|align|rowspan|colspan|class|width|bgcolor|data-sort-value)', c) else c
+                val = val.strip()
+                t = _hon_link_text(val).strip()
+                if comp is None and re.search(r"[A-Za-z]{3}", t) and not re.fullmatch(r"(Domestic|Continental|International|European|Worldwide|Regional|National|Type|Competition|Titles|Seasons|Friendly|Other)s?\W*", t, re.I):
+                    if _hon_classify(t) or re.search(r"Cup|League|Liga|Champion|Serie|Pokal|Coppa|Coupe|Copa|Shield|Trophy|Division|Bundesliga", t):
+                        comp = t; continue
+                if comp and n is None and re.fullmatch(r"\d{1,3}", t):
+                    n = int(t); continue
+                if comp and n is None and re.match(r"^\W*(Winners|Champions)\W*:?", t, re.I) and ":" in t:
+                    n = _hon_count(t.split(":", 1)[1]); continue
+                if comp and n is not None:
+                    seasons += " " + val
+            if comp and n:
+                found.append((comp, _hon_classify(comp), n, "table", _hon_count(seasons)))
+    # 2) 목록
+    if not found:
+        comp = None
+        for line in w.split("\n"):
+            m = re.match(r"^\*\s*(?!\*)(.*)", line)
+            if m:
+                comp = _hon_link_text(m.group(1)).strip()
+                # "* [[FA Cup]]: 1965, 1974" 같이 한 줄에 우승 시즌이 같이 있는 형식(준우승 줄이 따로 있으면 그쪽은 무시)
+                rest = re.split(r":(?![^\[]*\]\])", m.group(1), maxsplit=1)   # 링크 안의 콜론은 제외
+                if len(rest) == 2 and not re.search(r"runner|finalist|second", rest[0], re.I):
+                    k = _hon_count(rest[1])
+                    if k and not re.search(r"runner", rest[1], re.I):
+                        found.append((comp, _hon_classify(comp), k, "inline", k))
+                continue
+            m = re.match(r"^\*\*+\s*(.*)", line)
+            if m and comp:
+                sub = m.group(1)
+                head = _hon_link_text(sub.split(":", 1)[0]) if ":" in sub else _hon_link_text(sub)
+                if re.search(r"winner|champion", head, re.I) and not re.search(r"runner|play-?off", head, re.I):
+                    k = _hon_count(sub.split(":", 1)[1] if ":" in sub else sub)
+                    if k:
+                        found.append((comp, _hon_classify(comp), k, "list", k))
+    totals = {}
+    for comp, cat, n, how, k in found:
+        if cat and cat not in ("skip", "l3"):
+            totals[cat] = totals.get(cat, 0) + n
+    return totals, found
+
+
+# ── 구단 최고 이적료(영입/방출): "List of … records and statistics" 문서의 이적 표 첫 줄 ──
+_HON_FEE = re.compile(r"([£€$])\s?([\d]+(?:[.,]\d+)*)\s*(million|m\b|bn)?", re.I)
+_HON_FEE_TRAIL = re.compile(r"(?<![\d.,])([\d]+(?:[.,]\d+)*)\s*(million|m\b)?\s*(€|euros?|£|pounds)", re.I)
+def _hon_fees(row):
+    out = []
+    row = re.sub(r"\[\[[^\]|]*\|([£€$])\]\]", r"\1", row)   # [[Euro|€]]32 → €32
+    for m in _HON_FEE.finditer(row.replace("&nbsp;", " ")):
+        cur, num, unit = m.groups()
+        v = float(num.replace(",", ""))
+        if not unit and v >= 1e5:   # £40,200,000 → 40.2m
+            v, unit = v / 1e6, "m"
+        if v > 0 and (unit or v < 1000):
+            out.append((cur, round(v, 1)))
+    if not out:
+        for m in _HON_FEE_TRAIL.finditer(row.replace("&nbsp;", " ")):
+            num, unit, cur = m.groups()
+            v = float(num.replace(",", ""))
+            if not unit and v >= 1e5:
+                v, unit = v / 1e6, "m"
+            if v > 0 and (unit or v < 1000):
+                out.append(("€" if cur.lower().startswith(("€", "euro")) else "£", round(v, 1)))
+    return out
+
+def _hon_record_row(row, prefer_eur):
+    row = re.sub(r"<ref[^>]*/>|<ref[^>]*>.*?</ref>", "", row, flags=re.S)
+    row = re.sub(r"\{\{(?:efn|refn)[^{}]*\}\}", " ", row)
+    row = re.sub(r"\{\{#tag:ref.*", " ", row, flags=re.S)   # 비고 칸 각주(다른 금액이 섞여 있음)는 버림
+    row = re.sub(r"\{\{(?:[Uu]pdated|[Aa]bbr)[^{}]*\}\}", " ", row)
+    # {{sortname|Philippe|Coutinho|(링크 대상)}} → [[대상|Philippe Coutinho]] (바르셀로나 표 형식)
+    rank = re.match(r"\s*\|?\s*(?:[a-z]+=\"?[^|\n]*\"?\s*\|)?\s*(\d+)\s*(?:\n|\|\|)", row)
+    row = re.sub(r"(?i)\{\{sortname\|([^|{}]+)\|([^|{}]*)(?:\|([^|{}]*))?[^{}]*\}\}",
+                 lambda m: f"[[{(m.group(3) or '').strip() or (m.group(1) + ' ' + m.group(2)).strip()}|{(m.group(1) + ' ' + m.group(2)).strip()}]]", row)
+    row = re.sub(r"\{\{(?:flagicon|fbaicon|flag|nowrap|sort)[^{}]*\}\}|\{\{[A-Z]{3}\}\}", " ", row)
+    links = [(a.strip(), (b or a).strip()) for a, b in re.findall(r"\[\[([^\]|]+)(?:\|([^\]]+))?\]\]", row)
+             if not re.match(r"(File|Image|:?[a-z]{2}:)", a) and not re.fullmatch(r"[\d–\-/ ]+", (b or a).strip())
+             and not re.search(r"\d{4}.*(season|window|transfer|League|Liga)", a)]
+    fees = _hon_fees(row)
+    years = re.findall(r"(?<!\d)((?:19|20)\d\d)(?!\d)", re.sub(r"\[\[[^\]]*\|", "", row))
+    rank = int(rank.group(1)) if rank else None
+    if len(links) < 2 or (not fees and rank != 1):
+        return None
+    if not fees:   # 1위인데 이적료 비공개(예: 브렌트퍼드 상가레)
+        return {"player_title": links[0][0], "player": links[0][1], "club_title": links[1][0], "club": links[1][1],
+                "fee": None, "year": years[-1] if years else None, "_v": 0, "_rank": 1}
+    eur = [f for f in fees if f[0] == "€"]
+    cur, v = eur[0] if (prefer_eur and eur) else fees[0]
+    # 크기 비교용(파운드·달러는 대략 유로로 환산)
+    value = v * {"€": 1, "£": 1.17, "$": 0.92}[cur]
+    return {"player_title": links[0][0], "player": links[0][1], "club_title": links[1][0], "club": links[1][1],
+            "fee": f"{cur}{v:g}m", "year": years[-1] if years else None, "_v": value, "_rank": rank}
+
+def _parse_record_transfers(w, prefer_eur=False):
+    """→ {"paid": {...}, "received": {...}} — 소제목(paid/received, in/out)마다 첫 표에서 이적료가 가장 큰 줄
+    (날짜순으로 정렬된 표도 있어서 첫 줄을 그대로 쓰면 안 됨 — 바르셀로나 표가 최근 이적 순이었음)"""
+    out = {}
+    parts = re.split(r"^(={2,5}[^=\n]+={2,5})\s*$", w, flags=re.M)
+    heads = [("", parts[0])] + [(parts[i], parts[i + 1]) for i in range(1, len(parts) - 1, 2)]
+    for head, body in heads:
+        h = head.lower()
+        kind = "paid" if re.search(r"paid|\bin\b|purchase|signing|bought", h) else "received" if re.search(r"received|\bout\b|sale|sold", h) else None
+        if not kind or kind in out:
+            continue
+        t = re.search(r"\{\|.*?\n\|\}", body, flags=re.S)
+        if not t:
+            continue
+        rows = [r for r in (_hon_record_row(x, prefer_eur) for x in re.split(r"\n\|-[^\n]*", t.group(0))[1:]) if r]
+        if rows:
+            ranked = [r for r in rows if r["_rank"] == 1]
+            best = ranked[0] if ranked else max(rows, key=lambda r: r["_v"])   # 순위 칸이 있으면 1위, 없으면 최고액
+            best.pop("_v"); best.pop("_rank")
+            out[kind] = best
+    return out
+
+def _wiki_sections(title):
+    return _wiki_get("https://en.wikipedia.org/w/api.php", {"action": "parse", "page": title, "prop": "sections",
+                                                            "format": "json", "redirects": 1}).get("parse", {}).get("sections")
+
+def _wiki_section_text(title, index):
+    return _wiki_get("https://en.wikipedia.org/w/api.php", {"action": "parse", "page": title, "prop": "wikitext", "section": index,
+                                                            "format": "json", "redirects": 1})["parse"]["wikitext"]["*"]
+
+def _wiki_honours_records(en_title, prefer_eur=False):
+    out = {}
+    secs = _wiki_sections(en_title) or []
+    hon = [x for x in secs if x["level"] == "2" and re.match(r"(honours|honors|achievements|trophies|titles)", x["line"], re.I)]
+    if hon:
+        totals, _ = _parse_honours(_wiki_section_text(en_title, hon[0]["index"]))
+        out["honours"] = {k: v for k, v in totals.items() if v}
+        out["honours_url"] = f"https://en.wikipedia.org/wiki/{requests.utils.quote(en_title.replace(' ', '_'))}#{requests.utils.quote(hon[0]['anchor'])}"
+    base = re.sub(r"\s*\(.*\)$", "", en_title)
+    for rt in (f"List of {base} records and statistics", f"List of {base.replace('F.C.', 'FC')} records and statistics"):
+        rsecs = _wiki_sections(rt)
+        if not rsecs:
+            continue
+        tr = [x for x in rsecs if re.search(r"transfer", x["line"], re.I)]
+        text = "".join(_wiki_section_text(rt, x["index"]) + "\n" for x in tr[:3])
+        recs = _parse_record_transfers(text, prefer_eur) if text else {}
+        if recs:
+            # 선수·구단 한국어 이름(한국어 위키백과 문서 제목, 없으면 영어 그대로)
+            titles = sorted({r[k] for r in recs.values() for k in ("player_title", "club_title")})
+            ko = {}
+            q = _wiki_get("https://en.wikipedia.org/w/api.php", {"action": "query", "titles": "|".join(titles), "prop": "langlinks",
+                                                                  "lllang": "ko", "redirects": 1, "format": "json"})["query"]
+            alias = {r["from"]: r["to"] for r in q.get("redirects", []) + q.get("normalized", [])}
+            for pg in q.get("pages", {}).values():
+                if pg.get("langlinks"):
+                    ko[pg["title"]] = pg["langlinks"][0]["*"]
+            for r in recs.values():
+                for k in ("player", "club"):
+                    t = r.pop(f"{k}_title")
+                    t = alias.get(t, t)
+                    if t in ko:
+                        r[f"{k}_ko"] = re.sub(r"\s*\(.*\)$", "", ko[t])
+            out["records"] = recs
+            out["records_url"] = f"https://en.wikipedia.org/wiki/{requests.utils.quote(rt.replace(' ', '_'))}"
+        break
+    return out
+
+def _wiki_one(team_name, league=None):
     title = WIKI_TITLE_OVERRIDE.get(team_name)
     qid = None
     candidates = [title] if title else [h["title"] for h in _wiki_get("https://en.wikipedia.org/w/api.php", {
@@ -602,15 +859,26 @@ def _wiki_one(team_name):
     claims = ent.get("claims", {})
     site = ent.get("sitelinks", {})
     out = {"qid": qid, "name_ko": WIKI_NAME_KO_OVERRIDE.get(team_name) or ent.get("labels", {}).get("ko", {}).get("value")}
-    # 소개 글: 한국어 문서가 있으면 한국어, 없으면 영어
+    # 소개 글: 한국어 문서가 있으면 한국어, 없으면 영어 — 첫 문단(요약 API)이 아니라 머리말 전체
+    # (리버풀 한국어 요약은 44자 한 문장, 머리말 전체는 1,399자)
     for lang in ("ko", "en"):
         link = site.get(f"{lang}wiki")
         if not link:
             continue
-        summ = _wiki_get(f"https://{lang}.wikipedia.org/api/rest_v1/page/summary/{requests.utils.quote(link['title'].replace(' ', '_'), safe='')}")
-        if summ.get("extract"):
-            out.update({"extract": summ["extract"], "lang": lang, "url": summ.get("content_urls", {}).get("desktop", {}).get("page"), "title": link["title"]})
+        pg = next(iter(_wiki_get(f"https://{lang}.wikipedia.org/w/api.php", {
+            "action": "query", "prop": "extracts|info", "explaintext": 1, "exintro": 1, "inprop": "url",
+            "titles": link["title"], "redirects": 1, "format": "json"})["query"]["pages"].values()))
+        text = re.sub(r"\n{2,}", "\n", (pg.get("extract") or "")).strip()
+        if text:
+            out.update({"extract": text, "lang": lang, "url": pg.get("fullurl"), "title": link["title"]})
             break
+    en_title = site.get("enwiki", {}).get("title")
+    if en_title:
+        out["en_title"] = en_title
+        try:
+            out.update(_wiki_honours_records(en_title, prefer_eur=league not in (None, "PL")))
+        except Exception as e:
+            print(f"  ⚠️ {team_name} 우승·이적 기록 실패(기존 유지): {e}")
     # 별칭(P1449, 한국어 → 영어)
     nick = [c["mainsnak"]["datavalue"]["value"] for c in claims.get("P1449", []) if c.get("mainsnak", {}).get("datavalue")]
     nick = [n for n in nick if n.get("language") == "ko"] or [n for n in nick if n.get("language") == "en"]
@@ -662,9 +930,18 @@ def fetch_team_wiki(force=False):
     todo = [t for t in teams if force or wiki.get(t, {}).get("fetched", "") < stale]
     print(f"\n[구단 소개(위키)] {len(todo)}/{len(teams)}팀 갱신")
     from concurrent.futures import ThreadPoolExecutor
+    league_of = {}
+    try:
+        with open(f"{MODEL_DIR}/schedule.json", 'r', encoding='utf-8') as f:
+            for code, ms in json.load(f).items():
+                if code != 'CL':
+                    for m in ms:
+                        league_of[m['home_team']] = league_of[m['away_team']] = code
+    except Exception:
+        pass
     def one(t):
         try:
-            return t, _wiki_one(t), None
+            return t, _wiki_one(t, league_of.get(t)), None
         except Exception as e:
             return t, None, e
     with ThreadPoolExecutor(max_workers=2) as ex:   # 위키미디어 권장 범위의 적은 동시 요청(팀당 요청 5~6개라 순차면 10분+)
@@ -674,6 +951,15 @@ def fetch_team_wiki(force=False):
             elif not info:
                 print(f"  ⚠️ 문서를 못 찾음: {t}")
             else:
+                prev = wiki.get(t, {})
+                # 우승 횟수는 줄어들 수 없음 — 위키 편집으로 표 형식이 바뀌어 적게 읽히면 이전 값을 유지
+                old_h, new_h = prev.get("honours") or {}, info.get("honours")
+                if old_h and (new_h is None or any(new_h.get(k, 0) < v for k, v in old_h.items())):
+                    print(f"  ⚠️ {t} 우승 기록이 줄어들게 읽힘 → 이전 값 유지 ({old_h} → {new_h})")
+                    info["honours"] = old_h
+                    info["honours_url"] = prev.get("honours_url", info.get("honours_url"))
+                if prev.get("records") and not info.get("records"):
+                    info["records"], info["records_url"] = prev["records"], prev.get("records_url")
                 info["fetched"] = date.today().isoformat()
                 wiki[t] = info
     with open(path, 'w', encoding='utf-8') as f:
@@ -883,17 +1169,20 @@ def fetch_full_schedule():
 
         rows = []
         for m in res.json().get("matches", []):
-            ft = m["score"]["fullTime"]
-            rows.append({
+            hg, ag, pens = _match_goals(m)
+            row = {
                 "date":       m["utcDate"],
                 "matchday":   m.get("matchday"),
                 "stage":      m.get("stage"),
                 "home_team":  m["homeTeam"]["name"],
                 "away_team":  m["awayTeam"]["name"],
-                "home_goals": ft.get("home"),
-                "away_goals": ft.get("away"),
+                "home_goals": hg,
+                "away_goals": ag,
                 "status":     m["status"],
-            })
+            }
+            if pens:
+                row["penalties"] = list(pens)
+            rows.append(row)
         rows.sort(key=lambda r: r["date"])
         schedule[code] = rows
         print(f"  ✅ {name} {len(rows)}경기")
@@ -1009,69 +1298,78 @@ def update_prediction_log(schedule):
         json.dump(log, f, ensure_ascii=False, indent=2)
     print(f"  ✅ prediction_log.json 저장 완료 (총 {len(log)}건, 결과 확정 {len(resolved_keys)}건)")
 
-def fetch_ucl_tournament():
-    import json
-    print("\n[UCL 토너먼트] 수집 중...")
-    res = requests.get(
-        f"{BASE_URL}/competitions/CL/matches",
-        headers=HEADERS,
-        params={"season": 2025}
-    )
-    if res.status_code != 200:
-        print(f"  ❌ UCL 토너먼트 오류: {res.status_code}")
-        return
+UCL_KO_STAGES = ["PLAYOFFS", "LAST_16", "QUARTER_FINALS", "SEMI_FINALS", "FINAL"]
 
-    matches = res.json().get("matches", [])
-    stages = {"PLAYOFFS": [], "LAST_16": [], "QUARTER_FINALS": [], "SEMI_FINALS": [], "FINAL": []}
-
-    logo_path = f"{MODEL_DIR}/team_logos.json"
-    logos = {}
-    if os.path.exists(logo_path):
-        with open(logo_path, 'r', encoding='utf-8') as f:
-            logos = json.load(f)
-
+def _ucl_bracket(matches, logos):
+    """한 시즌 CL 경기 → 라운드별 대진(두 경기 합산, 승부차기 반영, 실제 대진표 순서)"""
+    stages = {s: [] for s in UCL_KO_STAGES}
     agg = {}
     for m in matches:
         stage = m.get("stage", "")
         if stage not in stages:
             continue
-        home = m["homeTeam"].get("name")
-        away = m["awayTeam"].get("name")
+        home, away = m["homeTeam"].get("name"), m["awayTeam"].get("name")
         if not home or not away:
             continue
-        ft = m["score"]["fullTime"]
-        status = m["status"]
-        key = tuple(sorted([home, away]))
+        hg, ag, pens = _match_goals(m)
+        key = (stage,) + tuple(sorted([home, away]))
         if key not in agg:
-            agg[key] = {"stage": stage, "team1": home, "team2": away, "team1_goals": 0, "team2_goals": 0, "legs": [], "status": "FINISHED"}
-        if ft.get("home") is not None:
-            hg, ag = ft["home"], ft["away"]
-            if agg[key]["team1"] == home:
-                agg[key]["team1_goals"] += hg
-                agg[key]["team2_goals"] += ag
+            agg[key] = {"stage": stage, "team1": home, "team2": away, "team1_goals": 0, "team2_goals": 0, "legs": [],
+                        "status": "FINISHED", "pens": None}
+        v = agg[key]
+        leg = {"home_team": home, "away_team": away, "home_goals": hg, "away_goals": ag, "date": m.get("utcDate")}
+        if hg is not None:
+            if v["team1"] == home:
+                v["team1_goals"] += hg; v["team2_goals"] += ag
             else:
-                agg[key]["team1_goals"] += ag
-                agg[key]["team2_goals"] += hg
-            agg[key]["legs"].append({"home_team": home, "away_team": away, "home_goals": hg, "away_goals": ag})
-        if status in ["SCHEDULED", "TIMED"]:
-            agg[key]["status"] = "UPCOMING"
-
-    for key, v in agg.items():
-        t1, t2 = v["team1"], v["team2"]
-        t1g, t2g = v["team1_goals"], v["team2_goals"]
-        winner = t1 if t1g > t2g else (t2 if t2g > t1g else None)
+                v["team1_goals"] += ag; v["team2_goals"] += hg
+            if pens:   # 승부차기는 팀1 기준으로 저장
+                v["pens"] = list(pens) if v["team1"] == home else [pens[1], pens[0]]
+                leg["penalties"] = list(pens)
+        if m["status"] not in ("FINISHED", "AWARDED"):
+            v["status"] = "UPCOMING"
+        v["legs"].append(leg)
+    for v in agg.values():
+        v["legs"].sort(key=lambda l: l.get("date") or "")
+        t1, t2, g1, g2 = v["team1"], v["team2"], v["team1_goals"], v["team2_goals"]
+        winner = None
+        if v["status"] == "FINISHED":
+            if g1 != g2:
+                winner = t1 if g1 > g2 else t2
+            elif v["pens"]:
+                winner = t1 if v["pens"][0] > v["pens"][1] else t2
         stages[v["stage"]].append({
-            "team1": t1, "team2": t2,
-            "team1_goals": t1g, "team2_goals": t2g,
-            "team1_logo": logos.get(t1, ""),
-            "team2_logo": logos.get(t2, ""),
-            "winner": winner, "status": v["status"], "legs": v["legs"]
+            "team1": t1, "team2": t2, "team1_goals": g1, "team2_goals": g2,
+            "team1_logo": logos.get(t1, ""), "team2_logo": logos.get(t2, ""),
+            "winner": winner, "status": v["status"], "legs": v["legs"], "pens": v["pens"],
         })
+    return reconstruct_bracket_order(stages)
 
-    stages = reconstruct_bracket_order(stages)
-
-    with open(f"{MODEL_DIR}/ucl_tournament.json", 'w', encoding='utf-8') as f:
-        json.dump(stages, f, ensure_ascii=False, indent=2)
+def fetch_ucl_tournament():
+    """시즌별 UCL 토너먼트(23-24~26-27) → ucl_tournament.json {"seasons": {"2026": {...}, ...}}
+    예전엔 2025 시즌만 하드코딩해서, 26-27 시즌이 시작돼도 지난 시즌 대진이 계속 나왔음(2026-09-29 수정)"""
+    import json
+    print("\n[UCL 토너먼트] 수집 중...")
+    path = f"{MODEL_DIR}/ucl_tournament.json"
+    old = {}
+    if os.path.exists(path):
+        with open(path, 'r', encoding='utf-8') as f:
+            old = json.load(f)
+    seasons = dict(old.get("seasons", {})) if "seasons" in old else ({"2025": old} if old else {})
+    logos = {}
+    if os.path.exists(f"{MODEL_DIR}/team_logos.json"):
+        with open(f"{MODEL_DIR}/team_logos.json", 'r', encoding='utf-8') as f:
+            logos = json.load(f)
+    for yr in MATCH_SEASONS:
+        res = requests.get(f"{BASE_URL}/competitions/CL/matches", headers=HEADERS, params={"season": yr})
+        time.sleep(6)
+        if res.status_code != 200:
+            print(f"  ❌ {yr} 시즌 오류: {res.status_code} (기존 유지)")
+            continue
+        seasons[str(yr)] = _ucl_bracket(res.json().get("matches", []), logos)
+        print(f"  ✅ {yr}-{(yr + 1) % 100:02d}: " + ", ".join(f"{k} {len(v)}" for k, v in seasons[str(yr)].items() if v))
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump({"seasons": seasons}, f, ensure_ascii=False, indent=2)
     print(f"  ✅ UCL 토너먼트 저장 완료")
 
 def train_models(df_total):
@@ -1351,6 +1649,8 @@ if __name__ == "__main__":
         collect_matches()
     elif "--wiki-only" in sys.argv:
         fetch_team_wiki(force="--force" in sys.argv)
+    elif "--ucl-only" in sys.argv:
+        fetch_ucl_tournament()
     elif "--transfers-only" in sys.argv:
         refresh_transfers()
     else:

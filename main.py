@@ -427,21 +427,16 @@ def _standings(league_code: str, season: str):
     if not league_name:
         raise HTTPException(status_code=404, detail="리그를 찾을 수 없습니다")
 
-    if season == "previous":
-        cutoff = pd.Timestamp('2025-08-01')
-        end = pd.Timestamp('2026-08-01')
-        league_name = f"{league_name} (2025-26)"
-    else:
-        cutoff = pd.Timestamp('2026-08-01')
-        end = pd.Timestamp('2027-08-01')
-        league_name = f"{league_name} (2026-27)"
+    yr = _season_year(season)   # current/previous 또는 연도(23-24~26-27, all_matches.csv가 담는 4시즌)
+    cutoff = pd.Timestamp(f'{yr}-08-01')
+    end = pd.Timestamp(f'{yr + 1}-08-01')
+    league_name = f"{league_name} ({yr}-{(yr + 1) % 100:02d})"
 
     filters = (df_matches_all['league'] == league_code.upper()) & (df_matches_all['date'] >= cutoff) & (df_matches_all['date'] < end)
     if league_code.upper() == 'CL':
-        if season == "previous":
-            filters = filters & (df_matches_all['date'] < pd.Timestamp('2026-02-01'))
-        else:
-            filters = filters & (df_matches_all['date'] < pd.Timestamp('2027-02-01'))
+        if yr <= 2023:   # 23-24까지는 조별리그(4팀×8조)라 한 줄 순위표가 없음
+            raise HTTPException(status_code=404, detail="조별리그 시즌")
+        filters = filters & (df_matches_all['date'] < pd.Timestamp(f'{yr + 1}-02-01'))   # 리그 스테이지만
     league_df = df_matches_all[filters].copy()
 
 
@@ -514,12 +509,31 @@ def _standings(league_code: str, season: str):
     return {"league": league_name, "standings": rows}
 
 # ── UCL 토너먼트 API ──
+CURRENT_SEASON_YEAR = 2026   # 시즌 전환 때 같이 바꿀 것(11번 체크리스트)
+
+def _season_year(season):
+    """"current"/"previous"/"2024" 같은 값 → 시즌 시작 연도"""
+    if season in (None, "", "current"):
+        return CURRENT_SEASON_YEAR
+    if season == "previous":
+        return CURRENT_SEASON_YEAR - 1
+    try:
+        return int(season)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="season은 current/previous 또는 연도(예: 2024)")
+
 @app.get("/ucl/tournament")
-def get_ucl_tournament():
+def get_ucl_tournament(season: str = "current"):
+    """시즌별 UCL 토너먼트 — ?season=2025. 파일이 예전 형식(한 시즌만)이면 그걸 2025 시즌으로 취급"""
     data = _load_json("ucl_tournament.json")
     if data is None:
         raise HTTPException(status_code=404, detail="UCL 토너먼트 데이터 없음")
-    return data
+    seasons = data["seasons"] if "seasons" in data else {"2025": data}
+    yr = str(_season_year(season))
+    stages = seasons.get(yr)
+    if stages is None:
+        return {"season": int(yr), "available": sorted(seasons), "stages": None}
+    return {"season": int(yr), "available": sorted(seasons), "stages": stages, **stages}
    
 # ── H2H API ──
 @app.get("/h2h")
@@ -765,16 +779,40 @@ def _league_season_stats(league, season):
             ranks[t][key] = 1 + sum(1 for o in vals.values() if (o > v if higher else o < v))
     return {"rows": rows, "ranks": ranks, "avg": avg, "teams": n, "long": L}
 
+@lru_cache(maxsize=64)
+def _season_rank_progress(league, season):
+    """리그·시즌 전체 팀의 "경기를 치를 때마다의 순위"를 한 번에 — 날짜순으로 승점·득실·득점을 누적하며 그날 경기가 끝난
+    뒤의 순위를 기록(예전엔 팀마다 경기 날짜마다 순위표를 새로 계산해서 팀 통계 첫 호출이 ~0.3초 걸렸음)"""
+    L = _league_season_stats(league, season)["long"]
+    tot = {t: [0, 0, 0] for t in L.team.unique()}   # 승점, 득실, 득점
+    progress = {t: [] for t in tot}
+    for date, day in L.groupby('date', sort=True):
+        for r in day.itertuples():
+            v = tot[r.team]
+            v[0] += r.pts; v[1] += r.gf - r.ga; v[2] += r.gf
+        order = sorted(tot, key=lambda t: (-tot[t][0], -tot[t][1], -tot[t][2]))
+        rank = {t: i + 1 for i, t in enumerate(order)}
+        for t in day.team.unique():
+            progress[t].append(rank[t])
+    return progress
+
 def _rank_progress(league, season, team):
-    """팀이 경기를 치를 때마다 그 시점 순위표에서의 순위"""
-    st = _league_season_stats(league, season)
-    L = st["long"]
-    out = []
-    for date in L[L.team == team].date.unique():
-        t = _table(L[L.date <= date])
-        if team in t.index:
-            out.append(int(t.loc[team, 'rank']))
-    return out
+    return _season_rank_progress(league, season).get(team, [])
+
+# 서버가 뜰 때 백그라운드에서 전 리그·시즌 통계를 미리 계산(재배포 직후 첫 사용자도 기다리지 않게, ~1초)
+def _warm_team_stats():
+    for lg in ("PL", "PD", "BL1", "SA", "FL1"):
+        for yr in STAT_SEASONS:
+            try:
+                if _league_season_stats(lg, yr):
+                    _season_rank_progress(lg, yr)
+            except Exception:
+                pass
+
+@app.on_event("startup")
+def _start_warmup():
+    import threading
+    threading.Thread(target=_warm_team_stats, daemon=True).start()
 
 @app.get("/team/stats/{team_name}")
 def get_team_stats(team_name: str):
