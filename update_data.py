@@ -983,7 +983,9 @@ def collect_matches():
     if legacy_dup.any():
         print(f"🧹 이름 표기가 다른 예전 중복 행 {int(legacy_dup.sum())}개 제거")
     df_total = df_total[~legacy_dup]
-    df_total = df_total.sort_values('date').reset_index(drop=True)
+    # 같은 날짜 경기끼리도 순서를 고정(날짜만으로 정렬하면 실행마다 순서가 바뀌어 파일 전체가 바뀐 것처럼
+    # 커밋되고, 같은 날 경기의 ELO 반영 순서도 달라짐)
+    df_total = df_total.sort_values(['date', 'league', 'home_team'], kind='mergesort').reset_index(drop=True)
     df_total['match_id'] = df_total['match_id'].astype('Int64')   # 예전 행은 match_id가 없어 float로 바뀌는 것 방지
     df_total.to_csv(existing_path, index=False, encoding='utf-8-sig')
     print(f"\n✅ 전체 경기 데이터: {len(df_total)}경기 (새로 받은 {sum(len(d) for d in fetched)}경기 + 기존 병합)")
