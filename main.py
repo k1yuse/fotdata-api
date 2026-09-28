@@ -11,6 +11,7 @@ import numpy as np
 import os
 import json
 import math
+from functools import lru_cache
 
 app = FastAPI(title="FotData API", version="1.0.0")
 
@@ -31,6 +32,19 @@ if not hasattr(lr_model, 'multi_class'):
     lr_model.multi_class = 'auto'
 scaler    = joblib.load(os.path.join(MODEL_DIR, "scaler.pkl"))
 df_stats  = pd.read_csv(os.path.join(MODEL_DIR, "team_stats.csv"))
+# ── 응답 캐시 (2026-09-29) ──
+# fotdata_model/의 데이터는 하루 한 번(자동 업데이트 커밋 → Render 재배포) 바뀌고, 재배포 때 프로세스가 새로 떠서
+# 캐시도 자연히 비워짐 → 파일 읽기·순위표·경기 분석·순위 예측 계산 결과를 메모리에 두고 재사용해도 안전.
+# Render 무료 CPU에선 요청마다 다시 계산하느라 순위표 0.5~1.2초, 경기 분석 0.9초씩 걸렸음.
+# 주의: 캐시된 dict/list를 그대로 돌려주므로 호출하는 쪽에서 수정하지 말 것(수정이 필요하면 복사본으로).
+@lru_cache(maxsize=None)
+def _load_json(name):
+    path = os.path.join(MODEL_DIR, name)
+    if not os.path.exists(path):
+        return None
+    with open(path, 'r', encoding='utf-8') as f:
+        return json.load(f)
+
 # 팀별 "오늘 시점" 모델 입력값(누적 ELO·최근 폼·최근 득실 등) — update_data.py의
 # build_point_in_time_features가 학습 피처와 같은 정의로 계산해서 저장한 것
 with open(os.path.join(MODEL_DIR, "team_state.json"), 'r', encoding='utf-8') as f:
@@ -45,11 +59,7 @@ UCL_ONLY_MIN_MATCHES = 8
 UCL_ONLY_SHRINK = 0.30
 MATCH_BASE_RATES = (0.44, 0.25, 0.31)   # 홈승/무/원정승 리그 평균 비율
 def _load_ucl_only_teams():
-    try:
-        with open(os.path.join(MODEL_DIR, "schedule.json"), 'r', encoding='utf-8') as f:
-            cl = json.load(f).get("CL", [])
-    except Exception:
-        return set()
+    cl = (_load_json("schedule.json") or {}).get("CL", [])
     league_teams = set(df_stats['team'])
     cl_teams = {t for m in cl for t in (m["home_team"], m["away_team"])}
     return {t for t in cl_teams - league_teams
@@ -409,6 +419,10 @@ LEAGUE_MAP = {
 # ── 순위표 API ──
 @app.get("/standings/{league_code}")
 def get_standings(league_code: str, season: str = "current"):
+    return _standings(league_code.upper(), season)
+
+@lru_cache(maxsize=32)
+def _standings(league_code: str, season: str):
     league_name = LEAGUE_MAP.get(league_code.upper())
     if not league_name:
         raise HTTPException(status_code=404, detail="리그를 찾을 수 없습니다")
@@ -430,18 +444,11 @@ def get_standings(league_code: str, season: str = "current"):
             filters = filters & (df_matches_all['date'] < pd.Timestamp('2027-02-01'))
     league_df = df_matches_all[filters].copy()
 
-    print(f"🔍 {league_code} 데이터: {len(league_df)}경기")
-    print(f"🔍 전체 리그: {df_matches_all['league'].unique()}")
 
     if league_df.empty:
         raise HTTPException(status_code=404, detail="데이터 없음")
 
-    # 로고 불러오기
-    logo_path = os.path.join(MODEL_DIR, "team_logos.json")
-    logos = {}
-    if os.path.exists(logo_path):
-        with open(logo_path, 'r', encoding='utf-8') as f:
-            logos = json.load(f)
+    logos = _load_json("team_logos.json") or {}
 
     # 홈 스탯
     home_stats = league_df.groupby('home_team').agg(
@@ -509,11 +516,10 @@ def get_standings(league_code: str, season: str = "current"):
 # ── UCL 토너먼트 API ──
 @app.get("/ucl/tournament")
 def get_ucl_tournament():
-    tournament_path = os.path.join(MODEL_DIR, "ucl_tournament.json")
-    if not os.path.exists(tournament_path):
+    data = _load_json("ucl_tournament.json")
+    if data is None:
         raise HTTPException(status_code=404, detail="UCL 토너먼트 데이터 없음")
-    with open(tournament_path, 'r', encoding='utf-8') as f:
-        return json.load(f)
+    return data
    
 # ── H2H API ──
 @app.get("/h2h")
@@ -618,6 +624,7 @@ def _team_current_league(team):
         return None
     return league_matches.sort_values('date').iloc[-1]['league']
 
+@lru_cache(maxsize=512)
 def _team_insight(team, venue):
     league = _team_current_league(team)
 
@@ -696,29 +703,19 @@ import json as _json
 @app.get("/accuracy")
 def get_accuracy():
     """AI 모델 정확도 정보"""
-    accuracy_path = os.path.join(MODEL_DIR, "accuracy.json")
-    if not os.path.exists(accuracy_path):
-        return {
-            "best": 56.3,
-            "total_matches": 4567,
-            "training_matches": 4059,
-            "updated_at": None
-        }
-    
-    with open(accuracy_path, 'r', encoding='utf-8') as f:
-        return _json.load(f)
+    data = _load_json("accuracy.json")
+    if data is None:
+        return {"best": None, "total_matches": None, "training_matches": None, "updated_at": None}
+    return data
 
 @app.get("/predict/track-record")
 def get_track_record():
     """AI 예측 트랙레코드 — update_data.py가 매일 그 시점에 실제 서빙 중인 /predict를
     호출해 미리 기록해두고, 경기가 끝나면 실제 결과와 대조해 채워넣은 로그(prediction_log.json)의
     요약 + 최근 완료 경기 목록"""
-    log_path = os.path.join(MODEL_DIR, "prediction_log.json")
-    if not os.path.exists(log_path):
+    log = _load_json("prediction_log.json")
+    if log is None:
         return {"summary": {"total_scheduled": 0, "total_resolved": 0}, "recent": []}
-
-    with open(log_path, 'r', encoding='utf-8') as f:
-        log = _json.load(f)
 
     # total_scheduled: 예정 경기까지 포함해 기록해둔 전체 건수 (아직 결과 없는 것 포함)
     # total_resolved: 그중 실제로 경기가 끝나 적중 여부를 확정한 건수 — 적중률 계산은 이 값 기준
@@ -761,13 +758,10 @@ def get_track_record():
 @app.get("/players/topscorers/{league_code}")
 def get_top_scorers(league_code: str):
     """리그별 득점왕"""
-    players_path = os.path.join(MODEL_DIR, "players.json")
-    if not os.path.exists(players_path):
+    data = _load_json("players.json")
+    if data is None:
         raise HTTPException(status_code=404, detail="선수 데이터 없음")
-    
-    with open(players_path, 'r', encoding='utf-8') as f:
-        data = _json.load(f)
-    
+
     scorers = data.get("topscorers", {}).get(league_code.upper(), [])
     if not scorers:
         raise HTTPException(status_code=404, detail="해당 리그 데이터 없음")
@@ -777,13 +771,10 @@ def get_top_scorers(league_code: str):
 @app.get("/players/topassists/{league_code}")
 def get_top_assists(league_code: str):
     """리그별 도움왕"""
-    players_path = os.path.join(MODEL_DIR, "players.json")
-    if not os.path.exists(players_path):
+    data = _load_json("players.json")
+    if data is None:
         raise HTTPException(status_code=404, detail="선수 데이터 없음")
-    
-    with open(players_path, 'r', encoding='utf-8') as f:
-        data = _json.load(f)
-    
+
     assists = data.get("topassists", {}).get(league_code.upper(), [])
     if not assists:
         raise HTTPException(status_code=404, detail="해당 리그 데이터 없음")
@@ -807,7 +798,10 @@ SIM_LEAGUES = ("PL", "PD", "BL1", "SA", "FL1")
 
 @app.get("/predict/champion/{league_code}")
 def get_champion_prediction(league_code: str):
-    code = league_code.upper()
+    return _champion(league_code.upper())
+
+@lru_cache(maxsize=8)
+def _champion(code: str):
     if code not in SIM_LEAGUES:
         raise HTTPException(status_code=404, detail="해당 리그 데이터 없음")
 
@@ -815,8 +809,7 @@ def get_champion_prediction(league_code: str):
     teams = {r["team"]: {"team": r["team"], "logo": r["logo"], "played": r["played"],
                          "points": r["points"], "gd": r["gd"]} for r in table}
 
-    with open(os.path.join(MODEL_DIR, "schedule.json"), 'r', encoding='utf-8') as f:
-        schedule = json.load(f).get(code, [])
+    schedule = (_load_json("schedule.json") or {}).get(code, [])
     remaining = [m for m in schedule if m.get("status") not in ("FINISHED", "AWARDED", "CANCELLED")]
     for m in remaining:   # 시즌 초 아직 경기가 없는 팀도 포함
         for t in (m["home_team"], m["away_team"]):
@@ -856,8 +849,7 @@ BIGMATCH_HORIZON_DAYS = 30
 
 @app.get("/bigmatch")
 def get_bigmatch():
-    with open(os.path.join(MODEL_DIR, "schedule.json"), 'r', encoding='utf-8') as f:
-        schedule = json.load(f)
+    schedule = _load_json("schedule.json") or {}
     now = pd.Timestamp.now(tz='UTC')
     horizon = now + pd.Timedelta(days=BIGMATCH_HORIZON_DAYS)
     prestige = dict(zip(df_stats['team'], df_stats['prestige'].fillna(0)))
@@ -878,16 +870,34 @@ def get_bigmatch():
         "home_logo": team_logos_cache.get(m['home_team'], ''), "away_logo": team_logos_cache.get(m['away_team'], ''),
     }}
 
+# ── 다가오는 경기 창 API (2026-09-29) ──
+# "오늘의(다음) 경기"·"내 팀"·"다른 경기도 예측해보기" 위젯용. 예전엔 이 셋 때문에 5대 리그+UCL 전체 시즌 일정 6개
+# (약 1,300경기)를 통째로 받았음 → 필요한 창만 한 번에:
+#   - 지금 − 30시간: 사용자 시간대(한국)의 "오늘"에 이미 끝난 경기까지 포함(날짜 판정은 브라우저가 로컬 시간으로)
+#   - 지금 + 21일: A매치 휴식기(보통 2주)에도 "다음 경기"·"내 팀 다음 경기"가 들어오게. "다른 경기" 카드는 14일만 씀
+# 21일 안에 내 팀 경기가 없으면 프론트가 그 팀 리그 일정만 따로 받음(예비 경로).
+MATCH_WINDOW_BEFORE_H = 30
+MATCH_WINDOW_AFTER_D = 21
+
+@app.get("/matches/window")
+def get_matches_window():
+    now = pd.Timestamp.now(tz='UTC')
+    lo, hi = now - pd.Timedelta(hours=MATCH_WINDOW_BEFORE_H), now + pd.Timedelta(days=MATCH_WINDOW_AFTER_D)
+    out = []
+    for league, matches in (_load_json("schedule.json") or {}).items():
+        for m in matches:
+            if lo <= pd.Timestamp(m['date']) <= hi:
+                out.append({**m, "league": league})
+    out.sort(key=lambda m: m['date'])
+    return {"from": lo.isoformat(), "to": hi.isoformat(), "matches": out}
+
 # ── 전체 일정 API ──
 @app.get("/schedule/{league_code}")
 def get_schedule(league_code: str):
     """리그 전체 시즌 일정 (완료 + 예정 경기 전부)"""
-    path = os.path.join(MODEL_DIR, "schedule.json")
-    if not os.path.exists(path):
+    data = _load_json("schedule.json")
+    if data is None:
         raise HTTPException(status_code=404, detail="일정 데이터 없음")
-
-    with open(path, 'r', encoding='utf-8') as f:
-        data = json.load(f)
 
     matches = data.get(league_code.upper())
     if matches is None:
@@ -898,28 +908,22 @@ def get_schedule(league_code: str):
 @app.get("/team/info/{team_name}")
 def get_team_info(team_name: str):
     """팀 상세 정보 (홈구장, 창단연도, 구단색, 스쿼드) — update_data.py의 fetch_team_info()가 생성한 캐시"""
-    path = os.path.join(MODEL_DIR, "team_info.json")
-    if not os.path.exists(path):
+    data = _load_json("team_info.json")
+    if data is None:
         raise HTTPException(status_code=404, detail="팀 정보 데이터 없음")
-
-    with open(path, 'r', encoding='utf-8') as f:
-        data = json.load(f)
 
     info = data.get(team_name)
     if info is None:
         raise HTTPException(status_code=404, detail=f"팀 정보를 찾을 수 없습니다: {team_name}")
 
     # API-Football 스쿼드 사진/등번호 + 이적 기록 (현재는 PL만 — fetch_squad_transfers() 참고)
-    extra_path = os.path.join(MODEL_DIR, "team_extra.json")
-    if os.path.exists(extra_path):
-        with open(extra_path, 'r', encoding='utf-8') as f:
-            extra = json.load(f).get(team_name)
-        if extra:
-            info = {**info}
-            if extra.get("squad"):
-                info["squad"] = extra["squad"]
-            if extra.get("transfers") is not None:
-                info["transfers"] = extra["transfers"]
+    extra = (_load_json("team_extra.json") or {}).get(team_name)
+    if extra:
+        info = {**info}   # 캐시된 원본을 건드리지 않게 복사본에 합침
+        if extra.get("squad"):
+            info["squad"] = extra["squad"]
+        if extra.get("transfers") is not None:
+            info["transfers"] = extra["transfers"]
 
     return info
 

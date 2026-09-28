@@ -36,6 +36,7 @@
 ## 3. 기술 스택
 
 - **백엔드**: FastAPI, `joblib`로 모델 로드, CORS 전체 허용(`allow_origins=["*"]`)
+  - **응답 캐시(2026-09-29)**: 서빙 데이터(fotdata_model/*)는 하루 한 번 재배포 때만 바뀌므로 프로세스 메모리에 캐시 — JSON 파일은 `_load_json(name)`(lru_cache, 파싱 결과 공유 → 호출부는 절대 수정하지 말고 필요하면 복사본에 합칠 것, `/team/info`가 `{**info}`로 하는 식), 순위표 `_standings`·순위 예측 `_champion`·경기 분석 `_team_insight`도 lru_cache. 재배포하면 프로세스가 새로 떠서 캐시가 자동으로 비워짐. 로컬 측정: 반복 호출 `/standings` 15.8→1.4ms, `/match/insights` 35→1.3ms, `/predict/champion` 21.8→3.7ms. (시간 기준으로 결과가 바뀌는 `/bigmatch`·`/matches/window`는 파일만 캐시하고 계산은 매번)
 - **ML**: scikit-learn (Logistic Regression — 실제 서빙용), RandomForest·XGBoost(학습·정확도 비교용, 서빙엔 LR만 사용), StandardScaler
 - **프론트엔드**: Vanilla JS + HTML/CSS (프레임워크 없음), 다크 테마(#0d1117 배경, #58a6ff 포인트)
 - **자동화**: GitHub Actions (`update_data.py`, 매일 UTC 18:00 = KST 03:00 실행)
@@ -174,6 +175,7 @@ cp landing.html index.html
 - 디자인 규칙: 홈 파랑 `#58a6ff` / 원정 주황 `#f0883e`(레이더 차트와 동일), 비교는 "가운데 라벨 + 좌우로 뻗는 막대"(`miCompareRow`), 좋고 나쁨이 있는 지표(득점·실점·무실점)는 불리한 쪽을 흐리게.
 - 레이아웃: 결과 영역을 두 개의 독립 세로 열(`.predict-col`: 왼쪽 예측 결과+홈팀 최근 경기 / 오른쪽 맞대결·분석+원정팀 최근 경기)로 바꿈 — 맞대결 줄 수(0~10)에 따라 양쪽 높이가 매번 달라서, 한 격자 행으로 묶으면 짧은 쪽 카드가 늘어나며 속이 빈 박스가 생겼음. 모바일은 `display:contents` + `order`로 기존 순서(결과→맞대결→홈팀 최근→원정팀 최근) 유지.
 - **양쪽 열 끝 맞춤**(`fitMoreCard`, 데스크톱만): 맞대결 줄 수에 따라 두 열 높이 차이가 경기마다 10~400px+로 달라서 고정 콘텐츠로는 못 맞춤 → (1) 왼쪽이 충분히 짧으면 예측 결과 카드 아래에 "다른 경기도 예측해보기" 카드(두 팀의 다음 경기 → 같은 리그+UCL 14일 내 경기, 클릭 시 경기 미리보기 모달)를 차이만큼의 높이로 넣고 들어가는 줄 수만 표시, (2) 차이가 작으면 짧은 쪽 카드(예측 결과/맞대결)를 `.spread`(flex space-between)로 섹션 간격을 고르게 넓힘 — flex로 바꾸면 margin collapse가 풀려 자연 높이가 커지므로 바꾼 뒤 다시 재서 minHeight 결정, 그래도 넘치면 padding-bottom으로. 결과: 양쪽 "최근 경기" 카드가 위·아래 모두 0px 오차로 정렬(1000px·1440px, 7개 대진 실측). 차트가 늦게 그려지면서 높이가 바뀌므로 `drawPowerChart` 끝과 리사이즈 때도 다시 맞춤. 모바일은 한 줄 배치라 카드 숨김.
+- **점진 표시(2026-09-29)**: `predict()`가 /predict·/h2h·/form×2·/match/insights를 동시에 요청하되 **/predict만 기다렸다가** 결과(확률·스코어·레이더)를 먼저 보여주고, 나머지는 `fillResultExtras()`가 도착하는 대로 채움(그 전엔 스켈레톤). 예전엔 5개가 다 끝나야 화면이 떠서 서버가 깨어나는 중이면 가장 느린 요청만큼 기다렸음. 부가 요청은 실패해도 해당 칸에만 "불러오지 못했어요". 레이더의 상대전적 축은 맞대결이 오면 다시 그림(`lastPrediction.h2h`도 그때 채움 → 공유 카드 반영). 다른 경기를 새로 예측하면 `predictSeq`가 바뀌어 이전 응답은 버림. 칸이 채워질 때마다 `fitMoreCard`를 다시 돌려 양쪽 열 끝을 맞춤(1280px, 4개 대진 0px 오차 확인). 서버 깨우는 중 문구(`onRetry`)는 /predict 요청에만 연결 — 부가 요청의 재시도가 결과 표시 후 버튼 글자를 바꾸지 않게.
 - 라벨용 팀명은 `shortTeamName()`(FC/AC/CF 같은 클럽 형태 표기만 제거) — 예전 `split(' ')[0]`은 "FC Bayern München"→"FC", "Manchester City"→"Manchester"처럼 깨졌음(승률 막대·공격/수비 라벨·맞대결 요약 라벨).
 
 ### 5.10 유리(glass) 테마 — 메인 페이지 (2026-09-28 전 탭 기본 적용. 비교용으로 `FotData.html?theme=default`면 예전 테마, 같은 탭 세션 동안 유지)
@@ -206,6 +208,7 @@ cp landing.html index.html
 | GET | `/teams/prestige` | 팀별 prestige 맵 (전역 검색 기본 정렬용, 2026-09-20 추가) |
 | GET | `/proxy/logo?url=` | 팀 로고 이미지 프록시 (2026-09-21 추가) — crests.football-data.org/wikimedia는 CORS 헤더가 없어서 프론트 `<canvas>`(예측 결과 공유카드)에 바로 그리면 tainted되어 내보내기가 막힘; 허용된 두 호스트로만 제한해 우리 서버(CORS 전체 허용)를 거쳐 내려줌 |
 | GET | `/predict/track-record` | AI 예측 트랙레코드 요약 + 최근 20경기 (2026-09-21 추가, 5.6 참고) |
+| GET | `/matches/window` | 지금 −30시간 ~ +21일 사이 5대 리그+UCL 경기(리그 코드 `league` 포함, 날짜순, 보통 100~150경기) — 홈 위젯(오늘/다음 경기·내 팀)·"다른 경기도 예측해보기" 공용. 예전엔 이 셋이 리그 전체 일정 6개(~1,300경기)를 받았음. 내 팀 경기가 21일 안에 없으면 프론트가 그 팀 리그 일정만 따로 받음. 서버에 이 엔드포인트가 없으면 전체 일정으로 대체(`fetchWindowMatches`) (2026-09-29) |
 | GET | `/bigmatch` | 다가오는 빅매치 1경기(BIG_CLUBS끼리 가장 가까운 경기, 로고 URL 포함) — 경기예측 탭 배너·랜딩 연출 공용 (2026-09-28, 5.8 참고) |
 | GET | `/match/insights?home_team=&away_team=` | 예측 결과 화면 경기 분석: 두 팀 현재 리그 순위·홈팀 홈/원정팀 원정 최근 10경기·경기 성향(전 대회 최근 10경기)·파워 레이팅(ELO) 추이 (2026-09-27 추가, 5.9 참고) |
 

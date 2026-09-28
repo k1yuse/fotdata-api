@@ -1383,7 +1383,7 @@ const TODAY_LEAGUE_INFO = {
   CL: { name: 'UCL', logo: 'https://crests.football-data.org/CL.png', invert: true },
 };
 
-// 5대리그+UCL 전체 일정을 한 번에 모아오는 공용 헬퍼(오늘의 경기/빅매치/마이팀 위젯이 다 같이 씀)
+// 5대리그+UCL 전체 일정을 한 번에 모아오는 헬퍼 — 지금은 /matches/window가 없는 서버일 때의 대체 경로로만 씀
 async function fetchAllSchedules() {
   const codes = Object.keys(TODAY_LEAGUE_INFO);
   const lists = await Promise.all(codes.map(async code => {
@@ -1395,6 +1395,21 @@ async function fetchAllSchedules() {
     return (scheduleData[code] || []).map(m => ({ ...m, league: code }));
   }));
   return lists.flat();
+}
+
+// 홈 위젯(오늘/다음 경기·내 팀·"다른 경기도 예측해보기")은 가까운 경기만 필요 — 서버가 지금 −30시간 ~ +21일
+// 경기만 골라 한 번에 내려줌(/matches/window, 전체 일정 6번 요청 ~1,300경기 → 1번 ~150경기).
+// 서버가 아직 이 엔드포인트가 없는 버전이면(배포 순서 차이) 전체 일정으로 대체
+let windowMatchesPromise = null;
+function fetchWindowMatches() {
+  if (!windowMatchesPromise) {
+    windowMatchesPromise = fetch(`${API}/matches/window`)
+      .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(d => d.matches)
+      .catch(() => fetchAllSchedules())
+      .catch(e => { windowMatchesPromise = null; throw e; });
+  }
+  return windowMatchesPromise;
 }
 
 // UTC 문자열을 그대로 slice하면 KST(UTC+9) 기준 날짜랑 어긋난다 — 예를 들어
@@ -1411,7 +1426,7 @@ async function loadTodayMatches() {
   if (!container) return;
   container.innerHTML = `<div class="loading" style="padding:16px 0;width:100%">${BRAND_LOADER_ICON}불러오는 중...</div>`;
   try {
-    const all = await fetchAllSchedules();
+    const all = await fetchWindowMatches();
     const todayStr = localDateStr(new Date());
     let matches = all.filter(m => localDateStr(m.date) === todayStr);
     let label = '오늘의 경기';
@@ -1547,11 +1562,17 @@ async function loadMyTeamWidget() {
   const team = getFavoriteTeam();
   if (!team) { widget.style.display = 'none'; return; }
   try {
-    const all = await fetchAllSchedules();
     const now = new Date();
-    const upcoming = all
+    const nextOf = list => list
       .filter(m => (m.home_team === team || m.away_team === team) && m.status !== 'FINISHED' && new Date(m.date) > now)
       .sort((a, b) => new Date(a.date) - new Date(b.date));
+    let upcoming = nextOf(await fetchWindowMatches());
+    // 21일 안에 경기가 없으면(A매치 휴식기 등) 그 팀 리그 일정만 따로 받아서 찾음
+    const code = getTeamLeagueCode(team);
+    if (!upcoming.length && code) {
+      if (!scheduleData[code]) scheduleData[code] = (await (await fetch(`${API}/schedule/${code}`)).json()).matches;
+      upcoming = nextOf(scheduleData[code] || []);
+    }
     if (!upcoming.length) { widget.style.display = 'none'; return; }
 
     const m = upcoming[0];
@@ -2916,6 +2937,9 @@ function closeTrackRecordModal(e) {
   }
 }
 
+// 예측 결과는 /predict만 오면 바로 보여주고, 맞대결·최근 경기·경기 분석은 동시에 요청해둔 뒤 도착하는 대로 채움
+// (예전엔 5개 요청이 전부 끝나야 화면이 떴음 — 서버가 깨어나는 중이면 가장 느린 요청만큼 기다렸음)
+let predictSeq = 0;
 async function predict(){
   const home=selectedTeams.home,away=selectedTeams.away,errorMsg=document.getElementById('error-msg'),btn=document.querySelector('.predict-btn');
   errorMsg.style.display='none';
@@ -2923,22 +2947,26 @@ async function predict(){
   if(home===away){errorMsg.textContent='같은 팀은 선택할 수 없습니다';errorMsg.style.display='block';return;}
   const missing=unpredictableTeamsIn(home,away);
   if(missing.length){errorMsg.textContent=unpredictableMessage(missing);errorMsg.style.display='block';return;}
+  const seq=++predictSeq;
   btn.disabled=true; btn.textContent='예측 중...';
   window.fotBg?.burst();
   const onRetry=(a,r)=>{btn.textContent=`서버를 깨우는 중... (${a}/${r})`;};
+  const q=`home_team=${encodeURIComponent(home)}&away_team=${encodeURIComponent(away)}`;
+  const getJson=url=>fetchWithRetry(url).then(r=>r.json());
+  const extras={
+    h2h:getJson(`${API}/h2h?${q}`),
+    homeForm:getJson(`${API}/form/${encodeURIComponent(home)}`),
+    awayForm:getJson(`${API}/form/${encodeURIComponent(away)}`),
+    insights:getJson(`${API}/match/insights?${q}`),
+  };
+  Object.values(extras).forEach(p=>p.catch(()=>{}));   // 실패는 각 칸에서 처리(처리 안 된 거부 경고 방지)
   try{
-    // 경기 분석(순위·홈/원정·성향·파워 레이팅)은 부가 정보라 실패해도 예측 결과는 보여줌
-    const insightsP=fetchWithRetry(`${API}/match/insights?home_team=${encodeURIComponent(home)}&away_team=${encodeURIComponent(away)}`,{},{onRetry}).then(r=>r.json()).catch(()=>null);
-    const[pR,hR,hfR,afR]=await Promise.all([
-      fetchWithRetry(`${API}/predict`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({home_team:home,away_team:away})},{onRetry}),
-      fetchWithRetry(`${API}/h2h?home_team=${encodeURIComponent(home)}&away_team=${encodeURIComponent(away)}`,{},{onRetry}),
-      fetchWithRetry(`${API}/form/${encodeURIComponent(home)}`,{},{onRetry}),
-      fetchWithRetry(`${API}/form/${encodeURIComponent(away)}`,{},{onRetry})
-    ]);
-    const[pD,hD,hfD,afD]=await Promise.all([pR.json(),hR.json(),hfR.json(),afR.json()]);
-    const insD=await insightsP;
+    const pR=await fetchWithRetry(`${API}/predict`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({home_team:home,away_team:away})},{onRetry});
+    const pD=await pR.json();
     await ensureTeamPrestigeLoaded();
-    showResult(pD,hD,hfD,afD,home,away,insD);
+    if(seq!==predictSeq) return;
+    showResult(pD,home,away);
+    fillResultExtras(extras,pD,home,away,seq);
   }catch(e){errorMsg.textContent=e.status===404?unpredictableMessage(null):'서버 연결 오류. 잠시 후 다시 시도해주세요.';errorMsg.style.display='block';}
   finally{btn.disabled=false;btn.textContent='경기 예측하기';window.fotBg?.settle();}
 }
@@ -3251,7 +3279,7 @@ function openScheduleTab() {
 // 후보: 두 팀의 다음 경기 → 같은 리그(+UCL)의 다가오는 경기(가까운 순). 예측 불가 팀 경기는 제외
 async function buildMoreCandidates(home, away) {
   let all;
-  try { all = await fetchAllSchedules(); } catch (e) { return []; }
+  try { all = await fetchWindowMatches(); } catch (e) { return []; }
   const now = Date.now();
   const ok = m => m.status !== 'FINISHED' && new Date(m.date).getTime() > now &&
     !(m.home_team === home && m.away_team === away) && !unpredictableTeamsIn(m.home_team, m.away_team).length;
@@ -3374,9 +3402,50 @@ function renderResultPitch() {
   </svg>`);
 }
 
+// 맞대결·최근 경기 목록 한 줄(날짜 + 뱃지 / 홈 스코어 원정)
+function matchRowHtml(homeTeam, awayTeam, homeGoals, awayGoals, date, scoreColor, resultBadge) {
+  const homeShort = homeTeam.replace(' FC','').replace(' CF','');
+  const awayShort = awayTeam.replace(' FC','').replace(' CF','');
+  return `<div style="padding:8px 0;border-bottom:0.5px solid #21262d">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <span style="font-size:10px;color:#8b949e">${date}</span>
+      ${resultBadge||''}
+    </div>
+    <div class="sched-match" style="padding:0;border-bottom:none">
+      <div class="sched-team clickable-team" onclick="openTeamInfo('${escJs(homeTeam)}')"><img src="${logos[homeTeam]||''}" onerror="this.style.display='none'"><span>${homeShort}</span></div>
+      <div class="sched-vs"><span class="sched-score" style="${scoreColor?`color:${scoreColor}`:''}">${homeGoals} - ${awayGoals}</span></div>
+      <div class="sched-team away clickable-team" onclick="openTeamInfo('${escJs(awayTeam)}')"><span>${awayShort}</span><img src="${logos[awayTeam]||''}" onerror="this.style.display='none'"></div>
+    </div>
+  </div>`;
+}
+const RESULT_FAIL_HTML = '<div style="color:#8b949e;font-size:13px;padding:8px 0">불러오지 못했어요. 다시 예측하면 재시도해요.</div>';
+function renderH2H(h2h) {
+  document.getElementById('h2h-home-wins').textContent=h2h.summary.home_wins;document.getElementById('h2h-draws').textContent=h2h.summary.draws;document.getElementById('h2h-away-wins').textContent=h2h.summary.away_wins;
+  const html=h2h.matches.map(m=>{
+    const color = m.result==='W' ? '#238636' : m.result==='L' ? '#da3633' : '#8b949e';
+    return matchRowHtml(m.home_team, m.away_team, m.home_goals, m.away_goals, m.date, color);
+  }).join('');
+  document.getElementById('h2h-matches').innerHTML=html||'<div style="color:#8b949e;font-size:13px;padding:8px 0">맞대 기록 없음</div>';
+}
+function renderForm(fd,cid,tid){
+  document.getElementById(tid).textContent=fd.team;
+  document.getElementById(cid).innerHTML=fd.form.map(m=>matchRowHtml(m.home_team, m.away_team, m.home_goals, m.away_goals, m.date, null, `<div class="form-badge ${m.result}">${m.result}</div>`)).join('');
+}
+// 동시에 요청해둔 부가 정보를 도착하는 대로 채움. 그 사이 다른 경기를 예측했으면(seq 불일치) 버림
+function fillResultExtras(ex, data, home, away, seq) {
+  const live = () => seq === predictSeq;
+  const refit = () => { clearTimeout(moreFitTimer); moreFitTimer = setTimeout(fitMoreCard, 60); };
+  const fill = (p, ok, fail) => p.then(v => { if (live()) { ok(v); refit(); } }, () => { if (live()) { fail(); refit(); } });
+  fill(ex.h2h, h => { lastPrediction.h2h = h; renderH2H(h); renderRadarChart(data, h, home, away); },
+    () => { document.getElementById('h2h-matches').innerHTML = RESULT_FAIL_HTML; });
+  fill(ex.homeForm, fd => renderForm(fd, 'home-form-list', 'home-form-title'), () => { document.getElementById('home-form-list').innerHTML = RESULT_FAIL_HTML; });
+  fill(ex.awayForm, fd => renderForm(fd, 'away-form-list', 'away-form-title'), () => { document.getElementById('away-form-list').innerHTML = RESULT_FAIL_HTML; });
+  fill(ex.insights, renderMatchInsights, () => renderMatchInsights(null));   // 경기 분석은 부가 정보라 실패하면 조용히 생략
+}
+
 let lastPrediction = null;
-function showResult(data,h2h,homeForm,awayForm,home,away,insights){
-  lastPrediction = { data, h2h, home, away };
+function showResult(data,home,away){
+  lastPrediction = { data, h2h: null, home, away };
   renderResultPitch();
   const prob=data.probabilities;
   const resultHomeLogo=document.getElementById('result-home-logo'), resultAwayLogo=document.getElementById('result-away-logo');
@@ -3411,7 +3480,7 @@ function showResult(data,h2h,homeForm,awayForm,home,away,insights){
   document.getElementById('s-home-def-label').textContent=homeShortLabel+' 수비력';
   document.getElementById('s-away-atk-label').textContent=awayShortLabel+' 공격력';
   document.getElementById('s-away-def-label').textContent=awayShortLabel+' 수비력';
-  renderRadarChart(data, h2h, home, away);
+  renderRadarChart(data, null, home, away);   // 상대전적 축은 맞대결이 도착하면 다시 그림
   renderExplanationFactors(data);
   if(data.score_prediction){
     const sp=data.score_prediction;
@@ -3423,39 +3492,14 @@ function showResult(data,h2h,homeForm,awayForm,home,away,insights){
       <div class="score-alt-list">${altScores.map(s=>`<span class="score-alt-chip"><span class="sc">${s.score.replace('-',':')}</span><span class="pc">${s.prob}%</span></span>`).join('')}</div>
     ` : '';
   }
-  document.getElementById('h2h-home-wins').textContent=h2h.summary.home_wins;document.getElementById('h2h-draws').textContent=h2h.summary.draws;document.getElementById('h2h-away-wins').textContent=h2h.summary.away_wins;
+  // 아직 안 온 칸은 자리 표시(스켈레톤) — fillResultExtras가 도착하는 대로 채움
+  ['h2h-home-wins','h2h-draws','h2h-away-wins'].forEach(id=>document.getElementById(id).textContent='-');
   document.getElementById('h2h-home-label').textContent=homeShortLabel+' 승';document.getElementById('h2h-away-label').textContent=awayShortLabel+' 승';
-  function matchRowHtml(homeTeam, awayTeam, homeGoals, awayGoals, date, scoreColor, resultBadge) {
-    const homeShort = homeTeam.replace(' FC','').replace(' CF','');
-    const awayShort = awayTeam.replace(' FC','').replace(' CF','');
-    return `<div style="padding:8px 0;border-bottom:0.5px solid #21262d">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-        <span style="font-size:10px;color:#8b949e">${date}</span>
-        ${resultBadge||''}
-      </div>
-      <div class="sched-match" style="padding:0;border-bottom:none">
-        <div class="sched-team clickable-team" onclick="openTeamInfo('${escJs(homeTeam)}')"><img src="${logos[homeTeam]||''}" onerror="this.style.display='none'"><span>${homeShort}</span></div>
-        <div class="sched-vs"><span class="sched-score" style="${scoreColor?`color:${scoreColor}`:''}">${homeGoals} - ${awayGoals}</span></div>
-        <div class="sched-team away clickable-team" onclick="openTeamInfo('${escJs(awayTeam)}')"><span>${awayShort}</span><img src="${logos[awayTeam]||''}" onerror="this.style.display='none'"></div>
-      </div>
-    </div>`;
-  }
-  let h2hHtml='';h2h.matches.forEach(m=>{
-    const color = m.result==='W' ? '#238636' : m.result==='L' ? '#da3633' : '#8b949e';
-    h2hHtml += matchRowHtml(m.home_team, m.away_team, m.home_goals, m.away_goals, m.date, color);
-  });
-  document.getElementById('h2h-matches').innerHTML=h2hHtml||'<div style="color:#8b949e;font-size:13px;padding:8px 0">맞대 기록 없음</div>';
-  function renderForm(fd,cid,tid){
-    document.getElementById(tid).textContent=fd.team;
-    let html='';
-    fd.form.forEach(m=>{
-      const badge = `<div class="form-badge ${m.result}">${m.result}</div>`;
-      html += matchRowHtml(m.home_team, m.away_team, m.home_goals, m.away_goals, m.date, null, badge);
-    });
-    document.getElementById(cid).innerHTML=html;
-  }
-  renderForm(homeForm,'home-form-list','home-form-title');renderForm(awayForm,'away-form-list','away-form-title');
-  renderMatchInsights(insights);
+  document.getElementById('h2h-matches').innerHTML=skeletonMatchRows(3);
+  document.getElementById('match-insights').innerHTML='<div class="mi-section"><div class="skeleton skeleton-line" style="width:38%;margin-bottom:12px"></div><div class="skeleton" style="height:120px;border-radius:10px"></div></div>';
+  document.getElementById('home-form-title').textContent=home;document.getElementById('away-form-title').textContent=away;
+  document.getElementById('home-form-list').innerHTML=skeletonMatchRows(5);
+  document.getElementById('away-form-list').innerHTML=skeletonMatchRows(5);
   moreCandidates = [];
   fitMoreCard();
   buildMoreCandidates(home, away).then(list => {
