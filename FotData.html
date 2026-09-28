@@ -3,14 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <script>
-  // 유리(glass) 테마 미리보기: ?theme=glass 로 켜고 ?theme=default 로 끔(같은 탭 세션 동안 유지).
-  // 그리기 전에 클래스를 붙여야 기본 테마가 잠깐 보였다 바뀌는 깜빡임이 없음
+  // 유리(glass) 테마 — 기본 적용(2026-09-28). 비교용으로 ?theme=default 로 예전 테마를 볼 수 있음(같은 탭 세션 동안 유지).
+  // 그리기 전에 클래스를 붙여야 예전 테마가 잠깐 보였다 바뀌는 깜빡임이 없음
   (function () {
+    var theme = 'glass';
     try {
       var q = new URLSearchParams(location.search).get('theme');
       if (q) sessionStorage.setItem('fotdataTheme', q);
-      if ((q || sessionStorage.getItem('fotdataTheme')) === 'glass') document.documentElement.classList.add('theme-glass');
+      theme = q || sessionStorage.getItem('fotdataTheme') || 'glass';
     } catch (e) {}
+    if (theme !== 'default') document.documentElement.classList.add('theme-glass');
   })();
   </script>
   <meta name="description" content="5대 리그+UCL 실시간 순위, AI 경기 예측, 역대 맞대 기록. 전문가 수준의 축구 인사이트를 무료로.">
@@ -771,7 +773,7 @@
       .sched-team span { font-size: 12px; }
     }
 
-    /* ── 유리(glass) 테마 — 랜딩 3D 연출과 같은 "하나로 이어진 어두운 공간" 컨셉 (미리보기: ?theme=glass) ──
+    /* ── 유리(glass) 테마 — 랜딩 3D 연출과 같은 "하나로 이어진 어두운 공간" 컨셉 (기본 적용, ?theme=default로 예전 테마) ──
        배경: 랜딩 공과 같은 구조의 와이어프레임 축구공(bg-ball.svg, generate_bg_ball.py)을 아주 흐리게 고정.
        카드: 반투명 + 흐림(backdrop-filter)으로 배경이 은은하게 비침. 숫자·표가 있는 앱이라 불투명도는 높게. */
     html.theme-glass body { background: #0b0f14; }
@@ -805,8 +807,8 @@
     /* backdrop-filter는 쌓임 맥락을 만들어서, 팀 선택 팝업이 아래 카드들에 가려지지 않게 선택 카드를 위로 */
     html.theme-glass .predict-selector-card { position: relative; z-index: 5; }
     @media (max-width: 768px) {
-      /* 모바일은 흐림 비용이 커서 약하게, 대신 불투명도를 높여 가독성 유지 */
-      html.theme-glass .card, html.theme-glass .myteam-widget { background: rgba(22,27,34,0.86); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+      /* 모바일은 카드마다 흐림을 걸면 긴 목록 탭(순위표·일정) 스크롤이 무거워져서 카드 흐림은 끄고 불투명도로 대신(메뉴·모달만 흐림) */
+      html.theme-glass .card, html.theme-glass .myteam-widget { background: rgba(22,27,34,0.88); backdrop-filter: none; -webkit-backdrop-filter: none; }
       html.theme-glass body::after { background-position: right -30vw top 14vh; background-size: 120vw auto; opacity: 0.16; }
       .bg-ball-canvas { right: -30vw; top: 14vh; width: 120vw; height: 120vw; }
       html.bg3d-on .bg-ball-canvas { opacity: 0.2; }
@@ -2160,9 +2162,24 @@ function togglePopup(side) {
   openTeamPopup(side, popup);
   document.getElementById(`${side}-search`).focus({ preventScroll: true });
 }
+// 팝업 가로 위치: 트리거 버튼 기준 가운데가 기본이지만, 화면 끝을 넘으면 안쪽으로 밀고 화면보다 넓으면 화면
+// 가운데로. CSS만으로 버튼 기준 가운데(translateX(-50%))에 고정했더니 769~1000px 폭에선 팝업(480px)이
+// 한쪽 화면 밖으로 잘렸음(2026-09-28 수정)
+function placeTeamPopup(side) {
+  const popup = document.getElementById(`${side}-popup`), trigger = document.getElementById(`${side}-trigger`);
+  if (!popup || popup.style.display !== 'block') return;
+  const M = 12, vw = document.documentElement.clientWidth, w = popup.offsetWidth;
+  const t = trigger.getBoundingClientRect(), parent = popup.offsetParent.getBoundingClientRect();
+  let left = t.left + t.width / 2 - w / 2;
+  left = w > vw - M * 2 ? (vw - w) / 2 : Math.min(Math.max(left, M), vw - M - w);
+  popup.style.transform = 'none';
+  popup.style.left = (left - parent.left) + 'px';
+}
+window.addEventListener('resize', () => { placeTeamPopup('home'); placeTeamPopup('away'); });
 function openTeamPopup(side, popup) {
   if (teamPopupCloseTimers[side]) { clearTimeout(teamPopupCloseTimers[side]); teamPopupCloseTimers[side] = null; }
   popup.style.display = 'block';
+  placeTeamPopup(side);
   // transition을 잠깐 껐다가(시작 위치 강제 확정) 다시 켜야 첫 오픈부터 항상
   // 올바른 위치(위→아래)에서 애니메이션이 시작됨 (kofi-panel과 동일한 기법)
   const inner = popup.querySelector('.popup-inner');
