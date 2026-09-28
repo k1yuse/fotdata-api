@@ -498,6 +498,250 @@ def _clean_squad(squad_raw, team_name, team_info):
             p["shirtNumber"] = None
     return squad_raw
 
+# ── 구단 소개(위키백과) + 별칭·홈구장 수용 인원·감독(위키데이터) — 팀 정보 모달 "개요" 탭 (2026-09-29) ──
+# football-data.org 무료 플랜은 감독이 항상 null이고 구단 설명이 없어서, 키 없이 쓸 수 있는 위키미디어 API로 채움.
+# 위키백과 글은 CC BY-SA라 화면에 출처(위키백과)와 원문 링크를 반드시 같이 표시할 것.
+# 팀 이름 → 영어 위키백과 검색 → 위키데이터 항목이 "축구 클럽"(Q476028)인지 확인해서 동명 도시·경기장 문서를 거름.
+# 감독은 바뀌므로 WIKI_REFRESH_DAYS마다 다시 받음(매일 전 팀을 다 받지 않고 오래된 것만).
+WIKI_UA = {"User-Agent": "FotData/1.0 (https://fotdata-api.vercel.app)"}
+WIKI_REFRESH_DAYS = 7
+# 검색이 엉뚱한 문서(동명 다른 클럽 등)를 고르는 팀: {"팀 이름": "영어 위키백과 문서 제목"} — 2026-09-29 전 팀 확인 후 추가
+WIKI_TITLE_OVERRIDE = {
+    "Manchester United FC": "Manchester United F.C.",   # FC United of Manchester가 먼저 잡힘
+    "Borussia Dortmund": "Borussia Dortmund",
+    "VfB Stuttgart": "VfB Stuttgart",
+    "Real Sociedad de Fútbol": "Real Sociedad",
+    "Atalanta BC": "Atalanta BC",
+    "TSG 1899 Hoffenheim": "TSG Hoffenheim",
+    "Venezia FC": "Venezia FC",
+    "Newcastle United FC": "Newcastle United F.C.",   # 호주 Newcastle Jets가 잡힘
+}
+_WIKI_SKIP_TITLE = re.compile(r"(\sII\b|\s[BC]$|\b(reserves?|women|femenino|féminin|frauen|femminile|u-?\d\d|under-\d\d|youth|academy|primavera)\b)", re.I)
+WIKI_NAME_KO_OVERRIDE = {"Venezia FC": "베네치아 FC"}   # 위키데이터 한국어 이름이 옛 명칭인 경우
+
+def _wiki_get(url, params=None):
+    for attempt in range(5):   # 429(요청 과다)면 Retry-After만큼(없으면 점점 길게) 쉬었다가 재시도
+        r = requests.get(url, params=params, headers=WIKI_UA, timeout=20)
+        if r.status_code != 429:
+            break
+        time.sleep(float(r.headers.get("Retry-After") or 2 * (attempt + 1)))
+    r.raise_for_status()
+    return r.json()
+
+def _wd_entities(ids, props="claims|labels|sitelinks"):
+    if not ids:
+        return {}
+    return _wiki_get("https://www.wikidata.org/w/api.php", {
+        "action": "wbgetentities", "ids": "|".join(ids), "props": props,
+        "languages": "ko|en", "sitefilter": "kowiki|enwiki", "format": "json"}).get("entities", {})
+
+def _wd_label(ent):
+    labels = (ent or {}).get("labels", {})
+    return (labels.get("ko") or labels.get("en") or {}).get("value")
+
+def _wd_current(claims, prop):
+    """현재 값(종료일 P582 없는 것) 중 선호 순위 → 시작일(P580) 최신 순으로 하나"""
+    cands = []
+    for c in claims.get(prop, []):
+        if c.get("rank") == "deprecated" or "P582" in c.get("qualifiers", {}):
+            continue
+        start = ((c.get("qualifiers", {}).get("P580") or [{}])[0].get("datavalue", {}).get("value", {}) or {}).get("time", "")
+        cands.append((c.get("rank") == "preferred", start, c))
+    if not cands:
+        return None
+    return max(cands, key=lambda x: (x[0], x[1]))[2].get("mainsnak", {}).get("datavalue", {}).get("value")
+
+# 연고지: 위키데이터 소재지 값은 훈련장 건물·구(區)·동네인 경우가 많아서(예: 바르셀로나 → "La Maternitat i Sant Ramon",
+# 아스널 → 이즐링턴구) 행정구역(P131)을 따라 올라가며 "도시"로 분류된 첫 항목을 씀
+_CITY_KINDS = {"Q515", "Q1549591", "Q1637706", "Q5119", "Q200250", "Q22865", "Q42744322", "Q484170", "Q747074",
+               "Q2074737", "Q3957", "Q1093829", "Q902814", "Q7930989", "Q15284"}
+_CITY_NAME_FIX = {"Q23306": "런던"}   # 그레이터런던 → 런던
+# 위키데이터상 훈련장·경기장이 옆 도시에 있어서 팬들이 아는 연고지와 다르게 나오는 팀(2026-09-29 전 팀 확인)
+WIKI_CITY_OVERRIDE = {"Cagliari Calcio": "칼리아리", "Nottingham Forest FC": "노팅엄", "Olympique Lyonnais": "리옹",
+                      "Manchester City FC": "맨체스터", "Manchester United FC": "맨체스터", "Lille OSC": "릴", "SS Lazio": "로마",
+                      "Aston Villa FC": "버밍엄"}
+_wd_cache = {}
+def _wd_city(qid, depth=0):
+    if qid in _CITY_NAME_FIX:
+        return _CITY_NAME_FIX[qid]
+    if depth > 4:
+        return None
+    if qid not in _wd_cache:
+        _wd_cache[qid] = _wd_entities([qid], "claims|labels").get(qid, {})
+    ent = _wd_cache[qid]
+    kinds = {c.get("mainsnak", {}).get("datavalue", {}).get("value", {}).get("id") for c in ent.get("claims", {}).get("P31", [])}
+    if kinds & _CITY_KINDS:
+        return _wd_label(ent)
+    up = _wd_current(ent.get("claims", {}), "P131")
+    return _wd_city(up["id"], depth + 1) if up else None
+
+def _wiki_one(team_name):
+    title = WIKI_TITLE_OVERRIDE.get(team_name)
+    qid = None
+    candidates = [title] if title else [h["title"] for h in _wiki_get("https://en.wikipedia.org/w/api.php", {
+        "action": "query", "list": "search", "srsearch": f"{team_name} football club", "srlimit": 5, "format": "json"})["query"]["search"]]
+    candidates = [c for c in candidates if title or not _WIKI_SKIP_TITLE.search(c)]   # 2군·유스·여자팀 문서 제외
+    if not candidates:
+        return None
+    pages = _wiki_get("https://en.wikipedia.org/w/api.php", {
+        "action": "query", "titles": "|".join(candidates), "prop": "pageprops", "ppprop": "wikibase_item",
+        "redirects": 1, "format": "json"})["query"]
+    by_title = {p["title"]: p.get("pageprops", {}).get("wikibase_item") for p in pages.get("pages", {}).values()}
+    for r in pages.get("redirects", []) + pages.get("normalized", []):
+        by_title.setdefault(r["from"], by_title.get(r["to"]))
+    qids = [by_title.get(c) for c in candidates if by_title.get(c)]
+    ents = _wd_entities(qids, "claims")
+    for q in qids:   # 검색 순서대로, 축구 클럽인 첫 문서
+        kinds = {c.get("mainsnak", {}).get("datavalue", {}).get("value", {}).get("id") for c in ents.get(q, {}).get("claims", {}).get("P31", [])}
+        if "Q476028" in kinds or "Q103229495" in kinds:
+            qid = q
+            break
+    if not qid:
+        return None
+    ent = _wd_entities([qid])[qid]
+    claims = ent.get("claims", {})
+    site = ent.get("sitelinks", {})
+    out = {"qid": qid, "name_ko": WIKI_NAME_KO_OVERRIDE.get(team_name) or ent.get("labels", {}).get("ko", {}).get("value")}
+    # 소개 글: 한국어 문서가 있으면 한국어, 없으면 영어
+    for lang in ("ko", "en"):
+        link = site.get(f"{lang}wiki")
+        if not link:
+            continue
+        summ = _wiki_get(f"https://{lang}.wikipedia.org/api/rest_v1/page/summary/{requests.utils.quote(link['title'].replace(' ', '_'), safe='')}")
+        if summ.get("extract"):
+            out.update({"extract": summ["extract"], "lang": lang, "url": summ.get("content_urls", {}).get("desktop", {}).get("page"), "title": link["title"]})
+            break
+    # 별칭(P1449, 한국어 → 영어)
+    nick = [c["mainsnak"]["datavalue"]["value"] for c in claims.get("P1449", []) if c.get("mainsnak", {}).get("datavalue")]
+    nick = [n for n in nick if n.get("language") == "ko"] or [n for n in nick if n.get("language") == "en"]
+    if nick:
+        out["nickname"] = nick[0]["text"]
+    # 홈구장(P115) 수용 인원(P1083), 감독(P286)
+    venue = _wd_current(claims, "P115")
+    coach = _wd_current(claims, "P286")
+    city_cands = [_wd_current(claims, "P159"), _wd_current(claims, "P131")]   # 본부 소재지 → 구단 소재지 → (아래) 경기장 소재지
+    refs = _wd_entities([v["id"] for v in (venue, coach) if v], "claims|labels")
+    if venue and venue["id"] in refs:
+        vent = refs[venue["id"]]
+        # 위키데이터 "현재" 홈구장(종료일 없는 값). football-data 경기장 이름은 옛 이름·옛 경기장인 경우가 많아서
+        # (에버턴 Goodison Park, 칼리아리 Sardegna Arena, 마인츠 Opel Arena 등) 화면엔 이쪽을 우선 표시
+        out["stadium"] = _wd_label(vent)
+        cap = _wd_current(vent.get("claims", {}), "P1083")
+        if cap:
+            out["capacity"] = int(float(cap["amount"]))
+        city_cands.append(_wd_current(vent.get("claims", {}), "P131"))
+    for c in ([] if team_name in WIKI_CITY_OVERRIDE else city_cands):
+        name = _wd_city(c["id"]) if c else None
+        if name:
+            out["city"] = name
+            break
+    if "city" not in out:   # "도시"로 분류된 항목을 못 찾으면 첫 후보 이름 그대로
+        first = next((c for c in city_cands if c), None)
+        if first:
+            out["city"] = _wd_label(_wd_cache.get(first["id"]) or _wd_entities([first["id"]], "labels").get(first["id"]))
+    if team_name in WIKI_CITY_OVERRIDE:
+        out["city"] = WIKI_CITY_OVERRIDE[team_name]
+    if coach and coach["id"] in refs:
+        out["coach"] = _wd_label(refs[coach["id"]])
+    return out
+
+def fetch_team_wiki(force=False):
+    import json
+    from datetime import date, timedelta
+    path = f"{MODEL_DIR}/team_wiki.json"
+    wiki = {}
+    if os.path.exists(path):
+        with open(path, 'r', encoding='utf-8') as f:
+            wiki = json.load(f)
+    with open(f"{MODEL_DIR}/team_info.json", 'r', encoding='utf-8') as f:
+        teams = sorted(json.load(f))
+    only = [a for a in __import__("sys").argv[2:] if not a.startswith("--")]   # --wiki-only "팀 이름" ... 이면 그 팀만
+    if only:
+        teams, force = [t for t in teams if t in only], True
+    stale = (date.today() - timedelta(days=WIKI_REFRESH_DAYS)).isoformat()
+    todo = [t for t in teams if force or wiki.get(t, {}).get("fetched", "") < stale]
+    print(f"\n[구단 소개(위키)] {len(todo)}/{len(teams)}팀 갱신")
+    from concurrent.futures import ThreadPoolExecutor
+    def one(t):
+        try:
+            return t, _wiki_one(t), None
+        except Exception as e:
+            return t, None, e
+    with ThreadPoolExecutor(max_workers=2) as ex:   # 위키미디어 권장 범위의 적은 동시 요청(팀당 요청 5~6개라 순차면 10분+)
+        for t, info, err in ex.map(one, todo):
+            if err:
+                print(f"  ❌ {t}: {err}")   # 실패하면 기존 값 유지
+            elif not info:
+                print(f"  ⚠️ 문서를 못 찾음: {t}")
+            else:
+                info["fetched"] = date.today().isoformat()
+                wiki[t] = info
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(wiki, f, ensure_ascii=False, indent=1, sort_keys=True)
+    print(f"  ✅ team_wiki.json 저장 ({len(wiki)}팀)")
+
+def _fetch_af_transfers(af_id, limit=30):
+    """API-Football /transfers → 최근 이적 기록(이 팀이 관련된 것만). 선수 사진·양쪽 구단 로고·방향(in/out)까지 저장
+    — 예전엔 이름·날짜·유형만 저장해서 화면에 글자만 나왔음(2026-09-29 확장). 사진은 선수 ID로 만드는 고정 주소."""
+    raw = _af_get(f"{API_FOOTBALL_URL}/transfers", {"team": af_id}).get("response", [])
+    flat = []
+    for item in raw:
+        player = item.get("player") or {}
+        pid = player.get("id")
+        for t in item.get("transfers", []):
+            tin = t.get("teams", {}).get("in") or {}
+            tout = t.get("teams", {}).get("out") or {}
+            if af_id not in (tin.get("id"), tout.get("id")):
+                continue
+            flat.append({
+                "player": player.get("name"),
+                "player_id": pid,
+                "photo": f"https://media.api-sports.io/football/players/{pid}.png" if pid else None,
+                "date": t.get("date"),
+                "type": t.get("type"),
+                "from": tout.get("name"), "from_logo": tout.get("logo"),
+                "to": tin.get("name"), "to_logo": tin.get("logo"),
+                "dir": "in" if tin.get("id") == af_id else "out",
+            })
+    flat.sort(key=lambda x: x["date"] or "", reverse=True)
+    return flat[:limit]
+
+def refresh_transfers():
+    """이적 기록만 다시 받기(스쿼드는 그대로): python update_data.py --transfers-only
+    team_extra.json에 있는 팀 전부 — 팀 ID를 저장해 둔 팀은 호출 1번, 아니면 검색 포함 2번(무료 한도 100회/일, 분당 10회)."""
+    import json
+    if not API_FOOTBALL_KEY:
+        print("  ⚠️ API_FOOTBALL_KEY가 없어 건너뜀")
+        return
+    extra_path = f"{MODEL_DIR}/team_extra.json"
+    with open(extra_path, 'r', encoding='utf-8') as f:
+        extra = json.load(f)
+    with open(f"{MODEL_DIR}/schedule.json", 'r', encoding='utf-8') as f:
+        schedule = json.load(f)
+    league_of = {t: code for code, ms in schedule.items() if code != 'CL' for m in ms for t in (m['home_team'], m['away_team'])}
+    print(f"\n[이적 기록 갱신] {len(extra)}팀")
+    for team_name, entry in extra.items():
+        af_id = entry.get("af_id")
+        if not af_id:
+            country = LEAGUE_COUNTRY.get(league_of.get(team_name))
+            af_id = _search_af_team_id(team_name, country) if country else None
+            time.sleep(7)
+            if not af_id:
+                print(f"  ⚠️ 매칭 실패: {team_name}")
+                continue
+            entry["af_id"] = af_id
+        try:
+            transfers = _fetch_af_transfers(af_id)
+        except Exception as e:
+            print(f"  ❌ {team_name} 예외: {e}")
+            continue
+        if transfers:   # 한도 초과 등으로 빈 응답이면 기존 기록 유지
+            entry["transfers"] = transfers
+            with open(extra_path, 'w', encoding='utf-8') as f:
+                json.dump(extra, f, ensure_ascii=False, indent=2)
+        print(f"  {'✅' if transfers else '⚠️ 빈 응답(기존 유지)'} {team_name} ({len(transfers)}건)")
+        time.sleep(7)
+
 def fetch_squad_transfers(league_code):
     """API-Football 무료 플랜으로 스쿼드(사진/등번호)+이적 기록 수집.
     시즌 제한이 있는 통계 엔드포인트와 달리, 스쿼드/이적 엔드포인트는
@@ -563,23 +807,8 @@ def fetch_squad_transfers(league_code):
             entry["squad"] = _clean_squad(squad_clean, team_name, team_info)
             time.sleep(7)
 
-            transfers_raw = _af_get(f"{API_FOOTBALL_URL}/transfers", {"team": af_id}).get("response", [])
-            flat = []
-            for item in transfers_raw:
-                player_name = item.get("player", {}).get("name")
-                for t in item.get("transfers", []):
-                    tin = t.get("teams", {}).get("in") or {}
-                    tout = t.get("teams", {}).get("out") or {}
-                    if tin.get("id") == af_id or tout.get("id") == af_id:
-                        flat.append({
-                            "player": player_name,
-                            "date": t.get("date"),
-                            "type": t.get("type"),
-                            "from": tout.get("name"),
-                            "to": tin.get("name"),
-                        })
-            flat.sort(key=lambda x: x["date"] or "", reverse=True)
-            entry["transfers"] = flat[:20]
+            entry["af_id"] = af_id
+            entry["transfers"] = _fetch_af_transfers(af_id)
 
             extra[team_name] = entry
             with open(extra_path, 'w', encoding='utf-8') as f:
@@ -1026,6 +1255,12 @@ def main():
     # 팀 상세정보 (홈구장/스쿼드 등)
     fetch_team_info()
 
+    # 구단 소개·별칭·홈구장 수용 인원·감독(위키백과/위키데이터, 키 불필요, 오래된 팀만)
+    try:
+        fetch_team_wiki()
+    except Exception as e:
+        print(f"  ⚠️ 구단 소개 갱신 실패(기존 유지): {e}")
+
     # 스쿼드 사진/등번호 + 이적 기록 (API-Football, 현재는 PL만 — 요청 한도 때문에 리그별로 점진 확대 예정)
     fetch_squad_transfers('PL')
 
@@ -1114,5 +1349,9 @@ if __name__ == "__main__":
     if "--matches-only" in sys.argv:
         # 경기 데이터만 다시 받아서 all_matches.csv 갱신(학습·다른 산출물은 건드리지 않음)
         collect_matches()
+    elif "--wiki-only" in sys.argv:
+        fetch_team_wiki(force="--force" in sys.argv)
+    elif "--transfers-only" in sys.argv:
+        refresh_transfers()
     else:
         main()

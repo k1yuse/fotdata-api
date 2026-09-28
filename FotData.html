@@ -371,6 +371,132 @@
     .clickable-team { cursor: pointer; }
     .clickable-team:hover { color: #58a6ff; }
     .ti-modal { width: min(760px, 94vw); max-height: 85vh; display: flex; flex-direction: column; }
+    .ti-fx-tag { display: inline-block; margin-left: 8px; padding: 1px 7px; border-radius: 99px; font-size: 10px; font-weight: 700; vertical-align: 1px; }
+    .ti-fx-tag.cl { background: rgba(88,166,255,0.12); color: #79b8ff; border: 0.5px solid rgba(88,166,255,0.35); }
+    .ti-fx-tag.next { background: rgba(63,185,80,0.14); color: #56d364; border: 0.5px solid rgba(63,185,80,0.4); }
+    .sched-match.ti-fx-next { background: rgba(63,185,80,0.06); border-radius: 8px; box-shadow: inset 2px 0 0 #3fb950; }
+    /* 팀 정보 · 이적 탭 */
+    .tf-filters { display: flex; gap: 6px; margin-bottom: 10px; }
+    .tf-filter { padding: 5px 12px; border-radius: 99px; border: 0.5px solid #30363d; background: transparent; color: #8b949e; font-size: 12px; font-family: inherit; cursor: pointer; }
+    .tf-filter.active { background: rgba(88,166,255,0.14); border-color: rgba(88,166,255,0.5); color: #79b8ff; font-weight: 600; }
+    .tf-row { display: grid; grid-template-columns: 44px 1fr auto; gap: 12px; align-items: center; padding: 11px 4px; border-bottom: 0.5px solid #21262d; }
+    .tf-photo { position: relative; width: 44px; height: 44px; border-radius: 50%; overflow: hidden; background: #21262d; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 2px var(--tf-c); }
+    .tf-row.in { --tf-c: rgba(63,185,80,0.55); } .tf-row.out { --tf-c: rgba(248,81,73,0.5); }
+    .tf-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+    .tf-photo svg { width: 24px; height: 24px; fill: none; stroke: #484f58; stroke-width: 1.6; }
+    .tf-main { min-width: 0; }
+    .tf-top { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .tf-name { font-size: 14px; font-weight: 600; color: #e6edf3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .tf-dir { flex-shrink: 0; font-size: 10.5px; font-weight: 700; padding: 1px 7px; border-radius: 99px; }
+    .tf-dir.in { color: #56d364; background: rgba(63,185,80,0.14); } .tf-dir.out { color: #ff7b72; background: rgba(248,81,73,0.13); }
+    .tf-move { display: flex; align-items: center; gap: 6px; margin-top: 5px; min-width: 0; font-size: 12px; }
+    .tf-club { display: inline-flex; align-items: center; gap: 5px; min-width: 0; color: #8b949e; }
+    .tf-club.self { color: #e6edf3; font-weight: 600; }
+    .tf-club img, .tf-crest-ph { width: 18px; height: 18px; object-fit: contain; flex-shrink: 0; }
+    .tf-crest-ph { border-radius: 50%; background: #30363d; color: #c9d1d9; font-size: 7.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; letter-spacing: -0.3px; }
+    .tf-club-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .tf-arrow { flex-shrink: 0; color: var(--tf-c); font-weight: 700; }
+    .tf-side { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+    .tf-type { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; color: #c9d1d9; background: rgba(139,148,158,0.14); }
+    .tf-type.loan { color: #d2a8ff; background: rgba(163,113,247,0.14); } .tf-type.fa { color: #e3b341; background: rgba(210,153,34,0.14); }
+    .tf-date { font-size: 11px; color: #7d8590; font-variant-numeric: tabular-nums; }
+    .tf-note { font-size: 11px; color: #7d8590; text-align: right; padding-top: 10px; }
+    @media (max-width: 480px) { .tf-row { grid-template-columns: 38px 1fr auto; gap: 10px; } .tf-photo { width: 38px; height: 38px; } .tf-move { font-size: 11px; } .tf-club-name { max-width: 88px; } }
+    /* 팀 정보 · 개요 탭 */
+    .ti-about { background: rgba(88,166,255,0.05); border: 0.5px solid rgba(88,166,255,0.18); border-radius: 12px; padding: 14px 16px 10px; margin-bottom: 12px; }
+    .ti-about-text { font-size: 13.5px; line-height: 1.75; color: #c9d1d9; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; word-break: keep-all; }
+    .ti-about.open .ti-about-text { -webkit-line-clamp: unset; display: block; }
+    .ti-about-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 11px; }
+    .ti-about-more { background: none; border: none; color: #58a6ff; font-size: 12px; font-family: inherit; cursor: pointer; padding: 2px 0; }
+    .ti-about-foot a { color: #7d8590; text-decoration: none; margin-left: auto; }
+    .ti-about-foot a:hover { color: #c9d1d9; }
+    .ti-season { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; margin-bottom: 12px; }
+    .ti-season:empty { display: none; }
+    .ti-season-card { border: 0.5px solid #30363d; border-radius: 12px; padding: 12px 14px; cursor: pointer; transition: border-color .15s, transform .15s; background: rgba(13,17,23,0.4); }
+    .ti-season-card:hover { border-color: #58a6ff; transform: translateY(-1px); }
+    .ti-season-rank { display: flex; align-items: baseline; gap: 4px; margin-top: 4px; }
+    .ti-season-rank b { font-size: 26px; font-weight: 800; color: #e6edf3; font-variant-numeric: tabular-nums; }
+    .ti-season-rank span { font-size: 12px; color: #8b949e; }
+    .ti-season-rank[class*='tz-'] b { color: inherit; }
+    .ti-season-next { display: flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 16px; font-weight: 700; color: #e6edf3; }
+    .ti-season-next img { width: 26px; height: 26px; object-fit: contain; }
+    .ti-season-sub { font-size: 11.5px; color: #8b949e; margin-top: 4px; }
+    .ti-history { grid-column: 1 / -1; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; border: 0.5px solid #30363d; border-radius: 12px; padding: 10px 14px; cursor: pointer; background: rgba(13,17,23,0.4); transition: border-color .15s; }
+    .ti-history:hover { border-color: #58a6ff; }
+    .ti-history .ti-fact-label { margin-right: 4px; }
+    .ti-history-item { display: inline-flex; align-items: baseline; gap: 5px; }
+    .ti-history-item small { font-size: 10.5px; color: #7d8590; }
+    .ti-history-item b { font-size: 14px; color: #e6edf3; font-variant-numeric: tabular-nums; }
+    .ti-facts2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 8px; }
+    .ti-fact2 { display: flex; align-items: center; gap: 11px; border: 0.5px solid #21262d; border-radius: 10px; padding: 10px 12px; background: rgba(13,17,23,0.4); }
+    .ti-fact2-icon { width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: rgba(88,166,255,0.1); color: #79b8ff; }
+    .ti-fact2-icon svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+    .ti-fact2-body { min-width: 0; }
+    .ti-fact2 .ti-fact-value { font-size: 13px; }
+    .ti-fact2-sub { font-size: 11px; font-weight: 500; color: #8b949e; }
+    .ti-swatches { display: inline-flex; gap: 3px; margin-right: 6px; vertical-align: -2px; }
+    .ti-swatch { width: 12px; height: 12px; border-radius: 50%; box-shadow: 0 0 0 1px rgba(255,255,255,0.18); }
+    /* 팀 정보 · 팀 통계 탭 */
+    .ts-segs { display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: rgba(13,17,23,0.5); border: 0.5px solid #30363d; margin-bottom: 12px; }
+    .ts-seg { padding: 6px 12px; border: none; border-radius: 7px; background: transparent; color: #8b949e; font-size: 12px; font-weight: 600; font-family: inherit; cursor: pointer; font-variant-numeric: tabular-nums; }
+    .ts-seg.active { background: #1f6feb; color: #fff; }
+    .ts-note { font-size: 11.5px; color: #d29922; background: rgba(210,153,34,0.08); border: 0.5px solid rgba(210,153,34,0.3); border-radius: 8px; padding: 7px 10px; margin-bottom: 10px; }
+    .ts-kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .ts-kpis.three { grid-template-columns: repeat(3, 1fr); }
+    .ts-kpi { border: 0.5px solid #21262d; border-radius: 10px; padding: 10px 12px; background: rgba(13,17,23,0.4); min-width: 0; }
+    .ts-kpi small { font-size: 10px; color: #7d8590; font-weight: 400; }
+    .ts-kpi-val { font-size: 24px; font-weight: 800; color: #e6edf3; margin: 2px 0; font-variant-numeric: tabular-nums; letter-spacing: -0.5px; }
+    .ts-kpi-val small { font-size: 12px; margin-left: 3px; color: #8b949e; }
+    .tz-cl, .tz-cl-q { color: #58a6ff !important; } .tz-el { color: #f0883e !important; } .tz-ecl { color: #3fb950 !important; } .tz-rel, .tz-rel-po { color: #f85149 !important; }
+    .ts-kpi-sub { font-size: 11px; color: #8b949e; }
+    .ts-rank { display: inline-block; margin-top: 4px; font-size: 10.5px; font-weight: 700; padding: 1px 7px; border-radius: 99px; color: #c9d1d9; background: rgba(139,148,158,0.14); white-space: nowrap; }
+    .ts-rank.top { color: #79b8ff; background: rgba(88,166,255,0.14); } .ts-rank.low { color: #ffa198; background: rgba(248,81,73,0.12); }
+    .ts-wdl { display: flex; height: 6px; border-radius: 99px; overflow: hidden; background: #21262d; margin-top: 6px; }
+    .ts-wdl i { display: block; height: 100%; } .ts-wdl .w { background: #3fb950; } .ts-wdl .d { background: #6e7681; } .ts-wdl .l { background: #f85149; }
+    .ts-wdl-legend { font-size: 11px; color: #8b949e; margin-top: 4px; }
+    .ts-section-title { font-size: 13px; font-weight: 700; color: #e6edf3; margin: 18px 0 8px; }
+    .ts-section-title span { font-size: 11px; font-weight: 400; color: #7d8590; margin-left: 6px; }
+    .ts-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .ts-metric { margin-bottom: 12px; }
+    .ts-metric-head { display: flex; align-items: center; gap: 6px; }
+    .ts-metric-head .ts-rank { margin: 0 0 0 auto; }
+    .ts-metric-label { font-size: 12px; color: #8b949e; }
+    .ts-metric-val { font-size: 14px; font-weight: 700; color: #e6edf3; font-variant-numeric: tabular-nums; }
+    .ts-track { position: relative; height: 6px; border-radius: 99px; background: #21262d; margin-top: 6px; }
+    .ts-track.big { height: 10px; flex: 1; margin: 0; }
+    .ts-track i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 99px; transition: width .5s cubic-bezier(.2,.8,.2,1); }
+    .ts-track i.good, .ts-track i.top { background: linear-gradient(90deg, #1f6feb, #58a6ff); } .ts-track i.bad { background: linear-gradient(90deg, #9e4a1b, #f0883e); }
+    .ts-track i.neutral { background: #8b949e; } .ts-track i.bottom { background: linear-gradient(90deg, #238636, #3fb950); }
+    .ts-track b { position: absolute; top: -3px; bottom: -3px; width: 2px; margin-left: -1px; background: #e6edf3; border-radius: 1px; opacity: .75; }
+    .ts-metric-avg { font-size: 10.5px; color: #7d8590; margin-top: 4px; }
+    .ts-split { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .ts-split-card { border: 0.5px solid #21262d; border-radius: 10px; padding: 10px 12px; background: rgba(13,17,23,0.4); }
+    .ts-split-card.home { box-shadow: inset 3px 0 0 #58a6ff; } .ts-split-card.away { box-shadow: inset 3px 0 0 #f0883e; }
+    .ts-split-head { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #e6edf3; flex-wrap: wrap; }
+    .ts-split-head .ts-rank { margin: 0; }
+    .ts-split-ppg { font-size: 11px; font-weight: 400; color: #8b949e; margin-left: auto; } .ts-split-ppg b { color: #e6edf3; font-size: 13px; }
+    .ts-split-goals { font-size: 11.5px; color: #8b949e; margin-top: 6px; } .ts-split-goals b { color: #c9d1d9; }
+    .ts-vs-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .ts-vs-label { width: 112px; font-size: 12px; color: #c9d1d9; flex-shrink: 0; } .ts-vs-label small { color: #7d8590; font-size: 10.5px; }
+    .ts-vs-val { width: 38px; text-align: right; font-size: 14px; font-weight: 700; color: #e6edf3; font-variant-numeric: tabular-nums; }
+    .ts-chart { width: 100%; }
+    .ts-chart svg { display: block; overflow: visible; }
+    .ts-ax text { font-size: 10px; fill: #7d8590; font-family: inherit; }
+    .ts-line { fill: none; stroke: #58a6ff; stroke-width: 2.2; stroke-linejoin: round; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: tsDraw 1s ease forwards; filter: drop-shadow(0 0 4px rgba(88,166,255,0.5)); }
+    .ts-dot { fill: #58a6ff; stroke: #0d1117; stroke-width: 2; }
+    @keyframes tsDraw { to { stroke-dashoffset: 0; } }
+    @media (prefers-reduced-motion: reduce) { .ts-line { animation: none; stroke-dashoffset: 0; } }
+    .ts-table { width: 100%; border-collapse: collapse; font-size: 12px; font-variant-numeric: tabular-nums; }
+    .ts-table th { font-size: 10.5px; font-weight: 500; color: #7d8590; text-align: left; padding: 6px 8px; border-bottom: 0.5px solid #30363d; }
+    .ts-table td { padding: 8px; color: #c9d1d9; border-bottom: 0.5px solid #21262d; }
+    .ts-table .c { text-align: center; }
+    .ts-table tbody tr { cursor: pointer; } .ts-table tbody tr:hover td { background: rgba(88,166,255,0.05); }
+    .ts-table tr.on td { background: rgba(88,166,255,0.1); color: #e6edf3; }
+    @media (max-width: 640px) {
+      .ts-kpis { grid-template-columns: 1fr 1fr; } .ts-kpis.three { grid-template-columns: 1fr 1fr 1fr; }
+      .ts-kpis.three .ts-kpi-val { font-size: 19px; } .ts-kpis.three small { display: none; }
+      .ts-cols { grid-template-columns: 1fr; gap: 0; } .ts-split { grid-template-columns: 1fr; }
+    }
     .ti-header { padding: 18px 16px 14px; display: flex; align-items: center; gap: 12px; border-bottom: 0.5px solid #30363d; flex-shrink: 0; }
     /* 팀 정보 헤더: 구단 색(clubColors 앞·뒤 두 색) 빛 + 오른쪽에 와이어프레임 공 — 색은 팀 정보가 오면 은은하게 켜짐 */
     .ti-header { position: relative; overflow: hidden; padding: 20px 16px 16px; --ti-c1: #58a6ff; --ti-c2: #58a6ff; }
@@ -2027,7 +2153,7 @@ function selectTiFixturesMonth(mk) {
 }
 function renderTiFixturesContent() {
   const panel = document.getElementById('ti-panel');
-  const { team, matches, month } = tiFixturesState;
+  const { team, matches, month, next } = tiFixturesState;
   const months = [...new Set(matches.map(m => tiFixturesMonthKey(m.date)))].sort();
   const idx = months.indexOf(month);
   const monthMatches = matches.filter(m => tiFixturesMonthKey(m.date) === month);
@@ -2047,7 +2173,9 @@ function renderTiFixturesContent() {
       const timeStr = d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
       const homeShort = m.home_team.replace(' FC', '').replace(' CF', '');
       const awayShort = m.away_team.replace(' FC', '').replace(' CF', '');
-      html += `<div class="sched-date-header">${dateStr}</div><div class="sched-match">
+      const isNext = next && m === next;
+      const tags = (m.league === 'CL' ? '<span class="ti-fx-tag cl">UCL</span>' : '') + (isNext ? '<span class="ti-fx-tag next">다음 경기</span>' : '');
+      html += `<div class="sched-date-header">${dateStr}${tags}</div><div class="sched-match${isNext ? ' ti-fx-next' : ''}">
         <div class="sched-team${m.home_team===team?' clickable-team':''}"><img src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span>${homeShort}</span></div>
         <div class="sched-vs">${played ? `<span class="sched-score">${m.home_goals} - ${m.away_goals}</span>` : `<span class="sched-time">${timeStr}</span>`}</div>
         <div class="sched-team away${m.away_team===team?' clickable-team':''}"><span>${awayShort}</span><img src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"></div>
@@ -2204,16 +2332,8 @@ async function switchTiTab(tab) {
   try {
     if (tab === 'overview') {
       const info = await fetchTeamInfo(team);
-      document.getElementById('ti-meta').textContent = info.founded ? `창단 ${info.founded}년` : '';
-      const facts = [
-        { label: '홈구장', value: info.venue },
-        { label: '창단연도', value: info.founded },
-        { label: '구단 컬러', value: info.clubColors },
-        { label: '감독', value: info.coach },
-      ].filter(f => f.value);
-      panel.innerHTML = facts.length
-        ? `<div class="ti-facts">${facts.map(f => `<div class="ti-fact"><div class="ti-fact-label">${f.label}</div><div class="ti-fact-value">${f.value}</div></div>`).join('')}</div>`
-        : '<div class="ti-empty">팀 정보를 아직 준비 중이에요.</div>';
+      if (tiState.team !== team || tiState.tab !== 'overview') return;
+      renderTiOverview(team, code, info);
     } else if (tab === 'squad') {
       const info = await fetchTeamInfo(team);
       const squad = info.squad || [];
@@ -2249,55 +2369,322 @@ async function switchTiTab(tab) {
       }</tbody></table>`;
     } else if (tab === 'fixtures') {
       if (!code) { panel.innerHTML = '<div class="ti-empty">이 팀의 리그 정보를 찾을 수 없어요.</div>'; return; }
-      if (!scheduleData[code]) {
-        const res = await fetch(`${API}/schedule/${code}`);
-        if (!res.ok) throw new Error('schedule fetch failed');
-        const data = await res.json();
-        scheduleData[code] = data.matches;
-      }
-      const matches = (scheduleData[code] || []).filter(m => m.home_team === team || m.away_team === team)
-        .sort((a, b) => new Date(a.date) - new Date(b.date));
+      // 리그 + 챔피언스리그 경기를 같이 보여줌(UCL 일정은 실패해도 리그만으로 표시)
+      await Promise.all([code, 'CL'].map(async c => {
+        if (scheduleData[c]) return;
+        const res = await fetch(`${API}/schedule/${c}`);
+        if (!res.ok) { if (c === code) throw new Error('schedule fetch failed'); return; }
+        scheduleData[c] = (await res.json()).matches;
+      }));
+      const mine = (c) => (scheduleData[c] || []).filter(m => m.home_team === team || m.away_team === team).map(m => ({ ...m, league: c }));
+      const matches = [...mine(code), ...mine('CL')].sort((a, b) => new Date(a.date) - new Date(b.date));
       if (!matches.length) { panel.innerHTML = '<div class="ti-empty">경기 일정이 없어요.</div>'; return; }
       const months = [...new Set(matches.map(m => tiFixturesMonthKey(m.date)))].sort();
-      const todayKey = tiFixturesMonthKey(new Date().toISOString());
-      tiFixturesState = { team, matches, month: months.includes(todayKey) ? todayKey : months[0] };
+      // 달력상 이번 달이 아니라 "다음 경기가 있는 달"로 열어야, 이번 달 경기가 다 끝났거나(A매치 휴식기 등)
+      // 남은 경기가 없을 때 곧바로 다음 달로 넘어감 — 일정 탭(renderScheduleMonths)과 같은 규칙
+      const next = matches.find(m => m.status !== 'FINISHED' && new Date(m.date) > Date.now() - 3 * 3600000);
+      tiFixturesState = { team, matches, next, month: next ? tiFixturesMonthKey(next.date) : months[months.length - 1] };
       renderTiFixturesContent();
     } else if (tab === 'teamstats') {
       let stats = teamStatsCache[team];
       if (!stats) {
-        const res = await fetch(`${API}/team/${encodeURIComponent(team)}`);
+        const res = await fetch(`${API}/team/stats/${encodeURIComponent(team)}`);
+        if (res.status === 404) { panel.innerHTML = '<div class="ti-empty">5대 리그 밖 팀이라 리그 통계가 없어요.</div>'; return; }
         if (!res.ok) throw new Error('team stats fetch failed');
         stats = await res.json();
         teamStatsCache[team] = stats;
       }
-      const facts = [
-        { label: '26-27 경기수', value: stats.games },
-        { label: '승률(3시즌 블렌딩)', value: `${Math.round(stats.win_rate * 100)}%` },
-        { label: '공격력', value: stats.attack_strength },
-        { label: '수비력', value: stats.defense_strength },
-        { label: '체급(prestige)', value: stats.prestige > 0 ? `+${stats.prestige}` : stats.prestige },
-      ];
-      panel.innerHTML = `<div class="ti-facts">${facts.map(f => `<div class="ti-fact"><div class="ti-fact-label">${f.label}</div><div class="ti-fact-value">${f.value}</div></div>`).join('')}</div><div class="ti-empty" style="padding-top:14px">이 수치는 예측 모델용 3시즌 블렌딩 값이라, 실제 이번 시즌 승/무/패 기록과는 다를 수 있어요. 정확한 이번 시즌 기록은 순위 탭을 참고하세요.</div>`;
+      if (tiState.team !== team || tiState.tab !== 'teamstats') return;
+      tiStatsState = { data: stats, idx: 0 };
+      renderTiStats();
     } else if (tab === 'playerstats') {
       panel.innerHTML = '<div class="ti-empty">플레이어 통계는 준비 중이에요.</div>';
     } else if (tab === 'transfers') {
       const info = await fetchTeamInfo(team);
       const transfers = info.transfers || [];
       if (!transfers.length) { panel.innerHTML = '<div class="ti-empty">이적 기록은 준비 중이에요.</div>'; return; }
-      panel.innerHTML = transfers.map(t => `<div class="ti-player-row">
-        <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
-          <span class="ti-player-name">${t.player}</span>
-          <span class="ti-player-nation">${t.from || '?'} → ${t.to || '?'}</span>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px">
-          <span class="ti-player-name" style="font-size:11px">${t.type || ''}</span>
-          <span class="ti-player-nation">${t.date || ''}</span>
-        </div>
-      </div>`).join('');
+      tiTransferState = { team, list: prepTransfers(team, info), filter: 'all' };
+      renderTiTransfers();
     }
   } catch (e) {
     panel.innerHTML = '<div class="ti-empty">데이터를 불러올 수 없어요. 잠시 후 다시 시도해주세요.</div>';
   }
+}
+
+// ── 팀 정보 · 개요 탭 ──
+// 구단 소개(위키백과 첫 문단, 출처 표시 필수 — CC BY-SA) + 한눈에 보는 정보(연고지·창단·홈구장/수용 인원·감독·별칭·구단 색)
+// + 이번 시즌 리그 순위 + 다음 경기. 감독·수용 인원은 위키데이터(update_data.py fetch_team_wiki, 매주 갱신)
+const TI_ICON = {
+  city: '<path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/>',
+  founded: '<rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+  stadium: '<ellipse cx="12" cy="9" rx="8.5" ry="3.5"/><path d="M3.5 9v6c0 1.9 3.8 3.5 8.5 3.5s8.5-1.6 8.5-3.5V9"/>',
+  coach: '<circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c1.2-3.8 4-5.5 7.5-5.5s6.3 1.7 7.5 5.5"/>',
+  nickname: '<path d="M20 12.5 12.5 20a2 2 0 0 1-2.8 0L4 14.3V4h10.3l5.7 5.7a2 2 0 0 1 0 2.8z"/><circle cx="8.5" cy="8.5" r="1.3"/>',
+  colors: '<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17"/>',
+};
+const tiIcon = k => `<svg viewBox="0 0 24 24" aria-hidden="true">${TI_ICON[k]}</svg>`;
+function toggleTiAbout(btn) {
+  const box = btn.closest('.ti-about');
+  const open = box.classList.toggle('open');
+  btn.textContent = open ? '접기' : '더 보기';
+}
+function renderTiOverview(team, code, info) {
+  const panel = document.getElementById('ti-panel');
+  const w = info.wiki || {};
+  const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  document.getElementById('ti-meta').textContent = [w.name_ko && w.name_ko !== team ? w.name_ko : '', info.founded ? `${info.founded}년 창단` : ''].filter(Boolean).join(' · ');
+  const years = info.founded ? new Date().getFullYear() - info.founded : null;
+  const swatches = (info.clubColors || '').split('/').map(c => c.trim()).filter(Boolean)
+    .map(c => `<span class="ti-swatch" style="background:${CLUB_COLOR_MAP[c.toLowerCase()] || '#484f58'}" title="${esc(c)}"></span>`).join('');
+  const facts = [
+    { k: 'city', label: '연고지', value: w.city },
+    { k: 'founded', label: '창단', value: info.founded ? `${info.founded}년` : '', sub: years ? `${years}년째` : '' },
+    { k: 'stadium', label: '홈구장', value: w.stadium || info.venue, sub: w.capacity ? `${w.capacity.toLocaleString('ko-KR')}석` : '' },
+    { k: 'coach', label: '감독', value: info.coach || w.coach },
+    { k: 'nickname', label: '별칭', value: w.nickname },
+    { k: 'colors', label: '구단 색', value: info.clubColors ? `<span class="ti-swatches">${swatches}</span>${esc(info.clubColors)}` : '', raw: true },
+  ].filter(f => f.value);
+  const about = w.extract ? `<div class="ti-about">
+      <div class="ti-about-text"${w.lang === 'en' ? ' lang="en"' : ''}>${esc(w.extract)}</div>
+      <div class="ti-about-foot">
+        <button class="ti-about-more" onclick="toggleTiAbout(this)">더 보기</button>
+        <a href="${esc(w.url)}" target="_blank" rel="noopener">출처: ${w.lang === 'en' ? '영문 ' : ''}위키백과 ↗</a>
+      </div>
+    </div>` : '';
+  panel.innerHTML = `
+    ${about}
+    <div class="ti-season" id="ti-season"></div>
+    <div class="ti-facts2">${facts.map(f => `<div class="ti-fact2">
+      <span class="ti-fact2-icon">${tiIcon(f.k)}</span>
+      <div class="ti-fact2-body"><div class="ti-fact-label">${f.label}</div><div class="ti-fact-value">${f.raw ? f.value : esc(f.value)}${f.sub ? ` <span class="ti-fact2-sub">${f.sub}</span>` : ''}</div></div>
+    </div>`).join('')}</div>
+    ${facts.some(f => f.k === 'coach' || f.k === 'city') || w.capacity ? '<div class="tf-note">감독·연고지·수용 인원·별칭: 위키데이터(매주 갱신)</div>' : ''}`;
+  // 더 보기 버튼은 글이 4줄을 넘을 때만
+  const txt = panel.querySelector('.ti-about-text');
+  if (txt && txt.scrollHeight <= txt.clientHeight + 2) panel.querySelector('.ti-about-more').style.display = 'none';
+  fillTiSeason(team, code);
+}
+// 이번 시즌 리그 순위 + 다음 경기(부가 정보 — 실패하면 칸을 비움)
+async function fillTiSeason(team, code) {
+  const box = document.getElementById('ti-season');
+  if (!box) return;
+  const parts = [];
+  try {
+    if (code) {
+      if (!standingsCache[code]) { const r = await fetch(`${API}/standings/${code}`); if (r.ok) standingsCache[code] = await r.json(); }
+      const rows = standingsCache[code]?.standings || [];
+      const me = rows.find(r => r.team === team);
+      if (me) {
+        const li = TODAY_LEAGUE_INFO[code] || {};
+        const zone = tsZone(getZoneClass(code, me.rank - 1, rows.length));
+        parts.push(`<div class="ti-season-card" onclick="switchTiTab('standings')">
+          <div class="ti-fact-label">${li.name || ''} 순위</div>
+          <div class="ti-season-rank ${zone}"><b>${me.rank}</b><span>/ ${rows.length}위</span></div>
+          <div class="ti-season-sub">${me.points}점 · ${me.wins}승 ${me.draws}무 ${me.losses}패 · 득실 ${me.gd > 0 ? '+' : ''}${me.gd}</div>
+        </div>`);
+      }
+    }
+    const all = await fetchWindowMatches();
+    const next = all.filter(m => (m.home_team === team || m.away_team === team) && m.status !== 'FINISHED' && new Date(m.date) > Date.now())
+      .sort((a, b) => new Date(a.date) - new Date(b.date))[0];
+    if (next) {
+      const opp = next.home_team === team ? next.away_team : next.home_team;
+      const d = new Date(next.date), wd = ['일', '월', '화', '수', '목', '금', '토'][d.getDay()];
+      const li = TODAY_LEAGUE_INFO[next.league] || {};
+      parts.push(`<div class="ti-season-card" onclick="openMatchPredictModal('${escJs(next.home_team)}','${escJs(next.away_team)}')">
+        <div class="ti-fact-label">다음 경기 · ${li.name || ''}</div>
+        <div class="ti-season-next"><img src="${logos[opp] || ''}" alt="" onerror="this.style.display='none'"><span>${next.home_team === team ? 'vs' : '@'} ${shortTeamName(opp)}</span></div>
+        <div class="ti-season-sub">${d.getMonth() + 1}.${d.getDate()} (${wd}) ${d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false })} · 예측 보기 ›</div>
+      </div>`);
+    }
+  } catch (e) { /* 부가 정보 */ }
+  // 최근 시즌 최종 순위 한 줄(팀 통계 탭과 같은 데이터·캐시) — 위키 소개가 짧은 팀도 구단 흐름이 보이게
+  try {
+    let stats = teamStatsCache[team];
+    if (!stats) { const r = await fetch(`${API}/team/stats/${encodeURIComponent(team)}`); if (r.ok) stats = teamStatsCache[team] = await r.json(); }
+    const past = (stats?.seasons || []).filter(x => x.stats.played >= 30);
+    if (past.length) parts.push(`<div class="ti-history" onclick="switchTiTab('teamstats')">
+      <span class="ti-fact-label">최근 시즌 최종 순위</span>
+      ${past.map(x => `<span class="ti-history-item"><small>${x.season}</small><b class="${tsZone(getZoneClass(x.league, x.stats.rank - 1, x.teams))}">${x.stats.rank}위</b><small>${(TODAY_LEAGUE_INFO[x.league] || {}).name || ''}</small></span>`).join('')}
+    </div>`);
+  } catch (e) { /* 부가 정보 */ }
+  if (tiState.team === team && document.getElementById('ti-season') === box) box.innerHTML = parts.join('');
+}
+
+// ── 팀 정보 · 팀 통계 탭 (2026-09-29 개편) ──
+// 실제 리그 경기 기록으로 시즌별 지표 + 같은 리그 안 순위(“리그 N위”)·리그 평균 표시(서버 /team/stats).
+// 막대 길이는 지표마다 고정 눈금(득점 0~3골, 비율 0~100%)이고 세로 눈금선이 리그 평균 — 평균보다 좋으면 파랑, 나쁘면 주황
+let tiStatsState = null;
+// 순위표 행용 zone-* 클래스엔 왼쪽 테두리가 붙어 있어서 숫자 색만 쓰려고 이름을 바꿈
+const tsZone = z => z ? 'tz-' + z.replace('zone-', '') : '';
+function tsRankChip(rank, n) {
+  if (!rank) return '';
+  const cls = rank <= Math.ceil(n * 0.25) ? 'top' : rank > n - Math.ceil(n * 0.25) ? 'low' : '';
+  return `<span class="ts-rank ${cls}">리그 ${rank}위</span>`;
+}
+function tsMetric(label, value, unit, max, avg, higherBetter, rank, n) {
+  const pos = v => Math.max(0, Math.min(100, v / max * 100));
+  const better = higherBetter == null ? null : (higherBetter ? value >= avg : value <= avg);
+  return `<div class="ts-metric">
+    <div class="ts-metric-head"><span class="ts-metric-label">${label}</span><span class="ts-metric-val">${value}${unit}</span>${tsRankChip(rank, n)}</div>
+    <div class="ts-track"><i class="${better === null ? 'neutral' : better ? 'good' : 'bad'}" style="width:${pos(value)}%"></i>${avg != null ? `<b style="left:${pos(avg)}%" title="리그 평균 ${avg}${unit}"></b>` : ''}</div>
+    <div class="ts-metric-avg">리그 평균 ${unit ? avg : Number(avg).toFixed(2)}${unit}</div>
+  </div>`;
+}
+function tsWdl(r) {
+  const t = r.wins + r.draws + r.losses || 1;
+  return `<div class="ts-wdl"><i class="w" style="width:${r.wins / t * 100}%"></i><i class="d" style="width:${r.draws / t * 100}%"></i><i class="l" style="width:${r.losses / t * 100}%"></i></div>
+    <div class="ts-wdl-legend">${r.wins}승 ${r.draws}무 ${r.losses}패</div>`;
+}
+function selectTiStatsSeason(i) { tiStatsState.idx = i; renderTiStats(); }
+function renderTiStats() {
+  const panel = document.getElementById('ti-panel');
+  const { data, idx } = tiStatsState;
+  const seasons = data.seasons || [];
+  if (!seasons.length) { panel.innerHTML = '<div class="ti-empty">리그 경기 기록이 없어요.</div>'; return; }
+  const S = seasons[idx], st = S.stats, rk = S.ranks, avg = S.league_avg, n = S.teams;
+  const zone = tsZone(getZoneClass(S.league, st.rank - 1, n));
+  const f1 = v => v == null ? '-' : v.toFixed(2);
+  const seg = seasons.map((x, i) => `<button class="ts-seg${i === idx ? ' active' : ''}" onclick="selectTiStatsSeason(${i})">${x.season}</button>`).join('');
+  const P = data.power;
+  const powerHtml = P ? `<div class="ts-section-title">AI 파워 레이팅 <span>예측 모델이 쓰는 최근 전력 · 오늘 기준</span></div>
+    <div class="ts-kpis three">
+      <div class="ts-kpi"><div class="ti-fact-label">파워 레이팅(ELO)</div><div class="ts-kpi-val">${Math.round(P.elo)}</div>${tsRankChip(P.elo_rank, P.peers)}</div>
+      <div class="ts-kpi"><div class="ti-fact-label">공격 지수 <small>최근 38경기 경기당 득점</small></div><div class="ts-kpi-val">${f1(P.attack)}</div>${tsRankChip(P.attack_rank, P.peers)}</div>
+      <div class="ts-kpi"><div class="ti-fact-label">수비 지수 <small>최근 38경기 경기당 실점</small></div><div class="ts-kpi-val">${f1(P.defense)}</div>${tsRankChip(P.defense_rank, P.peers)}</div>
+    </div>` : '';
+  panel.innerHTML = `
+    <div class="ts-segs" role="tablist">${seg}</div>
+    ${st.played < 10 ? `<div class="ts-note">아직 ${st.played}경기라 시즌이 진행되면서 수치가 크게 바뀔 수 있어요.</div>` : ''}
+    <div class="ts-kpis">
+      <div class="ts-kpi"><div class="ti-fact-label">${(TODAY_LEAGUE_INFO[S.league] || {}).name || S.league_name || ''} 순위</div><div class="ts-kpi-val ${zone}">${st.rank}<small>/ ${n}</small></div><div class="ts-kpi-sub">${st.played}경기</div></div>
+      <div class="ts-kpi"><div class="ti-fact-label">승점</div><div class="ts-kpi-val">${st.points}</div><div class="ts-kpi-sub">경기당 ${f1(st.ppg)}</div>${tsRankChip(rk.ppg, n)}</div>
+      <div class="ts-kpi"><div class="ti-fact-label">득실차</div><div class="ts-kpi-val">${st.gd > 0 ? '+' : ''}${st.gd}</div><div class="ts-kpi-sub">득 ${st.gf} · 실 ${st.ga}</div></div>
+      <div class="ts-kpi"><div class="ti-fact-label">승률</div><div class="ts-kpi-val">${Math.round(st.win_pct)}<small>%</small></div>${tsWdl(st)}</div>
+    </div>
+    <div class="ts-cols">
+      <div><div class="ts-section-title">공격</div>
+        ${tsMetric('경기당 득점', f1(st.gf_pg), '', 3, avg.gf_pg, true, rk.gf_pg, n)}
+        ${tsMetric('무득점 경기', Math.round(st.fts_pct), '%', 100, Math.round(avg.fts_pct), false, rk.fts_pct, n)}
+      </div>
+      <div><div class="ts-section-title">수비</div>
+        ${tsMetric('경기당 실점', f1(st.ga_pg), '', 3, avg.ga_pg, false, rk.ga_pg, n)}
+        ${tsMetric('무실점 경기', Math.round(st.cs_pct), '%', 100, Math.round(avg.cs_pct), true, rk.cs_pct, n)}
+      </div>
+      <div><div class="ts-section-title">경기 성향</div>
+        ${tsMetric('양 팀 모두 득점', Math.round(st.btts_pct), '%', 100, Math.round(avg.btts_pct), null, null, n)}
+        ${tsMetric('3골 이상 경기', Math.round(st.over25_pct), '%', 100, Math.round(avg.over25_pct), null, null, n)}
+      </div>
+    </div>
+    <div class="ts-section-title">홈 · 원정</div>
+    <div class="ts-split">
+      ${['home', 'away'].map(k => { const r = st[k]; return `<div class="ts-split-card ${k}">
+        <div class="ts-split-head"><span>${k === 'home' ? '홈' : '원정'}</span><span class="ts-split-ppg">경기당 승점 <b>${f1(st[k + '_ppg'])}</b></span>${tsRankChip(rk[k + '_ppg'], n)}</div>
+        ${tsWdl(r)}
+        <div class="ts-split-goals">경기당 득점 <b>${f1(r.gf_pg)}</b> · 실점 <b>${f1(r.ga_pg)}</b></div>
+      </div>`; }).join('')}
+    </div>
+    <div class="ts-section-title">상대 수준별 <span>경기당 승점 · 그 시즌 순위표 상위 절반 / 하위 절반</span></div>
+    <div class="ts-vs">
+      ${[['vs_top', '상위권 상대'], ['vs_bottom', '하위권 상대']].map(([k, l]) => `<div class="ts-vs-row"><span class="ts-vs-label">${l} <small>${st[k].played}경기</small></span>
+        <div class="ts-track big"><i class="${k === 'vs_top' ? 'top' : 'bottom'}" style="width:${(st[k].ppg || 0) / 3 * 100}%"></i><b style="left:${avg.ppg / 3 * 100}%" title="리그 평균 경기당 승점 ${avg.ppg}"></b></div>
+        <span class="ts-vs-val">${f1(st[k].ppg)}</span></div>`).join('')}
+    </div>
+    <div class="ts-section-title">순위 변동 <span>경기를 치를 때마다의 순위</span></div>
+    <div class="ts-chart" id="ts-rank-chart"></div>
+    <div class="ts-section-title">시즌별 기록</div>
+    <table class="ts-table"><thead><tr><th>시즌</th><th>리그</th><th class="c">순위</th><th class="c">승점</th><th class="c">승-무-패</th><th class="c">득</th><th class="c">실</th></tr></thead><tbody>
+      ${seasons.map((x, i) => `<tr class="${i === idx ? 'on' : ''}" onclick="selectTiStatsSeason(${i})"><td>${x.season}</td><td>${(TODAY_LEAGUE_INFO[x.league] || {}).name || x.league}</td><td class="c"><b class="${tsZone(getZoneClass(x.league, x.stats.rank - 1, x.teams))}">${x.stats.rank}</b></td><td class="c">${x.stats.points}</td><td class="c">${x.stats.wins}-${x.stats.draws}-${x.stats.losses}</td><td class="c">${x.stats.gf}</td><td class="c">${x.stats.ga}</td></tr>`).join('')}
+    </tbody></table>
+    ${powerHtml}
+    <div class="tf-note">리그 경기 기준(컵·UCL 제외) · 리그 순위는 같은 시즌 같은 리그 ${n}팀 중</div>`;
+  drawTsRankChart();
+}
+// 순위 변동 차트: 컨테이너 실제 폭으로 1:1(축 글자가 늘어나지 않게 — 파워 레이팅 차트와 같은 방식), 위가 1위
+function drawTsRankChart() {
+  const box = document.getElementById('ts-rank-chart');
+  if (!box || !tiStatsState) return;
+  const S = tiStatsState.data.seasons[tiStatsState.idx], pts = S.rank_progress || [], n = S.teams;
+  const W = box.clientWidth, H = 150, L = 26, R = 10, T = 10, B = 20;
+  if (!W || pts.length < 2) { box.innerHTML = pts.length < 2 ? '<div class="ti-empty">경기가 더 쌓이면 보여드릴게요.</div>' : ''; return; }
+  const x = i => L + (W - L - R) * i / (pts.length - 1), y = r => T + (H - T - B) * (r - 1) / (n - 1);
+  const z = LEAGUE_ZONES[S.league] || { cl: 4, rel: 3 };
+  const band = (r0, r1, c) => `<rect x="${L}" y="${y(r0) - 3}" width="${W - L - R}" height="${y(r1) - y(r0) + 6}" fill="${c}"/>`;
+  const line = pts.map((r, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)} ${y(r).toFixed(1)}`).join('');
+  const ticks = [1, Math.round(n / 2), n].map(r => `<text x="${L - 6}" y="${y(r) + 3.5}" text-anchor="end">${r}</text>`).join('');
+  const xt = [1, Math.round(pts.length / 2), pts.length].map(g => `<text x="${x(g - 1)}" y="${H - 4}" text-anchor="middle">${g}경기</text>`).join('');
+  const last = pts[pts.length - 1];
+  box.innerHTML = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-label="순위 변동: 최근 ${last}위">
+    ${band(1, z.cl, 'rgba(88,166,255,0.08)')}${band(n - z.rel + 1, n, 'rgba(248,81,73,0.08)')}
+    <g class="ts-ax">${ticks}${xt}</g>
+    <path class="ts-line" d="${line}" pathLength="1"/>
+    <circle cx="${x(pts.length - 1)}" cy="${y(last)}" r="4" class="ts-dot"/>
+  </svg>`;
+}
+window.addEventListener('resize', () => { if (tiStatsState && document.getElementById('ts-rank-chart')) drawTsRankChart(); });
+
+// ── 팀 정보 · 이적 탭 ──
+// 한 줄 = 선수 사진 + 이름 + [영입/방출] / 원래 구단 로고·이름 → 새 구단 로고·이름 / 유형(이적·임대·FA)·날짜.
+// 예전 기록(2026-09-29 전 수집)엔 사진·로고·방향이 없어서 화면에서 채움: 방향 = 이 팀 목록에 가장 많이 나오는 구단명이 이 팀,
+// 사진 = 현재 스쿼드에서 같은 이름, 로고 = 우리 로고 목록에서 이름이 맞는 구단(5대 리그 밖 구단은 머리글자 배지)
+const TRANSFER_TYPE_KO = { 'Transfer': '이적', 'Loan': '임대', 'Free agent': 'FA', 'Return from loan': '임대 복귀', 'Back from Loan': '임대 복귀', '-': '이적' };
+let tiTransferState = null;
+const normClub = n => (n || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+  .replace(/\b(fc|cf|afc|sc|ac|ud|cd|rcd|club|de|futbol|football)\b/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+function clubLogoFor(name) {
+  const k = normClub(name);
+  if (!k) return '';
+  let best = '';
+  for (const [team, url] of Object.entries(logos)) {
+    const t = normClub(team);
+    if (t === k) return url;
+    if (!best && (t.startsWith(k + ' ') || k.startsWith(t + ' '))) best = url;   // "Manchester City" ↔ "Manchester City FC" 같은 경우만
+  }
+  return best;
+}
+function prepTransfers(team, info) {
+  const list = info.transfers || [];
+  const count = {};
+  list.forEach(t => [t.from, t.to].forEach(n => { if (n) count[n] = (count[n] || 0) + 1; }));
+  const self = Object.entries(count).sort((a, b) => b[1] - a[1])[0]?.[0];
+  const squadPhoto = {};
+  (info.squad || []).forEach(p => { if (p.photo) squadPhoto[p.name] = p.photo; });
+  return list.map(t => ({
+    ...t,
+    dir: t.dir || (t.to === self ? 'in' : 'out'),
+    photo: t.photo || squadPhoto[t.player] || '',
+    from_logo: t.from_logo || (t.from === self ? logos[team] : clubLogoFor(t.from)) || '',
+    to_logo: t.to_logo || (t.to === self ? logos[team] : clubLogoFor(t.to)) || '',
+    typeKo: TRANSFER_TYPE_KO[t.type] || '이적',
+  }));
+}
+function setTiTransferFilter(f) { tiTransferState.filter = f; renderTiTransfers(); }
+function tfClubHtml(name, logo, isSelf) {
+  const initials = (name || '?').replace(/[^A-Za-zÀ-ÿ ]/g, '').split(' ').filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase() || '?';
+  const img = logo ? `<img src="${logo}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'tf-crest-ph',textContent:'${initials}'}))">` : `<span class="tf-crest-ph">${initials}</span>`;
+  return `<span class="tf-club${isSelf ? ' self' : ''}">${img}<span class="tf-club-name">${name || '?'}</span></span>`;
+}
+function renderTiTransfers() {
+  const panel = document.getElementById('ti-panel');
+  const { list, filter } = tiTransferState;
+  const nIn = list.filter(t => t.dir === 'in').length, nOut = list.length - nIn;
+  const shown = filter === 'all' ? list : list.filter(t => t.dir === filter);
+  const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토'];
+  const chip = (f, label) => `<button class="tf-filter${filter === f ? ' active' : ''}" onclick="setTiTransferFilter('${f}')">${label}</button>`;
+  panel.innerHTML = `<div class="tf-filters">${chip('all', `전체 ${list.length}`)}${chip('in', `영입 ${nIn}`)}${chip('out', `방출 ${nOut}`)}</div>
+    <div class="tf-list">${shown.map(t => {
+      const d = t.date ? new Date(t.date) : null;
+      const when = d && !isNaN(d) ? `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}` : '';
+      return `<div class="tf-row ${t.dir}">
+        <div class="tf-photo">${t.photo ? `<img src="${t.photo}" alt="" loading="lazy" onerror="this.remove()">` : ''}<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="4"/><path d="M4.5 20.5c1.2-3.8 4-5.5 7.5-5.5s6.3 1.7 7.5 5.5"/></svg></div>
+        <div class="tf-main">
+          <div class="tf-top"><span class="tf-name">${t.player || ''}</span><span class="tf-dir ${t.dir}">${t.dir === 'in' ? '영입' : '방출'}</span></div>
+          <div class="tf-move">${tfClubHtml(t.from, t.from_logo, t.dir === 'out')}<span class="tf-arrow" aria-label="에서">→</span>${tfClubHtml(t.to, t.to_logo, t.dir === 'in')}</div>
+        </div>
+        <div class="tf-side"><span class="tf-type ${t.type === 'Loan' || t.type === 'Return from loan' ? 'loan' : t.type === 'Free agent' ? 'fa' : ''}">${t.typeKo}</span><span class="tf-date">${when}</span></div>
+      </div>`;
+    }).join('') || '<div class="ti-empty">해당 기록이 없어요.</div>'}</div>
+    <div class="tf-note">최근 이적 기록 · 출처 API-Football</div>`;
 }
 
 function closeTeamInfoModal(e) { if (!e || e.target === document.getElementById('ti-modal')) document.getElementById('ti-modal').classList.remove('show'); }

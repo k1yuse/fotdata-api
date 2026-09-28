@@ -696,6 +696,125 @@ def get_match_insights(home_team: str, away_team: str):
         "window": INSIGHT_N,
     }
 
+# ── 팀 통계 API (팀 정보 모달 "팀 통계" 탭, 2026-09-29) ──
+# 예전 탭은 예측 모델용 블렌딩 값(승률·공격력·수비력·prestige)만 보여줘서 실제 기록과 달랐음 → 실제 리그 경기 기록으로
+# 시즌별(23-24~26-27) 지표 + 같은 리그 안 순위·리그 평균, 홈/원정, 상대 수준별, 라운드별 순위 변동, AI 파워 레이팅
+STAT_SEASONS = {2023: "23-24", 2024: "24-25", 2025: "25-26", 2026: "26-27"}
+# (키, 높을수록 좋은가) — 리그 안 순위 계산용
+STAT_KEYS = [("ppg", True), ("gf_pg", True), ("ga_pg", False), ("cs_pct", True), ("fts_pct", False),
+             ("btts_pct", None), ("over25_pct", None), ("home_ppg", True), ("away_ppg", True), ("win_pct", True)]
+
+def _long_matches(df):
+    """경기 한 줄 → 팀 관점 두 줄(team, opp, gf, ga, home 여부)"""
+    h = pd.DataFrame({"date": df['date'], "team": df['home_team'], "opp": df['away_team'],
+                      "gf": df['home_goals'], "ga": df['away_goals'], "home": True})
+    a = pd.DataFrame({"date": df['date'], "team": df['away_team'], "opp": df['home_team'],
+                      "gf": df['away_goals'], "ga": df['home_goals'], "home": False})
+    out = pd.concat([h, a], ignore_index=True)
+    out['pts'] = np.where(out.gf > out.ga, 3, np.where(out.gf == out.ga, 1, 0))
+    return out.sort_values('date', kind='stable')
+
+def _table(long_df):
+    t = long_df.groupby('team').agg(pts=('pts', 'sum'), gf=('gf', 'sum'), ga=('ga', 'sum'), p=('pts', 'size'))
+    t['gd'] = t.gf - t.ga
+    t = t.sort_values(['pts', 'gd', 'gf'], ascending=False)
+    t['rank'] = range(1, len(t) + 1)
+    return t
+
+@lru_cache(maxsize=64)
+def _league_season_stats(league, season):
+    df = df_matches_all[(df_matches_all['league'] == league) & (df_matches_all['season'] == season)]
+    df = df.dropna(subset=['home_goals', 'away_goals'])
+    if df.empty:
+        return None
+    L = _long_matches(df)
+    table = _table(L)
+    n = len(table)
+    top_half = set(table.index[: n // 2])
+    rows = {}
+    for team, g in L.groupby('team'):
+        hm, aw = g[g.home], g[~g.home]
+        w, d, l = int((g.gf > g.ga).sum()), int((g.gf == g.ga).sum()), int((g.gf < g.ga).sum())
+        pct = lambda mask: round(float(mask.mean()) * 100, 1)
+        vs_top, vs_bot = g[g.opp.isin(top_half)], g[~g.opp.isin(top_half)]
+        rows[team] = {
+            "played": len(g), "wins": w, "draws": d, "losses": l,
+            "points": int(g.pts.sum()), "gf": int(g.gf.sum()), "ga": int(g.ga.sum()), "gd": int(g.gf.sum() - g.ga.sum()),
+            "rank": int(table.loc[team, 'rank']),
+            "ppg": round(float(g.pts.mean()), 2), "win_pct": pct(g.gf > g.ga),
+            "gf_pg": round(float(g.gf.mean()), 2), "ga_pg": round(float(g.ga.mean()), 2),
+            "cs_pct": pct(g.ga == 0), "fts_pct": pct(g.gf == 0),
+            "btts_pct": pct((g.gf > 0) & (g.ga > 0)), "over25_pct": pct((g.gf + g.ga) > 2.5),
+            "home": {"played": len(hm), "wins": int((hm.gf > hm.ga).sum()), "draws": int((hm.gf == hm.ga).sum()), "losses": int((hm.gf < hm.ga).sum()),
+                     "gf_pg": round(float(hm.gf.mean()), 2) if len(hm) else None, "ga_pg": round(float(hm.ga.mean()), 2) if len(hm) else None},
+            "away": {"played": len(aw), "wins": int((aw.gf > aw.ga).sum()), "draws": int((aw.gf == aw.ga).sum()), "losses": int((aw.gf < aw.ga).sum()),
+                     "gf_pg": round(float(aw.gf.mean()), 2) if len(aw) else None, "ga_pg": round(float(aw.ga.mean()), 2) if len(aw) else None},
+            "home_ppg": round(float(hm.pts.mean()), 2) if len(hm) else None,
+            "away_ppg": round(float(aw.pts.mean()), 2) if len(aw) else None,
+            "vs_top": {"played": len(vs_top), "ppg": round(float(vs_top.pts.mean()), 2) if len(vs_top) else None},
+            "vs_bottom": {"played": len(vs_bot), "ppg": round(float(vs_bot.pts.mean()), 2) if len(vs_bot) else None},
+        }
+    # 같은 리그 안 순위(동률은 같은 순위)와 리그 평균
+    ranks, avg = {t: {} for t in rows}, {}
+    for key, higher in STAT_KEYS:
+        vals = {t: r[key] for t, r in rows.items() if r[key] is not None}
+        avg[key] = round(float(np.mean(list(vals.values()))), 2) if vals else None
+        if higher is None:
+            continue
+        for t, v in vals.items():
+            ranks[t][key] = 1 + sum(1 for o in vals.values() if (o > v if higher else o < v))
+    return {"rows": rows, "ranks": ranks, "avg": avg, "teams": n, "long": L}
+
+def _rank_progress(league, season, team):
+    """팀이 경기를 치를 때마다 그 시점 순위표에서의 순위"""
+    st = _league_season_stats(league, season)
+    L = st["long"]
+    out = []
+    for date in L[L.team == team].date.unique():
+        t = _table(L[L.date <= date])
+        if team in t.index:
+            out.append(int(t.loc[team, 'rank']))
+    return out
+
+@app.get("/team/stats/{team_name}")
+def get_team_stats(team_name: str):
+    team = TEAM_NAME_MAP.get(team_name, team_name)
+    return _team_stats(team)
+
+@lru_cache(maxsize=256)
+def _team_stats(team):
+    league = _team_current_league(team)
+    state = team_state.get(team)
+    if not league and not state:
+        raise HTTPException(status_code=404, detail=f"팀을 찾을 수 없습니다: {team}")
+    seasons = []
+    for yr, label in STAT_SEASONS.items():
+        # 그 시즌에 뛴 리그(승강한 팀은 시즌마다 다를 수 있음 — 5대 리그 안에서만)
+        played = df_matches_all[(df_matches_all['season'] == yr) & (df_matches_all['league'] != 'CL') &
+                                ((df_matches_all['home_team'] == team) | (df_matches_all['away_team'] == team))]
+        if played.empty:
+            continue
+        lg = played['league'].mode().iloc[0]
+        st = _league_season_stats(lg, yr)
+        if not st or team not in st["rows"]:
+            continue
+        seasons.append({
+            "season": label, "year": yr, "league": lg, "league_name": LEAGUE_MAP.get(lg), "teams": st["teams"],
+            "stats": st["rows"][team], "ranks": st["ranks"][team], "league_avg": st["avg"],
+            "rank_progress": _rank_progress(lg, yr, team),
+        })
+    power = None
+    if state:
+        # AI 모델 입력값(최근 38경기)과 같은 리그 팀들 사이 순위
+        # 비교 대상 = 가장 최근 시즌 같은 리그 팀(강등된 팀은 마지막 리그 경기가 이 리그여도 제외)
+        cur = next((_league_season_stats(league, yr) for yr in sorted(STAT_SEASONS, reverse=True) if league and _league_season_stats(league, yr)), None)
+        peers = [t for t in (cur["rows"] if cur else []) if t in team_state]
+        rank_of = lambda key, higher=True: (1 + sum(1 for t in peers if (team_state[t][key] > state[key] if higher else team_state[t][key] < state[key]))) if team in peers else None
+        power = {"elo": state.get('elo'), "elo_rank": rank_of('elo'), "attack": state.get('attack'), "attack_rank": rank_of('attack'),
+                 "defense": state.get('defense'), "defense_rank": rank_of('defense', False), "peers": len(peers),
+                 "history": [{"date": d, "elo": e} for d, e in state.get('elo_history', [])]}
+    return {"team": team, "league": league, "seasons": seasons[::-1], "power": power}
+
     # ── 선수 데이터 API ──
 import json as _json
 
@@ -924,6 +1043,11 @@ def get_team_info(team_name: str):
             info["squad"] = extra["squad"]
         if extra.get("transfers") is not None:
             info["transfers"] = extra["transfers"]
+
+    # 구단 소개·별칭·홈구장 수용 인원·감독·연고지(위키백과/위키데이터 — update_data.py fetch_team_wiki)
+    wiki = (_load_json("team_wiki.json") or {}).get(team_name)
+    if wiki:
+        info = {**info, "wiki": wiki}
 
     return info
 
