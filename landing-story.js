@@ -18,8 +18,8 @@ const COLORS = { blue: [0.345, 0.651, 1.0], orange: [0.941, 0.533, 0.243], gold:
 const TOPK = 5;
 
 const story = document.getElementById('story');
-// 공개 전 미리보기: ?story=1 로 접속했을 때만 켬(확인 후 기본 공개로 전환 예정)
-const ENABLED = story && (new URLSearchParams(location.search).has('story') || story.dataset.enabled === '1');
+// 기본 공개(2026-09-28). 비교·문제 확인용으로 ?story=0 이면 예전 랜딩(연출 없음)
+const ENABLED = story && new URLSearchParams(location.search).get('story') !== '0';
 
 // ── 표시 데이터 (API 실패 시 이 값으로 연출이 계속 돌아감) ──
 const data = {
