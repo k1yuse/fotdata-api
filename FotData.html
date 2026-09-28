@@ -2,6 +2,17 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <script>
+  // 유리(glass) 테마 미리보기: ?theme=glass 로 켜고 ?theme=default 로 끔(같은 탭 세션 동안 유지).
+  // 그리기 전에 클래스를 붙여야 기본 테마가 잠깐 보였다 바뀌는 깜빡임이 없음
+  (function () {
+    try {
+      var q = new URLSearchParams(location.search).get('theme');
+      if (q) sessionStorage.setItem('fotdataTheme', q);
+      if ((q || sessionStorage.getItem('fotdataTheme')) === 'glass') document.documentElement.classList.add('theme-glass');
+    } catch (e) {}
+  })();
+  </script>
   <meta name="description" content="5대 리그+UCL 실시간 순위, AI 경기 예측, 역대 맞대 기록. 전문가 수준의 축구 인사이트를 무료로.">
   <meta property="og:title" content="FotData - AI 축구 분석 플랫폼">
   <meta property="og:description" content="5대 리그+UCL 실시간 순위, AI 경기 예측, 역대 맞대 기록. 전문가 수준의 축구 인사이트를 무료로.">
@@ -421,8 +432,9 @@
     .team-box label { font-size: 12px; color: #8b949e; text-transform: uppercase; letter-spacing: 1px; }
     .team-logo-wrap { width: 80px; height: 80px; border-radius: 50%; background: #21262d; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 8px; flex-shrink: 0; border: 3px solid transparent; transition: border-color .4s ease, box-shadow .4s ease; }
     .team-logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
-    .team-logo-placeholder { display: flex; align-items: flex-end; gap: 4px; height: 30px; }
-    .team-logo-placeholder div { width: 5px; background: #484f58; border-radius: 1px 1px 0 0; }
+    /* 팀 선택 전 자리표시: 사이트 로고와 같은 축구공(예전 막대그래프 로고에서 교체), 색은 기존 회색 */
+    .team-logo-placeholder { display: flex; align-items: center; justify-content: center; color: #484f58; }
+    .team-logo-placeholder svg { width: 36px; height: 36px; display: block; }
     .league-badge-sm { font-size: 11px; color: #8b949e; display: flex; align-items: center; gap: 4px; min-height: 16px; }
     .league-badge-sm img { width: 12px; height: 12px; object-fit: contain; }
     .vs-center { font-size: 22px; font-weight: 700; color: #8b949e; margin-top: 50px; }
@@ -758,6 +770,47 @@
     @media (max-width: 768px) {
       .sched-team span { font-size: 12px; }
     }
+
+    /* ── 유리(glass) 테마 — 랜딩 3D 연출과 같은 "하나로 이어진 어두운 공간" 컨셉 (미리보기: ?theme=glass) ──
+       배경: 랜딩 공과 같은 구조의 와이어프레임 축구공(bg-ball.svg, generate_bg_ball.py)을 아주 흐리게 고정.
+       카드: 반투명 + 흐림(backdrop-filter)으로 배경이 은은하게 비침. 숫자·표가 있는 앱이라 불투명도는 높게. */
+    html.theme-glass body { background: #0b0f14; }
+    html.theme-glass body::before, html.theme-glass body::after { content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+    html.theme-glass body::before {
+      background:
+        radial-gradient(900px 640px at 88% 16%, rgba(88,166,255,0.10), transparent 70%),
+        radial-gradient(760px 560px at 4% 96%, rgba(163,113,247,0.06), transparent 70%),
+        radial-gradient(1200px 800px at 50% 110%, rgba(88,166,255,0.04), transparent 70%);
+    }
+    html.theme-glass body::after {
+      background: url(bg-ball.svg) no-repeat right -14vmin top 10vh / min(86vmin, 920px) auto;
+      opacity: 0.2; transition: opacity 1.2s ease;
+    }
+    /* 천천히 도는 3D 공(bg-ball.js) — 정지 SVG와 같은 자리·크기, 준비되면 SVG에서 교차 전환 */
+    .bg-ball-canvas { position: fixed; right: -14vmin; top: 10vh; width: min(86vmin, 920px); height: min(86vmin, 920px); z-index: -1; pointer-events: none; opacity: 0; transition: opacity 1.2s ease; }
+    html.bg3d-on .bg-ball-canvas { opacity: 0.26; }
+    html.bg3d-on body::after { opacity: 0; }
+    html.theme-glass .nav { background: rgba(13,17,23,0.7); backdrop-filter: blur(14px) saturate(140%); -webkit-backdrop-filter: blur(14px) saturate(140%); border-bottom-color: rgba(139,148,158,0.16); }
+    html.theme-glass .card, html.theme-glass .myteam-widget {
+      background: rgba(22,27,34,0.74);
+      backdrop-filter: blur(16px) saturate(130%); -webkit-backdrop-filter: blur(16px) saturate(130%);
+      border-color: rgba(139,148,158,0.18);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.045), 0 10px 36px rgba(0,0,0,0.38);
+    }
+    html.theme-glass .modal { background: rgba(22,27,34,0.86); backdrop-filter: blur(20px) saturate(140%); -webkit-backdrop-filter: blur(20px) saturate(140%); border-color: rgba(139,148,158,0.2); }
+    html.theme-glass .modal-overlay { backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); }
+    html.theme-glass .team-popup { background: rgba(22,27,34,0.9); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+    /* 카드 안 어두운 칸(#0d1117)은 반투명으로 — 유리 위에 검은 구멍처럼 보이지 않게 */
+    html.theme-glass .today-card, html.theme-glass .mi-rank-tile, html.theme-glass .mi-caption, html.theme-glass .stat-box { background: rgba(13,17,23,0.45); }
+    /* backdrop-filter는 쌓임 맥락을 만들어서, 팀 선택 팝업이 아래 카드들에 가려지지 않게 선택 카드를 위로 */
+    html.theme-glass .predict-selector-card { position: relative; z-index: 5; }
+    @media (max-width: 768px) {
+      /* 모바일은 흐림 비용이 커서 약하게, 대신 불투명도를 높여 가독성 유지 */
+      html.theme-glass .card, html.theme-glass .myteam-widget { background: rgba(22,27,34,0.86); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+      html.theme-glass body::after { background-position: right -30vw top 14vh; background-size: 120vw auto; opacity: 0.16; }
+      .bg-ball-canvas { right: -30vw; top: 14vh; width: 120vw; height: 120vw; }
+      html.bg3d-on .bg-ball-canvas { opacity: 0.2; }
+    }
   </style>
 </head>
 <body>
@@ -939,7 +992,7 @@
       <div class="team-selector">
         <div class="team-box">
           <label>홈팀</label>
-          <div class="team-logo-wrap" id="home-logo"><div class="team-logo-placeholder"><div style="height:14px"></div><div style="height:22px"></div><div style="height:12px"></div><div style="height:26px"></div><div style="height:17px"></div></div></div>
+          <div class="team-logo-wrap" id="home-logo"><div class="team-logo-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg></div></div>
           <div class="league-badge-sm" id="home-league"></div>
           <div class="popup-relative">
             <div class="select-trigger" id="home-trigger" onclick="togglePopup('home')">
@@ -968,7 +1021,7 @@
         <div class="vs-center">VS</div>
         <div class="team-box">
           <label>원정팀</label>
-          <div class="team-logo-wrap" id="away-logo"><div class="team-logo-placeholder"><div style="height:14px"></div><div style="height:22px"></div><div style="height:12px"></div><div style="height:26px"></div><div style="height:17px"></div></div></div>
+          <div class="team-logo-wrap" id="away-logo"><div class="team-logo-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg></div></div>
           <div class="league-badge-sm" id="away-league"></div>
           <div class="popup-relative">
             <div class="select-trigger" id="away-trigger" onclick="togglePopup('away')">
@@ -1280,7 +1333,7 @@ async function loadTournament() {
 
 function escJs(str) { return String(str).replace(/'/g, "\\'"); }
 
-const TEAM_LOGO_PLACEHOLDER = '<div class="team-logo-placeholder"><div style="height:14px"></div><div style="height:22px"></div><div style="height:12px"></div><div style="height:26px"></div><div style="height:17px"></div></div>';
+const TEAM_LOGO_PLACEHOLDER = '<div class="team-logo-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg></div>';
 
 function skeletonRows(n, opts = {}) {
   const widths = opts.widths || ['60%', '30%'];
@@ -4195,5 +4248,6 @@ function toggleKofiPanel() {
 }
 window.addEventListener('resize', () => { if (document.getElementById('kofi-panel').classList.contains('open')) positionKofiPanel(); });
 </script>
+<script type="module" src="bg-ball.js"></script>
 </body>
 </html>

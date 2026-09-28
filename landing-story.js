@@ -8,13 +8,14 @@
 // 문구는 전부 실제 HTML(검색 노출). 모션 최소화 설정·WebGL 미지원이면 고정 없이 문구+목록만 보여주는 정적 모드.
 // 3D 연출 속 팀은 중립 원형(홈 파랑/원정 주황)으로만 표현하고, 구단 로고는 옆 HTML 카드(실제 데이터 표시)에만 씀.
 
+import { BALL_R, ballGeometry, onSphere, pointInPenta, wirePositions, WIRE_VERTEX, WIRE_FRAGMENT, rimRadius } from './ball-geometry.js';
+
 const API = 'https://fotdata-api.onrender.com';
 const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js';
 const LEAGUE_KO = { PL: 'EPL', PD: '라리가', BL1: '분데스리가', SA: '세리에A', FL1: '리그앙', CL: 'UCL' };
 const SIM_LEAGUES = new Set(['PL', 'PD', 'BL1', 'SA', 'FL1']);
 const COLORS = { blue: [0.345, 0.651, 1.0], orange: [0.941, 0.533, 0.243], gold: [0.941, 0.753, 0.251], line: [0.55, 0.72, 1.0], dim: [0.35, 0.5, 0.75], face: [0.5, 0.7, 1.0] };
 const TOPK = 5;
-const BALL_R = 2.2;
 
 const story = document.getElementById('story');
 // 공개 전 미리보기: ?story=1 로 접속했을 때만 켬(확인 후 기본 공개로 전환 예정)
@@ -139,32 +140,6 @@ function simulateTitle(d, n) {
 }
 
 // ── 장면 기하 ──
-function ballGeometry() {
-  // 정이십면체 꼭짓점 → 모서리를 1/3·2/3로 자른 점들로 깎은 정이십면체(축구공) 90개 모서리
-  const f = (1 + Math.sqrt(5)) / 2;
-  const V = [[0, 1, f], [0, 1, -f], [0, -1, f], [0, -1, -f], [1, f, 0], [1, -f, 0], [-1, f, 0], [-1, -f, 0], [f, 0, 1], [f, 0, -1], [-f, 0, 1], [-f, 0, -1]];
-  const d2 = (a, b) => (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 + (a[2] - b[2]) ** 2;
-  const lerp = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
-  const nb = V.map((v, i) => V.map((w, j) => j).filter(j => j !== i && Math.abs(d2(V[i], V[j]) - 4) < 1e-6));
-  const edges = [], pentas = [];
-  for (let i = 0; i < 12; i++) for (const j of nb[i]) if (i < j) edges.push([lerp(V[i], V[j], 1 / 3), lerp(V[i], V[j], 2 / 3)]);
-  for (let i = 0; i < 12; i++) {
-    const v = V[i], pts = nb[i].map(j => lerp(v, V[j], 1 / 3));
-    // 꼭짓점 둘레로 각도 정렬해서 오각형으로 잇기
-    const n = v.map(x => x / Math.hypot(...v));
-    const ref = pts[0].map((x, k) => x - v[k]);
-    const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
-    const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
-    const ang = p => { const q = p.map((x, k) => x - v[k]); return Math.atan2(dot(cross(ref, q), n), dot(ref, q)); };
-    pts.sort((a, b) => ang(a) - ang(b));
-    for (let k = 0; k < 5; k++) edges.push([pts[k], pts[(k + 1) % 5]]);
-    pentas.push({ c: v, v: pts });
-  }
-  return { edges, pentas };   // 모서리 90개, 오각형 면 12개
-}
-const ballEdges = () => ballGeometry().edges;
-const onSphere = (a, b, t, R) => { const p = [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t]; const l = Math.hypot(...p); return [p[0] / l * R, p[1] / l * R, p[2] / l * R]; };
-
 function pitchSegments() {
   // 105×68m 경기장을 가로 6.4로 축소, y=0 평면(XZ). [x1,z1,x2,z2] 선분 목록(원·호는 잘게 쪼갬)
   const s = 6.4 / 105, L = 52.5, W = 34, segs = [];
@@ -192,11 +167,7 @@ function buildTargets(N) {
   for (let i = 0; i < N; i++) {
     seed[i] = Math.random();
     if (i < nFace) {
-      const pe = pentas[i % 12], k = Math.floor(Math.random() * 5), a = pe.v[k], b = pe.v[(k + 1) % 5];
-      let u = Math.random(), w = Math.random(); if (u + w > 1) { u = 1 - u; w = 1 - w; }
-      const q = [0, 1, 2].map(j => pe.c[j] + (a[j] - pe.c[j]) * u + (b[j] - pe.c[j]) * w);
-      const l = Math.hypot(...q);
-      set(P[0], i, [q[0] / l * R * 0.995, q[1] / l * R * 0.995, q[2] / l * R * 0.995]);
+      set(P[0], i, pointInPenta(pentas[i % 12], R));
       set(C[0], i, COLORS.face);
     } else {
       const e = edges[i % edges.length], t = Math.random();
@@ -310,23 +281,12 @@ function initScene(THREE) {
   group.add(points);
 
   // 공 와이어(선) — 공 장면에서만 보임. 점과 같이 뒷면은 흐리게
-  const wirePos = [];
-  for (const e of ballEdges()) for (let k = 0; k < 10; k++) wirePos.push(...onSphere(e[0], e[1], k / 10, BALL_R), ...onSphere(e[0], e[1], (k + 1) / 10, BALL_R));
-  const wireGeo = new THREE.BufferGeometry(); wireGeo.setAttribute('position', new THREE.Float32BufferAttribute(wirePos, 3));
+  const wireGeo = new THREE.BufferGeometry(); wireGeo.setAttribute('position', new THREE.Float32BufferAttribute(wirePositions(BALL_R), 3));
   const wireMat = new THREE.ShaderMaterial({
     uniforms: { uOp: { value: 0.55 }, uColor: { value: new THREE.Color(0x58a6ff) } },
     transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
-    vertexShader: `
-      varying float vF;
-      void main() {
-        vec4 mv = modelViewMatrix * vec4(position, 1.0);
-        float f = dot(normalize(normalMatrix * normalize(position)), normalize(-mv.xyz));
-        vF = 0.1 + 0.9 * smoothstep(-0.15, 0.35, f);
-        gl_Position = projectionMatrix * mv;
-      }`,
-    fragmentShader: `
-      uniform float uOp; uniform vec3 uColor; varying float vF;
-      void main() { gl_FragColor = vec4(uColor, uOp * vF); }`,
+    vertexShader: WIRE_VERTEX,
+    fragmentShader: WIRE_FRAGMENT,
   });
   group.add(new THREE.LineSegments(wireGeo, wireMat));
 
@@ -347,7 +307,7 @@ function initScene(THREE) {
   function placeRim(w0) {
     // 구를 보는 원뿔의 접선 반지름: 중심을 지나는 평면에서 R·d/√(d²−R²)
     const d = camera.position.distanceTo(group.position);
-    const r = BALL_R * d / Math.sqrt(Math.max(d * d - BALL_R * BALL_R, 0.01));
+    const r = rimRadius(BALL_R, d);
     ring.quaternion.copy(camera.quaternion); ring.scale.setScalar(r);
     glow.scale.setScalar(r * 2.3);
     ringMat.opacity = 0.62 * w0; glow.material.opacity = w0;
