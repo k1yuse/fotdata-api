@@ -697,6 +697,28 @@
     .champ-bar-wrap { flex: 1; background: #21262d; border-radius: 6px; height: 24px; position: relative; overflow: hidden; }
     .champ-bar { height: 100%; background: linear-gradient(90deg, #1f6feb, #58a6ff); border-radius: 6px; transition: width .5s; }
     .champ-prob { font-size: 13px; font-weight: 700; color: #58a6ff; width: 50px; text-align: right; }
+    /* 순위 예측 결과 표: 예상 순위 · 팀(현재 승점) · 예상 승점 · 우승 · UCL권 · 강등 */
+    .ct-head, .ct-row { display: grid; grid-template-columns: 30px minmax(0,1fr) 64px 58px 58px 58px; align-items: center; gap: 8px; padding: 0 12px; }
+    .ct-head { font-size: 11px; color: #6e7681; padding-bottom: 8px; border-bottom: 0.5px solid #30363d; }
+    .ct-head span { text-align: center; } .ct-head span:nth-child(2) { text-align: left; }
+    .ct-row { padding-top: 9px; padding-bottom: 9px; border-bottom: 0.5px solid #21262d; }
+    .ct-rank { font-size: 14px; font-weight: 700; text-align: center; color: #8b949e; font-variant-numeric: tabular-nums; }
+    .ct-team { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .ct-team img { width: 24px; height: 24px; object-fit: contain; flex-shrink: 0; cursor: pointer; }
+    .ct-name { font-size: 13px; color: #e6edf3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ct-sub { font-size: 10px; color: #6e7681; margin-top: 2px; }
+    .ct-pts { text-align: center; font-size: 15px; font-weight: 700; color: #e6edf3; font-variant-numeric: tabular-nums; }
+    .ct-pts small { display: block; font-size: 10px; font-weight: 500; color: #6e7681; margin-top: 1px; }
+    .ct-cell { height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .ct-cell.none { color: #484f58; font-weight: 500; }
+    .ct-legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 14px; font-size: 11px; color: #8b949e; }
+    .ct-meta { font-size: 12px; color: #8b949e; margin-bottom: 12px; }
+    .ct-meta b { color: #e6edf3; font-weight: 600; }
+    @media (max-width: 768px) {
+      .ct-head, .ct-row { grid-template-columns: 24px minmax(0,1fr) 44px 46px 46px 46px; gap: 6px; padding-left: 4px; padding-right: 4px; }
+      .ct-team img { width: 20px; height: 20px; } .ct-team { gap: 7px; }
+      .ct-cell { font-size: 11px; }
+    }
 
     /* 일정 */
     .sched-month-nav { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 0 auto 16px; max-width: 640px; }
@@ -815,7 +837,7 @@
 <div id="page-champion" class="page">
   <div class="card">
     <div class="card-title">2026-27 시즌 순위 예측</div>
-    <div style="font-size:12px;color:#8b949e;margin-bottom:16px">최근 3시즌 성적 + 클럽 전력 보정 기반 · 몬테카를로 시뮬레이션</div>
+    <div style="font-size:12px;color:#8b949e;margin-bottom:16px">현재 승점에서 출발해 남은 경기를 AI 예측 모델 확률로 시뮬레이션 · 몬테카를로</div>
     
     <div class="league-tabs" id="champion-league-tabs">
       <button class="champ-league-btn active" onclick="loadChampion('PL', this)"><img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="width:16px;height:16px;filter:brightness(0) invert(1);vertical-align:middle;margin-right:4px">EPL</button>
@@ -2217,88 +2239,58 @@ function refreshCurrentTab() {
 let currentChampionData = null;
 let currentLeagueCode = 'PL';
 
+// 순위 예측: 현재 승점에서 출발해 남은 경기를 서버가 준 "경기 예측 모델" 확률로 뽑는 몬테카를로.
+// 시뮬레이션마다 팀별 전력 변동 δ~N(0,σ)(부상·폼 등 시즌 중 변화)를 로짓에 더함 — σ는 서버 값(백테스트로 결정).
+// 예전엔 0점부터 전체 시즌을 블렌딩 승률 공식으로 돌려서 현재 승점을 무시했음(2026-09-28 교체, main.py 설명 참고)
 function runSimulation() {
-  if (!currentChampionData) return;
-  
+  const data = currentChampionData;
+  if (!data) return;
   const simBtn = document.getElementById('sim-btn');
   if (simBtn) { simBtn.textContent = '계산 중...'; simBtn.style.background = '#388bfd'; }
-  
+
   setTimeout(() => {
-  const nSim = parseInt(document.getElementById('sim-slider').value);
-  const teams = currentChampionData.teams;
-  
-  /// 리그별 설정 [승률반영계수, 시즌폼노이즈] (독주 리그는 계수 높게/노이즈 낮게)
-  const LEAGUE_CONFIG = {
-    'PL':  [650, 160],   // EPL: 경쟁 치열
-    'PD':  [650, 150],   // 라리가: 경쟁 치열
-    'SA':  [750, 150],   // 세리에A: 경쟁 치열
-    'BL1': [1300, 90],   // 분데스: 뮌헨 독주
-    'FL1': [1400, 60],   // 리그앙: PSG 독주
-  };
-  const cfg = LEAGUE_CONFIG[currentLeagueCode] || [800, 140];
-  const eloScale = cfg[0];
-  const seasonNoise = cfg[1];
+    const nSim = parseInt(document.getElementById('sim-slider').value);
+    const teams = data.teams, T = teams.length, sigma = data.sigma ?? 0.15;
+    const z = LEAGUE_ZONES[currentLeagueCode] || { cl: 4, rel: 3 };
+    const idx = {}; teams.forEach((t, i) => { idx[t.team] = i; });
+    const fx = data.fixtures.filter(f => idx[f.home] != null && idx[f.away] != null);
+    const F = fx.length;
+    const hi = new Int16Array(F), ai = new Int16Array(F), ph = new Float64Array(F), pdr = new Float64Array(F), pa = new Float64Array(F);
+    fx.forEach((f, k) => { hi[k] = idx[f.home]; ai[k] = idx[f.away]; [ph[k], pdr[k], pa[k]] = f.p; });
+    const basePts = teams.map(t => t.points), gd = teams.map(t => t.gd);
+    const champ = new Float64Array(T), ucl = new Float64Array(T), rele = new Float64Array(T), sumPts = new Float64Array(T), sumRank = new Float64Array(T);
+    const pts = new Float64Array(T), delta = new Float64Array(T), order = [...Array(T).keys()], key = new Float64Array(T);
 
-  // prestige는 API 응답(t.prestige)에서 직접 가져옴
-
-  const winCounts = {};
-  const top4Counts = {};
-  const relegationCounts = {};
-  teams.forEach(t => { winCounts[t.team]=0; top4Counts[t.team]=0; relegationCounts[t.team]=0; });
-  
-  for (let sim = 0; sim < nSim; sim++) {
-    const points = {};
-    const seasonForm = {};
-    teams.forEach(t => {
-      points[t.team] = 0;
-      seasonForm[t.team] = gaussRandom() * seasonNoise;  // 시즌 전체 폼 변동  // 시즌 전체 폼 변동
-    });
-    
-    // 모든 팀끼리 홈/원정 경기
-    for (let i = 0; i < teams.length; i++) {
-      for (let j = 0; j < teams.length; j++) {
-        if (i === j) continue;
-        const home = teams[i], away = teams[j];
-        
-        // ELO 계산 (노이즈 포함)
-        const homeElo = 1500 + (home.win_rate - 0.33) * eloScale + (home.prestige||0) + 70 + seasonForm[home.team] + gaussRandom() * 40;
-        const awayElo = 1500 + (away.win_rate - 0.33) * eloScale + (away.prestige||0) + seasonForm[away.team] + gaussRandom() * 40;
-        
-        const expHome = 1 / (1 + Math.pow(10, (awayElo - homeElo) / 400));
-        const expAway = 1 / (1 + Math.pow(10, (homeElo - awayElo) / 400));
-        
-        const drawProb = 0.25;
-        let hWin = expHome * (1 - drawProb);
-        let aWin = expAway * (1 - drawProb);
-        const total = hWin + drawProb + aWin;
-        hWin /= total;
-        const dProb = drawProb / total;
-        
-        const rand = Math.random();
-        if (rand < hWin) points[home.team] += 3;
-        else if (rand < hWin + dProb) { points[home.team] += 1; points[away.team] += 1; }
-        else points[away.team] += 3;
+    for (let s = 0; s < nSim; s++) {
+      for (let i = 0; i < T; i++) { pts[i] = basePts[i]; delta[i] = gaussRandom() * sigma; }
+      for (let k = 0; k < F; k++) {
+        const e = Math.exp(delta[hi[k]] - delta[ai[k]]);
+        const h = ph[k] * e, a = pa[k] / e, r = Math.random() * (h + pdr[k] + a);
+        if (r < h) pts[hi[k]] += 3;
+        else if (r < h + pdr[k]) { pts[hi[k]] += 1; pts[ai[k]] += 1; }
+        else pts[ai[k]] += 3;
+      }
+      // 승점 → 현재 득실차 → 무작위 순으로 순위 결정
+      for (let i = 0; i < T; i++) key[i] = pts[i] * 1000 + gd[i] + Math.random() * 0.5;
+      order.sort((x, y) => key[y] - key[x]);
+      for (let r = 0; r < T; r++) {
+        const i = order[r];
+        sumPts[i] += pts[i]; sumRank[i] += r;
+        if (r === 0) champ[i]++;
+        if (r < z.cl) ucl[i]++;
+        if (r >= T - z.rel) rele[i]++;
       }
     }
-    
-    const sorted = Object.entries(points).sort((a,b) => b[1]-a[1]);
-    winCounts[sorted[0][0]]++;
-    sorted.slice(0,4).forEach(([t]) => top4Counts[t]++);
-    const releCount = (currentLeagueCode === 'BL1' || currentLeagueCode === 'FL1') ? 2 : 3;
-    sorted.slice(-releCount).forEach(([t]) => relegationCounts[t]++);
-  }
-  
-  const results = teams.map(t => ({
-    team: t.team,
-    logo: t.logo,
-    champion_prob: Math.round(winCounts[t.team]/nSim*1000)/10,
-    top4_prob: Math.round(top4Counts[t.team]/nSim*1000)/10,
-    relegation_prob: Math.round(relegationCounts[t.team]/nSim*1000)/10,
-  })).sort((a,b) => b.champion_prob - a.champion_prob);
-  
-  renderChampionResults({teams: results});
-  
-  if (simBtn) { simBtn.textContent = '시뮬레이션 시작'; simBtn.style.background = '#1f6feb'; }
+
+    const pct = v => Math.round(v / nSim * 1000) / 10;
+    const results = teams.map((t, i) => ({
+      team: t.team, logo: t.logo, played: t.played, points: t.points,
+      exp_pts: sumPts[i] / nSim, avg_rank: sumRank[i] / nSim,
+      champion_prob: pct(champ[i]), ucl_prob: pct(ucl[i]), relegation_prob: pct(rele[i]),
+    })).sort((a, b) => a.avg_rank - b.avg_rank);
+
+    renderChampionResults({ teams: results, nSim, remaining: F, uclSpots: z.cl, releSpots: z.rel });
+    if (simBtn) { simBtn.textContent = '시뮬레이션 시작'; simBtn.style.background = '#1f6feb'; }
   }, 50);
 }
 
@@ -2334,91 +2326,46 @@ async function loadChampion(league, btn) {
     });
     const data = await res.json();
     currentChampionData = data;
-    renderChampionInitial(data);
+    runSimulation();
   } catch (e) {
     content.innerHTML = '<div style="color:#da3633;padding:12px">불러오기 실패. 잠시 후 다시 시도해주세요.</div>';
   }
 }
 
-function renderChampionInitial(data) {
-  const content = document.getElementById('champion-content');
-  const teams = [...data.teams].sort((a,b) => cleanTeamName(a.team).localeCompare(cleanTeamName(b.team)));
-  
-  let html = '<div style="font-size:12px;color:#8b949e;margin-bottom:12px">시뮬레이션 시작 버튼을 눌러 우승 확률을 계산하세요</div>';
-  teams.forEach((t, i) => {
-    html += `
-      <div class="champ-row">
-        <div class="champ-rank">${i+1}</div>
-        <img src="${t.logo}" style="width:24px;height:24px;object-fit:contain;cursor:pointer" onerror="this.style.display='none'" onclick="openTeamInfo('${escJs(t.team)}')">
-        <div style="flex:1;min-width:0">
-          <div class="clickable-team" style="font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" onclick="openTeamInfo('${escJs(t.team)}')">${cleanTeamName(t.team)}</div>
-        </div>
-        <div class="champ-bar-wrap" style="max-width:200px">
-          <div class="champ-bar" style="width:0%"></div>
-        </div>
-        <div class="champ-prob">0%</div>
-      </div>
-    `;
-  });
-  content.innerHTML = html;
-}
-
 function renderChampionResults(data) {
   const content = document.getElementById('champion-content');
-  const releCount = (currentLeagueCode === 'BL1' || currentLeagueCode === 'FL1') ? 2 : 3;
-  const teams = data.teams;  // 이미 우승확률 내림차순 정렬됨
-  const maxProb = teams[0].champion_prob || 1;
-  
-  let html = '<div style="font-size:13px;color:#e6edf3;font-weight:600;margin-bottom:10px">예상 순위 (우승 확률 순)</div>';
-  
+  const teams = data.teams, T = teams.length;
+  // 확률이 클수록 진하게 — 우승 금색, UCL권 파랑, 강등 빨강
+  const cell = (p, rgb) => p < 0.05
+    ? `<div class="ct-cell none">–</div>`
+    : `<div class="ct-cell" style="background:rgba(${rgb},${(0.08 + Math.min(p, 100) / 100 * 0.55).toFixed(3)});color:${p >= 50 ? '#fff' : `rgb(${rgb})`}">${p >= 99.95 ? '100' : p < 1 ? '<1' : Math.round(p)}%</div>`;
+
+  let html = `<div class="ct-meta">남은 <b>${data.remaining}경기</b>를 <b>${data.nSim.toLocaleString()}번</b> 시뮬레이션한 결과 · 예상 순위 순</div>
+    <div class="ct-head"><span>#</span><span>팀</span><span>예상 승점</span><span>우승</span><span>UCL권</span><span>강등</span></div>`;
   teams.forEach((t, i) => {
-    const barWidth = (t.champion_prob / maxProb) * 100;
-    // 순위별 색상: 1위 금색, 2-4위(유럽대항권) 파랑, 강등권(하위3) 빨강
-    let rankColor = '#8b949e';
-    if (i === 0) rankColor = '#f0c040';
-    else if (i < 4) rankColor = '#58a6ff';
-    else if (i >= teams.length - releCount) rankColor = '#f85149';
-    
-    // 막대 색상: 강등권은 빨강 계열
-    const isRele = i >= teams.length - releCount;
-    const barColor = isRele
-      ? 'linear-gradient(90deg,#da3633,#f85149)'
-      : 'linear-gradient(90deg,#1f6feb,#58a6ff)';
-    // 막대는 우승확률 / 강등권은 강등확률 표시
-    const showProb = isRele ? t.relegation_prob : t.champion_prob;
-    const probColor = isRele ? '#f85149' : '#58a6ff';
-    const probLabel = isRele ? t.relegation_prob + '%↓' : t.champion_prob + '%';
-    const releBarWidth = isRele ? t.relegation_prob : barWidth;
-    
-    html += `
-      <div class="champ-row">
-        <div class="champ-rank" style="color:${rankColor};font-weight:700">${i+1}</div>
-        <img src="${t.logo}" style="width:24px;height:24px;object-fit:contain;cursor:pointer" onerror="this.style.display='none'" onclick="openTeamInfo('${escJs(t.team)}')">
-        <div style="flex:1;min-width:0">
-          <div class="clickable-team" style="font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" onclick="openTeamInfo('${escJs(t.team)}')">${cleanTeamName(t.team)}</div>
+    const zone = MI_ZONE_INFO[getZoneClass(currentLeagueCode, i, T)];
+    html += `<div class="ct-row">
+      <div class="ct-rank" style="${zone ? `color:${zone.color}` : ''}">${i + 1}</div>
+      <div class="ct-team">
+        <img src="${t.logo}" onerror="this.style.visibility='hidden'" onclick="openTeamInfo('${escJs(t.team)}')" alt="">
+        <div style="min-width:0">
+          <div class="ct-name clickable-team" onclick="openTeamInfo('${escJs(t.team)}')">${cleanTeamName(t.team)}</div>
+          <div class="ct-sub">현재 ${t.points}점 · ${t.played}경기</div>
         </div>
-        <div class="champ-bar-wrap" style="max-width:200px">
-          <div class="champ-bar" data-width="${releBarWidth}" style="width:0%;background:${barColor}"></div>
-        </div>
-        <div class="champ-prob" data-target="${showProb}" data-suffix="${isRele ? '%↓' : '%'}" style="color:${probColor}">0%</div>
       </div>
-    `;
+      <div class="ct-pts">${Math.round(t.exp_pts)}<small>+${Math.round(t.exp_pts - t.points)}</small></div>
+      ${cell(t.champion_prob, '240,192,64')}
+      ${cell(t.ucl_prob, '88,166,255')}
+      ${cell(t.relegation_prob, '248,81,73')}
+    </div>`;
   });
-
-  // 범례
-  html += `<div style="display:flex;gap:16px;margin-top:14px;font-size:11px;color:#8b949e;flex-wrap:wrap">
-    <span><span style="color:#f0c040">●</span> 우승 후보</span>
-    <span><span style="color:#58a6ff">●</span> 상위권 (우승 확률)</span>
-    <span><span style="color:#f85149">●</span> 강등권 (강등 확률 ↓)</span>
+  const releNote = (currentLeagueCode === 'BL1' || currentLeagueCode === 'FL1') ? ' (16위 승강 PO 제외)' : '';
+  html += `<div class="ct-legend">
+    <span>예상 승점 = 시뮬레이션 평균 최종 승점 (아래 +는 남은 경기에서 더할 승점)</span>
+    <span>UCL권 = ${data.uclSpots}위 이내</span>
+    <span>강등 = 하위 ${data.releSpots}팀${releNote}</span>
   </div>`;
-
   content.innerHTML = html;
-  requestAnimationFrame(() => {
-    content.querySelectorAll('.champ-bar').forEach(el => { el.style.width = el.dataset.width + '%'; });
-    content.querySelectorAll('.champ-prob').forEach(el => {
-      animateCountUp(el, parseFloat(el.dataset.target), { decimals: 1, suffix: el.dataset.suffix });
-    });
-  });
 }
 
 async function loadPlayers() {

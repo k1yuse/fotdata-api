@@ -206,44 +206,22 @@ def get_teams():
     teams = sorted(df_stats['team'].tolist())
     return {"teams": teams, "count": len(teams)}
 
-@app.post("/predict")
-def predict_match(req: MatchRequest):
-    """경기 결과 예측"""
-    # 팀 이름 매핑
-    home_team = TEAM_NAME_MAP.get(req.home_team, req.home_team)
-    away_team = TEAM_NAME_MAP.get(req.away_team, req.away_team)
-    
-    h = df_stats[df_stats['team'] == home_team]
-    a = df_stats[df_stats['team'] == away_team]
+# ── 모델 입력 생성 (/predict와 순위 예측이 같이 씀) ──
+_h2h_cache = None
+def _h2h_home_rate(home, away, n=10):
+    """최근 n번 맞대결에서 home 팀 승률 (학습 피처 h2h_home_rate와 같은 정의)"""
+    global _h2h_cache
+    if _h2h_cache is None:
+        _h2h_cache = {}
+        for m in df_matches_all.sort_values('date').itertuples():
+            winner = m.home_team if m.result == 'H' else (m.away_team if m.result == 'A' else None)
+            _h2h_cache.setdefault(tuple(sorted((m.home_team, m.away_team))), []).append(winner)
+    rec = _h2h_cache.get(tuple(sorted((home, away))), [])[-n:]
+    return round(sum(w == home for w in rec) / len(rec), 3) if rec else 0.33
 
-    if h.empty:
-        raise HTTPException(status_code=404, detail=f"팀을 찾을 수 없습니다: {home_team}")
-    if a.empty:
-        raise HTTPException(status_code=404, detail=f"팀을 찾을 수 없습니다: {away_team}")
-
-    h, a = h.iloc[0], a.iloc[0]
-
-   # H2H 홈팀 승률 계산
-    h2h_df = df_matches_all[
-        ((df_matches_all['home_team']==home_team) & (df_matches_all['away_team']==away_team)) |
-        ((df_matches_all['home_team']==away_team) & (df_matches_all['away_team']==home_team))
-    ].tail(10)
-    if len(h2h_df) > 0:
-        h2h_home_wins = len(h2h_df[((h2h_df['home_team']==home_team) & (h2h_df['result']=='H')) |
-                                    ((h2h_df['away_team']==home_team) & (h2h_df['result']=='A'))])
-        h2h_rate = round(h2h_home_wins / len(h2h_df), 3)
-    else:
-        h2h_rate = 0.33
-
-    # 모델 입력은 학습 때와 같은 정의의 값(team_state.json)을 그대로 씀. 예전엔 여기서
-    # 블렌딩 승률로 ELO(+prestige+홈 어드밴티지 감쇠)와 폼을 재구성했는데, 모델이 학습한
-    # 입력과 의미가 달라서 강팀 홈경기를 과소평가하고 무승부를 과대평가했음(2026-09-27 수정)
-    hs, as_ = team_state.get(home_team), team_state.get(away_team)
-    if hs is None or as_ is None:
-        missing = home_team if hs is None else away_team
-        raise HTTPException(status_code=404, detail=f"예측 데이터가 없는 팀입니다: {missing}")
-
-    input_data = pd.DataFrame([{
+def _feature_row(home, away):
+    hs, as_ = team_state[home], team_state[away]
+    return {
         'home_elo':          hs['elo'],
         'away_elo':          as_['elo'],
         'elo_diff':          hs['elo'] - as_['elo'],
@@ -261,8 +239,40 @@ def predict_match(req: MatchRequest):
         'home_win_rate':     hs['win_rate'],
         'away_win_rate':     as_['win_rate'],
         'win_rate_diff':     hs['win_rate'] - as_['win_rate'],
-        'h2h_home_rate':     h2h_rate,
-    }])
+        'h2h_home_rate':     _h2h_home_rate(home, away),
+    }
+
+def _predict_hda(pairs):
+    """[(home, away), ...] → 각 경기 [홈승, 무, 원정승] 확률 (한 번에 계산)"""
+    X = scaler.transform(pd.DataFrame([_feature_row(h, a) for h, a in pairs]))
+    P = lr_model.predict_proba(X)
+    cols = [list(lr_model.classes_).index(c) for c in ('H', 'D', 'A')]
+    return P[:, cols]
+
+@app.post("/predict")
+def predict_match(req: MatchRequest):
+    """경기 결과 예측"""
+    # 팀 이름 매핑
+    home_team = TEAM_NAME_MAP.get(req.home_team, req.home_team)
+    away_team = TEAM_NAME_MAP.get(req.away_team, req.away_team)
+    
+    h = df_stats[df_stats['team'] == home_team]
+    a = df_stats[df_stats['team'] == away_team]
+
+    if h.empty:
+        raise HTTPException(status_code=404, detail=f"팀을 찾을 수 없습니다: {home_team}")
+    if a.empty:
+        raise HTTPException(status_code=404, detail=f"팀을 찾을 수 없습니다: {away_team}")
+
+    h, a = h.iloc[0], a.iloc[0]
+
+    # 모델 입력은 학습 때와 같은 정의의 값(team_state.json)을 그대로 씀. 예전엔 여기서
+    # 블렌딩 승률로 ELO(+prestige+홈 어드밴티지 감쇠)와 폼을 재구성했는데, 모델이 학습한
+    # 입력과 의미가 달라서 강팀 홈경기를 과소평가하고 무승부를 과대평가했음(2026-09-27 수정)
+    for t in (home_team, away_team):
+        if t not in team_state:
+            raise HTTPException(status_code=404, detail=f"예측 데이터가 없는 팀입니다: {t}")
+    input_data = pd.DataFrame([_feature_row(home_team, away_team)])
 
     input_scaled = scaler.transform(input_data)
     proba = lr_model.predict_proba(input_scaled)[0]
@@ -746,48 +756,46 @@ def get_top_assists(league_code: str):
     return {"league": league_code.upper(), "players": assists}
 
     # ── 우승 예측 API ──
+# ── 순위 예측 API ──
+# 브라우저가 "현재 승점 + 남은 경기 × 모델 확률"로 몬테카를로 시뮬레이션함(FotData.html runSimulation).
+# 예전엔 0점부터 전체 시즌을 블렌딩 승률 공식으로 시뮬레이션해서 현재 승점을 무시했고, 경기 예측 모델과도
+# 따로 놀았음. 24-25·25-26 시즌 5개 리그 백테스트(5/10/19/28라운드 시점)에서 새 방식이 우승 확률 Brier
+# 0.537→0.333, 강등 0.096→0.044, 평균 순위 오차 3.02→1.88위로 개선(2026-09-28).
+SEASON_SIM_SIGMA = 0.15   # 시뮬레이션마다 팀별 전력 변동(로짓 단위) — 같은 백테스트에서 σ 0.1~0.2가 최적
+SIM_LEAGUES = ("PL", "PD", "BL1", "SA", "FL1")
+
 @app.get("/predict/champion/{league_code}")
 def get_champion_prediction(league_code: str):
-    """리그 우승 예측"""
-    path = os.path.join(MODEL_DIR, "champion_predictions.json")
-    if not os.path.exists(path):
-        raise HTTPException(status_code=404, detail="우승 예측 데이터 없음")
-    
-    with open(path, 'r', encoding='utf-8') as f:
-        data = json.load(f)
-    
-    league = data.get(league_code.upper())
-    if not league:
+    code = league_code.upper()
+    if code not in SIM_LEAGUES:
         raise HTTPException(status_code=404, detail="해당 리그 데이터 없음")
-    
-    # 로고 추가
-    logo_path = os.path.join(MODEL_DIR, "team_logos.json")
-    logos = {}
-    if os.path.exists(logo_path):
-        with open(logo_path, 'r', encoding='utf-8') as f:
-            logos = json.load(f)
-    
-    # for team in league['teams']:
-    #     team['logo'] = logos.get(team['team'], '')
-    
-    # return league
 
-    # 팀 승률 + prestige 추가 (사용자 시뮬레이션용)
-    stats_path = os.path.join(MODEL_DIR, "team_stats.csv")
-    win_rates = {}
-    prestiges = {}
-    if os.path.exists(stats_path):
-        df_s = pd.read_csv(stats_path)
-        for _, row in df_s.iterrows():
-            win_rates[row['team']] = float(row['win_rate'])
-            prestiges[row['team']] = float(row['prestige']) if 'prestige' in row and pd.notna(row['prestige']) else 0.0
+    table = get_standings(code)["standings"]
+    teams = {r["team"]: {"team": r["team"], "logo": r["logo"], "played": r["played"],
+                         "points": r["points"], "gd": r["gd"]} for r in table}
 
-    for team in league['teams']:
-        team['logo'] = logos.get(team['team'], '')
-        team['win_rate'] = win_rates.get(team['team'], 0.33)
-        team['prestige'] = prestiges.get(team['team'], 0.0)
+    with open(os.path.join(MODEL_DIR, "schedule.json"), 'r', encoding='utf-8') as f:
+        schedule = json.load(f).get(code, [])
+    remaining = [m for m in schedule if m.get("status") not in ("FINISHED", "AWARDED", "CANCELLED")]
+    for m in remaining:   # 시즌 초 아직 경기가 없는 팀도 포함
+        for t in (m["home_team"], m["away_team"]):
+            teams.setdefault(t, {"team": t, "logo": team_logos_cache.get(t, ''), "played": 0, "points": 0, "gd": 0})
 
-    return league
+    pairs = [(m["home_team"], m["away_team"]) for m in remaining]
+    known = [i for i, (h, a) in enumerate(pairs) if h in team_state and a in team_state]
+    probs = [[0.44, 0.25, 0.31]] * len(pairs)   # 데이터 없는 팀(거의 없음)은 리그 평균 결과 비율
+    if known:
+        P = _predict_hda([pairs[i] for i in known])
+        for i, p in zip(known, P):
+            probs[i] = [round(float(x), 4) for x in p]
+
+    return {
+        "league":    LEAGUE_MAP.get(code),
+        "teams":     list(teams.values()),
+        "fixtures":  [{"home": h, "away": a, "p": p} for (h, a), p in zip(pairs, probs)],
+        "remaining": len(pairs),
+        "sigma":     SEASON_SIM_SIGMA,
+    }
 
 # ── 전체 일정 API ──
 @app.get("/schedule/{league_code}")
