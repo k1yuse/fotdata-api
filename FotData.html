@@ -88,7 +88,7 @@
     .tr-row-info { flex: 1; min-width: 0; }
     .tr-row-match { font-size: 13px; color: #e6edf3; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .tr-row-detail { font-size: 11px; color: #8b949e; margin-top: 2px; }
-    .tr-row-date { font-size: 10px; color: #6e7681; flex-shrink: 0; }
+    .tr-row-date { font-size: 10px; color: #7d8590; flex-shrink: 0; }
     .team-search-input-wrap { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 0.5px solid #30363d; flex-shrink: 0; }
     .team-search-input-wrap input { flex: 1; background: none; border: none; outline: none; color: #e6edf3; font-size: 15px; font-family: inherit; }
     .team-search-input-wrap input::placeholder { color: #8b949e; }
@@ -204,7 +204,7 @@
     .bigmatch-label img { width: 32px; height: 32px; object-fit: contain; }
     /* PL 원본은 정사각형 캔버스 가운데 가로 띠에만 로고가 있어서(위아래 여백 ~55%) 정사각형 박스로는 작게 보임 — 가로로 넓은 박스에 cover로 여백만 잘라냄 */
     .bigmatch-label img.wide { width: 72px; object-fit: cover; }
-    .bigmatch-venue { text-align: center; font-size: 11px; color: #6e7681; margin-bottom: 18px; display: flex; align-items: center; justify-content: center; gap: 4px; }
+    .bigmatch-venue { text-align: center; font-size: 11px; color: #7d8590; margin-bottom: 18px; display: flex; align-items: center; justify-content: center; gap: 4px; }
     .bigmatch-venue svg { width: 11px; height: 11px; flex-shrink: 0; }
     .bigmatch-teams { display: flex; align-items: center; justify-content: center; gap: 28px; margin-bottom: 20px; }
     .bigmatch-team { display: flex; flex-direction: column; align-items: center; gap: 10px; flex: 1; max-width: 220px; min-width: 0; }
@@ -372,6 +372,18 @@
     .clickable-team:hover { color: #58a6ff; }
     .ti-modal { width: min(760px, 94vw); max-height: 85vh; display: flex; flex-direction: column; }
     .ti-header { padding: 18px 16px 14px; display: flex; align-items: center; gap: 12px; border-bottom: 0.5px solid #30363d; flex-shrink: 0; }
+    /* 팀 정보 헤더: 구단 색(clubColors 앞·뒤 두 색) 빛 + 오른쪽에 와이어프레임 공 — 색은 팀 정보가 오면 은은하게 켜짐 */
+    .ti-header { position: relative; overflow: hidden; padding: 20px 16px 16px; --ti-c1: #58a6ff; --ti-c2: #58a6ff; }
+    .ti-header > * { position: relative; z-index: 1; }
+    .ti-header::before { content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .45s ease;
+      background: radial-gradient(120% 150% at 0% 0%, color-mix(in srgb, var(--ti-c1) 30%, transparent), transparent 62%),
+                  radial-gradient(80% 170% at 100% 100%, color-mix(in srgb, var(--ti-c2) 14%, transparent), transparent 62%);
+      box-shadow: inset 0 2px 0 color-mix(in srgb, var(--ti-c1) 75%, transparent); }
+    .ti-header.tinted::before { opacity: 1; }
+    .ti-header::after { content: ''; position: absolute; right: -46px; top: 50%; width: 200px; height: 200px; transform: translateY(-50%) rotate(-14deg); background: url(bg-ball.svg) center / contain no-repeat; opacity: 0.2; pointer-events: none; }
+    .ti-header .ti-logo { width: 52px; height: 52px; filter: drop-shadow(0 4px 14px color-mix(in srgb, var(--ti-c1) 40%, transparent)); }
+    .ti-header .ti-name { font-size: 17px; letter-spacing: -0.2px; }
+    @media (max-width: 768px) { .ti-header::after { width: 160px; height: 160px; right: -40px; opacity: 0.16; } }
     .ti-fav-btn { background: none; border: none; color: #8b949e; cursor: pointer; padding: 6px; flex-shrink: 0; transition: color .15s, transform .1s; }
     .ti-fav-btn:hover { color: #f0c040; transform: scale(1.1); }
     .ti-fav-btn svg { width: 22px; height: 22px; display: block; }
@@ -429,7 +441,7 @@
     .more-tag { display: inline-flex; align-items: center; gap: 4px; margin-left: 6px; font-weight: 600; color: #c9d1d9; }
     .more-tag .mi-dot { width: 6px; height: 6px; }
     .more-go { flex-shrink: 0; height: 20px; display: inline-flex; align-items: center; padding: 0 9px; border-radius: 10px; border: 0.5px solid #30363d; font-size: 10px; font-weight: 600; color: #8b949e; transition: color .15s, border-color .15s, background-color .15s; }
-    .more-row .sched-vs .vs { font-size: 12px; color: #6e7681; }
+    .more-row .sched-vs .vs { font-size: 12px; color: #7d8590; }
     .more-row:hover .more-go { color: #58a6ff; border-color: #1f6feb; background-color: rgba(88,166,255,0.08); }
     .more-row:hover .sched-team span { color: #58a6ff; }
     .more-foot { margin-top: auto; align-self: flex-end; display: inline-flex; align-items: center; gap: 2px; background: none; border: none; color: #8b949e; font-size: 12px; cursor: pointer; padding: 10px 0 0; font-family: inherit; }
@@ -473,7 +485,7 @@
     .popup-team-row:hover { background: #21262d; }
     .popup-team-row.selected { background: #1f4e8c; color: #58a6ff; }
     .popup-team-row img { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
-    .popup-team-nodata { margin-left: auto; flex-shrink: 0; font-size: 10px; color: #6e7681; border: 0.5px solid #30363d; border-radius: 4px; padding: 1px 6px; }
+    .popup-team-nodata { margin-left: auto; flex-shrink: 0; font-size: 10px; color: #7d8590; border: 0.5px solid #30363d; border-radius: 4px; padding: 1px 6px; }
     .popup-team-list::-webkit-scrollbar { width: 4px; }
     .popup-team-list::-webkit-scrollbar-thumb { background: #30363d; border-radius: 2px; }
     .predict-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #2ea043, #238636); border: none; border-radius: 10px; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; transition: box-shadow 0.2s, transform 0.1s; box-shadow: 0 4px 14px rgba(35,134,54,0.35); }
@@ -497,7 +509,7 @@
     .result-team-name { font-size: 13px; font-weight: 600; text-align: center; max-width: 130px; cursor: pointer; transition: color .15s; }
     .result-team:hover .result-team-name { color: var(--team-glow); }
     .result-vs { font-size: 18px; color: #8b949e; font-weight: 700; }
-    .score-alt-label { font-size: 10px; color: #6e7681; text-align: center; margin-bottom: 8px; }
+    .score-alt-label { font-size: 10px; color: #7d8590; text-align: center; margin-bottom: 8px; }
     .score-alt-list { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
     .score-alt-chip { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: #161b22; border: 0.5px solid #30363d; border-radius: 20px; font-size: 15px; }
     .score-alt-chip .sc { font-weight: 700; color: #58a6ff; }
@@ -538,7 +550,7 @@
     .mi-section { margin-top: 18px; padding-top: 18px; border-top: 0.5px solid #30363d; }
     .mi-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
     .mi-title { font-size: 11px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; }
-    .mi-note { font-size: 10px; color: #6e7681; white-space: nowrap; }
+    .mi-note { font-size: 10px; color: #7d8590; white-space: nowrap; }
     .mi-teams { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 10px; }
     .mi-team { display: flex; align-items: center; gap: 7px; min-width: 0; font-size: 12px; font-weight: 600; color: #e6edf3; }
     .mi-team.away { flex-direction: row-reverse; text-align: right; }
@@ -555,11 +567,11 @@
     .mi-rank-tile.away .mi-team { flex-direction: row; text-align: left; }
     .mi-rank-num { font-size: 28px; font-weight: 800; line-height: 1; color: #e6edf3; font-variant-numeric: tabular-nums; }
     .mi-rank-num small { font-size: 13px; font-weight: 600; color: #8b949e; margin-left: 2px; }
-    .mi-rank-num .of { font-size: 11px; font-weight: 500; color: #6e7681; margin-left: 4px; }
+    .mi-rank-num .of { font-size: 11px; font-weight: 500; color: #7d8590; margin-left: 4px; }
     .mi-zone { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 10px; margin-top: 8px; }
     .mi-rank-sub { font-size: 11px; color: #8b949e; margin-top: 8px; line-height: 1.5; }
     .mi-rank-sub b { color: #e6edf3; font-weight: 600; }
-    .mi-rank-empty { font-size: 12px; color: #6e7681; padding: 8px 0 4px; }
+    .mi-rank-empty { font-size: 12px; color: #7d8590; padding: 8px 0 4px; }
     .mi-track { position: relative; margin-top: 14px; padding: 26px 0 24px; }
     .mi-track-bar { display: flex; gap: 2px; height: 6px; }
     .mi-track-bar i { flex: 1; border-radius: 2px; background: #21262d; }
@@ -568,7 +580,7 @@
     .mi-track-mark.home { top: 0; } .mi-track-mark.away { bottom: 0; flex-direction: column-reverse; }
     .mi-track-mark .stem { width: 2px; height: 5px; border-radius: 1px; }
     .mi-track-mark.home .stem { background: #58a6ff; } .mi-track-mark.away .stem { background: #f0883e; }
-    .mi-track-ends { display: flex; justify-content: space-between; font-size: 10px; color: #6e7681; margin-top: 4px; }
+    .mi-track-ends { display: flex; justify-content: space-between; font-size: 10px; color: #7d8590; margin-top: 4px; }
     .mi-wdl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
     .mi-wdl-bar { display: flex; height: 10px; border-radius: 5px; overflow: hidden; background: #21262d; gap: 2px; }
     .mi-wdl-bar i { display: block; height: 100%; width: 0; transition: width .7s cubic-bezier(.2,.8,.2,1); }
@@ -579,7 +591,7 @@
     .mi-cmp { display: grid; grid-template-columns: 34px 1fr 84px 1fr 34px; align-items: center; gap: 8px; padding: 5px 0; }
     .mi-cmp-val { font-size: 13px; font-weight: 700; color: #e6edf3; font-variant-numeric: tabular-nums; }
     .mi-cmp-val.home { text-align: left; } .mi-cmp-val.away { text-align: right; }
-    .mi-cmp-val.dim { color: #6e7681; font-weight: 500; }
+    .mi-cmp-val.dim { color: #7d8590; font-weight: 500; }
     .mi-cmp-label { font-size: 11px; color: #8b949e; text-align: center; white-space: nowrap; }
     .mi-cmp-bar { height: 6px; background: #21262d; border-radius: 3px; display: flex; overflow: hidden; }
     .mi-cmp-bar.home { justify-content: flex-end; }
@@ -607,7 +619,17 @@
     .stat-box { background: #21262d; border-radius: 8px; padding: 12px; text-align: center; }
     .stat-val { font-size: 18px; font-weight: 700; }
     .stat-label { font-size: 11px; color: #8b949e; margin-top: 4px; }
+    /* 키보드로 이동할 때만 보이는 초점 테두리(마우스 클릭엔 안 보임) */
+    :focus-visible { outline: 2px solid #58a6ff; outline-offset: 2px; border-radius: 6px; }
+    .nav-tab:focus-visible, .ti-tab:focus-visible, .tabbar-item:focus-visible { outline-offset: -3px; }
+    .popup-search-input:focus-visible, .team-search-input-wrap input:focus-visible { outline: none; }
     .loading { text-align: center; padding: 40px; color: #8b949e; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
+    .loading.wake { gap: 10px; }
+    .wake-title { font-size: 14px; font-weight: 600; color: #e6edf3; }
+    .wake-bar { width: min(240px, 70%); height: 4px; border-radius: 99px; background: rgba(139,148,158,0.18); overflow: hidden; }
+    .wake-bar i { display: block; height: 100%; transform-origin: left; transform: scaleX(0.04); background: linear-gradient(90deg, #1f6feb, #58a6ff); box-shadow: 0 0 10px rgba(88,166,255,0.6); animation: wakeFill 55s cubic-bezier(.15,.6,.3,1) forwards; }
+    @keyframes wakeFill { to { transform: scaleX(0.94); } }
+    .wake-sub { font-size: 11px; color: #8b949e; }
 
     /* 로고의 그래프 바 애니메이션 — 로고 클릭(새로고침) 피드백 + 로딩 표시 공용 */
     .logo-bars { display: flex; align-items: flex-end; }
@@ -724,6 +746,31 @@
       .nav-search-btn { margin-left: 4px; padding: 7px 8px; }
     }
     
+    /* ── 모바일 하단 탭바 (≤768px) ── 위 네브바에 6개 탭을 욱여넣으면 글자가 11px까지 줄고 가로 스크롤이 생겨서,
+       탭은 엄지가 닿는 아래로 옮기고 위에는 로고·검색만 남김. 탭바 높이는 --tabbar-h(안전 영역 포함)로 다른 하단 고정 요소가 비켜감 */
+    .tabbar { display: none; }
+    @media (max-width: 768px) {
+      :root { --tabbar-h: calc(58px + env(safe-area-inset-bottom)); }
+      .tabbar { display: grid; grid-template-columns: repeat(6, 1fr); position: fixed; left: 0; right: 0; bottom: 0; z-index: 300; height: var(--tabbar-h); padding-bottom: env(safe-area-inset-bottom); background: rgba(13,17,23,0.86); backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%); border-top: 0.5px solid rgba(139,148,158,0.18); }
+      .tabbar-item { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-width: 0; padding: 0 2px; background: none; border: none; color: #8b949e; font-family: inherit; font-size: 10.5px; font-weight: 500; letter-spacing: -0.2px; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color .15s; }
+      .tabbar-item svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s cubic-bezier(.3,1.5,.5,1); }
+      .tabbar-item span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+      .tabbar-item.active { color: #58a6ff; font-weight: 600; }
+      .tabbar-item.active svg { transform: translateY(-1px) scale(1.06); }
+      .tabbar-item.active::before { content: ''; position: absolute; top: 0; left: 30%; right: 30%; height: 2px; border-radius: 0 0 2px 2px; background: #58a6ff; box-shadow: 0 0 10px rgba(88,166,255,0.7); }
+      .tabbar-item:active svg { transform: scale(0.9); }
+      body { padding-bottom: var(--tabbar-h); }
+      .nav-tabs-scroll { display: none; }
+      .nav-search-btn { margin-left: auto; }
+      .nav-wordmark { display: flex; }
+      .nav-logo { padding: 11px 0; }
+      #toast-container { bottom: calc(var(--tabbar-h) + 16px); }
+      .kofi-float-btn { bottom: calc(var(--tabbar-h) + 14px); }
+      .kofi-panel { bottom: calc(var(--tabbar-h) + 74px); }
+      .pwa-install-banner { bottom: calc(var(--tabbar-h) + 10px); }
+      .pwa-install-banner:not(.show) { transform: translateY(calc(100% + var(--tabbar-h) + 24px)); }
+    }
+    @media (max-width: 360px) { .tabbar-item { font-size: 9.5px; letter-spacing: -0.4px; } }
     .champ-league-btn { padding: 8px 16px; background: #161b22; border: 0.5px solid #30363d; border-radius: 8px; color: #8b949e; font-size: 13px; font-family: inherit; cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; }
     .champ-league-btn:hover { border-color: #58a6ff; transform: translateY(-1px); }
     .champ-league-btn.active { background: #1f6feb; border-color: #1f6feb; color: #fff; font-weight: 600; }
@@ -734,16 +781,16 @@
     .champ-prob { font-size: 13px; font-weight: 700; color: #58a6ff; width: 50px; text-align: right; }
     /* 순위 예측 결과 표: 예상 순위 · 팀(현재 승점) · 예상 승점 · 우승 · UCL권 · 강등 */
     .ct-head, .ct-row { display: grid; grid-template-columns: 30px minmax(0,1fr) 64px 58px 58px 58px; align-items: center; gap: 8px; padding: 0 12px; }
-    .ct-head { font-size: 11px; color: #6e7681; padding-bottom: 8px; border-bottom: 0.5px solid #30363d; }
+    .ct-head { font-size: 11px; color: #7d8590; padding-bottom: 8px; border-bottom: 0.5px solid #30363d; }
     .ct-head span { text-align: center; } .ct-head span:nth-child(2) { text-align: left; }
     .ct-row { padding-top: 9px; padding-bottom: 9px; border-bottom: 0.5px solid #21262d; }
     .ct-rank { font-size: 14px; font-weight: 700; text-align: center; color: #8b949e; font-variant-numeric: tabular-nums; }
     .ct-team { display: flex; align-items: center; gap: 10px; min-width: 0; }
     .ct-team img { width: 24px; height: 24px; object-fit: contain; flex-shrink: 0; cursor: pointer; }
     .ct-name { font-size: 13px; color: #e6edf3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .ct-sub { font-size: 10px; color: #6e7681; margin-top: 2px; }
+    .ct-sub { font-size: 10px; color: #7d8590; margin-top: 2px; }
     .ct-pts { text-align: center; font-size: 15px; font-weight: 700; color: #e6edf3; font-variant-numeric: tabular-nums; }
-    .ct-pts small { display: block; font-size: 10px; font-weight: 500; color: #6e7681; margin-top: 1px; }
+    .ct-pts small { display: block; font-size: 10px; font-weight: 500; color: #7d8590; margin-top: 1px; }
     .ct-cell { height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
     .ct-cell.none { color: #484f58; font-weight: 500; }
     .ct-cell.wait { border: 0.5px dashed #30363d; }
@@ -824,6 +871,9 @@
       html.theme-glass .card, html.theme-glass .myteam-widget { background-image: radial-gradient(560px circle at var(--mx, -999px) var(--my, -999px), rgba(88,166,255,0.075), transparent 55%); }
     }
     html.theme-glass .modal { background: rgba(22,27,34,0.86); backdrop-filter: blur(20px) saturate(140%); -webkit-backdrop-filter: blur(20px) saturate(140%); border-color: rgba(139,148,158,0.2); }
+    /* 로딩 화면도 유리 톤: 스켈레톤은 반투명 바탕에 파란 빛이 스쳐 지나가게, 로딩 공엔 은은한 빛 */
+    html.theme-glass .skeleton { background: linear-gradient(100deg, rgba(139,148,158,0.09) 30%, rgba(88,166,255,0.17) 45%, rgba(139,148,158,0.09) 60%); background-size: 300% 100%; }
+    html.theme-glass .loading .logo-bars { filter: drop-shadow(0 0 8px rgba(88,166,255,0.5)); }
     html.theme-glass .modal-overlay { backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); }
     html.theme-glass .team-popup { background: rgba(22,27,34,0.9); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
     /* 카드 안 어두운 칸(#0d1117)은 반투명으로 — 유리 위에 검은 구멍처럼 보이지 않게 */
@@ -850,12 +900,12 @@
     </div>
   </div>
   <div class="nav-tabs-scroll">
-    <div class="nav-tab active" onclick="showPage('predict')">경기 예측</div>
-    <div class="nav-tab" onclick="showPage('champion')">순위 예측</div>
-    <div class="nav-tab" onclick="showPage('standings')">순위표</div>
-    <div class="nav-tab" onclick="showPage('schedule')">일정</div>
-    <div class="nav-tab" onclick="showPage('players')">선수</div>
-    <div class="nav-tab" onclick="showPage('shootout')">승부차기</div>
+    <div data-page="predict" class="nav-tab active" aria-current="page" onclick="showPage('predict')">경기 예측</div>
+    <div data-page="champion" class="nav-tab" onclick="showPage('champion')">순위 예측</div>
+    <div data-page="standings" class="nav-tab" onclick="showPage('standings')">순위표</div>
+    <div data-page="schedule" class="nav-tab" onclick="showPage('schedule')">일정</div>
+    <div data-page="players" class="nav-tab" onclick="showPage('players')">선수</div>
+    <div data-page="shootout" class="nav-tab" onclick="showPage('shootout')">승부차기</div>
   </div>
   <button class="nav-search-btn" onclick="openTeamSearch()" aria-label="팀 검색" title="팀 검색 (Ctrl/Cmd+K)">
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -864,6 +914,15 @@
   <button class="nav-donate-btn" onclick="toggleKofiPanel()" aria-label="후원하기" title="후원하기">
     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
   </button>
+</nav>
+<!-- 모바일(≤768px) 하단 탭바 — 위쪽 네브바는 로고·검색만 남김. 같은 showPage를 부르고 활성 표시는 data-page로 양쪽 동기화 -->
+<nav class="tabbar" aria-label="메뉴">
+  <button type="button" data-page="predict" class="tabbar-item active" aria-current="page" onclick="showPage('predict')"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7V3.8M16.09 10.67l3.71-1.2M14.53 15.48l2.29 3.15M9.47 15.48l-2.29 3.15M7.91 10.67l-3.71-1.2"/></svg><span>경기 예측</span></button>
+  <button type="button" data-page="champion" class="tabbar-item" onclick="showPage('champion')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg><span>순위 예측</span></button>
+  <button type="button" data-page="standings" class="tabbar-item" onclick="showPage('standings')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4.5 6h.01M4.5 12h.01M4.5 18h.01" stroke-width="2.6"/></svg><span>순위표</span></button>
+  <button type="button" data-page="schedule" class="tabbar-item" onclick="showPage('schedule')"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span>일정</span></button>
+  <button type="button" data-page="players" class="tabbar-item" onclick="showPage('players')"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c1.2-3.8 4-5.5 7.5-5.5s6.3 1.7 7.5 5.5"/></svg><span>선수</span></button>
+  <button type="button" data-page="shootout" class="tabbar-item" onclick="showPage('shootout')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19V6h18v13"/><path d="M3 10.5h18M3 15h18M7.5 6v13M12 6v13M16.5 6v13" stroke-opacity=".45"/><path d="M1.5 19h21"/></svg><span>승부차기</span></button>
 </nav>
 
 <div class="container">
@@ -1097,7 +1156,7 @@
             <div class="prob-row" style="grid-template-columns:120px 1fr 45px"><span class="prob-label" id="prob-label-away">원정승</span><div class="prob-bar-bg"><div class="prob-bar away" id="bar-away" style="width:0%"></div></div><span class="prob-value" id="val-away"></span></div>
           </div>
           <div style="margin-top:16px;padding-top:16px;border-top:0.5px solid #30363d">
-            <div style="font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">예측 근거 <span style="font-size:10px;color:#6e7681;text-transform:none;letter-spacing:0">(이 예측에서 크게 반영된 요인 순)</span></div>
+            <div style="font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">예측 근거 <span style="font-size:10px;color:#7d8590;text-transform:none;letter-spacing:0">(이 예측에서 크게 반영된 요인 순)</span></div>
             <div id="explanation-factors"></div>
           </div>
           <div class="stats-grid">
@@ -1111,7 +1170,7 @@
             <div id="radar-chart-wrap"></div>
           </div>
           <div style="margin-top:16px;padding-top:16px;border-top:0.5px solid #30363d">
-            <div style="font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">예상 스코어 <span style="font-size:10px;color:#6e7681;text-transform:none;letter-spacing:0">(AI 추정·참고용)</span></div>
+            <div style="font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">예상 스코어 <span style="font-size:10px;color:#7d8590;text-transform:none;letter-spacing:0">(AI 추정·참고용)</span></div>
             <div style="text-align:center;margin-bottom:10px">
               <div style="font-size:32px;font-weight:800;color:#58a6ff" id="score-most-likely">- : -</div>
               <div style="font-size:11px;color:#8b949e;margin-top:2px" id="score-most-likely-sub"></div>
@@ -1154,7 +1213,7 @@
 <!-- 토너먼트 모달 -->
 <div class="modal-overlay" id="t-modal" onclick="closeTModal(event)">
   <div class="modal">
-    <div class="modal-header"><span class="modal-title" id="t-modal-title"></span><span class="modal-close" onclick="closeTModal()">✕</span></div>
+    <div class="modal-header"><span class="modal-title" id="t-modal-title"></span><span class="modal-close" aria-label="닫기" onclick="closeTModal()">✕</span></div>
     <div class="modal-teams">
       <div class="modal-team"><img class="modal-logo" id="t-logo1" src="" onerror="this.style.display='none'"><span class="modal-team-name" id="t-name1"></span></div>
       <div class="modal-vs"><div class="modal-score"><span id="t-s1" style="font-size:24px;font-weight:700"></span><span style="color:#8b949e;font-size:24px;font-weight:700">-</span><span id="t-s2" style="font-size:24px;font-weight:700"></span></div><span class="modal-agg">합산</span></div>
@@ -1180,7 +1239,7 @@
 <!-- AI 예측 트랙레코드 모달 -->
 <div class="modal-overlay" id="track-record-modal" onclick="closeTrackRecordModal(event)">
   <div class="modal track-record-box">
-    <div class="modal-header"><span class="modal-title">AI 예측 트랙레코드</span><span class="modal-close" onclick="closeTrackRecordModal()">✕</span></div>
+    <div class="modal-header"><span class="modal-title">AI 예측 트랙레코드</span><span class="modal-close" aria-label="닫기" onclick="closeTrackRecordModal()">✕</span></div>
     <div id="track-record-body"><div class="loading"><svg class="logo-bars animate" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg>불러오는 중...</div></div>
   </div>
 </div>
@@ -1188,7 +1247,7 @@
 <!-- 경기 예측 미리보기 모달 (빅매치/오늘·다음 경기/일정 탭에서 경기 클릭 시) -->
 <div class="modal-overlay" id="match-predict-modal" onclick="closeMatchPredictModal(event)">
   <div class="modal" style="width:340px">
-    <div class="modal-header"><span class="modal-title">경기 예측</span><span class="modal-close" onclick="closeMatchPredictModal()">✕</span></div>
+    <div class="modal-header"><span class="modal-title">경기 예측</span><span class="modal-close" aria-label="닫기" onclick="closeMatchPredictModal()">✕</span></div>
     <div class="modal-teams">
       <div class="modal-team"><img class="modal-logo" id="mp-logo1" src="" onerror="this.style.display='none'"><span class="modal-team-name" id="mp-name1"></span></div>
       <div class="modal-vs"><span>VS</span></div>
@@ -1208,7 +1267,7 @@
         <div class="ti-meta" id="ti-meta"></div>
       </div>
       <button class="ti-fav-btn" id="ti-fav-btn" style="margin-left:auto" onclick="toggleFavoriteTeam()" title="즐겨찾는 팀으로 등록"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></button>
-      <span class="modal-close" onclick="closeTeamInfoModal()">✕</span>
+      <span class="modal-close" aria-label="닫기" onclick="closeTeamInfoModal()">✕</span>
     </div>
     <div class="ti-tabs" id="ti-tabs">
       <div class="ti-tab active" data-tab="overview" onclick="switchTiTab('overview')">개요</div>
@@ -1259,8 +1318,19 @@ async function fetchWithRetry(url, options = {}, { retries = 4, timeoutMs = 1500
 
 const BRAND_LOADER_ICON = '<svg class="logo-bars animate" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg>';
 
+// 서버 깨우는 화면: 무료 서버 콜드스타트(~50초)에 맞춘 진행 막대. 재시도할 때마다 다시 그려지므로
+// 처음 깨우기 시작한 시각을 기억해 두고 애니메이션을 그만큼 앞당겨(음수 delay) 막대가 처음부터 다시 차지 않게 함
+let wakeStartedAt = 0, wakeLastAt = 0;
 function wakingUpHtml(attempt, retries) {
-  return `<div class="loading">${BRAND_LOADER_ICON}서버를 깨우는 중이에요... (${attempt}/${retries})<br><span style="font-size:11px;color:#8b949e">잠시 쉬고 있던 서버라 최대 1분 정도 걸릴 수 있어요</span></div>`;
+  const now = performance.now();
+  if (now - wakeLastAt > 90000) wakeStartedAt = now;   // 한참 뒤에 또 자고 있으면 새로 시작
+  wakeLastAt = now;
+  const elapsed = ((now - wakeStartedAt) / 1000).toFixed(1);
+  return `<div class="loading wake" role="status">${BRAND_LOADER_ICON}
+    <div class="wake-title">서버를 깨우는 중이에요</div>
+    <div class="wake-bar"><i style="animation-delay:-${elapsed}s"></i></div>
+    <div class="wake-sub">잠시 쉬고 있던 무료 서버라 최대 1분 정도 걸려요 · 시도 ${attempt}/${retries}</div>
+  </div>`;
 }
 
 let logos = {};
@@ -1893,9 +1963,42 @@ document.addEventListener('keydown', (e) => {
     e.preventDefault();
     openTeamSearch();
   } else if (e.key === 'Escape') {
-    closeTeamSearch();
+    // 가장 위에 떠 있는 것 하나만 닫음(팀 정보는 경기 미리보기 위에 겹쳐 뜰 수 있음)
+    const shown = id => document.getElementById(id)?.classList.contains('show');
+    if (shown('team-search-modal')) closeTeamSearch();
+    else if (shown('ti-modal')) closeTeamInfoModal();
+    else if (shown('match-predict-modal')) closeMatchPredictModal();
+    else if (shown('track-record-modal')) closeTrackRecordModal();
+    else if (shown('t-modal')) closeTModal();
+    else if (document.getElementById('kofi-panel')?.classList.contains('open')) toggleKofiPanel();
+    else ['home', 'away'].forEach(side => { if (shown(`${side}-popup`)) closePopup(side); });
   }
 });
+
+// ── 키보드 접근성: onclick만 달린 div/span(탭·경기 카드·팀 이름 등)도 Tab으로 이동하고 Enter/Space로 누를 수 있게 ──
+// 화면이 대부분 JS로 그려져서 요소마다 고치는 대신, 새로 생기는 요소까지 자동으로 tabindex/role을 붙임.
+// 모달 바깥 어두운 배경(클릭하면 닫힘)은 제외
+(function () {
+  const SEL = '[onclick]:not(button):not(a):not(input):not(select):not(textarea):not(.modal-overlay):not([tabindex])';
+  const mark = root => {
+    if (root.nodeType !== 1) return;
+    const list = root.matches(SEL) ? [root] : [];
+    list.push(...root.querySelectorAll(SEL));
+    for (const el of list) {
+      el.tabIndex = 0;
+      if (!el.hasAttribute('role') && el.tagName !== 'TR') el.setAttribute('role', 'button');   // 표의 행은 행 의미 유지
+    }
+  };
+  mark(document.body);
+  new MutationObserver(ms => { for (const m of ms) m.addedNodes.forEach(mark); })
+    .observe(document.body, { childList: true, subtree: true });
+  document.addEventListener('keydown', e => {
+    const t = e.target;
+    if ((e.key !== 'Enter' && e.key !== ' ') || !t.hasAttribute || !t.hasAttribute('onclick') || t.matches('button, a, input, select, textarea')) return;
+    e.preventDefault();
+    e.target.click();
+  });
+})();
 (function () {
   const isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
   const kbd = document.querySelector('.nav-search-kbd');
@@ -2019,10 +2122,8 @@ function closeMatchPredictModal(e) {
 function goToFullPrediction(home, away) {
   closeMatchPredictModal();
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('page-predict').classList.add('active');
-  const tab = document.querySelector('[onclick="showPage(\'predict\')"]');
-  if (tab) tab.classList.add('active');
+  setActiveTab('predict');
   selectTeamFromPopup('home', home);
   selectTeamFromPopup('away', away);
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2040,6 +2141,14 @@ async function openTeamInfo(teamName) {
   tiState = { team: teamName, code: getTeamLeagueCode(teamName), tab: 'overview' };
   document.querySelectorAll('#ti-tabs .ti-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === 'overview'));
   updateFavBtnState();
+  const header = modal.querySelector('.ti-header');
+  header.classList.remove('tinted');
+  fetchTeamInfo(teamName).then(info => {
+    if (tiState.team !== teamName) return;
+    const pair = getClubColorPair(info.clubColors) || ['#58a6ff', '#58a6ff'];   // 색 정보가 없으면 브랜드 파랑
+    header.style.setProperty('--ti-c1', pair[0]); header.style.setProperty('--ti-c2', pair[1]);
+    header.classList.add('tinted');
+  }).catch(() => {});
   modal.classList.add('show');
   initScrollFade(document.getElementById('ti-tabs'));
   await switchTiTab('overview');
@@ -2271,6 +2380,11 @@ const CLUB_COLOR_MAP = {
   'orange':'#f0883e', 'amber':'#f0883e', 'crimson':'#e5484d', 'scarlet':'#e5484d', 'pink':'#ec4899',
   'grey':'#8b949e', 'gray':'#8b949e', 'sky':'#58a6ff', 'cream':'#e6edf3', 'garnet':'#8c2f3d',
 };
+// 헤더 그라데이션용 두 색(구단 색 "Red / White" → 앞·뒤). 한 색만 알면 같은 색 두 번
+function getClubColorPair(clubColors) {
+  const cs = (clubColors || '').split('/').map(c => CLUB_COLOR_MAP[c.trim().toLowerCase()]).filter(Boolean);
+  return cs.length ? [cs[0], cs[1] || cs[0]] : null;
+}
 function getClubAccentColor(clubColors) {
   if (!clubColors) return null;
   const first = clubColors.split('/')[0].trim().toLowerCase();
@@ -2302,16 +2416,26 @@ async function applyClubAccent(side, team) {
 }
 document.addEventListener('click',e=>{['home','away'].forEach(side=>{if(!e.target.closest(`#${side}-popup`)&&!e.target.closest(`#${side}-trigger`))closePopup(side);});});
 
+// 위 네브바 탭과 모바일 하단 탭바의 활성 표시를 같이 맞춤
+function setActiveTab(page) {
+  document.querySelectorAll('.nav-tab, .tabbar-item').forEach(t => {
+    t.classList.toggle('active', t.dataset.page === page);
+    if (t.dataset.page === page) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current');
+  });
+}
 function showPage(page) {
+  // 하단 탭바는 스크롤을 내린 채로 누르게 되므로 새 탭은 맨 위부터, 지금 탭을 다시 누르면 부드럽게 맨 위로(iOS 관례)
+  const same = document.getElementById('page-'+page).classList.contains('active');
+  window.scrollTo({ top: 0, behavior: same ? 'smooth' : 'instant' });
+  if (same) return;
   window.fotBg?.turn();   // 탭을 바꿀 때마다 배경 공이 다른 각도로 돌아감
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   const target = document.getElementById('page-'+page);
   target.classList.add('active');
   target.classList.remove('page-enter');
   void target.offsetWidth;
   target.classList.add('page-enter');
-  event.target.classList.add('active');
+  setActiveTab(page);
   if(page!=='standings'){document.getElementById('ucl-subtabs').style.display='none';}
   if(page==='players'){loadPlayers();}
   if(page==='champion'){loadChampion('PL');}
@@ -3103,7 +3227,7 @@ function miRankTile(ins, side) {
   return `<div class="mi-rank-tile ${side}">${head}
     <div class="mi-rank-num">${s.rank}<small>위</small><span class="of">/ ${s.total}</span></div>
     ${zoneHtml}
-    <div class="mi-rank-sub"><b>${s.points}점</b> · 득실 ${gd}<br>${s.wins}승 ${s.draws}무 ${s.losses}패 <span style="color:#6e7681">(${s.played}경기)</span></div>
+    <div class="mi-rank-sub"><b>${s.points}점</b> · 득실 ${gd}<br>${s.wins}승 ${s.draws}무 ${s.losses}패 <span style="color:#7d8590">(${s.played}경기)</span></div>
   </div>`;
 }
 
@@ -3236,7 +3360,7 @@ function renderMatchInsights(ins) {
   // C. 경기 성향
   const ht = h.tendency, at = a.tendency;
   if (ht.n && at.n) {
-    const cnt = (v, tot) => `${v}<span style="font-size:10px;color:#6e7681;font-weight:500">/${tot}</span>`;
+    const cnt = (v, tot) => `${v}<span style="font-size:10px;color:#7d8590;font-weight:500">/${tot}</span>`;
     let caption = '';
     if (ht.total_goals >= 3 && at.total_goals >= 3) caption = '두 팀 모두 최근 경기당 3골 이상 — 골이 많이 나는 흐름이에요.';
     else if (ht.total_goals <= 2.2 && at.total_goals <= 2.2) caption = '두 팀 모두 최근 경기에서 골이 적었어요 — 팽팽한 저득점 흐름이에요.';
@@ -4338,7 +4462,7 @@ initScrollFade(document.querySelector('.nav-tabs-scroll'));
 
 loadLogos();loadPredictableTeams();loadStandings('PL');loadAccuracy();loadTodayMatches();loadBigMatch();loadMyTeamWidget();
 
-if(window.location.hash){setTimeout(()=>{const h=window.location.hash.replace('#','');const valid=['predict','champion','standings','players','schedule','shootout'];if(!valid.includes(h))return;document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));const pg=document.getElementById('page-'+h);if(pg)pg.classList.add('active');const tab=document.querySelector('[onclick="showPage(\''+h+'\')"]');if(tab)tab.classList.add('active');if(h==='champion')loadChampion('PL');if(h==='players')loadPlayers();if(h==='schedule')loadSchedule('PL');if(h==='shootout')initShootout();},100);}
+if(window.location.hash){setTimeout(()=>{const h=window.location.hash.replace('#','');const valid=['predict','champion','standings','players','schedule','shootout'];if(!valid.includes(h))return;document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));const pg=document.getElementById('page-'+h);if(pg)pg.classList.add('active');setActiveTab(h);if(h==='champion')loadChampion('PL');if(h==='players')loadPlayers();if(h==='schedule')loadSchedule('PL');if(h==='shootout')initShootout();},100);}
 </script>
 
 <footer style="padding:20px 24px;padding-bottom:calc(20px + env(safe-area-inset-bottom));border-top:0.5px solid #30363d;display:flex;align-items:center;justify-content:space-between;background:#161b22">
