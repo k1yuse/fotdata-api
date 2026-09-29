@@ -437,6 +437,12 @@
     .tie-row.win .tie-name { color: #e6edf3; font-weight: 700; } .tie-row.win .tie-score { color: #79b8ff; }
     .tie-row.lose { opacity: .45; }
     .tie.tbd .tie-name { color: #6e7681; font-style: italic; }
+    /* 팀 이름·로고에 올리면 파랗게, 누르면 팀 정보(카드 나머지 부분은 1·2차전 팝업) — 2026-09-29 */
+    .tie:not(.tbd) .tie-name { transition: color .15s; }
+    .tie:not(.tbd) .tie-name:hover, .tie:not(.tbd) .tie-row:has(img:hover) .tie-name { color: #58a6ff !important; }
+    .tie:not(.tbd) .tie-row img { cursor: pointer; }
+    .ko-champ[onclick] { cursor: pointer; } .ko-champ[onclick]:hover span { color: #58a6ff; }
+    .t-team-hit { cursor: pointer; transition: color .15s; } .modal-team-name.t-team-hit:hover { color: #58a6ff !important; }
     .tie-foot { margin-top: 3px; padding-top: 3px; border-top: 0.5px solid #21262d; font-size: 9.5px; color: #7d8590; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     /* 결승 카드만 흐름에 두고(= 4강 카드와 같은 높이) 트로피·우승 배지는 그 위로 띄움 */
     .ko-final { position: relative; display: flex; flex-direction: column; align-items: center; }
@@ -1584,9 +1590,9 @@
   <div class="modal">
     <div class="modal-header"><span class="modal-title" id="t-modal-title"></span><span class="modal-close" aria-label="닫기" onclick="closeTModal()">✕</span></div>
     <div class="modal-teams">
-      <div class="modal-team"><img class="modal-logo" id="t-logo1" src="" onerror="this.style.display='none'"><span class="modal-team-name" id="t-name1"></span></div>
+      <div class="modal-team"><img class="modal-logo t-team-hit" id="t-logo1" src="" onerror="this.style.display='none'" onclick="openTeamFromTModal(1)"><span class="modal-team-name t-team-hit" id="t-name1" onclick="openTeamFromTModal(1)"></span></div>
       <div class="modal-vs"><div class="modal-score"><span id="t-s1" style="font-size:24px;font-weight:700"></span><span style="color:#8b949e;font-size:24px;font-weight:700">-</span><span id="t-s2" style="font-size:24px;font-weight:700"></span></div><span class="modal-agg">합산</span></div>
-      <div class="modal-team"><img class="modal-logo" id="t-logo2" src="" onerror="this.style.display='none'"><span class="modal-team-name" id="t-name2"></span></div>
+      <div class="modal-team"><img class="modal-logo t-team-hit" id="t-logo2" src="" onerror="this.style.display='none'" onclick="openTeamFromTModal(2)"><span class="modal-team-name t-team-hit" id="t-name2" onclick="openTeamFromTModal(2)"></span></div>
     </div>
     <div class="modal-legs" id="t-legs"></div>
     <div class="modal-badge" id="t-badge"></div>
@@ -2178,7 +2184,7 @@ function tieCardHtml(m, key) {
   const when = next && next.date ? (() => { const d = new Date(next.date); return `${d.getMonth() + 1}.${d.getDate()} ${d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false })}`; })() : '';
   const foot = m.pens ? `승부차기 ${m.pens[0]}-${m.pens[1]}` : up ? (when ? `다음 경기 ${when}` : '진행 중') : legTxt;
   // 색 규칙(대진표·팝업 공통): 파란 점수 + 굵은 이름 = 다음 라운드 진출 팀, 흐리게 = 탈락, 진행 중·미정은 파란색 없음
-  const row = (t, logo, g, side) => `<div class="tie-row ${w === side ? 'win' : w ? 'lose' : ''}"><img src="${logo || logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'"><span class="tie-name">${shortName(t)}</span>${m.pens && w === side ? '<span class="tie-pk">PK</span>' : ''}<span class="tie-score">${legs.length ? g : ''}</span></div>`;
+  const row = (t, logo, g, side) => `<div class="tie-row ${w === side ? 'win' : w ? 'lose' : ''}"><img src="${logo || logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'" onclick="event.stopPropagation();openTeamInfo('${escJs(t)}')"><span class="tie-name" onclick="event.stopPropagation();openTeamInfo('${escJs(t)}')">${shortName(t)}</span>${m.pens && w === side ? '<span class="tie-pk">PK</span>' : ''}<span class="tie-score">${legs.length ? g : ''}</span></div>`;
   return `<button class="tie ${up ? 'live' : ''}" data-key="${key}" onclick="openTModal('${escJs(m.team1)}','${escJs(m.team2)}')">
     ${row(m.team1, m.team1_logo, m.team1_goals, 1)}${row(m.team2, m.team2_logo, m.team2_goals, 2)}
     ${foot ? `<div class="tie-foot">${foot}</div>` : ''}
@@ -2202,9 +2208,9 @@ function renderTournament(data, season) {
   const fw = tieWinnerSide(fin);
   const finalHtml = `<div class="ko-col ko-final-col"><div class="ko-label gold">결승</div><div class="ko-stack n1">
     <div class="ko-final ${fin && fin.winner ? 'done' : ''}" data-key="FINAL">
-      <div class="ko-final-top"><div class="ko-trophy">${TROPHY_ICON}</div>${fin && fin.winner ? `<div class="ko-champ"><img src="${logos[fin.winner] || ''}" alt="" onerror="this.style.display='none'"><span><small>우승</small>${shortName(fin.winner)}</span></div>` : ''}</div>
+      <div class="ko-final-top"><div class="ko-trophy">${TROPHY_ICON}</div>${fin && fin.winner ? `<div class="ko-champ" onclick="event.stopPropagation();openTeamInfo('${escJs(fin.winner)}')"><img src="${logos[fin.winner] || ''}" alt="" onerror="this.style.display='none'"><span><small>우승</small>${shortName(fin.winner)}</span></div>` : ''}</div>
       ${fin ? `<button class="tie final" onclick="openTModal('${escJs(fin.team1)}','${escJs(fin.team2)}')">
-        ${[[fin.team1, fin.team1_logo, fin.team1_goals, 1], [fin.team2, fin.team2_logo, fin.team2_goals, 2]].map(([t, lg, g, sd]) => `<div class="tie-row ${fw === sd ? 'win' : fw ? 'lose' : ''}"><img src="${lg || logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'"><span class="tie-name">${shortName(t)}</span>${fin.pens && fw === sd ? '<span class="tie-pk">PK</span>' : ''}<span class="tie-score">${fin.status === 'UPCOMING' ? '' : g}</span></div>`).join('')}
+        ${[[fin.team1, fin.team1_logo, fin.team1_goals, 1], [fin.team2, fin.team2_logo, fin.team2_goals, 2]].map(([t, lg, g, sd]) => `<div class="tie-row ${fw === sd ? 'win' : fw ? 'lose' : ''}"><img src="${lg || logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'" onclick="event.stopPropagation();openTeamInfo('${escJs(t)}')"><span class="tie-name" onclick="event.stopPropagation();openTeamInfo('${escJs(t)}')">${shortName(t)}</span>${fin.pens && fw === sd ? '<span class="tie-pk">PK</span>' : ''}<span class="tie-score">${fin.status === 'UPCOMING' ? '' : g}</span></div>`).join('')}
         ${fin.pens ? `<div class="tie-foot">승부차기 ${fin.pens[0]}-${fin.pens[1]}</div>` : ''}
       </button>`
       : `<div class="tie tbd"><div class="tie-row"><span class="tie-name">미정</span></div><div class="tie-row"><span class="tie-name">미정</span></div></div>`}
@@ -2219,7 +2225,7 @@ function renderTournament(data, season) {
     <div class="ko-mobile">
       <div class="st-seg ko-round-seg">${mobRounds.map(([k, l]) => `<button class="${k === mobSel ? 'active' : ''}" onclick="koMobileRound='${k}';renderTournament(tournamentCache[currentStandingsSeason], currentStandingsSeason)">${l}</button>`).join('')}</div>
       <div class="ko-mlist">${(st[mobSel] || []).map((m, i) => tieCardHtml(m, 'm' + i)).join('') || '<div class="ti-empty">아직 대진이 없어요.</div>'}</div>
-      ${mobSel === 'FINAL' && fin && fin.winner ? `<div class="ko-champ" style="margin:12px auto 0;width:max-content"><img src="${logos[fin.winner] || ''}" alt="" onerror="this.style.display='none'"><span><small>우승</small>${shortName(fin.winner)}</span></div>` : ''}
+      ${mobSel === 'FINAL' && fin && fin.winner ? `<div class="ko-champ" style="margin:12px auto 0;width:max-content" onclick="openTeamInfo('${escJs(fin.winner)}')"><img src="${logos[fin.winner] || ''}" alt="" onerror="this.style.display='none'"><span><small>우승</small>${shortName(fin.winner)}</span></div>` : ''}
     </div>
     <div class="ko-note"><span class="ko-key win">파란 점수</span> 다음 라운드 진출 · <span class="ko-key lose">흐림</span> 탈락 · 점수는 두 경기 합산(결승은 단판) · <span class="tie-pk">PK</span> 승부차기 승리 · 카드를 누르면 1·2차전 결과</div>`;
   requestAnimationFrame(drawKoLines);
@@ -2266,10 +2272,10 @@ function openTModal(t1, t2) {
     const img = document.getElementById(id); img.style.display = src ? '' : 'none'; img.src = src || '';
   });
   document.getElementById('t-name1').textContent = m.team1;
-  document.getElementById('t-name1').className = 'modal-team-name';
+  document.getElementById('t-name1').className = 'modal-team-name t-team-hit';
   document.getElementById('t-name1').style.color = isW1?'#58a6ff':m.winner?'#8b949e':'#e6edf3';
   document.getElementById('t-name2').textContent = m.team2;
-  document.getElementById('t-name2').className = 'modal-team-name';
+  document.getElementById('t-name2').className = 'modal-team-name t-team-hit';
   document.getElementById('t-name2').style.color = isW2?'#58a6ff':m.winner?'#8b949e':'#e6edf3';  document.getElementById('t-s1').textContent = m.team1_goals;
   document.getElementById('t-s1').style.color = isW1?'#58a6ff':m.winner?'#8b949e':'#e6edf3';
   document.getElementById('t-s2').textContent = m.team2_goals;
@@ -2290,6 +2296,12 @@ function openTModal(t1, t2) {
   badge.textContent = m.status==='UPCOMING' ? '진행 중' : (m.winner?m.winner+' 진출':'완료');
   badge.className = 'modal-badge '+(m.status==='UPCOMING'?'live':'done');
   document.getElementById('t-modal').classList.add('show');
+}
+// 대진 팝업의 팀 이름·로고 → 팝업을 닫고 팀 정보(같은 층이라 뒤에 숨지 않게)
+function openTeamFromTModal(k) {
+  const t = document.getElementById('t-name' + k).textContent;
+  document.getElementById('t-modal').classList.remove('show');
+  openTeamInfo(t);
 }
 function closeTModal(e) { if(!e||e.target===document.getElementById('t-modal')) document.getElementById('t-modal').classList.remove('show'); }
 
