@@ -1419,8 +1419,10 @@ def _live_overlay():
             row = {"status": m["status"], "home_goals": hg, "away_goals": ag}
             if pens:
                 row["penalties"] = pens
-            if m.get("minute"):
+            if m.get("minute"):   # 경기 분(무료 플랜에서도 오는지는 10/10 첫 경기에서 확인 예정 — 없으면 화면엔 "진행 중"만)
                 row["minute"] = m["minute"]
+            if m.get("injuryTime"):   # 추가시간(45+2 → 화면 "45+2분")
+                row["injury_time"] = m["injuryTime"]
             row["utc"] = m["utcDate"]
             data[_live_key(m["homeTeam"]["name"], m["awayTeam"]["name"], m["utcDate"])] = row
         quiet = not any(v["status"] in LIVE_STATUSES for v in data.values()) and _all_started_done(data, now)

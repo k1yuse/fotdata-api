@@ -2289,8 +2289,16 @@ function localDateStr(dateInput) {
 const LIVE_ST = new Set(['IN_PLAY', 'PAUSED', 'EXTRA_TIME', 'PENALTY_SHOOTOUT']);
 const isLive = m => LIVE_ST.has(m.status);
 const isDone = m => m.status === 'FINISHED' || m.status === 'AWARDED';
+// 경기 분 → "67분", 추가시간은 "45+2분"·"90+3분"(서버 injury_time, 또는 분 값에 "+"가 이미 붙어 오는 경우 그대로)
+function liveMinute(m) {
+  if (m.minute == null || m.minute === '') return '';
+  let s = String(m.minute).replace(/['’\s]/g, '');
+  if (m.injury_time && !s.includes('+')) s += `+${m.injury_time}`;
+  return `${s}분`;
+}
 function liveChip(m) {
-  const t = m.status === 'PAUSED' ? '하프타임' : m.status === 'PENALTY_SHOOTOUT' ? '승부차기' : m.status === 'EXTRA_TIME' ? '연장전' : m.minute ? `진행 중 ${m.minute}'` : '진행 중';
+  const min = liveMinute(m);
+  const t = m.status === 'PAUSED' ? '하프타임' : m.status === 'PENALTY_SHOOTOUT' ? '승부차기' : m.status === 'EXTRA_TIME' ? `연장전${min ? ' ' + min : ''}` : min ? `진행 중 ${min}` : '진행 중';
   return `<span class="live-chip"><i></i>${t}</span>`;
 }
 let windowMatchesList = null, liveTimer = null;
@@ -2316,9 +2324,9 @@ function applyLive(rows) {
   const upd = (m, lg) => {
     const v = map.get(liveKey(m));
     if (!v || (isDone(m) && !m.live)) return;   // 새벽 업데이트로 확정된 경기는 그대로
-    if (v.status === m.status && v.home_goals === m.home_goals && v.away_goals === m.away_goals && v.minute === m.minute) return;
+    if (v.status === m.status && v.home_goals === m.home_goals && v.away_goals === m.away_goals && v.minute === m.minute && v.injury_time === m.injury_time) return;
     const was = isDone(m);
-    Object.assign(m, { status: v.status, home_goals: v.home_goals, away_goals: v.away_goals, minute: v.minute, penalties: v.penalties, live: true });
+    Object.assign(m, { status: v.status, home_goals: v.home_goals, away_goals: v.away_goals, minute: v.minute, injury_time: v.injury_time, penalties: v.penalties, live: true });
     changed = true;
     if (isDone(m) && !was) ended.add(lg || m.league);
   };
