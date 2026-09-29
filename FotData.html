@@ -1148,17 +1148,34 @@
     .sched-vs { font-size: 12px; color: #8b949e; padding: 0 14px; text-align: center; min-width: 60px; flex-shrink: 0; }
     .sched-score { font-weight: 700; color: #e6edf3; }
     .sched-time { font-size: 11px; color: #8b949e; }
-    /* 일정 탭 AI 예측 막대: 홈 % | 홈·무·원정 막대 | 원정 %, 가장 높은 쪽만 진하게 */
-    .sched-match { flex-wrap: wrap; }
-    .sched-pred { flex: 0 0 100%; width: 100%; display: grid; grid-template-columns: 44px minmax(120px, 280px) 44px; justify-content: center; grid-template-areas: "hv bar av" ". dv ."; align-items: center; column-gap: 8px; row-gap: 2px; margin-top: 6px; }
-    .sp-bar { grid-area: bar; display: flex; height: 5px; border-radius: 99px; overflow: hidden; background: #21262d; }
-    .sp-bar i { display: block; height: 100%; }
-    .sp-bar i.h, .sched-pred-legend i.h { background: #58a6ff; } .sp-bar i.d, .sched-pred-legend i.d { background: #6e7681; } .sp-bar i.a, .sched-pred-legend i.a { background: #f0883e; }
-    .sp-bar i + i { margin-left: 2px; }
-    .sp-v { font-size: 11px; font-weight: 600; color: #7d8590; font-variant-numeric: tabular-nums; }
-    .sp-v.home { grid-area: hv; text-align: right; } .sp-v.away { grid-area: av; text-align: left; }
-    .sp-d { grid-area: dv; text-align: center; font-size: 10px; color: #7d8590; font-variant-numeric: tabular-nums; }
-    .sp-v.home.top { color: #79b8ff; font-weight: 800; } .sp-v.away.top { color: #ffa657; font-weight: 800; } .sp-d.top { color: #c9d1d9; font-weight: 700; }
+    /* 일정 탭 AI 예측(2026-09-29 개편): 막대를 한 줄 전체로 길게 그리면 경기 목록이 읽기 어려워서 →
+       가운데 칸(시간/스코어) 아래 짧은 막대 + 각 팀 승리 확률은 팀 이름 안쪽(가운데 칸 바로 옆), 무승부는 막대 아래 */
+    .sched-match.has-pred .sched-vs { min-width: 92px; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 0 10px; }
+    .sp-pct { margin-left: auto; padding-left: 8px; font-size: 12px; font-weight: 600; color: #7d8590; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+    .sched-team.away .sp-pct { margin-left: 0; margin-right: auto; padding-left: 0; padding-right: 8px; }
+    .sp-pct.home.top { color: #79b8ff; font-weight: 800; } .sp-pct.away.top { color: #ffa657; font-weight: 800; }
+    .sp-mini { display: flex; width: 72px; height: 4px; border-radius: 99px; overflow: hidden; background: #21262d; }
+    .sp-mini i { display: block; height: 100%; } .sp-mini i + i { margin-left: 1.5px; }
+    .sp-mini i.h, .sched-pred-legend i.h { background: #58a6ff; } .sp-mini i.d, .sched-pred-legend i.d { background: #6e7681; } .sp-mini i.a, .sched-pred-legend i.a { background: #f0883e; }
+    .sp-d { font-size: 10px; color: #7d8590; font-variant-numeric: tabular-nums; line-height: 1; }
+    .sp-d.top { color: #c9d1d9; font-weight: 700; }
+    /* 끝난 경기: 이긴 팀 굵게·진 팀 흐리게 + 경기 전에 기록해둔 AI 예측의 적중 여부 */
+    .sched-match.done .sched-team.lose span { color: #8b949e; }
+    .sched-match.done .sched-team.win span { font-weight: 700; color: #e6edf3; }
+    .sched-match.done .sp-mini { opacity: .45; }
+    .sched-match.done .sp-pct { opacity: .7; }
+    .sp-verdict { display: inline-flex; align-items: center; gap: 3px; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 99px; line-height: 1.2; white-space: nowrap; }
+    .sp-verdict.hit { color: #3fb950; background: rgba(63,185,80,0.13); }
+    .sp-verdict.miss { color: #8b949e; background: rgba(139,148,158,0.12); }
+    @media (max-width: 480px) {
+      .sched-match.has-pred .sched-vs { min-width: 80px; padding: 0 6px; }
+      .sp-mini { width: 60px; }
+      /* 좁은 폰: 확률을 팀 이름 옆에 두면 이름이 "New..."처럼 잘려서 → 이름 아래 줄로 */
+      .sched-match.has-pred .sched-team { flex-wrap: wrap; row-gap: 2px; }
+      .sched-match.has-pred .sched-team-hit { max-width: 100%; }
+      .sp-pct { order: 2; flex-basis: 100%; margin: 0; padding: 0 0 0 28px; font-size: 11px; }
+      .sched-team.away .sp-pct { margin: 0; padding: 0 28px 0 0; text-align: right; }
+    }
     .sched-pred-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; justify-content: center; font-size: 11px; color: #8b949e; margin: 0 0 12px; }
     .sched-pred-legend i { display: inline-block; width: 10px; height: 4px; border-radius: 2px; margin-right: 5px; vertical-align: 2px; }
     .sched-pred-legend .note { color: #7d8590; }
@@ -3568,22 +3585,12 @@ async function ensureSchedulePreds(league) {
   try {
     const res = await fetch(`${API}/predict/schedule/${league}`);
     if (!res.ok) return;
-    const map = {};
-    (await res.json()).predictions.forEach(x => { map[`${x.home_team}|${x.away_team}|${x.date}`] = x; });
+    const map = {}, body = await res.json();
+    // predictions = 예정 경기(지금 모델), results = 끝난 경기(경기 전에 기록해둔 예측 + 적중 여부)
+    [...body.predictions, ...(body.results || [])].forEach(x => { map[`${x.home_team}|${x.away_team}|${x.date}`] = x; });
     schedulePreds[league] = map;
     if (currentScheduleLeague === league && currentScheduleMonth) renderScheduleContent(league, currentScheduleMonth);
   } catch (e) { /* 부가 정보라 실패해도 일정은 그대로 */ }
-}
-function schedulePredHtml(x) {
-  const [h, d, a] = x.p.map(v => Math.round(v * 100));
-  const top = Math.max(h, d, a);
-  const cls = v => v === top ? 'top' : '';
-  return `<div class="sched-pred" title="AI 예측${x.limited ? ' (참고용 — 5대 리그 밖 팀은 UCL 기록만으로 계산)' : ''} · 누르면 자세한 예측">
-    <span class="sp-v home ${cls(h)}">${h}%</span>
-    <span class="sp-bar"><i class="h" style="width:${h}%"></i><i class="d" style="width:${d}%"></i><i class="a" style="width:${a}%"></i></span>
-    <span class="sp-v away ${cls(a)}">${a}%</span>
-    <span class="sp-d ${cls(d)}">무 ${d}%${x.limited ? ' · 참고용' : ''}</span>
-  </div>`;
 }
 function renderScheduleContent(league, monthKey) {
   const content = document.getElementById('schedule-content');
@@ -3608,14 +3615,22 @@ function renderScheduleContent(league, monthKey) {
     const timeStr = d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
     const homeShort = m.home_team.replace(' FC', '').replace(' CF', '');
     const awayShort = m.away_team.replace(' FC', '').replace(' CF', '');
-    html += `<div class="sched-match"${played ? '' : ` onclick="openMatchPredictModal('${escJs(m.home_team)}','${escJs(m.away_team)}')" style="cursor:pointer"`}>
-      <div class="sched-team"><span class="sched-team-hit" onclick="event.stopPropagation();openTeamInfo('${escJs(m.home_team)}')"><img src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span>${homeShort}</span></span></div>
-      <div class="sched-vs">${played ? `<span class="sched-score">${m.home_goals} - ${m.away_goals}</span>` : `<span class="sched-time">${timeStr}</span>`}</div>
-      <div class="sched-team away"><span class="sched-team-hit" onclick="event.stopPropagation();openTeamInfo('${escJs(m.away_team)}')"><span>${awayShort}</span><img src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"></span></div>
-      ${!played && preds && preds[`${m.home_team}|${m.away_team}|${m.date}`] ? schedulePredHtml(preds[`${m.home_team}|${m.away_team}|${m.date}`]) : ''}
+    const x = preds && preds[`${m.home_team}|${m.away_team}|${m.date}`];
+    const px = x && (!played || x.correct != null) ? x.p.map(v => Math.round(v * 100)) : null;
+    const top = px ? Math.max(...px) : -1;
+    const tc = v => v === top ? ' top' : '';
+    const res = played ? (m.home_goals > m.away_goals ? ['win', 'lose'] : m.home_goals < m.away_goals ? ['lose', 'win'] : ['', '']) : ['', ''];
+    const tip = px ? `${played ? '경기 전 AI 예측' : 'AI 예측'}: 홈승 ${px[0]}% · 무 ${px[1]}% · 원정승 ${px[2]}%${x.limited ? ' (참고용 — 5대 리그 밖 팀은 UCL 기록만으로 계산)' : ''}` : '';
+    const mid = played
+      ? `<span class="sched-score">${m.home_goals} - ${m.away_goals}</span>` + (px ? `<span class="sp-verdict ${x.correct ? 'hit' : 'miss'}">${x.correct ? 'AI 적중' : 'AI 빗나감'}</span>` : '')
+      : `<span class="sched-time">${timeStr}</span>` + (px ? `<span class="sp-mini"><i class="h" style="width:${px[0]}%"></i><i class="d" style="width:${px[1]}%"></i><i class="a" style="width:${px[2]}%"></i></span><span class="sp-d${tc(px[1])}">무 ${px[1]}%${x.limited ? ' · 참고용' : ''}</span>` : '');
+    html += `<div class="sched-match${px ? ' has-pred' : ''}${played ? ' done' : ''}"${played ? '' : ` onclick="openMatchPredictModal('${escJs(m.home_team)}','${escJs(m.away_team)}')" style="cursor:pointer"`}${tip ? ` title="${tip}"` : ''}>
+      <div class="sched-team ${res[0]}"><span class="sched-team-hit" onclick="event.stopPropagation();openTeamInfo('${escJs(m.home_team)}')"><img src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span>${homeShort}</span></span>${px ? `<b class="sp-pct home${tc(px[0])}">${px[0]}%</b>` : ''}</div>
+      <div class="sched-vs">${mid}</div>
+      <div class="sched-team away ${res[1]}">${px ? `<b class="sp-pct away${tc(px[2])}">${px[2]}%</b>` : ''}<span class="sched-team-hit" onclick="event.stopPropagation();openTeamInfo('${escJs(m.away_team)}')"><span>${awayShort}</span><img src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"></span></div>
     </div>`;
   });
-  const legend = preds ? `<div class="sched-pred-legend"><span><i class="h"></i>홈승</span><span><i class="d"></i>무</span><span><i class="a"></i>원정승</span><span class="note">AI 예측 확률 · 경기를 누르면 자세한 예측</span></div>` : '';
+  const legend = preds ? `<div class="sched-pred-legend"><span><i class="h"></i>홈승</span><span><i class="d"></i>무</span><span><i class="a"></i>원정승</span><span class="note">팀 옆 숫자 = 승리 확률 · 끝난 경기는 경기 전에 기록한 예측의 적중 여부</span></div>` : '';
   content.innerHTML = legend + html;
 }
 

@@ -322,7 +322,20 @@ def _schedule_predictions(code):
                 pd_ = {c: (1 - UCL_ONLY_SHRINK) * v + UCL_ONLY_SHRINK * base[c] for c, v in pd_.items()}
             out.append({"home_team": m["home_team"], "away_team": m["away_team"], "date": m["date"],
                         "p": [round(float(pd_[c]), 3) for c in ('H', 'D', 'A')], "limited": limited})
-    return {"league": code, "predictions": out}
+    # 끝난 경기: 경기 전에 트랙레코드(prediction_log.json)에 실제로 기록해둔 예측만 — 결과를 보고 나서
+    # 지금 모델로 다시 계산한 "사후 예측"은 보여주지 않음(적중률을 부풀릴 수 있어서)
+    log = _load_json("prediction_log.json") or {}
+    results = []
+    for m in matches:
+        if m.get("status") not in ("FINISHED", "AWARDED"):
+            continue
+        e = log.get(f"{code}|{m['home_team']}|{m['away_team']}|{m['date'][:10]}")
+        if not e or e.get("correct") is None:
+            continue
+        results.append({"home_team": m["home_team"], "away_team": m["away_team"], "date": m["date"],
+                        "p": [e["home_win_prob"], e["draw_prob"], e["away_win_prob"]],
+                        "predicted": e["predicted"], "correct": bool(e["correct"])})
+    return {"league": code, "predictions": out, "results": results}
 
 @app.post("/predict")
 def predict_match(req: MatchRequest):
