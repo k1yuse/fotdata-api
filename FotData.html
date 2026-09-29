@@ -204,6 +204,13 @@
     .today-card-hit:hover span.name { color: #58a6ff; }
     .today-card-row span.score { font-weight: 700; color: #58a6ff; margin-left: auto; }
     .today-card-time { font-size: 10px; color: #8b949e; text-align: center; margin-top: 4px; }
+    /* 다음 경기 카드 AI 예측: 팀 옆 승리 확률 + 짧은 막대 + 무(가장 높은 값만 진하게) */
+    .tc-pct { margin-left: auto; padding-left: 8px; font-size: 11px; font-weight: 600; color: #7d8590; font-variant-numeric: tabular-nums; }
+    .tc-pct.home.top { color: #79b8ff; font-weight: 800; } .tc-pct.away.top { color: #ffa657; font-weight: 800; }
+    .sp-mini.tc-bar { width: 100%; margin-top: 7px; }
+    .tc-d { font-variant-numeric: tabular-nums; } .tc-d.top { color: #e6edf3; font-weight: 700; }
+    .today-card-row.lose .today-card-hit, .today-card-row.lose .score { opacity: .45; }
+    .today-card .sp-verdict { font-size: 9.5px; }
     .player-hero { position: relative; display: flex; align-items: center; gap: 16px; padding: 18px 16px; margin-bottom: 8px; border-radius: 12px; background: linear-gradient(135deg, rgba(240,192,64,0.14), rgba(240,192,64,0.02)); border: 0.5px solid rgba(240,192,64,0.35); overflow: hidden; box-shadow: 0 6px 20px rgba(240,192,64,0.08); }
     .player-hero-badge { font-size: 11px; font-weight: 700; color: #f0c040; display: flex; align-items: center; gap: 4px; margin-bottom: 3px; }
     .player-hero-badge svg { width: 12px; height: 12px; flex-shrink: 0; }
@@ -2047,6 +2054,31 @@ function localDateStr(dateInput) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
+function renderTodayCards(container, matches) {
+  const favTeam = getFavoriteTeam();
+  container.innerHTML = matches.map(m => {
+    const li = TODAY_LEAGUE_INFO[m.league];
+    const played = m.status === 'FINISHED';
+    const timeStr = new Date(m.date).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+    const homeShort = shortName(m.home_team), awayShort = shortName(m.away_team);   // "Borussia Dort…"처럼 잘리던 것 → 흔히 부르는 짧은 이름
+    const isFav = favTeam && (m.home_team === favTeam || m.away_team === favTeam);
+    const x = schedPredOf(m, m.league);
+    const px = x && (!played || x.correct != null) ? x.p.map(v => Math.round(v * 100)) : null;
+    const top = px ? Math.max(...px) : -1, tc = v => v === top ? ' top' : '';
+    const w = played ? (m.home_goals > m.away_goals ? 1 : m.home_goals < m.away_goals ? 2 : 0) : 0;
+    const right = (k, g) => played ? `<span class="score">${g}</span>` : px ? `<span class="tc-pct ${k === 0 ? 'home' : 'away'}${tc(px[k])}">${px[k]}%</span>` : '';
+    const row = (t, nm, k, g, lose) => `<div class="today-card-row${lose ? ' lose' : ''}"><span class="today-card-hit" onclick="event.stopPropagation();openTeamInfo('${escJs(t)}')"><img src="${logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'"><span class="name">${nm}</span></span>${right(k, g)}</div>`;
+    const foot = played
+      ? (px ? `<div class="today-card-time"><span class="sp-verdict ${x.correct ? 'hit' : 'miss'}">${x.correct ? 'AI 적중' : 'AI 빗나감'}</span></div>` : '<div class="today-card-time">종료</div>')
+      : (px ? `<span class="sp-mini tc-bar"><i class="h" style="width:${px[0]}%"></i><i class="d" style="width:${px[1]}%"></i><i class="a" style="width:${px[2]}%"></i></span>` : '') + `<div class="today-card-time">${timeStr}${px ? ` · <span class="${tc(px[1]) ? 'tc-d top' : 'tc-d'}">무 ${px[1]}%</span>` : ''}</div>`;
+    const click = played ? `openMatchResultModal('${escJs(m.home_team)}','${escJs(m.away_team)}','${m.date}','${m.league}')` : `openMatchPredictModal('${escJs(m.home_team)}','${escJs(m.away_team)}')`;
+    return `<div class="today-card${isFav ? ' today-card-fav' : ''}" onclick="${click}" style="cursor:pointer"${px ? ` title="${played ? '경기 전 AI 예측' : 'AI 예측'}: 홈승 ${px[0]}% · 무 ${px[1]}% · 원정승 ${px[2]}%"` : ''}>
+      <div class="today-card-league"><img src="${li.logo}" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">${li.name}</div>
+      ${row(m.home_team, homeShort, 0, m.home_goals, w === 2)}${row(m.away_team, awayShort, 2, m.away_goals, w === 1)}
+      ${foot}
+    </div>`;
+  }).join('');
+}
 async function loadTodayMatches() {
   const container = document.getElementById('today-matches-widget');
   if (!container) return;
@@ -2067,20 +2099,12 @@ async function loadTodayMatches() {
     }
     document.getElementById('today-matches-title').textContent = label;
     if (!matches.length) { container.innerHTML = '<div class="ti-empty">예정된 경기가 없어요.</div>'; return; }
-    const favTeam = getFavoriteTeam();
-    container.innerHTML = matches.map(m => {
-      const li = TODAY_LEAGUE_INFO[m.league];
-      const played = m.status === 'FINISHED';
-      const timeStr = new Date(m.date).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
-      const homeShort = shortName(m.home_team), awayShort = shortName(m.away_team);   // "Borussia Dort…"처럼 잘리던 것 → 흔히 부르는 짧은 이름
-      const isFav = favTeam && (m.home_team === favTeam || m.away_team === favTeam);
-      return `<div class="today-card${isFav ? ' today-card-fav' : ''}"${played ? '' : ` onclick="openMatchPredictModal('${escJs(m.home_team)}','${escJs(m.away_team)}')" style="cursor:pointer"`}>
-        <div class="today-card-league"><img src="${li.logo}" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">${li.name}</div>
-        <div class="today-card-row"><span class="today-card-hit" onclick="event.stopPropagation();openTeamInfo('${escJs(m.home_team)}')"><img src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span class="name">${homeShort}</span></span>${played ? `<span class="score">${m.home_goals}</span>` : ''}</div>
-        <div class="today-card-row"><span class="today-card-hit" onclick="event.stopPropagation();openTeamInfo('${escJs(m.away_team)}')"><img src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"><span class="name">${awayShort}</span></span>${played ? `<span class="score">${m.away_goals}</span>` : ''}</div>
-        ${played ? '' : `<div class="today-card-time">${timeStr}</div>`}
-      </div>`;
-    }).join('');
+    // 카드마다 AI 예측(일정 탭과 같은 숫자): 팀 옆 승리 확률 + 짧은 막대 + 무. 예측이 곧 오면 기다렸다 한 번에, 늦으면 도착할 때 다시 그림
+    const leagues = [...new Set(matches.map(m => m.league))];
+    const predsP = Promise.all(leagues.map(ensureSchedulePreds));
+    if (leagues.some(l => !schedulePreds[l])) await Promise.race([predsP, new Promise(r => setTimeout(r, 700))]);
+    renderTodayCards(container, matches);
+    if (leagues.some(l => !schedulePreds[l])) predsP.then(() => renderTodayCards(container, matches));
     initScrollFade(container);
   } catch (e) {
     container.innerHTML = '<div class="ti-empty">일정을 불러올 수 없어요.</div>';
