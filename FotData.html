@@ -212,7 +212,7 @@
     .bigmatch-team-hit { display: flex; width: 100%; min-width: 0; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; --team-glow: #58a6ff; }
     .bigmatch-team img { width: 72px; height: 72px; object-fit: contain; transition: filter .15s; }
     .bigmatch-team-hit:hover img { filter: drop-shadow(0 0 6px var(--team-glow)) drop-shadow(0 0 6px var(--team-glow)); }
-    .bigmatch-team .bigmatch-team-name { font-size: 17px; font-weight: 800; color: #e6edf3; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; transition: color .15s; }
+    .bigmatch-team .bigmatch-team-name { font-size: 17px; font-weight: 800; color: #e6edf3; text-align: center; line-height: 1.25; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; word-break: keep-all; max-width: 100%; transition: color .15s; }
     .bigmatch-team-hit:hover .bigmatch-team-name { color: var(--team-glow); }
     .bigmatch-team .bigmatch-team-prob { font-size: 15px; font-weight: 800; color: #58a6ff; }
     .bigmatch-team.away .bigmatch-team-prob { color: #f0883e; }
@@ -713,7 +713,17 @@
     .ti-standings-table th { text-align: left; color: #8b949e; font-weight: 500; font-size: 10px; padding: 6px 4px; border-bottom: 0.5px solid #30363d; }
     .ti-standings-table th.center, .ti-standings-table td.center { text-align: center; }
     .ti-standings-table td { padding: 6px 4px; border-bottom: 0.5px solid #21262d; color: #e6edf3; }
-    .ti-standings-table tr.me { background: #1f6feb26; }
+    .ti-standings-table tr.me { background: rgba(31,111,235,0.16); } .ti-standings-table tr.me td { font-weight: 700; }
+    .ti-standings-table tr[onclick] { cursor: pointer; transition: background .15s; } .ti-standings-table tr[onclick]:hover { background: rgba(88,166,255,0.07); } .ti-standings-table tr[onclick]:hover .ti-standings-team span { color: #58a6ff; }
+    .ti-standings-table td:first-child { position: relative; }
+    .ti-standings-table tr[style*="--zc"] td:first-child::before { content: ''; position: absolute; left: 0; top: 6px; bottom: 6px; width: 3px; border-radius: 2px; background: var(--zc); }
+    .ti-standings-table tr[style*="--zc"] .st-rank { color: var(--zc); background: color-mix(in srgb, var(--zc) 13%, transparent); }
+    .ti-standings-table .st-rank { min-width: 24px; height: 20px; font-size: 11px; }
+    .ti-standings-table .st-pts { min-width: 30px; padding: 2px 6px; font-size: 12px; }
+    .ti-standings-team span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: color .15s; }
+    .ti-st-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 12px; font-size: 11px; color: #8b949e; }
+    .ti-st-legend i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 5px; }
+    .ti-st-legend .note { color: #7d8590; margin-left: auto; }
     .ti-standings-team { display: flex; align-items: center; gap: 6px; }
     .ti-standings-team img { width: 16px; height: 16px; object-fit: contain; }
     @media (max-width: 560px) {
@@ -789,8 +799,9 @@
     .popup-team-nodata { margin-left: auto; flex-shrink: 0; font-size: 10px; color: #7d8590; border: 0.5px solid #30363d; border-radius: 4px; padding: 1px 6px; }
     .popup-team-list::-webkit-scrollbar { width: 4px; }
     .popup-team-list::-webkit-scrollbar-thumb { background: #30363d; border-radius: 2px; }
-    .predict-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #2ea043, #238636); border: none; border-radius: 10px; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; transition: box-shadow 0.2s, transform 0.1s; box-shadow: 0 4px 14px rgba(35,134,54,0.35); }
-    .predict-btn:hover { box-shadow: 0 6px 18px rgba(35,134,54,0.5); }
+    /* 주 버튼은 브랜드 파랑(2026-09-29 — 예전 초록은 미리보기 창 "전체 분석 보기"·순위 예측 버튼과 따로 놀았음) */
+    .predict-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #1f6feb, #3b82f6); border: none; border-radius: 12px; color: #fff; font-size: 15px; font-weight: 700; font-family: inherit; cursor: pointer; transition: box-shadow 0.2s, transform 0.1s; box-shadow: 0 6px 20px rgba(31,111,235,0.35); }
+    .predict-btn:hover { box-shadow: 0 8px 26px rgba(31,111,235,0.45); }
     .predict-btn:active { transform: scale(0.98); }
     .predict-btn:disabled { background: #30363d; cursor: not-allowed; }
     .result-section { display: none; }
@@ -815,19 +826,35 @@
     .score-alt-chip { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: #161b22; border: 0.5px solid #30363d; border-radius: 20px; font-size: 15px; }
     .score-alt-chip .sc { font-weight: 700; color: #58a6ff; }
     .score-alt-chip .pc { color: #8b949e; }
+    /* 예측 결과의 맞대결·최근 경기 한 줄 */
+    .rr-row { display: grid; grid-template-columns: 50px minmax(0,1fr) 44px minmax(0,1fr); align-items: center; gap: 6px; padding: 9px 2px; border-bottom: 0.5px solid rgba(139,148,158,0.14); font-size: 12.5px; }
+    .rr-row.with-badge { grid-template-columns: 50px minmax(0,1fr) 44px minmax(0,1fr) 22px; }
+    .rr-row:last-child { border-bottom: none; }
+    .rr-date { font-size: 10.5px; color: #7d8590; font-variant-numeric: tabular-nums; }
+    .rr-team { display: flex; align-items: center; gap: 6px; min-width: 0; color: #c9d1d9; cursor: pointer; transition: color .15s, opacity .15s; }
+    .rr-team.a { justify-content: flex-end; text-align: right; }
+    .rr-team em { font-style: normal; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .rr-team img { width: 18px; height: 18px; object-fit: contain; flex-shrink: 0; }
+    .rr-team.win { color: #fff; font-weight: 700; } .rr-team.lose { opacity: .42; }
+    .rr-team:hover { color: #58a6ff; opacity: 1; }
+    .rr-score { text-align: center; font-weight: 700; color: #e6edf3; font-variant-numeric: tabular-nums; }
+    .rr-row .form-badge { justify-self: end; }
     .prediction-badge { text-align: center; margin-bottom: 20px; }
-    .badge { display: inline-block; padding: 8px 20px; border-radius: 20px; font-size: 14px; font-weight: 600; }
-    .badge.home { background: #1f4e8c; color: #58a6ff; }
-    .badge.draw { background: #3d2e00; color: #d29922; }
-    .badge.away { background: #4c1d1d; color: #f85149; }
+    /* 예측 결과 색(2026-09-29 통일): 홈 파랑 · 무 회색 · 원정 주황 — 미리보기 창·일정 탭·레이더와 같은 규칙(예전엔 무 노랑·원정 빨강) */
+    .badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px; border-radius: 99px; font-size: 14px; font-weight: 700; border: 0.5px solid; }
+    .badge::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 8px currentColor; }
+    .badge.home { background: rgba(88,166,255,0.1); color: #79b8ff; border-color: rgba(88,166,255,0.4); }
+    .badge.draw { background: rgba(139,148,158,0.1); color: #c9d1d9; border-color: rgba(139,148,158,0.4); }
+    .badge.away { background: rgba(240,136,62,0.1); color: #ffa657; border-color: rgba(240,136,62,0.4); }
     .prob-bars { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
     .prob-row { display: grid; grid-template-columns: 70px 1fr 45px; align-items: center; gap: 10px; }
     .prob-label { font-size: 12px; color: #8b949e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .prob-bar-bg { background: #21262d; border-radius: 4px; height: 8px; overflow: hidden; }
     .prob-bar { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
-    .prob-bar.home { background: #58a6ff; }
-    .prob-bar.draw { background: #d29922; }
-    .prob-bar.away { background: #f85149; }
+    .prob-bar.home { background: linear-gradient(90deg, #1f6feb, #58a6ff); }
+    .prob-bar.draw { background: #6e7681; }
+    .prob-bar.away { background: linear-gradient(90deg, #f0883e, #ffa657); }
+    #explanation-factors { display: flex; flex-direction: column; gap: 9px; }
     .prob-bar.factor-support { background: #58a6ff; }
     .prob-value { font-size: 13px; font-weight: 600; text-align: right; }
     .h2h-summary { display: flex; justify-content: space-around; align-items: center; padding: 16px 0; margin-bottom: 16px; border-bottom: 0.5px solid #30363d; }
@@ -1175,6 +1202,15 @@
     .mp-probs .d { align-items: center; } .mp-probs .a { align-items: flex-end; text-align: right; }
     .mp-probs b { font-size: 16px; font-weight: 700; color: #8b949e; font-variant-numeric: tabular-nums; }
     .mp-probs span { font-size: 11px; color: #7d8590; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    /* 대진 창: 진출 팀 파란 링, 결승 우승 금색, 탈락 흐리게 */
+    .tie-hero .mp-crest { border-color: rgba(139,148,158,0.45); box-shadow: none; }
+    .tie-hero .mp-team.win .mp-crest { border-color: rgba(88,166,255,0.7); box-shadow: 0 0 22px rgba(88,166,255,0.3); }
+    .tie-hero .mp-team.win.gold .mp-crest { border-color: rgba(227,179,65,0.8); box-shadow: 0 0 24px rgba(227,179,65,0.3); }
+    .tie-hero .mp-team.win .mp-name { color: #79b8ff; } .tie-hero .mp-team.win.gold .mp-name { color: #f2cc60; }
+    .mp-score.tie-score b { color: #c9d1d9; } .mp-score.tie-score b.w { color: #79b8ff; } .mp-score.tie-score.gold b.w { color: #f2cc60; }
+    .mp-verdict.gold { color: #f2cc60; border-color: rgba(227,179,65,0.45); background: rgba(227,179,65,0.1); }
+    .mr-row.tie-leg b.when { font-size: 10.5px; font-weight: 600; color: #8b949e; white-space: nowrap; }
+    .mr-row.tie-leg .tbd { grid-column: 2 / -1; text-align: center; font-size: 11.5px; color: #7d8590; }
     .mp-verdict small { font-size: 11px; font-weight: 600; opacity: .7; margin-left: 4px; }
     .mp-team.lose { opacity: .45; } .mp-team.win .mp-name { color: #fff; }
     .mp-score.final b.h, .mp-score.final b.a { color: #e6edf3; }
@@ -1677,15 +1713,15 @@
 
 <!-- 토너먼트 모달 -->
 <div class="modal-overlay" id="t-modal" onclick="closeTModal(event)">
-  <div class="modal">
-    <div class="modal-header"><span class="modal-title" id="t-modal-title"></span><span class="modal-close" aria-label="닫기" onclick="closeTModal()">✕</span></div>
-    <div class="modal-teams">
-      <div class="modal-team"><img class="modal-logo t-team-hit" id="t-logo1" src="" onerror="this.style.display='none'" onclick="openTeamFromTModal(1)"><span class="modal-team-name t-team-hit" id="t-name1" onclick="openTeamFromTModal(1)"></span></div>
-      <div class="modal-vs"><div class="modal-score"><span id="t-s1" style="font-size:24px;font-weight:700"></span><span style="color:#8b949e;font-size:24px;font-weight:700">-</span><span id="t-s2" style="font-size:24px;font-weight:700"></span></div><span class="modal-agg">합산</span></div>
-      <div class="modal-team"><img class="modal-logo t-team-hit" id="t-logo2" src="" onerror="this.style.display='none'" onclick="openTeamFromTModal(2)"><span class="modal-team-name t-team-hit" id="t-name2" onclick="openTeamFromTModal(2)"></span></div>
+  <!-- 챔스 토너먼트 대진 창(2026-09-29 리디자인 — 경기 미리보기·결과 창과 같은 모양): 두 팀 + 합산 점수, 진출 팀, 1·2차전 -->
+  <div class="modal mp-modal" role="dialog" aria-labelledby="t-modal-title">
+    <div class="mp-top"><span class="mp-title" id="t-modal-title">챔피언스리그</span><span class="mp-meta" id="t-meta"></span><span class="modal-close" aria-label="닫기" onclick="closeTModal()">✕</span></div>
+    <div class="mp-hero tie-hero">
+      <div class="mp-team" id="t-team1" onclick="openTeamFromTModal(1)"><div class="mp-crest"><img id="t-logo1" src="" alt="" onerror="this.style.visibility='hidden'"></div><span class="mp-name" id="t-name1"></span></div>
+      <div class="mp-center" id="t-center"></div>
+      <div class="mp-team" id="t-team2" onclick="openTeamFromTModal(2)"><div class="mp-crest"><img id="t-logo2" src="" alt="" onerror="this.style.visibility='hidden'"></div><span class="mp-name" id="t-name2"></span></div>
     </div>
-    <div class="modal-legs" id="t-legs"></div>
-    <div class="modal-badge" id="t-badge"></div>
+    <div class="mp-body" id="t-body"></div>
   </div>
 </div>
 
@@ -1997,8 +2033,7 @@ async function loadTodayMatches() {
       const li = TODAY_LEAGUE_INFO[m.league];
       const played = m.status === 'FINISHED';
       const timeStr = new Date(m.date).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
-      const homeShort = m.home_team.replace(' FC', '').replace(' CF', '');
-      const awayShort = m.away_team.replace(' FC', '').replace(' CF', '');
+      const homeShort = shortName(m.home_team), awayShort = shortName(m.away_team);   // "Borussia Dort…"처럼 잘리던 것 → 흔히 부르는 짧은 이름
       const isFav = favTeam && (m.home_team === favTeam || m.away_team === favTeam);
       return `<div class="today-card${isFav ? ' today-card-fav' : ''}"${played ? '' : ` onclick="openMatchPredictModal('${escJs(m.home_team)}','${escJs(m.away_team)}')" style="cursor:pointer"`}>
         <div class="today-card-league"><img src="${li.logo}" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">${li.name}</div>
@@ -2361,41 +2396,48 @@ window.addEventListener('resize', () => { if (document.querySelector('.ko-bracke
 function openTModal(t1, t2) {
   const m = flatMatches.find(x => x && x.team1 === t1 && x.team2 === t2);
   if (!m) return;
-  const isW1=m.winner?m.winner===m.team1:m.team1_goals>m.team2_goals, isW2=m.winner?m.winner===m.team2:m.team2_goals>m.team1_goals;
-  document.getElementById('t-modal-title').textContent = m.team1+' vs '+m.team2;
-  // 처음 페이지를 열 때 빈 src로 onerror가 한 번 불려 숨겨진 채로 남아 있었음 → 열 때마다 다시 보이게
-  [['t-logo1', m.team1_logo || logos[m.team1]], ['t-logo2', m.team2_logo || logos[m.team2]]].forEach(([id, src]) => {
-    const img = document.getElementById(id); img.style.display = src ? '' : 'none'; img.src = src || '';
+  const stages = (tournamentCache[currentStandingsSeason] || {}).stages || {};
+  const stage = Object.keys(stages).find(k => (stages[k] || []).includes(m));
+  const isFinal = stage === 'FINAL';
+  document.getElementById('t-modal-title').textContent = `챔피언스리그 ${STAGE_LABEL[stage] || ''}`.trim();
+  const played = (m.legs || []).filter(l => l.home_goals != null);
+  const W = ['일', '월', '화', '수', '목', '금', '토'];
+  const fmt = dt => { const d = new Date(dt); return `${d.getMonth() + 1}.${d.getDate()} (${W[d.getDay()]}) ${d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false })}`; };
+  const firstDate = (m.legs || []).map(l => l.date).filter(Boolean).sort()[0];
+  document.getElementById('t-meta').textContent = firstDate ? fmt(firstDate) + (m.legs.length > 1 ? ' 외' : '') : '';
+  // 색 규칙(대진표와 같음): 진출 팀 = 파란 링·파란 점수, 탈락 = 흐리게, 결승 우승 = 금색
+  [[1, m.team1, m.team1_logo], [2, m.team2, m.team2_logo]].forEach(([k, t, lg]) => {
+    const img = document.getElementById('t-logo' + k);
+    img.style.visibility = ''; img.src = lg || logos[t] || '';
+    document.getElementById('t-name' + k).textContent = shortName(t);
+    const box = document.getElementById('t-team' + k);
+    box.dataset.team = t; box.title = `${t} 팀 정보`;
+    box.className = 'mp-team' + (m.winner ? (m.winner === t ? (isFinal ? ' win gold' : ' win') : ' lose') : '');
   });
-  document.getElementById('t-name1').textContent = m.team1;
-  document.getElementById('t-name1').className = 'modal-team-name t-team-hit';
-  document.getElementById('t-name1').style.color = isW1?'#58a6ff':m.winner?'#8b949e':'#e6edf3';
-  document.getElementById('t-name2').textContent = m.team2;
-  document.getElementById('t-name2').className = 'modal-team-name t-team-hit';
-  document.getElementById('t-name2').style.color = isW2?'#58a6ff':m.winner?'#8b949e':'#e6edf3';  document.getElementById('t-s1').textContent = m.team1_goals;
-  document.getElementById('t-s1').style.color = isW1?'#58a6ff':m.winner?'#8b949e':'#e6edf3';
-  document.getElementById('t-s2').textContent = m.team2_goals;
-  document.getElementById('t-s2').style.color = isW2?'#58a6ff':m.winner?'#8b949e':'#e6edf3';
-  let legsHtml = '';
-  m.legs.forEach((leg,i) => {
-    const hw=leg.home_goals>leg.away_goals, aw=leg.away_goals>leg.home_goals;   // 각 경기 승자는 흰색 굵게만(파란색은 진출 팀 전용)
-    if (leg.home_goals == null) {   // 아직 안 한 경기(날짜만 있음)
-      const d = leg.date ? new Date(leg.date) : null;
-      legsHtml += `<div class="leg-item"><div class="leg-ttl">${m.legs.length === 1 ? '단판' : (i+1)+'차전'} (${shortName(leg.home_team)} 홈)</div><div class="leg-tbd">${d ? `${d.getMonth()+1}.${d.getDate()} ${d.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit',hour12:false})} 예정` : '미진행'}</div></div>`;
-      return;
-    }
-    legsHtml += `<div class="leg-item"><div class="leg-ttl">${m.legs.length === 1 ? '단판' : (i+1)+'차전'} (${shortName(leg.home_team)} 홈)</div><div class="leg-row"><span style="flex:1;font-size:12px;color:${hw?'#e6edf3':'#8b949e'};font-weight:${hw?'600':'400'};display:flex;align-items:center;gap:6px"><img src="${logos[leg.home_team]||''}" style="width:18px;height:18px;object-fit:contain" onerror="this.style.display='none'">${shortName(leg.home_team)}</span><span style="font-size:13px;font-weight:700;color:#e6edf3;padding:0 8px">${leg.home_goals} - ${leg.away_goals}</span><span style="flex:1;font-size:12px;color:${aw?'#e6edf3':'#8b949e'};font-weight:${aw?'600':'400'};text-align:right;display:flex;align-items:center;justify-content:flex-end;gap:6px">${shortName(leg.away_team)}<img src="${logos[leg.away_team]||''}" style="width:18px;height:18px;object-fit:contain" onerror="this.style.display='none'"></span></div></div>`;  });
-  if (m.pens) legsHtml += `<div class="leg-item"><div class="leg-ttl">승부차기</div><div class="leg-row" style="justify-content:center;font-weight:700;color:#e6edf3">${m.pens[0]} - ${m.pens[1]}</div></div>`;
-  if (m.status==='UPCOMING' && m.legs.length<2) legsHtml += `<div class="leg-item"><div class="leg-ttl">${m.legs.length+1}차전</div><div class="leg-tbd">미진행</div></div>`;
-  document.getElementById('t-legs').innerHTML = legsHtml;
-  const badge = document.getElementById('t-badge');
-  badge.textContent = m.status==='UPCOMING' ? '진행 중' : (m.winner?m.winner+' 진출':'완료');
-  badge.className = 'modal-badge '+(m.status==='UPCOMING'?'live':'done');
+  const w = tieWinnerSide(m);
+  document.getElementById('t-center').innerHTML = played.length
+    ? `<span class="mp-score-label">${isFinal || m.legs.length === 1 ? '최종' : '합산'}</span><span class="mp-score tie-score${isFinal ? ' gold' : ''}"><b class="${w === 1 ? 'w' : ''}">${m.team1_goals}</b><i>:</i><b class="${w === 2 ? 'w' : ''}">${m.team2_goals}</b></span>${m.pens ? `<span class="mp-xg">승부차기 ${m.pens[0]}-${m.pens[1]}</span>` : ''}`
+    : '<span class="mp-vs">VS</span>';
+  const next = (m.legs || []).find(l => l.home_goals == null);
+  const chip = m.winner
+    ? `<div class="mp-verdict ${isFinal ? 'gold' : 'home'}"><span class="dot"></span>${shortName(m.winner)} ${isFinal ? '우승' : '진출'}${m.pens ? '<small>승부차기</small>' : ''}</div>`
+    : `<div class="mp-verdict draw"><span class="dot"></span>진행 중${next && next.date ? `<small>다음 경기 ${fmt(next.date)}</small>` : ''}</div>`;
+  const legs = [...(m.legs || [])];
+  if (m.status === 'UPCOMING' && !isFinal && legs.length < 2) legs.push({ tbd: true });
+  const rows = legs.map((l, i) => {
+    const lbl = m.legs.length === 1 && !l.tbd ? (isFinal ? '결승' : '단판') : `${i + 1}차전`;
+    if (l.tbd) return `<div class="mr-row tie-leg"><span class="dt">${lbl}</span><span class="tbd">일정 미정</span></div>`;
+    const logo = t => `<img src="${logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'">`;
+    const hw = l.home_goals == null ? 0 : l.home_goals > l.away_goals ? 1 : l.home_goals < l.away_goals ? 2 : 0;
+    const mid = l.home_goals == null ? `<b class="when">${l.date ? fmt(l.date).replace(/ \(.\)/, '') : '미정'}</b>` : `<b>${l.home_goals} - ${l.away_goals}</b>`;
+    return `<div class="mr-row tie-leg"><span class="dt">${lbl}</span><span class="t h${hw === 2 ? ' lose' : ''}">${logo(l.home_team)}<em>${shortName(l.home_team)}</em></span>${mid}<span class="t a${hw === 1 ? ' lose' : ''}"><em>${shortName(l.away_team)}</em>${logo(l.away_team)}</span></div>`;
+  }).join('');
+  document.getElementById('t-body').innerHTML = chip + `<div class="mp-sec"><div class="mp-sec-t">경기별 결과 <span class="mp-sec-n">왼쪽이 그 경기 홈팀</span></div>${rows}</div>`;
   document.getElementById('t-modal').classList.add('show');
 }
 // 대진 팝업의 팀 이름·로고 → 팝업을 닫고 팀 정보(같은 층이라 뒤에 숨지 않게)
 function openTeamFromTModal(k) {
-  const t = document.getElementById('t-name' + k).textContent;
+  const t = document.getElementById('t-team' + k).dataset.team;
   document.getElementById('t-modal').classList.remove('show');
   openTeamInfo(t);
 }
@@ -2837,9 +2879,16 @@ async function switchTiTab(tab) {
         standingsCache[code] = data;
       }
       const rows = data.standings || [];
-      panel.innerHTML = `<table class="ti-standings-table"><thead><tr><th style="width:24px">#</th><th>팀</th><th class="center">경기</th><th class="center">승</th><th class="center">무</th><th class="center">패</th><th class="center">득실</th><th class="center">승점</th></tr></thead><tbody>${
-        rows.map(r => `<tr class="${r.team === team ? 'me' : ''}"><td>${r.rank}</td><td><div class="ti-standings-team"><img src="${r.logo || ''}" onerror="this.style.display='none'">${cleanTeamName ? cleanTeamName(r.team) : r.team}</div></td><td class="center">${r.played}</td><td class="center">${r.wins}</td><td class="center">${r.draws}</td><td class="center">${r.losses}</td><td class="center">${r.gd > 0 ? '+' : ''}${r.gd}</td><td class="center">${r.points}</td></tr>`).join('')
-      }</tbody></table>`;
+      // 순위표 탭과 같은 모양: 구역 색 순위 알약 + 왼쪽 색 막대, 승점 알약, 이 팀 줄 강조, 다른 팀을 누르면 그 팀 정보
+      const T = rows.length;
+      const zones = new Set();
+      panel.innerHTML = `<table class="ti-standings-table"><thead><tr><th style="width:34px" class="center">#</th><th>팀</th><th class="center">경기</th><th class="center">승</th><th class="center">무</th><th class="center">패</th><th class="center">득실</th><th class="center">승점</th></tr></thead><tbody>${
+        rows.map((r, i) => {
+          const zc = getZoneClass(code, i, T), z = MI_ZONE_INFO[zc];
+          if (z) zones.add(zc);
+          return `<tr class="${r.team === team ? 'me' : ''}"${z ? ` style="--zc:${z.color}"` : ''}${r.team === team ? '' : ` onclick="openTeamInfo('${escJs(r.team)}')"`}><td class="center"><span class="st-rank">${r.rank}</span></td><td><div class="ti-standings-team"><img src="${r.logo || logos[r.team] || ''}" alt="" onerror="this.style.visibility='hidden'"><span>${shortName(r.team)}</span></div></td><td class="center">${r.played}</td><td class="center">${r.wins}</td><td class="center">${r.draws}</td><td class="center">${r.losses}</td><td class="center">${r.gd > 0 ? '+' : ''}${r.gd}</td><td class="center"><span class="st-pts">${r.points}</span></td></tr>`;
+        }).join('')
+      }</tbody></table><div class="ti-st-legend">${[...zones].map(zc => `<span><i style="background:${MI_ZONE_INFO[zc].color}"></i>${MI_ZONE_INFO[zc].label}</span>`).join('')}<span class="note">팀을 누르면 그 팀 정보</span></div>`;
     } else if (tab === 'fixtures') {
       if (!code) { panel.innerHTML = '<div class="ti-empty">이 팀의 리그 정보를 찾을 수 없어요.</div>'; return; }
       // 리그 + 챔피언스리그 경기를 같이 보여줌(UCL 일정은 실패해도 리그만으로 표시). 예측도 동시에 요청
@@ -4599,27 +4648,18 @@ function renderResultPitch() {
 }
 
 // 맞대결·최근 경기 목록 한 줄(날짜 + 뱃지 / 홈 스코어 원정)
-function matchRowHtml(homeTeam, awayTeam, homeGoals, awayGoals, date, scoreColor, resultBadge) {
-  const homeShort = homeTeam.replace(' FC','').replace(' CF','');
-  const awayShort = awayTeam.replace(' FC','').replace(' CF','');
-  return `<div style="padding:8px 0;border-bottom:0.5px solid #21262d">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-      <span style="font-size:10px;color:#8b949e">${date}</span>
-      ${resultBadge||''}
-    </div>
-    <div class="sched-match" style="padding:0;border-bottom:none">
-      <div class="sched-team clickable-team" onclick="openTeamInfo('${escJs(homeTeam)}')"><img src="${logos[homeTeam]||''}" onerror="this.style.display='none'"><span>${homeShort}</span></div>
-      <div class="sched-vs"><span class="sched-score" style="${scoreColor?`color:${scoreColor}`:''}">${homeGoals} - ${awayGoals}</span></div>
-      <div class="sched-team away clickable-team" onclick="openTeamInfo('${escJs(awayTeam)}')"><span>${awayShort}</span><img src="${logos[awayTeam]||''}" onerror="this.style.display='none'"></div>
-    </div>
-  </div>`;
+// 맞대결·최근 경기 목록 한 줄(2026-09-29 개편): 날짜 | 홈 | 스코어 | 원정 | (승무패) — 두 줄이던 걸 한 줄로,
+// 스코어 색 대신 일정 탭과 같은 규칙(이긴 팀 굵게·진 팀 로고·이름 흐리게)
+function matchRowHtml(homeTeam, awayTeam, homeGoals, awayGoals, date, _unused, resultBadge) {
+  const w = homeGoals > awayGoals ? 1 : homeGoals < awayGoals ? 2 : 0;
+  const side = (t, cls) => `<span class="rr-team ${cls}" onclick="openTeamInfo('${escJs(t)}')" title="${t.replace(/"/g, '&quot;')} 팀 정보">${cls.includes('a') ? `<em>${shortName(t)}</em><img src="${logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'">` : `<img src="${logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'"><em>${shortName(t)}</em>`}</span>`;
+  return `<div class="rr-row${resultBadge ? ' with-badge' : ''}"><span class="rr-date">${String(date).slice(2, 10).replace(/-/g, '.')}</span>${side(homeTeam, 'h' + (w === 1 ? ' win' : w === 2 ? ' lose' : ''))}<b class="rr-score">${homeGoals} - ${awayGoals}</b>${side(awayTeam, 'a' + (w === 2 ? ' win' : w === 1 ? ' lose' : ''))}${resultBadge || ''}</div>`;
 }
 const RESULT_FAIL_HTML = '<div style="color:#8b949e;font-size:13px;padding:8px 0">불러오지 못했어요. 다시 예측하면 재시도해요.</div>';
 function renderH2H(h2h) {
   document.getElementById('h2h-home-wins').textContent=h2h.summary.home_wins;document.getElementById('h2h-draws').textContent=h2h.summary.draws;document.getElementById('h2h-away-wins').textContent=h2h.summary.away_wins;
   const html=h2h.matches.map(m=>{
-    const color = m.result==='W' ? '#238636' : m.result==='L' ? '#da3633' : '#8b949e';
-    return matchRowHtml(m.home_team, m.away_team, m.home_goals, m.away_goals, m.date, color);
+    return matchRowHtml(m.home_team, m.away_team, m.home_goals, m.away_goals, m.date);
   }).join('');
   document.getElementById('h2h-matches').innerHTML=html||'<div style="color:#8b949e;font-size:13px;padding:8px 0">맞대 기록 없음</div>';
 }
