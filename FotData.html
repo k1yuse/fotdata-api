@@ -1308,6 +1308,17 @@
     #sim-btn.pulse { animation: simPulse 1.8s ease-in-out infinite; }
     @keyframes simPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(88,166,255,.45); } 50% { box-shadow: 0 0 0 7px rgba(88,166,255,0); } }
     @media (prefers-reduced-motion: reduce) { .ct-row.reveal .ct-cell, .ct-row.reveal .ct-pts, #sim-btn.pulse { animation: none; } }
+    .ct-row.expandable { cursor: pointer; transition: background .15s; } .ct-row.expandable:hover, .ct-row.expanded { background: #1c2230; }
+    .ct-dist { padding: 12px 14px 14px; background: rgba(13,17,23,0.55); border-bottom: 0.5px solid #21262d; animation: cdIn .35s ease; }
+    @keyframes cdIn { from { opacity: 0; transform: translateY(-4px); } }
+    .cd-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; font-size: 12px; margin-bottom: 10px; }
+    .cd-head b { color: #e6edf3; } .cd-head span { color: #8b949e; } .cd-head em { font-style: normal; color: #79b8ff; font-weight: 700; }
+    .cd-chart { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 3px; height: 70px; align-items: end; }
+    .cd-col { display: flex; flex-direction: column; align-items: stretch; justify-content: flex-end; height: 100%; }
+    .cd-col i { display: block; background: #484f58; border-radius: 3px 3px 1px 1px; animation: cdBar .5s cubic-bezier(.22,.8,.2,1) both; transform-origin: bottom; }
+    .cd-col span { font-size: 9px; color: #7d8590; text-align: center; margin-top: 3px; font-variant-numeric: tabular-nums; }
+    @keyframes cdBar { from { transform: scaleY(0); } }
+    @media (prefers-reduced-motion: reduce) { .ct-dist, .cd-col i { animation: none; } }
     .ct-legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 14px; font-size: 11px; color: #8b949e; }
     .ct-meta { font-size: 12px; color: #8b949e; margin-bottom: 12px; }
     .ct-meta b { color: #e6edf3; font-weight: 600; }
@@ -3822,6 +3833,7 @@ function runSimulation() {
     const champ = new Float64Array(T), ucl = new Float64Array(T), rele = new Float64Array(T), sumPts = new Float64Array(T), sumRank = new Float64Array(T);
     const pts = new Float64Array(T), delta = new Float64Array(T), order = [...Array(T).keys()], key = new Float64Array(T);
     const allPts = Array.from({ length: T }, () => new Uint16Array(nSim));   // 팀별 시뮬레이션 최종 승점(범위 계산용)
+    const rankCount = new Uint32Array(T * T);   // 팀별 최종 순위 횟수(줄을 누르면 펼치는 순위 분포 — 2026-09-29)
 
     for (let s = 0; s < nSim; s++) {
       for (let i = 0; i < T; i++) { pts[i] = basePts[i]; delta[i] = gaussRandom() * sigma; }
@@ -3837,7 +3849,7 @@ function runSimulation() {
       order.sort((x, y) => key[y] - key[x]);
       for (let r = 0; r < T; r++) {
         const i = order[r];
-        sumPts[i] += pts[i]; sumRank[i] += r; allPts[i][s] = pts[i];
+        sumPts[i] += pts[i]; sumRank[i] += r; allPts[i][s] = pts[i]; rankCount[i * T + r]++;
         if (r === 0) champ[i]++;
         if (r < z.cl) ucl[i]++;
         if (r >= T - z.rel) rele[i]++;
@@ -3851,6 +3863,7 @@ function runSimulation() {
       team: t.team, logo: t.logo, played: t.played, points: t.points,
       exp_pts: sumPts[i] / nSim, avg_rank: sumRank[i] / nSim, pts_range: range(i),
       champion_prob: pct(champ[i]), ucl_prob: pct(ucl[i]), relegation_prob: pct(rele[i]),
+      rank_dist: Array.from(rankCount.subarray(i * T, i * T + T), c => c / nSim),
     }))
     // 화면에 보이는 숫자와 순서가 모순되지 않게: 예상 승점(반올림 값) → 우승 → UCL권 → 강등(낮을수록 위) 순.
     // 예전엔 평균 순위로만 정렬해서, 예상 승점이 같은 두 팀 중 우승 확률이 낮은 팀이 위에 오는 경우가 있었음
@@ -3939,8 +3952,33 @@ function renderChampionPending(data) {
   document.getElementById('sim-btn')?.classList.add('pulse');
 }
 
+// 결과 줄을 누르면 그 팀의 최종 순위 분포(1~T위 확률 막대, 구역 색) — 다시 누르면 접힘, 한 번에 하나만
+let champDist = {};
+function toggleChampDist(row) {
+  const content = document.getElementById('champion-content');
+  const open = row.nextElementSibling && row.nextElementSibling.classList.contains('ct-dist');
+  content.querySelectorAll('.ct-dist').forEach(d => d.remove());
+  content.querySelectorAll('.ct-row.expanded').forEach(r => r.classList.remove('expanded'));
+  if (open) return;
+  const t = champDist[row.dataset.team];
+  if (!t) return;
+  const T = t.rank_dist.length, maxP = Math.max(...t.rank_dist);
+  const best = t.rank_dist.indexOf(maxP);
+  const cum = (a, b) => t.rank_dist.slice(a, b).reduce((x, y) => x + y, 0);
+  const z = LEAGUE_ZONES[currentLeagueCode] || { cl: 4, rel: 3 };
+  const bars = t.rank_dist.map((p, i) => {
+    const zone = MI_ZONE_INFO[getZoneClass(currentLeagueCode, i, T)];
+    return `<div class="cd-col" title="${i + 1}위 ${p >= 0.0005 ? (p * 100).toFixed(1) : '0'}%"><i style="height:${maxP ? Math.max(p > 0 ? 3 : 0, p / maxP * 100) : 0}%;${zone ? `background:${zone.color}` : ''}"></i><span>${i + 1}</span></div>`;
+  }).join('');
+  row.classList.add('expanded');
+  row.insertAdjacentHTML('afterend', `<div class="ct-dist">
+    <div class="cd-head"><b>${cleanTeamName(t.team)} 최종 순위 분포</b><span>가장 가능성 높은 순위 <em>${best + 1}위 (${Math.round(maxP * 100)}%)</em> · UCL권 안 ${Math.round(cum(0, z.cl) * 100)}% · 강등권 ${Math.round(cum(T - z.rel, T) * 100)}%</span></div>
+    <div class="cd-chart">${bars}</div>
+  </div>`);
+}
 function renderChampionResults(data) {
   const content = document.getElementById('champion-content');
+  champDist = {}; data.teams.forEach(t => { champDist[t.team] = t; });
   const teams = data.teams, T = teams.length;
   // 확률이 클수록 진하게 — 우승 금색, UCL권 파랑, 강등 빨강. "–"는 시뮬레이션에서 한 번도 안 나온 경우만
   const cell = (p, rgb) => p === 0
@@ -3970,11 +4008,13 @@ function renderChampionResults(data) {
       cell(t.champion_prob, '240,192,64') + cell(t.ucl_prob, '88,166,255') + cell(t.relegation_prob, '248,81,73'),
       `<div class="ct-pts">${Math.round(t.exp_pts)}<small>${t.pts_range[0]}~${t.pts_range[1]}</small></div>`)).join('') +
     `<div class="ct-legend">
+      <span>줄을 누르면 그 팀의 최종 순위 분포(1~${T}위 확률)</span>
       <span>예상 승점 = 시뮬레이션 평균 최종 승점 · 아래 범위 = 시뮬레이션 10번 중 8번이 들어오는 최종 승점 구간</span>
       <span>UCL권 = ${data.uclSpots}위 이내 · 강등 = 하위 ${data.releSpots}팀${releNote}</span>
       <span>&lt;1% = 1% 미만으로 일어남 (예: ${data.nSim.toLocaleString()}번 중 ${Math.max(1, Math.floor(data.nSim / 100) - 1).toLocaleString()}번 이하) · – = 한 번도 안 일어남</span>
     </div>`;
   document.getElementById('sim-btn')?.classList.remove('pulse');
+  content.querySelectorAll('.ct-row').forEach(r => { r.classList.add('expandable'); r.title = '눌러서 최종 순위 분포 보기'; r.onclick = e => { if (!e.target.closest('.ct-name, img')) toggleChampDist(r); }; });
 
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const rows = [...content.querySelectorAll('.ct-row')];
