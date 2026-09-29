@@ -1740,6 +1740,10 @@ def main():
         print(f"⚠️ 예측 트랙레코드 갱신 실패(다음 실행에서 재시도): {e}")
 
     fetch_top_scorers()
+    try:
+        fetch_scorers()
+    except Exception as e:
+        print(f"  ⚠️ 득점·도움 순위 실패(기존 유지): {e}")
 
     # 로고 자동 업데이트
     update_team_logos()
@@ -1773,6 +1777,62 @@ def main():
     print(f"\n🏆 업데이트 완료!")
     print(f"   데이터: {len(df_total)}경기")
     print(f"   서빙 모델(LR) 시간순 검증 정확도: {accuracy_data['logistic_regression']}%")
+
+SCORER_COMPS = ["PL", "PD", "BL1", "SA", "FL1", "CL"]
+
+def fetch_scorers():
+    """이번 시즌 득점·도움 순위(football-data.org /competitions/{리그}/scorers, 5대 리그 + UCL) → scorers.json.
+    FOOTBALL_API_KEY 하나로 매일 받음(API-Football 무료 플랜은 24-25 시즌에 막혀 있어서 현재 시즌은 이쪽).
+    리그별로 제대로 받은 것만 교체 — 403(플랜 제한)·429·빈 응답이면 그 리그는 기존 값 유지"""
+    import json
+    print("\n[득점·도움 순위] 수집 중...")
+    if not API_KEY:
+        print("  ⚠️ FOOTBALL_API_KEY가 없어 건너뜀")
+        return
+    path = f"{MODEL_DIR}/scorers.json"
+    out = {}
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as f:
+            out = json.load(f)
+    changed = False
+    for code in SCORER_COMPS:
+        for attempt in range(2):
+            try:
+                r = requests.get(f"{BASE_URL}/competitions/{code}/scorers", headers=HEADERS, params={"limit": 100}, timeout=20)
+            except Exception as e:
+                print(f"  ⚠️ {code}: {e}")
+                r = None
+                break
+            if r.status_code == 429 and attempt == 0:
+                time.sleep(61)
+                continue
+            break
+        time.sleep(6)
+        if r is None or r.status_code != 200:
+            print(f"  ⚠️ {code}: HTTP {getattr(r, 'status_code', '-')} (기존 유지){' — 무료 플랜에서 막힌 것 같음' if getattr(r, 'status_code', 0) == 403 else ''}")
+            continue
+        data = r.json()
+        rows = []
+        for sc in data.get("scorers") or []:
+            pl, tm = sc.get("player") or {}, sc.get("team") or {}
+            if not pl.get("name"):
+                continue
+            rows.append({"id": pl.get("id"), "name": pl.get("name"), "nationality": pl.get("nationality"),
+                         "position": pl.get("section") or pl.get("position"), "shirt": pl.get("shirtNumber"),
+                         "team": tm.get("name"), "team_logo": tm.get("crest"), "played": sc.get("playedMatches"),
+                         "goals": sc.get("goals") or 0, "assists": sc.get("assists") or 0, "penalties": sc.get("penalties") or 0})
+        if not rows:
+            print(f"  ⚠️ {code}: 빈 응답 (기존 유지)")
+            continue
+        season = data.get("season") or {}
+        out[code] = {"season": (season.get("startDate") or "")[:4], "matchday": season.get("currentMatchday"),
+                     "updated": pd.Timestamp.utcnow().strftime("%Y-%m-%d"), "scorers": rows}
+        changed = True
+        print(f"  ✅ {code}: {len(rows)}명 (1위 {rows[0]['name']} {rows[0]['goals']}골)")
+    if changed:
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(out, f, ensure_ascii=False, indent=1)
+        print("  ✅ scorers.json 저장 완료")
 
 def fetch_top_scorers():
     """리그별 득점왕/도움왕 데이터 수집"""
@@ -1862,6 +1922,8 @@ if __name__ == "__main__":
         fetch_ucl_tournament()
         fetch_team_wiki()
         fetch_season_zones()
+    elif "--scorers-only" in sys.argv:
+        fetch_scorers()
     elif "--ucl-only" in sys.argv:
         fetch_ucl_tournament()
     elif "--transfers-only" in sys.argv:

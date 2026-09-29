@@ -11,6 +11,7 @@ import numpy as np
 import os
 import json
 import math
+import re
 from functools import lru_cache
 
 app = FastAPI(title="FotData API", version="1.0.0")
@@ -1075,6 +1076,47 @@ def get_top_assists(league_code: str):
         raise HTTPException(status_code=404, detail="해당 리그 데이터 없음")
     
     return {"league": league_code.upper(), "players": assists}
+
+def _norm_name(n):
+    import unicodedata
+    n = unicodedata.normalize("NFKD", n or "").encode("ascii", "ignore").decode().lower()
+    return re.sub(r"[^a-z ]", "", n).split()
+
+def _squad_photo(team, name):
+    """team_extra.json(API-Football 스쿼드)에서 같은 팀·같은 선수 사진 찾기 — 표기가 "M. Di Gregorio"처럼 이름 머리글자라
+    성(마지막 단어들) + 이름 첫 글자로 맞춤. 못 찾으면 None(화면은 등번호/실루엣)"""
+    squad = ((_load_json("team_extra.json") or {}).get(team) or {}).get("squad") or []
+    want = _norm_name(name)
+    if not want:
+        return None
+    for p in squad:
+        got = _norm_name(p.get("name"))
+        if not got or not p.get("photo"):
+            continue
+        if got == want or (got[-1] == want[-1] and got[0][0] == want[0][0]):
+            return p["photo"]
+    return None
+
+@lru_cache(maxsize=8)
+def _leaders(code):
+    """이번 시즌 득점·도움 순위(scorers.json — update_data.fetch_scorers). 도움 순위는 football-data가
+    득점 순으로 준 상위 100명 안에서 다시 정렬한 것(득점 없이 도움만 많은 선수는 빠질 수 있음 — 화면에 안내)"""
+    d = (_load_json("scorers.json") or {}).get(code)
+    if not d or not d.get("scorers"):
+        return None
+    rows = [{**r, "photo": _squad_photo(r.get("team"), r.get("name"))} for r in d["scorers"]]
+    goals = sorted(rows, key=lambda r: (-r["goals"], -r["assists"], r.get("played") or 99))[:20]
+    assists = sorted([r for r in rows if r["assists"] > 0], key=lambda r: (-r["assists"], -r["goals"], r.get("played") or 99))[:20]
+    return {"league": code, "season": d.get("season"), "matchday": d.get("matchday"), "updated": d.get("updated"),
+            "pool": len(rows), "goals": goals, "assists": assists}
+
+@app.get("/players/leaders/{league_code}")
+def get_leaders(league_code: str):
+    """선수 탭: 이번 시즌 득점·도움 순위(5대 리그 + UCL). 아직 받은 데이터가 없는 리그는 404 → 프론트가 예전 EPL 24-25로 대체"""
+    out = _leaders(league_code.upper())
+    if out is None:
+        raise HTTPException(status_code=404, detail="이번 시즌 득점 순위 데이터 없음")
+    return out
 
     # ── 우승 예측 API ──
 # ── 순위 예측 API ──
