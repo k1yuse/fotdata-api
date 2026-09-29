@@ -1127,6 +1127,40 @@
     .sched-vs { font-size: 12px; color: #8b949e; padding: 0 14px; text-align: center; min-width: 60px; flex-shrink: 0; }
     .sched-score { font-weight: 700; color: #e6edf3; }
     .sched-time { font-size: 11px; color: #8b949e; }
+    /* 일정 탭 AI 예측 막대: 홈 % | 홈·무·원정 막대 | 원정 %, 가장 높은 쪽만 진하게 */
+    .sched-match { flex-wrap: wrap; }
+    .sched-pred { flex: 0 0 100%; width: 100%; display: grid; grid-template-columns: 44px minmax(120px, 280px) 44px; justify-content: center; grid-template-areas: "hv bar av" ". dv ."; align-items: center; column-gap: 8px; row-gap: 2px; margin-top: 6px; }
+    .sp-bar { grid-area: bar; display: flex; height: 5px; border-radius: 99px; overflow: hidden; background: #21262d; }
+    .sp-bar i { display: block; height: 100%; }
+    .sp-bar i.h, .sched-pred-legend i.h { background: #58a6ff; } .sp-bar i.d, .sched-pred-legend i.d { background: #6e7681; } .sp-bar i.a, .sched-pred-legend i.a { background: #f0883e; }
+    .sp-bar i + i { margin-left: 2px; }
+    .sp-v { font-size: 11px; font-weight: 600; color: #7d8590; font-variant-numeric: tabular-nums; }
+    .sp-v.home { grid-area: hv; text-align: right; } .sp-v.away { grid-area: av; text-align: left; }
+    .sp-d { grid-area: dv; text-align: center; font-size: 10px; color: #7d8590; font-variant-numeric: tabular-nums; }
+    .sp-v.home.top { color: #79b8ff; font-weight: 800; } .sp-v.away.top { color: #ffa657; font-weight: 800; } .sp-d.top { color: #c9d1d9; font-weight: 700; }
+    .sched-pred-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; justify-content: center; font-size: 11px; color: #8b949e; margin: 0 0 12px; }
+    .sched-pred-legend i { display: inline-block; width: 10px; height: 4px; border-radius: 2px; margin-right: 5px; vertical-align: 2px; }
+    .sched-pred-legend .note { color: #7d8590; }
+    /* 모바일 리그 칩: 2~3줄로 쌓여 표가 아래로 밀리던 것 → 한 줄 가로 스크롤(양 끝 흐림은 initScrollFade) */
+    @media (max-width: 768px) {
+      #league-tabs, #schedule-league-tabs, #champion-league-tabs, #players-league-tabs {
+        flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+        justify-content: flex-start; margin-left: -4px; margin-right: -4px; padding: 2px 4px 4px; scroll-padding: 0 24px;
+      }
+      #league-tabs::-webkit-scrollbar, #schedule-league-tabs::-webkit-scrollbar, #champion-league-tabs::-webkit-scrollbar, #players-league-tabs::-webkit-scrollbar { display: none; }
+      #league-tabs .league-tab, #schedule-league-tabs .league-tab, #champion-league-tabs .league-tab, #players-league-tabs .league-tab { flex-shrink: 0; white-space: nowrap; padding: 7px 13px; }
+    }
+    /* 좁은 폰: 순위표가 최소 폭 480px이라 경기 칸 뒤가 가로 스크롤로 숨었음 → 팀명을 줄이고 한 화면에 전부(승·무·패·득실·승점) */
+    @media (max-width: 480px) {
+      .standings-table.st-table { min-width: 0; }
+      .st-table td, .st-table th { padding: 8px 3px; font-size: 11.5px; }
+      .st-table .team-cell { gap: 6px; }
+      .st-table .team-cell img { width: 20px; height: 20px; }
+      .st-table .team-cell span { max-width: 92px; }
+      .st-rank { min-width: 20px; height: 19px; font-size: 10.5px; }
+      .st-pts { min-width: 26px; padding: 2px 5px; font-size: 11.5px; }
+      .st-table th:first-child { width: 28px !important; }
+    }
 
     @media (max-width: 768px) {
       .sched-team span { font-size: 12px; }
@@ -3407,6 +3441,7 @@ async function loadSchedule(league, btn) {
       scheduleData[league] = data.matches;
     }
     renderScheduleMonths(league);
+    ensureSchedulePreds(league);   // AI 예측은 부가 정보 — 도착하면 지금 보는 달을 다시 그림
   } catch (e) {
     content.innerHTML = '<div class="loading">일정을 불러올 수 없어요. 잠시 후 다시 시도해주세요.</div>';
   }
@@ -3475,6 +3510,30 @@ function stepScheduleMonth(delta) {
   renderScheduleContent(currentScheduleLeague, mk);
 }
 
+// ── 일정 탭 AI 예측(/predict/schedule — 경기 하나 예측과 같은 숫자) ──
+const schedulePreds = {};
+async function ensureSchedulePreds(league) {
+  if (schedulePreds[league]) return;
+  try {
+    const res = await fetch(`${API}/predict/schedule/${league}`);
+    if (!res.ok) return;
+    const map = {};
+    (await res.json()).predictions.forEach(x => { map[`${x.home_team}|${x.away_team}|${x.date}`] = x; });
+    schedulePreds[league] = map;
+    if (currentScheduleLeague === league && currentScheduleMonth) renderScheduleContent(league, currentScheduleMonth);
+  } catch (e) { /* 부가 정보라 실패해도 일정은 그대로 */ }
+}
+function schedulePredHtml(x) {
+  const [h, d, a] = x.p.map(v => Math.round(v * 100));
+  const top = Math.max(h, d, a);
+  const cls = v => v === top ? 'top' : '';
+  return `<div class="sched-pred" title="AI 예측${x.limited ? ' (참고용 — 5대 리그 밖 팀은 UCL 기록만으로 계산)' : ''} · 누르면 자세한 예측">
+    <span class="sp-v home ${cls(h)}">${h}%</span>
+    <span class="sp-bar"><i class="h" style="width:${h}%"></i><i class="d" style="width:${d}%"></i><i class="a" style="width:${a}%"></i></span>
+    <span class="sp-v away ${cls(a)}">${a}%</span>
+    <span class="sp-d ${cls(d)}">무 ${d}%${x.limited ? ' · 참고용' : ''}</span>
+  </div>`;
+}
 function renderScheduleContent(league, monthKey) {
   const content = document.getElementById('schedule-content');
   const matches = (scheduleData[league] || []).filter(m => scheduleMonthKey(m.date) === monthKey);
@@ -3483,6 +3542,7 @@ function renderScheduleContent(league, monthKey) {
     return;
   }
   const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토'];
+  const preds = schedulePreds[league];
   let html = '';
   let lastDate = null;
   matches.forEach(m => {
@@ -3501,9 +3561,11 @@ function renderScheduleContent(league, monthKey) {
       <div class="sched-team"><span class="sched-team-hit" onclick="event.stopPropagation();openTeamInfo('${escJs(m.home_team)}')"><img src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span>${homeShort}</span></span></div>
       <div class="sched-vs">${played ? `<span class="sched-score">${m.home_goals} - ${m.away_goals}</span>` : `<span class="sched-time">${timeStr}</span>`}</div>
       <div class="sched-team away"><span class="sched-team-hit" onclick="event.stopPropagation();openTeamInfo('${escJs(m.away_team)}')"><span>${awayShort}</span><img src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"></span></div>
+      ${!played && preds && preds[`${m.home_team}|${m.away_team}|${m.date}`] ? schedulePredHtml(preds[`${m.home_team}|${m.away_team}|${m.date}`]) : ''}
     </div>`;
   });
-  content.innerHTML = html;
+  const legend = preds ? `<div class="sched-pred-legend"><span><i class="h"></i>홈승</span><span><i class="d"></i>무</span><span><i class="a"></i>원정승</span><span class="note">AI 예측 확률 · 경기를 누르면 자세한 예측</span></div>` : '';
+  content.innerHTML = legend + html;
 }
 
 let currentStandingsSeason = 'current';   // 'current' 또는 시즌 시작 연도('2025' 등 — 서버 /standings?season=)
@@ -5171,6 +5233,16 @@ function initScrollFade(el) {
   setTimeout(update, 50);
 }
 initScrollFade(document.querySelector('.nav-tabs-scroll'));
+// 리그 칩 줄(모바일에선 가로 스크롤) — 양 끝 흐림 + 고른 칩이 화면 안으로 오게
+['league-tabs', 'schedule-league-tabs', 'champion-league-tabs', 'players-league-tabs'].forEach(id => {
+  const row = document.getElementById(id);
+  if (!row) return;
+  initScrollFade(row);
+  row.addEventListener('click', e => {
+    const chip = e.target.closest('.league-tab');
+    if (chip && row.scrollWidth > row.clientWidth) chip.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+  });
+});
 
 loadLogos();loadPredictableTeams();loadStandings('PL');loadAccuracy();loadTodayMatches();loadBigMatch();loadMyTeamWidget();
 

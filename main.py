@@ -292,6 +292,38 @@ def _display_stats(team):
         return {'attack_strength': s['attack'], 'defense_strength': s['defense'], 'win_rate': s['win_rate']}
     return None
 
+# ── 일정 탭 AI 예측: 리그의 남은 경기 전체를 한 번에 (2026-09-30) ──
+# 경기 하나 예측(/predict)과 같은 모델·같은 입력(_feature_row)·같은 UCL 전용 팀 보정·같은 반올림이라 숫자가 똑같음
+# (일정에서 본 확률과 눌러서 연 예측이 달라 보이면 안 되므로). 예측할 수 없는 팀(첫 출전 UCL 팀 등)이 낀 경기는 뺌
+@app.get("/predict/schedule/{league_code}")
+def predict_schedule(league_code: str):
+    return _schedule_predictions(league_code.upper())
+
+@lru_cache(maxsize=8)
+def _schedule_predictions(code):
+    matches = (_load_json("schedule.json") or {}).get(code)
+    if matches is None:
+        raise HTTPException(status_code=404, detail="해당 리그 일정 없음")
+    keep, pairs = [], []
+    for m in matches:
+        if m.get("status") in ("FINISHED", "AWARDED", "CANCELLED"):
+            continue
+        h, a = TEAM_NAME_MAP.get(m["home_team"], m["home_team"]), TEAM_NAME_MAP.get(m["away_team"], m["away_team"])
+        if _display_stats(h) is None or _display_stats(a) is None or h not in team_state or a not in team_state:
+            continue
+        keep.append(m); pairs.append((h, a))
+    out = []
+    if pairs:
+        base = dict(zip(('H', 'D', 'A'), MATCH_BASE_RATES))
+        for m, (h, a), p in zip(keep, pairs, _predict_hda(pairs)):
+            pd_ = dict(zip(('H', 'D', 'A'), p))
+            limited = h in ucl_only_teams or a in ucl_only_teams
+            if limited:
+                pd_ = {c: (1 - UCL_ONLY_SHRINK) * v + UCL_ONLY_SHRINK * base[c] for c, v in pd_.items()}
+            out.append({"home_team": m["home_team"], "away_team": m["away_team"], "date": m["date"],
+                        "p": [round(float(pd_[c]), 3) for c in ('H', 'D', 'A')], "limited": limited})
+    return {"league": code, "predictions": out}
+
 @app.post("/predict")
 def predict_match(req: MatchRequest):
     """경기 결과 예측"""
