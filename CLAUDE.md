@@ -262,6 +262,17 @@ cp landing.html index.html
   - **랜딩 3D 공 "툭" 튐**: 히어로 기울기 0.18 → 스토리 0.12가 한 프레임에 바뀌었음 → `tilt`가 목표를 부드럽게 따라가게.
   - 테스트 팁: 인트로는 2.6초라 캡처 도구가 느려서 못 잡음 → 사본에서 `?t=초`로 시간을 멈추고(캔버스 t 고정 + `document.getAnimations()` currentTime/pause) 확인했음. `sessionStorage.introPlayed`를 지워야 다시 재생됨.
 
+- **메인 앱 5차(2026-09-29)**:
+  - **즐겨찾기 최대 5팀**(`favoriteTeams` 배열 — 예전 `favoriteTeam` 한 팀은 자동 이전, `getFavoriteTeams`/`setFavoriteTeams`/`isFavoriteTeam`, 6번째는 토스트로 막음). 상단 위젯은 **5칸 격자의 작은 카드**(팀이 1개여도 1/5 — 예전 1팀 카드가 한 줄을 꽉 채웠음; 구단 색 왼쪽 줄·★, 둘째 줄 앞 D-day 배지 — 오른쪽 배지였을 땐 1000px에서 이름이 "Liver…"로 잘림, 5팀 미만이면 "+ 팀 추가"). 팀마다 다음 경기는 `favUpcomingMatches`(창 → 모자라면 그 리그 일정). 구단 색은 팀 정보가 오는 대로 칠함(기다리지 않음).
+  - **다음 경기 카드 [전체 | ★ 내 팀]**(즐겨찾기가 있을 때만, 선택은 `todayView` 기억): 내 팀 보기는 팀마다 최대 3경기·전체 10경기·카드에 날짜. **일정 탭 "★ 내 팀만"**(지금 리그·달에서 즐겨찾기 팀 경기만).
+  - **예측 결과 공개 연출**(`showResult` + `revealTimers`): 배지 "AI 분석 중…" → 막대가 홈·무·원정 0.18초 간격으로 차고 % 카운트(원래 카운트업은 있었고 막대가 동시에 찼음) → 0.9초 예상 스코어 숫자 롤링 → 1.5초 배지 공개(톡)·이긴 줄 또렷·나머지 흐리게·빛 훑기 + **한 줄 요약**(`predictionSummary` — 예측 근거에서 이 예측 쪽 요인 상위 2개 + 반대쪽 요인(8% 이상)으로 문장, 확률 60%+ "뚜렷하게"/45% 미만 "근소하게", 조사는 받침으로 은/는). 새 예측을 누르면 이전 타이머 취소, 모션 최소화면 바로 최종.
+  - **지표 칸**(`renderStatBoxes`, 2×2 — 홈 위 줄·원정 아래 줄): "1.848"만 있던 칸 → 경기당 득점/실점(카운트) + 리그 N위 칩(상위 25% 파랑·하위 25% 빨강) + 리그 평균 눈금 막대(평균보다 나쁘면 흐리게). 서버 `/predict`의 `home_stats`/`away_stats`에 `league_size`·`attack_rank`·`defense_rank`·`league_avg_*`(`_team_league_map` 전 팀 한 번에 + `_league_display_ranks` 캐시·서버 시작 때 미리 계산, 응답 3ms 그대로). 막대 폭 속성은 `data-fill`(`data-w`는 경기 분석 칸 코드와 겹친 전례).
+  - **양쪽 열 끝 맞춤 확장**: 오른쪽 열이 짧은 경기(5대 리그 밖 팀 — 경기 분석 칸이 비어 라이브에서도 PSV–바이에른 247px 어긋나 있었음)는 "다른 경기도 예측해보기" 카드를 오른쪽 열(맞대결 아래)로 옮겨 채움 — 5개 대진 0~1px.
+  - **팀 정보 플레이어 통계 탭**(예전 "준비 중" 한 줄): 서버 `/team/players/{team}`(scorers.json에서 이 팀 선수 — 리그·챔스 따로, 이번 시즌 팀 리그 득점 대비 비중, team_info 스쿼드 포지션·국적 상위 5) → 공격 포인트 목록(사진·골·도움·경기·PK·팀 득점 비중 막대) + 스쿼드 구성(포지션 막대·국적 칩). 득점 데이터 전엔 안내 + 스쿼드 구성만. (생년월일은 데이터에 없어서 평균 나이는 안 함)
+  - **순위 예측 순위 분포**: 시뮬레이션이 팀별 최종 순위 횟수(`rankCount`)를 세서 `rank_dist`로 — 결과 줄을 누르면 아래로 1~20위 확률 막대(구역 색)·가장 유력한 순위·UCL권/강등권 확률, 한 번에 하나만.
+  - **순위표 보기 전환**(리그만, 챔스 숨김): 전체 / 홈 / 원정 / 최근 5경기 — 서버 `/standings/{리그}?season=&view=home|away|form`(`_standings_view` 캐시, 첫 호출 ~24ms). 전체가 아닌 보기엔 구역 색·우승 표시·요약 칸 없음 + 안내 문구.
+  - 점검: 데스크톱 1000·1280px, 모바일 375px 전 탭·팀 정보 7개 탭·결과·순위 분포에서 JS 에러 0·가로 넘침 0.
+
 ## 6. API 엔드포인트 (main.py)
 
 | Method | Path | 설명 |
@@ -271,7 +282,7 @@ cp landing.html index.html
 | POST | `/predict` | 경기 결과 예측 (body: home_team, away_team) |
 | GET | `/team/{team_name}` | 팀 스탯 |
 | GET | `/logos` | 팀 로고 URL 맵 |
-| GET | `/standings/{league_code}?season=current\|previous\|연도` | 리그 순위표 (실시간 계산, 23-24~26-27 — 끝난 시즌은 공식 순서·구역·감점, 5.14) |
+| GET | `/standings/{league_code}?season=current\|previous\|연도&view=all\|home\|away\|form` | 리그 순위표 (실시간 계산, 23-24~26-27 — 끝난 시즌은 공식 순서·구역·감점, 5.14 / view: 홈·원정·최근 5경기만의 순위표) |
 | GET | `/ucl/tournament?season=` | 시즌별 UCL 토너먼트 브래킷(5.13) |
 | GET | `/ucl/groups?season=2023` | 챔스 조별리그(23-24까지) 조별 순위·기록(5.14) |
 | GET | `/h2h?home_team=&away_team=&limit=` | 상대전적 |
@@ -284,6 +295,7 @@ cp landing.html index.html
 | GET | `/teams/prestige` | 팀별 prestige 맵 (전역 검색 기본 정렬용, 2026-09-20 추가) |
 | GET | `/proxy/logo?url=` | 팀 로고 이미지 프록시 (2026-09-21 추가) — crests.football-data.org/wikimedia는 CORS 헤더가 없어서 프론트 `<canvas>`(예측 결과 공유카드)에 바로 그리면 tainted되어 내보내기가 막힘; 허용된 두 호스트로만 제한해 우리 서버(CORS 전체 허용)를 거쳐 내려줌 |
 | GET | `/predict/track-record` | AI 예측 트랙레코드 요약 + 최근 20경기 (2026-09-21 추가, 5.6 참고) |
+| GET | `/team/players/{team_name}` | 팀 정보 플레이어 통계 탭: 이번 시즌 이 팀 선수 골·도움(리그·챔스)·팀 득점 비중 + 스쿼드 포지션·국적 (2026-09-29) |
 | GET | `/players/leaders/{league_code}` | 선수 탭: 이번 시즌 득점·도움 순위(scorers.json, 5대 리그+UCL — 데이터 없으면 404) (2026-09-29) |
 | GET | `/predict/schedule/{league_code}` | 일정 탭용: 남은 경기 전부의 H/D/A 확률(`/predict`와 같은 숫자) + `results`(끝난 경기 중 트랙레코드에 경기 전 예측이 있는 것, 적중 여부) (2026-09-29, 5.15) |
 | GET | `/team/stats/{team_name}` | 팀 통계 탭: 시즌별 실제 리그 기록·리그 내 순위·리그 평균·홈/원정·상대 수준별·순위 변동 + AI 파워 레이팅 (2026-09-29, 5.12 참고) |

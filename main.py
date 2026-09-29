@@ -495,8 +495,46 @@ LEAGUE_MAP = {
 
 # ── 순위표 API ──
 @app.get("/standings/{league_code}")
-def get_standings(league_code: str, season: str = "current"):
+def get_standings(league_code: str, season: str = "current", view: str = "all"):
+    if view in ("home", "away", "form"):
+        return _standings_view(league_code.upper(), season, view)
     return _standings(league_code.upper(), season)
+
+@lru_cache(maxsize=64)
+def _standings_view(league_code, season, view):
+    """순위표 보기 전환(2026-09-29): home = 홈 경기만, away = 원정 경기만, form = 팀마다 최근 5경기만으로 낸 순위표.
+    공식 순서·구역·감점은 전체 순위표에만 해당해서 여기선 안 씀(승점 → 득실차 → 득점 순)"""
+    base = _standings(league_code, season)   # 리그·시즌 검증과 이름은 전체 순위표와 공유
+    yr = _season_year(season)
+    f = (df_matches_all['league'] == league_code) & (df_matches_all['date'] >= pd.Timestamp(f'{yr}-08-01')) & (df_matches_all['date'] < pd.Timestamp(f'{yr + 1}-08-01'))
+    if league_code == 'CL':
+        f = f & (df_matches_all['date'] < pd.Timestamp(f'{yr + 1}-02-01'))
+    df = df_matches_all[f].sort_values('date')
+    logos = _load_json("team_logos.json") or {}
+    teams = [r["team"] for r in base["standings"]]
+    rows = []
+    for team in teams:
+        if view == "home":
+            m = df[df['home_team'] == team]
+        elif view == "away":
+            m = df[df['away_team'] == team]
+        else:
+            m = df[(df['home_team'] == team) | (df['away_team'] == team)].tail(5)
+        w = d = l = gf = ga = 0
+        form = []
+        for _, x in m.iterrows():
+            home = x['home_team'] == team
+            g1, g2 = (x['home_goals'], x['away_goals']) if home else (x['away_goals'], x['home_goals'])
+            gf += int(g1); ga += int(g2)
+            r = 'W' if g1 > g2 else 'L' if g1 < g2 else 'D'
+            w += r == 'W'; d += r == 'D'; l += r == 'L'
+            form.append(r)
+        rows.append({"team": team, "logo": logos.get(team, ''), "played": w + d + l, "wins": w, "draws": d, "losses": l,
+                     "points": w * 3 + d, "gf": gf, "ga": ga, "gd": gf - ga, "form": form[-5:]})
+    rows.sort(key=lambda r: (-r["points"], -r["gd"], -r["gf"], r["team"]))
+    for i, r in enumerate(rows):
+        r["rank"] = i + 1
+    return {"league": base["league"], "standings": rows, "official": False, "view": view}
 
 @lru_cache(maxsize=32)
 def _standings(league_code: str, season: str):

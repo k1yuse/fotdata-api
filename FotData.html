@@ -1677,6 +1677,13 @@
           <button data-season="2024" onclick="setStandingsSeason('2024', this)">24-25</button>
           <button data-season="2023" onclick="setStandingsSeason('2023', this)">23-24</button>
         </div>
+        <!-- 보기 전환(리그만): 전체 / 홈 경기만 / 원정 경기만 / 팀마다 최근 5경기 — 2026-09-29 -->
+        <div class="st-seg" id="st-view-seg" role="tablist" aria-label="순위표 보기">
+          <button class="active" data-view="all" onclick="setStandingsView('all')">전체</button>
+          <button data-view="home" onclick="setStandingsView('home')">홈</button>
+          <button data-view="away" onclick="setStandingsView('away')">원정</button>
+          <button data-view="form" onclick="setStandingsView('form')">최근 5경기</button>
+        </div>
         <div id="ucl-subtabs" style="display:none" class="st-seg ucl-view" role="tablist" aria-label="챔피언스리그 보기">
           <button class="ucl-subtab active" data-view="standings" onclick="showUCLTab('standings',this)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4.5 6h.01M4.5 12h.01M4.5 18h.01" stroke-width="2.6"/></svg>리그 스테이지</button>
           <button class="ucl-subtab" data-view="tournament" onclick="showUCLTab('tournament',this)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h5v5H3M3 14h5v5H3M8 7.5h4v9H8M12 12h4M16 9.5h5v5h-5"/></svg>토너먼트</button>
@@ -2102,6 +2109,7 @@ function loadCL() {
   document.querySelectorAll('#league-tabs .league-tab').forEach(t => t.classList.remove('active'));
   document.querySelector('[data-league="CL"]').classList.add('active');
   document.getElementById('ucl-subtabs').style.display = 'flex';
+  document.getElementById('st-view-seg').style.display = 'none';   // 홈/원정/최근 5경기 보기는 리그 순위표에서만
   // 23-24까지는 조별리그(4팀×8조) — 첫 버튼이 "조별리그"가 되고 조별 순위표를 보여줌
   const groupEra = currentStandingsSeason === '2023';
   const stBtn = document.querySelector('#ucl-subtabs [data-view="standings"]');
@@ -4312,7 +4320,18 @@ function setStandingsSeason(season, el) {
   if (leagueCode === 'CL') loadCL(); else loadStandings(leagueCode);
 }
 
+let currentStandingsView = 'all';
+function setStandingsView(v) {
+  currentStandingsView = v;
+  document.querySelectorAll('#st-view-seg button').forEach(b => b.classList.toggle('active', b.dataset.view === v));
+  const active = document.querySelector('#league-tabs .league-tab.active');
+  loadStandings(active ? active.dataset.league : 'PL');
+}
 async function loadStandings(leagueCode) {
+  // 보기 전환은 리그 순위표에서만(챔스는 리그 스테이지·토너먼트·조별리그 전환이 따로 있음)
+  const viewSeg = document.getElementById('st-view-seg');
+  if (viewSeg) viewSeg.style.display = leagueCode === 'CL' ? 'none' : '';
+  const view = leagueCode === 'CL' ? 'all' : currentStandingsView;
   if (leagueCode !== 'CL') {
     document.querySelectorAll('#league-tabs .league-tab').forEach(t => t.classList.remove('active'));
     document.querySelector(`[data-league="${leagueCode}"]`).classList.add('active');
@@ -4324,13 +4343,13 @@ async function loadStandings(leagueCode) {
   document.getElementById('st-summary').innerHTML = '';
   content.innerHTML = skeletonRows(10);
   try {
-    const res = await fetchWithRetry(`${API}/standings/${leagueCode}?season=${season}`, {}, {
+    const res = await fetchWithRetry(`${API}/standings/${leagueCode}?season=${season}${view !== 'all' ? `&view=${view}` : ''}`, {}, {
       onRetry: (a, r) => { content.innerHTML = wakingUpHtml(a, r); }
     });
     const data = await res.json();
     // 그 사이 다른 리그·시즌을 눌렀으면 버림
     const active = document.querySelector('#league-tabs .league-tab.active');
-    if (season !== currentStandingsSeason || (active && active.dataset.league !== leagueCode)) return;
+    if (season !== currentStandingsSeason || view !== (leagueCode === 'CL' ? 'all' : currentStandingsView) || (active && active.dataset.league !== leagueCode)) return;
     renderStandings(data, leagueCode);
   }
   catch (e) { content.innerHTML = '<div class="loading">데이터를 불러올 수 없어요. 잠시 후 다시 시도해주세요.</div>'; }
@@ -4403,7 +4422,8 @@ function renderStandings(data, leagueCode, keepSort) {
   standingsView.data = data; standingsView.leagueCode = leagueCode;
   const rows = data.standings, totalTeams = rows.length, content = document.getElementById('standings-content'), isCL = leagueCode === 'CL';
   const finished = currentStandingsSeason !== 'current', official = !!data.official, sort = standingsView.sort;
-  document.getElementById('st-summary').innerHTML = standingsSummaryHtml(rows, leagueCode, finished, official);
+  const view = data.view || 'all';   // home/away/form 보기엔 구역 색·우승 표시·요약 칸을 안 씀(전체 순위 기준이라)
+  document.getElementById('st-summary').innerHTML = view === 'all' ? standingsSummaryHtml(rows, leagueCode, finished, official) : '';
   // 정렬: 순위(기본) / 득점 많은 순 / 실점 적은 순(동률은 원래 순위)
   const shown = sort === 'gf' ? rows.slice().sort((a, b) => b.gf - a.gf || a.rank - b.rank)
     : sort === 'ga' ? rows.slice().sort((a, b) => a.ga - b.ga || a.rank - b.rank) : rows;
@@ -4415,8 +4435,9 @@ function renderStandings(data, leagueCode, keepSort) {
     if (isCL) { if (idx < 8) zc = 'zone-ucl-ko'; else if (idx < 24) zc = 'zone-ucl-po'; }
     else if (official) zc = ZONE_CLASS[team.zone] || '';   // 끝난 시즌: 그 시즌 실제 진출·강등(컵 우승 팀 포함)
     else zc = getZoneClass(leagueCode, idx, totalTeams);
+    if (view !== 'all') zc = '';
     const fb = team.form.map(f => `<div class="form-badge ${f}">${f}</div>`).join('');
-    const champ = finished && !isCL && team.rank === 1;   // 챔스 리그 스테이지 1위는 우승이 아님
+    const champ = view === 'all' && finished && !isCL && team.rank === 1;   // 챔스 리그 스테이지 1위는 우승이 아님
     const num = sort === 'rank' ? team.rank : `${i + 1}<small>(${team.rank})</small>`;
     html += `<tr class="st-row ${zc} ${champ ? 'champ' : ''} row-enter" style="animation-delay:${Math.min(i * 35, 600)}ms">
       <td><span class="st-rank">${num}</span></td>
@@ -4429,7 +4450,8 @@ function renderStandings(data, leagueCode, keepSort) {
   });
   html += '</tbody></table></div><div class="st-legend">';
   const legendItem = (color, label) => `<span><i style="background:${color}"></i>${label}</span>`;
-  if (isCL) html += legendItem('#f0c040', '16강 직행 (1~8위)') + legendItem('#f0883e', '플레이오프 (9~24위)');
+  if (view !== 'all') html += `<span class="st-legend-note">${view === 'home' ? '홈 경기만' : view === 'away' ? '원정 경기만' : '팀마다 최근 리그 5경기만'}으로 낸 순위예요 · 실제 순위·진출권은 "전체"에서</span>`;
+  else if (isCL) html += legendItem('#f0c040', '16강 직행 (1~8위)') + legendItem('#f0883e', '플레이오프 (9~24위)');
   else {
     const z = LEAGUE_ZONES[leagueCode] || {};
     const has = k => official ? rows.some(r => r.zone === k) : true;
