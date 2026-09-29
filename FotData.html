@@ -1001,6 +1001,34 @@
     @keyframes miFade { to { opacity: 1; } }
     @media (prefers-reduced-motion: reduce) { .mi-chart .line { animation: none; stroke-dashoffset: 0; } .mi-chart .pt { animation: none; opacity: 1; } }
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; }
+    /* 지표 칸(홈 위 줄·원정 아래 줄) */
+    .stats-grid.sb-grid { grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+    .stat-box.sb { text-align: left; padding: 10px 12px; }
+    .sb-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+    .sb-label { font-size: 11px; color: #8b949e; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sb-rank { flex-shrink: 0; font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 99px; color: #c9d1d9; background: rgba(139,148,158,0.14); font-variant-numeric: tabular-nums; }
+    .sb-rank.good { color: #79b8ff; background: rgba(88,166,255,0.14); } .sb-rank.bad { color: #ff7b72; background: rgba(248,81,73,0.12); }
+    .sb-val { display: flex; align-items: baseline; gap: 6px; margin: 4px 0 7px; }
+    .sb-val b { font-size: 20px; font-weight: 800; color: #e6edf3; font-variant-numeric: tabular-nums; } .sb-val small { font-size: 10.5px; color: #7d8590; }
+    .sb-bar { position: relative; height: 5px; border-radius: 99px; background: #21262d; }
+    .sb-bar i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 99px; transition: width .9s cubic-bezier(.22,.8,.2,1); }
+    .sb.home .sb-bar i { background: linear-gradient(90deg, #1f6feb, #58a6ff); } .sb.away .sb-bar i { background: linear-gradient(90deg, #f0883e, #ffa657); }
+    .sb.worse .sb-bar i { opacity: .45; }
+    .sb-bar em { position: absolute; top: -3px; bottom: -3px; width: 2px; margin-left: -1px; border-radius: 1px; background: #e6edf3; opacity: .7; }
+    /* 결과 공개 연출 */
+    .badge.thinking { background: rgba(139,148,158,0.12); color: #c9d1d9; border-color: rgba(139,148,158,0.35); }
+    .badge.thinking::after { content: ''; display: inline-block; width: 1.2em; text-align: left; animation: predDots 1s steps(4) infinite; }
+    @keyframes predDots { 0% { content: ''; } 25% { content: '.'; } 50% { content: '..'; } 75% { content: '...'; } }
+    .badge.reveal { animation: predPop .55s cubic-bezier(.3,1.6,.5,1); }
+    @keyframes predPop { from { transform: scale(.82); } to { transform: none; } }
+    .prob-bars .prob-row { transition: opacity .45s ease; } .prob-bars .prob-row.dim { opacity: .55; }
+    .prob-bars .prob-row.win .prob-value { color: #fff; } .prob-bars .prob-row.win .prob-bar-bg { position: relative; overflow: hidden; }
+    .prob-bars .prob-row.win .prob-bar-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,.5), transparent); transform: translateX(-100%); animation: predSheen .9s ease .1s both; }
+    @keyframes predSheen { to { transform: translateX(100%); } }
+    .pred-summary { max-width: 520px; margin: -8px auto 18px; text-align: center; font-size: 13px; line-height: 1.6; color: #c9d1d9; word-break: keep-all; opacity: 0; transform: translateY(6px); transition: opacity .5s ease, transform .5s ease; }
+    .pred-summary.on { opacity: 1; transform: none; }
+    .pred-summary:empty { display: none; }
+    @media (prefers-reduced-motion: reduce) { .badge.thinking::after, .badge.reveal, .prob-bars .prob-row.win .prob-bar-bg::after { animation: none; } .pred-summary { transition: none; } }
     .stat-box { background: #21262d; border-radius: 8px; padding: 12px; text-align: center; }
     .stat-val { font-size: 18px; font-weight: 700; }
     .stat-label { font-size: 11px; color: #8b949e; margin-top: 4px; }
@@ -1808,6 +1836,7 @@
             <div class="result-team" id="result-away-team"><img id="result-away-logo" src="" alt=""><div class="result-team-name" id="result-away-name"></div></div>
           </div>
           <div class="prediction-badge"><span class="badge" id="pred-badge"></span></div>
+          <p class="pred-summary" id="pred-summary"></p>
           <div class="limited-note" id="limited-note" style="display:none"></div>
           <div class="prob-bars">
             <div class="prob-row" style="grid-template-columns:120px 1fr 45px"><span class="prob-label" id="prob-label-home">홈승</span><div class="prob-bar-bg"><div class="prob-bar home" id="bar-home" style="width:0%"></div></div><span class="prob-value" id="val-home"></span></div>
@@ -1818,12 +1847,7 @@
             <div style="font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">예측 근거 <span style="font-size:10px;color:#7d8590;text-transform:none;letter-spacing:0">(이 예측에서 크게 반영된 요인 순)</span></div>
             <div id="explanation-factors"></div>
           </div>
-          <div class="stats-grid">
-            <div class="stat-box"><div class="stat-val" id="s-home-atk">-</div><div class="stat-label" id="s-home-atk-label">홈 공격력</div></div>
-            <div class="stat-box"><div class="stat-val" id="s-home-def">-</div><div class="stat-label" id="s-home-def-label">홈 수비력</div></div>
-            <div class="stat-box"><div class="stat-val" id="s-away-atk">-</div><div class="stat-label" id="s-away-atk-label">원정 공격력</div></div>
-            <div class="stat-box"><div class="stat-val" id="s-away-def">-</div><div class="stat-label" id="s-away-def-label">원정 수비력</div></div>
-          </div>
+          <div class="stats-grid sb-grid" id="stat-boxes"></div>
           <div style="margin-top:16px;padding-top:16px;border-top:0.5px solid #30363d">
             <div style="font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">팀 비교</div>
             <div id="radar-chart-wrap"></div>
@@ -4887,10 +4911,14 @@ function fitMoreCard() {
   const measure = () => (h2h.offsetHeight + GAP + awayForm.offsetHeight) - (result.offsetHeight + GAP + homeForm.offsetHeight);
   const diff = measure();
 
-  // 1) 왼쪽이 충분히 짧으면: 차이만큼 "다른 경기" 카드를 넣고, 들어가는 만큼만 경기 줄 표시
-  if (moreCandidates.length && diff - GAP >= 120) {
+  // 1) 한쪽이 충분히 짧으면: 짧은 열에 차이만큼 "다른 경기" 카드를 넣고, 들어가는 만큼만 경기 줄 표시.
+  //    예전엔 왼쪽이 짧을 때만 처리해서, 경기 분석 칸이 비는 경기(5대 리그 밖 팀 — PSV·바이에른 등)는 오른쪽이 짧아 250px 넘게 어긋났음
+  if (diff >= 0) { if (card.previousElementSibling !== result) result.after(card); }
+  else if (card.previousElementSibling !== h2h) h2h.after(card);
+  const gapAbs = Math.abs(diff);
+  if (moreCandidates.length && gapAbs - GAP >= 120) {
     card.classList.add('on');
-    card.style.height = (diff - GAP) + 'px';
+    card.style.height = (gapAbs - GAP) + 'px';
     list.innerHTML = moreCandidates.map(moreRowHtml).join('');
     const overflow = () => card.scrollHeight > card.clientHeight;
     while (list.children.length > 1 && overflow()) list.lastElementChild.remove();
@@ -4985,6 +5013,48 @@ function fillResultExtras(ex, data, home, away, seq) {
 }
 
 let lastPrediction = null;
+let revealTimers = [];
+
+// ── 예측 한 줄 요약(2026-09-29): 예측 근거(explanation — 각 요인이 이 예측 쪽으로 얼마나 기울였는지)로 문장을 만듦 ──
+// 예) "공격력·팀 전력에서 앞선 Man City 쪽으로 뚜렷하게 기울었어요. 다만 최근 폼은 반대쪽으로 작용했어요."
+const josaEunNeun = w => { const c = w.charCodeAt(w.length - 1); return c >= 0xAC00 && c <= 0xD7A3 && (c - 0xAC00) % 28 ? '은' : '는'; };
+function predictionSummary(data, home, away) {
+  const ex = (data.explanation || []).filter(e => e.influence_pct >= 3).map(e => ({ ...e, label: e.label.replace(/\s*\(.*\)$/, '') }));
+  const sup = ex.filter(e => e.direction === 'support').slice(0, 2).map(e => e.label);
+  const against = ex.find(e => e.direction === 'against' && e.influence_pct >= 8);
+  const p = data.probabilities, top = Math.max(p.home_win, p.draw, p.away_win);
+  if (!sup.length) return '';
+  let s;
+  if (data.prediction === 'draw') s = `${sup.join('·')}에서 두 팀 차이가 크지 않아 무승부 가능성이 가장 높아요.`;
+  else {
+    const team = shortName(data.prediction === 'home_win' ? home : away);
+    const deg = top >= 0.6 ? '뚜렷하게 ' : top < 0.45 ? '근소하게 ' : '';
+    s = `${sup.join('·')}에서 앞선 ${team} 쪽으로 ${deg}기울었어요.`;
+  }
+  if (against) s += ` 다만 ${against.label}${josaEunNeun(against.label)} 반대쪽으로 작용했어요.`;
+  return s;
+}
+
+// ── 지표 칸(2026-09-29): "1.848"만 있던 칸 → 경기당 득점/실점 + 리그 순위 칩 + 리그 평균 눈금 막대(홈 위 줄·원정 아래 줄) ──
+function renderStatBoxes(data, homeLbl, awayLbl, RM) {
+  const box = (side, lbl, st, kind) => {
+    const atk = kind === 'atk', v = atk ? st.attack : st.defense, max = atk ? 3.2 : 2.4;
+    const rank = atk ? st.attack_rank : st.defense_rank, n = st.league_size, avg = atk ? st.league_avg_attack : st.league_avg_defense;
+    const better = avg != null ? (atk ? v >= avg : v <= avg) : true;
+    const tier = rank && n ? (rank <= Math.ceil(n / 4) ? 'good' : rank > n - Math.ceil(n / 4) ? 'bad' : '') : '';
+    return `<div class="stat-box sb ${side}${better ? '' : ' worse'}">
+      <div class="sb-top"><span class="sb-label">${lbl} ${atk ? '공격' : '수비'}</span>${rank ? `<span class="sb-rank ${tier}">리그 ${rank}위</span>` : ''}</div>
+      <div class="sb-val"><b data-v="${v}">0.00</b><small>${atk ? '경기당 득점' : '경기당 실점'}</small></div>
+      <div class="sb-bar" title="${avg != null ? `리그 평균 ${avg.toFixed(2)}${atk ? '' : ' (낮을수록 좋음)'}` : ''}"><i data-fill="${Math.min(100, v / max * 100).toFixed(1)}"></i>${avg != null ? `<em style="left:${Math.min(100, avg / max * 100).toFixed(1)}%"></em>` : ''}</div>
+    </div>`;
+  };
+  const el = document.getElementById('stat-boxes');
+  el.innerHTML = box('home', homeLbl, data.home_stats, 'atk') + box('home', homeLbl, data.home_stats, 'def') + box('away', awayLbl, data.away_stats, 'atk') + box('away', awayLbl, data.away_stats, 'def');
+  el.querySelectorAll('.sb-val b').forEach((b, i) => { const v = +b.dataset.v; if (RM) b.textContent = v.toFixed(2); else setTimeout(() => animateCountUp(b, v, { decimals: 2, duration: 800 }), 600 + i * 90); });
+  const fill = () => el.querySelectorAll(".sb-bar i").forEach(i => { i.style.width = i.dataset.fill + "%"; });
+  RM ? fill() : setTimeout(fill, 600);
+}
+
 function showResult(data,home,away){
   lastPrediction = { data, h2h: null, home, away };
   try { history.replaceState(null, '', predictionUrl(home, away)); } catch (e) { /* file:// 등 */ }   // 주소창 = 공유 링크
@@ -5002,31 +5072,54 @@ function showResult(data,home,away){
   document.getElementById('result-away-name').onclick=()=>openTeamInfo(away);
   document.getElementById('result-home-name').classList.add('clickable-team');
   document.getElementById('result-away-name').classList.add('clickable-team');
+  // ── 결과 공개 연출(2026-09-29): 배지 "AI 분석 중" → 막대가 홈·무·원정 순서로 차며 % 오름 → 배지가 결과로 톡 + 이긴 줄 또렷하게
+  //    → 예상 스코어 숫자가 굴러 멈춤 → 한 줄 요약. 새 예측을 누르면 이전 연출 타이머는 취소. 모션 최소화면 최종 모습으로 바로
+  revealTimers.forEach(clearTimeout); revealTimers = [];
+  const RM = matchMedia('(prefers-reduced-motion: reduce)').matches, later = (fn, ms) => RM ? fn() : revealTimers.push(setTimeout(fn, ms));
   const badge=document.getElementById('pred-badge');
-  if(data.prediction==='home_win'){badge.textContent=`${home} 승리 예측`;badge.className='badge home';}
-  else if(data.prediction==='away_win'){badge.textContent=`${away} 승리 예측`;badge.className='badge away';}
-  else{badge.textContent='무승부 예측';badge.className='badge draw';}
+  const finalBadge = data.prediction==='home_win' ? [`${home} 승리 예측`, 'badge home'] : data.prediction==='away_win' ? [`${away} 승리 예측`, 'badge away'] : ['무승부 예측', 'badge draw'];
+  const probRows = [...document.querySelectorAll('.prob-bars .prob-row')];
+  probRows.forEach(r => r.classList.remove('win', 'dim'));
+  const summary = document.getElementById('pred-summary');
+  summary.textContent = predictionSummary(data, home, away); summary.classList.remove('on');
+  if (RM) { badge.textContent = finalBadge[0]; badge.className = finalBadge[1]; }
+  else { badge.textContent = 'AI 분석 중'; badge.className = 'badge thinking'; }
+  later(() => {
+    badge.textContent = finalBadge[0]; badge.className = finalBadge[1] + (RM ? '' : ' reveal');
+    const wi = data.prediction === 'home_win' ? 0 : data.prediction === 'draw' ? 1 : 2;
+    probRows.forEach((r, i) => r.classList.add(i === wi ? 'win' : 'dim'));
+    summary.classList.add('on');
+  }, 1500);
   const limitedNote=document.getElementById('limited-note');
   if(data.limited){limitedNote.innerHTML=limitedNoteHtml(home,away);limitedNote.style.display='';}else{limitedNote.style.display='none';}
   const hw=Math.round(prob.home_win*100),dw=Math.round(prob.draw*100),aw=Math.round(prob.away_win*100);
-  document.getElementById('bar-home').style.width=hw+'%';document.getElementById('bar-draw').style.width=dw+'%';document.getElementById('bar-away').style.width=aw+'%';
-  animateCountUp(document.getElementById('val-home'), hw, {suffix:'%'});
-  animateCountUp(document.getElementById('val-draw'), dw, {suffix:'%'});
-  animateCountUp(document.getElementById('val-away'), aw, {suffix:'%'});
-  document.getElementById('s-home-atk').textContent=data.home_stats.attack;document.getElementById('s-home-def').textContent=data.home_stats.defense;
-  document.getElementById('s-away-atk').textContent=data.away_stats.attack;document.getElementById('s-away-def').textContent=data.away_stats.defense;
+  // 막대: 0에서 시작해 0.18초 간격으로 차례로(예전엔 세 개가 동시에), 숫자도 같은 박자로
+  const bars = [['bar-home', 'val-home', hw], ['bar-draw', 'val-draw', dw], ['bar-away', 'val-away', aw]];
+  bars.forEach(([b, v]) => { const el = document.getElementById(b); el.style.transition = 'none'; el.style.width = '0%'; document.getElementById(v).textContent = '0%'; });
+  void document.getElementById('bar-home').offsetWidth;
+  bars.forEach(([b, v, pct], i) => {
+    const el = document.getElementById(b);
+    el.style.transition = RM ? 'none' : `width .9s cubic-bezier(.22,.8,.2,1) ${0.25 + i * 0.18}s`;
+    el.style.width = pct + '%';
+    if (RM) document.getElementById(v).textContent = pct + '%';
+    else later(() => animateCountUp(document.getElementById(v), pct, { suffix: '%', duration: 900 }), 250 + i * 180);
+  });
   const homeShortLabel=shortTeamName(home),awayShortLabel=shortTeamName(away);
   document.getElementById('prob-label-home').textContent=homeShortLabel+' 승';
   document.getElementById('prob-label-away').textContent=awayShortLabel+' 승';
-  document.getElementById('s-home-atk-label').textContent=homeShortLabel+' 공격력';
-  document.getElementById('s-home-def-label').textContent=homeShortLabel+' 수비력';
-  document.getElementById('s-away-atk-label').textContent=awayShortLabel+' 공격력';
-  document.getElementById('s-away-def-label').textContent=awayShortLabel+' 수비력';
+  renderStatBoxes(data, homeShortLabel, awayShortLabel, RM);
   renderRadarChart(data, null, home, away);   // 상대전적 축은 맞대결이 도착하면 다시 그림
   renderExplanationFactors(data);
   if(data.score_prediction){
     const sp=data.score_prediction;
-    document.getElementById('score-most-likely').textContent=sp.most_likely.replace('-',' : ');
+    // 예상 스코어: 숫자가 0부터 굴러서 멈춤(배지 공개 직전)
+    const [shg, sag] = sp.most_likely.split('-').map(Number), scoreEl = document.getElementById('score-most-likely');
+    if (RM) scoreEl.textContent = `${shg} : ${sag}`;
+    else {
+      scoreEl.textContent = '0 : 0';
+      later(() => { const t0 = performance.now(), step = now => { const k = Math.min(1, (now - t0) / 700), e = 1 - Math.pow(1 - k, 3);
+        scoreEl.textContent = `${Math.round(shg * e)} : ${Math.round(sag * e)}`; if (k < 1) requestAnimationFrame(step); }; requestAnimationFrame(step); }, 900);
+    }
     document.getElementById('score-most-likely-sub').textContent=`확률 ${sp.top_scores[0].prob}% · 예상 득점 ${homeShortLabel} ${sp.expected_goals.home} - ${sp.expected_goals.away} ${awayShortLabel}`;
     const altScores=sp.top_scores.slice(1,4);
     document.getElementById('score-top-list').innerHTML=altScores.length ? `

@@ -404,13 +404,44 @@ def predict_match(req: MatchRequest):
             "attack":   round(float(h['attack_strength']), 3),
             "defense":  round(float(h['defense_strength']), 3),
             "win_rate": round(float(h['win_rate']), 3),
+            **_stat_context(home_team),   # 결과 화면에서 "경기당 득점 1.85 · 리그 3위"처럼 읽히게(2026-09-29)
         },
         "away_stats": {
             "attack":   round(float(a['attack_strength']), 3),
             "defense":  round(float(a['defense_strength']), 3),
             "win_rate": round(float(a['win_rate']), 3),
+            **_stat_context(away_team),
         }
     }
+
+@lru_cache(maxsize=1)
+def _team_league_map():
+    """팀 → 가장 최근 리그(UCL 제외) 경기의 리그 코드, 전 팀을 한 번에(팀마다 _team_current_league를 부르면 느려서)"""
+    m = df_matches_all[df_matches_all['league'] != 'CL']
+    both = pd.concat([m[['date', 'league', 'home_team']].rename(columns={'home_team': 'team'}),
+                      m[['date', 'league', 'away_team']].rename(columns={'away_team': 'team'})])
+    return both.sort_values('date').groupby('team')['league'].last().to_dict()
+
+@lru_cache(maxsize=8)
+def _league_display_ranks(league):
+    """예측 결과 화면 지표용: 같은 리그 팀들 사이 경기당 득점(공격) 순위·실점(수비) 순위와 리그 평균(블렌딩 값 기준)"""
+    lm = _team_league_map()
+    rows = df_stats[df_stats['team'].map(lambda t: lm.get(t) == league)]
+    if rows.empty:
+        return None
+    atk = rows.sort_values('attack_strength', ascending=False)['team'].tolist()
+    dfn = rows.sort_values('defense_strength')['team'].tolist()
+    return {"n": len(rows), "atk": {t: i + 1 for i, t in enumerate(atk)}, "def": {t: i + 1 for i, t in enumerate(dfn)},
+            "avg_atk": round(float(rows['attack_strength'].mean()), 3), "avg_def": round(float(rows['defense_strength'].mean()), 3)}
+
+def _stat_context(team):
+    """/predict home_stats·away_stats에 붙는 리그 내 순위·평균(5대 리그 팀만, UCL 전용 팀은 None)"""
+    lg = _team_league_map().get(team)
+    r = _league_display_ranks(lg) if lg else None
+    if not r or team not in r["atk"]:
+        return {}
+    return {"league": lg, "league_size": r["n"], "attack_rank": r["atk"][team], "defense_rank": r["def"][team],
+            "league_avg_attack": r["avg_atk"], "league_avg_defense": r["avg_def"]}
 
 @app.get("/team/{team_name}")
 def get_team_stats(team_name: str):
@@ -908,6 +939,11 @@ def _rank_progress(league, season, team):
 # 서버가 뜰 때 백그라운드에서 전 리그·시즌 통계를 미리 계산(재배포 직후 첫 사용자도 기다리지 않게, ~1초)
 def _warm_team_stats():
     # 일정 탭 예측(리그당 수백 경기 한 번에 계산)도 먼저 — 첫 사용자의 예측 막대가 늦게 뜨지 않게
+    try:
+        for lg in ("PL", "PD", "BL1", "SA", "FL1"):
+            _league_display_ranks(lg)
+    except Exception:
+        pass
     for lg in ("PL", "PD", "BL1", "SA", "FL1", "CL"):
         try:
             _schedule_predictions(lg)
