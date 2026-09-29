@@ -397,7 +397,6 @@
     .grp-form { display: flex; gap: 3px; padding-left: 4px; }
     .gf { width: 20px; height: 20px; border-radius: 5px; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #fff; }
     .gf.W { background: #238636; } .gf.D { background: #6e7681; } .gf.L { background: #da3633; }
-    .gf.last { box-shadow: 0 2px 0 0 #e6edf3; }
     @media (max-width: 900px) { .grp-grid { grid-template-columns: 1fr; } }
     .grp-table th { white-space: nowrap; }
     .grp-table td:first-child { padding-left: 10px; }
@@ -1708,10 +1707,10 @@ async function loadUclGroups() {
         <td><div class="team-cell clickable-team" onclick="openTeamInfo('${escJs(r.team)}')"><img src="${r.logo || logos[r.team] || ''}" alt="" onerror="this.style.visibility='hidden'"><span>${shortName(r.team)}</span></div></td>
         <td>${r.played}</td><td>${r.wins}</td><td>${r.draws}</td><td>${r.losses}</td><td class="hide-mobile">${r.gf}-${r.ga}</td>
         <td class="st-gd ${r.gd > 0 ? 'pos' : r.gd < 0 ? 'neg' : ''}">${r.gd > 0 ? '+' : ''}${r.gd}</td><td><b class="grp-pts">${r.points}</b></td>
-        <td><div class="grp-form">${r.form.map((f, i, arr) => `<span class="gf ${f} ${i === arr.length - 1 ? 'last' : ''}">${RES_KO[f]}</span>`).join('')}</div></td>
+        <td><div class="grp-form">${r.form.map(f => `<span class="gf ${f}">${RES_KO[f]}</span>`).join('')}</div></td>
       </tr>`).join('')}
       </tbody></table></div>`).join('')}</div>
-      <div class="st-legend"><span><i style="background:#3fb950"></i>16강 진출 (1·2위)</span><span><i style="background:#d29922"></i>유로파리그 녹아웃 플레이오프 (3위)</span><span class="st-legend-note">기록은 왼쪽부터 조별리그 1~6차전 · 밑줄은 마지막 경기</span></div>`;
+      <div class="st-legend"><span><i style="background:#3fb950"></i>16강 진출 (1·2위)</span><span><i style="background:#d29922"></i>유로파리그 녹아웃 플레이오프 (3위)</span><span class="st-legend-note">기록은 왼쪽부터 조별리그 1~6차전</span></div>`;
   } catch (e) { content.innerHTML = '<div class="loading">데이터를 불러올 수 없어요. 잠시 후 다시 시도해주세요.</div>'; }
 }
 async function loadTournament() {

@@ -594,6 +594,11 @@ WIKI_TITLE_OVERRIDE = {
     "Sport Lisboa e Benfica": "S.L. Benfica",
     "Sporting Clube de Portugal": "Sporting CP",       # "Atlético Clube de Portugal"이 잡힘
     "Feyenoord Rotterdam": "Feyenoord",                # 같은 도시 Excelsior Rotterdam이 잡힘
+    # 2026-09-30 전 팀 점검(팀 이름 단어가 문서 제목에 없는 경우를 전부 확인)에서 나온 오매칭 — 검색 결과가 실행마다 바뀌어 생김
+    "Sheffield United FC": "Sheffield United F.C.",    # 다른 클럽 Sheffield F.C.가 잡힘
+    "RC Celta de Vigo": "RC Celta de Vigo",            # 2군 RC Celta Fortuna가 잡힘
+    "FK Kairat": "FC Kairat",                          # Qarabağ FK가 잡힘
+    "PAE AEK": "AEK Athens F.C.",                      # Panathinaikos가 잡힘
 }
 _WIKI_SKIP_TITLE = re.compile(r"(\sII\b|\s[BC]$|\b(reserves?|women|femenino|féminin|frauen|femminile|u-?\d\d|under-\d\d|youth|academy|primavera)\b)", re.I)
 WIKI_NAME_KO_OVERRIDE = {"Venezia FC": "베네치아 FC"}   # 위키데이터 한국어 이름이 옛 명칭인 경우
@@ -638,7 +643,8 @@ _CITY_NAME_FIX = {"Q23306": "런던"}   # 그레이터런던 → 런던
 # 위키데이터상 훈련장·경기장이 옆 도시에 있어서 팬들이 아는 연고지와 다르게 나오는 팀(2026-09-29 전 팀 확인)
 WIKI_CITY_OVERRIDE = {"Cagliari Calcio": "칼리아리", "Nottingham Forest FC": "노팅엄", "Olympique Lyonnais": "리옹",
                       "Manchester City FC": "맨체스터", "Manchester United FC": "맨체스터", "Lille OSC": "릴", "SS Lazio": "로마",
-                      "Aston Villa FC": "버밍엄"}
+                      "Aston Villa FC": "버밍엄", "AS Saint-Étienne": "생테티엔", "PAE AEK": "아테네", "Real Oviedo": "오비에도",
+                      "Stade de Reims": "랭스", "Viking FK": "스타방에르", "SV 07 Elversberg": "슈피젠엘버스베르크"}
 _wd_cache = {}
 def _wd_city(qid, depth=0):
     if qid in _CITY_NAME_FIX:
