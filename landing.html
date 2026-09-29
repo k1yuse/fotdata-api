@@ -513,12 +513,13 @@
     }
     .standings-mock-header { padding: 14px 18px; border-bottom: 0.5px solid var(--border); display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; }
     .standings-mock-header img { width: 18px; height: 18px; object-fit: contain; }
-    .standings-row { display: grid; grid-template-columns: 28px 1fr auto auto; gap: 8px; align-items: center; padding: 10px 18px; border-bottom: 0.5px solid rgba(48,54,61,0.5); font-size: 13px; }
+    /* 승점 칸 폭 고정(예전 auto라 승점이 두 자리면 폼 점들이 한 글자만큼 왼쪽으로 밀렸음) */
+    .standings-row { display: grid; grid-template-columns: 28px 1fr auto 30px; gap: 10px; align-items: center; padding: 10px 18px; border-bottom: 0.5px solid rgba(48,54,61,0.5); font-size: 13px; }
     .standings-row:last-child { border-bottom: none; }
     .standings-rank { color: var(--muted); font-size: 12px; text-align: center; }
     .standings-team { display: flex; align-items: center; gap: 8px; }
     .standings-team img { width: 20px; height: 20px; object-fit: contain; }
-    .standings-pts { font-weight: 700; color: var(--blue); min-width: 28px; text-align: right; }
+    .standings-pts { font-weight: 700; color: var(--blue); text-align: right; font-variant-numeric: tabular-nums; }
     .form-dots { display: flex; gap: 3px; }
     .form-dot { width: 8px; height: 8px; border-radius: 50%; }
     .form-dot.W { background: var(--green); }
@@ -936,7 +937,7 @@
   <div class="standings-inner">
     <div class="standings-mock">
       <div class="standings-mock-header">
-          <img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'">
+          <img src="https://crests.football-data.org/PL.png" alt="" style="filter:brightness(0) invert(1)" onerror="this.style.display='none'">
           EPL 2026-27 순위표
         </div>
       <div id="landing-standings-preview">
