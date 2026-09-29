@@ -1458,6 +1458,16 @@ def _with_live(m, live):
         return m
     return {**m, **{k: x for k, x in v.items() if k != "utc"}, "live": True}
 
+@app.get("/match/detail")
+def get_match_detail(home_team: str, away_team: str, date: str):
+    """경기 결과 창 [요약 | 라인업 | 통계] 탭 — 득점·카드·교체, 라인업(포메이션·평점), 팀 통계(xG 포함), 경기 최우수 선수.
+    update_data.af_match_detail이 만든 fotdata_model/match_details.json {"홈|원정|YYYY-MM-DD": ...}에서 꺼냄.
+    수집은 API-Football Pro 결제 후에 붙일 예정이라 지금은 파일이 없어서 404 → 화면은 예전처럼(탭 없이) 보여줌 (2026-09-30)"""
+    d = (_load_json("match_details.json") or {}).get(f"{home_team}|{away_team}|{date[:10]}")
+    if not d:
+        raise HTTPException(status_code=404, detail="경기 상세 데이터 없음")
+    return d
+
 @app.get("/matches/live")
 def get_matches_live():
     """오늘 경기 최신 상태만(가벼움) — 화면이 진행 중 경기가 있을 때 1분마다 부름"""

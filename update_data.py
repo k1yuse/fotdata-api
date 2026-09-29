@@ -1167,6 +1167,93 @@ def fetch_team_wiki(force=False):
         json.dump(wiki, f, ensure_ascii=False, indent=1, sort_keys=True)
     print(f"  ✅ team_wiki.json 저장 ({len(wiki)}팀)")
 
+# ── 경기 상세(API-Football /fixtures?id=) → 화면용 형태 (2026-09-30) ──
+# 경기 결과 창의 [요약 | 라인업 | 통계] 탭이 쓰는 형태. 수집(어느 경기를 언제 받을지)은 API-Football Pro 결제 후에 붙이고,
+# 결과는 fotdata_model/match_details.json {"홈|원정|YYYY-MM-DD": 이 함수 결과}에 저장 → main.py /match/detail이 내려줌.
+# /fixtures?id= 한 번이면 이벤트·라인업·팀 통계·선수별 스탯(평점)이 같이 옴(무료 키로 24-25 경기에서 형태 확인함).
+AF_STAT_KEYS = [   # (API-Football 이름, 키, 화면 라벨, 단위, 좋은 쪽)
+    ("Ball Possession", "possession", "점유율", "%", None),
+    ("expected_goals", "xg", "기대 득점(xG)", "", "high"),
+    ("Total Shots", "shots", "슈팅", "", "high"),
+    ("Shots on Goal", "shots_on", "유효 슈팅", "", "high"),
+    ("Shots insidebox", "shots_box", "박스 안 슈팅", "", "high"),
+    ("Corner Kicks", "corners", "코너킥", "", "high"),
+    ("Total passes", "passes", "패스", "", None),
+    ("Passes %", "pass_acc", "패스 성공률", "%", "high"),
+    ("Goalkeeper Saves", "saves", "선방", "", None),
+    ("Fouls", "fouls", "파울", "", "low"),
+    ("Offsides", "offsides", "오프사이드", "", "low"),
+    ("Yellow Cards", "yellow", "경고", "", "low"),
+    ("Red Cards", "red", "퇴장", "", "low"),
+]
+
+def af_match_detail(fx):
+    """API-Football 경기 하나(/fixtures?id= 응답의 response[0]) → 화면용 dict(점수·팀 이름은 우리 일정에 이미 있어서 안 넣음)"""
+    hid = fx["teams"]["home"]["id"]
+    side = lambda tid: "home" if tid == hid else "away"
+    num = lambda v: None if v in (None, "") else float(str(v).rstrip("%"))
+    pinfo = {}   # 선수 ID → 평점·출전 시간·사진
+    for tp in fx.get("players") or []:
+        for p in tp.get("players") or []:
+            g = ((p.get("statistics") or [{}])[0] or {}).get("games") or {}
+            pinfo[p["player"]["id"]] = {"rating": round(float(g["rating"]), 1) if g.get("rating") else None,
+                                        "minutes": g.get("minutes"), "photo": p["player"].get("photo")}
+    starters = {x["player"]["id"] for l in fx.get("lineups") or [] for x in l.get("startXI") or []}
+    events, tally = [], {}
+    def mark(pid, k, minute=None):
+        """선수별 표시: 골·도움·카드는 횟수, 교체(off/on)는 그 분"""
+        if not pid:
+            return
+        t = tally.setdefault(pid, {})
+        t[k] = minute if k in ("off", "on") else t.get(k, 0) + 1
+    for e in fx.get("events") or []:
+        t, d = e.get("type"), e.get("detail") or ""
+        kind = {"Goal": {"Own Goal": "own_goal", "Penalty": "pen_goal", "Missed Penalty": "missed_pen"}.get(d, "goal"),
+                "Card": "red" if "Red" in d else "second_yellow" if "Second" in d else "yellow",
+                "subst": "sub", "Var": "var"}.get(t, (t or "").lower())
+        p, a = e.get("player") or {}, e.get("assist") or {}
+        if kind == "sub" and p.get("id") not in starters and a.get("id") in starters:
+            p, a = a, p   # 교체는 player = 나간 선수, assist = 들어온 선수가 원칙인데 반대로 오는 경우가 있어 선발 명단으로 바로잡음
+        tm = e.get("time") or {}
+        events.append({"min": tm.get("elapsed"), "extra": tm.get("extra"), "side": side(e["team"]["id"]), "type": kind,
+                       "player": p.get("name"), "player_id": p.get("id"), "other": a.get("name"), "other_id": a.get("id"),
+                       "detail": d, "comment": e.get("comments")})
+        m = tm.get("elapsed")
+        if kind in ("goal", "pen_goal"):
+            mark(p.get("id"), "goals"); mark(a.get("id"), "assists")
+        elif kind == "own_goal":
+            mark(p.get("id"), "own_goals")
+        elif kind in ("yellow", "second_yellow", "red"):
+            mark(p.get("id"), kind)
+        elif kind == "sub":
+            mark(p.get("id"), "off", m); mark(a.get("id"), "on", m)
+    def player(x):
+        pl = x["player"]
+        info = pinfo.get(pl["id"], {})
+        return {"id": pl["id"], "name": pl.get("name"), "number": pl.get("number"), "pos": pl.get("pos"), "grid": pl.get("grid"),
+                "rating": info.get("rating"), "minutes": info.get("minutes"), "photo": info.get("photo"), **tally.get(pl["id"], {})}
+    lineups = {}
+    for l in fx.get("lineups") or []:
+        lineups[side(l["team"]["id"])] = {
+            "formation": l.get("formation"), "coach": (l.get("coach") or {}).get("name"),
+            "colors": (l.get("team") or {}).get("colors"),
+            "start": [player(x) for x in l.get("startXI") or []],
+            "subs": [player(x) for x in l.get("substitutes") or []]}
+    stats, raw = [], {side(s["team"]["id"]): {x["type"]: x["value"] for x in s.get("statistics") or []} for s in fx.get("statistics") or []}
+    for src, key, label, unit, better in AF_STAT_KEYS:
+        hv, av = num(raw.get("home", {}).get(src)), num(raw.get("away", {}).get(src))
+        if hv is None and av is None:
+            continue
+        stats.append({"key": key, "label": label, "unit": unit, "better": better, "home": hv or 0, "away": av or 0})
+    rated = [(p["rating"], s, p) for s, l in lineups.items() for p in l["start"] + l["subs"] if p.get("rating")]
+    best = max(rated, key=lambda r: r[0]) if rated else None
+    st = (fx.get("fixture") or {}).get("status") or {}
+    return {"source": "api-football", "fixture_id": (fx.get("fixture") or {}).get("id"),
+            "status": {"short": st.get("short"), "elapsed": st.get("elapsed"), "extra": st.get("extra")},
+            "referee": (fx.get("fixture") or {}).get("referee"), "venue": ((fx.get("fixture") or {}).get("venue") or {}).get("name"),
+            "events": events, "lineups": lineups, "stats": stats,
+            "potm": {"id": best[2]["id"], "name": best[2]["name"], "side": best[1], "rating": best[0], "photo": best[2].get("photo")} if best else None}
+
 def _fetch_af_transfers(af_id, limit=30):
     """API-Football /transfers → 최근 이적 기록(이 팀이 관련된 것만). 선수 사진·양쪽 구단 로고·방향(in/out)까지 저장
     — 예전엔 이름·날짜·유형만 저장해서 화면에 글자만 나왔음(2026-09-29 확장). 사진은 선수 ID로 만드는 고정 주소."""
