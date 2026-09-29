@@ -299,6 +299,9 @@
     .share-result-btn:active { transform: scale(0.98); }
     .share-result-btn svg { width: 17px; height: 17px; }
     .share-result-btn:disabled { opacity: 0.6; cursor: default; }
+    .share-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 18px; } .share-row .share-result-btn { margin-top: 0; }
+    .share-result-btn.primary { background: linear-gradient(135deg, #1f6feb, #3b82f6); border-color: transparent; color: #fff; box-shadow: 0 6px 18px rgba(31,111,235,0.3); }
+    .share-result-btn.primary:hover { background: linear-gradient(135deg, #1f6feb, #3b82f6); box-shadow: 0 8px 24px rgba(31,111,235,0.42); }
 
     /* PWA 설치 유도 배너 */
     .pwa-install-banner { position: fixed; left: 16px; right: 16px; bottom: 16px; max-width: 420px; margin: 0 auto; background: #161b22; border: 0.5px solid #30363d; border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; gap: 12px; box-shadow: 0 16px 48px rgba(0,0,0,.5), 0 4px 12px rgba(0,0,0,.3); z-index: 500; transform: translateY(120%); transition: transform .3s ease; }
@@ -775,7 +778,7 @@
     /* 예측 */
     /* 두 열을 독립된 세로 열로 — 맞대결 줄 수(0~10)에 따라 양쪽 높이가 매번 달라서, 한 격자 행으로
        묶으면 짧은 쪽 카드가 긴 쪽 높이로 늘어나며 속이 빈 박스가 생김 */
-    .predict-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+    .predict-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 16px; align-items: start; }   /* minmax(0,…): 안쪽 내용 최소 폭 때문에 열이 화면보다 넓어지던 것 방지 */
     .predict-col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
     .predict-col > .card { margin-bottom: 0; }
     /* "다른 경기도 예측해보기": 왼쪽 열이 오른쪽보다 짧은 만큼 정확히 채우는 카드(fitMoreCard) —
@@ -1161,7 +1164,7 @@
     .error-msg { background: #4c1d1d; border: 0.5px solid #f85149; border-radius: 8px; padding: 10px 14px; color: #f85149; font-size: 13px; margin-top: 10px; display: none; }
 
     @media (max-width: 768px) {
-      .predict-grid { grid-template-columns: 1fr; }
+      .predict-grid { grid-template-columns: minmax(0,1fr); }
       /* 모바일 한 줄 배치에선 기존 순서(결과 → 맞대결 → 홈팀 최근 → 원정팀 최근) 유지 */
       .predict-col { display: contents; }
       .pg-result { order: 1; } .pg-h2h { order: 2; } .pg-home-form { order: 3; } .pg-away-form { order: 4; }
@@ -1812,7 +1815,10 @@
             </div>
             <div id="score-top-list" class="prob-bars"></div>
           </div>
-          <button class="share-result-btn" id="share-result-btn" onclick="shareResultCard()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.6" x2="15.4" y2="6.4"/><line x1="8.6" y1="13.4" x2="15.4" y2="17.6"/></svg>예측 결과 이미지로 저장</button>
+          <div class="share-row">
+            <button class="share-result-btn primary" id="share-link-btn" onclick="sharePredictionLink()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>링크 공유</button>
+            <button class="share-result-btn" id="share-result-btn" onclick="shareResultCard()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>이미지 저장</button>
+          </div>
         </div>
         <div class="card pg-more" id="pg-more">
           <div class="card-title">다른 경기도 예측해보기</div>
@@ -1994,6 +2000,7 @@ function limitedNoteHtml(home, away) {
   const who = outs.length ? `${outs.join(', ')}은(는) 5대 리그 밖 팀이라 ` : '5대 리그 밖 팀이 있어 ';
   return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><circle cx="12" cy="8" r="0.6" fill="currentColor"/></svg><span><b>참고용 예측</b> · ${who}UCL 경기 기록만으로 계산했어요</span>`;
 }
+let predictableTeamsReady = Promise.resolve();
 async function loadPredictableTeams() {
   try {
     const res = await fetchWithRetry(`${API}/teams`);
@@ -2917,6 +2924,43 @@ async function openMatchPredictModal(home, away) {
 function closeMatchPredictModal(e) {
   if (!e || e.target === document.getElementById('match-predict-modal')) document.getElementById('match-predict-modal').classList.remove('show');
 }
+// ── 예측 공유 링크: FotData.html?match=liverpool-vs-manchester-city ──
+// 팀 이름을 읽기 쉬운 slug로(악센트 제거·FC 같은 클럽 표기 제거). 들어오면 그 예측을 바로 보여줌
+function teamSlug(t) {
+  return cleanTeamName(t).normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase()
+    .replace(/\b(fc|afc|cf|ac|sc|ssc|us|as|rc|rcd|cd|sv|tsg|vfb|vfl|ogc|aj|bc)\b/g, ' ').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
+function teamFromSlug(slug) {
+  const all = [...new Set([...getAllTeamsForSearch(), ...(predictableTeams || [])])];
+  return all.find(t => teamSlug(t) === slug) || null;
+}
+function predictionUrl(home, away) {
+  return `${location.origin}${location.pathname}?match=${teamSlug(home)}-vs-${teamSlug(away)}`;
+}
+async function sharePredictionLink() {
+  if (!lastPrediction) return;
+  const { home, away, data } = lastPrediction;
+  const url = predictionUrl(home, away), p = data.probabilities;
+  const pick = data.prediction === 'home_win' ? `${shortName(home)} 승 ${Math.round(p.home_win * 100)}%` : data.prediction === 'away_win' ? `${shortName(away)} 승 ${Math.round(p.away_win * 100)}%` : `무승부 ${Math.round(p.draw * 100)}%`;
+  const text = `${shortName(home)} vs ${shortName(away)} — AI 예측: ${pick}`;
+  // 모바일은 시스템 공유 창(카톡 등), 안 되면 주소 복사
+  if (navigator.share && matchMedia('(pointer: coarse)').matches) {
+    try { await navigator.share({ title: 'FotData AI 경기 예측', text, url }); return; } catch (e) { if (e.name === 'AbortError') return; }
+  }
+  try { await navigator.clipboard.writeText(`${text}\n${url}`); showToast('예측 링크를 복사했어요'); }
+  catch (e) { prompt('아래 링크를 복사하세요', url); }
+}
+// 공유 링크로 들어왔으면 그 경기 예측을 바로(팀 목록·로고가 준비된 뒤)
+async function openSharedPrediction() {
+  const m = new URLSearchParams(location.search).get('match');
+  if (!m || !m.includes('-vs-')) return;
+  const [hs, as] = m.split('-vs-');
+  await Promise.all([logosReady, predictableTeamsReady]);
+  const home = teamFromSlug(hs), away = teamFromSlug(as);
+  if (!home || !away || home === away) { showToast('링크의 경기를 찾을 수 없어요'); return; }
+  goToFullPrediction(home, away);
+}
+
 function goToFullPrediction(home, away) {
   closeMatchPredictModal();
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -3589,6 +3633,7 @@ function showPage(page) {
   void target.offsetWidth;
   target.classList.add('page-enter');
   setActiveTab(page);
+  if (page !== 'predict' && location.search.includes('match=')) { try { history.replaceState(null, '', location.pathname); } catch (e) {} }
   if(page==='players'){loadPlayers();}
   if(page==='champion'){loadChampion('PL');}
   if(page==='schedule'){loadSchedule(currentScheduleLeague);}
@@ -4876,6 +4921,7 @@ function fillResultExtras(ex, data, home, away, seq) {
 let lastPrediction = null;
 function showResult(data,home,away){
   lastPrediction = { data, h2h: null, home, away };
+  try { history.replaceState(null, '', predictionUrl(home, away)); } catch (e) { /* file:// 등 */ }   // 주소창 = 공유 링크
   renderResultPitch();
   const prob=data.probabilities;
   const resultHomeLogo=document.getElementById('result-home-logo'), resultAwayLogo=document.getElementById('result-away-logo');
@@ -5791,7 +5837,7 @@ initScrollFade(document.querySelector('.nav-tabs-scroll'));
   });
 });
 
-loadLogos();loadPredictableTeams();loadStandings('PL');loadAccuracy();loadTodayMatches();loadBigMatch();loadMyTeamWidget();loadTrackStrip();
+loadLogos();predictableTeamsReady=loadPredictableTeams();loadStandings('PL');loadAccuracy();loadTodayMatches();loadBigMatch();loadMyTeamWidget();loadTrackStrip();openSharedPrediction();
 
 if(window.location.hash){setTimeout(()=>{const h=window.location.hash.replace('#','');const valid=['predict','champion','standings','players','schedule','shootout'];if(!valid.includes(h))return;document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));const pg=document.getElementById('page-'+h);if(pg)pg.classList.add('active');setActiveTab(h);if(h==='champion')loadChampion('PL');if(h==='players')loadPlayers();if(h==='schedule')loadSchedule('PL');if(h==='shootout')initShootout();},100);}
 </script>
