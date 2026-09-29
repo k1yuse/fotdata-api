@@ -669,6 +669,7 @@
     .kofi-panel-body iframe { width: 100%; height: 100%; border: none; display: block; }
     @media (max-width: 480px) { .kofi-panel { left: 10px; } }
   </style>
+  <script src="analytics.js" defer></script>
 </head>
 <body>
 
@@ -694,19 +695,19 @@
 </a>
 
 <div class="nav-links">
-    <a href="FotData.html">경기 예측</a>
-    <a href="FotData.html#champion">순위 예측</a>
-    <a href="FotData.html#standings">순위표</a>
-    <a href="FotData.html#schedule">일정</a>
-    <a href="FotData.html#players">선수</a>
-    <a href="FotData.html#shootout">승부차기</a>
+    <a data-umami-event="landing_nav" href="FotData.html">경기 예측</a>
+    <a data-umami-event="landing_nav" href="FotData.html#champion">순위 예측</a>
+    <a data-umami-event="landing_nav" href="FotData.html#standings">순위표</a>
+    <a data-umami-event="landing_nav" href="FotData.html#schedule">일정</a>
+    <a data-umami-event="landing_nav" href="FotData.html#players">선수</a>
+    <a data-umami-event="landing_nav" href="FotData.html#shootout">승부차기</a>
   </div>
   <div style="display: flex; align-items: center; gap: 14px; justify-self: end;">
     <button class="nav-donate-btn" onclick="toggleKofiPanel()" aria-label="후원하기" title="후원하기">
       <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
       후원하기
     </button>
-    <a href="FotData.html" class="nav-cta">시작하기 →</a>
+    <a href="FotData.html" class="nav-cta" data-umami-event="landing_cta" data-umami-event-where="nav">시작하기 →</a>
   </div>
 </nav>
 
@@ -718,8 +719,8 @@
   <h1>축구를 데이터로<br><em>예측하다</em></h1>
   <p>5대 리그+UCL 실시간 순위, AI 경기 예측, 역대 맞대 기록. 전문가 수준의 축구&nbsp;인사이트를 무료로.</p>
   <div class="hero-btns">
-    <a href="FotData.html" class="btn-primary">경기 예측하기</a>
-    <a href="FotData.html#standings" class="btn-secondary">순위표 보기</a>
+    <a href="FotData.html" class="btn-primary" data-umami-event="landing_cta" data-umami-event-where="hero">경기 예측하기</a>
+    <a href="FotData.html#standings" class="btn-secondary" data-umami-event="landing_cta" data-umami-event-where="hero_standings">순위표 보기</a>
   </div>
   
     <div class="stats-row"><div class="stat-item"><div class="stat-num" id="matches-stat">0</div><div class="stat-label">경기 데이터</div></div>
@@ -769,7 +770,7 @@
         <div class="story-kicker">FotData</div>
         <h2>그리고 이 모든 게,<br><em>버튼 하나로</em></h2>
         <p>두 팀만 고르면 AI가 확률, 예상 스코어, 근거까지 보여줘요.</p>
-        <a href="FotData.html" class="btn-primary">경기 예측하기</a>
+        <a href="FotData.html" class="btn-primary" data-umami-event="landing_cta" data-umami-event-where="story">경기 예측하기</a>
       </div>
     </div>
     <div class="story-bar-labels" id="story-bar-labels" aria-hidden="true"></div>
@@ -1032,7 +1033,7 @@
 <section class="cta-section reveal">
   <h2>지금 바로<br><em>시작하세요</em></h2>
   <p>무료로 모든 기능을 이용할 수 있어요</p>
-  <a href="FotData.html" class="btn-primary cta-shine" style="font-size:16px;padding:16px 40px">FotData 시작하기 →</a>
+  <a href="FotData.html" class="btn-primary cta-shine" data-umami-event="landing_cta" data-umami-event-where="bottom" style="font-size:16px;padding:16px 40px">FotData 시작하기 →</a>
 </section>
 
 <footer>

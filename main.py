@@ -987,6 +987,12 @@ def _warm_team_stats():
             _schedule_predictions(lg)
         except Exception:
             pass
+    try:   # 공유 썸네일 배경(빛번짐·공·경기장)도 미리 — 첫 링크 미리보기 봇이 기다리지 않게
+        import share_card
+        share_card._background()
+        share_card.warm_crests(team_logos_cache.values())
+    except Exception:
+        pass
     for lg in ("PL", "PD", "BL1", "SA", "FL1"):
         for yr in STAT_SEASONS:
             try:
@@ -1411,3 +1417,161 @@ def proxy_logo(url: str):
         media_type=resp.headers.get("Content-Type", "image/png"),
         headers={"Cache-Control": "public, max-age=86400"},
     )
+# ── 경기별 링크 공유 미리보기 (2026-09-30) ──
+# 카톡·페북·X의 링크 미리보기는 JS를 실행하지 않아서 FotData.html?match=... 로는 사이트 공통 썸네일만 떴음.
+# 공유 링크를 https://fotdata-api.vercel.app/m/{홈}-vs-{원정} 으로 바꾸고, Vercel이 이 주소를 여기로 넘겨줌(vercel.json rewrites):
+#   /m/{slug}          → /share/match/{slug}  : 그 경기 예측이 담긴 og 태그 + 사람은 JS로 앱 예측 화면으로 이동
+#   /og/m/{slug}.jpg   → /og/match/{slug}.jpg : 1200×630 예측 카드(share_card.py)
+# slug 규칙은 FotData.html teamSlug()와 같아야 함(앱이 만든 링크를 여기서 풀어야 하므로)
+SITE_URL = "https://fotdata-api.vercel.app"
+LEAGUE_KO = {"PL": "프리미어리그", "PD": "라리가", "BL1": "분데스리가", "SA": "세리에 A", "FL1": "리그 1", "CL": "챔피언스리그"}
+_SLUG_CLUB = re.compile(r"\b(fc|afc|cf|ac|sc|ssc|us|as|rc|rcd|cd|sv|tsg|vfb|vfl|ogc|aj|bc)\b", re.ASCII)
+
+def _team_slug(name):
+    import unicodedata
+    s = re.sub(r"^\d+\.\s*", "", name or "")
+    s = "".join(c for c in unicodedata.normalize("NFKD", s) if not ("̀" <= c <= "ͯ")).lower()
+    s = _SLUG_CLUB.sub(" ", s)
+    return re.sub(r"[^a-z0-9]+", "-", s, flags=re.ASCII).strip("-")
+
+@lru_cache(maxsize=1)
+def _slug_map():
+    """slug → 예측에 쓰는 팀 이름. 앱이 쓰는 이름(LEAGUE_DATA 표기·API 표기) 어느 쪽 slug로 와도 찾게"""
+    names = set(team_logos_cache) | set(df_stats['team']) | set(ucl_only_teams) | set(TEAM_NAME_MAP)
+    out = {}
+    for n in sorted(names):
+        api = TEAM_NAME_MAP.get(n, n)
+        s = _team_slug(n)
+        if s and (s not in out or (api in team_state and out[s] not in team_state)):
+            out[s] = api
+    return out
+
+@lru_cache(maxsize=1)
+def _short_names():
+    """FotData.html의 SHORT_NAMES 표를 그대로 읽어 씀(표를 두 군데서 관리하지 않으려고) — 못 읽으면 빈 표"""
+    try:
+        with open(os.path.join(BASE, "FotData.html"), encoding="utf-8") as f:
+            html = f.read()
+        block = html[html.index("const SHORT_NAMES = {"):]
+        block = block[:block.index("};")]
+        return dict(re.findall(r"'([^']+)':\s*'([^']+)'", block))
+    except Exception:
+        return {}
+
+def _short_name(name):
+    """FotData.html shortName()과 같은 규칙"""
+    if name in _short_names():
+        return _short_names()[name]
+    t = re.sub(r"\b(FC|CF|AFC|BC|SC|AC|SK|FK|SSC|US|KV)\b|\b\d{4}\b", "", re.sub(r"^\d+\.\s*", "", name))
+    return re.sub(r"\s+", " ", t).strip() or name
+
+def _fixture_meta(home, away):
+    """다가오는 같은 대진(홈·원정 그대로)이 일정에 있으면 '챔피언스리그 · 10월 21일(수) 04:00'(한국 시간)"""
+    from datetime import datetime, timedelta, timezone
+    now = datetime.now(timezone.utc)
+    best = None
+    for code, ms in (_load_json("schedule.json") or {}).items():
+        for m in ms:
+            if m.get("status") in ("FINISHED", "AWARDED", "CANCELLED"):
+                continue
+            if TEAM_NAME_MAP.get(m["home_team"], m["home_team"]) != home or TEAM_NAME_MAP.get(m["away_team"], m["away_team"]) != away:
+                continue
+            dt = datetime.fromisoformat(m["date"].replace("Z", "+00:00"))
+            if dt > now - timedelta(hours=3) and (best is None or dt < best[0]):
+                best = (dt, code)
+    if not best:
+        return None
+    k = best[0] + timedelta(hours=9)
+    return f"{LEAGUE_KO.get(best[1], best[1])} · {k.month}월 {k.day}일({'월화수목금토일'[k.weekday()]}) {k:%H:%M}"
+
+@lru_cache(maxsize=512)
+def _share_data(slug):
+    """slug → 공유 미리보기에 쓸 예측 요약. 풀 수 없거나 예측할 수 없는 경기면 None"""
+    if "-vs-" not in slug:
+        return None
+    hs, as_ = slug.split("-vs-", 1)
+    sm = _slug_map()
+    home, away = sm.get(hs), sm.get(as_)
+    if not home or not away or home == away:
+        return None
+    try:
+        r = predict_match(MatchRequest(home_team=home, away_team=away))
+    except HTTPException:
+        return None
+    p = r["probabilities"]
+    return {
+        "slug": f"{hs}-vs-{as_}", "home": home, "away": away,
+        "home_short": _short_name(home), "away_short": _short_name(away),
+        "probs": (p["home_win"], p["draw"], p["away_win"]),
+        "prediction": r["prediction"], "score": (r.get("score_prediction") or {}).get("most_likely"),
+        "limited": r.get("limited", False), "meta": _fixture_meta(home, away),
+    }
+
+def _data_version():
+    """썸네일 주소에 붙이는 버전 — 매일 예측이 바뀌면 메신저가 새 이미지를 받아가게(모델 학습 시각)"""
+    acc = _load_json("accuracy.json") or {}
+    return re.sub(r"\D", "", str(acc.get("updated_at") or ""))[:10] or "1"
+
+@app.get("/share/match/{slug}")
+def share_match_page(slug: str):
+    from fastapi.responses import HTMLResponse
+    from html import escape
+    slug = slug.lower().strip()
+    app_url = f"{SITE_URL}/FotData.html?match={slug}"
+    d = _share_data(slug)
+    if d:
+        hp, dp, ap = (round(x * 100) for x in d["probs"])
+        pick = (f"{d['home_short']} 승 {hp}%" if d["prediction"] == "home_win"
+                else f"{d['away_short']} 승 {ap}%" if d["prediction"] == "away_win" else f"무승부 {dp}%")
+        title = f"{d['home_short']} vs {d['away_short']} — AI 예측: {pick}"
+        desc = f"홈 {hp}% · 무 {dp}% · 원정 {ap}%"
+        if d["score"]:
+            desc += f" · 예상 스코어 {d['score']}"
+        desc += f" | {d['meta']}" if d["meta"] else ""
+        desc += " — FotData AI 축구 경기 예측"
+        image = f"{SITE_URL}/og/m/{d['slug']}.jpg?v={_data_version()}"
+    else:
+        title, desc, image = "FotData — AI 축구 경기 예측", "5대 리그 + 챔피언스리그 AI 경기 예측", f"{SITE_URL}/og-image.png?v=2"
+    e = lambda s: escape(s, quote=True)
+    html = f"""<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{e(title)}</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="{e(desc)}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FotData">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="{e(title)}">
+<meta property="og:description" content="{e(desc)}">
+<meta property="og:url" content="{e(f'{SITE_URL}/m/{slug}')}">
+<meta property="og:image" content="{e(image)}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{e(title)}">
+<meta name="twitter:description" content="{e(desc)}">
+<meta name="twitter:image" content="{e(image)}">
+<meta name="theme-color" content="#0d1117">
+<script>location.replace({json.dumps(app_url)});</script>
+</head><body style="margin:0;background:#0d1117;color:#e6edf3;font-family:-apple-system,sans-serif;display:grid;place-items:center;min-height:100vh">
+<a href="{e(app_url)}" style="color:#58a6ff">FotData에서 예측 보기</a>
+</body></html>"""
+    # 사람은 곧바로 앱으로 넘어가고, 미리보기 봇(JS 실행 안 함)만 위 태그를 읽음. 링크 미리보기 봇이 og:url을
+    # 다시 긁어가도 같은 페이지라 안전(og:url을 FotData.html로 두면 페북이 그쪽 공통 태그로 덮어씀)
+    return HTMLResponse(html, headers={"Cache-Control": "public, max-age=600, s-maxage=3600"})
+
+@app.get("/og/match/{name}")
+def share_match_image(name: str):
+    slug = re.sub(r"\.(jpe?g|png)$", "", name.lower())
+    d = _share_data(slug)
+    if not d:
+        return Response(status_code=302, headers={"Location": f"{SITE_URL}/og-image.png?v=2"})
+    return Response(_share_jpg(slug), media_type="image/jpeg", headers={"Cache-Control": "public, max-age=86400, s-maxage=43200"})
+
+@lru_cache(maxsize=128)
+def _share_jpg(slug):
+    import share_card   # Pillow는 이 기능에서만 씀 — 서버 시작 시간에 영향 없게 지연 import
+    d = _share_data(slug)
+    return share_card.render(d["home_short"], d["away_short"], team_logos_cache.get(d["home"]), team_logos_cache.get(d["away"]),
+                             d["probs"], d["score"], d["prediction"], d["meta"], d["limited"])

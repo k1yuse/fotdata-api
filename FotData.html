@@ -1593,6 +1593,7 @@
       html.bg3d-on .bg-ball-canvas { opacity: 0.2; }
     }
   </style>
+  <script src="analytics.js" defer></script>
 </head>
 <body>
 
@@ -2007,6 +2008,8 @@
 
 <script>
 const API = "https://fotdata-api.onrender.com";
+// 방문 통계(analytics.js — Umami, 쿠키 없음). 파일이 아직 안 불렸으면 fdQ에 쌓아 두면 나중에 보냄
+function track(name, data) { if (window.fdTrack) window.fdTrack(name, data); else (window.fdQ = window.fdQ || []).push([name, data]); }
 
 // Render 무료 플랜은 한동안 안 쓰면 서버가 잠들었다가, 요청이 오면 깨어나는 데
 // 최대 1분 가까이 걸릴 수 있다. 그동안 나는 타임아웃/네트워크 에러를 재시도로
@@ -2970,6 +2973,7 @@ async function openMatchResultModal(home, away, date, league) {
 
 async function openMatchPredictModal(home, away) {
   const seq = ++mpSeq;
+  track('match_preview');
   const modal = document.getElementById('match-predict-modal');
   const body = document.getElementById('match-predict-body');
   const homeShort = shortTeamName(home), awayShort = shortTeamName(away);
@@ -3033,20 +3037,26 @@ function teamFromSlug(slug) {
   const all = [...new Set([...getAllTeamsForSearch(), ...(predictableTeams || [])])];
   return all.find(t => teamSlug(t) === slug) || null;
 }
+function matchSlug(home, away) { return `${teamSlug(home)}-vs-${teamSlug(away)}`; }
+// 주소창용(이 페이지 그대로) / 공유용(/m/… — 카톡·SNS 미리보기에 그 경기 예측 카드가 뜸. Vercel이 서버 /share/match로 넘겨주고,
+// 사람은 곧바로 FotData.html?match=…로 이동 — main.py 공유 미리보기 주석 참고)
 function predictionUrl(home, away) {
-  return `${location.origin}${location.pathname}?match=${teamSlug(home)}-vs-${teamSlug(away)}`;
+  return `${location.origin}${location.pathname}?match=${matchSlug(home, away)}`;
+}
+function sharePageUrl(home, away) {
+  return `https://fotdata-api.vercel.app/m/${matchSlug(home, away)}`;
 }
 async function sharePredictionLink() {
   if (!lastPrediction) return;
   const { home, away, data } = lastPrediction;
-  const url = predictionUrl(home, away), p = data.probabilities;
+  const url = sharePageUrl(home, away), p = data.probabilities;
   const pick = data.prediction === 'home_win' ? `${shortName(home)} 승 ${Math.round(p.home_win * 100)}%` : data.prediction === 'away_win' ? `${shortName(away)} 승 ${Math.round(p.away_win * 100)}%` : `무승부 ${Math.round(p.draw * 100)}%`;
   const text = `${shortName(home)} vs ${shortName(away)} — AI 예측: ${pick}`;
   // 모바일은 시스템 공유 창(카톡 등), 안 되면 주소 복사
   if (navigator.share && matchMedia('(pointer: coarse)').matches) {
-    try { await navigator.share({ title: 'FotData AI 경기 예측', text, url }); return; } catch (e) { if (e.name === 'AbortError') return; }
+    try { await navigator.share({ title: 'FotData AI 경기 예측', text, url }); track('share_link', { how: 'native' }); return; } catch (e) { if (e.name === 'AbortError') return; }
   }
-  try { await navigator.clipboard.writeText(`${text}\n${url}`); showToast('예측 링크를 복사했어요'); }
+  try { await navigator.clipboard.writeText(`${text}\n${url}`); showToast('예측 링크를 복사했어요'); track('share_link', { how: 'copy' }); }
   catch (e) { prompt('아래 링크를 복사하세요', url); }
 }
 // 공유 링크로 들어왔으면 그 경기 예측을 바로(팀 목록·로고가 준비된 뒤)
@@ -3057,6 +3067,7 @@ async function openSharedPrediction() {
   await Promise.all([logosReady, predictableTeamsReady]);
   const home = teamFromSlug(hs), away = teamFromSlug(as);
   if (!home || !away || home === away) { showToast('링크의 경기를 찾을 수 없어요'); return; }
+  track('shared_open', { match: `${shortName(home)} vs ${shortName(away)}` });   // 공유 링크로 들어온 방문
   goToFullPrediction(home, away);
 }
 
@@ -3073,6 +3084,7 @@ function goToFullPrediction(home, away) {
 
 async function openTeamInfo(teamName) {
   if (!teamName) return;
+  track('team_info', { team: shortName(teamName) });
   const modal = document.getElementById('ti-modal');
   const tiLogo = document.getElementById('ti-logo');
   tiLogo.style.display = '';
@@ -3126,6 +3138,7 @@ function toggleFavoriteTeam() {
   } else {
     if (list.length >= FAV_MAX) { showToast(`즐겨찾기는 ${FAV_MAX}팀까지예요 · 다른 팀을 먼저 해제해 주세요`); return; }
     setFavoriteTeams([...list, team]);
+    track('favorite_add', { team: teamShort });
     showToast(`${teamShort}을(를) 즐겨찾는 팀으로 등록했어요 ⭐ (${list.length + 1}/${FAV_MAX})`);
   }
   updateFavBtnState();
@@ -3773,6 +3786,7 @@ function showPage(page) {
   void target.offsetWidth;
   target.classList.add('page-enter');
   setActiveTab(page);
+  track('__view', page);
   if (page !== 'predict' && location.search.includes('match=')) { try { history.replaceState(null, '', location.pathname); } catch (e) {} }
   if(page==='players'){loadPlayers();}
   if(page==='champion'){loadChampion('PL');}
@@ -3830,6 +3844,7 @@ function runSimulation() {
 
   setTimeout(() => {
     const nSim = parseInt(document.getElementById('sim-slider').value);
+    track('simulation', { league: currentLeagueCode, runs: nSim });
     const teams = data.teams, T = teams.length, sigma = data.sigma ?? 0.15;
     const z = LEAGUE_ZONES[currentLeagueCode] || { cl: 4, rel: 3 };
     const idx = {}; teams.forEach((t, i) => { idx[t.team] = i; });
@@ -4568,6 +4583,7 @@ async function loadTrackStrip() {
 }
 
 async function openTrackRecordModal() {
+  track('track_record');
   const modal = document.getElementById('track-record-modal');
   const body = document.getElementById('track-record-body');
   modal.classList.add('show');
@@ -4650,6 +4666,7 @@ async function predict(){
     await ensureTeamPrestigeLoaded();
     if(seq!==predictSeq) return;
     showResult(pD,home,away);
+    track('predict',{match:`${shortName(home)} vs ${shortName(away)}`});
     fillResultExtras(extras,pD,home,away,seq);
   }catch(e){errorMsg.textContent=e.status===404?unpredictableMessage(null):'서버 연결 오류. 잠시 후 다시 시도해주세요.';errorMsg.style.display='block';}
   finally{btn.disabled=false;btn.textContent='경기 예측하기';window.fotBg?.settle();}
@@ -5366,6 +5383,7 @@ const PITCH_SIDE_COLOR = { home: '#58a6ff', away: '#f0883e', mid: '#8fb8ff' };
 
 async function shareResultCard() {
   if (!lastPrediction) return;
+  track('share_image');
   const btn = document.getElementById('share-result-btn');
   const origHtml = btn.innerHTML;
   btn.disabled = true; btn.textContent = '생성 중...';
@@ -5846,6 +5864,7 @@ function renderShootoutCoinTossHtml() {
 }
 function startCoinToss() {
   const s = shootoutState;
+  track('shootout_start');
   s.phase = 'coin-toss';
   s.firstKicker = Math.random() < 0.5 ? 'me' : 'opp';
   renderShootout();

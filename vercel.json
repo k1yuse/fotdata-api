@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/m/:slug", "destination": "https://fotdata-api.onrender.com/share/match/:slug" },
+    { "source": "/og/m/:file", "destination": "https://fotdata-api.onrender.com/og/match/:file" }
+  ]
+}

@@ -59,6 +59,10 @@ fotdata-api/
 ├── bg-ball.svg / generate_bg_ball.py   # 유리 테마 배경 공 정지 이미지(3D 로딩 전·모션 최소화용)와 그 생성 스크립트(`primitives()`로 투영 결과를 다른 스크립트에 제공)
 ├── og-image.png / generate_og_image.py # 링크 공유 썸네일(2400×1260) — 새 축구공 로고 + 와이어프레임 공, 문구 바꾸면 스크립트 재실행 + meta의 `?v=` 올리기(카톡·페북 캐시)
 ├── index.html               # 루트(`/`)에서 서빙되는 파일 — landing.html의 사본 (아래 5.1 참고)
+├── share_card.py            # 경기별 링크 공유 썸네일(1200×630 JPEG) 렌더러 — main.py `/og/match`가 씀(5.16)
+├── fonts/                   # 썸네일용 한글 폰트(Pretendard 1.3.9 OFL을 한글 2,350자+라틴으로 추리고 이름을 FotData Card Sans로 바꾼 것, OFL.txt·README.txt)
+├── vercel.json              # Vercel 리라이트: `/m/*`·`/og/m/*` → Render 공유 페이지·썸네일(5.16)
+├── analytics.js             # 방문 통계(Umami) 로더 — FotData.html·landing.html 공용, 사이트 ID는 여기 한 곳(5.16)
 ├── FotData_01.ipynb        # 초기 개발용 주피터 노트북 — 지금은 update_data.py가 대체, 참고용
 ├── manifest.json            # PWA 매니페스트
 ├── icon-192.png / icon-512.png   # PWA/파비콘 아이콘 — 진한 남색(#0d1117) 배경 + 파란(#58a6ff) 축구공(2026-09-23 축구공 로고로 전면 교체)
@@ -273,6 +277,15 @@ cp landing.html index.html
   - **순위표 보기 전환**(리그만, 챔스 숨김): 전체 / 홈 / 원정 / 최근 5경기 — 서버 `/standings/{리그}?season=&view=home|away|form`(`_standings_view` 캐시, 첫 호출 ~24ms). 전체가 아닌 보기엔 구역 색·우승 표시·요약 칸 없음 + 안내 문구.
   - 점검: 데스크톱 1000·1280px, 모바일 375px 전 탭·팀 정보 7개 탭·결과·순위 분포에서 JS 에러 0·가로 넘침 0.
 
+### 5.16 경기별 공유 썸네일 · 방문 통계 (2026-09-30)
+- **공유 링크 = `https://fotdata-api.vercel.app/m/{홈slug}-vs-{원정slug}`**(예측 결과 "링크 공유" 버튼, `sharePageUrl`). 카톡·페북·X 미리보기 봇은 JS를 안 돌려서 예전 `FotData.html?match=`는 공통 썸네일만 떴음. `vercel.json`이 `/m/:slug` → Render `/share/match/:slug`(그 경기 og 태그 — 제목 "Liverpool vs Man City — AI 예측: Man City 승 41%", 설명에 확률·예상 스코어·대회·킥오프(한국 시간), 사람은 JS `location.replace`로 `FotData.html?match=`로 이동), `/og/m/:file` → Render `/og/match/:file`(1200×630 JPEG ~110KB, `share_card.py`)로 넘겨줌. 주소창은 계속 `FotData.html?match=`(새로고침이 Render를 안 거치게).
+  - og:url은 반드시 `/m/…` 자기 자신(FotData.html로 두면 페북이 그쪽 공통 태그를 다시 긁음). 메타 refresh는 봇이 따라갈 수 있어서 안 씀. 썸네일 주소엔 `?v=모델 학습 시각`(매일 새 예측 → 메신저가 새 이미지를 받게).
+  - slug는 서버 `_team_slug`가 JS `teamSlug`와 같은 규칙(ASCII `\b`까지) — 앱 팀 이름 106개로 JS·파이썬 결과 전부 일치·전부 풀림 확인. 짧은 이름은 서버가 FotData.html의 `SHORT_NAMES` 표를 그대로 읽음(`_short_names`, 표 하나만 관리). 풀 수 없거나 예측할 수 없는 경기는 사이트 공통 og 태그 / 이미지는 og-image.png로 302.
+  - 속도: 링크 미리보기 봇은 몇 초만 기다림 → 배경(빛번짐·공·경기장)은 한 번만 그려 재사용, 구단 로고 161개는 서버 시작 때 미리 받아 둠(`warm_crests`, 압축 바이트로 캐시), 카드는 `_share_jpg` lru_cache. 로컬 렌더 0.16초(로고 받는 시간 제외). Render가 자고 있으면 첫 봇은 놓칠 수 있음(cron-job.org 핑으로 대부분 깨어 있음).
+  - 폰트: 맥 기본 폰트는 재배포 불가라 Pretendard(OFL)를 한글 2,350자(KS X 1001)+라틴·기호로 추려 넣음(두 굵기 745KB). **OFL상 수정본은 원래 이름을 못 써서 글꼴 이름을 "FotData Card Sans"로 바꿈.** 여기 없는 글자(드문 한자·이모지)는 □로 나옴.
+  - 서비스워커는 `/m/`·`/og/`를 캐시하지 않음.
+- **방문 통계(Umami Cloud, 쿠키 없음·개인정보 없음)**: `analytics.js`의 `UMAMI_ID`가 비어 있으면(또는 배포 주소가 아니면) 아무것도 안 보냄. 앱: 탭 전환 = 가상 주소 `/app/{탭}` 조회, 이벤트 `predict`(대진)·`share_link`(native/copy)·`share_image`·`shared_open`(공유 링크로 들어온 방문)·`favorite_add`·`team_info`·`simulation`(리그·횟수)·`match_preview`·`track_record`·`shootout_start`. 랜딩: `data-umami-event` 속성으로 `landing_cta`(where: nav/hero/hero_standings/story/bottom)·`landing_nav`. 앱의 `track()`은 analytics.js가 늦게 로드돼도 `window.fdQ`에 쌓았다가 보냄.
+
 ## 6. API 엔드포인트 (main.py)
 
 | Method | Path | 설명 |
@@ -300,6 +313,7 @@ cp landing.html index.html
 | GET | `/predict/schedule/{league_code}` | 일정 탭용: 남은 경기 전부의 H/D/A 확률(`/predict`와 같은 숫자) + `results`(끝난 경기 중 트랙레코드에 경기 전 예측이 있는 것, 적중 여부) (2026-09-29, 5.15) |
 | GET | `/team/stats/{team_name}` | 팀 통계 탭: 시즌별 실제 리그 기록·리그 내 순위·리그 평균·홈/원정·상대 수준별·순위 변동 + AI 파워 레이팅 (2026-09-29, 5.12 참고) |
 | GET | `/matches/window` | 지금 −30시간 ~ +21일 사이 5대 리그+UCL 경기(리그 코드 `league` 포함, 날짜순, 보통 100~150경기) — 홈 위젯(오늘/다음 경기·내 팀)·"다른 경기도 예측해보기" 공용. 예전엔 이 셋이 리그 전체 일정 6개(~1,300경기)를 받았음. 내 팀 경기가 21일 안에 없으면 프론트가 그 팀 리그 일정만 따로 받음. 서버에 이 엔드포인트가 없으면 전체 일정으로 대체(`fetchWindowMatches`) (2026-09-29) |
+| GET | `/share/match/{slug}` · `/og/match/{slug}.jpg` | 경기별 공유 페이지(og 태그 + 앱으로 이동)·썸네일 — Vercel `/m/`·`/og/m/`이 넘겨줌 (2026-09-30, 5.16) |
 | GET | `/bigmatch` | 다가오는 빅매치 1경기(BIG_CLUBS끼리 가장 가까운 경기, 로고 URL 포함) — 경기예측 탭 배너·랜딩 연출 공용 (2026-09-28, 5.8 참고) |
 | GET | `/match/insights?home_team=&away_team=` | 예측 결과 화면 경기 분석: 두 팀 현재 리그 순위·홈팀 홈/원정팀 원정 최근 10경기·경기 성향(전 대회 최근 10경기)·파워 레이팅(ELO) 추이 (2026-09-27 추가, 5.9 참고) |
 
