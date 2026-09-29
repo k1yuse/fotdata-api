@@ -1533,6 +1533,79 @@
     .md-st-bars i { display: block; height: 100%; width: 0; border-radius: 99px; transition: width .7s cubic-bezier(.22,.8,.2,1); opacity: .45; }
     .md-st-bars i.h { background: #58a6ff; } .md-st-bars i.a { background: #f0883e; } .md-st-bars i.on { opacity: 1; }
     @media (prefers-reduced-motion: reduce) { .md-poss-bar i, .md-st-bars i { transition: none; } }
+    .md-pl[onclick] { cursor: pointer; } .md-pl[onclick]:hover .md-pn { color: #79b8ff; }
+    .md-lines .circle.top { top: 0; }
+    /* 팀 소식(경기 미리보기·예측 결과): 라인업 · 결장·부상 · 주요 선수 */
+    .team-news .md-pitch { max-width: 420px; margin: 0 auto; }
+    .tn-chip { font-style: normal; font-size: 9.5px; font-weight: 700; padding: 1px 6px; border-radius: 99px; margin-left: 4px; color: #d29922; background: rgba(210,153,34,0.14); border: 0.5px solid rgba(210,153,34,0.4); }
+    .tn-chip.ok { color: #3fb950; background: rgba(63,185,80,0.14); border-color: rgba(63,185,80,0.4); }
+    .tn-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .tn-col, .tn-kp { min-width: 0; }
+    .tn-col-h { display: flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 700; color: #e6edf3; margin-bottom: 6px; }
+    .tn-col-h img { width: 14px; height: 14px; object-fit: contain; }
+    .tn-inj { display: flex; align-items: center; gap: 7px; padding: 5px 0; font-size: 11px; }
+    .tn-inj[onclick] { cursor: pointer; } .tn-inj[onclick]:hover b { color: #79b8ff; }
+    .tn-inj img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; background: #21262d; flex-shrink: 0; }
+    .tn-inj > div { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
+    .tn-inj b { font-weight: 600; color: #e6edf3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tn-inj small { font-size: 10px; color: #8b949e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tn-abs { flex-shrink: 0; font-size: 9.5px; font-weight: 700; padding: 1px 6px; border-radius: 99px; }
+    .tn-abs.out { color: #ff7b72; background: rgba(248,81,73,0.14); } .tn-abs.doubtful { color: #e3b341; background: rgba(210,153,34,0.14); }
+    .tn-none { font-size: 11px; color: #7d8590; padding: 4px 0; }
+    .tn-kp + .tn-kp { margin-top: 12px; }
+    .tn-row { display: flex; align-items: center; gap: 9px; padding: 6px 8px; margin: 0 -8px; border-radius: 8px; cursor: pointer; transition: background .15s; }
+    .tn-row:hover { background: rgba(88,166,255,0.08); }
+    .tn-row img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; background: #21262d; flex-shrink: 0; }
+    .tn-info { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
+    .tn-info b { font-size: 12.5px; font-weight: 600; color: #e6edf3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tn-info small { font-size: 10.5px; color: #8b949e; }
+    /* 선수 카드 — 다른 창(경기 결과·팀 정보) 위에 뜸 */
+    .modal-overlay.pc-overlay { z-index: 1100; }
+    .pc-hero { display: flex; align-items: center; gap: 14px; padding: 4px 0 14px; }
+    .pc-photo { width: 76px; height: 76px; border-radius: 50%; object-fit: cover; background: #21262d; border: 2px solid rgba(88,166,255,0.45); box-shadow: 0 0 24px rgba(88,166,255,0.2); flex-shrink: 0; }
+    .pc-id { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+    .pc-name { font-size: 18px; font-weight: 800; color: #fff; line-height: 1.2; }
+    .pc-full { font-size: 10.5px; color: #7d8590; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pc-team { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #c9d1d9; } .pc-team img { width: 16px; height: 16px; object-fit: contain; }
+    .pc-tags { display: flex; gap: 5px; margin-top: 2px; }
+    .pc-tags em { font-style: normal; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 99px; background: rgba(139,148,158,0.15); color: #c9d1d9; }
+    .pc-pos.GK { color: #e3b341; background: rgba(227,179,65,0.14); } .pc-pos.DF { color: #3fb950; background: rgba(63,185,80,0.14); }
+    .pc-pos.MF { color: #79b8ff; background: rgba(88,166,255,0.14); } .pc-pos.FW { color: #ffa657; background: rgba(240,136,62,0.14); }
+    .pc-tags .pc-inj { color: #ff7b72; background: rgba(248,81,73,0.14); } .pc-tags .pc-cap { color: #f2cc60; background: rgba(242,204,96,0.14); }
+    .pc-rt { display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0; }
+    .pc-rt .md-rt { font-size: 17px; padding: 5px 8px; border-radius: 9px; }
+    .pc-rt small { font-size: 9.5px; color: #8b949e; }
+    .pc-cells { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+    .pc-cell { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 9px 4px; border-radius: 10px; background: rgba(13,17,23,0.45); border: 0.5px solid rgba(139,148,158,0.16); text-align: center; min-width: 0; }
+    .pc-cell small { font-size: 10px; color: #8b949e; } .pc-cell b { font-size: 13px; color: #e6edf3; font-weight: 700; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pc-cell span { font-size: 9.5px; color: #7d8590; font-variant-numeric: tabular-nums; }
+    .pc-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-bottom: 10px; }
+    .pc-tile { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 10px 4px; border-radius: 10px; background: rgba(88,166,255,0.07); border: 0.5px solid rgba(88,166,255,0.18); }
+    .pc-tile b { font-size: 17px; font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .pc-tile b i { font-style: normal; font-size: 10px; font-weight: 600; color: #8b949e; margin-left: 2px; }
+    .pc-tile small { font-size: 10px; color: #8b949e; }
+    .pc-grp { margin-top: 8px; }
+    .pc-grp-t { font-size: 10.5px; font-weight: 700; color: #7d8590; margin-bottom: 3px; }
+    .pc-kv { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; font-size: 12px; border-bottom: 0.5px solid rgba(139,148,158,0.1); }
+    .pc-kv span { color: #8b949e; } .pc-kv b { color: #e6edf3; font-weight: 600; font-variant-numeric: tabular-nums; }
+    /* 팀 정보 · 시즌 베스트 11 + 선수별 시즌 기록 */
+    .bx-pitch { aspect-ratio: 68 / 64; max-width: 420px; margin: 0 auto; }
+    .md-shirt.ph { width: 36px; height: 36px; background: #21262d; border-color: var(--kb); border-width: 2px; }
+    .md-shirt.ph img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+    .bx-note { margin-top: 6px; font-size: 10.5px; color: #7d8590; text-align: center; }
+    .sq-head, .sq-row { display: grid; grid-template-columns: 30px minmax(0, 1fr) 34px 30px 30px 40px; align-items: center; gap: 6px; }
+    .sq-head { font-size: 10px; color: #7d8590; padding: 0 4px 4px; text-align: center; } .sq-head span:nth-child(2) { text-align: left; }
+    .sq-row { padding: 6px 4px; border-radius: 8px; cursor: pointer; font-size: 12px; transition: background .15s; }
+    .sq-row:hover { background: rgba(88,166,255,0.08); }
+    .sq-row + .sq-row { border-top: 0.5px solid rgba(139,148,158,0.1); }
+    .sq-row img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; background: #21262d; }
+    .sq-info { min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
+    .sq-info b { font-weight: 600; color: #e6edf3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .sq-info small { font-size: 10px; color: #8b949e; }
+    .sq-n { text-align: center; color: #c9d1d9; font-variant-numeric: tabular-nums; }
+    .sq-row .md-rt { justify-self: center; }
+    .sq-more { display: block; width: 100%; margin-top: 8px; padding: 8px; border-radius: 8px; border: 0.5px solid #30363d; background: transparent; color: #8b949e; font-size: 12px; font-family: inherit; cursor: pointer; }
+    .sq-more:hover { color: #c9d1d9; border-color: #484f58; }
+    @media (max-width: 480px) { .pc-cells, .pc-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } .tn-cols { grid-template-columns: 1fr; } }
     .mp-scores { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
     .mp-scores span { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 7px 4px; border-radius: 10px; background: rgba(13,17,23,0.45); border: 0.5px solid #30363d; font-size: 10.5px; color: #7d8590; font-variant-numeric: tabular-nums; }
     .mp-scores span b { font-size: 14px; color: #e6edf3; font-weight: 700; }
@@ -2059,6 +2132,7 @@
           </div>
           <div id="h2h-matches"></div>
           <div id="match-insights"></div>
+          <div id="team-news" class="team-news"></div>
         </div>
         <div class="card pg-away-form">
           <div class="card-title"><span id="away-form-title">원정팀</span> 최근 경기</div>
@@ -2102,6 +2176,14 @@
   <div class="modal mp-modal trm-modal" role="dialog" aria-labelledby="trm-title">
     <div class="mp-top"><span class="mp-title" id="trm-title">AI 트랙레코드</span><span class="mp-meta">사전 기록 예측의 실전 검증</span><span class="modal-close" aria-label="닫기" onclick="closeTrackRecordModal()">✕</span></div>
     <div id="track-record-body" class="mp-body"></div>
+  </div>
+</div>
+
+<div class="modal-overlay pc-overlay" id="pc-modal" onclick="closePlayerCard(event)">
+  <!-- 선수 카드(2026-09-30): 라인업·주요 선수·베스트 11·선수 목록에서 선수를 누르면. 다른 창 위에 뜸 -->
+  <div class="modal mp-modal pc-modal" role="dialog" aria-label="선수 정보">
+    <div class="mp-top"><span class="mp-title">선수 정보</span><span class="mp-meta"></span><span class="modal-close" aria-label="닫기" onclick="closePlayerCard()">✕</span></div>
+    <div class="mp-body" id="pc-body"></div>
   </div>
 </div>
 
@@ -3151,7 +3233,7 @@ function mdTab(p) {
 }
 const mdMin = e => `${e.min}${e.extra ? '+' + e.extra : ''}분`;
 // 경기장 위 이름: "C. Bradley" → "Bradley", "Virgil van Dijk" → "van Dijk"(성 앞 전치사는 같이)
-const MD_PARTICLE = /^(van|von|de|der|den|da|das|do|dos|di|del|della|le|la|el|al|ten|ter)$/i;
+const MD_PARTICLE = /^(van|von|de|der|den|da|das|do|dos|di|del|della|le|la|el|al|ten|ter|mac|mc)$/i;
 function mdShortName(n) {
   const t = String(n || '').split(/\s+/).filter(w => w && !/^\p{L}\.$/u.test(w));
   if (t.length <= 1) return t[0] || n || '';
@@ -3159,7 +3241,8 @@ function mdShortName(n) {
   while (i > 0 && MD_PARTICLE.test(t[i - 1])) i--;
   return t.slice(i).join(' ');
 }
-const mdRatingClass = r => (r == null ? '' : r >= 8 ? 'r8' : r >= 7 ? 'r7' : r >= 6 ? 'r6' : 'r5');
+// 색은 화면에 보이는 반올림 값 기준(6.97 → "7.0"인데 노랑이면 어색해서)
+const mdRatingClass = r => { if (r == null) return ''; const v = Math.round(r * 10) / 10; return v >= 8 ? 'r8' : v >= 7 ? 'r7' : v >= 6 ? 'r6' : 'r5'; };
 const mdRating = r => (r == null ? '' : `<span class="md-rt ${mdRatingClass(r)}">${r.toFixed(1)}</span>`);
 const MD_BALL = '<svg viewBox="0 0 24 24" class="md-ic ball" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7V3.8M16.09 10.67l3.71-1.2M14.53 15.48l2.29 3.15M9.47 15.48l-2.29 3.15M7.91 10.67L4.2 9.47"/></svg>';
 function mdIcon(type) {
@@ -3219,7 +3302,7 @@ function mdSummaryHtml(d, home, away, hg, ag) {
   return `${potm}<div class="mp-sec" style="${potm ? '' : 'margin-top:0;padding-top:0;border-top:none'}"><div class="mp-sec-t">경기 기록</div><div class="md-tl">${html}</div>${meta ? `<div class="md-meta">${meta}</div>` : ''}</div>`;
 }
 
-function mdLineupHtml(d, home, away) {
+function mdLineupHtml(d, home, away, opts = {}) {   // opts.bench === false → 아래 교체·벤치 칸 없이 경기장만(경기 전 라인업)
   const L = d.lineups || {};
   if (!L.home || !L.away || !L.home.start.length) return '<div class="mr-nolog">라인업 정보가 없어요</div>';
   const hex = c => (c && /^[0-9a-f]{6}$/i.test(c) ? '#' + c : null);
@@ -3234,7 +3317,7 @@ function mdLineupHtml(d, home, away) {
       const bg = hex(kit?.primary) || (side === 'home' ? '#58a6ff' : '#f0883e'), fg = hex(kit?.number) || '#0d1117';
       const marks = (p.goals ? MD_BALL.repeat(Math.min(p.goals, 3)) : '') + (p.own_goals ? MD_BALL.replace('md-ic ball', 'md-ic ball og') : '')
         + (p.red ? '<i class="md-card r"></i>' : p.second_yellow ? '<i class="md-card y2"></i>' : p.yellow ? '<i class="md-card y"></i>' : '');
-      return `<div class="md-pl${p.off != null ? ' off' : ''}" style="left:${side === 'home' ? x : 100 - x}%;top:${side === 'home' ? 94 - t * 39 : 6 + t * 39}%;--kb:${bg};--kn:${fg}" title="${p.name}${p.rating ? ' · 평점 ' + p.rating.toFixed(1) : ''}">
+      return `<div class="md-pl${p.off != null ? ' off' : ''}" style="left:${side === 'home' ? x : 100 - x}%;top:${side === 'home' ? 94 - t * 39 : 6 + t * 39}%;--kb:${bg};--kn:${fg}" title="${p.name}${p.rating ? ' · 평점 ' + p.rating.toFixed(1) : ''}"${p.id ? ` onclick="openPlayerCard('${escJs(side === 'home' ? home : away)}', ${p.id})"` : ''}>
         <span class="md-shirt">${p.number ?? ''}${mdRating(p.rating)}${p.off != null ? `<span class="md-offm">${p.off}'</span>` : ''}${marks ? `<span class="md-marks">${marks}</span>` : ''}</span>
         <span class="md-pn">${mdShortName(p.name)}</span></div>`;
     }); }).join('');
@@ -3248,8 +3331,8 @@ function mdLineupHtml(d, home, away) {
   return `<div class="md-pitch"><div class="md-lines"><i class="half"></i><i class="circle"></i><i class="box t"></i><i class="box b"></i><i class="six t"></i><i class="six b"></i></div>
       <span class="md-form t">${shortName(away)} ${L.away.formation || ''}</span><span class="md-form b">${shortName(home)} ${L.home.formation || ''}</span>
       ${dots('away')}${dots('home')}</div>
-    <div class="md-rt-legend"><span>평점</span>${[['r8', '8.0+'], ['r7', '7.0+'], ['r6', '6.0+'], ['r5', '6.0 미만']].map(([c, t]) => `<i class="md-rt ${c}">${t}</i>`).join('')}</div>
-    <div class="md-benches">${bench('home')}${bench('away')}</div>`;
+    ${opts.bench === false ? '' : `<div class="md-rt-legend"><span>평점</span>${[['r8', '8.0+'], ['r7', '7.0+'], ['r6', '6.0+'], ['r5', '6.0 미만']].map(([c, t]) => `<i class="md-rt ${c}">${t}</i>`).join('')}</div>
+    <div class="md-benches">${bench('home')}${bench('away')}</div>`}`;
 }
 
 function mdStatsHtml(d, home, away) {
@@ -3265,6 +3348,166 @@ function mdStatsHtml(d, home, away) {
     return `<div class="md-st${s.key === 'xg' ? ' xg' : ''}"><b class="h${hOn ? ' on' : ''}">${fmt(s.home)}</b><div class="md-st-mid"><span>${s.label}</span><div class="md-st-bars"><div class="l"><i class="h${hOn ? ' on' : ''}" data-fill="${s.home / mx * 100}"></i></div><div class="r"><i class="a${aOn ? ' on' : ''}" data-fill="${s.away / mx * 100}"></i></div></div></div><b class="a${aOn ? ' on' : ''}">${fmt(s.away)}</b></div>`;
   }).join('');
   return `${head}${possHtml}<div class="md-sts">${rows}</div>`;
+}
+
+// ── 선수 기록·팀 소식(2026-09-30): /team/squad(선수 프로필·시즌 기록) · /match/preview(라인업·결장자) — 결제 후 수집 전엔 404라 안 보임 ──
+const afSquadCache = {}, matchPreviewCache = {};
+function fetchAfSquad(team) {
+  if (!(team in afSquadCache)) afSquadCache[team] = fetch(`${API}/team/squad/${encodeURIComponent(team)}`).then(r => (r.ok ? r.json() : null)).catch(() => { delete afSquadCache[team]; return null; });
+  return afSquadCache[team];
+}
+function fetchMatchPreview(home, away, date) {
+  const k = `${home}|${away}|${date ? date.slice(0, 10) : ''}`;
+  if (!(k in matchPreviewCache)) matchPreviewCache[k] = fetch(`${API}/match/preview?home_team=${encodeURIComponent(home)}&away_team=${encodeURIComponent(away)}${date ? `&date=${date.slice(0, 10)}` : ''}`)
+    .then(r => (r.ok ? r.json() : null)).catch(() => { delete matchPreviewCache[k]; return null; });
+  return matchPreviewCache[k];
+}
+const POS_KO = { GK: '골키퍼', DF: '수비수', MF: '미드필더', FW: '공격수' };
+const INJ_KO = { 'Knee Injury': '무릎 부상', 'Hamstring Injury': '햄스트링 부상', 'Ankle Injury': '발목 부상', 'Muscle Injury': '근육 부상', 'Calf Injury': '종아리 부상',
+  'Thigh Injury': '허벅지 부상', 'Groin Injury': '사타구니 부상', 'Back Injury': '허리 부상', 'Foot Injury': '발 부상', 'Hip Injury': '고관절 부상', 'Shoulder Injury': '어깨 부상',
+  'Head Injury': '머리 부상', 'Concussion': '뇌진탕', 'Achilles Tendon Injury': '아킬레스건 부상', 'Illness': '질병', 'Suspended': '출전 정지', 'Red Card': '퇴장 징계',
+  'Yellow Cards': '경고 누적', 'Rest': '휴식', 'Knock': '타박상', 'Personal Reasons': '개인 사정', "Coach's decision": '감독 결정', 'Injury': '부상', 'Lack of fitness': '컨디션 난조',
+  'Broken ankle': '발목 골절', 'Broken leg': '다리 골절', 'Inactive': '결장', 'Loan agreement': '임대 계약 조항', 'Virus': '바이러스 감염' };
+const injReason = r => (!r ? '사유 미상' : INJ_KO[r] || r);
+const NAT_KO = { England: '잉글랜드', Spain: '스페인', France: '프랑스', Germany: '독일', Italy: '이탈리아', Portugal: '포르투갈', Netherlands: '네덜란드', Belgium: '벨기에',
+  Brazil: '브라질', Argentina: '아르헨티나', Uruguay: '우루과이', Colombia: '콜롬비아', Scotland: '스코틀랜드', Wales: '웨일스', Ireland: '아일랜드', 'Northern Ireland': '북아일랜드',
+  Norway: '노르웨이', Sweden: '스웨덴', Denmark: '덴마크', Switzerland: '스위스', Austria: '오스트리아', Poland: '폴란드', Croatia: '크로아티아', Serbia: '세르비아',
+  Ukraine: '우크라이나', Turkey: '튀르키예', 'Türkiye': '튀르키예', Morocco: '모로코', Senegal: '세네갈', Nigeria: '나이지리아', Ghana: '가나', "Côte d'Ivoire": '코트디부아르',
+  Egypt: '이집트', Algeria: '알제리', Cameroon: '카메룬', Japan: '일본', 'Korea Republic': '대한민국', 'South Korea': '대한민국', USA: '미국', 'United States': '미국',
+  Canada: '캐나다', Mexico: '멕시코', Ecuador: '에콰도르', Paraguay: '파라과이', Chile: '칠레', Greece: '그리스', 'Czech Republic': '체코', Czechia: '체코', Slovakia: '슬로바키아',
+  Slovenia: '슬로베니아', Hungary: '헝가리', Georgia: '조지아', Mali: '말리', 'Guinea': '기니', Jamaica: '자메이카', Australia: '호주', Iceland: '아이슬란드', Finland: '핀란드' };
+const natKo = n => (n ? NAT_KO[n] || n : null);
+const mdHex = c => (c && /^#?[0-9a-f]{6}$/i.test(c) ? (c[0] === '#' ? c : '#' + c) : null);
+
+// 주요 선수: 출전 시간이 팀 최다의 25% 이상인 선수 중 평점 순 3명(평점이 없으면 공격 포인트 순)
+function keyPlayers(sq, n = 3) {
+  const ps = (sq?.players || []).filter(p => p.minutes > 0);
+  const maxMin = Math.max(0, ...ps.map(p => p.minutes));
+  return ps.filter(p => p.minutes >= maxMin * 0.25).sort((a, b) => ((b.rating || 0) - (a.rating || 0)) || ((b.goals + b.assists) - (a.goals + a.assists))).slice(0, n);
+}
+function tnPlayerRow(p, team, absent) {
+  const ga = p.pos === 'GK' ? `${p.apps}경기 · 실점 ${p.conceded ?? '-'}` : `${p.goals}골 ${p.assists}도움 · ${p.apps}경기`;
+  return `<div class="tn-row" onclick="openPlayerCard('${escJs(team)}', ${p.id})"><img src="${p.photo || ''}" alt="" onerror="this.style.visibility='hidden'">
+    <div class="tn-info"><b>${p.name}</b><small>${POS_KO[p.pos] || ''} · ${ga}</small></div>
+    ${absent ? `<span class="tn-abs ${absent.status}">${absent.status === 'out' ? '결장' : '불투명'}</span>` : ''}${mdRating(p.rating)}</div>`;
+}
+// 팀 소식(경기 미리보기 창·예측 결과 공용): 라인업(확정 또는 지난 경기 선발 기준 예상) + 결장·부상 + 주요 선수(결장이면 표시)
+function teamNewsHtml(pv, sqH, sqA, home, away) {
+  const inj = pv?.injuries || {};
+  const absentOf = side => new Map((inj[side] || []).map(x => [x.id, x]));
+  let html = '';
+  const lu = pv?.lineups?.home && pv?.lineups?.away ? { lineups: pv.lineups, kind: 'confirmed' }
+    : pv?.predicted?.home && pv?.predicted?.away ? { lineups: pv.predicted, kind: 'predicted' } : null;
+  if (lu) html += `<div class="mp-sec"><div class="mp-sec-t"><span>${lu.kind === 'confirmed' ? '선발 라인업 <em class="tn-chip ok">확정</em>' : '예상 라인업 <em class="tn-chip">예상</em>'}</span>
+      <span class="mp-sec-n">${lu.kind === 'confirmed' ? '킥오프 전 발표' : '각 팀 지난 경기 선발 기준'}</span></div>${mdLineupHtml({ lineups: lu.lineups }, home, away, { bench: false })}</div>`;
+  if (pv?.injuries) {
+    const col = (side, team) => { const l = inj[side] || [];
+      return `<div class="tn-col"><div class="tn-col-h"><img src="${logos[team] || ''}" alt="" onerror="this.style.display='none'">${shortName(team)}</div>
+        ${l.length ? l.map(x => `<div class="tn-inj"${x.id ? ` onclick="openPlayerCard('${escJs(team)}', ${x.id})"` : ''}><img src="${x.photo || ''}" alt="" onerror="this.style.visibility='hidden'"><div><b>${mdShortName(x.name)}</b><small>${injReason(x.reason)}</small></div><span class="tn-abs ${x.status}">${x.status === 'out' ? '결장' : '불투명'}</span></div>`).join('')
+          : '<div class="tn-none">결장자 없음</div>'}</div>`; };
+    html += `<div class="mp-sec"><div class="mp-sec-t">결장·부상 <span class="mp-sec-n">출전 불투명 포함</span></div><div class="tn-cols">${col('home', home)}${col('away', away)}</div></div>`;
+  }
+  if (sqH || sqA) {
+    const block = (sq, side, team) => { const ks = keyPlayers(sq), ab = absentOf(side);
+      return `<div class="tn-kp ${side}"><div class="tn-col-h"><img src="${logos[team] || ''}" alt="" onerror="this.style.display='none'">${shortName(team)}</div>
+        ${ks.length ? ks.map(p => tnPlayerRow(p, team, ab.get(p.id))).join('') : '<div class="tn-none">시즌 기록이 아직 없어요</div>'}</div>`; };
+    html += `<div class="mp-sec"><div class="mp-sec-t">주요 선수 <span class="mp-sec-n">시즌 평균 평점 순 · 누르면 선수 카드</span></div>${block(sqH, 'home', home)}${block(sqA, 'away', away)}</div>`;
+  }
+  return html;
+}
+async function loadTeamNews(el, home, away, date, isLive = () => true) {
+  const [pv, sqH, sqA] = await Promise.all([fetchMatchPreview(home, away, date), fetchAfSquad(home), fetchAfSquad(away)]);
+  if (!isLive() || !el) return false;
+  const html = pv || sqH || sqA ? teamNewsHtml(pv, sqH, sqA, home, away) : '';
+  el.innerHTML = html;
+  return !!html;
+}
+
+// ── 선수 카드(2026-09-30): 사진·포지션·나이·국적·키·몸무게 + 리그 시즌 기록·평균 평점 ──
+async function openPlayerCard(team, pid) {
+  const modal = document.getElementById('pc-modal'), body = document.getElementById('pc-body');
+  if (!modal || pid == null) return;
+  body.innerHTML = '<div class="mp-skel"><i style="width:100%;height:64px"></i><i style="width:100%;height:10px"></i><i style="width:70%"></i><i style="width:100%;height:120px"></i></div>';
+  modal.classList.add('show');
+  track('player_card', { team: shortName(team) });
+  const sq = await fetchAfSquad(team);
+  const p = sq?.players?.find(x => x.id === pid);
+  if (!p) { body.innerHTML = '<div class="ti-empty">이 선수의 시즌 기록이 아직 없어요.</div>'; return; }
+  body.innerHTML = playerCardHtml(p, team, sq);
+}
+function closePlayerCard(e) { const m = document.getElementById('pc-modal'); if (!e || e.target === m) m.classList.remove('show'); }
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.getElementById('pc-modal')?.classList.contains('show')) { e.stopImmediatePropagation(); closePlayerCard(); }
+}, true);
+function playerCardHtml(p, team, sq) {
+  const full = [p.firstname, p.lastname].filter(Boolean).join(' ');
+  const bd = p.birth_date ? p.birth_date.replace(/-/g, '.') : '';
+  const cell = (label, v, sub) => `<div class="pc-cell"><small>${label}</small><b>${v ?? '-'}</b>${sub ? `<span>${sub}</span>` : ''}</div>`;
+  const tile = (label, v) => `<div class="pc-tile"><b>${v ?? '-'}</b><small>${label}</small></div>`;
+  const pct = (a, b) => (a != null && b ? ` (${Math.round(a / b * 100)}%)` : '');
+  const rows = (title, list) => { const l = list.filter(([, v]) => v != null && v !== ''); return l.length ? `<div class="pc-grp"><div class="pc-grp-t">${title}</div>${l.map(([k, v]) => `<div class="pc-kv"><span>${k}</span><b>${v}</b></div>`).join('')}</div>` : ''; };
+  const gk = p.pos === 'GK';
+  const per90 = v => (p.minutes >= 270 && v != null ? (v / p.minutes * 90).toFixed(2) : null);
+  const season = sq.season ? `${String(sq.season).slice(2)}-${String(sq.season + 1).slice(2)} 시즌` : '이번 시즌';
+  return `<div class="pc-hero"><img class="pc-photo" src="${p.photo || ''}" alt="" onerror="this.style.visibility='hidden'">
+      <div class="pc-id"><b class="pc-name">${p.name}</b>${full && full !== p.name ? `<small class="pc-full">${full}</small>` : ''}
+        <span class="pc-team"><img src="${logos[team] || ''}" alt="" onerror="this.style.display='none'">${shortName(team)}${p.number ? ` · ${p.number}번` : ''}</span>
+        <span class="pc-tags"><em class="pc-pos ${p.pos || ''}">${POS_KO[p.pos] || '-'}</em>${p.captain ? '<em class="pc-cap">주장</em>' : ''}${p.injured ? '<em class="pc-inj">부상 중</em>' : ''}</span></div>
+      ${p.rating ? `<div class="pc-rt"><span class="md-rt ${mdRatingClass(p.rating)}">${p.rating.toFixed(2)}</span><small>평균 평점</small></div>` : ''}</div>
+    <div class="pc-cells">${cell('나이', p.age != null ? `${p.age}세` : null, bd)}${cell('국적', natKo(p.nationality))}${cell('키', p.height ? `${p.height}cm` : null)}${cell('몸무게', p.weight ? `${p.weight}kg` : null)}</div>
+    <div class="mp-sec"><div class="mp-sec-t">${season} 리그 기록 <span class="mp-sec-n">${p.birth_place ? `출생지 ${p.birth_place}` : ''}</span></div>
+      <div class="pc-tiles">${tile('출전', p.apps ? `${p.apps}<i>(선발 ${p.starts})</i>` : 0)}${tile('출전 시간', p.minutes ? `${p.minutes.toLocaleString()}분` : '0분')}${gk ? tile('실점', p.conceded) + tile('선방', p.saves) : tile('골', p.goals) + tile('도움', p.assists)}</div>
+      ${gk ? rows('골키퍼', [['경기당 실점', p.apps && p.conceded != null ? (p.conceded / p.apps).toFixed(2) : null], ['패스', p.passes?.toLocaleString()]])
+        : rows('공격', [['슈팅', p.shots != null ? `${p.shots}${p.shots_on != null ? ` · 유효 ${p.shots_on}` : ''}` : null], ['90분당 골+도움', per90((p.goals || 0) + (p.assists || 0))],
+            ['드리블 성공', p.dribbles ? `${p.dribbles_won ?? 0} / ${p.dribbles}${pct(p.dribbles_won, p.dribbles)}` : null], ['페널티킥', p.pen_scored || p.pen_missed ? `${p.pen_scored ?? 0}골 · 실축 ${p.pen_missed ?? 0}` : null]])
+          + rows('패스', [['패스', p.passes?.toLocaleString()], ['키패스', p.key_passes]])
+          + rows('수비', [['태클', p.tackles], ['가로채기', p.interceptions], ['볼 경합 승리', p.duels ? `${p.duels_won ?? 0} / ${p.duels}${pct(p.duels_won, p.duels)}` : null]])}
+      ${rows('규율', [['경고', p.yellow], ['퇴장', p.red], ['파울', p.fouls != null ? `${p.fouls}${p.fouled != null ? ` · 얻어낸 파울 ${p.fouled}` : ''}` : null]])}
+    </div>`;
+}
+
+// ── 구단 베스트 11(2026-09-30): 시즌 평균 평점으로 포메이션 채우기(출전 시간이 팀 최다의 25% 이상인 선수만) ──
+const BX_FORMS = [[4, 3, 3], [4, 4, 2], [3, 5, 2], [3, 4, 3], [4, 5, 1], [5, 3, 2]];
+function bestEleven(sq) {
+  const ps = (sq?.players || []).filter(p => p.rating && p.minutes > 0);
+  const maxMin = Math.max(0, ...ps.map(p => p.minutes));
+  const pool = { GK: [], DF: [], MF: [], FW: [] };
+  ps.filter(p => p.minutes >= maxMin * 0.25).forEach(p => pool[p.pos] && pool[p.pos].push(p));
+  Object.values(pool).forEach(l => l.sort((a, b) => b.rating - a.rating));
+  if (!pool.GK.length) return null;
+  let best = null;
+  BX_FORMS.forEach(([d, m, f]) => {
+    if (pool.DF.length < d || pool.MF.length < m || pool.FW.length < f) return;
+    const pick = [pool.DF.slice(0, d), pool.MF.slice(0, m), pool.FW.slice(0, f)];
+    const avg = (pool.GK[0].rating + pick.flat().reduce((s, p) => s + p.rating, 0)) / 11;
+    if (!best || avg > best.avg + 0.005) best = { form: `${d}-${m}-${f}`, gk: pool.GK[0], lines: pick, avg };
+  });
+  return best;
+}
+function bestElevenHtml(sq, team) {
+  const bx = bestEleven(sq);
+  if (!bx) return '';
+  const pair = getClubColorPair(teamInfoCache[team]?.clubColors) || ['#1f6feb', '#ffffff'];
+  const kb = pair[0], kn = pair[0].toLowerCase() === pair[1].toLowerCase() ? '#fff' : pair[1];
+  const rows = [[bx.gk], ...bx.lines];   // 아래(골키퍼) → 위(공격수)
+  const ys = [88, 66, 42, 18];
+  const dots = rows.map((line, r) => line.map((p, i) => `<div class="md-pl" style="left:${(i + 0.5) / line.length * 100}%;top:${ys[r]}%;--kb:${r ? kb : '#2f3740'};--kn:${r ? kn : '#e6edf3'}" onclick="openPlayerCard('${escJs(team)}', ${p.id})" title="${p.name} · 평점 ${p.rating.toFixed(2)}">
+      <span class="md-shirt${p.photo ? ' ph' : ''}">${p.photo ? `<img src="${p.photo}" alt="" onerror="this.remove()">` : p.number ?? ''}${mdRating(p.rating)}</span><span class="md-pn">${mdShortName(p.name)}</span></div>`).join('')).join('');
+  const season = sq.season ? `${String(sq.season).slice(2)}-${String(sq.season + 1).slice(2)}` : '';
+  return `<div class="tp-sec"><div class="tp-t">시즌 베스트 11 <span>${season} 평균 평점 기준 · ${bx.form} · 평균 ${bx.avg.toFixed(2)}</span></div>
+    <div class="md-pitch bx-pitch"><div class="md-lines"><i class="box b"></i><i class="six b"></i><i class="circle top"></i></div>${dots}</div>
+    <div class="bx-note">출전 시간이 팀 최다의 25% 이상인 선수 중 포지션별 평점 상위 · 선수를 누르면 선수 카드</div></div>`;
+}
+function squadListHtml(sq, team) {
+  const ps = (sq?.players || []).filter(p => p.minutes >= 90).sort((a, b) => (b.rating || 0) - (a.rating || 0) || b.minutes - a.minutes);
+  if (!ps.length) return '';
+  const row = p => `<div class="sq-row" onclick="openPlayerCard('${escJs(team)}', ${p.id})"><img src="${p.photo || ''}" alt="" onerror="this.style.visibility='hidden'">
+      <div class="sq-info"><b>${p.name}</b><small>${POS_KO[p.pos] || ''}${p.age ? ` · ${p.age}세` : ''}</small></div>
+      <span class="sq-n">${p.apps}</span><span class="sq-n">${p.pos === 'GK' ? '-' : p.goals}</span><span class="sq-n">${p.pos === 'GK' ? '-' : p.assists}</span>${mdRating(p.rating) || '<span class="md-rt">-</span>'}</div>`;
+  return `<div class="tp-sec"><div class="tp-t">선수별 시즌 기록 <span>평균 평점 순 · 90분 이상 출전</span></div>
+    <div class="sq-head"><span></span><span>선수</span><span>출전</span><span>골</span><span>도움</span><span>평점</span></div>
+    <div class="sq-list">${ps.slice(0, 12).map(row).join('')}</div>
+    ${ps.length > 12 ? `<div class="sq-list" hidden>${ps.slice(12).map(row).join('')}</div><button class="sq-more" onclick="this.previousElementSibling.hidden=false;this.remove()">전체 ${ps.length}명 보기</button>` : ''}</div>`;
 }
 
 function renderMatchDetail(d, home, away, hg, ag) {
@@ -3385,8 +3628,11 @@ async function openMatchPredictModal(home, away) {
       </div>
       ${sp && sp.top_scores ? `<div class="mp-sec"><div class="mp-sec-t">가능성 높은 스코어</div><div class="mp-scores">${sp.top_scores.slice(0, 4).map((x, i) => `<span class="${i ? '' : 'first ' + side}"><b>${x.score.replace('-', ' : ')}</b>${Math.round(x.prob)}%</span>`).join('')}</div></div>` : ''}
       ${expl.length ? `<div class="mp-sec"><div class="mp-sec-t">예측 근거 <span class="mp-sec-n">▲ 이 예측 쪽으로 · ▼ 반대로 · % 영향 비중</span></div><div class="mp-why">${expl.map(e => `<span class="${e.direction === 'support' ? 'up' : 'down'}">${e.direction === 'support' ? '▲' : '▼'} ${e.label}<small>${Math.round(e.influence_pct)}%</small></span>`).join('')}</div></div>` : ''}
+      <div id="mp-news"></div>
       <button class="mp-cta" onclick="goToFullPrediction('${escJs(home)}','${escJs(away)}')">전체 분석 보기<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
     `;
+    // 팀 소식(라인업·결장자·주요 선수) — 데이터가 있을 때만(API-Football, 결제 후 수집)
+    loadTeamNews(document.getElementById('mp-news'), home, away, null, () => seq === mpSeq);
   } catch (e) {
     if (seq !== mpSeq) return;
     body.innerHTML = `<div class="ti-empty">${e.status === 404 ? unpredictableMessage(null) : '예측을 불러올 수 없어요.'}</div>`;
@@ -3618,7 +3864,8 @@ async function switchTiTab(tab) {
       renderTiStats();
     } else if (tab === 'playerstats') {
       // 이번 시즌 공격 포인트(득점 순위 데이터 — 리그·챔스 따로, 팀 리그 득점 비중) + 스쿼드 구성(포지션·국적) — 2026-09-29
-      const res = await fetch(`${API}/team/players/${encodeURIComponent(team)}`);
+      // + 시즌 베스트 11·선수별 시즌 기록(API-Football 선수 기록 — 결제 후 수집 전엔 없음, 2026-09-30)
+      const [res, afSq] = await Promise.all([fetch(`${API}/team/players/${encodeURIComponent(team)}`), fetchAfSquad(team)]);
       if (!res.ok) throw new Error('team players fetch failed');
       const d = await res.json();
       if (tiState.team !== team || tiState.tab !== 'playerstats') return;
@@ -3635,7 +3882,7 @@ async function switchTiTab(tab) {
               <div class="tp-num"><b>${p.goals}</b><small>골</small></div><div class="tp-num a"><b>${p.assists}</b><small>도움</small></div>
             </div>`; }).join('')}</div>`;
       };
-      let html = '';
+      let html = afSq ? bestElevenHtml(afSq, team) + squadListHtml(afSq, team) : '';
       const codes = Object.keys(d.comps);
       if (codes.length) codes.forEach(c => { html += compHtml(c, d.comps[c], c !== 'CL'); });
       else html += `<div class="tp-sec"><div class="tp-t">이번 시즌 공격 포인트</div><div class="ti-empty" style="padding:14px 0">이번 시즌 선수별 골·도움은 매일 새벽 자동 업데이트 때 받아와요.<br>곧 여기에 표시돼요.</div></div>`;
@@ -5506,6 +5753,9 @@ function fillResultExtras(ex, data, home, away, seq) {
   fill(ex.homeForm, fd => renderForm(fd, 'home-form-list', 'home-form-title'), () => { document.getElementById('home-form-list').innerHTML = RESULT_FAIL_HTML; });
   fill(ex.awayForm, fd => renderForm(fd, 'away-form-list', 'away-form-title'), () => { document.getElementById('away-form-list').innerHTML = RESULT_FAIL_HTML; });
   fill(ex.insights, renderMatchInsights, () => renderMatchInsights(null));   // 경기 분석은 부가 정보라 실패하면 조용히 생략
+  // 팀 소식(라인업·결장자·주요 선수, 2026-09-30) — 데이터가 있을 때만(API-Football, 결제 후 수집)
+  const news = document.getElementById('team-news');
+  if (news) { news.innerHTML = ''; loadTeamNews(news, home, away, null, live).then(ok => { if (ok) refit(); }); }
 }
 
 let lastPrediction = null;

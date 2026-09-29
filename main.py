@@ -1468,6 +1468,46 @@ def get_match_detail(home_team: str, away_team: str, date: str):
         raise HTTPException(status_code=404, detail="경기 상세 데이터 없음")
     return d
 
+@app.get("/team/squad/{team_name}")
+def get_team_squad(team_name: str):
+    """선수 카드·구단 베스트 11·주요 선수 — 선수 프로필(나이·키·몸무게·국적·사진) + 리그 시즌 기록(출전·골·도움·평점 등).
+    update_data.af_player_row로 만든 fotdata_model/af_squads.json. 결제 후 수집 전엔 404 (2026-09-30)"""
+    team = TEAM_NAME_MAP.get(team_name, team_name)
+    d = (_load_json("af_squads.json") or {}).get(team)
+    if not d:
+        raise HTTPException(status_code=404, detail="선수 기록 데이터 없음")
+    return d
+
+@app.get("/match/preview")
+def get_match_preview(home_team: str, away_team: str, date: str = None):
+    """경기 미리보기·예측 결과의 '팀 소식': 라인업(발표 전이면 각 팀 지난 경기 선발 = 예상 라인업) + 결장·부상자.
+    fotdata_model/match_previews.json(킥오프 전 수집) + match_details.json(지난 경기 선발). 둘 다 없으면 404 (2026-09-30)"""
+    if not date:   # 날짜가 없으면(예측 탭에서 두 팀만 고른 경우) 다가오는 같은 대진 날짜로
+        now = pd.Timestamp.now(tz="UTC")
+        nxt = sorted(m["date"] for ms in (_load_json("schedule.json") or {}).values() for m in ms
+                     if m["home_team"] == home_team and m["away_team"] == away_team and pd.Timestamp(m["date"]) > now - pd.Timedelta(hours=3))
+        date = nxt[0] if nxt else ""
+    pv = dict((_load_json("match_previews.json") or {}).get(f"{home_team}|{away_team}|{date[:10]}") or {})
+    lineups = pv.get("lineups") or {}
+    if not (lineups.get("home") and lineups.get("away")):
+        # 라인업 발표 전(보통 킥오프 약 1시간 전): 각 팀의 가장 최근 경기 선발을 예상 라인업으로(평점·교체 표시는 뺌)
+        det = _load_json("match_details.json") or {}
+        def last_xi(team):
+            keys = sorted((k for k in det if team in k.split("|")[:2]), key=lambda k: k.split("|")[2], reverse=True)
+            for k in keys:
+                side = "home" if k.split("|")[0] == team else "away"
+                lu = (det[k].get("lineups") or {}).get(side)
+                if lu and lu.get("start"):
+                    return {**lu, "subs": [], "start": [{kk: v for kk, v in p.items() if kk in ("id", "name", "number", "pos", "grid", "photo")} for p in lu["start"]],
+                            "from": k.split("|")[2]}
+            return None
+        pred = {"home": last_xi(home_team), "away": last_xi(away_team)}
+        if pred["home"] or pred["away"]:
+            pv["predicted"] = pred
+    if not pv.get("lineups") and not pv.get("predicted") and not pv.get("injuries"):
+        raise HTTPException(status_code=404, detail="팀 소식 데이터 없음")
+    return {**pv, "date": date}
+
 @app.get("/matches/live")
 def get_matches_live():
     """오늘 경기 최신 상태만(가벼움) — 화면이 진행 중 경기가 있을 때 1분마다 부름"""

@@ -1254,6 +1254,46 @@ def af_match_detail(fx):
             "events": events, "lineups": lineups, "stats": stats,
             "potm": {"id": best[2]["id"], "name": best[2]["name"], "side": best[1], "rating": best[0], "photo": best[2].get("photo")} if best else None}
 
+# ── 선수 시즌 기록·부상자 → 화면용 형태 (2026-09-30, 결제 후 수집에서 사용) ──
+# af_squads.json {"우리 팀 이름": {"season", "league", "updated", "players": [af_player_row…]}} → /team/squad (선수 카드·베스트 11·주요 선수)
+# match_previews.json {"홈|원정|YYYY-MM-DD": {"lineups", "injuries": {"home": [...], "away": [...]}}} → /match/preview
+AF_POS = {"Goalkeeper": "GK", "Defender": "DF", "Midfielder": "MF", "Attacker": "FW"}
+
+def af_player_row(p, league_id=None):
+    """/players 응답 한 명 → 프로필 + 그 리그 시즌 기록(여러 대회 기록이 오면 league_id 것)"""
+    pl = p.get("player") or {}
+    sts = p.get("statistics") or [{}]
+    s = next((x for x in sts if league_id and (x.get("league") or {}).get("id") == league_id), sts[0]) or {}
+    g, gl, sh, ps = s.get("games") or {}, s.get("goals") or {}, s.get("shots") or {}, s.get("passes") or {}
+    tk, du, dr, fo, cd, pn = (s.get(k) or {} for k in ("tackles", "duels", "dribbles", "fouls", "cards", "penalty"))
+    cm = lambda v: int(re.sub(r"\D", "", str(v))) if v and re.search(r"\d", str(v)) else None   # "182 cm"·"182" → 182
+    return {
+        "id": pl.get("id"), "name": pl.get("name"), "firstname": pl.get("firstname"), "lastname": pl.get("lastname"),
+        "age": pl.get("age"), "birth_date": (pl.get("birth") or {}).get("date"), "birth_place": (pl.get("birth") or {}).get("place"),
+        "nationality": pl.get("nationality"), "height": cm(pl.get("height")), "weight": cm(pl.get("weight")),
+        "photo": pl.get("photo"), "injured": bool(pl.get("injured")),
+        "pos": AF_POS.get(g.get("position")), "number": g.get("number"), "captain": bool(g.get("captain")),
+        "apps": g.get("appearences") or 0, "starts": g.get("lineups") or 0, "minutes": g.get("minutes") or 0,
+        "rating": round(float(g["rating"]), 2) if g.get("rating") else None,
+        "goals": gl.get("total") or 0, "assists": gl.get("assists") or 0, "conceded": gl.get("conceded"), "saves": gl.get("saves"),
+        "shots": sh.get("total"), "shots_on": sh.get("on"), "passes": ps.get("total"), "key_passes": ps.get("key"), "pass_acc": ps.get("accuracy"),
+        "tackles": tk.get("total"), "interceptions": tk.get("interceptions"), "blocks": tk.get("blocks"),
+        "duels": du.get("total"), "duels_won": du.get("won"), "dribbles": dr.get("attempts"), "dribbles_won": dr.get("success"),
+        "fouls": fo.get("committed"), "fouled": fo.get("drawn"), "yellow": cd.get("yellow") or 0, "red": cd.get("red") or 0,
+        "pen_scored": pn.get("scored"), "pen_missed": pn.get("missed"),
+    }
+
+def af_injury_rows(resp, team_id):
+    """/injuries 응답 → 그 팀 결장자 [{id, name, photo, status: out(결장)|doubtful(출전 불투명), reason}]"""
+    out = []
+    for x in resp or []:
+        if (x.get("team") or {}).get("id") != team_id:
+            continue
+        pl = x.get("player") or {}
+        out.append({"id": pl.get("id"), "name": pl.get("name"), "photo": pl.get("photo"),
+                    "status": "doubtful" if pl.get("type") == "Questionable" else "out", "reason": pl.get("reason")})
+    return out
+
 def _fetch_af_transfers(af_id, limit=30):
     """API-Football /transfers → 최근 이적 기록(이 팀이 관련된 것만). 선수 사진·양쪽 구단 로고·방향(in/out)까지 저장
     — 예전엔 이름·날짜·유형만 저장해서 화면에 글자만 나왔음(2026-09-29 확장). 사진은 선수 ID로 만드는 고정 주소."""
