@@ -1146,6 +1146,39 @@ def _leaders(code):
     return {"league": code, "season": d.get("season"), "matchday": d.get("matchday"), "updated": d.get("updated"),
             "pool": len(rows), "goals": goals, "assists": assists}
 
+@lru_cache(maxsize=256)
+def _team_players(team):
+    """팀 정보 "플레이어 통계" 탭: 이번 시즌 이 팀 선수의 골·도움(scorers.json — 리그·챔스 따로, 득점 상위 100명 안)
+    + 팀 리그 득점에서 차지하는 비중 + 스쿼드 구성(team_info.json의 포지션·국적)"""
+    sc = _load_json("scorers.json") or {}
+    lg = _team_league_map().get(team)
+    comps = {}
+    for code in [c for c in (lg, "CL") if c]:
+        d = sc.get(code)
+        if not d:
+            continue
+        rows = [{**r, "photo": _squad_photo(team, r.get("name"))} for r in d.get("scorers", []) if r.get("team") == team]
+        rows.sort(key=lambda r: (-r["goals"], -r["assists"], r.get("played") or 99))
+        comps[code] = {"season": d.get("season"), "matchday": d.get("matchday"), "updated": d.get("updated"), "players": rows}
+    # 이번 시즌 리그 득점(비중 계산용)
+    team_goals = None
+    if lg:
+        m = df_matches_all[(df_matches_all['league'] == lg) & (pd.to_datetime(df_matches_all['date']) >= f"{CURRENT_SEASON_YEAR}-07-01")]
+        team_goals = int(m.loc[m['home_team'] == team, 'home_goals'].sum() + m.loc[m['away_team'] == team, 'away_goals'].sum())
+    squad = ((_load_json("team_info.json") or {}).get(team) or {}).get("squad") or []
+    pos, nat = {}, {}
+    for p in squad:
+        pos[p.get("position") or "?"] = pos.get(p.get("position") or "?", 0) + 1
+        if p.get("nationality"):
+            nat[p["nationality"]] = nat.get(p["nationality"], 0) + 1
+    return {"team": team, "league": lg, "scorers_available": bool(sc), "comps": comps, "team_league_goals": team_goals,
+            "squad": {"size": len(squad), "positions": pos, "nationalities": sorted(nat.items(), key=lambda x: -x[1])[:5]}}
+
+@app.get("/team/players/{team_name}")
+def get_team_players(team_name: str):
+    team = TEAM_NAME_MAP.get(team_name, team_name)
+    return _team_players(team)
+
 @app.get("/players/leaders/{league_code}")
 def get_leaders(league_code: str):
     """선수 탭: 이번 시즌 득점·도움 순위(5대 리그 + UCL). 아직 받은 데이터가 없는 리그는 404 → 프론트가 예전 EPL 24-25로 대체"""

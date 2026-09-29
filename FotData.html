@@ -1413,6 +1413,22 @@
       .mp-scores span b { font-size: 13px; }
     }
 
+    /* 팀 정보 · 플레이어 통계 탭(2026-09-29) */
+    .tp-sec + .tp-sec { margin-top: 18px; padding-top: 14px; border-top: 0.5px solid rgba(139,148,158,0.18); }
+    .tp-t { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 13px; font-weight: 700; color: #e6edf3; margin-bottom: 8px; }
+    .tp-t span { font-size: 11px; font-weight: 500; color: #7d8590; }
+    .tp-row { display: grid; grid-template-columns: 38px minmax(0,1fr) 38px 38px; align-items: center; gap: 10px; padding: 8px 2px; border-bottom: 0.5px solid rgba(139,148,158,0.12); }
+    .tp-row:last-child { border-bottom: none; }
+    .tp-info { min-width: 0; } .tp-name { font-size: 13px; font-weight: 600; color: #e6edf3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tp-sub { font-size: 10.5px; color: #7d8590; margin-top: 2px; font-variant-numeric: tabular-nums; }
+    .tp-share { height: 3px; margin-top: 5px; border-radius: 99px; background: #21262d; overflow: hidden; } .tp-share i { display: block; height: 100%; background: linear-gradient(90deg, #1f6feb, #58a6ff); border-radius: 99px; }
+    .tp-num { text-align: center; } .tp-num b { display: block; font-size: 16px; font-weight: 800; color: #79b8ff; font-variant-numeric: tabular-nums; line-height: 1.1; } .tp-num.a b { color: #c9d1d9; } .tp-num small { font-size: 9.5px; color: #7d8590; }
+    .tp-pos { display: flex; gap: 2px; height: 10px; border-radius: 99px; overflow: hidden; }
+    .tp-pos i { display: block; }
+    .tp-pos-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 8px; font-size: 11.5px; color: #8b949e; }
+    .tp-pos-legend i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 5px; } .tp-pos-legend b { color: #e6edf3; margin-left: 2px; }
+    .tp-nat { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 12px; } .tp-nat-t { font-size: 11px; color: #7d8590; margin-right: 2px; }
+    .tp-chip { font-size: 11.5px; color: #c9d1d9; padding: 3px 9px; border-radius: 99px; background: rgba(13,17,23,0.45); border: 0.5px solid #30363d; } .tp-chip b { color: #79b8ff; margin-left: 2px; }
     /* 선수 탭 목록(2026-09-29) */
     .pl-col-t { font-size: 14px; color: #e6edf3; margin-bottom: 12px; }
     .pl-row { display: grid; grid-template-columns: 24px 38px minmax(0,1fr) auto; align-items: center; gap: 10px; padding: 9px 6px; border-bottom: 0.5px solid rgba(139,148,158,0.14); }
@@ -3201,7 +3217,39 @@ async function switchTiTab(tab) {
       tiStatsState = { data: stats, idx: 0 };
       renderTiStats();
     } else if (tab === 'playerstats') {
-      panel.innerHTML = '<div class="ti-empty">플레이어 통계는 준비 중이에요.</div>';
+      // 이번 시즌 공격 포인트(득점 순위 데이터 — 리그·챔스 따로, 팀 리그 득점 비중) + 스쿼드 구성(포지션·국적) — 2026-09-29
+      const res = await fetch(`${API}/team/players/${encodeURIComponent(team)}`);
+      if (!res.ok) throw new Error('team players fetch failed');
+      const d = await res.json();
+      if (tiState.team !== team || tiState.tab !== 'playerstats') return;
+      const LN = { PL: 'EPL', PD: '라리가', BL1: '분데스리가', SA: '세리에A', FL1: '리그앙', CL: '챔피언스리그' };
+      const compHtml = (code, c, isLeague) => {
+        if (!c.players.length) return `<div class="tp-sec"><div class="tp-t">${LN[code]} 공격 포인트</div><div class="ti-empty" style="padding:14px 0">아직 이 대회 득점 순위(상위 100명)에 든 선수가 없어요.</div></div>`;
+        const tg = isLeague ? d.team_league_goals : null;
+        return `<div class="tp-sec"><div class="tp-t">${LN[code]} 공격 포인트 <span>${c.matchday ? `${c.matchday}라운드 기준` : ''}${c.updated ? ` · ${c.updated.slice(5).replace('-', '.')} 갱신` : ''}</span></div>
+          ${c.players.slice(0, 8).map((p, i) => {
+            const share = tg ? Math.round(p.goals / tg * 100) : null;
+            return `<div class="tp-row">${playerAvatarHtml(p, 'pl-photo')}
+              <div class="tp-info"><div class="tp-name">${p.name}</div><div class="tp-sub">${p.played ?? '-'}경기${p.penalties ? ` · PK ${p.penalties}` : ''}${share != null && p.goals ? ` · 팀 리그 득점의 ${share}%` : ''}</div>
+                ${share != null && p.goals ? `<div class="tp-share"><i style="width:${Math.min(100, share)}%"></i></div>` : ''}</div>
+              <div class="tp-num"><b>${p.goals}</b><small>골</small></div><div class="tp-num a"><b>${p.assists}</b><small>도움</small></div>
+            </div>`; }).join('')}</div>`;
+      };
+      let html = '';
+      const codes = Object.keys(d.comps);
+      if (codes.length) codes.forEach(c => { html += compHtml(c, d.comps[c], c !== 'CL'); });
+      else html += `<div class="tp-sec"><div class="tp-t">이번 시즌 공격 포인트</div><div class="ti-empty" style="padding:14px 0">이번 시즌 선수별 골·도움은 매일 새벽 자동 업데이트 때 받아와요.<br>곧 여기에 표시돼요.</div></div>`;
+      const sq = d.squad || {};
+      if (sq.size) {
+        const PC = { Goalkeeper: ['골키퍼', '#e3b341'], Defence: ['수비수', '#3fb950'], Midfield: ['미드필더', '#58a6ff'], Offence: ['공격수', '#f0883e'] };
+        const order = Object.keys(PC).filter(k => sq.positions[k]);
+        html += `<div class="tp-sec"><div class="tp-t">스쿼드 구성 <span>${sq.size}명</span></div>
+          <div class="tp-pos">${order.map(k => `<i style="flex:${sq.positions[k]};background:${PC[k][1]}" title="${PC[k][0]} ${sq.positions[k]}명"></i>`).join('')}</div>
+          <div class="tp-pos-legend">${order.map(k => `<span><i style="background:${PC[k][1]}"></i>${PC[k][0]} <b>${sq.positions[k]}</b></span>`).join('')}</div>
+          ${sq.nationalities.length ? `<div class="tp-nat"><span class="tp-nat-t">국적 상위</span>${sq.nationalities.map(([n, c]) => `<span class="tp-chip">${n} <b>${c}</b></span>`).join('')}</div>` : ''}
+        </div>`;
+      }
+      panel.innerHTML = html;
     } else if (tab === 'transfers') {
       const info = await fetchTeamInfo(team);
       const transfers = info.transfers || [];
