@@ -1075,6 +1075,27 @@
     .champ-bar { height: 100%; background: linear-gradient(90deg, #1f6feb, #58a6ff); border-radius: 6px; transition: width .5s; }
     .champ-prob { font-size: 13px; font-weight: 700; color: #58a6ff; width: 50px; text-align: right; }
     /* 순위 예측 결과 표: 예상 순위 · 팀(현재 승점) · 예상 승점 · 우승 · UCL권 · 강등 */
+    /* 순위 예측 탭(2026-09-29 순위표와 같은 디자인으로) */
+    .champ-head { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; margin-bottom: 16px; }
+    .champ-head b { font-size: 16px; color: #e6edf3; }
+    .champ-head span { font-size: 12px; color: #8b949e; }
+    #champion-league-tabs { justify-content: center; }
+    .champ-league-btn { gap: 6px; white-space: nowrap; flex-shrink: 0; }
+    .sim-panel { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; max-width: 1100px; margin: 0 auto 14px; }
+    .sim-count { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
+    .sim-label { font-size: 12px; color: #8b949e; }
+    #sim-btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-width: 150px; padding: 10px 18px; border: none; border-radius: 10px; background: linear-gradient(135deg, #1f6feb, #3b82f6); color: #fff; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; box-shadow: 0 4px 16px rgba(31,111,235,0.35); transition: transform .15s, box-shadow .15s, opacity .15s; }
+    #sim-btn svg { width: 14px; height: 14px; fill: currentColor; }
+    #sim-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(31,111,235,0.45); }
+    #sim-btn.busy { opacity: .75; pointer-events: none; }
+    .champ-sum { margin-bottom: 14px; }
+    .champ-sum .st-sum-team:not([onclick]) { cursor: default; }
+    .champ-sum .st-sum:hover .st-sum-team:not([onclick]) b { color: #e6edf3; }
+    .st-sum.rel { border-color: rgba(248,81,73,0.4); background: linear-gradient(160deg, rgba(248,81,73,0.1), rgba(13,17,23,0.4) 70%); }
+    .st-sum.rel .st-sum-label { color: #ff7b72; }
+    .ct-rank { position: relative; display: flex; justify-content: center; }
+    .ct-row[style*="--zc"] .st-rank { color: var(--zc); background: color-mix(in srgb, var(--zc) 13%, transparent); }
+    .ct-row[style*="--zc"]::before { content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px; border-radius: 2px; background: var(--zc); }
     .ct-head, .ct-row { display: grid; grid-template-columns: 30px minmax(0,1fr) 64px 58px 58px 58px; align-items: center; gap: 8px; padding: 0 12px; }
     .ct-head { font-size: 11px; color: #7d8590; padding-bottom: 8px; border-bottom: 0.5px solid #30363d; }
     .ct-head span { text-align: center; } .ct-head span:nth-child(2) { text-align: left; }
@@ -1316,8 +1337,7 @@
   <!-- 우승 예측 페이지 -->
 <div id="page-champion" class="page">
   <div class="card">
-    <div class="card-title">2026-27 시즌 순위 예측</div>
-    <div style="font-size:12px;color:#8b949e;margin-bottom:16px">현재 승점에서 출발해 남은 경기를 AI 예측 모델 확률로 시뮬레이션 · 몬테카를로</div>
+    <div class="champ-head"><b>2026-27 시즌 순위 예측</b><span>현재 승점에서 출발해 남은 경기를 AI 예측 모델 확률로 수천 번 돌려본 결과(몬테카를로 시뮬레이션)</span></div>
     
     <div class="league-tabs" id="champion-league-tabs">
       <button class="champ-league-btn active" onclick="loadChampion('PL', this)"><img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="width:16px;height:16px;filter:brightness(0) invert(1);vertical-align:middle;margin-right:4px">EPL</button>
@@ -1327,19 +1347,21 @@
       <button class="champ-league-btn" onclick="loadChampion('FL1', this)"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">리그앙</button>
     </div>
     <!-- <div id="champion-content"><div class="loading">불러오는 중...</div></div> -->
-     <div style="background:#161b22;border:0.5px solid #30363d;border-radius:8px;padding:16px;margin-bottom:20px">
-  <div style="font-size:13px;color:#e6edf3;font-weight:600;margin-bottom:12px">직접 시뮬레이션 돌리기</div>
-  <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-    <div style="flex:1;min-width:200px">
-      <div style="display:flex;justify-content:space-between;font-size:11px;color:#8b949e;margin-bottom:4px">
-        <span>시뮬레이션 횟수</span>
-        <span id="sim-count-label">1,000회</span>
+    <!-- 시뮬레이션 횟수(세그먼트) + 시작 버튼 — 순위표와 같은 컨트롤 모양 (2026-09-29) -->
+    <div class="sim-panel">
+      <div class="sim-count">
+        <span class="sim-label">시뮬레이션 횟수</span>
+        <div class="st-seg" id="sim-count-seg" role="tablist" aria-label="시뮬레이션 횟수">
+          <button class="active" data-n="1000" onclick="setSimCount(1000)">1,000</button>
+          <button data-n="3000" onclick="setSimCount(3000)">3,000</button>
+          <button data-n="5000" onclick="setSimCount(5000)">5,000</button>
+          <button data-n="10000" onclick="setSimCount(10000)">10,000</button>
+        </div>
+        <input type="hidden" id="sim-slider" value="1000">
       </div>
-      <input type="range" id="sim-slider" min="1000" max="10000" step="1000" value="1000" style="width:100%" oninput="document.getElementById('sim-count-label').textContent=Number(this.value).toLocaleString()+'회'">
+      <button id="sim-btn" onclick="runSimulation()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5v14l11-7z"/></svg><span>시뮬레이션 시작</span></button>
     </div>
-    <button id="sim-btn" onclick="runSimulation()" style="padding:10px 20px;min-width:148px;box-sizing:border-box;text-align:center;white-space:nowrap;background:#1f6feb;border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:transform .1s,background .2s" onmousedown="this.style.transform='scale(0.95)'" onmouseup="this.style.transform='scale(1)'" onmouseleave="this.style.transform='scale(1)'">시뮬레이션 시작</button>
-  </div>
-</div>
+    <div id="champ-summary"></div>
 
 <div id="champion-content"><div class="loading"><svg class="logo-bars animate" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg>불러오는 중...</div></div>
   </div>
@@ -3180,11 +3202,15 @@ let currentLeagueCode = 'PL';
 // 순위 예측: 현재 승점에서 출발해 남은 경기를 서버가 준 "경기 예측 모델" 확률로 뽑는 몬테카를로.
 // 시뮬레이션마다 팀별 전력 변동 δ~N(0,σ)(부상·폼 등 시즌 중 변화)를 로짓에 더함 — σ는 서버 값(백테스트로 결정).
 // 예전엔 0점부터 전체 시즌을 블렌딩 승률 공식으로 돌려서 현재 승점을 무시했음(2026-09-28 교체, main.py 설명 참고)
+function setSimCount(n) {
+  document.getElementById('sim-slider').value = n;
+  document.querySelectorAll('#sim-count-seg button').forEach(b => b.classList.toggle('active', +b.dataset.n === n));
+}
 function runSimulation() {
   const data = currentChampionData;
   if (!data) return;
   const simBtn = document.getElementById('sim-btn');
-  if (simBtn) { simBtn.textContent = '계산 중...'; simBtn.style.background = '#388bfd'; }
+  if (simBtn) { simBtn.classList.add('busy'); simBtn.querySelector('span').textContent = '계산 중...'; }
 
   setTimeout(() => {
     const nSim = parseInt(document.getElementById('sim-slider').value);
@@ -3235,7 +3261,7 @@ function runSimulation() {
       b.ucl_prob - a.ucl_prob || a.relegation_prob - b.relegation_prob || a.avg_rank - b.avg_rank);
 
     renderChampionResults({ teams: results, nSim, remaining: F, uclSpots: z.cl, releSpots: z.rel });
-    if (simBtn) { simBtn.textContent = '시뮬레이션 시작'; simBtn.style.background = '#1f6feb'; }
+    if (simBtn) { simBtn.classList.remove('busy'); simBtn.querySelector('span').textContent = '다시 돌리기'; }
   }, 50);
 }
 
@@ -3258,10 +3284,13 @@ async function loadChampion(league, btn) {
   
   // 버튼 active 토글
   if (btn) {
-    document.querySelectorAll('.champ-league-btn').forEach(b => b.classList.remove('active'));
+    // 순위 예측 탭 칩만(선수 탭도 같은 클래스라 예전엔 그쪽 활성 표시까지 지워졌음)
+    document.querySelectorAll('#champion-league-tabs .champ-league-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
   }
-  
+  const simBtn = document.getElementById('sim-btn');
+  if (simBtn) simBtn.querySelector('span').textContent = '시뮬레이션 시작';
+  document.getElementById('champ-summary').innerHTML = '';
   const content = document.getElementById('champion-content');
   content.innerHTML = skeletonRows(10);
 
@@ -3281,8 +3310,9 @@ const CT_HEAD = `<div class="ct-head"><span>#</span><span>팀</span><span>예상
 
 function ctRowHtml(t, i, T, cells, ptsHtml) {
   const zone = MI_ZONE_INFO[getZoneClass(currentLeagueCode, i, T)];
-  return `<div class="ct-row" data-team="${t.team.replace(/"/g, '&quot;')}">
-    <div class="ct-rank" style="${zone ? `color:${zone.color}` : ''}">${i + 1}</div>
+  // 순위표와 같은 모양: 존 색 알약 + 왼쪽 존 색 막대
+  return `<div class="ct-row" data-team="${t.team.replace(/"/g, '&quot;')}" style="${zone ? `--zc:${zone.color}` : ''}">
+    <div class="ct-rank"><span class="st-rank">${i + 1}</span></div>
     <div class="ct-team">
       <img src="${t.logo}" onerror="this.style.visibility='hidden'" onclick="openTeamInfo('${escJs(t.team)}')" alt="">
       <div style="min-width:0">
@@ -3299,6 +3329,14 @@ function renderChampionPending(data) {
   const content = document.getElementById('champion-content');
   const teams = data.teams, T = teams.length;   // 서버가 현재 순위 순으로 줌
   const wait = '<div class="ct-cell wait"></div>'.repeat(3);
+  const z = LEAGUE_ZONES[currentLeagueCode] || { cl: 4, rel: 3 };
+  const lead = teams[0];
+  document.getElementById('champ-summary').innerHTML = `<div class="st-summary champ-sum">
+    <div class="st-sum lead"><span class="st-sum-label">현재 선두</span><span class="st-sum-team" onclick="openTeamInfo('${escJs(lead.team)}')"><img src="${lead.logo}" alt="" onerror="this.style.display='none'"><b>${cleanTeamName(lead.team)}</b></span><span class="st-sum-sub">${lead.points}점 · ${lead.played}경기</span></div>
+    <div class="st-sum"><span class="st-sum-label">남은 경기</span><span class="st-sum-team"><b>${data.remaining}경기</b></span><span class="st-sum-sub">팀당 약 ${Math.round(data.remaining * 2 / T)}경기</span></div>
+    <div class="st-sum"><span class="st-sum-label">챔피언스리그</span><span class="st-sum-team"><b>${z.cl}위까지</b></span><span class="st-sum-sub">리그 스테이지 진출</span></div>
+    <div class="st-sum"><span class="st-sum-label">강등</span><span class="st-sum-team"><b>하위 ${z.rel}팀</b></span><span class="st-sum-sub">${(currentLeagueCode === 'BL1' || currentLeagueCode === 'FL1') ? '16위는 승강 PO' : '다음 시즌 2부'}</span></div>
+  </div>`;
   content.innerHTML = `<div class="ct-meta">지금은 <b>현재 순위</b>예요 · <b>시뮬레이션 시작</b>을 누르면 남은 ${data.remaining}경기를 돌려 우승·UCL권·강등 확률을 계산해요</div>` +
     CT_HEAD + teams.map((t, i) => ctRowHtml(t, i, T, wait, '<div class="ct-pts wait">–</div>')).join('');
   document.getElementById('sim-btn')?.classList.add('pulse');
@@ -3317,6 +3355,19 @@ function renderChampionResults(data) {
   content.querySelectorAll('.ct-row').forEach(r => { before[r.dataset.team] = r.getBoundingClientRect().top; });
 
   const releNote = (currentLeagueCode === 'BL1' || currentLeagueCode === 'FL1') ? ' (16위 승강 PO 제외)' : '';
+  // 요약: 우승 1순위 / UCL권 경계(마지막 자리 확률이 가장 비슷한 두 팀) / 강등 1순위 / 시뮬레이션 정보
+  const byChamp = teams.slice().sort((a, b) => b.champion_prob - a.champion_prob);
+  const byUcl = teams.slice().sort((a, b) => b.ucl_prob - a.ucl_prob);
+  const byRele = teams.slice().sort((a, b) => b.relegation_prob - a.relegation_prob);
+  const pctTxt = p => p >= 99.95 ? '100%' : p < 1 ? (p === 0 ? '0%' : '<1%') : Math.round(p) + '%';
+  const sumTeam = (t, label, sub, cls) => `<div class="st-sum ${cls || ''}"><span class="st-sum-label">${label}</span><span class="st-sum-team" onclick="openTeamInfo('${escJs(t.team)}')"><img src="${t.logo}" alt="" onerror="this.style.display='none'"><b>${cleanTeamName(t.team)}</b></span><span class="st-sum-sub">${sub}</span></div>`;
+  const inU = byUcl[data.uclSpots - 1], outU = byUcl[data.uclSpots];
+  document.getElementById('champ-summary').innerHTML = `<div class="st-summary champ-sum">
+    ${sumTeam(byChamp[0], '우승 1순위', `우승 확률 ${pctTxt(byChamp[0].champion_prob)}${byChamp[1] ? ` · 2위 ${shortName(byChamp[1].team)} ${pctTxt(byChamp[1].champion_prob)}` : ''}`, 'champ')}
+    ${inU && outU ? `<div class="st-sum"><span class="st-sum-label">UCL권 경계 (${data.uclSpots}위)</span><span class="st-sum-team"><b>${shortName(inU.team)} ${pctTxt(inU.ucl_prob)}</b></span><span class="st-sum-sub">바로 아래 ${shortName(outU.team)} ${pctTxt(outU.ucl_prob)}</span></div>` : ''}
+    ${sumTeam(byRele[0], '강등 위험 1순위', `강등 확률 ${pctTxt(byRele[0].relegation_prob)}`, 'rel')}
+    <div class="st-sum"><span class="st-sum-label">시뮬레이션</span><span class="st-sum-team"><b>${data.nSim.toLocaleString()}회</b></span><span class="st-sum-sub">남은 ${data.remaining}경기 · 약 0.1초</span></div>
+  </div>`;
   content.innerHTML = `<div class="ct-meta">남은 <b>${data.remaining}경기</b>를 <b>${data.nSim.toLocaleString()}번</b> 시뮬레이션한 결과 · 예상 승점 순</div>` + CT_HEAD +
     teams.map((t, i) => ctRowHtml(t, i, T,
       cell(t.champion_prob, '240,192,64') + cell(t.ucl_prob, '88,166,255') + cell(t.relegation_prob, '248,81,73'),
