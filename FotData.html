@@ -195,6 +195,10 @@
     .today-card { flex-shrink: 0; min-width: 152px; background: #0d1117; border: 0.5px solid #30363d; border-radius: 10px; padding: 10px 12px; transition: border-color .15s, transform .15s; }
     .today-card:hover { border-color: #58a6ff; transform: translateY(-1px); }
     .today-card-fav { border-color: rgba(63,185,80,0.5); box-shadow: 0 0 0 1px rgba(63,185,80,0.2); }
+    .today-head { justify-content: space-between; }
+    .today-seg { text-transform: none; letter-spacing: 0; }
+    .today-seg button { padding: 5px 11px; font-size: 11.5px; }
+    .today-card-date { font-size: 10px; color: #79b8ff; font-weight: 700; margin-left: auto; font-variant-numeric: tabular-nums; }
     .today-card-league { font-size: 10px; color: #8b949e; display: flex; align-items: center; gap: 4px; margin-bottom: 8px; white-space: nowrap; }
     .today-card-league img { width: 12px; height: 12px; object-fit: contain; }
     .today-card-row { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #e6edf3; margin-bottom: 4px; }
@@ -229,14 +233,23 @@
     .radar-legend .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
 
     /* 즐겨찾는 팀(마이팀) 위젯 */
-    .myteam-widget { position: relative; padding: 14px 16px; border-radius: 12px; background: #161b22; border: 0.5px solid #30363d; border-left: 4px solid #3fb950; margin-bottom: 8px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: border-color .15s, transform .1s; }
+    /* 내 팀(최대 5팀): 5칸 격자 — 팀 수와 상관없이 카드 크기 같음 */
+    .myteam-row { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin-bottom: 8px; }
+    .myteam-widget { --ac: #3fb950; position: relative; padding: 10px 12px; border-radius: 12px; background: #161b22; border: 0.5px solid #30363d; border-left: 3px solid var(--ac); display: flex; align-items: center; gap: 10px; cursor: pointer; min-width: 0; transition: border-color .15s, transform .15s; }
     .myteam-widget:hover { transform: translateY(-1px); }
-    .myteam-logo { width: 44px; height: 44px; object-fit: contain; flex-shrink: 0; }
+    .myteam-logo { width: 30px; height: 30px; object-fit: contain; flex-shrink: 0; }
     .myteam-info { flex: 1; min-width: 0; }
-    .myteam-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px; }
-    .myteam-name { font-size: 15px; font-weight: 800; color: #e6edf3; margin-top: 2px; }
-    .myteam-next { font-size: 12px; color: #8b949e; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .myteam-badge { flex-shrink: 0; background: #21262d; border-radius: 8px; padding: 8px 14px; font-size: 14px; font-weight: 800; text-align: center; }
+    .myteam-name { font-size: 13px; font-weight: 800; color: #e6edf3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .myteam-star { color: var(--ac); font-size: 10px; margin-right: 4px; vertical-align: 1px; }
+    .myteam-next { font-size: 11px; color: #8b949e; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+    .myteam-badge { font-size: 10px; font-weight: 800; color: var(--ac); background: color-mix(in srgb, var(--ac) 14%, transparent); border-radius: 99px; padding: 1px 6px; margin-right: 5px; font-variant-numeric: tabular-nums; }   /* 둘째 줄 앞 — 이름이 한 줄을 다 쓰게(오른쪽 배지였을 땐 1000px에서 "Liver…"로 잘렸음) */
+    .myteam-add { display: flex; align-items: center; justify-content: center; gap: 6px; border-radius: 12px; border: 1px dashed #30363d; background: transparent; color: #7d8590; font-size: 12px; font-weight: 600; font-family: inherit; cursor: pointer; min-height: 52px; transition: border-color .15s, color .15s; }
+    .myteam-add span { font-size: 16px; line-height: 1; } .myteam-add small { font-size: 10px; opacity: .8; }
+    .myteam-add:hover { border-color: #58a6ff; color: #79b8ff; }
+    @media (max-width: 768px) {
+      .myteam-row { display: flex; overflow-x: auto; scrollbar-width: none; } .myteam-row::-webkit-scrollbar { display: none; }
+      .myteam-row > * { flex: 0 0 200px; } .myteam-row > .myteam-add { flex-basis: 110px; }
+    }
 
     /* 빅매치 카운트다운 배너 */
     .bigmatch-banner { position: relative; padding: 22px 24px; border-radius: 14px; background: linear-gradient(135deg, rgba(88,166,255,0.18), rgba(163,113,247,0.06)); border: 0.5px solid rgba(88,166,255,0.4); box-shadow: 0 6px 24px rgba(88,166,255,0.12); margin-bottom: 8px; }
@@ -1390,6 +1403,11 @@
     .sched-month-nav { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 0 auto 16px; max-width: 640px; }
     .sched-month-arrow { width: 32px; height: 32px; border-radius: 50%; border: 0.5px solid #30363d; background: #21262d; color: #e6edf3; font-size: 17px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color .15s; }
     .sched-month-arrow:hover:not(:disabled) { border-color: #58a6ff; }
+    .sched-month-nav { position: relative; }
+    .sched-fav-toggle { position: absolute; right: 0; top: 50%; transform: translateY(-50%); padding: 6px 12px; border-radius: 99px; border: 0.5px solid #30363d; background: rgba(13,17,23,0.5); color: #8b949e; font-size: 12px; font-weight: 600; font-family: inherit; cursor: pointer; transition: all .15s; }
+    .sched-fav-toggle:hover { border-color: #58a6ff; color: #e6edf3; }
+    .sched-fav-toggle.on { background: rgba(227,179,65,0.14); border-color: rgba(227,179,65,0.5); color: #f2cc60; }
+    @media (max-width: 600px) { .sched-fav-toggle { position: static; transform: none; } .sched-month-nav { flex-wrap: wrap; } }
     .sched-month-arrow:disabled { opacity: 0.3; cursor: not-allowed; }
     #schedule-month-select, .sched-month-select { background: #21262d; border: 0.5px solid #30363d; color: #e6edf3; font-size: 14px; font-weight: 600; padding: 8px 16px; border-radius: 8px; cursor: pointer; text-align: center; text-align-last: center; min-width: 140px; }
     #schedule-month-select:hover, .sched-month-select:hover { border-color: #58a6ff; }
@@ -1664,6 +1682,7 @@
       <button class="sched-month-arrow" id="sched-month-prev" onclick="stepScheduleMonth(-1)" aria-label="이전 달">‹</button>
       <select id="schedule-month-select" onchange="selectScheduleMonth(this.value)"></select>
       <button class="sched-month-arrow" id="sched-month-next" onclick="stepScheduleMonth(1)" aria-label="다음 달">›</button>
+      <button class="sched-fav-toggle" id="sched-fav-toggle" style="display:none" onclick="toggleSchedFav()" aria-pressed="false">★ 내 팀만</button>
     </div>
     <div id="schedule-content"><div class="loading"><svg class="logo-bars animate" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg>일정 불러오는 중...</div></div>
   </div>
@@ -1703,10 +1722,12 @@
 </div>
 
   <div class="page active" id="page-predict">
-    <div class="myteam-widget" id="myteam-widget" style="display:none"></div>
+    <div class="myteam-row" id="myteam-widget" style="display:none"></div>
     <div class="bigmatch-banner" id="bigmatch-banner" style="display:none"></div>
     <div class="card">
-      <div class="card-title" id="today-matches-title">오늘의 경기</div>
+      <div class="card-title today-head"><span id="today-matches-title">오늘의 경기</span>
+        <div class="st-seg today-seg" id="today-view-seg" style="display:none" role="tablist" aria-label="보기"><button data-v="all" onclick="setTodayView('all')">전체</button><button data-v="fav" onclick="setTodayView('fav')">★ 내 팀</button></div>
+      </div>
       <div class="today-matches-strip" id="today-matches-widget"></div>
     </div>
     <!-- AI 트랙레코드 한 줄 카드 — 누르면 트랙레코드 창 -->
@@ -2150,14 +2171,14 @@ function localDateStr(dateInput) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
-function renderTodayCards(container, matches) {
-  const favTeam = getFavoriteTeam();
+function renderTodayCards(container, matches, opts = {}) {
+  const favs = getFavoriteTeams();
   container.innerHTML = matches.map(m => {
     const li = TODAY_LEAGUE_INFO[m.league];
     const played = m.status === 'FINISHED';
     const timeStr = new Date(m.date).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
     const homeShort = shortName(m.home_team), awayShort = shortName(m.away_team);   // "Borussia Dort…"처럼 잘리던 것 → 흔히 부르는 짧은 이름
-    const isFav = favTeam && (m.home_team === favTeam || m.away_team === favTeam);
+    const isFav = !opts.showDate && (favs.includes(m.home_team) || favs.includes(m.away_team));
     const x = schedPredOf(m, m.league);
     const px = x && (!played || x.correct != null) ? x.p.map(v => Math.round(v * 100)) : null;
     const top = px ? Math.max(...px) : -1, tc = v => v === top ? ' top' : '';
@@ -2169,38 +2190,60 @@ function renderTodayCards(container, matches) {
       : (px ? `<span class="sp-mini tc-bar"><i class="h" style="width:${px[0]}%"></i><i class="d" style="width:${px[1]}%"></i><i class="a" style="width:${px[2]}%"></i></span>` : '') + `<div class="today-card-time">${timeStr}${px ? ` · <span class="${tc(px[1]) ? 'tc-d top' : 'tc-d'}">무 ${px[1]}%</span>` : ''}</div>`;
     const click = played ? `openMatchResultModal('${escJs(m.home_team)}','${escJs(m.away_team)}','${m.date}','${m.league}')` : `openMatchPredictModal('${escJs(m.home_team)}','${escJs(m.away_team)}')`;
     return `<div class="today-card${isFav ? ' today-card-fav' : ''}" onclick="${click}" style="cursor:pointer"${px ? ` title="${played ? '경기 전 AI 예측' : 'AI 예측'}: 홈승 ${px[0]}% · 무 ${px[1]}% · 원정승 ${px[2]}%"` : ''}>
-      <div class="today-card-league"><img src="${li.logo}" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">${li.name}</div>
+      <div class="today-card-league"><img src="${li.logo}" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">${li.name}${opts.showDate ? `<span class="today-card-date">${(() => { const d = new Date(m.date); return `${d.getMonth() + 1}.${d.getDate()} (${'일월화수목금토'[d.getDay()]})`; })()}</span>` : ''}</div>
       ${row(m.home_team, homeShort, 0, m.home_goals, w === 2)}${row(m.away_team, awayShort, 2, m.away_goals, w === 1)}
       ${foot}
     </div>`;
   }).join('');
 }
+// 다음 경기 카드: [전체 | ★ 내 팀] — 즐겨찾기가 있으면 전환 버튼이 보임(선택은 기기에 기억)
+function getTodayView() { try { return localStorage.getItem('todayView') || 'all'; } catch (e) { return 'all'; } }
+function setTodayView(v) { try { localStorage.setItem('todayView', v); } catch (e) {} loadTodayMatches(); }
+let todaySeq = 0;
 async function loadTodayMatches() {
   const container = document.getElementById('today-matches-widget');
   if (!container) return;
+  const seq = ++todaySeq;
+  const favs = getFavoriteTeams(), seg = document.getElementById('today-view-seg');
+  const view = favs.length && getTodayView() === 'fav' ? 'fav' : 'all';
+  if (seg) { seg.style.display = favs.length ? '' : 'none'; seg.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.v === view)); }
   container.innerHTML = `<div class="loading" style="padding:16px 0;width:100%">${BRAND_LOADER_ICON}불러오는 중...</div>`;
   try {
     const [all] = await Promise.all([fetchWindowMatches(), logosReady]);
-    const todayStr = localDateStr(new Date());
-    let matches = all.filter(m => localDateStr(m.date) === todayStr);
-    let label = '오늘의 경기';
-    if (!matches.length) {
-      const future = all.filter(m => localDateStr(m.date) > todayStr).sort((a, b) => new Date(a.date) - new Date(b.date));
-      if (future.length) {
-        const nextDate = localDateStr(future[0].date);
-        matches = future.filter(m => localDateStr(m.date) === nextDate);
-        const [, mm, dd] = nextDate.split('-');
-        label = `다음 경기 · ${parseInt(mm)}.${parseInt(dd)}`;
+    let matches, label;
+    if (view === 'fav') {
+      // 즐겨찾기 팀들의 다가오는 경기(팀마다 최대 3경기, 날짜순, 최대 10경기) — 날짜가 달라서 카드에 날짜 표시
+      const lists = await Promise.all(favs.map(t => favUpcomingMatches(t).catch(() => [])));
+      const seen = new Set();
+      matches = lists.flatMap(l => l.slice(0, 3)).filter(m => { const k = m.date + m.home_team; if (seen.has(k)) return false; seen.add(k); return true; })
+        .sort((a, b) => new Date(a.date) - new Date(b.date)).slice(0, 10);
+      label = '내 팀 다음 경기';
+    } else {
+      const todayStr = localDateStr(new Date());
+      matches = all.filter(m => localDateStr(m.date) === todayStr);
+      label = '오늘의 경기';
+      if (!matches.length) {
+        const future = all.filter(m => localDateStr(m.date) > todayStr).sort((a, b) => new Date(a.date) - new Date(b.date));
+        if (future.length) {
+          const nextDate = localDateStr(future[0].date);
+          matches = future.filter(m => localDateStr(m.date) === nextDate);
+          const [, mm, dd] = nextDate.split('-');
+          label = `다음 경기 · ${parseInt(mm)}.${parseInt(dd)}`;
+        }
       }
     }
+    if (seq !== todaySeq) return;
     document.getElementById('today-matches-title').textContent = label;
-    if (!matches.length) { container.innerHTML = '<div class="ti-empty">예정된 경기가 없어요.</div>'; return; }
+    if (!matches.length) { container.innerHTML = `<div class="ti-empty">${view === 'fav' ? '내 팀의 예정된 경기가 없어요.' : '예정된 경기가 없어요.'}</div>`; return; }
     // 카드마다 AI 예측(일정 탭과 같은 숫자): 팀 옆 승리 확률 + 짧은 막대 + 무. 예측이 곧 오면 기다렸다 한 번에, 늦으면 도착할 때 다시 그림
     const leagues = [...new Set(matches.map(m => m.league))];
     const predsP = Promise.all(leagues.map(ensureSchedulePreds));
     if (leagues.some(l => !schedulePreds[l])) await Promise.race([predsP, new Promise(r => setTimeout(r, 700))]);
-    renderTodayCards(container, matches);
-    if (leagues.some(l => !schedulePreds[l])) predsP.then(() => renderTodayCards(container, matches));
+    if (seq !== todaySeq) return;
+    const opts = { showDate: view === 'fav' };
+    renderTodayCards(container, matches, opts);
+    if (leagues.some(l => !schedulePreds[l])) predsP.then(() => { if (seq === todaySeq) renderTodayCards(container, matches, opts); });
+    container.scrollLeft = 0;
     initScrollFade(container);
   } catch (e) {
     container.innerHTML = '<div class="ti-empty">일정을 불러올 수 없어요.</div>';
@@ -2301,54 +2344,51 @@ async function renderBigMatchBanner(m) {
   bigMatchTimer = setInterval(tick, 1000);
 }
 
-// ── 즐겨찾는 팀(마이팀) 다음 경기 위젯 ──
+// ── 즐겨찾는 팀(마이팀) 위젯: 최대 5팀, 5칸 격자의 작은 카드(팀이 1개여도 1/5 크기 — 예전엔 1팀 카드가 한 줄을 꽉 채웠음) ──
+// 팀마다 다음 경기: 받아둔 창(/matches/window) → 21일 안에 없으면 그 팀 리그 일정(한 번 받으면 재사용)
+async function favUpcomingMatches(team, now = new Date()) {
+  const pick = (list, lg) => list.filter(m => (m.home_team === team || m.away_team === team) && m.status !== 'FINISHED' && new Date(m.date) > now)
+    .map(m => ({ ...m, league: m.league || lg })).sort((a, b) => new Date(a.date) - new Date(b.date));
+  let up = pick(await fetchWindowMatches());
+  const code = getTeamLeagueCode(team);
+  if (up.length < 2 && code) {
+    try { if (!scheduleData[code]) scheduleData[code] = (await (await fetch(`${API}/schedule/${code}`)).json()).matches; } catch (e) { /* 창 안의 경기만 */ }
+    const more = pick(scheduleData[code] || [], code);
+    up = [...up, ...more.filter(x => !up.some(y => y.date === x.date && y.home_team === x.home_team))].sort((a, b) => new Date(a.date) - new Date(b.date));
+  }
+  return up;
+}
 async function loadMyTeamWidget() {
   const widget = document.getElementById('myteam-widget');
   if (!widget) return;
-  const team = getFavoriteTeam();
-  if (!team) { widget.style.display = 'none'; return; }
+  const teams = getFavoriteTeams();
+  if (!teams.length) { widget.style.display = 'none'; widget.innerHTML = ''; return; }
   try {
+    await logosReady;
     const now = new Date();
-    const nextOf = list => list
-      .filter(m => (m.home_team === team || m.away_team === team) && m.status !== 'FINISHED' && new Date(m.date) > now)
-      .sort((a, b) => new Date(a.date) - new Date(b.date));
-    let upcoming = nextOf((await Promise.all([fetchWindowMatches(), logosReady]))[0]);
-    // 21일 안에 경기가 없으면(A매치 휴식기 등) 그 팀 리그 일정만 따로 받아서 찾음
-    const code = getTeamLeagueCode(team);
-    if (!upcoming.length && code) {
-      if (!scheduleData[code]) scheduleData[code] = (await (await fetch(`${API}/schedule/${code}`)).json()).matches;
-      upcoming = nextOf(scheduleData[code] || []);
-    }
-    if (!upcoming.length) { widget.style.display = 'none'; return; }
-
-    const m = upcoming[0];
-    const isHome = m.home_team === team;
-    const opponent = isHome ? m.away_team : m.home_team;
-    const d = new Date(m.date);
-    const isToday = localDateStr(m.date) === localDateStr(now);
-    const dateLabel = isToday ? '오늘' : `${d.getMonth() + 1}.${d.getDate()}`;
-    const timeLabel = d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
-    const daysLeft = Math.max(1, Math.ceil((d - now) / 86400000));
-    const badgeText = isToday ? '오늘 경기' : `D-${daysLeft}`;
-
-    let accentColor = '#3fb950';
-    try {
-      const info = await fetchTeamInfo(team);
-      accentColor = getClubAccentColor(info.clubColors) || accentColor;
-    } catch (e) { /* 팀 정보 없으면 기본 색 사용 */ }
-
-    widget.style.borderLeftColor = accentColor;
-    widget.innerHTML = `
-      <img class="myteam-logo" src="${logos[team] || ''}" onerror="this.style.display='none'">
-      <div class="myteam-info">
-        <div class="myteam-label" style="color:${accentColor}">⭐ 내 팀</div>
-        <div class="myteam-name">${team.replace(' FC', '').replace(' CF', '')}</div>
-        <div class="myteam-next">${dateLabel} ${timeLabel} · ${isHome ? '홈' : '원정'} vs ${opponent.replace(' FC', '').replace(' CF', '')}</div>
-      </div>
-      <div class="myteam-badge" style="color:${accentColor}">${badgeText}</div>
-    `;
-    widget.onclick = () => openTeamInfo(team);
-    widget.style.display = 'flex';
+    const nexts = await Promise.all(teams.map(t => favUpcomingMatches(t, now).then(l => l[0] || null).catch(() => null)));
+    const card = (team, m) => {
+      let next = '예정된 경기 없음', badge = '';
+      if (m) {
+        const home = m.home_team === team, opp = home ? m.away_team : m.home_team, d = new Date(m.date);
+        const today = localDateStr(m.date) === localDateStr(now);
+        next = `${today ? '오늘' : `${d.getMonth() + 1}.${d.getDate()}`} ${d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false })} · ${home ? '홈' : '원정'} vs ${shortName(opp)}`;
+        badge = today ? '오늘' : `D-${Math.max(1, Math.ceil((d - now) / 86400000))}`;
+      }
+      return `<div class="myteam-widget myteam-card" data-team="${team.replace(/"/g, '&quot;')}" onclick="openTeamInfo('${escJs(team)}')" title="${team.replace(/"/g, '&quot;')} 팀 정보">
+        <img class="myteam-logo" src="${logos[team] || ''}" alt="" onerror="this.style.visibility='hidden'">
+        <div class="myteam-info"><div class="myteam-name"><span class="myteam-star">★</span>${shortName(team)}</div><div class="myteam-next">${badge ? `<b class="myteam-badge">${badge}</b>` : ''}${next}</div></div>
+      </div>`;
+    };
+    widget.innerHTML = teams.map((t, i) => card(t, nexts[i])).join('') +
+      (teams.length < FAV_MAX ? `<button class="myteam-add" type="button" onclick="openTeamSearch()" title="팀을 골라 팀 정보에서 ☆를 누르면 추가돼요"><span>+</span>팀 추가 <small>${teams.length}/${FAV_MAX}</small></button>` : '');
+    widget.style.display = '';
+    // 구단 색(카드 왼쪽 줄·별)은 팀 정보가 오는 대로 — 기다리지 않고 기본 색으로 먼저 그림
+    teams.forEach(t => fetchTeamInfo(t).then(info => {
+      const c = getClubAccentColor(info.clubColors);
+      const el = [...widget.querySelectorAll('.myteam-card')].find(x => x.dataset.team === t);
+      if (c && el) el.style.setProperty('--ac', c);
+    }).catch(() => {}));
   } catch (e) {
     widget.style.display = 'none';
   }
@@ -2997,33 +3037,42 @@ async function openTeamInfo(teamName) {
 }
 
 // ── 즐겨찾는 팀(마이팀) ──
-function getFavoriteTeam() {
-  try { return localStorage.getItem('favoriteTeam'); } catch (e) { return null; }
+// 즐겨찾는 팀은 최대 5팀(2026-09-29 — 예전엔 1팀, 'favoriteTeam' 하나에 저장하던 걸 목록으로 옮김)
+const FAV_MAX = 5;
+function getFavoriteTeams() {
+  try {
+    const a = JSON.parse(localStorage.getItem('favoriteTeams') || 'null');
+    if (Array.isArray(a)) return a.filter(Boolean).slice(0, FAV_MAX);
+    const old = localStorage.getItem('favoriteTeam');
+    return old ? [old] : [];
+  } catch (e) { return []; }
 }
-function setFavoriteTeamStorage(name) {
-  try { localStorage.setItem('favoriteTeam', name); } catch (e) { /* 저장 불가 환경(프라이빗 모드 등)이면 그냥 무시 */ }
+function setFavoriteTeams(list) {
+  try { localStorage.setItem('favoriteTeams', JSON.stringify(list.slice(0, FAV_MAX))); localStorage.removeItem('favoriteTeam'); } catch (e) { /* 저장 불가 환경(프라이빗 모드 등)이면 그냥 무시 */ }
 }
-function clearFavoriteTeamStorage() {
-  try { localStorage.removeItem('favoriteTeam'); } catch (e) {}
-}
+const isFavoriteTeam = t => getFavoriteTeams().includes(t);
+function getFavoriteTeam() { return getFavoriteTeams()[0] || null; }
 function updateFavBtnState() {
   const btn = document.getElementById('ti-fav-btn');
   if (!btn) return;
-  btn.classList.toggle('active', getFavoriteTeam() === tiState.team);
+  btn.classList.toggle('active', isFavoriteTeam(tiState.team));
 }
 function toggleFavoriteTeam() {
   const team = tiState.team;
   if (!team) return;
-  const teamShort = team.split(' ')[0];
-  if (getFavoriteTeam() === team) {
-    clearFavoriteTeamStorage();
+  const teamShort = shortName(team), list = getFavoriteTeams();
+  if (list.includes(team)) {
+    setFavoriteTeams(list.filter(t => t !== team));
     showToast(`${teamShort} 즐겨찾기를 해제했어요`);
   } else {
-    setFavoriteTeamStorage(team);
-    showToast(`${teamShort}을(를) 즐겨찾는 팀으로 등록했어요 ⭐`);
+    if (list.length >= FAV_MAX) { showToast(`즐겨찾기는 ${FAV_MAX}팀까지예요 · 다른 팀을 먼저 해제해 주세요`); return; }
+    setFavoriteTeams([...list, team]);
+    showToast(`${teamShort}을(를) 즐겨찾는 팀으로 등록했어요 ⭐ (${list.length + 1}/${FAV_MAX})`);
   }
   updateFavBtnState();
   loadMyTeamWidget();
+  loadTodayMatches();
+  if (document.getElementById('page-schedule').classList.contains('active')) syncSchedFavToggle();
 }
 
 async function fetchTeamInfo(teamName) {
@@ -3983,6 +4032,7 @@ async function loadSchedule(league, btn) {
     if (!schedulePreds[league]) await Promise.race([predsP, new Promise(r => setTimeout(r, 700))]);
     if (currentScheduleLeague !== league) return;
     renderScheduleMonths(league);
+    syncSchedFavToggle();
     if (!schedulePreds[league]) predsP.then(map => { if (map && currentScheduleLeague === league && currentScheduleMonth) renderScheduleContent(league, currentScheduleMonth); });
   } catch (e) {
     content.innerHTML = '<div class="loading">일정을 불러올 수 없어요. 잠시 후 다시 시도해주세요.</div>';
@@ -4101,9 +4151,25 @@ function schedRowHtml(m, league, opts = {}) {
 }
 const SCHED_PRED_LEGEND = `<div class="sched-pred-legend"><span><i class="h"></i>홈승</span><span><i class="d"></i>무</span><span><i class="a"></i>원정승</span><span class="note">팀 옆 숫자 = 승리 확률 · 경기를 누르면 예측/결과</span></div>`;
 
+// 일정 탭 "★ 내 팀만": 즐겨찾기 팀이 있을 때만 버튼이 보이고, 켜면 지금 리그·달에서 그 팀들 경기만
+let schedFavOnly = false;
+function syncSchedFavToggle() {
+  const btn = document.getElementById('sched-fav-toggle'), favs = getFavoriteTeams();
+  if (!btn) return;
+  if (!favs.length) schedFavOnly = false;
+  btn.style.display = favs.length ? '' : 'none';
+  btn.classList.toggle('on', schedFavOnly); btn.setAttribute('aria-pressed', schedFavOnly);
+  if (currentScheduleMonth && scheduleData[currentScheduleLeague]) renderScheduleContent(currentScheduleLeague, currentScheduleMonth);
+}
+function toggleSchedFav() { schedFavOnly = !schedFavOnly; syncSchedFavToggle(); }
 function renderScheduleContent(league, monthKey) {
   const content = document.getElementById('schedule-content');
-  const matches = (scheduleData[league] || []).filter(m => scheduleMonthKey(m.date) === monthKey);
+  const favs = getFavoriteTeams();
+  let matches = (scheduleData[league] || []).filter(m => scheduleMonthKey(m.date) === monthKey);
+  if (schedFavOnly && favs.length) {
+    matches = matches.filter(m => favs.includes(m.home_team) || favs.includes(m.away_team));
+    if (!matches.length) { content.innerHTML = `<div class="loading">이번 달 이 리그에 내 팀 경기가 없어요.</div>`; return; }
+  }
   if (!matches.length) {
     content.innerHTML = '<div class="loading">해당 월에 예정된 경기가 없습니다.</div>';
     return;
