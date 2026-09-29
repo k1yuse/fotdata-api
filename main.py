@@ -980,22 +980,42 @@ def get_accuracy():
 def get_track_record():
     """AI 예측 트랙레코드 — update_data.py가 매일 그 시점에 실제 서빙 중인 /predict를
     호출해 미리 기록해두고, 경기가 끝나면 실제 결과와 대조해 채워넣은 로그(prediction_log.json)의
-    요약 + 최근 완료 경기 목록"""
-    log = _load_json("prediction_log.json")
-    if log is None:
-        return {"summary": {"total_scheduled": 0, "total_resolved": 0}, "recent": []}
+    요약 + 최근 완료 경기 목록 + 채점 예정 경기"""
+    log = _load_json("prediction_log.json") or {}
+    now = pd.Timestamp.utcnow().tz_localize(None)
+
+    def _row(e):
+        return {k: e.get(k) for k in ("league", "home_team", "away_team", "date", "predicted", "home_win_prob",
+                                      "draw_prob", "away_win_prob", "predicted_score", "actual", "actual_score", "correct")}
+
+    # 채점 예정: 기록은 됐지만 아직 안 끝난 경기(가까운 순) — 첫 결과가 나오기 전 화면용
+    pending = sorted((e for e in log.values() if e.get("actual") is None
+                      and pd.Timestamp(e["date"]).tz_localize(None) > now - pd.Timedelta(hours=3)), key=lambda e: e["date"])
+    upcoming = {"count": len(pending), "first_date": pending[0]["date"] if pending else None,
+                "matches": [_row(e) for e in pending[:6]]}
 
     # total_scheduled: 예정 경기까지 포함해 기록해둔 전체 건수 (아직 결과 없는 것 포함)
     # total_resolved: 그중 실제로 경기가 끝나 적중 여부를 확정한 건수 — 적중률 계산은 이 값 기준
     total_scheduled = len(log)
-    resolved = [e for e in log.values() if e.get("actual") is not None]
-    resolved.sort(key=lambda e: e["date"])
+    resolved = sorted((e for e in log.values() if e.get("actual") is not None), key=lambda e: e["date"])
     if not resolved:
-        return {"summary": {"total_scheduled": total_scheduled, "total_resolved": 0}, "recent": []}
+        return {"summary": {"total_scheduled": total_scheduled, "total_resolved": 0}, "recent": [], "upcoming": upcoming}
+
+    def _acc(rows):
+        n = len(rows); c = sum(1 for e in rows if e["correct"])
+        return {"n": n, "correct": c, "pct": round(c / n * 100, 1) if n else None}
 
     recent = resolved[-50:]
     total_correct = sum(1 for e in resolved if e["correct"])
     recent_correct = sum(1 for e in recent if e["correct"])
+    # 최근 7일: 가장 최근에 끝난 기록 경기 기준 7일(A매치 휴식기에도 "지난 라운드" 성적이 보이게)
+    last_dt = pd.Timestamp(resolved[-1]["date"]).tz_localize(None)
+    last7 = [e for e in resolved if pd.Timestamp(e["date"]).tz_localize(None) > last_dt - pd.Timedelta(days=7)]
+    # 확신 높은 예측: 가장 높은 확률이 60% 이상이었던 경기만
+    confident = [e for e in resolved if max(e["home_win_prob"], e["draw_prob"], e["away_win_prob"]) >= 0.6]
+    by_league = {}
+    for e in resolved:
+        by_league.setdefault(e.get("league") or "?", []).append(e)
 
     # 누적 적중률 추이: 확정된 경기를 날짜순으로 하나씩 반영했을 때 그 시점까지의
     # 누적 적중률(%)이 어떻게 움직였는지 — 차트 가독성을 위해 최근 30포인트만
@@ -1018,9 +1038,16 @@ def get_track_record():
             "recent_n": len(recent),
             "recent_correct": recent_correct,
             "recent_accuracy_pct": round(recent_correct / len(recent) * 100, 1),
+            # 비교 기준: 같은 경기를 전부 "홈승"으로 찍었다면의 적중률(정직한 비교용)
+            "baseline_home_pct": round(sum(1 for e in resolved if e["actual"] == "home_win") / len(resolved) * 100, 1),
+            "last7": {**_acc(last7), "from": last7[0]["date"], "to": last7[-1]["date"]},
+            "confident": _acc(confident),
+            "by_league": {k: _acc(v) for k, v in by_league.items()},
         },
         "accuracy_trend": accuracy_trend,
-        "recent": list(reversed(recent[-20:])),
+        "recent": [_row(e) for e in reversed(recent[-20:])],
+        "last10": [bool(e["correct"]) for e in resolved[-10:]],
+        "upcoming": upcoming,
     }
 
 @app.get("/players/topscorers/{league_code}")

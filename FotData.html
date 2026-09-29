@@ -80,6 +80,38 @@
     }
     @media (max-width: 480px) { .nav-search-kbd { display: none; } }
     .team-search-box { width: 480px; max-width: 92vw; max-height: 72vh; display: flex; flex-direction: column; align-items: stretch; }
+    /* AI 트랙레코드 — 홈 한 줄 카드 + 창 */
+    .card.tr-strip { display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; transition: border-color .15s, transform .15s; }
+    .card.tr-strip:hover { border-color: rgba(88,166,255,0.5); transform: translateY(-1px); }
+    .trs-icon { width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: rgba(63,185,80,0.12); border: 0.5px solid rgba(63,185,80,0.35); }
+    .trs-icon svg { width: 18px; height: 18px; fill: none; stroke: #3fb950; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .trs-main { flex: 1; min-width: 0; }
+    .trs-t { display: flex; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 700; color: #e6edf3; }
+    .trs-chip { font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 99px; color: #3fb950; background: rgba(63,185,80,0.13); white-space: nowrap; }
+    .trs-chip.soon { color: #79b8ff; background: rgba(88,166,255,0.12); font-weight: 700; }
+    .trs-s { margin-top: 3px; font-size: 11.5px; color: #8b949e; line-height: 1.45; word-break: keep-all; } .trs-s b { color: #e6edf3; }
+    .trs-dots { display: flex; gap: 3px; flex-shrink: 0; } .trs-dots i { width: 7px; height: 7px; border-radius: 50%; } .trs-dots i.hit { background: #3fb950; } .trs-dots i.miss { background: #484f58; }
+    .trs-chev { width: 16px; height: 16px; flex-shrink: 0; fill: none; stroke: #7d8590; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    @media (max-width: 480px) { .trs-dots { display: none; } }
+    .modal.trm-modal { width: 460px; }
+    .trm-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .trm-tile { display: flex; flex-direction: column; gap: 2px; padding: 10px; border-radius: 12px; border: 0.5px solid #30363d; background: rgba(13,17,23,0.45); min-width: 0; }
+    .trm-tile span { font-size: 10.5px; color: #8b949e; font-weight: 600; } .trm-tile b { font-size: 20px; font-weight: 800; color: #e6edf3; font-variant-numeric: tabular-nums; } .trm-tile small { font-size: 10px; color: #7d8590; }
+    .trm-tile.main { border-color: rgba(63,185,80,0.4); background: linear-gradient(160deg, rgba(63,185,80,0.13), rgba(13,17,23,0.4) 70%); } .trm-tile.main b { color: #3fb950; }
+    .trm-cmp { display: grid; grid-template-columns: 64px 1fr 74px; align-items: center; gap: 8px; margin: 6px 0; font-size: 12px; color: #c9d1d9; }
+    .trm-cmp.lg { grid-template-columns: 96px 1fr 74px; } .trm-cmp span { display: flex; align-items: center; gap: 6px; white-space: nowrap; } .trm-cmp span img { width: 14px; height: 14px; object-fit: contain; }
+    .trm-cmp div { height: 8px; border-radius: 99px; background: #21262d; overflow: hidden; } .trm-cmp div i { display: block; height: 100%; border-radius: 99px; background: #6e7681; } .trm-cmp div i.ai { background: linear-gradient(90deg, #238636, #3fb950); }
+    .trm-cmp b { text-align: right; font-variant-numeric: tabular-nums; color: #e6edf3; } .trm-cmp b small { color: #7d8590; font-weight: 500; font-size: 10px; }
+    .mr-row.trm-row { grid-template-columns: 40px minmax(0,1fr) 34px minmax(0,1fr) 62px; cursor: default; } .mr-row.trm-row[onclick] { cursor: pointer; } .mr-row.trm-row[onclick]:hover { background: rgba(88,166,255,0.07); }
+    .mr-row.trm-row b.when { font-size: 10.5px; color: #7d8590; }
+    .trm-pick { justify-self: end; font-size: 10.5px; font-weight: 700; padding: 2px 7px; border-radius: 99px; white-space: nowrap; color: #79b8ff; background: rgba(88,166,255,0.1); }
+    .trm-pick.away_win { color: #ffa657; background: rgba(240,136,62,0.1); } .trm-pick.draw { color: #c9d1d9; background: rgba(139,148,158,0.12); }
+    .trm-pick.hit { color: #3fb950; background: rgba(63,185,80,0.13); } .trm-pick.miss { color: #8b949e; background: rgba(139,148,158,0.12); }
+    .trm-how { display: flex; flex-direction: column; gap: 8px; } .trm-how div { display: flex; align-items: center; gap: 10px; font-size: 12.5px; color: #c9d1d9; word-break: keep-all; } .trm-how strong { color: #e6edf3; margin-right: 6px; }
+    .trm-how b { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #79b8ff; background: rgba(88,166,255,0.12); border: 0.5px solid rgba(88,166,255,0.35); }
+    .trm-first { margin-top: 14px; padding: 12px; border-radius: 12px; text-align: center; font-size: 13px; color: #c9d1d9; background: rgba(31,111,235,0.08); border: 0.5px solid rgba(88,166,255,0.3); } .trm-first b { color: #79b8ff; }
+    .trm-first small { display: block; margin-top: 3px; font-size: 11px; color: #7d8590; }
+    @media (max-width: 420px) { .trm-tile b { font-size: 17px; } .mr-row.trm-row { grid-template-columns: 32px minmax(0,1fr) 28px minmax(0,1fr) 58px; gap: 4px; } .mr-row.trm-row .t img { width: 16px; height: 16px; } }
     .track-record-box { width: 480px; max-width: 92vw; max-height: 80vh; display: flex; flex-direction: column; }
     .track-record-box #track-record-body { overflow-y: auto; padding: 16px; }
     .tr-summary { display: flex; gap: 10px; margin-bottom: 16px; }
@@ -509,6 +541,8 @@
     .ti-fx-tag { display: inline-block; margin-left: 8px; padding: 1px 7px; border-radius: 99px; font-size: 10px; font-weight: 700; vertical-align: 1px; }
     .ti-fx-tag.cl { background: rgba(88,166,255,0.12); color: #79b8ff; border: 0.5px solid rgba(88,166,255,0.35); }
     .ti-fx-tag.next { background: rgba(63,185,80,0.14); color: #56d364; border: 0.5px solid rgba(63,185,80,0.4); }
+    .sched-date-header.ti-fx-head { display: flex; align-items: center; gap: 7px; }
+    .ti-fx-comp { width: 16px; height: 16px; object-fit: contain; flex-shrink: 0; }
     .sched-match.ti-fx-next { background: rgba(63,185,80,0.06); border-radius: 8px; box-shadow: inset 2px 0 0 #3fb950; }
     /* 팀 정보 · 이적 탭 */
     .tf-filters { display: flex; gap: 6px; margin-bottom: 10px; }
@@ -1225,6 +1259,8 @@
     .mr-row .t { display: flex; align-items: center; gap: 6px; min-width: 0; color: #e6edf3; } .mr-row .t.a { justify-content: flex-end; } .mr-row .t.lose { opacity: .45; }
     .mr-row .t em { font-style: normal; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .mr-row .t img { width: 18px; height: 18px; object-fit: contain; flex-shrink: 0; }
+    /* 남색·검정 문장(유벤투스·칼리아리·토트넘 등)이 어두운 배경에 묻히지 않게 옅은 테두리 빛 */
+    .mr-row .t img, .rr-team img, .sched-team img, .today-card-row img { filter: drop-shadow(0 0 1px rgba(230,237,243,0.35)); }
     .mr-row b { text-align: center; color: #e6edf3; }
     .mp-probs .h.top b { color: #79b8ff; font-weight: 800; } .mp-probs .a.top b { color: #ffa657; font-weight: 800; } .mp-probs .d.top b { color: #e6edf3; font-weight: 800; }
     .mp-sec { margin-top: 14px; padding-top: 12px; border-top: 0.5px solid rgba(139,148,158,0.18); }
@@ -1574,6 +1610,8 @@
       <div class="card-title" id="today-matches-title">오늘의 경기</div>
       <div class="today-matches-strip" id="today-matches-widget"></div>
     </div>
+    <!-- AI 트랙레코드 한 줄 카드 — 누르면 트랙레코드 창 -->
+    <div class="card tr-strip" id="tr-strip" style="display:none" onclick="openTrackRecordModal()"></div>
     <div class="card predict-selector-card">
       <div class="team-selector">
         <div class="team-box">
@@ -1739,9 +1777,10 @@
 
 <!-- AI 예측 트랙레코드 모달 -->
 <div class="modal-overlay" id="track-record-modal" onclick="closeTrackRecordModal(event)">
-  <div class="modal track-record-box">
-    <div class="modal-header"><span class="modal-title">AI 예측 트랙레코드</span><span class="modal-close" aria-label="닫기" onclick="closeTrackRecordModal()">✕</span></div>
-    <div id="track-record-body"><div class="loading"><svg class="logo-bars animate" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg>불러오는 중...</div></div>
+  <!-- AI 트랙레코드(2026-09-29 리디자인): 경기 전에 기록해 둔 예측을 경기가 끝나면 그대로 채점한 결과 -->
+  <div class="modal mp-modal trm-modal" role="dialog" aria-labelledby="trm-title">
+    <div class="mp-top"><span class="mp-title" id="trm-title">AI 트랙레코드</span><span class="mp-meta">사전 기록 예측의 실전 검증</span><span class="modal-close" aria-label="닫기" onclick="closeTrackRecordModal()">✕</span></div>
+    <div id="track-record-body" class="mp-body"></div>
   </div>
 </div>
 
@@ -2593,8 +2632,11 @@ function renderTiFixturesContent() {
       const d = new Date(m.date);
       const dateStr = `${d.getMonth() + 1}.${d.getDate()} (${WEEKDAY[d.getDay()]})`;
       const isNext = next && m === next;
-      const tags = (m.league === 'CL' ? '<span class="ti-fx-tag cl">UCL</span>' : '') + (isNext ? '<span class="ti-fx-tag next">다음 경기</span>' : '');
-      html += `<div class="sched-date-header">${dateStr}${tags}</div>` + schedRowHtml(m, m.league, { next: isNext, team });
+      // 대회는 글자 태그 대신 리그·챔스 모두 대회 로고로(2026-09-29 사용자 요청)
+      const li = TODAY_LEAGUE_INFO[m.league];
+      const comp = li ? `<img class="ti-fx-comp" src="${li.logo}" alt="${li.name}" title="${li.name}" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">` : '';
+      const tags = isNext ? '<span class="ti-fx-tag next">다음 경기</span>' : '';
+      html += `<div class="sched-date-header ti-fx-head">${comp}${dateStr}${tags}</div>` + schedRowHtml(m, m.league, { next: isNext, team });
     });
   }
   panel.innerHTML = html;
@@ -3452,7 +3494,7 @@ function refreshCurrentTab() {
   const page = activePage.id.replace('page-', '');
   let job;
   if (page === 'predict') {
-    job = Promise.all([loadTodayMatches(), loadBigMatch(), loadMyTeamWidget(), loadAccuracy()]);
+    job = Promise.all([loadTodayMatches(), loadBigMatch(), loadMyTeamWidget(), loadAccuracy(), loadTrackStrip()]);
   } else if (page === 'champion') {
     job = loadChampion(currentLeagueCode || 'PL');
   } else if (page === 'standings') {
@@ -4121,60 +4163,90 @@ function buildAccuracyTrendSVG(trend) {
 }
 function renderAccuracyTrendChart(trend) {
   if (!trend || trend.length < 3) return '';
-  return `
-    <div style="margin-bottom:16px;padding:14px;background:#0d1117;border:0.5px solid #30363d;border-radius:10px">
-      <div style="font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">누적 적중률 추이 (최근 ${trend.length}건)</div>
-      ${buildAccuracyTrendSVG(trend)}
-    </div>
-  `;
+  return `<div class="mp-sec"><div class="mp-sec-t">누적 적중률 추이 <span class="mp-sec-n">최근 ${trend.length}건</span></div>${buildAccuracyTrendSVG(trend)}</div>`;
+}
+
+// ── AI 트랙레코드(사전 기록 예측의 실전 검증) ──
+// 한 번 받아서 홈 카드·창이 같이 씀(데이터는 하루 한 번 바뀜)
+let trackRecordP = null;
+function fetchTrackRecord() {
+  if (!trackRecordP) trackRecordP = fetchWithRetry(`${API}/predict/track-record`).then(r => r.json()).catch(e => { trackRecordP = null; throw e; });
+  return trackRecordP;
+}
+const TR_W = ['일', '월', '화', '수', '목', '금', '토'];
+const trDate = (iso, withTime) => { const d = new Date(iso); return `${d.getMonth() + 1}.${d.getDate()} (${TR_W[d.getDay()]})${withTime ? ' ' + d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false }) : ''}`; };
+const trPick = e => e.predicted === 'home_win' ? '홈승' : e.predicted === 'away_win' ? '원정승' : '무';
+const trPickProb = e => Math.round((e.predicted === 'home_win' ? e.home_win_prob : e.predicted === 'away_win' ? e.away_win_prob : e.draw_prob) * 100);
+
+// 경기 예측 탭 한 줄 카드: 첫 채점 전엔 "첫 채점 날짜 · 기록 N건", 이후엔 최근 7일 적중 + 최근 10경기 점
+async function loadTrackStrip() {
+  const el = document.getElementById('tr-strip');
+  if (!el) return;
+  try {
+    const d = await fetchTrackRecord();
+    const sm = d.summary || {}, up = d.upcoming || {};
+    const icon = `<span class="trs-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg></span>`;
+    const chev = '<svg class="trs-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
+    if (sm.total_resolved) {
+      const l7 = sm.last7 || {};
+      el.innerHTML = `${icon}<div class="trs-main"><div class="trs-t">AI 트랙레코드 <span class="trs-chip">적중률 ${sm.accuracy_pct}%</span></div>
+        <div class="trs-s">최근 7일 <b>${l7.correct}/${l7.n}</b> 적중 · 누적 ${sm.total_resolved}경기 검증 · 기준선(전부 홈승) ${sm.baseline_home_pct}%</div></div>
+        <div class="trs-dots" aria-label="최근 10경기 적중 여부">${(d.last10 || []).map(c => `<i class="${c ? 'hit' : 'miss'}"></i>`).join('')}</div>${chev}`;
+    } else if (up.count) {
+      el.innerHTML = `${icon}<div class="trs-main"><div class="trs-t">AI 트랙레코드 <span class="trs-chip soon">첫 검증 ${trDate(up.first_date)}</span></div>
+        <div class="trs-s">킥오프 전 예측 <b>${sm.total_scheduled}건</b> 사전 기록 완료 · 경기 종료 후 자동 채점</div></div>${chev}`;
+    } else { el.style.display = 'none'; return; }
+    el.style.display = '';
+  } catch (e) { el.style.display = 'none'; }
 }
 
 async function openTrackRecordModal() {
   const modal = document.getElementById('track-record-modal');
   const body = document.getElementById('track-record-body');
   modal.classList.add('show');
-  body.innerHTML = `<div class="loading">${BRAND_LOADER_ICON}불러오는 중...</div>`;
+  body.innerHTML = `<div class="mp-skel"><i style="width:100%;height:60px"></i><i style="width:100%;height:10px"></i><i style="width:80%"></i><i style="width:100%;height:120px"></i></div>`;
   try {
-    const res = await fetchWithRetry(`${API}/predict/track-record`);
-    const data = await res.json();
-    const summary = data.summary || {};
-    if (!summary.total_scheduled) {
-      body.innerHTML = `
-        <div class="tr-summary">
-          <div class="tr-summary-box"><div class="tr-summary-val">-</div><div class="tr-summary-label">기록 없음</div></div>
+    const data = await fetchTrackRecord();
+    const sm = data.summary || {}, up = data.upcoming || {};
+    const teamCell = (t, cls) => `<span class="t ${cls}">${cls === 'a' ? `<em>${shortName(t)}</em><img src="${logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'">` : `<img src="${logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'"><em>${shortName(t)}</em>`}</span>`;
+    const upList = (up.matches || []).length ? `<div class="mp-sec"><div class="mp-sec-t">검증 대기 <span class="mp-sec-n">사전 기록 ${up.count}건 중 킥오프 순</span></div>${up.matches.map(e =>
+      `<div class="mr-row trm-row"><span class="dt">${trDate(e.date).replace(/ \(.\)/, '')}</span>${teamCell(e.home_team, 'h')}<b class="when">vs</b>${teamCell(e.away_team, 'a')}<span class="trm-pick ${e.predicted}">${trPick(e)} ${trPickProb(e)}%</span></div>`).join('')}</div>` : '';
+    if (!sm.total_resolved) {
+      body.innerHTML = `<div class="trm-how">
+          <div><b>1</b><span><strong>사전 기록</strong> 킥오프 전, 실제 서비스 중인 모델의 예측을 그대로 저장</span></div>
+          <div><b>2</b><span><strong>수정 불가</strong> 저장된 예측은 경기 후에 바꾸지 않음</span></div>
+          <div><b>3</b><span><strong>자동 채점</strong> 경기 종료 후 실제 결과와 대조해 적중률 집계</span></div>
         </div>
-        <div class="ti-empty">아직 검증된 예측 기록이 없어요.<br>앞으로의 예측부터 하나씩 쌓여서, 실제 경기 결과가 나오는 대로 여기서 확인할 수 있어요.</div>`;
+        <div class="trm-first">${up.first_date ? `첫 검증 <b>${trDate(up.first_date, true)}</b> 경기부터` : '아직 사전 기록된 예측이 없어요'}<small>사전 기록된 예측 ${sm.total_scheduled || 0}건</small></div>${upList}`;
       return;
     }
-    if (!summary.total_resolved) {
-      body.innerHTML = `
-        <div class="tr-summary">
-          <div class="tr-summary-box"><div class="tr-summary-val">${summary.total_scheduled}건</div><div class="tr-summary-label">예정된 예측 기록됨</div></div>
-        </div>
-        <div class="ti-empty">아직 끝난 경기가 없어서 적중률을 계산할 수 없어요.<br>기록해둔 예측 경기들이 끝나는 대로 여기서 결과를 확인할 수 있어요.</div>`;
-      return;
-    }
-    const recent = data.recent || [];
-    body.innerHTML = `
-      <div class="tr-summary">
-        <div class="tr-summary-box"><div class="tr-summary-val">${summary.accuracy_pct ?? '-'}%</div><div class="tr-summary-label">전체 적중률 (${summary.total_resolved}경기)</div></div>
-        <div class="tr-summary-box"><div class="tr-summary-val">${summary.recent_accuracy_pct ?? '-'}%</div><div class="tr-summary-label">최근 ${summary.recent_n ?? 0}경기</div></div>
+    const tile = (label, val, sub, cls = '') => `<div class="trm-tile ${cls}"><span>${label}</span><b>${val}</b><small>${sub}</small></div>`;
+    const l7 = sm.last7 || {}, cf = sm.confident || {};
+    const leagues = Object.entries(sm.by_league || {}).sort((a, b) => b[1].n - a[1].n);
+    body.innerHTML = `<div class="trm-tiles">
+        ${tile('누적 적중률', `${sm.accuracy_pct}%`, `${sm.total_correct}/${sm.total_resolved}경기`, 'main')}
+        ${tile('최근 7일', `${l7.pct ?? '-'}%`, `${l7.correct}/${l7.n}경기`)}
+        ${tile('고확신 예측', cf.n ? `${cf.pct}%` : '-', cf.n ? `확률 60%+ · ${cf.correct}/${cf.n}` : '확률 60%+ 없음')}
+      </div>
+      <div class="mp-sec"><div class="mp-sec-t">기준선 대비 <span class="mp-sec-n">기준선 = 같은 경기를 전부 홈승으로 예측</span></div>
+        <div class="trm-cmp"><span>AI 모델</span><div><i class="ai" style="width:${sm.accuracy_pct}%"></i></div><b>${sm.accuracy_pct}%</b></div>
+        <div class="trm-cmp"><span>기준선</span><div><i style="width:${sm.baseline_home_pct}%"></i></div><b>${sm.baseline_home_pct}%</b></div>
       </div>
       ${renderAccuracyTrendChart(data.accuracy_trend)}
-      ${recent.map(e => `
-        <div class="tr-row">
-          <div class="tr-row-icon ${e.correct ? 'correct' : 'wrong'}">${e.correct ? '✓' : '✕'}</div>
-          <div class="tr-row-info">
-            <div class="tr-row-match">${e.home_team.replace(' FC','').replace(' CF','')} vs ${e.away_team.replace(' FC','').replace(' CF','')}</div>
-            <div class="tr-row-detail">예측: ${outcomeTeamLabel(e.predicted, e.home_team, e.away_team)} · 실제: ${e.actual_score || ''} (${outcomeTeamLabel(e.actual, e.home_team, e.away_team)})</div>
-          </div>
-          <div class="tr-row-date">${e.date ? e.date.slice(5,10).replace('-','.') : ''}</div>
-        </div>
-      `).join('')}
-    `;
+      ${leagues.length > 1 ? `<div class="mp-sec"><div class="mp-sec-t">리그별 적중률</div>${leagues.map(([lg, v]) => { const li = TODAY_LEAGUE_INFO[lg];
+        return `<div class="trm-cmp lg"><span>${li ? `<img src="${li.logo}" alt="" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">${li.name}` : lg}</span><div><i class="ai" style="width:${v.pct}%"></i></div><b>${v.pct}% <small>${v.correct}/${v.n}</small></b></div>`; }).join('')}</div>` : ''}
+      <div class="mp-sec"><div class="mp-sec-t">최근 검증 결과 <span class="mp-sec-n">경기를 누르면 상세</span></div>${(data.recent || []).map(e => {
+        const [hg, ag] = (e.actual_score || '').split('-').map(Number);
+        return `<div class="mr-row trm-row" onclick="openTrackResult('${escJs(e.home_team)}','${escJs(e.away_team)}','${e.date}','${e.league || ''}')"><span class="dt">${trDate(e.date).replace(/ \(.\)/, '')}</span>${teamCell(e.home_team, 'h' + (hg < ag ? ' lose' : ''))}<b>${e.actual_score || ''}</b>${teamCell(e.away_team, 'a' + (hg > ag ? ' lose' : ''))}<span class="trm-pick ${e.correct ? 'hit' : 'miss'}" title="AI 예측 ${trPick(e)} ${trPickProb(e)}%">${e.correct ? '✓' : '✕'} ${trPick(e)}</span></div>`; }).join('')}</div>${upList}`;
   } catch (e) {
     body.innerHTML = '<div class="ti-empty">트랙레코드를 불러올 수 없어요.</div>';
   }
+}
+// 트랙레코드의 경기 → 경기 결과 창(그 리그 일정이 없으면 받아서)
+async function openTrackResult(home, away, date, league) {
+  closeTrackRecordModal();
+  if (!scheduleData[league]) { try { scheduleData[league] = (await (await fetch(`${API}/schedule/${league}`)).json()).matches; } catch (e) { return; } }
+  openMatchResultModal(home, away, date, league);
 }
 function closeTrackRecordModal(e) {
   if (!e || e.target === document.getElementById('track-record-modal')) {
@@ -5582,7 +5654,7 @@ initScrollFade(document.querySelector('.nav-tabs-scroll'));
   });
 });
 
-loadLogos();loadPredictableTeams();loadStandings('PL');loadAccuracy();loadTodayMatches();loadBigMatch();loadMyTeamWidget();
+loadLogos();loadPredictableTeams();loadStandings('PL');loadAccuracy();loadTodayMatches();loadBigMatch();loadMyTeamWidget();loadTrackStrip();
 
 if(window.location.hash){setTimeout(()=>{const h=window.location.hash.replace('#','');const valid=['predict','champion','standings','players','schedule','shootout'];if(!valid.includes(h))return;document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));const pg=document.getElementById('page-'+h);if(pg)pg.classList.add('active');setActiveTab(h);if(h==='champion')loadChampion('PL');if(h==='players')loadPlayers();if(h==='schedule')loadSchedule('PL');if(h==='shootout')initShootout();},100);}
 </script>
