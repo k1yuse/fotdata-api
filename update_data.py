@@ -1712,6 +1712,40 @@ def collect_matches():
     print(f"\n✅ 전체 경기 데이터: {len(df_total)}경기 (새로 받은 {sum(len(d) for d in fetched)}경기 + 기존 병합)")
     return df_total
 
+# UCL에 나오는 5대 리그 밖 팀(PSV·페예노르트·아약스 / 포르투·스포르팅·벤피카)의 자국 리그 — 무료 플랜 포함.
+# 아직 예측 모델엔 안 씀(리그 수준 보정을 백테스트로 검증한 뒤 켤 예정) → 별도 파일에만 모아 둠
+EXTRA_LEAGUES = {"DED": "에레디비시 (네덜란드)", "PPL": "프리메이라리가 (포르투갈)"}
+
+def fetch_extra_leagues():
+    """에레디비시·프리메이라리가 4시즌 경기 → extra_matches.csv(all_matches.csv와 같은 열, 같은 병합 규칙)"""
+    print("\n[자국 리그(5대 리그 밖)] 수집 중...")
+    path = f"{MODEL_DIR}/extra_matches.csv"
+    fetched, failed = [], []
+    for season in MATCH_SEASONS:
+        for code in EXTRA_LEAGUES:
+            df_s = fetch_matches(code, season)
+            if df_s.empty:
+                failed.append(f"{code} {season}")
+            else:
+                df_s['season'] = season
+                fetched.append(df_s)
+            time.sleep(6)
+    if failed:
+        print(f"  ⚠️ 수집 실패(기존 유지): {', '.join(failed)}")
+    parts = fetched[:]
+    if os.path.exists(path):
+        old = pd.read_csv(path)
+        old['date'] = pd.to_datetime(old['date'])
+        parts.append(old)
+    if not parts:
+        return
+    df = pd.concat(parts, ignore_index=True)
+    df = df[[c for c in MATCH_COLUMNS if c in df.columns]].drop_duplicates(subset=['date', 'home_team', 'away_team'], keep='first')
+    df = df.sort_values(['date', 'league', 'home_team'], kind='mergesort').reset_index(drop=True)
+    df['match_id'] = df['match_id'].astype('Int64')
+    df.to_csv(path, index=False, encoding='utf-8-sig')
+    print(f"  ✅ extra_matches.csv: {len(df)}경기")
+
 def main():
     print("=== FotData 자동 업데이트 시작 ===")
 
@@ -1744,6 +1778,10 @@ def main():
         fetch_scorers()
     except Exception as e:
         print(f"  ⚠️ 득점·도움 순위 실패(기존 유지): {e}")
+    try:
+        fetch_extra_leagues()
+    except Exception as e:
+        print(f"  ⚠️ 자국 리그 경기 수집 실패(기존 유지): {e}")
 
     # 로고 자동 업데이트
     update_team_logos()
@@ -1924,6 +1962,8 @@ if __name__ == "__main__":
         fetch_season_zones()
     elif "--scorers-only" in sys.argv:
         fetch_scorers()
+    elif "--extra-leagues" in sys.argv:
+        fetch_extra_leagues()
     elif "--ucl-only" in sys.argv:
         fetch_ucl_tournament()
     elif "--transfers-only" in sys.argv:
