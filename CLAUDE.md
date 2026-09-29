@@ -286,6 +286,18 @@ cp landing.html index.html
   - 서비스워커는 `/m/`·`/og/`를 캐시하지 않음.
 - **방문 통계(Umami Cloud, 쿠키 없음·개인정보 없음)**: `analytics.js`의 `UMAMI_ID`가 비어 있으면(또는 배포 주소가 아니면) 아무것도 안 보냄. 앱: 탭 전환 = 가상 주소 `/app/{탭}` 조회, 이벤트 `predict`(대진)·`share_link`(native/copy)·`share_image`·`shared_open`(공유 링크로 들어온 방문)·`favorite_add`·`team_info`·`simulation`(리그·횟수)·`match_preview`·`track_record`·`shootout_start`. 랜딩: `data-umami-event` 속성으로 `landing_cta`(where: nav/hero/hero_standings/story/bottom)·`landing_nav`. 앱의 `track()`은 analytics.js가 늦게 로드돼도 `window.fdQ`에 쌓았다가 보냄.
 
+### 5.17 경기 당일 결과 · 첫 방문 안내 · 위키 매일 갱신 (2026-09-30)
+- **경기 당일 결과**: schedule.json은 새벽 업데이트 때만 바뀌어서 경기가 끝나도 다음 날 아침까지 결과가 없었음 → Render가 football-data `/v4/matches?competitions=…&dateFrom~dateTo`를 직접 받아 오늘 경기 점수·상태를 일정 위에 덮음(`_live_overlay`, `/matches/window`·`/schedule/{code}`에 적용 — 캐시된 원본은 복사본으로만). **Render 환경변수 `FOOTBALL_API_KEY`가 있어야 켜짐**(2026-09-30 등록, 없으면 아무것도 안 함).
+  - 호출 조건: 지금 −30시간~+2분에 킥오프했는데 일정상 안 끝난 경기가 있을 때만. 서버 전체에서 1분에 최대 1번(모든 사용자가 같은 캐시), 오늘 경기가 전부 끝났으면 15분에 한 번 — 단 다음 킥오프 시각이 지나면 바로 다시 확인(`_next_kickoff`). 실패하면 직전 값 유지.
+  - 새벽 자동 업데이트와 같은 키의 분당 10회 한도를 나눠 쓰므로 update_data의 football-data 호출은 전부 `fd_get`(429면 `X-RequestCounter-Reset`만큼 쉬고 최대 3번 재시도 — 예전엔 429면 그 리그를 조용히 건너뜀).
+  - 무료 플랜은 "Scores delayed"(몇 분 늦음, 실시간은 €12/월) → 화면 표기는 "LIVE"가 아니라 빨간 점 + "진행 중 67'"(분이 없으면 "진행 중")·"하프타임"·"연장전"·"승부차기". 진행 중 경기는 승리 확률 대신 스코어.
+  - 화면(`applyLive`): 진행 중이거나 막 킥오프한 경기가 있으면 1분마다 `/matches/live`(가벼움)로 점수만 갱신 → 다음 경기 카드는 깜빡임 없이 다시 그림(`loadTodayMatches({quiet:true})`), 일정 탭은 그 달 다시 그림. 탭이 숨겨지면 쉬고 다시 보이면 이어감.
+  - 끝나면 `/predict/schedule`이 경기 전에 기록된 예측(prediction_log)으로 바로 "AI 적중/빗나감"을 붙임(새벽 채점 전이라도). 순위표·트랙레코드 누적은 그대로 새벽 업데이트 때.
+  - 함께 고친 기존 버그: 다음 경기 카드에서 끝난 경기를 누르면 그 리그 일정을 아직 안 받았을 때 결과 창이 안 떴음 → 가까운 경기 목록(`windowMatchesList`)에서도 찾음.
+- **첫 방문 안내**(`maybeOnboard`): 처음 온 브라우저에 "응원하는 팀을 골라주세요(최대 5팀)" 창 — 리그 칩, 강팀 순 로고 격자(고를 때 격자를 다시 그리지 않아 스크롤 유지), 고른 팀 칩, "나중에 할게요". 고르면 즐겨찾기 + 다음 경기 카드를 "내 팀" 보기로. 로그인 없이 localStorage `fdOnboarded`만 남김. 즐겨찾기가 이미 있는 사람·공유 링크(`?match=`)·탭 주소(`#…`)로 들어온 방문엔 안 띄움(표시도 안 남겨 다음 방문 때). 다른 창이 떠 있으면 이번엔 생략. 통계 이벤트 `onboard_open/done/skip`.
+- **위키 매일 갱신**: `WIKI_REFRESH_DAYS` 7 → 1(감독 교체 등이 위키에 반영돼도 우리가 최대 7일 늦게 받았음). 갱신 때는 **다시 검색하지 않고 저장된 `en_title` 문서를 그대로 씀**(`_wiki_one(known_title=)`) — 매일 검색하면 실행마다 바뀌는 검색 결과로 오매칭 위험도 매일 생김. 문서를 다시 찾게 하려면 team_wiki.json에서 그 팀 항목을 지우고 실행.
+- 나무위키는 CC BY-NC-SA(비영리)라 상업 서비스에 못 씀(확인함). 해외 매체 RSS(BBC 등)는 "변경 금지·상업 이용은 허가 필요"라 번역 게재 불가 — 뉴스는 나중에 다시 검토.
+
 ## 6. API 엔드포인트 (main.py)
 
 | Method | Path | 설명 |
@@ -314,6 +326,7 @@ cp landing.html index.html
 | GET | `/team/stats/{team_name}` | 팀 통계 탭: 시즌별 실제 리그 기록·리그 내 순위·리그 평균·홈/원정·상대 수준별·순위 변동 + AI 파워 레이팅 (2026-09-29, 5.12 참고) |
 | GET | `/matches/window` | 지금 −30시간 ~ +21일 사이 5대 리그+UCL 경기(리그 코드 `league` 포함, 날짜순, 보통 100~150경기) — 홈 위젯(오늘/다음 경기·내 팀)·"다른 경기도 예측해보기" 공용. 예전엔 이 셋이 리그 전체 일정 6개(~1,300경기)를 받았음. 내 팀 경기가 21일 안에 없으면 프론트가 그 팀 리그 일정만 따로 받음. 서버에 이 엔드포인트가 없으면 전체 일정으로 대체(`fetchWindowMatches`) (2026-09-29) |
 | GET | `/share/match/{slug}` · `/og/match/{slug}.jpg` | 경기별 공유 페이지(og 태그 + 앱으로 이동)·썸네일 — Vercel `/m/`·`/og/m/`이 넘겨줌 (2026-09-30, 5.16) |
+| GET | `/matches/live` | 오늘 경기 최신 점수·상태만(진행 중일 때 화면이 1분마다 부름, `enabled` = Render에 키가 있는지) (2026-09-30, 5.17) |
 | GET | `/bigmatch` | 다가오는 빅매치 1경기(BIG_CLUBS끼리 가장 가까운 경기, 로고 URL 포함) — 경기예측 탭 배너·랜딩 연출 공용 (2026-09-28, 5.8 참고) |
 | GET | `/match/insights?home_team=&away_team=` | 예측 결과 화면 경기 분석: 두 팀 현재 리그 순위·홈팀 홈/원정팀 원정 최근 10경기·경기 성향(전 대회 최근 10경기)·파워 레이팅(ELO) 추이 (2026-09-27 추가, 5.9 참고) |
 

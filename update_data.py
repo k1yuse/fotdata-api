@@ -16,6 +16,19 @@ from xgboost import XGBClassifier
 API_KEY = os.environ.get('FOOTBALL_API_KEY', '')
 BASE_URL = "https://api.football-data.org/v4"
 HEADERS = {"X-Auth-Token": API_KEY}
+
+def fd_get(url, **kw):
+    """football-data GET — 429(분당 10회 초과)면 서버가 알려준 초기화 시간만큼 쉬고 최대 3번 재시도.
+    2026-09-30부터 Render 서버도 경기 당일 결과를 같은 키로 받아와서(1분에 최대 1회) 이 작업의 6초 간격(=분당 10회)과
+    겹치면 429가 날 수 있음 — 예전엔 429면 그 리그를 조용히 건너뛰었음"""
+    kw.setdefault("timeout", 30)
+    for attempt in range(4):
+        r = requests.get(url, **kw)
+        if r.status_code != 429 or attempt == 3:
+            return r
+        wait = int(r.headers.get("X-RequestCounter-Reset") or 0) or 15 * (attempt + 1)
+        print(f"  ⏳ 요청 한도(429) — {wait}초 쉬고 다시")
+        time.sleep(min(wait, 65) + 1)
 MODEL_DIR = "fotdata_model"
 
 # API-Football (선수 데이터용)
@@ -66,7 +79,7 @@ def fetch_matches(league_code, season):
     params = {"season": season}
     name = LEAGUES_V2.get(league_code, league_code)
     print(f"  [{name}] 수집 중...")
-    res = requests.get(url, headers=HEADERS, params=params)
+    res = fd_get(url, headers=HEADERS, params=params)
     if res.status_code != 200:
         print(f"  ❌ 오류: {res.status_code}")
         return pd.DataFrame()
@@ -384,7 +397,7 @@ def fetch_team_info():
     name_to_id = {}
     for code in list(LEAGUES_V2.keys()):
         try:
-            res = requests.get(f"{BASE_URL}/competitions/{code}/teams", headers=HEADERS)
+            res = fd_get(f"{BASE_URL}/competitions/{code}/teams", headers=HEADERS)
             data = res.json()
             for team in data.get('teams', []):
                 name_to_id[team['name']] = team['id']
@@ -401,7 +414,7 @@ def fetch_team_info():
             missing.append(name)
             continue
         try:
-            res = requests.get(f"{BASE_URL}/teams/{team_id}", headers=HEADERS)
+            res = fd_get(f"{BASE_URL}/teams/{team_id}", headers=HEADERS)
             if res.status_code != 200:
                 print(f"  ❌ {name} 조회 실패: {res.status_code}")
                 time.sleep(6)
@@ -458,7 +471,7 @@ def fetch_history_teams():
     added_logo, added_info = 0, 0
     for code in LEAGUES_V2:
         for yr in MATCH_SEASONS:
-            res = requests.get(f"{BASE_URL}/competitions/{code}/teams", headers=HEADERS, params={"season": yr})
+            res = fd_get(f"{BASE_URL}/competitions/{code}/teams", headers=HEADERS, params={"season": yr})
             time.sleep(6)
             if res.status_code != 200:
                 print(f"  ❌ {code} {yr}: {res.status_code}"); continue
@@ -575,9 +588,10 @@ def _clean_squad(squad_raw, team_name, team_info):
 # football-data.org 무료 플랜은 감독이 항상 null이고 구단 설명이 없어서, 키 없이 쓸 수 있는 위키미디어 API로 채움.
 # 위키백과 글은 CC BY-SA라 화면에 출처(위키백과)와 원문 링크를 반드시 같이 표시할 것.
 # 팀 이름 → 영어 위키백과 검색 → 위키데이터 항목이 "축구 클럽"(Q476028)인지 확인해서 동명 도시·경기장 문서를 거름.
-# 감독은 바뀌므로 WIKI_REFRESH_DAYS마다 다시 받음(매일 전 팀을 다 받지 않고 오래된 것만).
+# 감독·홈구장 같은 건 바뀌므로 WIKI_REFRESH_DAYS마다 다시 받음. 2026-09-30 7일 → 1일(매일): 감독 교체가 위키에 반영돼도
+# 우리 쪽이 최대 7일 늦게 받아서 "위키백과가 느리다"로 보였음. 갱신 때는 검색하지 않고 이전에 찾은 문서를 그대로 씀(_wiki_one)
 WIKI_UA = {"User-Agent": "FotData/1.0 (https://fotdata-api.vercel.app)"}
-WIKI_REFRESH_DAYS = 7
+WIKI_REFRESH_DAYS = 1
 # 검색이 엉뚱한 문서(동명 다른 클럽 등)를 고르는 팀: {"팀 이름": "영어 위키백과 문서 제목"} — 2026-09-29 전 팀 확인 후 추가
 WIKI_TITLE_OVERRIDE = {
     "Manchester United FC": "Manchester United F.C.",   # FC United of Manchester가 먼저 잡힘
@@ -1016,8 +1030,11 @@ def _wiki_honours_records(en_title, prefer_eur=False):
         break
     return out
 
-def _wiki_one(team_name, league=None):
-    title = WIKI_TITLE_OVERRIDE.get(team_name)
+def _wiki_one(team_name, league=None, known_title=None):
+    # known_title: 이전에 찾아 둔(2026-09-30 전 팀 점검을 거친) 영어 문서 제목 — 갱신 때 다시 검색하면 검색 결과가 실행마다
+    # 바뀌어 엉뚱한 문서가 잡힐 수 있어서(셰필드 유나이티드 → Sheffield F.C. 등 전례) 한 번 찾은 문서를 계속 씀.
+    # 새 팀만 검색. 문서를 다시 찾고 싶으면 team_wiki.json에서 그 팀 항목을 지우고 실행
+    title = WIKI_TITLE_OVERRIDE.get(team_name) or known_title
     qid = None
     candidates = [title] if title else [h["title"] for h in _wiki_get("https://en.wikipedia.org/w/api.php", {
         "action": "query", "list": "search", "srsearch": f"{team_name} football club", "srlimit": 5, "format": "json"})["query"]["search"]]
@@ -1125,7 +1142,7 @@ def fetch_team_wiki(force=False):
         pass
     def one(t):
         try:
-            return t, _wiki_one(t, league_of.get(t)), None
+            return t, _wiki_one(t, league_of.get(t), wiki.get(t, {}).get("en_title")), None
         except Exception as e:
             return t, None, e
     with ThreadPoolExecutor(max_workers=2) as ex:   # 위키미디어 권장 범위의 적은 동시 요청(팀당 요청 5~6개라 순차면 10분+)
@@ -1341,7 +1358,7 @@ def fetch_full_schedule():
     schedule = {}
     for code, name in LEAGUES_V2.items():
         print(f"  [{name}] 일정 수집 중...")
-        res = requests.get(
+        res = fd_get(
             f"{BASE_URL}/competitions/{code}/matches",
             headers=HEADERS,
             params={"season": CURRENT_SEASON}
@@ -1555,7 +1572,7 @@ def fetch_ucl_tournament():
         with open(f"{MODEL_DIR}/team_logos.json", 'r', encoding='utf-8') as f:
             logos = json.load(f)
     for yr in MATCH_SEASONS:
-        res = requests.get(f"{BASE_URL}/competitions/CL/matches", headers=HEADERS, params={"season": yr})
+        res = fd_get(f"{BASE_URL}/competitions/CL/matches", headers=HEADERS, params={"season": yr})
         time.sleep(6)
         if res.status_code != 200:
             print(f"  ❌ {yr} 시즌 오류: {res.status_code} (기존 유지)")
@@ -1836,7 +1853,7 @@ def fetch_scorers():
     for code in SCORER_COMPS:
         for attempt in range(2):
             try:
-                r = requests.get(f"{BASE_URL}/competitions/{code}/scorers", headers=HEADERS, params={"limit": 100}, timeout=20)
+                r = fd_get(f"{BASE_URL}/competitions/{code}/scorers", headers=HEADERS, params={"limit": 100}, timeout=20)
             except Exception as e:
                 print(f"  ⚠️ {code}: {e}")
                 r = None

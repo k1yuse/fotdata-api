@@ -298,7 +298,30 @@ def _display_stats(team):
 # (일정에서 본 확률과 눌러서 연 예측이 달라 보이면 안 되므로). 예측할 수 없는 팀(첫 출전 UCL 팀 등)이 낀 경기는 뺌
 @app.get("/predict/schedule/{league_code}")
 def predict_schedule(league_code: str):
-    return _schedule_predictions(league_code.upper())
+    code = league_code.upper()
+    base = _schedule_predictions(code)
+    live = _live_overlay()
+    if not live:
+        return base
+    # 오늘 끝난 경기: 새벽 업데이트 전이라도 경기 전에 기록해둔 예측(prediction_log)으로 바로 적중 여부를 매김
+    log, extra, done = _load_json("prediction_log.json") or {}, [], set()
+    for m in (_load_json("schedule.json") or {}).get(code, []):
+        v = live.get(_live_key(m["home_team"], m["away_team"], m["date"]))
+        if m.get("status") in DONE_STATUSES or not v or v["status"] not in DONE_STATUSES or v["home_goals"] is None:
+            continue
+        done.add((m["home_team"], m["away_team"], m["date"]))
+        e = log.get(f"{code}|{m['home_team']}|{m['away_team']}|{m['date'][:10]}")
+        if not e or e.get("predicted") is None:
+            continue
+        hg, ag = v["home_goals"], v["away_goals"]
+        actual = "home_win" if hg > ag else "away_win" if hg < ag else "draw"
+        extra.append({"home_team": m["home_team"], "away_team": m["away_team"], "date": m["date"],
+                      "p": [e["home_win_prob"], e["draw_prob"], e["away_win_prob"]],
+                      "predicted": e["predicted"], "correct": actual == e["predicted"]})
+    if not done:
+        return base
+    return {**base, "predictions": [x for x in base["predictions"] if (x["home_team"], x["away_team"], x["date"]) not in done],
+            "results": base["results"] + extra}
 
 @lru_cache(maxsize=8)
 def _schedule_predictions(code):
@@ -1330,15 +1353,126 @@ def get_bigmatch():
 MATCH_WINDOW_BEFORE_H = 30
 MATCH_WINDOW_AFTER_D = 21
 
+# ── 경기 당일 결과 (2026-09-30) ──
+# schedule.json은 새벽 자동 업데이트 때만 바뀌어서, 예전엔 경기가 끝나도 다음 날 아침까지 일정·다음 경기 카드에 결과가 없었음.
+# 지금 −30시간 ~ +2분 사이에 킥오프했는데 일정상 아직 안 끝난 경기가 있을 때만 football-data에서 오늘 경기를 받아
+# 일정 위에 덮어씀(점수·상태). 요청은 서버 전체에서 최대 1분에 1번(모든 사용자가 같은 캐시를 봄) — 무료 플랜 한도(분당 10회)는
+# 새벽 자동 업데이트와 같은 키로 나눠 씀(그쪽은 429면 쉬었다 재시도, update_data.fd_get).
+# 무료 플랜은 점수가 몇 분 늦게 들어옴("Scores delayed") — 화면엔 "LIVE"가 아니라 "진행 중"으로 표기.
+# Render 환경변수에 FOOTBALL_API_KEY가 없으면 아무것도 안 하고 일정 그대로.
+import threading
+LIVE_STATUSES = {"IN_PLAY", "PAUSED", "EXTRA_TIME", "PENALTY_SHOOTOUT"}
+DONE_STATUSES = {"FINISHED", "AWARDED"}
+LIVE_TTL, LIVE_TTL_QUIET = 60, 900   # 진행 중 경기가 있으면 1분, 전부 끝났으면(새벽 업데이트 전까지) 15분
+_live = {"at": 0.0, "data": {}, "quiet": False, "next": None}   # next: 다음 킥오프(epoch초) — 조용할 때도 그때는 다시 확인
+_live_lock = threading.Lock()
+
+def _live_key(home, away, date):
+    return f"{home}|{away}|{date[:10]}"
+
+def _live_goals(m):
+    """update_data._match_goals와 같은 규칙(승부차기 골 빼기) — 진행 중이면 fullTime이 지금 점수"""
+    sc = m.get("score") or {}
+    ft = sc.get("fullTime") or {}
+    hg, ag = ft.get("home"), ft.get("away")
+    pen = sc.get("penalties") or {}
+    if sc.get("duration") == "PENALTY_SHOOTOUT" and pen.get("home") is not None and hg is not None:
+        return hg - pen["home"], ag - pen["away"], [pen["home"], pen["away"]]
+    return hg, ag, None
+
+def _live_needed(now):
+    lo, hi = now - pd.Timedelta(hours=30), now + pd.Timedelta(minutes=2)
+    for ms in (_load_json("schedule.json") or {}).values():
+        for m in ms:
+            if m.get("status") not in DONE_STATUSES | {"CANCELLED", "POSTPONED"} and lo <= pd.Timestamp(m["date"]) <= hi:
+                return True
+    return False
+
+def _live_overlay():
+    """{홈|원정|날짜: {status, home_goals, away_goals, penalties?, minute?}} — 오늘 경기 최신 상태(없으면 빈 dict)"""
+    key = os.environ.get("FOOTBALL_API_KEY")
+    if not key:
+        return {}
+    import time as _t
+    now_s = _t.time()
+    fresh = now_s - _live["at"] < (LIVE_TTL_QUIET if _live["quiet"] else LIVE_TTL)
+    if fresh and not (_live["quiet"] and _live["next"] and now_s >= _live["next"] + 60):
+        return _live["data"]
+    if not _live_lock.acquire(blocking=False):   # 다른 요청이 받아오는 중이면 기다리지 않고 직전 값
+        return _live["data"]
+    try:
+        now = pd.Timestamp.now(tz="UTC")
+        _live["next"] = _next_kickoff(now)
+        if not _live_needed(now):
+            _live.update(at=_t.time(), data={}, quiet=True)
+            return {}
+        r = requests.get("https://api.football-data.org/v4/matches", headers={"X-Auth-Token": key}, timeout=8, params={
+            "competitions": "PL,PD,BL1,SA,FL1,CL",
+            "dateFrom": (now - pd.Timedelta(days=2)).strftime("%Y-%m-%d"), "dateTo": (now + pd.Timedelta(days=1)).strftime("%Y-%m-%d")})
+        if r.status_code != 200:
+            print(f"경기 당일 결과 받기 실패: {r.status_code}")
+            _live["at"] = _t.time()   # 실패해도 1분은 다시 안 부름(직전 값 유지)
+            return _live["data"]
+        data = {}
+        for m in r.json().get("matches", []):
+            hg, ag, pens = _live_goals(m)
+            row = {"status": m["status"], "home_goals": hg, "away_goals": ag}
+            if pens:
+                row["penalties"] = pens
+            if m.get("minute"):
+                row["minute"] = m["minute"]
+            row["utc"] = m["utcDate"]
+            data[_live_key(m["homeTeam"]["name"], m["awayTeam"]["name"], m["utcDate"])] = row
+        quiet = not any(v["status"] in LIVE_STATUSES for v in data.values()) and _all_started_done(data, now)
+        _live.update(at=_t.time(), data=data, quiet=quiet)
+        return data
+    except Exception as e:
+        print(f"경기 당일 결과 오류: {e}")
+        _live["at"] = _t.time()
+        return _live["data"]
+    finally:
+        _live_lock.release()
+
+def _next_kickoff(now):
+    ts = [pd.Timestamp(m["date"]) for ms in (_load_json("schedule.json") or {}).values() for m in ms
+          if m.get("status") not in DONE_STATUSES | {"CANCELLED", "POSTPONED"} and pd.Timestamp(m["date"]) > now]
+    return min(ts).timestamp() if ts else None
+
+def _all_started_done(data, now):
+    """이미 킥오프한 일정 경기가 전부 '끝남'으로 들어왔으면 True(그럼 새벽 업데이트 전까지 15분에 한 번만 확인)"""
+    lo = now - pd.Timedelta(hours=30)
+    for ms in (_load_json("schedule.json") or {}).values():
+        for m in ms:
+            t = pd.Timestamp(m["date"])
+            if lo <= t <= now and m.get("status") not in DONE_STATUSES | {"CANCELLED", "POSTPONED"}:
+                v = data.get(_live_key(m["home_team"], m["away_team"], m["date"]))
+                if not v or v["status"] not in DONE_STATUSES:
+                    return False
+    return True
+
+def _with_live(m, live):
+    v = live.get(_live_key(m["home_team"], m["away_team"], m["date"])) if live else None
+    if not v or m.get("status") in DONE_STATUSES:
+        return m
+    return {**m, **{k: x for k, x in v.items() if k != "utc"}, "live": True}
+
+@app.get("/matches/live")
+def get_matches_live():
+    """오늘 경기 최신 상태만(가벼움) — 화면이 진행 중 경기가 있을 때 1분마다 부름"""
+    live = _live_overlay()
+    return {"matches": [{"home_team": k.split("|")[0], "away_team": k.split("|")[1], **v} for k, v in live.items()],
+            "enabled": bool(os.environ.get("FOOTBALL_API_KEY"))}
+
 @app.get("/matches/window")
 def get_matches_window():
     now = pd.Timestamp.now(tz='UTC')
     lo, hi = now - pd.Timedelta(hours=MATCH_WINDOW_BEFORE_H), now + pd.Timedelta(days=MATCH_WINDOW_AFTER_D)
+    live = _live_overlay()
     out = []
     for league, matches in (_load_json("schedule.json") or {}).items():
         for m in matches:
             if lo <= pd.Timestamp(m['date']) <= hi:
-                out.append({**m, "league": league})
+                out.append({**_with_live(m, live), "league": league})
     out.sort(key=lambda m: m['date'])
     return {"from": lo.isoformat(), "to": hi.isoformat(), "matches": out}
 
@@ -1354,6 +1488,9 @@ def get_schedule(league_code: str):
     if matches is None:
         raise HTTPException(status_code=404, detail="해당 리그 데이터 없음")
 
+    live = _live_overlay()
+    if live:   # 오늘 경기만 최신 점수·상태로(캐시된 원본은 건드리지 않고 복사)
+        matches = [_with_live(m, live) for m in matches]
     return {"league": league_code.upper(), "matches": matches}
 
 @app.get("/team/info/{team_name}")
