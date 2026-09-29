@@ -432,7 +432,7 @@ function initScene(THREE) {
   }
 
   // ── 렌더 루프 (보이지 않으면 멈춤) ──
-  let spin = 0, last = performance.now(), running = false, opacity = 0;
+  let spin = 0, tilt = 0.18, last = performance.now(), running = false, opacity = 0;
   const clock0 = performance.now();
   function frame(now) {
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
@@ -449,7 +449,10 @@ function initScene(THREE) {
     if (spinning > 0.5) spin += dt * 0.22;
     else { const target = Math.round(spin / (Math.PI * 2)) * Math.PI * 2; spin += (target - spin) * Math.min(1, dt * 3); }
     group.rotation.y = spin;
-    group.rotation.x = state.heroMode ? 0.18 : 0.12 * spinning;
+    // 기울기도 부드럽게 따라감 — 히어로(0.18)에서 스토리(0.12)로 넘어가는 순간 한 프레임에 바뀌어 공이 "툭" 튀었음
+    const tiltTarget = state.heroMode ? 0.18 : 0.12 * spinning;
+    tilt += (tiltTarget - tilt) * Math.min(1, dt * 3);
+    group.rotation.x = tilt;
     const w0 = (state.A === 0 ? 1 - state.T : 0) + (state.B === 0 ? state.T : 0);   // 공 장면 비중
     // 선·윤곽은 점들이 거의 다 모였을 때 나타남(모이는 중에 선이 먼저 보이면 공이 찌그러져 보임)
     const formed = Math.pow(clamp((w0 - 0.55) / 0.45), 1.5);
@@ -480,7 +483,8 @@ function initScene(THREE) {
   window.addEventListener('scroll', wake, { passive: true });
   document.addEventListener('visibilitychange', () => { if (document.hidden) running = false; else wake(); });
   // 인트로(골대 애니메이션)가 끝난 뒤 공이 이어받아 나타나도록
-  const introGone = () => !document.getElementById('intro-overlay');
+  // 인트로 로고가 커지며 사라지기 시작하면(.out) 바로 켜서, 로고 → 3D 공이 빈틈 없이 이어지게
+  const introGone = () => { const o = document.getElementById('intro-overlay'); return !o || o.classList.contains('out') || o.classList.contains('hide'); };
   const startWhenReady = () => { if (introGone()) { story.classList.add('live'); wake(); } else setTimeout(startWhenReady, 150); };
   startWhenReady();
 }
