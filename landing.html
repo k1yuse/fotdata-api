@@ -223,19 +223,22 @@
     .intro-counter span { font-size: 12px; color: var(--muted); font-weight: 600; }
     .intro-overlay.play .intro-counter { animation: introCount .6s ease .5s both; }   /* 끝까지 남음(v2는 이름이 나오기 전에 사라져서 급했음) */
     @keyframes introCount { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-    .intro-brand { display: flex; margin-top: 12px; font-size: 38px; font-weight: 800; letter-spacing: -1px; line-height: 1.1; }
+    .intro-lockup { display: inline-flex; flex-direction: column; align-items: stretch; margin-top: 12px; }   /* 로고와 같은 비율: 태그 폭 = 이름 폭 */
+    .intro-brand { display: flex; font-size: 38px; font-weight: 800; letter-spacing: -1px; line-height: 1.1; }
     .intro-brand span { display: inline-block; opacity: 0; transform: translateY(14px); filter: blur(8px); }
     .intro-brand .b { color: var(--blue); }
     .intro-overlay.play .intro-brand span { animation: introLetter .6s cubic-bezier(.2,.8,.2,1) forwards; }
-    .intro-tag { margin-top: 10px; font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: 2px; opacity: 0; }
-    .intro-overlay.play .intro-tag { animation: introTag 1s ease 3.25s forwards; }
+    .intro-tag { display: flex; justify-content: space-between; width: 0; min-width: 100%; margin-top: 8px; padding: 0 1px 0 3px; font-size: 12.5px; font-weight: 700; line-height: 1; color: var(--muted); }
+    .intro-tag .sp { width: 4px; }
+    .intro-tag span { opacity: 0; transform: translateY(4px); }
+    .intro-overlay.play .intro-tag span { animation: introTagL .45s ease forwards; }
     @keyframes introLetter { to { opacity: 1; transform: none; filter: blur(0); } }
-    @keyframes introTag { from { opacity: 0; letter-spacing: 2px; } to { opacity: 1; letter-spacing: 9px; } }
+    @keyframes introTagL { to { opacity: 1; transform: none; } }
     /* 퇴장: 글자는 위로 흐려지고 공은 캔버스에서 커지며 사라짐 */
     .intro-overlay.out .intro-words { opacity: 0; transform: translateY(-14px); }
     .intro-skip { position: absolute; right: 20px; bottom: calc(20px + env(safe-area-inset-bottom)); background: rgba(22,27,34,0.7); border: 0.5px solid #30363d; color: var(--muted); font-size: 12px; font-family: inherit; padding: 7px 14px; border-radius: 99px; cursor: pointer; }
     .intro-skip:hover { color: var(--text); border-color: var(--blue); }
-    @media (max-width: 600px) { .intro-brand { font-size: 32px; } }
+    @media (max-width: 600px) { .intro-brand { font-size: 32px; } .intro-tag { font-size: 10.5px; } }
     @media (prefers-reduced-motion: reduce) { .intro-overlay { display: none; } }
     html.intro-on .hero, html.intro-on .hero * { animation-play-state: paused !important; }
 
@@ -250,7 +253,13 @@
       height: 60px;
     }
     .nav-logo { font-size: 18px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 8px; text-decoration: none; justify-self: start; }
-    .nav-logo span { color: var(--blue); }
+    .nav-logo .brand-word span { color: #fff; } .nav-logo .brand-word span.b { color: var(--blue); }
+    /* 로고 글자 묶음: "AI FOOTBALL"을 한 글자씩 양끝 정렬해서 폭을 "FotData"에 정확히 맞춤(예전엔 자간 7px로 FotData보다 넓게 삐져나와 중심이 어긋났음).
+       tag는 width:0 + min-width:100%라 묶음 폭을 늘리지 않고 FotData 폭만큼만 퍼짐. 크기 비율 ≈ 1 : 0.33 */
+    .brand-lockup { display: inline-flex; flex-direction: column; align-items: stretch; }
+    .brand-word { display: flex; align-items: baseline; font-size: 27px; font-weight: 800; letter-spacing: -1px; line-height: 1; }
+    .brand-tag { display: flex; justify-content: space-between; width: 0; min-width: 100%; margin-top: 5px; padding: 0 1px 0 2px; font-size: 9px; font-weight: 700; line-height: 1; color: #8b949e; }
+    .brand-tag .sp { width: 3px; }
     .nav-links { display: flex; gap: 28px; justify-self: center; }
     .nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color .2s; }
     .nav-links a:hover { color: var(--text); }
@@ -339,6 +348,14 @@
     .leaders-strip { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 0 auto; animation: fadeUp .6s .5s ease both; }
     .leader-card { display: flex; align-items: center; gap: 10px; background: var(--bg2); border: 0.5px solid var(--border); border-radius: 10px; padding: 10px 16px; text-align: left; transition: border-color .2s, transform .15s; }
     .leader-card:hover { border-color: rgba(88,166,255,0.4); transform: translateY(-2px); }
+    @media (prefers-reduced-motion: no-preference) {
+      .leaders-strip { animation: none !important; }   /* 통째로 떠오르던 것 대신 카드별로 */
+      .leaders-strip .leader-card { opacity: 0; transform: translateY(12px) scale(.97); transition: opacity .55s ease, transform .6s cubic-bezier(.2,.8,.2,1), border-color .2s; }
+      .leaders-strip.cards-on .leader-card { opacity: 1; transform: none; transition-delay: calc(var(--i, 0) * 90ms), calc(var(--i, 0) * 90ms), 0s; }
+      .leaders-strip.cards-on .leader-card:hover { transform: translateY(-2px); transition-delay: 0s; }
+      .leaders-strip.cards-on .team-crest { animation: crestPop .7s cubic-bezier(.3,1.7,.5,1) both; animation-delay: calc(var(--i, 0) * 90ms + .15s); }
+    }
+    @keyframes crestPop { from { transform: scale(.5); opacity: 0; filter: drop-shadow(0 0 0 rgba(88,166,255,0)); } 60% { filter: drop-shadow(0 0 8px rgba(88,166,255,.6)); } to { transform: none; opacity: 1; filter: none; } }
     .leader-card .team-crest { width: 28px; height: 28px; object-fit: contain; flex-shrink: 0; }
     .leader-card .league-crest { width: 12px; height: 12px; object-fit: contain; }
     .leader-league { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.3px; display: flex; align-items: center; gap: 4px; }
@@ -384,32 +401,38 @@
     .mock-vs-center { text-align: center; }
     .mock-vs { font-size: 20px; font-weight: 700; color: var(--muted); margin-bottom: 10px; }
     .mock-badge { display: inline-block; padding: 4px 14px; background: rgba(88,166,255,0.15); color: var(--blue); border-radius: 20px; font-size: 11px; font-weight: 600; }
-    .mock-bars { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
-    .mock-bar-row { display: grid; grid-template-columns: 52px 1fr 38px; align-items: center; gap: 8px; }
-    .mock-bar-label { font-size: 11px; color: var(--muted); }
-    .mock-bar-bg { background: var(--bg3); border-radius: 3px; height: 6px; overflow: hidden; }
-    .mock-bar-fill { height: 100%; border-radius: 3px; width: var(--w); }
+    .mock-bars { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
+    .mock-bar-row { display: grid; grid-template-columns: 52px 1fr 42px; align-items: center; gap: 10px; }
+    .mock-bar-label { font-size: 12px; color: var(--muted); font-weight: 600; }
+    .mock-bar-bg { background: var(--bg3); border-radius: 99px; height: 10px; overflow: hidden; }
+    .mock-bar-fill { height: 100%; border-radius: 99px; width: var(--w); }
     .mock-bar-fill.home { background: linear-gradient(90deg, #1f6feb, #58a6ff); } .mock-bar-fill.draw { background: #6e7681; } .mock-bar-fill.away { background: linear-gradient(90deg, #f0883e, #ffa657); }
-    .mock-bar-val { font-size: 11px; font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
+    .mock-bar-val { font-size: 13px; font-weight: 800; text-align: right; font-variant-numeric: tabular-nums; }
     .mock-bar-val.home { color: #79b8ff; } .mock-bar-val.draw { color: #8b949e; } .mock-bar-val.away { color: #ffa657; }
     .mock-bar-bg { position: relative; }
     /* 목업 등장 모션(.mock-on) — 모션 최소화면 처음부터 최종 모습 */
     @media (prefers-reduced-motion: no-preference) {
-      .mock-card:not(.mock-on) .mock-bar-fill { width: 0; }
-      .mock-card .mock-bar-fill { transition: width 1.1s cubic-bezier(.22,.8,.2,1); }
-      .mock-card.mock-on .mock-bar-row:nth-child(1) .mock-bar-fill { transition-delay: .52s; }
-      .mock-card.mock-on .mock-bar-row:nth-child(2) .mock-bar-fill { transition-delay: .69s; }
-      .mock-card.mock-on .mock-bar-row:nth-child(3) .mock-bar-fill { transition-delay: .86s; }
+      .mock-card:not(.mock-on) .mock-bar-fill { width: 0; transition: none; }
+      .mock-card .mock-bar-fill { transition: width 1.2s cubic-bezier(.22,.8,.2,1); }
+      .mock-card.mock-on .mock-bar-row:nth-child(1) .mock-bar-fill { transition-delay: .7s; }
+      .mock-card.mock-on .mock-bar-row:nth-child(2) .mock-bar-fill { transition-delay: .92s; }
+      .mock-card.mock-on .mock-bar-row:nth-child(3) .mock-bar-fill { transition-delay: 1.14s; }
+      .mock-card .mock-bar-row { transition: opacity .4s ease; } .mock-card.mock-done .mock-bar-row:not(:first-child) { opacity: .6; }   /* 결과가 나오면 이긴 쪽만 또렷하게 */
+      .mock-badge.thinking::after { content: ''; display: inline-block; width: 1.2em; text-align: left; animation: mockDots 1s steps(4) infinite; }
+      @keyframes mockDots { 0% { content: ''; } 25% { content: '.'; } 50% { content: '..'; } 75% { content: '...'; } }
+      .mock-card.mock-done .mock-badge { animation: mockPop .5s cubic-bezier(.3,1.6,.5,1); }
+      @keyframes mockPop { 0% { transform: scale(.85); } 100% { transform: scale(1); } }
       .mock-card .mock-team-logo, .mock-card .mock-team-name, .mock-card .mock-team-sub { transition: transform .8s cubic-bezier(.2,.8,.2,1), opacity .6s ease; }
       .mock-card:not(.mock-on) .mock-team:first-child > * { opacity: 0; transform: translateX(-18px); }
       .mock-card:not(.mock-on) .mock-team:last-child > * { opacity: 0; transform: translateX(18px); }
       .mock-card.mock-on .mock-team > *:nth-child(2) { transition-delay: .08s; } .mock-card.mock-on .mock-team > *:nth-child(3) { transition-delay: .14s; }
       .mock-card .mock-vs { transition: opacity .5s ease .25s; } .mock-card:not(.mock-on) .mock-vs { opacity: 0; }
-      .mock-card .mock-badge { transition: opacity .45s ease 1.75s, transform .55s cubic-bezier(.3,1.6,.5,1) 1.75s; }
-      .mock-card:not(.mock-on) .mock-badge { opacity: 0; transform: translateY(6px) scale(.85); }
+      .mock-card .mock-badge { transition: opacity .45s ease .3s, background .3s ease, color .3s ease; }
+      .mock-card:not(.mock-on) .mock-badge { opacity: 0; }
+      .mock-badge.thinking { background: rgba(139,148,158,0.14); color: #c9d1d9; }
       /* 이긴 쪽(홈) 막대가 채워진 뒤 빛이 한 번 훑고 지나감 */
-      .mock-card.mock-on .mock-bar-row:nth-child(1) .mock-bar-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent); transform: translateX(-100%); animation: mockSheen .9s ease 1.75s both; }
-      .mock-card.mock-on .mock-bar-row:nth-child(1) .mock-bar-val { animation: mockGlow 1s ease 1.75s both; }
+      .mock-card.mock-done .mock-bar-row:nth-child(1) .mock-bar-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,.6), transparent); transform: translateX(-100%); animation: mockSheen .9s ease both; }
+      .mock-card.mock-done .mock-bar-row:nth-child(1) .mock-bar-val { animation: mockGlow 1s ease both; }
     }
     @keyframes mockSheen { to { transform: translateX(100%); } }
     @keyframes mockGlow { 40% { text-shadow: 0 0 12px rgba(121,184,255,.9); } }
@@ -439,6 +462,17 @@
       margin-bottom: 18px;
     }
     .feat-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+    /* 카드가 뜰 때 아이콘 선이 그려지듯 나타남(선마다 pathLength=1 + .draw, 카드 등장 지연 + 0.25초 뒤) → 다 그려지면 아이콘 칸이 한 번 빛남 */
+    @media (prefers-reduced-motion: no-preference) {
+      /* 처음엔 [pathLength] 속성 선택자로 걸었는데 "보이는 상태" 규칙이 SVG에서 안 잡혀 선이 숨김 상태로 남았음 → 클래스(.draw)로 */
+      .feat-icon .draw { stroke-dasharray: 1; stroke-dashoffset: 1; }
+      .feat-card.visible .feat-icon .draw { animation: featDraw .9s cubic-bezier(.4,0,.2,1) both; animation-delay: var(--d, .25s); }
+      .feat-icon svg [fill]:not([fill="none"]) { opacity: 0; transition: opacity .4s ease; transition-delay: calc(var(--d, .25s) + .7s); }
+      .feat-card.visible .feat-icon svg [fill]:not([fill="none"]) { opacity: 1; }
+      .feat-card.visible .feat-icon { animation: featGlow 1.2s ease both; animation-delay: calc(var(--d, .25s) + .6s); }
+    }
+    @keyframes featDraw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+    @keyframes featGlow { 40% { box-shadow: 0 0 0 1px rgba(88,166,255,.45), 0 0 18px rgba(88,166,255,.35); } }
     .feat-card p { font-size: 13px; color: var(--muted); line-height: 1.7; }
 
     /* LEAGUES */
@@ -490,12 +524,24 @@
     .form-dot.W { background: var(--green); }
     .form-dot.D { background: #6e7681; }
     .form-dot.L { background: var(--red); }
+    @media (prefers-reduced-motion: no-preference) {
+      #landing-standings-preview .standings-row:not(.mini-loader-row) { opacity: 0; transform: translateX(-14px); transition: opacity .5s ease, transform .6s cubic-bezier(.2,.8,.2,1); }
+      #landing-standings-preview.rows-on .standings-row { opacity: 1; transform: none; transition-delay: calc(var(--i, 0) * 110ms); }
+      #landing-standings-preview .form-dot { transform: scale(0); transition: transform .35s cubic-bezier(.3,1.7,.5,1); }
+      #landing-standings-preview.rows-on .form-dot { transform: none; transition-delay: calc(var(--i, 0) * 110ms + .3s + var(--k, 0) * 70ms); }
+    }
 
     /* CTA */
     .cta-section { padding: 100px 48px; text-align: center; }
     .cta-section h2 { font-size: 40px; font-weight: 800; letter-spacing: -1px; margin-bottom: 14px; }
     .cta-section h2 em { color: var(--blue); font-style: normal; }
     .cta-section p { font-size: 16px; color: var(--muted); margin-bottom: 32px; }
+    /* 마지막 버튼: 7초마다 빛이 한 번 스침(앱의 빅매치 배너와 같은 효과) */
+    .cta-shine { position: relative; overflow: hidden; }
+    @media (prefers-reduced-motion: no-preference) {
+      .cta-shine::after { content: ''; position: absolute; top: 0; bottom: 0; left: -60%; width: 45%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.55), transparent); transform: skewX(-18deg); animation: ctaShine 7s ease-in-out 1.2s infinite; pointer-events: none; }
+    }
+    @keyframes ctaShine { 0% { left: -60%; } 14% { left: 130%; } 100% { left: 130%; } }
 
     /* FOOTER */
     footer { padding: 28px 48px; border-top: 0.5px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
@@ -524,7 +570,6 @@
       /* 메뉴 링크가 빠지면 오른쪽 버튼이 가운데 칸으로 밀려 로고 글자와 겹쳤음 → 두 칸으로 */
       nav { padding: 0 20px; grid-template-columns: 1fr auto; }
       .nav-links { display: none; }
-      .nav-tagline { letter-spacing: 2px !important; }
       .hero { padding: 80px 24px 60px; }
       .hero h1 { font-size: 36px; }
       .stats-row { display: grid; grid-template-columns: 1fr 1fr; border-radius: 12px; border: 0.5px solid var(--border); }
@@ -630,8 +675,10 @@
   <canvas id="intro-canvas"></canvas>
   <div class="intro-words">
     <div class="intro-counter"><b id="intro-count">0</b><span>경기 데이터</span></div>
-    <div class="intro-brand"><span style="animation-delay:2.80s">F</span><span style="animation-delay:2.87s">o</span><span style="animation-delay:2.94s">t</span><span style="animation-delay:3.01s" class="b">D</span><span style="animation-delay:3.08s" class="b">a</span><span style="animation-delay:3.15s" class="b">t</span><span style="animation-delay:3.22s" class="b">a</span></div>
-    <div class="intro-tag">AI FOOTBALL</div>
+    <div class="intro-lockup">
+      <div class="intro-brand"><span style="animation-delay:2.80s">F</span><span style="animation-delay:2.87s">o</span><span style="animation-delay:2.94s">t</span><span style="animation-delay:3.01s" class="b">D</span><span style="animation-delay:3.08s" class="b">a</span><span style="animation-delay:3.15s" class="b">t</span><span style="animation-delay:3.22s" class="b">a</span></div>
+      <div class="intro-tag" aria-label="AI Football"><span style="animation-delay:3.300s">A</span><span style="animation-delay:3.335s">I</span><span class="sp" style="animation-delay:3.370s"></span><span style="animation-delay:3.405s">F</span><span style="animation-delay:3.440s">O</span><span style="animation-delay:3.475s">O</span><span style="animation-delay:3.510s">T</span><span style="animation-delay:3.545s">B</span><span style="animation-delay:3.580s">A</span><span style="animation-delay:3.615s">L</span><span style="animation-delay:3.650s">L</span></div>
+    </div>
   </div>
   <button class="intro-skip" type="button">건너뛰기</button>
 </div>
@@ -639,12 +686,10 @@
 <nav>
   <a href="" class="nav-logo" id="landing-nav-logo" style="display:flex;align-items:center;gap:13px;text-decoration:none">
   <svg class="logo-bars" id="landing-logo-bars" viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg>
-  <div style="display:flex;flex-direction:column;gap:0px">
-    <div style="display:flex;align-items:baseline">
-      <span style="font-size:27px;font-weight:800;color:#ffffff;letter-spacing:-1px">Fot</span>
-      <span style="font-size:27px;font-weight:800;color:#58a6ff;letter-spacing:-1px">Data</span>
-    </div>
-    <span class="nav-tagline" style="font-size:10px;color:#8b949e;letter-spacing:7px;text-transform:uppercase;margin-top:-6px;display:block;white-space:nowrap">AI Football</span>  </div>
+  <div class="brand-lockup">
+    <div class="brand-word"><span>Fot</span><span class="b">Data</span></div>
+    <span class="brand-tag" aria-label="AI Football"><span>A</span><span>I</span><span class="sp"></span><span>F</span><span>O</span><span>O</span><span>T</span><span>B</span><span>A</span><span>L</span><span>L</span></span>
+  </div>
 </a>
 
 <div class="nav-links">
@@ -986,7 +1031,7 @@
 <section class="cta-section reveal">
   <h2>지금 바로<br><em>시작하세요</em></h2>
   <p>무료로 모든 기능을 이용할 수 있어요</p>
-  <a href="FotData.html" class="btn-primary" style="font-size:16px;padding:16px 40px">FotData 시작하기 →</a>
+  <a href="FotData.html" class="btn-primary cta-shine" style="font-size:16px;padding:16px 40px">FotData 시작하기 →</a>
 </section>
 
 <footer>
@@ -1043,16 +1088,45 @@ document.addEventListener('DOMContentLoaded', () => {
   // 예측 목업: 카드가 화면에 절반쯤 들어오면 — 로고가 양옆에서 들어오고, 막대가 위에서부터 차며 %가 같이 오르고, 배지가 뜨고, 이긴 쪽이 한 번 빛남
   const mock = document.querySelector('.mock-card');
   if (mock) {
+    // 예전엔 섹션(.preview)이 아직 흐릿하게 떠오르는 중(투명도 ~0.86)에 막대가 차기 시작해 등장에 묻혔고 막대도 6px로 얇았음
+    // → 섹션이 다 뜬 뒤 카드가 70% 보일 때 시작, 배지가 먼저 "AI 분석 중" → 막대가 차고 → 결과로 바뀜. 화면 밖으로 나갔다 오면 다시 재생
+    const badge = mock.querySelector('.mock-badge'), BADGE_FINAL = badge ? badge.textContent : '';
+    const vals = [...mock.querySelectorAll('.mock-bar-val')];
+    let timers = [];
+    const reset = () => {
+      timers.forEach(clearTimeout); timers = [];
+      mock.classList.remove('mock-on', 'mock-done');
+      vals.forEach(v => { v.textContent = '0%'; delete v.dataset.counted; });
+      if (badge) { badge.textContent = 'AI 분석 중'; badge.classList.add('thinking'); }
+    };
     const play = () => {
       mock.classList.add('mock-on');
-      mock.querySelectorAll('.mock-bar-row').forEach((row, i) => {
-        const val = row.querySelector('.mock-bar-val'), target = +val.dataset.v;
-        countUp(val, target, { suffix: '%', dur: 1100, delay: REDUCE_MOTION ? 0 : 520 + i * 170 });
-      });
+      vals.forEach((val, i) => countUp(val, +val.dataset.v, { suffix: '%', dur: 1200, delay: REDUCE_MOTION ? 0 : 700 + i * 220 }));
+      timers.push(setTimeout(() => { if (badge) { badge.textContent = BADGE_FINAL; badge.classList.remove('thinking'); } mock.classList.add('mock-done'); }, REDUCE_MOTION ? 0 : 2050));
     };
     if (REDUCE_MOTION || !('IntersectionObserver' in window)) play();
-    else { const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { io.disconnect(); play(); } }, { threshold: 0.55 }); io.observe(mock); }
+    else {
+      reset();
+      const section = mock.closest('.preview');
+      const io = new IntersectionObserver(es => es.forEach(e => {
+        if (e.intersectionRatio >= 0.7 && !mock.classList.contains('mock-on')) {
+          // 섹션 등장(.reveal .6s)이 끝난 다음에
+          const wait = section && !section.classList.contains('visible') ? 700 : 250;
+          timers.push(setTimeout(play, wait));
+        } else if (e.intersectionRatio === 0 && mock.classList.contains('mock-on')) reset();
+      }), { threshold: [0, 0.7] });
+      io.observe(mock);
+    }
   }
+
+  // 기능 카드 아이콘: 선마다 pathLength=1(그려지듯 나타나게), 카드 순서만큼 늦게
+  document.querySelectorAll('.feat-card').forEach((card, i) => {
+    card.style.setProperty('--d', `${0.25 + (i % 3) * 0.08 + Math.floor(i / 3) * 0.05}s`);
+    card.querySelectorAll('.feat-icon svg path, .feat-icon svg circle, .feat-icon svg rect, .feat-icon svg polygon').forEach(el => {
+      if (el.getAttribute('fill') && el.getAttribute('fill') !== 'none') return;   // 채운 점(과녁 가운데)은 나중에 나타남
+      el.setAttribute('pathLength', '1'); el.classList.add('draw');   // 속성 선택자([pathLength])는 SVG에서 안 잡혀서 클래스로
+    });
+  });
 
   // 지원하는 리그: 칩이 흐림에서 하나씩 떠오르고 로고가 살짝 튀어오름 → 다 나오면 빛줄기가 한 번 스침
   const pills = document.querySelector('.league-pills');
@@ -1106,10 +1180,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return { league: l, team: data.standings && data.standings[0] };
       } catch (e) { return { league: l, team: null }; }
     }));
-    const cardsHtml = results.filter(r => r.team).map(({ league, team }) => {
+    const cardsHtml = results.filter(r => r.team).map(({ league, team }, i) => {
       const teamName = team.team.replace(' FC', '').replace(' CF', '');
       return `
-        <div class="leader-card">
+        <div class="leader-card" style="--i:${i}">
           <img class="team-crest" src="${team.logo}" onerror="this.style.display='none'">
           <div>
             <div class="leader-league"><img class="league-crest" src="${league.logo}" style="${league.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">${league.name}</div>
@@ -1119,6 +1193,9 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
     }).join('');
     strip.innerHTML = cardsHtml || '';
+    // 히어로 숫자가 오르기 시작할 즈음(인트로 끝 + 0.9초) 카드가 하나씩 떠오름 — 데이터가 늦게 오면 오자마자
+    const go = () => setTimeout(() => strip.classList.add('cards-on'), REDUCE_MOTION ? 0 : 900);
+    if (window.__introDone) go(); else addEventListener('intro-exit', go, { once: true });
   } catch (e) {
     strip.innerHTML = '';
   }
@@ -1133,19 +1210,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const medalColors = ['#FFD700', '#C0C0C0', '#CD7F32', '', ''];
     
     const html = top5.map((team, i) => {
-      const formDots = team.form.map(f => `<div class="form-dot ${f}"></div>`).join('');
+      const formDots = team.form.map((f, k) => `<div class="form-dot ${f}" style="--k:${k}"></div>`).join('');
       const rankColor = medalColors[i] ? `style="color:${medalColors[i]}"` : '';
       return `
-        <div class="standings-row">
+        <div class="standings-row" style="--i:${i}">
           <span class="standings-rank" ${rankColor}>${team.rank}</span>
           <div class="standings-team"><img src="${team.logo}" onerror="this.style.display='none'">${team.team}</div>
           <div class="form-dots">${formDots}</div>
-          <span class="standings-pts">${team.points}</span>
+          <span class="standings-pts" data-v="${team.points}">${team.points}</span>
         </div>
       `;
     }).join('');
     
-    document.getElementById('landing-standings-preview').innerHTML = html;
+    const box = document.getElementById('landing-standings-preview');
+    box.innerHTML = html;
+    // 1위부터 줄이 차례로 들어오고, 최근 5경기 점이 왼쪽부터 켜지고, 승점이 오름 — 표가 화면에 반쯤 들어오면
+    const mockEl = box.closest('.standings-mock') || box;
+    const run = () => {
+      box.classList.add('rows-on');
+      box.querySelectorAll('.standings-pts').forEach((el, i) => countUp(el, +el.dataset.v, { dur: 1000, delay: REDUCE_MOTION ? 0 : 350 + i * 110 }));
+    };
+    if (REDUCE_MOTION || !('IntersectionObserver' in window)) run();
+    else {
+      box.querySelectorAll('.standings-pts').forEach(el => el.textContent = '0');
+      const io = new IntersectionObserver(es => { if (es.some(e => e.intersectionRatio >= 0.5)) { io.disconnect(); setTimeout(run, 250); } }, { threshold: [0.5] });
+      io.observe(mockEl);
+    }
   } catch(e) {
     document.getElementById('landing-standings-preview').innerHTML = '<div class="standings-row"><span style="color:#8b949e;padding:12px 0">순위표를 불러올 수 없습니다</span></div>';
   }
