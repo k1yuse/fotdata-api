@@ -6127,7 +6127,7 @@ initScrollFade(document.querySelector('.nav-tabs-scroll'));
 
 loadLogos();predictableTeamsReady=loadPredictableTeams();loadStandings('PL');loadAccuracy();loadTodayMatches();loadBigMatch();loadMyTeamWidget();loadTrackStrip();openSharedPrediction();
 
-if(window.location.hash){setTimeout(()=>{const h=window.location.hash.replace('#','');const valid=['predict','champion','standings','players','schedule','shootout'];if(!valid.includes(h))return;document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));const pg=document.getElementById('page-'+h);if(pg)pg.classList.add('active');setActiveTab(h);if(h==='champion')loadChampion('PL');if(h==='players')loadPlayers();if(h==='schedule')loadSchedule('PL');if(h==='shootout')initShootout();},100);}
+if(window.location.hash){setTimeout(()=>{const h=window.location.hash.replace('#','');const valid=['predict','champion','standings','players','schedule','shootout'];if(!valid.includes(h))return;document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));const pg=document.getElementById('page-'+h);if(pg)pg.classList.add('active');setActiveTab(h);track('__view',h);if(h==='champion')loadChampion('PL');if(h==='players')loadPlayers();if(h==='schedule')loadSchedule('PL');if(h==='shootout')initShootout();},100);}
 </script>
 
 <footer style="padding:20px 24px;padding-bottom:calc(20px + env(safe-area-inset-bottom));border-top:0.5px solid #30363d;display:flex;align-items:center;justify-content:space-between;background:#161b22">

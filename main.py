@@ -991,6 +991,7 @@ def _warm_team_stats():
         import share_card
         share_card._background()
         share_card.warm_crests(team_logos_cache.values())
+        _warm_share_cards()
     except Exception:
         pass
     for lg in ("PL", "PD", "BL1", "SA", "FL1"):
@@ -1567,11 +1568,31 @@ def share_match_image(name: str):
     d = _share_data(slug)
     if not d:
         return Response(status_code=302, headers={"Location": f"{SITE_URL}/og-image.png?v=2"})
-    return Response(_share_jpg(slug), media_type="image/jpeg", headers={"Cache-Control": "public, max-age=86400, s-maxage=43200"})
+    return Response(_share_jpg(d["home"], d["away"]), media_type="image/jpeg",
+                    headers={"Cache-Control": "public, max-age=86400, s-maxage=43200"})
 
-@lru_cache(maxsize=128)
-def _share_jpg(slug):
+@lru_cache(maxsize=256)
+def _share_jpg(home, away):
+    """대진(예측에 쓰는 팀 이름) 기준 캐시 — 같은 경기를 다른 표기의 slug로 불러도 한 번만 그림"""
     import share_card   # Pillow는 이 기능에서만 씀 — 서버 시작 시간에 영향 없게 지연 import
-    d = _share_data(slug)
-    return share_card.render(d["home_short"], d["away_short"], team_logos_cache.get(d["home"]), team_logos_cache.get(d["away"]),
+    d = _share_data(f"{_team_slug(home)}-vs-{_team_slug(away)}")
+    return share_card.render(d["home_short"], d["away_short"], team_logos_cache.get(home), team_logos_cache.get(away),
                              d["probs"], d["score"], d["prediction"], d["meta"], d["limited"])
+
+def _warm_share_cards(days=10):
+    """앞으로 며칠 안의 실제 경기 카드를 미리 그려 둠 — 공유는 대부분 곧 열릴 경기라, 첫 미리보기 봇도 바로 받게"""
+    from datetime import datetime, timedelta, timezone
+    now = datetime.now(timezone.utc)
+    for ms in (_load_json("schedule.json") or {}).values():
+        for m in ms:
+            if m.get("status") in ("FINISHED", "AWARDED", "CANCELLED"):
+                continue
+            dt = datetime.fromisoformat(m["date"].replace("Z", "+00:00"))
+            if not (now <= dt <= now + timedelta(days=days)):
+                continue
+            h, a = TEAM_NAME_MAP.get(m["home_team"], m["home_team"]), TEAM_NAME_MAP.get(m["away_team"], m["away_team"])
+            try:
+                if _share_data(f"{_team_slug(h)}-vs-{_team_slug(a)}"):
+                    _share_jpg(h, a)
+            except Exception:
+                pass
