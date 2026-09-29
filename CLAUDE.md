@@ -316,6 +316,10 @@ cp landing.html index.html
 - 평점 배지 색은 보이는 반올림 값 기준(`mdRatingClass`) — 6.97이 "7.0"인데 노랑이던 것 수정. 이름 줄임에 Mac/Mc 포함(Mac Allister).
 - 확인: 무료 키 샘플(24-25 아스널 58명·사우샘프턴–아스널·부상 241건)로 데스크톱·모바일, JS 에러·가로 넘침 0. 푸시 전 인라인 스크립트 전체를 `node --check`로 문법 검사(같은 블록 `const sq` 이름 충돌로 스크립트 전체가 멈춘 걸 이 검사로 잡음).
 
+- **이름 표기 규칙(2026-09-30 사용자 결정)**: 경기장 위(라인업·예상 라인업·결과 창 라인업·베스트 11)는 "M. Salah"(이니셜+성, `mdInitialName` — 좁은 폰 ≤480px은 성만), 목록·기록·선수 카드·결장자는 전체 이름 "Bukayo Saka"(`afFullName` — API-Football "B. Saka"의 이니셜에 맞는 단어를 firstname에서 골라 붙임, 서버 `af_player_row`의 `full_name`과 같은 규칙). 등번호는 이름 앞 **회색**(`.md-pn i`, 스쿼드 탭 `.pl-num` — 예전 `#7` 표기 제거). 경기 전 라인업(확정·예상)·베스트 11은 동그라미에 선수 사진(테두리 = 유니폼 색), 결과 창 라인업은 유니폼 색 + 등번호 그대로. 베스트 11 등번호는 시즌 기록에 없으면 팀 정보 스쿼드 사진 주소 속 선수 ID로 현재 등번호를 찾음.
+- **스쿼드 탭 이름 통일(서버 `_squad_full_names`)**: API-Football 스쿼드(30팀, 사진·등번호)가 "I. Meslier"처럼 줄인 이름이라 football-data 명단 팀들과 표기가 달랐음 → football-data 1군 명단의 전체 이름으로 바꿈. 줄인 이름(이니셜 일치 필수)·한 단어 이름만, 이미 전체 이름이면 그대로(football-data 쪽이 더 짧은 "Sannadi" 같은 경우 방지), 같은 이름이 두 명에게 붙으면 둘 다 원래대로. 740명 중 480명 변경, 오매칭·중복 0(처음 규칙에선 유스 "Z. Christie" → 1군 "Ryan Christie", "Vitor Nunes" → "Matheus Nunes" 같은 오매칭 12건이 있어서 엄격하게 바꿈).
+- 라인업 선수를 누르면 선수 카드, 시즌 기록이 없는 선수는 라인업 정보(사진·등번호·포지션·그 경기 평점)로 간단한 카드(`mdPlayerIndex`).
+
 ### 5.20 데이터 소스 구조(결제 시) — football-data + API-Football
 - 경기 결과·순위·일정·예측 모델은 **football-data 그대로**(지금 4시즌, 학습·팀 이름 기준). API-Football은 **선수·라인업·경기 상세·부상**과 **23-24 이전 과거 시즌**(EPL 기준 2010-11~) 담당 — 지금 데이터를 다시 만들 필요는 없음.
 - 섞일 때 문제는 **팀 이름 표기**(football-data "Wolverhampton Wanderers FC" ↔ API-Football "Wolves"). team_extra.json에 이미 30팀 `af_id` 매핑이 있으니 5대 리그+UCL 전 팀으로 넓힌 매핑 표(우리 이름 → af 팀 ID)를 만들고, 리그·시즌마다 "우리 팀 전부가 정확히 한 ID에 대응"하는지 검사할 것.

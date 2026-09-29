@@ -1267,8 +1267,13 @@ def af_player_row(p, league_id=None):
     g, gl, sh, ps = s.get("games") or {}, s.get("goals") or {}, s.get("shots") or {}, s.get("passes") or {}
     tk, du, dr, fo, cd, pn = (s.get(k) or {} for k in ("tackles", "duels", "dribbles", "fouls", "cards", "penalty"))
     cm = lambda v: int(re.sub(r"\D", "", str(v))) if v and re.search(r"\d", str(v)) else None   # "182 cm"·"182" → 182
+    # 목록·선수 카드용 전체 이름: "B. Saka" + firstname "Bukayo Ayoyinka Temidayo" → "Bukayo Saka"(이니셜이 맞는 단어). 줄인 이름이 아니면 그대로
+    full, m = pl.get("name"), re.match(r"^(\w)\.\s+(.+)$", pl.get("name") or "")
+    if m and pl.get("firstname"):
+        toks = pl["firstname"].split()
+        full = f"{next((t for t in toks if t[:1].upper() == m.group(1).upper()), toks[0])} {m.group(2)}"
     return {
-        "id": pl.get("id"), "name": pl.get("name"), "firstname": pl.get("firstname"), "lastname": pl.get("lastname"),
+        "id": pl.get("id"), "name": pl.get("name"), "full_name": full, "firstname": pl.get("firstname"), "lastname": pl.get("lastname"),
         "age": pl.get("age"), "birth_date": (pl.get("birth") or {}).get("date"), "birth_place": (pl.get("birth") or {}).get("place"),
         "nationality": pl.get("nationality"), "height": cm(pl.get("height")), "weight": cm(pl.get("weight")),
         "photo": pl.get("photo"), "injured": bool(pl.get("injured")),

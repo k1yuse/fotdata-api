@@ -1545,6 +1545,31 @@ def get_schedule(league_code: str):
         matches = [_with_live(m, live) for m in matches]
     return {"league": league_code.upper(), "matches": matches}
 
+def _squad_full_names(af_squad, fd_squad):
+    """API-Football 스쿼드(사진·등번호)의 이름을 football-data 1군 명단의 전체 이름으로 바꿈(2026-09-30).
+    API-Football은 "I. Meslier"·"R. Calafiori"처럼 이니셜로 줄여 와서 football-data 명단을 쓰는 다른 팀·화면과 표기가 달랐음.
+    성(마지막 단어, 한 단어 이름이면 그 단어)이 같고 이니셜이 맞는 사람이 딱 한 명일 때만 바꾸고, 애매하면 원래 이름 그대로"""
+    # 바꾸는 경우는 두 가지뿐: "I. Meslier"처럼 이니셜로 줄인 이름(이니셜이 맞아야 함), "Kepa"처럼 한 단어 이름.
+    # 이미 전체 이름("Maroan Sannadi")이면 그대로 — football-data 쪽이 더 짧은 경우("Sannadi")도 있어서.
+    # 성만 같은 다른 선수(유스 "Z. Christie" ↔ 1군 "Ryan Christie", "Vitor Nunes" ↔ "Matheus Nunes")로 바뀌지 않게 이니셜은 엄격히
+    fd = [(p.get("name"), _norm_name(p.get("name"))) for p in fd_squad if p.get("name")]
+    picks = []
+    for p in af_squad:
+        raw = p.get("name") or ""
+        toks = _norm_name(raw)
+        abbrev = bool(re.match(r"^\S\.\s", raw))
+        cand = None
+        if toks and (abbrev or len(raw.split()) == 1):
+            last = toks[-1]
+            cands = [n for n, t in fd if last in t and len(t) > len(toks) - (1 if abbrev else 0)]
+            if abbrev and len(toks) > 1:
+                cands = [n for n in cands if _norm_name(n)[0].startswith(toks[0][0])]
+            if len(cands) == 1:
+                cand = cands[0]
+        picks.append(cand)
+    used = {n: picks.count(n) for n in picks if n}
+    return [{**p, "name": n, "short_name": p.get("name")} if n and used[n] == 1 else p for p, n in zip(af_squad, picks)]
+
 @app.get("/team/info/{team_name}")
 def get_team_info(team_name: str):
     """팀 상세 정보 (홈구장, 창단연도, 구단색, 스쿼드) — update_data.py의 fetch_team_info()가 생성한 캐시"""
@@ -1561,7 +1586,7 @@ def get_team_info(team_name: str):
     if extra:
         info = {**info}   # 캐시된 원본을 건드리지 않게 복사본에 합침
         if extra.get("squad"):
-            info["squad"] = extra["squad"]
+            info["squad"] = _squad_full_names(extra["squad"], info.get("squad") or [])
         if extra.get("transfers") is not None:
             info["transfers"] = extra["transfers"]
 

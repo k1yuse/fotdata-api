@@ -1591,6 +1591,12 @@
     /* 팀 정보 · 시즌 베스트 11 + 선수별 시즌 기록 */
     .bx-pitch { aspect-ratio: 68 / 64; max-width: 420px; margin: 0 auto; }
     .md-shirt.ph { width: 36px; height: 36px; background: #21262d; border-color: var(--kb); border-width: 2px; }
+    /* 등번호: 이름 앞 회색(이름은 흰색이라 구분) — 경기장 위 이름·스쿼드 목록 공용 */
+    .md-pn i, .pl-num { font-style: normal; font-weight: 700; color: #8b949e; margin-right: 3px; font-variant-numeric: tabular-nums; }
+    .md-pl { width: 78px; } .md-pn { max-width: 78px; }
+    .md-pn .nm-s { display: none; }
+    @media (max-width: 480px) { .md-pl { width: 56px; } .md-pn { max-width: 56px; } .md-pn .nm-f { display: none; } .md-pn .nm-s { display: inline; } }
+    .pl-num { display: inline-block; min-width: 20px; margin-right: 6px; text-align: right; }
     .md-shirt.ph img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
     .bx-note { margin-top: 6px; font-size: 10.5px; color: #7d8590; text-align: center; }
     .sq-head, .sq-row { display: grid; grid-template-columns: 30px minmax(0, 1fr) 34px 30px 30px 40px; align-items: center; gap: 6px; }
@@ -3242,6 +3248,28 @@ function mdShortName(n) {
   return t.slice(i).join(' ');
 }
 // 색은 화면에 보이는 반올림 값 기준(6.97 → "7.0"인데 노랑이면 어색해서)
+// 경기장 위 이름(라인업·베스트 11): "Mohamed Salah" → "M. Salah", "Virgil van Dijk" → "V. van Dijk", 이미 "C. Bradley"면 그대로
+function mdInitialName(n) {
+  const s = String(n || '').trim();
+  if (/^\p{L}\.\s/u.test(s)) return s;
+  const t = s.split(/\s+/);
+  if (t.length < 2) return s;
+  let i = t.length - 1;
+  while (i > 1 && MD_PARTICLE.test(t[i - 1])) i--;
+  return `${t[0][0]}. ${t.slice(i).join(' ')}`;
+}
+// 경기장 위 이름 칸: 넓은 화면은 이니셜+성, 좁은 폰(≤480px)은 성만(CSS로 전환), 등번호가 있으면 앞에 회색
+const mdNameHtml = (name, num) => `<span class="md-pn">${num != null ? `<i>${num}</i>` : ''}<span class="nm-f">${mdInitialName(name)}</span><span class="nm-s">${mdShortName(name)}</span></span>`;
+// 목록·기록·선수 카드 이름: API-Football "B. Saka" → 이름(firstname)에서 이니셜이 맞는 단어를 붙여 "Bukayo Saka"
+function afFullName(p) {
+  if (!p) return '';
+  if (p.full_name) return p.full_name;
+  const m = /^(\p{L})\.\s+(.+)$/u.exec(p.name || '');
+  if (!m || !p.firstname) return p.name || '';
+  const toks = p.firstname.split(/\s+/);
+  const tok = toks.find(t => t[0] && t[0].toUpperCase() === m[1].toUpperCase()) || toks[0];
+  return `${tok} ${m[2]}`;
+}
 const mdRatingClass = r => { if (r == null) return ''; const v = Math.round(r * 10) / 10; return v >= 8 ? 'r8' : v >= 7 ? 'r7' : v >= 6 ? 'r6' : 'r5'; };
 const mdRating = r => (r == null ? '' : `<span class="md-rt ${mdRatingClass(r)}">${r.toFixed(1)}</span>`);
 const MD_BALL = '<svg viewBox="0 0 24 24" class="md-ic ball" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7V3.8M16.09 10.67l3.71-1.2M14.53 15.48l2.29 3.15M9.47 15.48l-2.29 3.15M7.91 10.67L4.2 9.47"/></svg>';
@@ -3315,11 +3343,14 @@ function mdLineupHtml(d, home, away, opts = {}) {   // opts.bench === false → 
       const x = (i + 0.5) / list.length * 100, t = (p.r - 1) / (nRows - 1);
       const kit = p.pos === 'G' ? lu.colors?.goalkeeper : lu.colors?.player;
       const bg = hex(kit?.primary) || (side === 'home' ? '#58a6ff' : '#f0883e'), fg = hex(kit?.number) || '#0d1117';
+      mdPlayerIndex[p.id] = { ...p, team: side === 'home' ? home : away };   // 시즌 기록이 없을 때 선수 카드가 이 정보로 간단히 뜸
+      // 경기 전 라인업(opts.photos): 동그라미에 선수 사진(테두리 = 유니폼 색), 등번호는 이름 앞 회색으로
+      const ph = opts.photos && (p.photo || (p.id ? `https://media.api-sports.io/football/players/${p.id}.png` : null));
       const marks = (p.goals ? MD_BALL.repeat(Math.min(p.goals, 3)) : '') + (p.own_goals ? MD_BALL.replace('md-ic ball', 'md-ic ball og') : '')
         + (p.red ? '<i class="md-card r"></i>' : p.second_yellow ? '<i class="md-card y2"></i>' : p.yellow ? '<i class="md-card y"></i>' : '');
       return `<div class="md-pl${p.off != null ? ' off' : ''}" style="left:${side === 'home' ? x : 100 - x}%;top:${side === 'home' ? 94 - t * 39 : 6 + t * 39}%;--kb:${bg};--kn:${fg}" title="${p.name}${p.rating ? ' · 평점 ' + p.rating.toFixed(1) : ''}"${p.id ? ` onclick="openPlayerCard('${escJs(side === 'home' ? home : away)}', ${p.id})"` : ''}>
-        <span class="md-shirt">${p.number ?? ''}${mdRating(p.rating)}${p.off != null ? `<span class="md-offm">${p.off}'</span>` : ''}${marks ? `<span class="md-marks">${marks}</span>` : ''}</span>
-        <span class="md-pn">${mdShortName(p.name)}</span></div>`;
+        <span class="md-shirt${ph ? ' ph' : ''}">${ph ? `<img src="${ph}" alt="" onerror="this.remove()">` : p.number ?? ''}${mdRating(p.rating)}${p.off != null ? `<span class="md-offm">${p.off}'</span>` : ''}${marks ? `<span class="md-marks">${marks}</span>` : ''}</span>
+        ${mdNameHtml(p.name, ph ? p.number : null)}</div>`;
     }); }).join('');
   };
   const bench = side => {
@@ -3388,22 +3419,24 @@ function keyPlayers(sq, n = 3) {
 function tnPlayerRow(p, team, absent) {
   const ga = p.pos === 'GK' ? `${p.apps}경기 · 실점 ${p.conceded ?? '-'}` : `${p.goals}골 ${p.assists}도움 · ${p.apps}경기`;
   return `<div class="tn-row" onclick="openPlayerCard('${escJs(team)}', ${p.id})"><img src="${p.photo || ''}" alt="" onerror="this.style.visibility='hidden'">
-    <div class="tn-info"><b>${p.name}</b><small>${POS_KO[p.pos] || ''} · ${ga}</small></div>
+    <div class="tn-info"><b>${afFullName(p)}</b><small>${POS_KO[p.pos] || ''} · ${ga}</small></div>
     ${absent ? `<span class="tn-abs ${absent.status}">${absent.status === 'out' ? '결장' : '불투명'}</span>` : ''}${mdRating(p.rating)}</div>`;
 }
 // 팀 소식(경기 미리보기 창·예측 결과 공용): 라인업(확정 또는 지난 경기 선발 기준 예상) + 결장·부상 + 주요 선수(결장이면 표시)
 function teamNewsHtml(pv, sqH, sqA, home, away) {
   const inj = pv?.injuries || {};
   const absentOf = side => new Map((inj[side] || []).map(x => [x.id, x]));
+  // 결장자 이름도 목록이라 전체 이름으로(시즌 기록에 있는 선수면 "Martin Ødegaard", 없으면 받은 이름 그대로)
+  const fullById = new Map([...(sqH?.players || []), ...(sqA?.players || [])].map(p => [p.id, afFullName(p)]));
   let html = '';
   const lu = pv?.lineups?.home && pv?.lineups?.away ? { lineups: pv.lineups, kind: 'confirmed' }
     : pv?.predicted?.home && pv?.predicted?.away ? { lineups: pv.predicted, kind: 'predicted' } : null;
   if (lu) html += `<div class="mp-sec"><div class="mp-sec-t"><span>${lu.kind === 'confirmed' ? '선발 라인업 <em class="tn-chip ok">확정</em>' : '예상 라인업 <em class="tn-chip">예상</em>'}</span>
-      <span class="mp-sec-n">${lu.kind === 'confirmed' ? '킥오프 전 발표' : '각 팀 지난 경기 선발 기준'}</span></div>${mdLineupHtml({ lineups: lu.lineups }, home, away, { bench: false })}</div>`;
+      <span class="mp-sec-n">${lu.kind === 'confirmed' ? '킥오프 전 발표' : '각 팀 지난 경기 선발 기준'}</span></div>${mdLineupHtml({ lineups: lu.lineups }, home, away, { bench: false, photos: true })}</div>`;
   if (pv?.injuries) {
     const col = (side, team) => { const l = inj[side] || [];
       return `<div class="tn-col"><div class="tn-col-h"><img src="${logos[team] || ''}" alt="" onerror="this.style.display='none'">${shortName(team)}</div>
-        ${l.length ? l.map(x => `<div class="tn-inj"${x.id ? ` onclick="openPlayerCard('${escJs(team)}', ${x.id})"` : ''}><img src="${x.photo || ''}" alt="" onerror="this.style.visibility='hidden'"><div><b>${mdShortName(x.name)}</b><small>${injReason(x.reason)}</small></div><span class="tn-abs ${x.status}">${x.status === 'out' ? '결장' : '불투명'}</span></div>`).join('')
+        ${l.length ? l.map(x => `<div class="tn-inj"${x.id ? ` onclick="openPlayerCard('${escJs(team)}', ${x.id})"` : ''}><img src="${x.photo || ''}" alt="" onerror="this.style.visibility='hidden'"><div><b>${fullById.get(x.id) || x.name}</b><small>${injReason(x.reason)}</small></div><span class="tn-abs ${x.status}">${x.status === 'out' ? '결장' : '불투명'}</span></div>`).join('')
           : '<div class="tn-none">결장자 없음</div>'}</div>`; };
     html += `<div class="mp-sec"><div class="mp-sec-t">결장·부상 <span class="mp-sec-n">출전 불투명 포함</span></div><div class="tn-cols">${col('home', home)}${col('away', away)}</div></div>`;
   }
@@ -3432,15 +3465,25 @@ async function openPlayerCard(team, pid) {
   track('player_card', { team: shortName(team) });
   const sq = await fetchAfSquad(team);
   const p = sq?.players?.find(x => x.id === pid);
-  if (!p) { body.innerHTML = '<div class="ti-empty">이 선수의 시즌 기록이 아직 없어요.</div>'; return; }
-  body.innerHTML = playerCardHtml(p, team, sq);
+  if (p) { body.innerHTML = playerCardHtml(p, team, sq); return; }
+  // 시즌 기록이 없는 선수(상대 팀·새로 온 선수 등): 라인업에 있던 정보(사진·등번호·포지션·그 경기 평점)로 간단히
+  const f = mdPlayerIndex[pid];
+  if (!f) { body.innerHTML = '<div class="ti-empty">이 선수의 시즌 기록이 아직 없어요.</div>'; return; }
+  const pos = { G: 'GK', D: 'DF', M: 'MF', F: 'FW' }[f.pos] || f.pos;
+  const photo = f.photo || `https://media.api-sports.io/football/players/${pid}.png`;
+  body.innerHTML = `<div class="pc-hero"><img class="pc-photo" src="${photo}" alt="" onerror="this.style.visibility='hidden'">
+      <div class="pc-id"><b class="pc-name">${f.name}</b><span class="pc-team"><img src="${logos[f.team] || ''}" alt="" onerror="this.style.display='none'">${shortName(f.team)}${f.number != null ? ` · ${f.number}번` : ''}</span>
+        <span class="pc-tags"><em class="pc-pos ${pos || ''}">${POS_KO[pos] || '-'}</em></span></div>
+      ${f.rating ? `<div class="pc-rt"><span class="md-rt ${mdRatingClass(f.rating)}">${f.rating.toFixed(1)}</span><small>이 경기 평점</small></div>` : ''}</div>
+    <div class="mr-nolog">이 선수의 시즌 기록은 아직 없어요</div>`;
 }
+const mdPlayerIndex = {};
 function closePlayerCard(e) { const m = document.getElementById('pc-modal'); if (!e || e.target === m) m.classList.remove('show'); }
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && document.getElementById('pc-modal')?.classList.contains('show')) { e.stopImmediatePropagation(); closePlayerCard(); }
 }, true);
 function playerCardHtml(p, team, sq) {
-  const full = [p.firstname, p.lastname].filter(Boolean).join(' ');
+  const legal = [p.firstname, p.lastname].filter(Boolean).join(' ');   // 공식 전체 이름(예: Bukayo Ayoyinka Temidayo Saka)
   const bd = p.birth_date ? p.birth_date.replace(/-/g, '.') : '';
   const cell = (label, v, sub) => `<div class="pc-cell"><small>${label}</small><b>${v ?? '-'}</b>${sub ? `<span>${sub}</span>` : ''}</div>`;
   const tile = (label, v) => `<div class="pc-tile"><b>${v ?? '-'}</b><small>${label}</small></div>`;
@@ -3450,7 +3493,7 @@ function playerCardHtml(p, team, sq) {
   const per90 = v => (p.minutes >= 270 && v != null ? (v / p.minutes * 90).toFixed(2) : null);
   const season = sq.season ? `${String(sq.season).slice(2)}-${String(sq.season + 1).slice(2)} 시즌` : '이번 시즌';
   return `<div class="pc-hero"><img class="pc-photo" src="${p.photo || ''}" alt="" onerror="this.style.visibility='hidden'">
-      <div class="pc-id"><b class="pc-name">${p.name}</b>${full && full !== p.name ? `<small class="pc-full">${full}</small>` : ''}
+      <div class="pc-id"><b class="pc-name">${afFullName(p)}</b>${legal && legal !== afFullName(p) ? `<small class="pc-full">${legal}</small>` : ''}
         <span class="pc-team"><img src="${logos[team] || ''}" alt="" onerror="this.style.display='none'">${shortName(team)}${p.number ? ` · ${p.number}번` : ''}</span>
         <span class="pc-tags"><em class="pc-pos ${p.pos || ''}">${POS_KO[p.pos] || '-'}</em>${p.captain ? '<em class="pc-cap">주장</em>' : ''}${p.injured ? '<em class="pc-inj">부상 중</em>' : ''}</span></div>
       ${p.rating ? `<div class="pc-rt"><span class="md-rt ${mdRatingClass(p.rating)}">${p.rating.toFixed(2)}</span><small>평균 평점</small></div>` : ''}</div>
@@ -3490,9 +3533,13 @@ function bestElevenHtml(sq, team) {
   const pair = getClubColorPair(teamInfoCache[team]?.clubColors) || ['#1f6feb', '#ffffff'];
   const kb = pair[0], kn = pair[0].toLowerCase() === pair[1].toLowerCase() ? '#fff' : pair[1];
   const rows = [[bx.gk], ...bx.lines];   // 아래(골키퍼) → 위(공격수)
+  // 등번호: 시즌 기록에 없으면(지난 시즌 조회 등) 팀 정보 스쿼드의 현재 등번호 — 스쿼드 사진 주소에 선수 ID가 들어 있어서 ID로 맞춤
+  const numById = {};
+  (teamInfoCache[team]?.squad || []).forEach(s => { const m = /players\/(\d+)\.png/.exec(s.photo || ''); if (m && s.shirtNumber != null) numById[m[1]] = s.shirtNumber; });
+  const num = p => p.number ?? numById[p.id];
   const ys = [88, 66, 42, 18];
   const dots = rows.map((line, r) => line.map((p, i) => `<div class="md-pl" style="left:${(i + 0.5) / line.length * 100}%;top:${ys[r]}%;--kb:${r ? kb : '#2f3740'};--kn:${r ? kn : '#e6edf3'}" onclick="openPlayerCard('${escJs(team)}', ${p.id})" title="${p.name} · 평점 ${p.rating.toFixed(2)}">
-      <span class="md-shirt${p.photo ? ' ph' : ''}">${p.photo ? `<img src="${p.photo}" alt="" onerror="this.remove()">` : p.number ?? ''}${mdRating(p.rating)}</span><span class="md-pn">${mdShortName(p.name)}</span></div>`).join('')).join('');
+      <span class="md-shirt${p.photo ? ' ph' : ''}">${p.photo ? `<img src="${p.photo}" alt="" onerror="this.remove()">` : num(p) ?? ''}${mdRating(p.rating)}</span>${mdNameHtml(p.name, p.photo ? num(p) : null)}</div>`).join('')).join('');
   const season = sq.season ? `${String(sq.season).slice(2)}-${String(sq.season + 1).slice(2)}` : '';
   return `<div class="tp-sec"><div class="tp-t">시즌 베스트 11 <span>${season} 평균 평점 기준 · ${bx.form} · 평균 ${bx.avg.toFixed(2)}</span></div>
     <div class="md-pitch bx-pitch"><div class="md-lines"><i class="box b"></i><i class="six b"></i><i class="circle top"></i></div>${dots}</div>
@@ -3502,7 +3549,7 @@ function squadListHtml(sq, team) {
   const ps = (sq?.players || []).filter(p => p.minutes >= 90).sort((a, b) => (b.rating || 0) - (a.rating || 0) || b.minutes - a.minutes);
   if (!ps.length) return '';
   const row = p => `<div class="sq-row" onclick="openPlayerCard('${escJs(team)}', ${p.id})"><img src="${p.photo || ''}" alt="" onerror="this.style.visibility='hidden'">
-      <div class="sq-info"><b>${p.name}</b><small>${POS_KO[p.pos] || ''}${p.age ? ` · ${p.age}세` : ''}</small></div>
+      <div class="sq-info"><b>${afFullName(p)}</b><small>${POS_KO[p.pos] || ''}${p.age ? ` · ${p.age}세` : ''}</small></div>
       <span class="sq-n">${p.apps}</span><span class="sq-n">${p.pos === 'GK' ? '-' : p.goals}</span><span class="sq-n">${p.pos === 'GK' ? '-' : p.assists}</span>${mdRating(p.rating) || '<span class="md-rt">-</span>'}</div>`;
   return `<div class="tp-sec"><div class="tp-t">선수별 시즌 기록 <span>평균 평점 순 · 90분 이상 출전</span></div>
     <div class="sq-head"><span></span><span>선수</span><span>출전</span><span>골</span><span>도움</span><span>평점</span></div>
@@ -3797,7 +3844,7 @@ async function switchTiTab(tab) {
         html += players.map(p => `<div class="ti-player-row">
           <div style="display:flex;align-items:center;gap:8px;min-width:0">
             ${p.photo ? `<img src="${p.photo}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;background:#21262d" onerror="this.style.display='none'">` : ''}
-            <span class="ti-player-name" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.shirtNumber ? `#${p.shirtNumber} ` : ''}${p.name}</span>
+            <span class="ti-player-name" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.shirtNumber ? `<i class="pl-num">${p.shirtNumber}</i>` : ''}${p.name}</span>
           </div>
           <span class="ti-player-nation">${p.nationality || ''}</span>
         </div>`).join('');
