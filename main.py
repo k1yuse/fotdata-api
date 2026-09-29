@@ -906,6 +906,12 @@ def _rank_progress(league, season, team):
 
 # 서버가 뜰 때 백그라운드에서 전 리그·시즌 통계를 미리 계산(재배포 직후 첫 사용자도 기다리지 않게, ~1초)
 def _warm_team_stats():
+    # 일정 탭 예측(리그당 수백 경기 한 번에 계산)도 먼저 — 첫 사용자의 예측 막대가 늦게 뜨지 않게
+    for lg in ("PL", "PD", "BL1", "SA", "FL1", "CL"):
+        try:
+            _schedule_predictions(lg)
+        except Exception:
+            pass
     for lg in ("PL", "PD", "BL1", "SA", "FL1"):
         for yr in STAT_SEASONS:
             try:

@@ -1175,6 +1175,21 @@
     .mp-probs .d { align-items: center; } .mp-probs .a { align-items: flex-end; text-align: right; }
     .mp-probs b { font-size: 16px; font-weight: 700; color: #8b949e; font-variant-numeric: tabular-nums; }
     .mp-probs span { font-size: 11px; color: #7d8590; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .mp-verdict small { font-size: 11px; font-weight: 600; opacity: .7; margin-left: 4px; }
+    .mp-team.lose { opacity: .45; } .mp-team.win .mp-name { color: #fff; }
+    .mp-score.final b.h, .mp-score.final b.a { color: #e6edf3; }
+    .mr-nolog { font-size: 11.5px; color: #8b949e; text-align: center; padding: 10px 12px; border-radius: 10px; background: rgba(13,17,23,0.45); border: 0.5px dashed #30363d; line-height: 1.5; word-break: keep-all; }
+    .mr-pick { margin-top: 8px; font-size: 12px; color: #8b949e; text-align: center; } .mr-pick b { color: #e6edf3; }
+    .mp-sec-t .sp-verdict { margin-left: auto; }
+    .mr-row { display: grid; grid-template-columns: 50px 1fr 42px 1fr; align-items: center; gap: 6px; padding: 6px 4px; border-radius: 8px; font-size: 12px; font-variant-numeric: tabular-nums; }
+    .mr-row + .mr-row { border-top: 0.5px solid rgba(139,148,158,0.12); }
+    .mr-row.cur { background: rgba(88,166,255,0.08); } .mr-row.cur .dt { color: #79b8ff; font-weight: 700; }
+    .mr-nolog small { font-size: 10.5px; color: #7d8590; }
+    .mr-row .dt { font-size: 10.5px; color: #7d8590; }
+    .mr-row .t { display: flex; align-items: center; gap: 6px; min-width: 0; color: #e6edf3; } .mr-row .t.a { justify-content: flex-end; } .mr-row .t.lose { opacity: .45; }
+    .mr-row .t em { font-style: normal; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .mr-row .t img { width: 18px; height: 18px; object-fit: contain; flex-shrink: 0; }
+    .mr-row b { text-align: center; color: #e6edf3; }
     .mp-probs .h.top b { color: #79b8ff; font-weight: 800; } .mp-probs .a.top b { color: #ffa657; font-weight: 800; } .mp-probs .d.top b { color: #e6edf3; font-weight: 800; }
     .mp-sec { margin-top: 14px; padding-top: 12px; border-top: 0.5px solid rgba(139,148,158,0.18); }
     .mp-sec-t { display: flex; justify-content: space-between; gap: 8px; font-size: 11px; color: #8b949e; font-weight: 600; margin-bottom: 8px; }
@@ -1236,8 +1251,13 @@
     .sp-d { font-size: 10px; color: #7d8590; font-variant-numeric: tabular-nums; line-height: 1; }
     .sp-d.top { color: #c9d1d9; font-weight: 700; }
     /* 끝난 경기: 이긴 팀 굵게·진 팀 흐리게 + 경기 전에 기록해둔 AI 예측의 적중 여부 */
-    .sched-match.done .sched-team.lose span { color: #8b949e; }
-    .sched-match.done .sched-team.win span { font-weight: 700; color: #e6edf3; }
+    /* 진 팀은 로고·이름 통째로 흐리게(글자색만 바꿨을 땐 이긴 팀과 티가 잘 안 났음), 이긴 팀은 굵게 */
+    .sched-match.done .sched-team.lose .sched-team-hit { opacity: .4; }
+    .sched-match.done .sched-team.lose .sched-team-hit:hover { opacity: .8; }
+    .sched-match.done .sched-team.win span { font-weight: 700; color: #fff; }
+    .sched-match.done .sched-team.draw span { color: #c9d1d9; }
+    .sched-match.done .sched-score { font-size: 14px; letter-spacing: .5px; }
+    .sched-team-hit.me span { color: #79b8ff; font-weight: 700; }
     .sched-match.done .sp-mini { opacity: .45; }
     .sched-match.done .sp-pct { opacity: .7; }
     .sp-verdict { display: inline-flex; align-items: center; gap: 3px; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 99px; line-height: 1.2; white-space: nowrap; }
@@ -1781,6 +1801,9 @@ function wakingUpHtml(attempt, retries) {
 }
 
 let logos = {};
+// 로고 맵(/logos)이 오기 전에 위젯이 먼저 그려지면 로고가 빈 칸으로 굳었음(다음 경기 위젯 — 빅매치는 응답에 로고 주소가 있어서 멀쩡했음)
+// → 팀 로고를 쓰는 곳은 이 약속을 기다렸다가 그림
+let logosLoaded; const logosReady = new Promise(r => { logosLoaded = r; });
 // 예측 가능한 팀 = 5대 리그 팀 + UCL 경기 기록이 8경기 이상인 5대 리그 밖 UCL 팀(서버 /teams의 ucl_teams).
 // UCL 첫 출전 팀처럼 기록이 부족한 팀은 /predict가 404 — 미리 알고 안내하기 위함
 let predictableTeams = null;
@@ -1954,7 +1977,7 @@ async function loadTodayMatches() {
   if (!container) return;
   container.innerHTML = `<div class="loading" style="padding:16px 0;width:100%">${BRAND_LOADER_ICON}불러오는 중...</div>`;
   try {
-    const all = await fetchWindowMatches();
+    const [all] = await Promise.all([fetchWindowMatches(), logosReady]);
     const todayStr = localDateStr(new Date());
     let matches = all.filter(m => localDateStr(m.date) === todayStr);
     let label = '오늘의 경기';
@@ -2003,6 +2026,7 @@ async function loadBigMatch() {
     const res = await fetchWithRetry(`${API}/bigmatch`);
     const big = (await res.json()).match;
     if (!big) { banner.style.display = 'none'; return; }
+    await logosReady;
     await renderBigMatchBanner(big);
     banner.style.display = 'block';
   } catch (e) {
@@ -2094,7 +2118,7 @@ async function loadMyTeamWidget() {
     const nextOf = list => list
       .filter(m => (m.home_team === team || m.away_team === team) && m.status !== 'FINISHED' && new Date(m.date) > now)
       .sort((a, b) => new Date(a.date) - new Date(b.date));
-    let upcoming = nextOf(await fetchWindowMatches());
+    let upcoming = nextOf((await Promise.all([fetchWindowMatches(), logosReady]))[0]);
     // 21일 안에 경기가 없으면(A매치 휴식기 등) 그 팀 리그 일정만 따로 받아서 찾음
     const code = getTeamLeagueCode(team);
     if (!upcoming.length && code) {
@@ -2522,20 +2546,13 @@ function renderTiFixturesContent() {
   if (!monthMatches.length) {
     html += '<div class="ti-empty">해당 월에 경기가 없어요.</div>';
   } else {
+    if ([...new Set(monthMatches.map(m => m.league))].some(l => schedulePreds[l])) html += SCHED_PRED_LEGEND;
     monthMatches.forEach(m => {
       const d = new Date(m.date);
       const dateStr = `${d.getMonth() + 1}.${d.getDate()} (${WEEKDAY[d.getDay()]})`;
-      const played = m.status === 'FINISHED';
-      const timeStr = d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
-      const homeShort = m.home_team.replace(' FC', '').replace(' CF', '');
-      const awayShort = m.away_team.replace(' FC', '').replace(' CF', '');
       const isNext = next && m === next;
       const tags = (m.league === 'CL' ? '<span class="ti-fx-tag cl">UCL</span>' : '') + (isNext ? '<span class="ti-fx-tag next">다음 경기</span>' : '');
-      html += `<div class="sched-date-header">${dateStr}${tags}</div><div class="sched-match${isNext ? ' ti-fx-next' : ''}">
-        <div class="sched-team${m.home_team===team?' clickable-team':''}"><img src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span>${homeShort}</span></div>
-        <div class="sched-vs">${played ? `<span class="sched-score">${m.home_goals} - ${m.away_goals}</span>` : `<span class="sched-time">${timeStr}</span>`}</div>
-        <div class="sched-team away${m.away_team===team?' clickable-team':''}"><span>${awayShort}</span><img src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"></div>
-      </div>`;
+      html += `<div class="sched-date-header">${dateStr}${tags}</div>` + schedRowHtml(m, m.league, { next: isNext, team });
     });
   }
   panel.innerHTML = html;
@@ -2571,26 +2588,93 @@ function mpPitchSvg() {
     <path class="ln" pathLength="1" d="${by.home}" stroke="${PITCH_SIDE_COLOR.home}"/><path class="ln" pathLength="1" d="${by.away}" stroke="${PITCH_SIDE_COLOR.away}"/><path class="ln" pathLength="1" d="${by.mid}" stroke="${PITCH_SIDE_COLOR.mid}"/>`;
 }
 let mpSeq = 0;
+// 미리보기·결과 창 공통 머리: 두 팀(누르면 팀 정보) + 경기장 선
+function mpSetHeader(home, away, title) {
+  document.getElementById('mp-title').textContent = title;
+  [[1, home], [2, away]].forEach(([k, t]) => {
+    const img = document.getElementById('mp-logo' + k);
+    img.style.visibility = ''; img.src = logos[t] || '';
+    const el = document.getElementById('mp-name' + k);
+    el.textContent = shortTeamName(t); el.title = `${t} 팀 정보`;
+    const box = document.getElementById('mp-team' + k);
+    box.classList.remove('win', 'lose');
+    box.onclick = () => { closeMatchPredictModal(); openTeamInfo(t); };
+  });
+  document.getElementById('mp-pitch').innerHTML = mpPitchSvg();
+  document.getElementById('mp-center').innerHTML = '<span class="mp-vs">VS</span>';
+  document.getElementById('mp-meta').innerHTML = '';
+}
+function mpMetaHtml(league, date) {
+  const d = new Date(date), li = TODAY_LEAGUE_INFO[league];
+  const W = ['일', '월', '화', '수', '목', '금', '토'];
+  return `${li ? `<img src="${li.logo}" alt="" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">${li.name} · ` : ''}${d.getMonth() + 1}.${d.getDate()} (${W[d.getDay()]}) ${d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false })}`;
+}
+
+// ── 경기 결과 창(끝난 경기) ──
+// 최종 스코어 + 경기 전에 트랙레코드에 기록해둔 AI 예측과 적중 여부 + 최근 맞대결.
+// 득점자·라인업은 무료 데이터(football-data 무료 플랜)에 없어서 안 보여줌
+async function openMatchResultModal(home, away, date, league) {
+  const seq = ++mpSeq;
+  const modal = document.getElementById('match-predict-modal');
+  const body = document.getElementById('match-predict-body');
+  const m = (scheduleData[league] || []).find(x => x.home_team === home && x.away_team === away && x.date === date);
+  if (!m) return;
+  mpSetHeader(home, away, '경기 결과');
+  document.getElementById('mp-meta').innerHTML = mpMetaHtml(league, date);
+  const hg = m.home_goals, ag = m.away_goals, side = hg > ag ? 'home' : hg < ag ? 'away' : 'draw';
+  document.getElementById('mp-center').innerHTML = `<span class="mp-score-label">경기 종료</span><span class="mp-score final"><b class="h">${hg}</b><i>:</i><b class="a">${ag}</b></span>`;
+  if (side !== 'draw') {
+    document.getElementById('mp-team1').classList.add(side === 'home' ? 'win' : 'lose');
+    document.getElementById('mp-team2').classList.add(side === 'away' ? 'win' : 'lose');
+  }
+  const homeShort = shortTeamName(home), awayShort = shortTeamName(away);
+  const verdict = side === 'home' ? `${homeShort} 승리` : side === 'away' ? `${awayShort} 승리` : '무승부';
+  const round = league === 'CL' ? (STAGE_LABEL[m.stage] || '') : (m.matchday ? `${m.matchday}라운드` : '');
+  body.innerHTML = `<div class="mp-verdict ${side}"><span class="dot"></span>${verdict}${round ? `<small>${round}</small>` : ''}</div><div id="mr-pred"><div class="mp-skel"><i style="width:100%;height:10px"></i><i style="width:70%"></i></div></div><div id="mr-h2h"></div>
+    <button class="mp-cta" onclick="goToFullPrediction('${escJs(home)}','${escJs(away)}')">이 대진 다시 붙으면? AI 예측 보기<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>`;
+  modal.classList.add('show');
+
+  // 경기 전 AI 예측(기록이 있는 경기만 — 결과를 보고 다시 계산한 예측은 보여주지 않음)
+  ensureSchedulePreds(league).then(() => {
+    if (seq !== mpSeq) return;
+    const x = schedPredOf(m, league), box = document.getElementById('mr-pred');
+    if (!box) return;
+    if (!x || x.correct == null) {
+      box.innerHTML = `<div class="mr-nolog">이 경기는 경기 전 AI 예측 기록이 없어요<br><small>예측을 경기 전에 미리 기록해 두는 건 10월 10일 경기부터예요</small></div>`;
+      return;
+    }
+    const [h, d, a] = x.p.map(v => Math.round(v * 100)), top = Math.max(h, d, a), tc = v => v === top ? ' top' : '';
+    const pick = x.predicted === 'home_win' ? `${homeShort} 승` : x.predicted === 'away_win' ? `${awayShort} 승` : '무승부';
+    box.innerHTML = `<div class="mp-sec" style="margin-top:0;padding-top:0;border-top:none"><div class="mp-sec-t">경기 전 AI 예측 <span class="sp-verdict ${x.correct ? 'hit' : 'miss'}">${x.correct ? '적중' : '빗나감'}</span></div>
+      <div class="mp-bar"><i class="h" style="width:${h}%"></i><i class="d" style="width:${d}%"></i><i class="a" style="width:${a}%"></i></div>
+      <div class="mp-probs"><div class="h${tc(h)}"><b>${h}%</b><span>홈승</span></div><div class="d${tc(d)}"><b>${d}%</b><span>무승부</span></div><div class="a${tc(a)}"><b>${a}%</b><span>원정승</span></div></div>
+      <div class="mr-pick">AI 예측 <b>${pick}</b> · 실제 결과 <b>${verdict}</b></div></div>`;
+  });
+  // 최근 맞대결(이번 경기 포함, 최근 5번)
+  try {
+    const res = await fetch(`${API}/h2h?home_team=${encodeURIComponent(home)}&away_team=${encodeURIComponent(away)}&limit=5`);
+    const hd = await res.json();
+    if (seq !== mpSeq) return;
+    const box = document.getElementById('mr-h2h');
+    if (!box || !hd.matches || !hd.matches.length) return;
+    const sm = hd.summary || {};
+    box.innerHTML = `<div class="mp-sec"><div class="mp-sec-t">최근 맞대결 <span class="mp-sec-n">${shortName(home)} ${sm.home_wins || 0}승 · ${sm.draws || 0}무 · ${sm.away_wins || 0}승 ${shortName(away)}</span></div>
+      ${hd.matches.map(r => { const cur = (r.date === localDateStr(date) || r.date === date.slice(0, 10)) && r.home_team === home && r.home_goals === hg && r.away_goals === ag;
+        const w = r.home_goals > r.away_goals ? 1 : r.home_goals < r.away_goals ? 2 : 0;
+        return `<div class="mr-row${cur ? ' cur' : ''}"><span class="dt">${cur ? '이번 경기' : r.date.slice(2).replace(/-/g, '.')}</span><span class="t h${w === 2 ? ' lose' : ''}"><img src="${logos[r.home_team] || ''}" alt="" onerror="this.style.visibility='hidden'"><em>${shortName(r.home_team)}</em></span><b>${r.home_goals} - ${r.away_goals}</b><span class="t a${w === 1 ? ' lose' : ''}"><em>${shortName(r.away_team)}</em><img src="${logos[r.away_team] || ''}" alt="" onerror="this.style.visibility='hidden'"></span></div>`; }).join('')}</div>`;
+  } catch (e) { /* 부가 정보 */ }
+}
+
 async function openMatchPredictModal(home, away) {
   const seq = ++mpSeq;
   const modal = document.getElementById('match-predict-modal');
   const body = document.getElementById('match-predict-body');
   const homeShort = shortTeamName(home), awayShort = shortTeamName(away);
-  [[1, home, homeShort], [2, away, awayShort]].forEach(([k, t, nm]) => {
-    const img = document.getElementById('mp-logo' + k);
-    img.style.visibility = ''; img.src = logos[t] || '';
-    const el = document.getElementById('mp-name' + k);
-    el.textContent = nm; el.title = `${t} 팀 정보`;
-    document.getElementById('mp-team' + k).onclick = () => { closeMatchPredictModal(); openTeamInfo(t); };
-  });
-  document.getElementById('mp-pitch').innerHTML = mpPitchSvg();
-  document.getElementById('mp-center').innerHTML = '<span class="mp-vs">VS</span>';
-  const meta = document.getElementById('mp-meta'); meta.innerHTML = '';
+  mpSetHeader(home, away, '경기 미리보기');
+  const meta = document.getElementById('mp-meta');
   findUpcomingFixture(home, away).then(fx => {
     if (!fx || seq !== mpSeq) return;
-    const d = new Date(fx.date), li = TODAY_LEAGUE_INFO[fx.league];
-    const W = ['일', '월', '화', '수', '목', '금', '토'];
-    meta.innerHTML = `${li ? `<img src="${li.logo}" alt="" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">${li.name} · ` : ''}${d.getMonth() + 1}.${d.getDate()} (${W[d.getDay()]}) ${d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false })}`;
+    meta.innerHTML = mpMetaHtml(fx.league, fx.date);
   });
   modal.classList.add('show');
   const missing = unpredictableTeamsIn(home, away);
@@ -2758,7 +2842,9 @@ async function switchTiTab(tab) {
       }</tbody></table>`;
     } else if (tab === 'fixtures') {
       if (!code) { panel.innerHTML = '<div class="ti-empty">이 팀의 리그 정보를 찾을 수 없어요.</div>'; return; }
-      // 리그 + 챔피언스리그 경기를 같이 보여줌(UCL 일정은 실패해도 리그만으로 표시)
+      // 리그 + 챔피언스리그 경기를 같이 보여줌(UCL 일정은 실패해도 리그만으로 표시). 예측도 동시에 요청
+      [code, 'CL'].forEach(ensureSchedulePreds);
+      await logosReady;
       await Promise.all([code, 'CL'].map(async c => {
         if (scheduleData[c]) return;
         const res = await fetch(`${API}/schedule/${c}`);
@@ -2773,7 +2859,14 @@ async function switchTiTab(tab) {
       // 남은 경기가 없을 때 곧바로 다음 달로 넘어감 — 일정 탭(renderScheduleMonths)과 같은 규칙
       const next = matches.find(m => m.status !== 'FINISHED' && new Date(m.date) > Date.now() - 3 * 3600000);
       tiFixturesState = { team, matches, next, month: next ? tiFixturesMonthKey(next.date) : months[months.length - 1] };
+      // 일정 탭과 같은 AI 예측 막대 — 이미 받아둔 게 없으면 받아서 다시 그림(창이 아직 이 팀·이 탭일 때만)
+      const need = [code, 'CL'].filter(c => !schedulePreds[c]);
+      if (need.length) await Promise.race([Promise.all(need.map(ensureSchedulePreds)), new Promise(r => setTimeout(r, 700))]);
+      if (tiState.team !== team || tiState.tab !== 'fixtures') return;
       renderTiFixturesContent();
+      if ([code, 'CL'].some(c => !schedulePreds[c])) Promise.all(need.map(ensureSchedulePreds)).then(() => {
+        if (tiState.team === team && tiState.tab === 'fixtures' && tiFixturesState.team === team) renderTiFixturesContent();
+      });
     } else if (tab === 'teamstats') {
       let stats = teamStatsCache[team];
       if (!stats) {
@@ -3617,7 +3710,10 @@ async function loadSchedule(league, btn) {
   }
   const content = document.getElementById('schedule-content');
   content.innerHTML = skeletonMatchRows(6);
+  // 일정과 AI 예측을 동시에 요청(예전엔 일정이 온 뒤에야 예측을 요청해서 막대가 한 박자 늦게 떴음)
+  const predsP = ensureSchedulePreds(league);
   try {
+    await logosReady;
     if (!scheduleData[league]) {
       const res = await fetchWithRetry(`${API}/schedule/${league}`, {}, {
         onRetry: (a, r) => { content.innerHTML = wakingUpHtml(a, r); }
@@ -3625,8 +3721,11 @@ async function loadSchedule(league, btn) {
       const data = await res.json();
       scheduleData[league] = data.matches;
     }
+    // 예측이 곧 오면(보통 일정과 거의 같이 옴) 기다렸다가 한 번에 그림 — 늦으면 일정 먼저, 도착하면 다시 그림
+    if (!schedulePreds[league]) await Promise.race([predsP, new Promise(r => setTimeout(r, 700))]);
+    if (currentScheduleLeague !== league) return;
     renderScheduleMonths(league);
-    ensureSchedulePreds(league);   // AI 예측은 부가 정보 — 도착하면 지금 보는 달을 다시 그림
+    if (!schedulePreds[league]) predsP.then(map => { if (map && currentScheduleLeague === league && currentScheduleMonth) renderScheduleContent(league, currentScheduleMonth); });
   } catch (e) {
     content.innerHTML = '<div class="loading">일정을 불러올 수 없어요. 잠시 후 다시 시도해주세요.</div>';
   }
@@ -3696,19 +3795,54 @@ function stepScheduleMonth(delta) {
 }
 
 // ── 일정 탭 AI 예측(/predict/schedule — 경기 하나 예측과 같은 숫자) ──
-const schedulePreds = {};
-async function ensureSchedulePreds(league) {
-  if (schedulePreds[league]) return;
-  try {
-    const res = await fetch(`${API}/predict/schedule/${league}`);
-    if (!res.ok) return;
-    const map = {}, body = await res.json();
-    // predictions = 예정 경기(지금 모델), results = 끝난 경기(경기 전에 기록해둔 예측 + 적중 여부)
-    [...body.predictions, ...(body.results || [])].forEach(x => { map[`${x.home_team}|${x.away_team}|${x.date}`] = x; });
-    schedulePreds[league] = map;
-    if (currentScheduleLeague === league && currentScheduleMonth) renderScheduleContent(league, currentScheduleMonth);
-  } catch (e) { /* 부가 정보라 실패해도 일정은 그대로 */ }
+// 리그별로 한 번만 받고, 받는 중인 요청은 공유(일정 탭·구단 정보 경기 탭·결과 모달이 같이 씀)
+const schedulePreds = {}, schedulePredsP = {};
+function ensureSchedulePreds(league) {
+  if (schedulePreds[league]) return Promise.resolve(schedulePreds[league]);
+  if (!schedulePredsP[league]) {
+    schedulePredsP[league] = fetch(`${API}/predict/schedule/${league}`).then(async res => {
+      if (!res.ok) throw new Error('preds ' + res.status);
+      const map = {}, body = await res.json();
+      // predictions = 예정 경기(지금 모델), results = 끝난 경기(경기 전에 기록해둔 예측 + 적중 여부)
+      [...body.predictions, ...(body.results || [])].forEach(x => { map[`${x.home_team}|${x.away_team}|${x.date}`] = x; });
+      return (schedulePreds[league] = map);
+    }).catch(() => { delete schedulePredsP[league]; return null; });   // 부가 정보라 실패해도 일정은 그대로(다음에 다시 시도)
+  }
+  return schedulePredsP[league];
 }
+const schedPredOf = (m, league) => { const p = schedulePreds[league || m.league]; return p ? p[`${m.home_team}|${m.away_team}|${m.date}`] : null; };
+
+// 일정 한 줄 — 일정 탭과 구단 정보 "경기" 탭이 같이 씀.
+// 예정 경기: 가운데 시간 + 짧은 예측 막대, 팀 옆 승리 확률 / 끝난 경기: 스코어, 진 팀 흐리게, 경기 전 기록한 예측의 적중 여부.
+// 예정 경기를 누르면 예측 미리보기, 끝난 경기를 누르면 경기 결과
+function schedRowHtml(m, league, opts = {}) {
+  const d = new Date(m.date);
+  const played = m.status === 'FINISHED';
+  const timeStr = d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+  const homeShort = m.home_team.replace(' FC', '').replace(' CF', '');
+  const awayShort = m.away_team.replace(' FC', '').replace(' CF', '');
+  const x = schedPredOf(m, league);
+  const px = x && (!played || x.correct != null) ? x.p.map(v => Math.round(v * 100)) : null;
+  const top = px ? Math.max(...px) : -1;
+  const tc = v => v === top ? ' top' : '';
+  const res = played ? (m.home_goals > m.away_goals ? ['win', 'lose'] : m.home_goals < m.away_goals ? ['lose', 'win'] : ['draw', 'draw']) : ['', ''];
+  const tip = px ? `${played ? '경기 전 AI 예측' : 'AI 예측'}: 홈승 ${px[0]}% · 무 ${px[1]}% · 원정승 ${px[2]}%${x.limited ? ' (참고용 — 5대 리그 밖 팀은 UCL 기록만으로 계산)' : ''}` : '';
+  const mid = played
+    ? `<span class="sched-score">${m.home_goals} - ${m.away_goals}</span>` + (px ? `<span class="sp-verdict ${x.correct ? 'hit' : 'miss'}">${x.correct ? 'AI 적중' : 'AI 빗나감'}</span>` : '')
+    : `<span class="sched-time">${timeStr}</span>` + (px ? `<span class="sp-mini"><i class="h" style="width:${px[0]}%"></i><i class="d" style="width:${px[1]}%"></i><i class="a" style="width:${px[2]}%"></i></span><span class="sp-d${tc(px[1])}">무 ${px[1]}%${x.limited ? ' · 참고용' : ''}</span>` : '');
+  const lg = league || m.league || '';
+  const click = (opts.team ? 'closeTeamInfoModal();' : '') + (played
+    ? `openMatchResultModal('${escJs(m.home_team)}','${escJs(m.away_team)}','${m.date}','${lg}')`
+    : `openMatchPredictModal('${escJs(m.home_team)}','${escJs(m.away_team)}')`);
+  const me = t => opts.team === t ? ' me' : '';
+  return `<div class="sched-match${px ? ' has-pred' : ''}${played ? ' done' : ''}${opts.next ? ' ti-fx-next' : ''}" onclick="${click}" style="cursor:pointer"${tip ? ` title="${tip}"` : ''}>
+    <div class="sched-team ${res[0]}"><span class="sched-team-hit${me(m.home_team)}" onclick="event.stopPropagation();openTeamInfo('${escJs(m.home_team)}')"><img src="${logos[m.home_team] || ''}" alt="" onerror="this.style.visibility='hidden'"><span>${homeShort}</span></span>${px ? `<b class="sp-pct home${tc(px[0])}">${px[0]}%</b>` : ''}</div>
+    <div class="sched-vs">${mid}</div>
+    <div class="sched-team away ${res[1]}">${px ? `<b class="sp-pct away${tc(px[2])}">${px[2]}%</b>` : ''}<span class="sched-team-hit${me(m.away_team)}" onclick="event.stopPropagation();openTeamInfo('${escJs(m.away_team)}')"><span>${awayShort}</span><img src="${logos[m.away_team] || ''}" alt="" onerror="this.style.visibility='hidden'"></span></div>
+  </div>`;
+}
+const SCHED_PRED_LEGEND = `<div class="sched-pred-legend"><span><i class="h"></i>홈승</span><span><i class="d"></i>무</span><span><i class="a"></i>원정승</span><span class="note">팀 옆 숫자 = 승리 확률 · 경기를 누르면 예측/결과</span></div>`;
+
 function renderScheduleContent(league, monthKey) {
   const content = document.getElementById('schedule-content');
   const matches = (scheduleData[league] || []).filter(m => scheduleMonthKey(m.date) === monthKey);
@@ -3717,7 +3851,6 @@ function renderScheduleContent(league, monthKey) {
     return;
   }
   const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토'];
-  const preds = schedulePreds[league];
   let html = '';
   let lastDate = null;
   matches.forEach(m => {
@@ -3728,27 +3861,9 @@ function renderScheduleContent(league, monthKey) {
       html += `<div class="sched-date-header">${dateStr}${roundLabel ? ' · ' + roundLabel : ''}</div>`;
       lastDate = dateStr;
     }
-    const played = m.status === 'FINISHED';
-    const timeStr = d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
-    const homeShort = m.home_team.replace(' FC', '').replace(' CF', '');
-    const awayShort = m.away_team.replace(' FC', '').replace(' CF', '');
-    const x = preds && preds[`${m.home_team}|${m.away_team}|${m.date}`];
-    const px = x && (!played || x.correct != null) ? x.p.map(v => Math.round(v * 100)) : null;
-    const top = px ? Math.max(...px) : -1;
-    const tc = v => v === top ? ' top' : '';
-    const res = played ? (m.home_goals > m.away_goals ? ['win', 'lose'] : m.home_goals < m.away_goals ? ['lose', 'win'] : ['', '']) : ['', ''];
-    const tip = px ? `${played ? '경기 전 AI 예측' : 'AI 예측'}: 홈승 ${px[0]}% · 무 ${px[1]}% · 원정승 ${px[2]}%${x.limited ? ' (참고용 — 5대 리그 밖 팀은 UCL 기록만으로 계산)' : ''}` : '';
-    const mid = played
-      ? `<span class="sched-score">${m.home_goals} - ${m.away_goals}</span>` + (px ? `<span class="sp-verdict ${x.correct ? 'hit' : 'miss'}">${x.correct ? 'AI 적중' : 'AI 빗나감'}</span>` : '')
-      : `<span class="sched-time">${timeStr}</span>` + (px ? `<span class="sp-mini"><i class="h" style="width:${px[0]}%"></i><i class="d" style="width:${px[1]}%"></i><i class="a" style="width:${px[2]}%"></i></span><span class="sp-d${tc(px[1])}">무 ${px[1]}%${x.limited ? ' · 참고용' : ''}</span>` : '');
-    html += `<div class="sched-match${px ? ' has-pred' : ''}${played ? ' done' : ''}"${played ? '' : ` onclick="openMatchPredictModal('${escJs(m.home_team)}','${escJs(m.away_team)}')" style="cursor:pointer"`}${tip ? ` title="${tip}"` : ''}>
-      <div class="sched-team ${res[0]}"><span class="sched-team-hit" onclick="event.stopPropagation();openTeamInfo('${escJs(m.home_team)}')"><img src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span>${homeShort}</span></span>${px ? `<b class="sp-pct home${tc(px[0])}">${px[0]}%</b>` : ''}</div>
-      <div class="sched-vs">${mid}</div>
-      <div class="sched-team away ${res[1]}">${px ? `<b class="sp-pct away${tc(px[2])}">${px[2]}%</b>` : ''}<span class="sched-team-hit" onclick="event.stopPropagation();openTeamInfo('${escJs(m.away_team)}')"><span>${awayShort}</span><img src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"></span></div>
-    </div>`;
+    html += schedRowHtml(m, league);
   });
-  const legend = preds ? `<div class="sched-pred-legend"><span><i class="h"></i>홈승</span><span><i class="d"></i>무</span><span><i class="a"></i>원정승</span><span class="note">팀 옆 숫자 = 승리 확률 · 끝난 경기는 경기 전에 기록한 예측의 적중 여부</span></div>` : '';
-  content.innerHTML = legend + html;
+  content.innerHTML = (schedulePreds[league] ? SCHED_PRED_LEGEND : '') + html;
 }
 
 let currentStandingsSeason = 'current';   // 'current' 또는 시즌 시작 연도('2025' 등 — 서버 /standings?season=)
@@ -3895,7 +4010,7 @@ function renderStandings(data, leagueCode, keepSort) {
   initScrollFade(content.querySelector('.st-table-wrap') || content);
 }
 
-async function loadLogos(){try{const res=await fetchWithRetry(`${API}/logos`);logos=await res.json();}catch(e){console.error('로고 로드 실패');}renderTeamGrid('home','EPL');renderTeamGrid('away','EPL');}
+async function loadLogos(){try{const res=await fetchWithRetry(`${API}/logos`);logos=await res.json();}catch(e){console.error('로고 로드 실패');}finally{logosLoaded();}renderTeamGrid('home','EPL');renderTeamGrid('away','EPL');}
 
 async function loadAccuracy(){
   const note=document.getElementById('model-accuracy-note');
