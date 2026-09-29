@@ -378,7 +378,8 @@
     .feat-grid .feat-card:nth-child(9) { transition-delay: .64s; }
 
     @media (max-width: 768px) {
-      nav { padding: 0 20px; }
+      /* 메뉴 링크가 빠지면 오른쪽 버튼이 가운데 칸으로 밀려 로고 글자와 겹쳤음 → 두 칸으로 */
+      nav { padding: 0 20px; grid-template-columns: 1fr auto; }
       .nav-links { display: none; }
       .nav-tagline { letter-spacing: 2px !important; }
       .hero { padding: 80px 24px 60px; }

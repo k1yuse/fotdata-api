@@ -255,8 +255,24 @@ function initScene(THREE) {
         float t = clamp((uT - seed * 0.35) / 0.65, 0.0, 1.0);
         t = t * t * (3.0 - 2.0 * t);
         vec3 pos = mix(pick(uA, p0, p1, p2, p3), pick(uB, p0, p1, p2, p3), t);
+        // 전환 중간 모션(2026-09-29) — 양 끝(t=0,1)에선 0이라 도착 위치는 그대로:
+        float mid = t * (1.0 - t) * 4.0;   // 0 → 1 → 0
+        bool ab = abs(uA) < 0.5 && abs(uB - 1.0) < 0.5;
+        // 공 → 구름: 점들이 바깥으로 한 번 터졌다가 구름으로 가라앉음
+        if (ab) pos *= 1.0 + mid * (0.25 + seed * 0.45);
+        // 구름 → 경기장: 소용돌이치며 바닥(경기장 평면)으로 내려앉음
+        if (abs(uA - 1.0) < 0.5 && abs(uB - 2.0) < 0.5) {
+          float a = mid * (1.1 + seed * 1.6);
+          pos.xz = mat2(cos(a), -sin(a), sin(a), cos(a)) * pos.xz;
+          pos.y += mid * (seed - 0.35) * 0.9;
+        }
         // 경기장 → 막대: 점들이 포물선을 그리며 날아가는 빛줄기
         if (abs(uA - 2.0) < 0.5 && abs(uB - 3.0) < 0.5) pos.y += sin(t * 3.14159) * (1.0 + seed * 1.8);
+        // 막대/구름 → 공: 반대 방향으로 감기며 모여듦
+        if (abs(uB) < 0.5 && uA > 0.5) {
+          float a = -mid * (0.9 + seed * 1.3);
+          pos.xz = mat2(cos(a), -sin(a), sin(a), cos(a)) * pos.xz;
+        }
         pos += 0.012 * vec3(sin(uTime * 1.3 + seed * 40.0), cos(uTime * 1.1 + seed * 31.0), sin(uTime * 0.9 + seed * 17.0));
         vColor = mix(pick(uA, c0, c1, c2, c3), pick(uB, c0, c1, c2, c3), t);
         vec4 mv = modelViewMatrix * vec4(pos, 1.0);
@@ -382,18 +398,25 @@ function initScene(THREE) {
   const STEP_RANGE = [[0.08, 0.36], [0.40, 0.62], [0.66, 0.86], [0.90, 1.01]];
   const fade = (p, a, b, w = 0.035) => clamp(Math.min((p - a) / w, (b - p) / w));
 
-  function readScroll() {
+  // 스크롤 진행도에 관성: 스크롤 위치에 1:1로 붙어 있으면 휠 한 칸마다 장면이 뚝뚝 끊겨 보여서,
+  // 실제 진행도를 짧게(시정수 ~0.14초) 따라가게 함. 크게 건너뛰면(앵커 이동 등) 바로 맞춤
+  let pS = 0;
+  function readScroll(dt = 0) {
     const sr = story.getBoundingClientRect();
     if (sr.top > 0) {   // 히어로 구간: 공
       const k = clamp(1 - sr.top / H);
+      pS = 0;
       Object.assign(state, { A: 0, B: 0, T: 0, heroMode: true, p: 0, opacity: 0.3 + 0.7 * k, shift: ease(k), dy: 0, zoom: 1 });
     } else if (sr.bottom > H * 0.7) {   // 스토리 구간
-      const p = clamp(-sr.top / (sr.height - H));
+      const raw = clamp(-sr.top / (sr.height - H));
+      pS = Math.abs(raw - pS) > 0.2 ? raw : pS + (raw - pS) * (1 - Math.exp(-dt * 7));
+      const p = Math.abs(raw - pS) < 1e-4 ? raw : pS;
       const s = SEG.find(g => p >= g[0] && p <= g[1]) || SEG[SEG.length - 1];
       Object.assign(state, { A: s[2], B: s[3], T: s[2] === s[3] ? 0 : ease(clamp((p - s[0]) / (s[1] - s[0]))), heroMode: false, p,
         // 스토리가 끝나 다음 섹션이 올라오면 글과 겹치기 전에 공이 먼저 사라짐
         opacity: clamp((sr.bottom - H * 0.7) / (H * 0.3)), shift: 1, dy: 0, zoom: 1 });
     } else {
+      pS = 1;
       const cr = cta ? cta.getBoundingClientRect() : { top: 1e9, height: 0 };
       const c = clamp((H - cr.top) / (H * 0.42));   // 마지막 CTA: 구름 → 공으로 합쳐짐(화면 중간쯤에서 완성)
       // 공이 CTA 섹션 중심을 따라 움직여 글 뒤 정중앙에 자리 잡음
@@ -413,7 +436,7 @@ function initScene(THREE) {
   const clock0 = performance.now();
   function frame(now) {
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
-    readScroll();
+    readScroll(dt);
     opacity += (state.opacity - opacity) * Math.min(1, dt * 6);
     canvas.style.opacity = opacity.toFixed(3);
     if (opacity < 0.01 && state.opacity === 0) { running = false; return; }   // 화면 밖: 루프 중단(스크롤 시 재개)
