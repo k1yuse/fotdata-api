@@ -1288,6 +1288,29 @@ def af_player_row(p, league_id=None):
         "pen_scored": pn.get("scored"), "pen_missed": pn.get("missed"),
     }
 
+AF_PCT_STATS = ["goals", "assists", "shots", "shots_on", "key_passes", "passes", "dribbles_won", "tackles", "interceptions", "blocks", "duels_won", "saves", "conceded"]
+
+def add_percentiles(players, min_minutes=450):
+    """선수 카드 순위 막대: 같은 리그·같은 포지션(GK/DF/MF/FW)에서 min_minutes 이상 뛴 선수 중 90분당 수치 백분위(0~100) → p["pct"].
+    실점은 적을수록 좋아서 뒤집음. 표본이 5명 미만인 포지션은 계산 안 함(순위가 의미 없음)"""
+    from collections import defaultdict
+    groups = defaultdict(list)
+    for p in players:
+        if (p.get("minutes") or 0) >= min_minutes and p.get("pos"):
+            groups[p["pos"]].append(p)
+    for ps in groups.values():
+        if len(ps) < 5:
+            continue
+        for k in AF_PCT_STATS:
+            if all(p.get(k) is None for p in ps):
+                continue
+            per90 = [((p.get(k) or 0) / p["minutes"] * 90) for p in ps]
+            for p, v in zip(ps, per90):
+                below, eq = sum(x < v for x in per90), sum(x == v for x in per90)
+                pc = round((below + 0.5 * eq) / len(per90) * 100)
+                p.setdefault("pct", {})[k] = 100 - pc if k == "conceded" else pc
+    return players
+
 def af_injury_rows(resp, team_id):
     """/injuries 응답 → 그 팀 결장자 [{id, name, photo, status: out(결장)|doubtful(출전 불투명), reason}]"""
     out = []

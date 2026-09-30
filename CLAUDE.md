@@ -320,6 +320,10 @@ cp landing.html index.html
 - **스쿼드 탭 이름 통일(서버 `_squad_full_names`)**: API-Football 스쿼드(30팀, 사진·등번호)가 "I. Meslier"처럼 줄인 이름이라 football-data 명단 팀들과 표기가 달랐음 → football-data 1군 명단의 전체 이름으로 바꿈. 줄인 이름(이니셜 일치 필수)·한 단어 이름만, 이미 전체 이름이면 그대로(football-data 쪽이 더 짧은 "Sannadi" 같은 경우 방지), 같은 이름이 두 명에게 붙으면 둘 다 원래대로. 740명 중 480명 변경, 오매칭·중복 0(처음 규칙에선 유스 "Z. Christie" → 1군 "Ryan Christie", "Vitor Nunes" → "Matheus Nunes" 같은 오매칭 12건이 있어서 엄격하게 바꿈).
 - 라인업 선수를 누르면 선수 카드, 시즌 기록이 없는 선수는 라인업 정보(사진·등번호·포지션·그 경기 평점)로 간단한 카드(`mdPlayerIndex`).
 
+- **선수 카드 보강(2026-09-30, 풋몹 참고)**: 시즌 기록 [합계 | 90분당] 전환(`pcSetMode`), **순위 막대** = 같은 리그·같은 포지션에서 450분 이상 뛴 선수 대비 90분당 백분위(`update_data.add_percentiles` → `p.pct`, 상위 1/3 초록·중간 노랑·하위 1/3 빨강, 표본 5명 미만 포지션은 계산 안 함) — 막대가 있으면 모든 줄을 같은 칸 배치로(숫자 열 정렬), 90분당 골+도움·드리블 성공률·경합 승률 칩, **최근 경기**(`p.matches` — 수집 때 경기 상세의 선수별 기록으로: 날짜·상대·결과·출전·골·도움·카드·평점), **경력·트로피·부상 이력**(`/player/profile/{id}` → `playerProfileHtml`, 클럽/국가대표 구분·트로피 대회별 우승 횟수·최근 부상 5건) — 서버 주소·수집은 결제 후(형태 확인용 `probe_af3`: `/players/teams`·`/trophies`·`/transfers?player`·`/sidelined`).
+- **API-Football로 안 되는 것(풋몹에 있지만)**: 이적 시장 가치(Transfermarkt 데이터 — 긁어오기는 약관 위반), 계약 만료일, 주발, 선수별 xG·xGOT·xA, 히트맵, 슈팅 맵(Opta급 이벤트 좌표 데이터). 세부 포지션(LW 등)은 라인업 `grid` 위치로 대략 추정만 가능.
+- **선수 탭 이번 시즌 득점·도움은 football-data**(`fetch_scorers`, 2026-09-29 첫 자동 수집 성공 — 무료 플랜도 26-27 가능). "24-25만 가능"은 API-Football 무료 플랜 제한이었음(예전 EPL 득점왕 데이터).
+
 ### 5.20 데이터 소스 구조(결제 시) — football-data + API-Football
 - 경기 결과·순위·일정·예측 모델은 **football-data 그대로**(지금 4시즌, 학습·팀 이름 기준). API-Football은 **선수·라인업·경기 상세·부상**과 **23-24 이전 과거 시즌**(EPL 기준 2010-11~) 담당 — 지금 데이터를 다시 만들 필요는 없음.
 - 섞일 때 문제는 **팀 이름 표기**(football-data "Wolverhampton Wanderers FC" ↔ API-Football "Wolves"). team_extra.json에 이미 30팀 `af_id` 매핑이 있으니 5대 리그+UCL 전 팀으로 넓힌 매핑 표(우리 이름 → af 팀 ID)를 만들고, 리그·시즌마다 "우리 팀 전부가 정확히 한 ID에 대응"하는지 검사할 것.
