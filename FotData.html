@@ -1377,11 +1377,6 @@
     @keyframes cbSway { 0%, 100% { transform: rotateY(-24deg) rotateX(6deg); } 50% { transform: rotateY(24deg) rotateX(-4deg); } }
     .cb-l { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; backface-visibility: hidden; -webkit-backface-visibility: hidden; pointer-events: none; }
     .cb-l.front { transform: translateZ(0.5px); }
-    /* 광택: 로고 모양으로 잘린(마스크) 칸 안에서 빛 띠가 transform으로만 움직임(다시 그리기 없이 합성만) — 흔들림과 같은 7초 박자 */
-    .cb-sheen { position: absolute; inset: 0; overflow: hidden; transform: translateZ(1px); pointer-events: none; backface-visibility: hidden; -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center; opacity: 0; transition: opacity .5s; }
-    .cb-logo3d.deep .cb-sheen { opacity: 1; }
-    .cb-sheen::before { content: ''; position: absolute; top: -10%; bottom: -10%; left: -60%; width: 60%; background: linear-gradient(100deg, transparent, rgba(255,255,255,0.38) 50%, transparent); animation: cbSheen 7s ease-in-out infinite; will-change: transform; }
-    @keyframes cbSheen { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(270%); } }
     .cb-l-empty { position: absolute; inset: 20%; border-radius: 50%; background: #21262d; }
     .cb-shadow { position: absolute; left: 18%; right: 18%; bottom: -18px; height: 22px; border-radius: 50%; background: radial-gradient(ellipse, rgba(0,0,0,0.55), transparent 70%); transform: translateZ(-40px); backface-visibility: hidden; -webkit-backface-visibility: hidden; transition: opacity .3s; }
     /* 뒤집으면 그림자를 숨김 — 앞면보다 뒤쪽 깊이에 있어서 뒤집으면 뒷면 앞으로 튀어나와 보였음 */
@@ -1389,28 +1384,11 @@
     .cb-card:not(.center) .cb-shadow { opacity: 0.5; }
     .cb-name { font-size: 26px; font-weight: 800; color: #fff; text-align: center; line-height: 1.15; max-width: 100%; padding: 0 10px; }
     .cb-rec { font-size: 12px; color: #8b949e; font-variant-numeric: tabular-nums; }
-    .cb-star { width: 34px; height: 34px; border-radius: 50%; border: 0.5px solid #30363d; background: rgba(22,27,34,0.8); color: #484f58; font-size: 16px; cursor: pointer; transition: color .15s, border-color .15s, transform .15s; }
+    .cb-star { width: 34px; height: 34px; margin-top: 8px; border-radius: 50%; border: 0.5px solid #30363d; background: rgba(22,27,34,0.8); color: #484f58; font-size: 16px; cursor: pointer; transition: color .15s, border-color .15s, transform .15s; }
     .cb-star:hover { color: #c9d1d9; } .cb-star.on { color: #f2cc60; border-color: rgba(242,204,96,0.55); background: rgba(242,204,96,0.12); }
     .cb-star:active { transform: scale(.9); }
-    .cb-card:not(.center) .cb-star, .cb-card:not(.center) .cb-rec, .cb-card:not(.center) .cb-form, .cb-card:not(.center) .cb-next, .cb-card:not(.center) .cb-btns { visibility: hidden; }
+    .cb-card:not(.center) .cb-star, .cb-card:not(.center) .cb-rec { visibility: hidden; }
     .cb-mv { font-style: normal; font-size: 11px; font-weight: 800; margin: 0 2px; } .cb-mv.up { color: #3fb950; } .cb-mv.down { color: #ff7b72; } .cb-mv.same { color: #7d8590; }
-    .cb-form { display: flex; gap: 3px; margin-top: 2px; }
-    .cb-form i { width: 18px; height: 18px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-style: normal; font-size: 9.5px; font-weight: 800; color: #0d1117; }
-    .cb-form i.W { background: #3fb950; } .cb-form i.D { background: #8b949e; } .cb-form i.L { background: #f85149; color: #fff; }
-    .cb-next { display: flex; align-items: center; gap: 5px; min-height: 20px; font-size: 11.5px; color: #8b949e; }
-    .cb-next img { width: 16px; height: 16px; object-fit: contain; } .cb-next b { color: #e6edf3; font-weight: 600; } .cb-next em { font-style: normal; font-size: 10px; color: #7d8590; }
-    .cb-dd { font-size: 10px; font-weight: 800; color: #58a6ff; padding: 1px 6px; border-radius: 99px; background: rgba(88,166,255,0.14); }
-    .cb-btns { display: flex; gap: 8px; margin-top: 4px; }
-    .cb-vs-btn { height: 34px; padding: 0 12px; border-radius: 99px; border: 0.5px solid #30363d; background: rgba(22,27,34,0.8); color: #c9d1d9; font-size: 12px; font-weight: 700; font-family: inherit; cursor: pointer; }
-    .cb-vs-btn:hover { border-color: #f0883e; color: #ffa657; } .cb-vs-btn.on { border-color: #f0883e; color: #ffa657; background: rgba(240,136,62,0.14); }
-    .cb-overlay.pick .cb-vs-btn { display: none; }
-    .cb-vsbar { position: relative; z-index: 3; display: none; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; margin: 2px auto 0; padding: 8px 12px; max-width: 640px; border-radius: 14px; background: rgba(22,27,34,0.92); border: 0.5px solid rgba(240,136,62,0.45); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
-    .cb-vsbar.show { display: flex; animation: cbVsIn .3s ease; } @keyframes cbVsIn { from { opacity: 0; transform: translateY(6px); } }
-    .cb-vs-team { display: flex; align-items: center; gap: 6px; } .cb-vs-team img { width: 24px; height: 24px; object-fit: contain; } .cb-vs-team b { font-size: 13px; color: #fff; }
-    .cb-vsbar small { font-size: 9.5px; color: #7d8590; } .cb-vsbar i { font-style: normal; font-weight: 800; color: #ffa657; font-size: 12px; }
-    .cb-vs-hint { font-size: 11.5px; color: #8b949e; }
-    .cb-vs-swap, .cb-vs-x { width: 30px; height: 30px; border-radius: 50%; border: 0.5px solid #30363d; background: transparent; color: #c9d1d9; cursor: pointer; font-size: 13px; }
-    .cb-vs-go { height: 32px; padding: 0 14px; border-radius: 99px; border: none; background: #2f81f7; color: #fff; font-size: 12.5px; font-weight: 700; font-family: inherit; cursor: pointer; }
     .cb-dot .mv { font-size: 8px; line-height: 1; } .cb-dot .mv.up { color: #3fb950; } .cb-dot .mv.down { color: #ff7b72; }
     .cb-card.landed .cb-logo-wrap { animation: cbLand .7s cubic-bezier(.2,.8,.2,1); }
     @keyframes cbLand { 0% { transform: scale(.86); filter: brightness(1.6); } 60% { transform: scale(1.05); } 100% { transform: none; filter: none; } }
@@ -1453,7 +1431,7 @@
       .cb-nav { display: none; }
       .cb-pick-btns .ob-done { min-width: 150px; }
     }
-    @media (prefers-reduced-motion: reduce) { .cb-card.center .cb-logo3d { animation: none; transform: rotateY(-18deg); } .cb-card, .cb-flip { transition-duration: .01s; } .cb-sheen::before { animation: none; } }
+    @media (prefers-reduced-motion: reduce) { .cb-card.center .cb-logo3d { animation: none; transform: rotateY(-18deg); } .cb-card, .cb-flip { transition-duration: .01s; } }
     /* 첫 방문 안내(2026-09-30) — 응원 팀 고르기(최대 5팀 → 즐겨찾기) */
     .modal.ob-modal { width: 460px; }
     .ob-body { padding: 10px 16px 16px; }
@@ -2368,7 +2346,6 @@
     <button class="cb-nav next" id="cb-next" onclick="cbStep(1)" aria-label="다음 구단">›</button>
   </div>
   <div class="cb-strip" id="cb-strip"></div>
-  <div class="cb-vsbar" id="cb-vsbar"></div>
   <div class="cb-foot" id="cb-foot"></div>
 </div>
 
@@ -7047,7 +7024,7 @@ initScrollFade(document.querySelector('.nav-tabs-scroll'));
 const CB_LEAGUES = [['PL', '프리미어리그', 'https://crests.football-data.org/PL.png', true], ['PD', '라리가', 'https://crests.football-data.org/laliga.png'],
   ['BL1', '분데스리가', 'https://crests.football-data.org/BL1.png'], ['SA', '세리에 A', 'https://crests.football-data.org/c111.png'], ['FL1', '리그 1', 'https://crests.football-data.org/FL1.png'],
   ['CL', '챔피언스리그', 'https://crests.football-data.org/CL.png', true]];
-const cb = { mode: 'browse', league: 'PL', rows: [], cur: 0, flipped: false, sweep: null, wheel: 0, wheelAt: 0, drag: null, stand: {}, move: {}, meta: {}, win: [], vs: [] };
+const cb = { mode: 'browse', league: 'PL', rows: [], cur: 0, flipped: false, sweep: null, wheel: 0, wheelAt: 0, drag: null, stand: {}, move: {}, meta: {} };
 let obPicked = [], obDone = false, teamsMetaP = null;
 const cbReduce = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 const cbAttr = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
@@ -7078,9 +7055,7 @@ async function openClubBrowser(opts = {}) {
   const inp = document.getElementById('cb-search-input'); inp.value = ''; cbSearch('');
   renderCbLeagues(); renderCbFoot();
   if (cb.mode === 'browse') track('club_browser');
-  cb.vs = []; renderCbVs();
   fetchTeamsMeta().then(() => layoutCb());   // 구단 색이 오면 카드 뒤 빛 색을 칠함
-  fetchWindowMatches().then(l => { cb.win = l || []; document.querySelectorAll('#cb-track .cb-card').forEach(cbFillNext); }).catch(() => {});
   await cbLoadLeague(opts.league || cb.league, opts.team);
   if (cb.mode === 'browse' && matchMedia('(pointer: fine)').matches) setTimeout(() => inp.focus(), 60);
 }
@@ -7125,79 +7100,72 @@ async function cbLoadLeague(code, focusTeam) {
 // 광택: 로고 모양으로 잘라낸(마스크) 빛 띠가 좌우 흔들림과 같은 박자로 훑고 지나감 — 마스크 그림은 CORS가 필요해서 우리 서버 /proxy/logo를 거침
 // (마스크를 못 받으면 빛 띠가 통째로 가려짐 — 사각형으로 번지지 않음). 무거워서 가운데 카드만 층을 쌓음
 const cbSvg = u => (u && /crests\.football-data\.org\/.+\.png$/.test(u) ? u.replace(/\.png$/, '.svg') : u);
-// 옆면용 어두운 로고 4단계를 캔버스로 한 번만 만들어 둠(층마다 CSS filter를 걸면 흔들리는 동안 매 프레임 필터 20개를 다시 계산해서 끊겼음).
-// 캔버스로 그림을 읽으려면 CORS가 필요해서 /proxy/logo를 거침 — 실패하면 CSS filter로 대체
-const CB_TONES = [0.2, 0.3, 0.4, 0.52, 0.78], cbToneCache = {};
+// 로고 원본 고르기(팀마다 한 번): football-data SVG는 선명하지만 약 60팀은 로고 뒤에 **배경 사각형이 깔려 있고**(토트넘·선덜랜드·노팅엄 등 —
+// 그대로 쓰면 사각형 배경이 보였음) 일부 팀은 SVG가 없음 → SVG를 캔버스에 그려 테두리 한 줄이 불투명(배경)하면 원래 쓰던 투명 PNG를 씀.
+// 캔버스로 읽으려면 CORS가 필요해서 /proxy/logo를 거침
+const cbSrcCache = {}, cbSrcKnown = {};
+const cbLoadImg = src => new Promise(res => { const i = new Image(); i.crossOrigin = 'anonymous'; i.onload = () => res(i); i.onerror = () => res(null); i.src = src; });
+function cbEdgeOpaque(img) {
+  const S = 200, cv = document.createElement('canvas'); cv.width = cv.height = S;
+  const c = cv.getContext('2d', { willReadFrequently: true });
+  const iw = img.naturalWidth || S, ih = img.naturalHeight || S, k = Math.min(S / iw, S / ih), w = iw * k, h = ih * k, x = (S - w) / 2, y = (S - h) / 2;
+  c.drawImage(img, x, y, w, h);
+  const d = c.getImageData(0, 0, S, S).data;
+  let n = 0, op = 0;
+  for (let t = 0; t < 1; t += 0.02) for (const [px, py] of [[x + w * t, y + 1], [x + w * t, y + h - 2], [x + 1, y + h * t], [x + w - 2, y + h * t]]) {
+    n++; if (d[(Math.floor(py) * S + Math.floor(px)) * 4 + 3] > 3) op++;   // 아주 옅은 배경도 배경(토트넘 SVG엔 불투명도 4.9%짜리 사각형이 숨어 있었음)
+  }
+  return op / n;
+}
+function cbSource(logo) {
+  if (!cbSrcCache[logo]) cbSrcCache[logo] = (async () => {
+    const svg = cbSvg(logo);
+    if (svg !== logo) {
+      const si = await cbLoadImg(`${API}/proxy/logo?url=${encodeURIComponent(svg)}`);
+      if (si) { try { if (cbEdgeOpaque(si) < 0.3) { cbSrcKnown[logo] = svg; return { front: svg, img: si }; } } catch (e) {} }
+    }
+    cbSrcKnown[logo] = logo;
+    return { front: logo, img: await cbLoadImg(`${API}/proxy/logo?url=${encodeURIComponent(logo)}`) };
+  })();
+  return cbSrcCache[logo];
+}
+// 옆면(두께)용 어두운 로고: **앞면과 같은 그림**을 앞면 <img>(object-fit: contain)와 똑같이 맞춰 그린 뒤 어둡게 — 크기·위치가 같아서
+// 정면에선 앞면에 가려지고 기울어질 때만 옆면으로 보임(로고 자체에는 아무것도 안 더함).
+// 2026-09-30 수정: 예전엔 옆면은 PNG·앞면은 94%로 줄여 그린 엠보싱 SVG라 옆면이 둘레로 삐져나와 원본에 없던 윤곽선처럼 보였고,
+// 엠보싱이 글자 경계 색을 바꿨음 → 엠보싱·광택·밝은 테두리 층 모두 제거. 층마다 CSS filter를 걸면 매 프레임 재계산해 끊겨서 미리 그림으로
+const CB_TONES = [0.18, 0.26, 0.34, 0.42], cbToneCache = {};
 function cbTones(logo) {
-  if (!cbToneCache[logo]) cbToneCache[logo] = new Promise(res => {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      try {
-        const n = 256, cv = document.createElement('canvas'); cv.width = cv.height = n;
-        const ctx = cv.getContext('2d');
-        res(CB_TONES.map(b => {
-          ctx.clearRect(0, 0, n, n); ctx.globalCompositeOperation = 'source-over';
-          const k = Math.min(n / img.width, n / img.height), w = img.width * k, h = img.height * k;
-          ctx.drawImage(img, (n - w) / 2, (n - h) / 2, w, h);
-          ctx.globalCompositeOperation = 'source-atop'; ctx.fillStyle = `rgba(4,8,14,${1 - b})`; ctx.fillRect(0, 0, n, n);
-          return cv.toDataURL('image/png');
-        }));
-      } catch (e) { res(null); }
-    };
-    img.onerror = () => res(null);
-    img.src = `${API}/proxy/logo?url=${encodeURIComponent(logo)}`;
+  if (!cbToneCache[logo]) cbToneCache[logo] = cbSource(logo).then(async ({ img }) => {
+    if (!img) return null;
+    try {
+      const n = 384, cv = document.createElement('canvas'); cv.width = cv.height = n;   // 화면 로고(200px·2배 화면 400px)에 충분, 512보다 가벼움
+      const ctx = cv.getContext('2d', { willReadFrequently: true });
+      const iw = img.naturalWidth || n, ih = img.naturalHeight || n, k = Math.min(n / iw, n / ih), w = iw * k, h = ih * k;
+      ctx.drawImage(img, (n - w) / 2, (n - h) / 2, w, h);
+      const base = ctx.getImageData(0, 0, n, n);
+      // 거의 투명한 픽셀(불투명도 약 20% 미만)은 완전히 지움 — 토트넘 SVG처럼 눈에 안 보이는 옅은 배경(1~2%)도 옆면 20장을 겹치면
+      // 진한 사각형이 됐음. 로고 가장자리 부드러운 픽셀은 그대로 둠
+      const src = base.data;
+      for (let i = 3; i < src.length; i += 4) if (src[i] < 48) src[i] = 0;
+      const urls = [];
+      for (const b of CB_TONES) {   // 그림 저장은 toBlob(비동기) — toDataURL은 메인 스레드에서 인코딩해서 도착 순간 한 프레임이 늦었음
+        const out = new ImageData(new Uint8ClampedArray(src), n, n), d = out.data;
+        for (let i = 0; i < d.length; i += 4) { if (!d[i + 3]) continue; d[i] = d[i] * b + 3 * (1 - b); d[i + 1] = d[i + 1] * b + 6 * (1 - b); d[i + 2] = d[i + 2] * b + 11 * (1 - b); }
+        ctx.putImageData(out, 0, 0);
+        const blob = await new Promise(r => cv.toBlob(r, 'image/png'));
+        if (!blob) return null;
+        urls.push(URL.createObjectURL(blob));
+      }
+      return urls;
+    } catch (e) { return null; }
   });
   return cbToneCache[logo];
 }
-// 앞면 엠보싱(윤곽·글자 입체): 로고를 SVG로 640px 고해상도로 한 번 그린 뒤, 밝기+윤곽을 높이로 보고 왼쪽 위 빛으로 음영을 계산해
-// 글자·테두리·문양 경계마다 밝은 면/그림자를 넣음(로고마다 한 번 계산해 캐시 — 넘길 때 부담 없음). 실패하면 SVG 그대로
-const cbEmbossCache = {};
-function cbEmboss(logo) {
-  if (!cbEmbossCache[logo]) cbEmbossCache[logo] = new Promise(res => {
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      try {
-        const S = 640, cv = document.createElement('canvas'); cv.width = cv.height = S;
-        const ctx = cv.getContext('2d', { willReadFrequently: true });
-        const iw = img.naturalWidth || S, ih = img.naturalHeight || S, k = Math.min(S / iw, S / ih) * 0.94, w = iw * k, h = ih * k;
-        ctx.drawImage(img, (S - w) / 2, (S - h) / 2, w, h);
-        const id = ctx.getImageData(0, 0, S, S), d = id.data, N = S * S;
-        // 높이 = 불투명도 × (0.55 + 0.45 × 밝기) → 살짝 번지게(3×3 두 번) 해서 경사를 부드럽게
-        let H = new Float32Array(N);
-        for (let i = 0; i < N; i++) { const a = d[i * 4 + 3] / 255; H[i] = a * (0.55 + 0.45 * (0.3 * d[i * 4] + 0.59 * d[i * 4 + 1] + 0.11 * d[i * 4 + 2]) / 255); }
-        for (let pass = 0; pass < 2; pass++) {
-          const T = new Float32Array(N);
-          for (let y = 1; y < S - 1; y++) for (let x = 1; x < S - 1; x++) {
-            const i = y * S + x;
-            T[i] = (H[i - S - 1] + H[i - S] + H[i - S + 1] + H[i - 1] + H[i] + H[i + 1] + H[i + S - 1] + H[i + S] + H[i + S + 1]) / 9;
-          }
-          H = T;
-        }
-        const L = 0.7071, STR = 1.35;   // 빛: 왼쪽 위에서
-        for (let y = 1; y < S - 1; y++) for (let x = 1; x < S - 1; x++) {
-          const i = y * S + x, a = d[i * 4 + 3];
-          if (!a) continue;
-          const gx = (H[i - S + 1] + 2 * H[i + 1] + H[i + S + 1]) - (H[i - S - 1] + 2 * H[i - 1] + H[i + S - 1]);
-          const gy = (H[i + S - 1] + 2 * H[i + S] + H[i + S + 1]) - (H[i - S - 1] + 2 * H[i - S] + H[i - S + 1]);
-          const sh = Math.max(-1, Math.min(1, (-gx * L - gy * L) * STR));   // + 밝게(빛을 받는 경사) / − 어둡게
-          for (let c = 0; c < 3; c++) { const v = d[i * 4 + c]; d[i * 4 + c] = sh > 0 ? v + (255 - v) * sh * 0.55 : v * (1 + sh * 0.5); }
-        }
-        ctx.putImageData(id, 0, 0);
-        cv.toBlob(b => res(b ? URL.createObjectURL(b) : null), 'image/png');
-      } catch (e) { res(null); }
-    };
-    img.onerror = () => res(null);
-    img.src = `${API}/proxy/logo?url=${encodeURIComponent(cbSvg(logo))}`;
-  });
-  return cbEmbossCache[logo];
-}
 function cbFrontHtml(logo) {
-  const svg = cbSvg(logo);
-  return `<img class="cb-l front" src="${svg}" alt="" draggable="false" onerror="if(this.src!=='${logo}')this.src='${logo}'">`;
+  const src = cbSrcKnown[logo] || logo;   // 아직 판단 전이면 투명 PNG(안전) → 판단 후 배경 없는 SVG면 선명한 SVG로 바뀜
+  return `<img class="cb-l front" src="${src}" alt="" draggable="false" onerror="if(this.src!=='${logo}')this.src='${logo}'">`;
 }
-// 가운데에 도착한 카드에만 옆면 층(20장, 1.25px 간격 → 두께 25px) + 광택을 붙임
+// 가운데에 도착한 카드에만 옆면 층(16장, 1px 간격 → 두께 16px)을 붙임
 async function cbDeepen(card) {
   const i = +card.dataset.i, r = cb.rows[i], lg = card.querySelector('.cb-logo3d');
   if (!r || !lg || lg.dataset.deep === '2') return;
@@ -7205,22 +7173,21 @@ async function cbDeepen(card) {
   if (!logo) return;
   const tones = await cbTones(logo);
   if (+card.dataset.i !== cb.cur || cb.sweep || lg.dataset.deep === '2') return;
-  const N = 20;
+  const front = lg.querySelector('.cb-l.front'), src = cbSrcKnown[logo];
+  if (front && src && front.getAttribute('src') !== src) front.src = src;   // 옆면과 같은 그림(배경 없는 SVG면 SVG, 아니면 PNG)
+  if (!tones) { lg.dataset.deep = '2'; return; }   // 옆면 그림을 못 만들면 앞면(원본)만 — 어긋난 옆면보다 나음
+  const N = 16;   // 두께 16px(1px 간격) — 24px는 로고가 두꺼운 판처럼 보였음
   let h = '';
   for (let k = N; k >= 1; k--) {
-    // 뒤→앞으로 점점 밝게, 앞면에 맞닿은 두 층은 가장 밝은 톤(모서리가 빛을 받는 느낌)
-    const t = k <= 2 ? CB_TONES.length - 1 : Math.min(CB_TONES.length - 2, Math.floor((1 - k / N) * (CB_TONES.length - 1)));
-    h += tones ? `<img class="cb-l" src="${tones[t]}" alt="" draggable="false" style="transform:translateZ(${(-k * 1.25).toFixed(2)}px)">`
-      : `<img class="cb-l" src="${logo}" alt="" draggable="false" style="transform:translateZ(${(-k * 1.25).toFixed(2)}px);filter:brightness(${CB_TONES[t]})">`;
+    const t = Math.min(CB_TONES.length - 1, Math.floor((1 - k / N) * CB_TONES.length));   // 뒤→앞으로 조금씩 덜 어둡게
+    h += `<img class="cb-l side" src="${tones[t]}" alt="" draggable="false" style="transform:translateZ(${-k}px)">`;
   }
-  const mask = `url('${API}/proxy/logo?url=${encodeURIComponent(logo)}')`;
   lg.insertAdjacentHTML('afterbegin', h);
-  lg.insertAdjacentHTML('beforeend', `<i class="cb-sheen" style="-webkit-mask-image:${mask};mask-image:${mask}"></i>`);
   lg.dataset.deep = '2';
   requestAnimationFrame(() => lg.classList.add('deep'));
-  const emb = await cbEmboss(logo);
-  const front = lg.querySelector('.cb-l.front');
-  if (emb && front && lg.dataset.deep === '2') { const im = new Image(); im.onload = () => { if (lg.dataset.deep === '2') front.src = emb; }; im.src = emb; }
+  // 양옆 구단 것도 쉬는 시간에 미리 만들어 둠 → 넘기는 순간엔 준비돼 있음
+  const idle = window.requestIdleCallback || (f => setTimeout(f, 200));
+  [i - 1, i + 1].forEach(j => { const rr = cb.rows[j]; if (rr) idle(() => cbTones(logos[rr.team] || rr.logo || '')); });
 }
 const cbIsStar = t => (cb.mode === 'pick' ? obPicked.includes(t) : isFavoriteTeam(t));
 function buildCbCards() {
@@ -7231,32 +7198,16 @@ function buildCbCards() {
         <div class="cb-logo-wrap"><div class="cb-logo3d"></div><i class="cb-shadow"></i></div>
         <div class="cb-name">${shortName(r.team)}</div>
         <div class="cb-rec">${r.played}경기 ${r.wins}승 ${r.draws}무 ${r.losses}패 · 득실 ${r.gd > 0 ? '+' : ''}${r.gd}</div>
-        ${(r.form || []).length ? `<div class="cb-form" title="최근 경기(왼쪽이 오래된 경기)">${r.form.map(f => `<i class="${f}">${{ W: '승', D: '무', L: '패' }[f] || f}</i>`).join('')}</div>` : ''}
-        <div class="cb-next"></div>
-        <div class="cb-btns"><button class="cb-star${cbIsStar(r.team) ? ' on' : ''}" data-team="${cbAttr(r.team)}" onclick="event.stopPropagation();cbToggleStar(this.dataset.team)" aria-label="내 팀">★</button>
-          <button class="cb-vs-btn" data-team="${cbAttr(r.team)}" onclick="event.stopPropagation();cbPickVs(this.dataset.team)" title="다른 구단과 붙으면? AI 예측">⚔ 대결</button></div>
+        <button class="cb-star${cbIsStar(r.team) ? ' on' : ''}" data-team="${cbAttr(r.team)}" onclick="event.stopPropagation();cbToggleStar(this.dataset.team)" aria-label="내 팀">★</button>
       </div>
       <div class="cb-face cb-back"></div>
     </div></div>`).join('');
-  document.querySelectorAll('#cb-track .cb-card').forEach(cbFillNext);
 }
 // 지난 라운드 대비 순위 변동(서버 /standings/{리그}/movement): ▲ 오름(초록) · ▼ 내림(빨강) · – 그대로
 function cbMoveHtml(team) {
   const d = (cb.move[cb.league] || {})[team];
   if (d == null) return '';
   return d > 0 ? `<em class="cb-mv up" title="지난 라운드보다 ${d}계단 상승">▲${d}</em>` : d < 0 ? `<em class="cb-mv down" title="지난 라운드보다 ${-d}계단 하락">▼${-d}</em>` : '<em class="cb-mv same" title="지난 라운드와 같음">–</em>';
-}
-// 다음 경기(지금 −30시간 ~ +21일 5대 리그+챔스 경기 목록에서): D-day · 상대 로고 · 홈/원정
-function cbFillNext(card) {
-  const r = cb.rows[+card.dataset.i], el = card.querySelector('.cb-next');
-  if (!r || !el) return;
-  const now = Date.now();
-  const m = (cb.win || []).filter(x => (x.home_team === r.team || x.away_team === r.team) && !isDone(x) && !isLive(x) && new Date(x.date).getTime() > now)
-    .sort((a, b) => new Date(a.date) - new Date(b.date))[0];
-  if (!m) { el.innerHTML = ''; return; }
-  const home = m.home_team === r.team, opp = home ? m.away_team : m.home_team;
-  const days = Math.round((new Date(localDateStr(m.date)) - new Date(localDateStr(new Date()))) / 86400000);
-  el.innerHTML = `<span class="cb-dd">${days <= 0 ? '오늘' : `D-${days}`}</span>다음 경기 <img src="${logos[opp] || ''}" alt="" onerror="this.style.display='none'"><b>${shortName(opp)}</b><em>${home ? '홈' : '원정'}</em>`;
 }
 // 카드 배치: p = 가운데에 올 위치(소수 가능 — 멀리 이동할 때 연속으로 흐르게). 카드마다 거리 o = i − p로 위치·깊이·기울기·투명도 계산
 function cbPlace(p) {
@@ -7418,37 +7369,6 @@ function cbToggleStar(team) {
     loadMyTeamWidget(); loadTodayMatches();
   }
   document.querySelectorAll('#club-browser .cb-star').forEach(b => b.classList.toggle('on', cbIsStar(b.dataset.team)));
-}
-// ⚔ 대결: 한 구단을 고르고 다른 구단의 ⚔를 누르면 "A vs B" → AI 예측 화면으로(홈/원정 바꾸기 가능)
-function cbPickVs(team) {
-  const i = cb.vs.indexOf(team);
-  if (i >= 0) cb.vs.splice(i, 1);
-  else if (cb.vs.length >= 2) cb.vs = [cb.vs[0], team];
-  else cb.vs.push(team);
-  renderCbVs();
-}
-function renderCbVs() {
-  const bar = document.getElementById('cb-vsbar');
-  document.querySelectorAll('#club-browser .cb-vs-btn').forEach(b => b.classList.toggle('on', cb.vs.includes(b.dataset.team)));
-  if (!bar) return;
-  if (!cb.vs.length || cb.mode === 'pick') { bar.classList.remove('show'); return; }
-  const lg = t => `<span class="cb-vs-team"><img src="${logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'"><b>${shortName(t)}</b></span>`;
-  const [a, b] = cb.vs;
-  bar.innerHTML = b
-    ? `${lg(a)}<small>홈</small><i>vs</i><small>원정</small>${lg(b)}<button class="cb-vs-swap" onclick="cbVsSwap()" title="홈/원정 바꾸기">⇄</button><button class="cb-vs-go" onclick="cbVsGo()">AI 예측 보기</button><button class="cb-vs-x" onclick="cb.vs=[];renderCbVs()" aria-label="취소">✕</button>`
-    : `${lg(a)}<span class="cb-vs-hint">다른 구단의 ⚔ 대결을 누르면 두 팀이 붙었을 때 AI 예측을 볼 수 있어요</span><button class="cb-vs-x" onclick="cb.vs=[];renderCbVs()" aria-label="취소">✕</button>`;
-  bar.classList.add('show');
-}
-function cbVsSwap() { cb.vs.reverse(); renderCbVs(); }
-function cbVsGo() {
-  const [home, away] = cb.vs;
-  if (!home || !away) return;
-  const missing = unpredictableTeamsIn(home, away);
-  if (missing.length) { showToast(unpredictableMessage(missing)); return; }
-  track('club_vs', { match: `${shortName(home)} vs ${shortName(away)}` });
-  cb.vs = []; renderCbVs();
-  closeClubBrowser();
-  goToFullPrediction(home, away);
 }
 function renderCbFoot() {
   const foot = document.getElementById('cb-foot');
