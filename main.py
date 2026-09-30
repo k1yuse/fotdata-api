@@ -84,14 +84,15 @@ TEAM_NAME_MAP = {
 }
 
 # 로고 딕셔너리에 HTML 팀 이름으로도 추가
+# 고화질·최신 엠블럼(team_logos_hd.json, generate_logos_hd.py — 위키백과 인포박스 로고를 400px WebP로, 153팀)이 있으면
+# football-data 로고(200px PNG, 옛 버전 섞임) 위에 덮어씀 → /logos·순위표·빅매치·공유 썸네일이 모두 같은 로고
 def get_logos_with_mapping():
-    logo_path = os.path.join(MODEL_DIR, "team_logos.json")
-    print(f"로고 파일 경로: {logo_path}")
-    print(f"파일 존재: {os.path.exists(logo_path)}")
     try:
-        with open(logo_path, 'r', encoding='utf-8') as f:
-            logos = json.load(f)
-        print(f"로고 수: {len(logos)}")
+        hd = _load_json("team_logos_hd.json") or {}
+        if os.environ.get("LOGO_HD_BASE"):   # 로컬 확인용: 배포 전 로고를 로컬 정적 서버에서(예: http://127.0.0.1:8765)
+            hd = {t: u.replace("https://fotdata-api.vercel.app", os.environ["LOGO_HD_BASE"]) for t, u in hd.items()}
+        logos = {**(_load_json("team_logos.json") or {}), **hd}
+        print(f"로고 수: {len(logos)} (고화질 {len(hd)})")
         for html_name, api_name in TEAM_NAME_MAP.items():
             if api_name in logos:
                 logos[html_name] = logos[api_name]
@@ -533,7 +534,7 @@ def _standings_view(league_code, season, view):
     if league_code == 'CL':
         f = f & (df_matches_all['date'] < pd.Timestamp(f'{yr + 1}-02-01'))
     df = df_matches_all[f].sort_values('date')
-    logos = _load_json("team_logos.json") or {}
+    logos = team_logos_cache
     teams = [r["team"] for r in base["standings"]]
     rows = []
     for team in teams:
@@ -581,7 +582,7 @@ def _standings(league_code: str, season: str):
     if league_df.empty:
         raise HTTPException(status_code=404, detail="데이터 없음")
 
-    logos = _load_json("team_logos.json") or {}
+    logos = team_logos_cache
 
     # 홈 스탯
     home_stats = league_df.groupby('home_team').agg(
@@ -700,7 +701,7 @@ def get_ucl_groups(season: str = "2023"):
     groups = (seasons.get(yr) or {}).get("GROUPS")
     if not groups:
         return {"season": int(yr), "groups": None}
-    logos = _load_json("team_logos.json") or {}
+    logos = team_logos_cache
     out = {}
     for g, ms in groups.items():
         done = [m for m in ms if m.get("home_goals") is not None]
@@ -1652,7 +1653,7 @@ def get_team_info(team_name: str):
     # 주요 라이벌(수동 관리 rivals.json) + 우리 데이터에 있는 맞대결 전적(최근 4시즌 전 대회)
     rivals = (_load_json("rivals.json") or {}).get(team_name)
     if rivals:
-        logos = _load_json("team_logos.json") or {}
+        logos = team_logos_cache
         out = []
         for r in rivals:
             opp = r["opponent"]
@@ -1670,13 +1671,19 @@ def get_team_info(team_name: str):
 # <canvas>에 로고를 그려 예측 결과 공유카드 이미지를 만들 때 canvas가 tainted되어
 # toDataURL/toBlob이 막힌다. 허용 호스트로 제한한 프록시를 거쳐 우리 서버(CORS 전체 허용)
 # 응답으로 내려주면 crossOrigin="anonymous"로 안전하게 로드해 캔버스에 사용할 수 있다.
-PROXY_ALLOWED_HOSTS = {"crests.football-data.org", "upload.wikimedia.org"}
+PROXY_ALLOWED_HOSTS = {"crests.football-data.org", "upload.wikimedia.org", "fotdata-api.vercel.app"}
+_HD_LOGO_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "logos", "hd")
 
 @app.get("/proxy/logo")
 def proxy_logo(url: str):
     parsed = urlparse(url)
     if parsed.scheme != "https" or parsed.hostname not in PROXY_ALLOWED_HOSTS:
         raise HTTPException(status_code=400, detail="허용되지 않은 이미지 URL")
+    # 우리 고화질 로고(logos/hd)는 저장소에 같이 배포돼 있으니 디스크에서 바로 (Vercel까지 왕복 안 함)
+    m = re.fullmatch(r"/logos/hd/([a-z0-9-]+\.webp)", parsed.path)
+    if parsed.hostname == "fotdata-api.vercel.app" and m and os.path.exists(os.path.join(_HD_LOGO_DIR, m.group(1))):
+        with open(os.path.join(_HD_LOGO_DIR, m.group(1)), "rb") as f:
+            return Response(content=f.read(), media_type="image/webp", headers={"Cache-Control": "public, max-age=86400"})
     try:
         resp = requests.get(url, timeout=5)
         resp.raise_for_status()

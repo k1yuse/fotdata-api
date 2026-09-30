@@ -160,6 +160,11 @@ def _crest_url(url):
 @lru_cache(maxsize=512)
 def _crest_bytes(url):
     """로고 원본 바이트(압축된 PNG라 작음 — 디코딩한 이미지 대신 이걸 캐시). 실패하면 None(다음 요청 때 다시 시도하게 캐시 안 함)"""
+    # 우리 고화질 로고(generate_logos_hd.py → logos/hd)는 저장소에 같이 있으니 디스크에서
+    local = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logos', 'hd', url.rsplit('/', 1)[-1])
+    if '/logos/hd/' in url and os.path.exists(local):
+        with open(local, 'rb') as f:
+            return f.read()
     r = requests.get(_crest_url(url), timeout=4, headers={'User-Agent': 'FotData/1.0 (share card)'})
     r.raise_for_status()
     return r.content
@@ -291,7 +296,8 @@ def render(home_name, away_name, home_logo, away_logo, probs, score, prediction,
 
 if __name__ == '__main__':   # 로컬 확인용: python share_card.py [저장 경로] (기본: share_card_test.jpg)
     import json, sys
-    logos = json.load(open(os.path.join(os.path.dirname(__file__), 'fotdata_model', 'team_logos.json')))
+    base = os.path.join(os.path.dirname(__file__), 'fotdata_model')
+    logos = {**json.load(open(os.path.join(base, 'team_logos.json'))), **json.load(open(os.path.join(base, 'team_logos_hd.json')))}
     png = render('Bayern', 'PSG', logos.get('FC Bayern München'), logos.get('Paris Saint-Germain FC'),
                  (0.52, 0.24, 0.24), '2-1', 'home_win', '챔피언스리그 · 10월 21일(수) 04:00')
     open(sys.argv[1] if len(sys.argv) > 1 else 'share_card_test.jpg', 'wb').write(png)

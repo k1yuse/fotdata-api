@@ -1,6 +1,23 @@
 {
   "rewrites": [
-    { "source": "/m/:slug", "destination": "https://fotdata-api.onrender.com/share/match/:slug" },
-    { "source": "/og/m/:file", "destination": "https://fotdata-api.onrender.com/og/match/:file" }
+    {
+      "source": "/m/:slug",
+      "destination": "https://fotdata-api.onrender.com/share/match/:slug"
+    },
+    {
+      "source": "/og/m/:file",
+      "destination": "https://fotdata-api.onrender.com/og/match/:file"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/logos/hd/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=604800"
+        }
+      ]
+    }
   ]
 }

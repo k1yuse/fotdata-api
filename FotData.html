@@ -4481,14 +4481,14 @@ const TRANSFER_TYPE_KO = { 'Transfer': '이적', 'Loan': '임대', 'Free agent':
 let tiTransferState = null;
 const normClub = n => (n || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
   .replace(/\b(fc|cf|afc|sc|ac|ud|cd|rcd|club|de|futbol|football)\b/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
-function clubLogoFor(name) {
+function clubLogoFor(name, exact) {   // exact: 이름이 정확히 같을 때만(2군·유스 "… B"가 1군 로고로 잡히지 않게)
   const k = normClub(name);
   if (!k) return '';
   let best = '';
   for (const [team, url] of Object.entries(logos)) {
     const t = normClub(team);
     if (t === k) return url;
-    if (!best && (t.startsWith(k + ' ') || k.startsWith(t + ' '))) best = url;   // "Manchester City" ↔ "Manchester City FC" 같은 경우만
+    if (!exact && !best && (t.startsWith(k + ' ') || k.startsWith(t + ' '))) best = url;   // "Manchester City" ↔ "Manchester City FC" 같은 경우만
   }
   return best;
 }
@@ -4503,8 +4503,8 @@ function prepTransfers(team, info) {
     ...t,
     dir: t.dir || (t.to === self ? 'in' : 'out'),
     photo: t.photo || squadPhoto[t.player] || '',
-    from_logo: t.from_logo || (t.from === self ? logos[team] : clubLogoFor(t.from)) || '',
-    to_logo: t.to_logo || (t.to === self ? logos[team] : clubLogoFor(t.to)) || '',
+    from_logo: (t.from === self ? logos[team] : clubLogoFor(t.from, true)) || t.from_logo || clubLogoFor(t.from) || '',   // 우리 로고(고화질)가 있으면 우선
+    to_logo: (t.to === self ? logos[team] : clubLogoFor(t.to, true)) || t.to_logo || clubLogoFor(t.to) || '',
     typeKo: TRANSFER_TYPE_KO[t.type] || '이적',
   }));
 }
@@ -4972,7 +4972,7 @@ async function loadPlayers(league, btn) {
       const yr = +d.season || 2026;
       title.textContent = `${PL_LEAGUE_NAME[league]} ${String(yr % 100).padStart(2, '0')}-${String((yr + 1) % 100).padStart(2, '0')} 시즌 선수 순위`;
       sub.textContent = `${d.matchday ? `${d.matchday}라운드 기준 · ` : ''}${d.updated ? d.updated.slice(5).replace('-', '.') + ' 갱신 · ' : ''}매일 새벽 자동 갱신`;
-      const norm = (p, type) => ({ name: p.name, photo: p.photo, shirt: p.shirt, team: p.team, team_logo: p.team_logo || logos[p.team],
+      const norm = (p, type) => ({ name: p.name, photo: p.photo, shirt: p.shirt, team: p.team, team_logo: logos[p.team] || p.team_logo,
         value: type === 'goals' ? p.goals : p.assists,
         sub: type === 'goals' ? `${p.played ?? '-'}경기${p.penalties ? ` · PK ${p.penalties}` : ''}${p.assists ? ` · 도움 ${p.assists}` : ''}` : `${p.played ?? '-'}경기${p.goals ? ` · ${p.goals}골` : ''}` });
       gl.innerHTML = renderPlayerList(d.goals.map(p => norm(p, 'goals')), 'goals');
@@ -6175,6 +6175,7 @@ function showResult(data,home,away){
 // tainted되어 toBlob이 막힌다 — 백엔드 /proxy/logo(CORS 전체 허용)를 거쳐 로드한다.
 function proxiedLogo(url) {
   if (!url) return null;
+  if (url.startsWith(location.origin + '/')) return url;   // 우리 고화질 로고(logos/hd)는 같은 주소라 캔버스에 바로 그려도 됨
   return `${API}/proxy/logo?url=${encodeURIComponent(url)}`;
 }
 function loadImageForCanvas(url) {
@@ -7119,10 +7120,11 @@ function cbEdgeOpaque(img) {
 }
 function cbSource(logo) {
   // 2026-09-30: football-data SVG는 쓰지 않음 — SVG가 있는 140팀 중 95팀이 사이트 로고(PNG)와 디자인 자체가 다른 버전이었음
-  // (색·모양이 다름 → 가운데로 오면 로고가 바뀌어 보임) + 74팀은 배경이 있거나 없음. 사이트 전체와 같은 PNG로 통일(원본 그대로)
+  // (색·모양이 다름 → 가운데로 오면 로고가 바뀌어 보임) + 74팀은 배경이 있거나 없음. 사이트 전체와 같은 로고로 통일(원본 그대로)
+  // — 사이트 로고 자체가 고화질 최신 엠블럼(logos/hd, 400px)으로 바뀌어서 여기도 자동으로 선명해짐
   if (!cbSrcCache[logo]) cbSrcCache[logo] = (async () => {
     cbSrcKnown[logo] = logo;
-    return { front: logo, img: await cbLoadImg(`${API}/proxy/logo?url=${encodeURIComponent(logo)}`) };
+    return { front: logo, img: await cbLoadImg(proxiedLogo(logo)) };
   })();
   return cbSrcCache[logo];
 }
@@ -7445,8 +7447,14 @@ document.addEventListener('keydown', e => {
     setTimeout(() => { cb.drag = null; }, 0);   // 드래그 직후의 click(뒤집기)은 무시
   };
   stage.addEventListener('pointerup', end); stage.addEventListener('pointercancel', () => { cb.drag = null; });
-  // 뒤집어서 정보를 본 뒤 카드 밖(빈 곳)을 누르면 다시 로고 면으로 — 옆 카드를 누르면 그 구단으로 넘어감(cbCardClick)
-  stage.addEventListener('click', e => { if (cb.flipped && !e.target.closest('.cb-card') && !cb.drag?.moved) cbFlip(false); });
+  // 카드 밖(빈 곳)을 누르면: 뒤집혀 있으면 다시 로고 면으로, 아니면 가운데보다 왼쪽은 이전·오른쪽은 다음 구단으로
+  // (옆 카드를 누르면 그 구단으로 — cbCardClick)
+  stage.addEventListener('click', e => {
+    if (e.target.closest('.cb-card, button, input, a') || cb.drag?.moved) return;
+    if (cb.flipped) { cbFlip(false); return; }
+    const r = stage.getBoundingClientRect();
+    cbStep(e.clientX < r.left + r.width / 2 ? -1 : 1);
+  });
   addEventListener('resize', () => { if (document.getElementById('club-browser').classList.contains('show')) layoutCb(true); });
 })();
 
