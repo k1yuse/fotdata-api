@@ -1622,6 +1622,8 @@
     .pp-row b, .pp-tr b { font-size: 12px; font-weight: 600; color: #e6edf3; }
     .pp-row small, .pp-tr small { font-size: 10.5px; color: #8b949e; }
     .pp-n { flex-shrink: 0; min-width: 24px; height: 24px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #f2cc60; background: rgba(242,204,96,0.12); border: 0.5px solid rgba(242,204,96,0.35); }
+    .pp-n.ru { color: #c9d1d9; background: rgba(139,148,158,0.14); border-color: rgba(139,148,158,0.35); }
+    .pp-now { margin-left: auto; font-style: normal; font-size: 9.5px; font-weight: 700; color: #3fb950; padding: 1px 6px; border-radius: 99px; background: rgba(63,185,80,0.14); }
     .pp-inj { display: flex; justify-content: space-between; gap: 10px; padding: 6px 0; font-size: 12px; border-top: 0.5px solid rgba(139,148,158,0.1); }
     .pp-inj span { color: #e6edf3; } .pp-inj small { color: #8b949e; font-size: 10.5px; white-space: nowrap; font-variant-numeric: tabular-nums; }
     /* 팀 정보 · 시즌 베스트 11 + 선수별 시즌 기록 */
@@ -3434,7 +3436,7 @@ const INJ_KO = { 'Knee Injury': '무릎 부상', 'Hamstring Injury': '햄스트�
   'Thigh Injury': '허벅지 부상', 'Groin Injury': '사타구니 부상', 'Back Injury': '허리 부상', 'Foot Injury': '발 부상', 'Hip Injury': '고관절 부상', 'Shoulder Injury': '어깨 부상',
   'Head Injury': '머리 부상', 'Concussion': '뇌진탕', 'Achilles Tendon Injury': '아킬레스건 부상', 'Illness': '질병', 'Suspended': '출전 정지', 'Red Card': '퇴장 징계',
   'Yellow Cards': '경고 누적', 'Rest': '휴식', 'Knock': '타박상', 'Personal Reasons': '개인 사정', "Coach's decision": '감독 결정', 'Injury': '부상', 'Lack of fitness': '컨디션 난조',
-  'Broken ankle': '발목 골절', 'Broken leg': '다리 골절', 'Inactive': '결장', 'Loan agreement': '임대 계약 조항', 'Virus': '바이러스 감염' };
+  'Broken ankle': '발목 골절', 'Hamstring': '햄스트링 부상', 'Ankle/Foot Injury': '발목·발 부상', 'Leg Injury': '다리 부상', 'Muscle': '근육 부상', 'Ankle': '발목 부상', 'Knee': '무릎 부상', 'Calf': '종아리 부상', 'Groin': '사타구니 부상', 'Broken leg': '다리 골절', 'Inactive': '결장', 'Loan agreement': '임대 계약 조항', 'Virus': '바이러스 감염' };
 const injReason = r => (!r ? '사유 미상' : INJ_KO[r] || r);
 const NAT_KO = { England: '잉글랜드', Spain: '스페인', France: '프랑스', Germany: '독일', Italy: '이탈리아', Portugal: '포르투갈', Netherlands: '네덜란드', Belgium: '벨기에',
   Brazil: '브라질', Argentina: '아르헨티나', Uruguay: '우루과이', Colombia: '콜롬비아', Scotland: '스코틀랜드', Wales: '웨일스', Ireland: '아일랜드', 'Northern Ireland': '북아일랜드',
@@ -3547,23 +3549,27 @@ async function loadPlayerProfile(id) {
   el.innerHTML = pcCur.profileHtml;
 }
 function playerProfileHtml(d) {
-  const ym = s => (s ? `${s.slice(0, 4)}.${s.slice(5, 7)}` : '');
+  // 경력은 날짜 없이 "뛴 시즌"만 와서 "2018/19 – 현재" 식으로. 1군 클럽 → 국가대표(연령별 포함) 순, 유스 클럽은 뺌
+  const ss = y => `${y}/${String((y + 1) % 100).padStart(2, '0')}`;
+  const row = c => `<div class="pp-row"><img src="${c.logo || logos[c.team] || ''}" alt="" onerror="this.style.visibility='hidden'"><div><b>${c.team}</b><small>${ss(c.from)}${c.to === c.from ? '' : ` – ${c.to ? ss(c.to) : '현재'}`} · ${c.seasons}시즌</small></div>${c.to ? '' : '<em class="pp-now">현재</em>'}</div>`;
+  const career = d.career || [];
+  const clubs = career.filter(c => !c.national && !c.youth), nats = career.filter(c => c.national);
   let html = '';
-  const row = c => `<div class="pp-row"><img src="${c.logo || logos[c.team] || ''}" alt="" onerror="this.style.visibility='hidden'"><div><b>${c.team}</b><small>${c.from || ''}${c.to === c.from ? '' : ` – ${c.to || '현재'}`}</small></div></div>`;
-  const clubs = (d.career || []).filter(c => !c.national), nats = (d.career || []).filter(c => c.national);
   if (clubs.length || nats.length) html += `<div class="mp-sec"><div class="mp-sec-t">경력</div>${clubs.length ? `<div class="pp-sub">클럽</div>${clubs.map(row).join('')}` : ''}${nats.length ? `<div class="pp-sub">국가대표</div>${nats.map(row).join('')}` : ''}</div>`;
-  const wins = (d.trophies || []).filter(t => t.place === 'Winner');
-  if (wins.length) {
+  // 트로피: 1군 공식 대회만(친선 대회는 서버에서 뺌, 유스 대회는 여기서 뺌) — 대회별 우승·준우승 횟수
+  const tro = (d.trophies || []).filter(t => !t.youth && (t.place === 'winner' || t.place === 'runner_up'));
+  if (tro.length) {
     const g = {};
-    wins.forEach(t => { const k = `${t.league}|${t.country || ''}`; (g[k] = g[k] || []).push(t.season); });
-    const list = Object.entries(g).sort((a, b) => b[1].length - a[1].length);
-    html += `<div class="mp-sec"><div class="mp-sec-t">트로피 <span class="mp-sec-n">우승 ${wins.length}회</span></div>${list.map(([k, ss]) => { const [lg, ct] = k.split('|');
-      return `<div class="pp-tr"><span class="pp-n">${ss.length}</span><div><b>${lg}</b><small>${ct ? `${ct} · ` : ''}${ss.join(', ')}</small></div></div>`; }).join('')}</div>`;
+    tro.forEach(t => { const k = `${t.league}|${t.country || ''}`; const x = g[k] = g[k] || { w: [], r: [] }; (t.place === 'winner' ? x.w : x.r).push(t.season); });
+    const list = Object.entries(g).sort((a, b) => (b[1].w.length - a[1].w.length) || (b[1].r.length - a[1].r.length));
+    const wins = tro.filter(t => t.place === 'winner').length, runs = tro.length - wins;
+    html += `<div class="mp-sec"><div class="mp-sec-t">트로피 <span class="mp-sec-n">우승 ${wins} · 준우승 ${runs} · 친선·유스 대회 제외</span></div>${list.map(([k, x]) => { const [lg, ct] = k.split('|');
+      return `<div class="pp-tr">${x.w.length ? `<span class="pp-n">${x.w.length}</span>` : `<span class="pp-n ru">${x.r.length}</span>`}<div><b>${lg}</b><small>${x.w.length ? `우승 ${x.w.join(', ')}` : ''}${x.w.length && x.r.length ? ' · ' : ''}${x.r.length ? `준우승 ${x.r.join(', ')}` : ''}</small></div></div>`; }).join('')}</div>`;
   }
   const inj = (d.sidelined || []).slice(0, 5);
   if (inj.length) html += `<div class="mp-sec"><div class="mp-sec-t">부상·결장 이력 <span class="mp-sec-n">최근 ${inj.length}건</span></div>${inj.map(x => {
-    const days = x.start && x.end ? Math.round((new Date(x.end) - new Date(x.start)) / 86400000) : null;
-    return `<div class="pp-inj"><span>${injReason(x.type)}</span><small>${(x.start || '').replace(/-/g, '.')} ~ ${x.end ? x.end.replace(/-/g, '.') : '진행 중'}${days != null ? ` · ${days}일` : ''}</small></div>`; }).join('')}</div>`;
+    const days = x.start && x.end ? Math.max(1, Math.round((new Date(x.end) - new Date(x.start)) / 86400000)) : null;
+    return `<div class="pp-inj"><span>${injReason(x.type)}</span><small>${(x.start || '').replace(/-/g, '.')} ~ ${x.end ? x.end.slice(5).replace('-', '.') : '진행 중'}${days != null ? ` · ${days}일` : ''}</small></div>`; }).join('')}</div>`;
   return html;
 }
 const pcTier = v => (v >= 67 ? 'hi' : v >= 34 ? 'mid' : 'lo');

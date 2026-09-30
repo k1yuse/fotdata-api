@@ -1478,6 +1478,15 @@ def get_team_squad(team_name: str):
         raise HTTPException(status_code=404, detail="선수 기록 데이터 없음")
     return d
 
+@app.get("/player/profile/{player_id}")
+def get_player_profile(player_id: int):
+    """선수 카드 경력·트로피·부상 이력 — update_data.af_player_profile로 만든 fotdata_model/af_profiles.json {API-Football 선수 ID: ...}.
+    결제 후 수집 전엔 404 (2026-09-30)"""
+    d = (_load_json("af_profiles.json") or {}).get(str(player_id))
+    if not d:
+        raise HTTPException(status_code=404, detail="선수 경력 데이터 없음")
+    return d
+
 @app.get("/match/preview")
 def get_match_preview(home_team: str, away_team: str, date: str = None):
     """경기 미리보기·예측 결과의 '팀 소식': 라인업(발표 전이면 각 팀 지난 경기 선발 = 예상 라인업) + 결장·부상자.

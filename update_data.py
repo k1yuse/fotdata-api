@@ -1311,6 +1311,39 @@ def add_percentiles(players, min_minutes=450):
                 p.setdefault("pct", {})[k] = 100 - pc if k == "conceded" else pc
     return players
 
+# 선수 카드 경력·트로피·부상 이력(/players/teams·/trophies·/sidelined, 선수당 요청 3번) → af_profiles.json {선수 ID: ...} → /player/profile
+# 사카 샘플로 형태 확인(2026-09-30): 경력은 날짜 없이 "뛴 시즌 목록"만, 유스 팀(U18 등) 섞임 / 트로피엔 친선 대회(Emirates Cup 5회·Florida Cup·
+# MLS All-Star)와 유스 대회(FA Youth Cup 등)가 섞여 있어 그대로 세면 부풀려짐 → 친선은 빼고 유스는 표시만
+AF_FRIENDLY_CUPS = {"Emirates Cup", "Florida Cup", "MLS All-Star", "Trofeo Joan Gamper", "Club Friendlies", "Audi Cup", "Premier League Summer Series",
+                    "International Champions Cup", "Trofeo Santiago Bernabéu", "Uhrencup", "Trofeo Teresa Herrera", "Franz Beckenbauer Supercup",
+                    "Trofeo Luigi Berlusconi", "Trofeo Colombino", "Trofeo Carranza", "Friendlies", "Friendlies Clubs"}
+AF_YOUTH_RE = re.compile(r"\bU\d{2}\b|\bYouth\b|Premier League 2|Primavera|Juvenil|Junior|Reserve", re.I)
+
+def af_player_profile(teams, trophies, sidelined, nationality=None, current_season=None):
+    cur = current_season or max(MATCH_SEASONS)
+    career = []
+    for x in teams or []:
+        ss, tm = x.get("seasons") or [], x.get("team") or {}
+        if not ss:
+            continue
+        name = tm.get("name") or ""
+        career.append({"team": name, "team_id": tm.get("id"), "logo": tm.get("logo"), "from": min(ss), "to": None if max(ss) >= cur else max(ss),
+                       "seasons": len(ss), "youth": bool(re.search(r"\bU\d{2}\b", name)),
+                       "national": bool(nationality) and (name == nationality or name.startswith(nationality + " "))})
+    career.sort(key=lambda c: (c["to"] is not None, -(c["to"] or 9999), -c["from"]))   # 지금 팀 → 최근에 떠난 팀 순
+    tro = []
+    for t in trophies or []:
+        if t.get("league") in AF_FRIENDLY_CUPS:
+            continue
+        pl = {"Winner": "winner", "2nd Place": "runner_up"}.get(t.get("place"), t.get("place"))
+        tro.append({"league": t.get("league"), "country": t.get("country"), "season": t.get("season"), "place": pl, "youth": bool(AF_YOUTH_RE.search(t.get("league") or ""))})
+    # 같은 트로피가 시즌 없이 한 번 더 오는 경우가 있음(사카: FA Cup 우승 "2019/2020" + 시즌 없는 FA Cup 우승) → 시즌 있는 기록이 있으면 시즌 없는 쪽은 버림
+    dated = {(t["league"], t["place"]) for t in tro if t["season"]}
+    tro = [t for t in tro if t["season"] or (t["league"], t["place"]) not in dated]
+    sd = [{"type": x.get("type"), "start": x.get("start"), "end": x.get("end")}
+          for x in sorted(sidelined or [], key=lambda x: x.get("start") or "", reverse=True)[:10]]
+    return {"career": career, "trophies": tro, "sidelined": sd}
+
 def af_injury_rows(resp, team_id):
     """/injuries 응답 → 그 팀 결장자 [{id, name, photo, status: out(결장)|doubtful(출전 불투명), reason}]"""
     out = []
