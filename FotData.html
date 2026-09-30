@@ -81,6 +81,17 @@
     @media (max-width: 480px) { .nav-search-kbd { display: none; } }
     .team-search-box { width: 480px; max-width: 92vw; max-height: 72vh; display: flex; flex-direction: column; align-items: stretch; }
     /* AI 트랙레코드 — 홈 한 줄 카드 + 창 */
+    /* 늦게 오는 홈 카드(빅매치·내 팀·트랙레코드) 자리를 첫 화면부터 잡아 둠 — 나타나면서 팀 선택 카드를 밀어내던 화면 밀림(CLS 0.3~0.46) 방지.
+       높이는 실제 카드 실측값(데스크톱 1280px·모바일 375px) */
+    .slot-wait { position: relative; overflow: hidden; pointer-events: none; }
+    .slot-wait::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(90deg, rgba(48,54,61,0) 25%, rgba(88,166,255,0.07) 50%, rgba(48,54,61,0) 75%); background-size: 200% 100%; animation: skeletonShimmer 1.4s linear infinite; }
+    @media (prefers-reduced-motion: reduce) { .slot-wait::after { animation: none; } }
+    .bigmatch-banner.slot-wait { min-height: 331px; }
+    .card.tr-strip.slot-wait { min-height: 67px; }
+    .myteam-row.slot-wait { min-height: 53px; }
+    .today-matches-strip > .loading { min-height: 105px; box-sizing: border-box; }
+    @media (max-width: 768px) { .bigmatch-banner.slot-wait { min-height: 298px; } }
+    @media (max-width: 400px) { .card.tr-strip.slot-wait { min-height: 83px; } }   /* 좁은 폰은 설명이 두 줄 */
     .card.tr-strip { display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; transition: border-color .15s, transform .15s; }
     .card.tr-strip:hover { border-color: rgba(88,166,255,0.5); transform: translateY(-1px); }
     .trs-icon { width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: rgba(63,185,80,0.12); border: 0.5px solid rgba(63,185,80,0.35); }
@@ -2146,7 +2157,8 @@
 
   <div class="page active" id="page-predict">
     <div class="myteam-row" id="myteam-widget" style="display:none"></div>
-    <div class="bigmatch-banner" id="bigmatch-banner" style="display:none"></div>
+    <script>/* 즐겨찾기가 있으면 첫 화면부터 자리를 잡아 둠(늦게 나타나며 아래를 밀지 않게) */try{var fv=JSON.parse(localStorage.getItem('favoriteTeams')||'null');if((Array.isArray(fv)&&fv.length)||(!fv&&localStorage.getItem('favoriteTeam'))){var mw=document.getElementById('myteam-widget');mw.style.display='';mw.classList.add('slot-wait');}}catch(e){}</script>
+    <div class="bigmatch-banner slot-wait" id="bigmatch-banner"></div>
     <div class="card">
       <div class="card-title today-head"><span id="today-matches-title">오늘의 경기</span>
         <div class="st-seg today-seg" id="today-view-seg" style="display:none" role="tablist" aria-label="보기"><button data-v="all" onclick="setTodayView('all')">전체</button><button data-v="fav" onclick="setTodayView('fav')">★ 내 팀</button></div>
@@ -2154,7 +2166,7 @@
       <div class="today-matches-strip" id="today-matches-widget"></div>
     </div>
     <!-- AI 트랙레코드 한 줄 카드 — 누르면 트랙레코드 창 -->
-    <div class="card tr-strip" id="tr-strip" style="display:none" onclick="openTrackRecordModal()"></div>
+    <div class="card tr-strip slot-wait" id="tr-strip" onclick="openTrackRecordModal()"></div>
     <div class="card predict-selector-card">
       <div class="team-selector">
         <div class="team-box">
@@ -2780,7 +2792,7 @@ async function loadBigMatch() {
     banner.style.display = 'block';
   } catch (e) {
     banner.style.display = 'none';
-  }
+  } finally { banner.classList.remove('slot-wait'); }
 }
 
 async function renderBigMatchBanner(m) {
@@ -2874,7 +2886,7 @@ async function loadMyTeamWidget() {
   const widget = document.getElementById('myteam-widget');
   if (!widget) return;
   const teams = getFavoriteTeams();
-  if (!teams.length) { widget.style.display = 'none'; widget.innerHTML = ''; return; }
+  if (!teams.length) { widget.style.display = 'none'; widget.innerHTML = ''; widget.classList.remove('slot-wait'); return; }
   try {
     await logosReady;
     const now = new Date();
@@ -2903,7 +2915,7 @@ async function loadMyTeamWidget() {
     }).catch(() => {}));
   } catch (e) {
     widget.style.display = 'none';
-  }
+  } finally { widget.classList.remove('slot-wait'); }
 }
 
 function skeletonMatchRows(n) {
@@ -5470,6 +5482,7 @@ async function loadTrackStrip() {
     } else { el.style.display = 'none'; return; }
     el.style.display = '';
   } catch (e) { el.style.display = 'none'; }
+  finally { el.classList.remove('slot-wait'); }
 }
 
 async function openTrackRecordModal() {
