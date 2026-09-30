@@ -1333,7 +1333,8 @@
     body.cb-open { overflow: hidden; }
     .cb-overlay { position: fixed; inset: 0; z-index: 950; display: flex; flex-direction: column; background: radial-gradient(ellipse at 50% 38%, #142033 0%, #0b1017 62%); visibility: hidden; opacity: 0; transition: opacity .25s ease, visibility .25s; }
     .cb-overlay.show { visibility: visible; opacity: 1; }
-    .cb-glow { position: absolute; left: 50%; top: 44%; width: 560px; height: 560px; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, rgba(88,166,255,0.16), transparent 65%); pointer-events: none; }
+    .cb-glow { position: absolute; left: 50%; top: 46%; width: 760px; height: 760px; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(closest-side, rgba(88,166,255,0.2), transparent); pointer-events: none; opacity: 0; transition: opacity .7s ease; will-change: opacity; }
+    .cb-glow.on { opacity: 1; }
     .cb-top { position: relative; z-index: 3; display: flex; align-items: center; gap: 14px; padding: 14px 20px 8px; max-width: 1100px; width: 100%; margin: 0 auto; }
     .cb-head { display: flex; flex-direction: column; min-width: 0; flex: 0 1 auto; }
     .cb-head b { font-size: 18px; color: #fff; font-weight: 800; } .cb-head span { font-size: 11.5px; color: #8b949e; }
@@ -1357,8 +1358,11 @@
     .cb-stage { position: relative; flex: 1; min-height: 0; perspective: 1200px; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
     .cb-track { position: absolute; inset: 0; transform-style: preserve-3d; }
     .cb-loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: #8b949e; font-size: 13px; }
-    .cb-card { position: absolute; left: 50%; top: 50%; width: 340px; height: 440px; margin: -220px 0 0 -170px; transform-style: preserve-3d;
+    .cb-card { position: absolute; left: 50%; top: 50%; width: 340px; height: 470px; margin: -235px 0 0 -170px; transform-style: preserve-3d; will-change: transform, opacity;
       transition: transform var(--cbdur, .55s) cubic-bezier(.2,.8,.2,1), opacity var(--cbdur, .55s) ease; }
+    .cb-card.far { visibility: hidden; transition: none; will-change: auto; }
+    .cb-card:not(.center):hover .cb-logo-wrap { transform: scale(1.06); } .cb-card:not(.center) .cb-logo-wrap { transition: transform .2s; }
+    .cb-card:not(.center):hover .cb-name { color: #79b8ff; }
     .cb-track.instant .cb-card { transition: none; }
     .cb-flip { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform .85s cubic-bezier(.3,.75,.2,1); }
     .cb-card.flipped .cb-flip { transform: rotateY(180deg); }
@@ -1367,21 +1371,47 @@
     .cb-card:not(.center) .cb-front { cursor: pointer; }
     .cb-back { transform: rotateY(180deg); background: linear-gradient(180deg, rgba(28,35,46,0.97), rgba(15,20,27,0.98)); border: 0.5px solid rgba(88,166,255,0.28); box-shadow: 0 24px 60px rgba(0,0,0,0.55); overflow: hidden; }
     .cb-rank { font-size: 13px; color: #8b949e; font-weight: 600; } .cb-rank b { font-size: 22px; color: #fff; font-weight: 800; margin-right: 1px; } .cb-rank span { font-weight: 500; }
-    .cb-logo-wrap { position: relative; width: 210px; height: 210px; margin: 8px 0 10px; transform-style: preserve-3d; }
+    .cb-logo-wrap { position: relative; width: 200px; height: 200px; margin: 6px 0 8px; transform-style: preserve-3d; }
     .cb-logo3d { position: absolute; inset: 0; transform-style: preserve-3d; }
     .cb-card.center .cb-logo3d { animation: cbSway 7s ease-in-out infinite; }
     @keyframes cbSway { 0%, 100% { transform: rotateY(-24deg) rotateX(6deg); } 50% { transform: rotateY(24deg) rotateX(-4deg); } }
     .cb-l { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; backface-visibility: hidden; -webkit-backface-visibility: hidden; pointer-events: none; }
-    .cb-l.front { transform: translateZ(0.5px); filter: drop-shadow(0 0 0.5px rgba(255,255,255,0.25)); }
+    .cb-l.front { transform: translateZ(0.5px); }
+    /* 광택: 로고 모양으로 잘린(마스크) 칸 안에서 빛 띠가 transform으로만 움직임(다시 그리기 없이 합성만) — 흔들림과 같은 7초 박자 */
+    .cb-sheen { position: absolute; inset: 0; overflow: hidden; transform: translateZ(1px); pointer-events: none; backface-visibility: hidden; -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; -webkit-mask-position: center; mask-position: center; opacity: 0; transition: opacity .5s; }
+    .cb-logo3d.deep .cb-sheen { opacity: 1; }
+    .cb-sheen::before { content: ''; position: absolute; top: -10%; bottom: -10%; left: -60%; width: 60%; background: linear-gradient(100deg, transparent, rgba(255,255,255,0.38) 50%, transparent); animation: cbSheen 7s ease-in-out infinite; will-change: transform; }
+    @keyframes cbSheen { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(270%); } }
     .cb-l-empty { position: absolute; inset: 20%; border-radius: 50%; background: #21262d; }
-    .cb-shadow { position: absolute; left: 18%; right: 18%; bottom: -18px; height: 22px; border-radius: 50%; background: radial-gradient(ellipse, rgba(0,0,0,0.55), transparent 70%); transform: translateZ(-40px); }
+    .cb-shadow { position: absolute; left: 18%; right: 18%; bottom: -18px; height: 22px; border-radius: 50%; background: radial-gradient(ellipse, rgba(0,0,0,0.55), transparent 70%); transform: translateZ(-40px); backface-visibility: hidden; -webkit-backface-visibility: hidden; transition: opacity .3s; }
+    /* 뒤집으면 그림자를 숨김 — 앞면보다 뒤쪽 깊이에 있어서 뒤집으면 뒷면 앞으로 튀어나와 보였음 */
+    .cb-card.flipped .cb-shadow { opacity: 0; }
     .cb-card:not(.center) .cb-shadow { opacity: 0.5; }
     .cb-name { font-size: 26px; font-weight: 800; color: #fff; text-align: center; line-height: 1.15; max-width: 100%; padding: 0 10px; }
     .cb-rec { font-size: 12px; color: #8b949e; font-variant-numeric: tabular-nums; }
-    .cb-star { width: 34px; height: 34px; margin-top: 6px; border-radius: 50%; border: 0.5px solid #30363d; background: rgba(22,27,34,0.8); color: #484f58; font-size: 16px; cursor: pointer; transition: color .15s, border-color .15s, transform .15s; }
+    .cb-star { width: 34px; height: 34px; border-radius: 50%; border: 0.5px solid #30363d; background: rgba(22,27,34,0.8); color: #484f58; font-size: 16px; cursor: pointer; transition: color .15s, border-color .15s, transform .15s; }
     .cb-star:hover { color: #c9d1d9; } .cb-star.on { color: #f2cc60; border-color: rgba(242,204,96,0.55); background: rgba(242,204,96,0.12); }
     .cb-star:active { transform: scale(.9); }
-    .cb-card:not(.center) .cb-star, .cb-card:not(.center) .cb-rec { visibility: hidden; }
+    .cb-card:not(.center) .cb-star, .cb-card:not(.center) .cb-rec, .cb-card:not(.center) .cb-form, .cb-card:not(.center) .cb-next, .cb-card:not(.center) .cb-btns { visibility: hidden; }
+    .cb-mv { font-style: normal; font-size: 11px; font-weight: 800; margin: 0 2px; } .cb-mv.up { color: #3fb950; } .cb-mv.down { color: #ff7b72; } .cb-mv.same { color: #7d8590; }
+    .cb-form { display: flex; gap: 3px; margin-top: 2px; }
+    .cb-form i { width: 18px; height: 18px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-style: normal; font-size: 9.5px; font-weight: 800; color: #0d1117; }
+    .cb-form i.W { background: #3fb950; } .cb-form i.D { background: #8b949e; } .cb-form i.L { background: #f85149; color: #fff; }
+    .cb-next { display: flex; align-items: center; gap: 5px; min-height: 20px; font-size: 11.5px; color: #8b949e; }
+    .cb-next img { width: 16px; height: 16px; object-fit: contain; } .cb-next b { color: #e6edf3; font-weight: 600; } .cb-next em { font-style: normal; font-size: 10px; color: #7d8590; }
+    .cb-dd { font-size: 10px; font-weight: 800; color: #58a6ff; padding: 1px 6px; border-radius: 99px; background: rgba(88,166,255,0.14); }
+    .cb-btns { display: flex; gap: 8px; margin-top: 4px; }
+    .cb-vs-btn { height: 34px; padding: 0 12px; border-radius: 99px; border: 0.5px solid #30363d; background: rgba(22,27,34,0.8); color: #c9d1d9; font-size: 12px; font-weight: 700; font-family: inherit; cursor: pointer; }
+    .cb-vs-btn:hover { border-color: #f0883e; color: #ffa657; } .cb-vs-btn.on { border-color: #f0883e; color: #ffa657; background: rgba(240,136,62,0.14); }
+    .cb-overlay.pick .cb-vs-btn { display: none; }
+    .cb-vsbar { position: relative; z-index: 3; display: none; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; margin: 2px auto 0; padding: 8px 12px; max-width: 640px; border-radius: 14px; background: rgba(22,27,34,0.92); border: 0.5px solid rgba(240,136,62,0.45); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+    .cb-vsbar.show { display: flex; animation: cbVsIn .3s ease; } @keyframes cbVsIn { from { opacity: 0; transform: translateY(6px); } }
+    .cb-vs-team { display: flex; align-items: center; gap: 6px; } .cb-vs-team img { width: 24px; height: 24px; object-fit: contain; } .cb-vs-team b { font-size: 13px; color: #fff; }
+    .cb-vsbar small { font-size: 9.5px; color: #7d8590; } .cb-vsbar i { font-style: normal; font-weight: 800; color: #ffa657; font-size: 12px; }
+    .cb-vs-hint { font-size: 11.5px; color: #8b949e; }
+    .cb-vs-swap, .cb-vs-x { width: 30px; height: 30px; border-radius: 50%; border: 0.5px solid #30363d; background: transparent; color: #c9d1d9; cursor: pointer; font-size: 13px; }
+    .cb-vs-go { height: 32px; padding: 0 14px; border-radius: 99px; border: none; background: #2f81f7; color: #fff; font-size: 12.5px; font-weight: 700; font-family: inherit; cursor: pointer; }
+    .cb-dot .mv { font-size: 8px; line-height: 1; } .cb-dot .mv.up { color: #3fb950; } .cb-dot .mv.down { color: #ff7b72; }
     .cb-card.landed .cb-logo-wrap { animation: cbLand .7s cubic-bezier(.2,.8,.2,1); }
     @keyframes cbLand { 0% { transform: scale(.86); filter: brightness(1.6); } 60% { transform: scale(1.05); } 100% { transform: none; filter: none; } }
     .cb-back-in { height: 100%; overflow-y: auto; padding: 16px 16px 14px; box-sizing: border-box; overscroll-behavior: contain; }
@@ -1418,12 +1448,12 @@
     @media (max-width: 600px) {
       .cb-top { flex-wrap: wrap; padding: 12px 14px 6px; gap: 8px; } .cb-head { flex: 1; } .cb-search { order: 3; flex-basis: 100%; max-width: none; }
       .cb-leagues { justify-content: flex-start; }
-      .cb-card { width: 280px; height: 400px; margin: -200px 0 0 -140px; }
-      .cb-logo-wrap { width: 160px; height: 160px; } .cb-name { font-size: 22px; }
+      .cb-card { width: 280px; height: 430px; margin: -215px 0 0 -140px; }
+      .cb-logo-wrap { width: 150px; height: 150px; } .cb-name { font-size: 22px; }
       .cb-nav { display: none; }
       .cb-pick-btns .ob-done { min-width: 150px; }
     }
-    @media (prefers-reduced-motion: reduce) { .cb-card.center .cb-logo3d { animation: none; transform: rotateY(-18deg); } .cb-card, .cb-flip { transition-duration: .01s; } }
+    @media (prefers-reduced-motion: reduce) { .cb-card.center .cb-logo3d { animation: none; transform: rotateY(-18deg); } .cb-card, .cb-flip { transition-duration: .01s; } .cb-sheen::before { animation: none; } }
     /* 첫 방문 안내(2026-09-30) — 응원 팀 고르기(최대 5팀 → 즐겨찾기) */
     .modal.ob-modal { width: 460px; }
     .ob-body { padding: 10px 16px 16px; }
@@ -2321,7 +2351,7 @@
 
 <!-- 구단 둘러보기(2026-09-30): 상단 검색(⌘K)·첫 방문 안내. 리그별 현재 순위 순 카드 넘기기 + 3D 로고 뒤집기(구단 정보·베스트 11) -->
 <div class="cb-overlay" id="club-browser" aria-hidden="true" role="dialog" aria-labelledby="cb-title">
-  <div class="cb-glow" aria-hidden="true"></div>
+  <div class="cb-glow on" aria-hidden="true"></div><div class="cb-glow" aria-hidden="true"></div>
   <div class="cb-top">
     <div class="cb-head"><b id="cb-title">구단 둘러보기</b><span id="cb-sub"></span></div>
     <div class="cb-search">
@@ -2338,6 +2368,7 @@
     <button class="cb-nav next" id="cb-next" onclick="cbStep(1)" aria-label="다음 구단">›</button>
   </div>
   <div class="cb-strip" id="cb-strip"></div>
+  <div class="cb-vsbar" id="cb-vsbar"></div>
   <div class="cb-foot" id="cb-foot"></div>
 </div>
 
@@ -7014,12 +7045,16 @@ initScrollFade(document.querySelector('.nav-tabs-scroll'));
 // 첫 방문 안내(mode 'pick'): 같은 화면에서 ★로 응원 팀을 고름 — 로그인 없이 이 브라우저에 "봤음" 표시(fdOnboarded)만 남김.
 // 즐겨찾기가 이미 있는 사람·공유 링크(?match=)·탭 주소(#…)로 들어온 방문엔 안 띄움(표시도 안 남겨서 다음 방문 때 뜸)
 const CB_LEAGUES = [['PL', '프리미어리그', 'https://crests.football-data.org/PL.png', true], ['PD', '라리가', 'https://crests.football-data.org/laliga.png'],
-  ['BL1', '분데스리가', 'https://crests.football-data.org/BL1.png'], ['SA', '세리에 A', 'https://crests.football-data.org/c111.png'], ['FL1', '리그 1', 'https://crests.football-data.org/FL1.png']];
-const cb = { mode: 'browse', league: 'PL', rows: [], cur: 0, flipped: false, sweep: null, wheel: 0, wheelAt: 0, drag: null, stand: {} };
-let obPicked = [], obDone = false, teamsKoP = null;
+  ['BL1', '분데스리가', 'https://crests.football-data.org/BL1.png'], ['SA', '세리에 A', 'https://crests.football-data.org/c111.png'], ['FL1', '리그 1', 'https://crests.football-data.org/FL1.png'],
+  ['CL', '챔피언스리그', 'https://crests.football-data.org/CL.png', true]];
+const cb = { mode: 'browse', league: 'PL', rows: [], cur: 0, flipped: false, sweep: null, wheel: 0, wheelAt: 0, drag: null, stand: {}, move: {}, meta: {}, win: [], vs: [] };
+let obPicked = [], obDone = false, teamsMetaP = null;
 const cbReduce = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 const cbAttr = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
-function fetchTeamsKo() { return teamsKoP || (teamsKoP = fetch(`${API}/teams/ko`).then(r => (r.ok ? r.json() : {})).catch(() => { teamsKoP = null; return {}; })); }
+// 팀 이름 → {ko: 한국어 구단명, colors: 구단 색} (서버 /teams/meta, 한 번에)
+function fetchTeamsMeta() {
+  return teamsMetaP || (teamsMetaP = fetch(`${API}/teams/meta`).then(r => (r.ok ? r.json() : {})).then(m => (cb.meta = m)).catch(() => { teamsMetaP = null; return {}; }));
+}
 
 function maybeOnboard() {
   try { if (localStorage.getItem('fdOnboarded')) return; } catch (e) { return; }
@@ -7043,14 +7078,16 @@ async function openClubBrowser(opts = {}) {
   const inp = document.getElementById('cb-search-input'); inp.value = ''; cbSearch('');
   renderCbLeagues(); renderCbFoot();
   if (cb.mode === 'browse') track('club_browser');
-  fetchTeamsKo();
+  cb.vs = []; renderCbVs();
+  fetchTeamsMeta().then(() => layoutCb());   // 구단 색이 오면 카드 뒤 빛 색을 칠함
+  fetchWindowMatches().then(l => { cb.win = l || []; document.querySelectorAll('#cb-track .cb-card').forEach(cbFillNext); }).catch(() => {});
   await cbLoadLeague(opts.league || cb.league, opts.team);
   if (cb.mode === 'browse' && matchMedia('(pointer: fine)').matches) setTimeout(() => inp.focus(), 60);
 }
 function closeClubBrowser() {
   const el = document.getElementById('club-browser');
   if (!el.classList.contains('show')) return;
-  clearInterval(cb.sweep); cb.sweep = null;
+  cancelAnimationFrame(cb.sweep); cb.sweep = null;
   el.classList.remove('show'); el.setAttribute('aria-hidden', 'true');
   document.body.classList.remove('cb-open');
   if (cb.mode === 'pick') {
@@ -7064,12 +7101,16 @@ function renderCbLeagues() {
 }
 async function cbLoadLeague(code, focusTeam) {
   cb.league = code; cb.flipped = false; renderCbLeagues();
-  clearInterval(cb.sweep); cb.sweep = null;
+  cancelAnimationFrame(cb.sweep); cb.sweep = null;
   const trackEl = document.getElementById('cb-track');
   if (!cb.stand[code]) {
     trackEl.innerHTML = `<div class="cb-loading">${BRAND_LOADER_ICON}순위 불러오는 중...</div>`;
     document.getElementById('cb-strip').innerHTML = '';
-    try { cb.stand[code] = (await (await fetchWithRetry(`${API}/standings/${code}`)).json()).standings || []; }
+    try {
+      const [st, mv] = await Promise.all([fetchWithRetry(`${API}/standings/${code}`).then(r => r.json()),
+        fetch(`${API}/standings/${code}/movement`).then(r => (r.ok ? r.json() : null)).catch(() => null)]);
+      cb.stand[code] = st.standings || []; cb.move[code] = mv?.delta || {};
+    }
     catch (e) { trackEl.innerHTML = '<div class="cb-loading">순위를 불러올 수 없어요. 잠시 후 다시 시도해 주세요.</div>'; return; }
   }
   if (cb.league !== code) return;
@@ -7079,76 +7120,242 @@ async function cbLoadLeague(code, focusTeam) {
   const i = focusTeam ? cb.rows.findIndex(r => r.team === focusTeam) : -1;
   if (i > 0) setTimeout(() => cbSweepTo(i), cbReduce() ? 0 : 350);
 }
-// 3D 로고: 같은 로고 그림을 1px 간격으로 뒤로 겹겹이 쌓아(뒤쪽일수록 어둡게) 로고 모양 그대로 두께를 만듦 — 사각형 여백 없이 로고 윤곽만 입체.
-// 무거워서 가운데 카드만 층을 쌓고 나머지는 한 장
-function cbLogoLayers(logo, deep) {
-  if (!logo) return '<div class="cb-l-empty"></div>';
-  if (!deep) return `<img class="cb-l front" src="${logo}" alt="" draggable="false">`;
-  const N = 16;
+// 3D 로고: 같은 로고 그림을 1.25px 간격으로 20장 뒤로 쌓고(뒤쪽일수록 어둡게) 로고 모양 그대로 두께를 만듦 — 사각형 여백 없이 로고 윤곽만 입체.
+// 앞면은 SVG(football-data 로고 PNG는 200px라 크게 띄우면 흐림 — 같은 주소의 .svg는 벡터라 선명), 옆면 층은 가벼운 PNG.
+// 광택: 로고 모양으로 잘라낸(마스크) 빛 띠가 좌우 흔들림과 같은 박자로 훑고 지나감 — 마스크 그림은 CORS가 필요해서 우리 서버 /proxy/logo를 거침
+// (마스크를 못 받으면 빛 띠가 통째로 가려짐 — 사각형으로 번지지 않음). 무거워서 가운데 카드만 층을 쌓음
+const cbSvg = u => (u && /crests\.football-data\.org\/.+\.png$/.test(u) ? u.replace(/\.png$/, '.svg') : u);
+// 옆면용 어두운 로고 4단계를 캔버스로 한 번만 만들어 둠(층마다 CSS filter를 걸면 흔들리는 동안 매 프레임 필터 20개를 다시 계산해서 끊겼음).
+// 캔버스로 그림을 읽으려면 CORS가 필요해서 /proxy/logo를 거침 — 실패하면 CSS filter로 대체
+const CB_TONES = [0.2, 0.3, 0.4, 0.52, 0.78], cbToneCache = {};
+function cbTones(logo) {
+  if (!cbToneCache[logo]) cbToneCache[logo] = new Promise(res => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      try {
+        const n = 256, cv = document.createElement('canvas'); cv.width = cv.height = n;
+        const ctx = cv.getContext('2d');
+        res(CB_TONES.map(b => {
+          ctx.clearRect(0, 0, n, n); ctx.globalCompositeOperation = 'source-over';
+          const k = Math.min(n / img.width, n / img.height), w = img.width * k, h = img.height * k;
+          ctx.drawImage(img, (n - w) / 2, (n - h) / 2, w, h);
+          ctx.globalCompositeOperation = 'source-atop'; ctx.fillStyle = `rgba(4,8,14,${1 - b})`; ctx.fillRect(0, 0, n, n);
+          return cv.toDataURL('image/png');
+        }));
+      } catch (e) { res(null); }
+    };
+    img.onerror = () => res(null);
+    img.src = `${API}/proxy/logo?url=${encodeURIComponent(logo)}`;
+  });
+  return cbToneCache[logo];
+}
+// 앞면 엠보싱(윤곽·글자 입체): 로고를 SVG로 640px 고해상도로 한 번 그린 뒤, 밝기+윤곽을 높이로 보고 왼쪽 위 빛으로 음영을 계산해
+// 글자·테두리·문양 경계마다 밝은 면/그림자를 넣음(로고마다 한 번 계산해 캐시 — 넘길 때 부담 없음). 실패하면 SVG 그대로
+const cbEmbossCache = {};
+function cbEmboss(logo) {
+  if (!cbEmbossCache[logo]) cbEmbossCache[logo] = new Promise(res => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      try {
+        const S = 640, cv = document.createElement('canvas'); cv.width = cv.height = S;
+        const ctx = cv.getContext('2d', { willReadFrequently: true });
+        const iw = img.naturalWidth || S, ih = img.naturalHeight || S, k = Math.min(S / iw, S / ih) * 0.94, w = iw * k, h = ih * k;
+        ctx.drawImage(img, (S - w) / 2, (S - h) / 2, w, h);
+        const id = ctx.getImageData(0, 0, S, S), d = id.data, N = S * S;
+        // 높이 = 불투명도 × (0.55 + 0.45 × 밝기) → 살짝 번지게(3×3 두 번) 해서 경사를 부드럽게
+        let H = new Float32Array(N);
+        for (let i = 0; i < N; i++) { const a = d[i * 4 + 3] / 255; H[i] = a * (0.55 + 0.45 * (0.3 * d[i * 4] + 0.59 * d[i * 4 + 1] + 0.11 * d[i * 4 + 2]) / 255); }
+        for (let pass = 0; pass < 2; pass++) {
+          const T = new Float32Array(N);
+          for (let y = 1; y < S - 1; y++) for (let x = 1; x < S - 1; x++) {
+            const i = y * S + x;
+            T[i] = (H[i - S - 1] + H[i - S] + H[i - S + 1] + H[i - 1] + H[i] + H[i + 1] + H[i + S - 1] + H[i + S] + H[i + S + 1]) / 9;
+          }
+          H = T;
+        }
+        const L = 0.7071, STR = 1.35;   // 빛: 왼쪽 위에서
+        for (let y = 1; y < S - 1; y++) for (let x = 1; x < S - 1; x++) {
+          const i = y * S + x, a = d[i * 4 + 3];
+          if (!a) continue;
+          const gx = (H[i - S + 1] + 2 * H[i + 1] + H[i + S + 1]) - (H[i - S - 1] + 2 * H[i - 1] + H[i + S - 1]);
+          const gy = (H[i + S - 1] + 2 * H[i + S] + H[i + S + 1]) - (H[i - S - 1] + 2 * H[i - S] + H[i - S + 1]);
+          const sh = Math.max(-1, Math.min(1, (-gx * L - gy * L) * STR));   // + 밝게(빛을 받는 경사) / − 어둡게
+          for (let c = 0; c < 3; c++) { const v = d[i * 4 + c]; d[i * 4 + c] = sh > 0 ? v + (255 - v) * sh * 0.55 : v * (1 + sh * 0.5); }
+        }
+        ctx.putImageData(id, 0, 0);
+        cv.toBlob(b => res(b ? URL.createObjectURL(b) : null), 'image/png');
+      } catch (e) { res(null); }
+    };
+    img.onerror = () => res(null);
+    img.src = `${API}/proxy/logo?url=${encodeURIComponent(cbSvg(logo))}`;
+  });
+  return cbEmbossCache[logo];
+}
+function cbFrontHtml(logo) {
+  const svg = cbSvg(logo);
+  return `<img class="cb-l front" src="${svg}" alt="" draggable="false" onerror="if(this.src!=='${logo}')this.src='${logo}'">`;
+}
+// 가운데에 도착한 카드에만 옆면 층(20장, 1.25px 간격 → 두께 25px) + 광택을 붙임
+async function cbDeepen(card) {
+  const i = +card.dataset.i, r = cb.rows[i], lg = card.querySelector('.cb-logo3d');
+  if (!r || !lg || lg.dataset.deep === '2') return;
+  const logo = logos[r.team] || r.logo || '';
+  if (!logo) return;
+  const tones = await cbTones(logo);
+  if (+card.dataset.i !== cb.cur || cb.sweep || lg.dataset.deep === '2') return;
+  const N = 20;
   let h = '';
-  for (let k = N; k >= 1; k--) h += `<img class="cb-l" src="${logo}" alt="" draggable="false" style="transform:translateZ(${(-k * 1.35).toFixed(2)}px);filter:brightness(${(0.2 + 0.28 * (1 - k / N)).toFixed(2)}) saturate(.75)">`;
-  return h + `<img class="cb-l front" src="${logo}" alt="" draggable="false">`;
+  for (let k = N; k >= 1; k--) {
+    // 뒤→앞으로 점점 밝게, 앞면에 맞닿은 두 층은 가장 밝은 톤(모서리가 빛을 받는 느낌)
+    const t = k <= 2 ? CB_TONES.length - 1 : Math.min(CB_TONES.length - 2, Math.floor((1 - k / N) * (CB_TONES.length - 1)));
+    h += tones ? `<img class="cb-l" src="${tones[t]}" alt="" draggable="false" style="transform:translateZ(${(-k * 1.25).toFixed(2)}px)">`
+      : `<img class="cb-l" src="${logo}" alt="" draggable="false" style="transform:translateZ(${(-k * 1.25).toFixed(2)}px);filter:brightness(${CB_TONES[t]})">`;
+  }
+  const mask = `url('${API}/proxy/logo?url=${encodeURIComponent(logo)}')`;
+  lg.insertAdjacentHTML('afterbegin', h);
+  lg.insertAdjacentHTML('beforeend', `<i class="cb-sheen" style="-webkit-mask-image:${mask};mask-image:${mask}"></i>`);
+  lg.dataset.deep = '2';
+  requestAnimationFrame(() => lg.classList.add('deep'));
+  const emb = await cbEmboss(logo);
+  const front = lg.querySelector('.cb-l.front');
+  if (emb && front && lg.dataset.deep === '2') { const im = new Image(); im.onload = () => { if (lg.dataset.deep === '2') front.src = emb; }; im.src = emb; }
 }
 const cbIsStar = t => (cb.mode === 'pick' ? obPicked.includes(t) : isFavoriteTeam(t));
 function buildCbCards() {
   document.getElementById('cb-track').innerHTML = cb.rows.map((r, i) => `<div class="cb-card" data-i="${i}">
     <div class="cb-flip">
       <div class="cb-face cb-front" onclick="cbCardClick(${i})">
-        <div class="cb-rank"><b>${r.rank}</b>위 <span>· 승점 ${r.points}</span></div>
+        <div class="cb-rank"><b>${r.rank}</b>위 ${cbMoveHtml(r.team)}<span>· 승점 ${r.points}</span></div>
         <div class="cb-logo-wrap"><div class="cb-logo3d"></div><i class="cb-shadow"></i></div>
         <div class="cb-name">${shortName(r.team)}</div>
         <div class="cb-rec">${r.played}경기 ${r.wins}승 ${r.draws}무 ${r.losses}패 · 득실 ${r.gd > 0 ? '+' : ''}${r.gd}</div>
-        <button class="cb-star${cbIsStar(r.team) ? ' on' : ''}" data-team="${cbAttr(r.team)}" onclick="event.stopPropagation();cbToggleStar(this.dataset.team)" aria-label="내 팀">★</button>
+        ${(r.form || []).length ? `<div class="cb-form" title="최근 경기(왼쪽이 오래된 경기)">${r.form.map(f => `<i class="${f}">${{ W: '승', D: '무', L: '패' }[f] || f}</i>`).join('')}</div>` : ''}
+        <div class="cb-next"></div>
+        <div class="cb-btns"><button class="cb-star${cbIsStar(r.team) ? ' on' : ''}" data-team="${cbAttr(r.team)}" onclick="event.stopPropagation();cbToggleStar(this.dataset.team)" aria-label="내 팀">★</button>
+          <button class="cb-vs-btn" data-team="${cbAttr(r.team)}" onclick="event.stopPropagation();cbPickVs(this.dataset.team)" title="다른 구단과 붙으면? AI 예측">⚔ 대결</button></div>
       </div>
       <div class="cb-face cb-back"></div>
     </div></div>`).join('');
+  document.querySelectorAll('#cb-track .cb-card').forEach(cbFillNext);
+}
+// 지난 라운드 대비 순위 변동(서버 /standings/{리그}/movement): ▲ 오름(초록) · ▼ 내림(빨강) · – 그대로
+function cbMoveHtml(team) {
+  const d = (cb.move[cb.league] || {})[team];
+  if (d == null) return '';
+  return d > 0 ? `<em class="cb-mv up" title="지난 라운드보다 ${d}계단 상승">▲${d}</em>` : d < 0 ? `<em class="cb-mv down" title="지난 라운드보다 ${-d}계단 하락">▼${-d}</em>` : '<em class="cb-mv same" title="지난 라운드와 같음">–</em>';
+}
+// 다음 경기(지금 −30시간 ~ +21일 5대 리그+챔스 경기 목록에서): D-day · 상대 로고 · 홈/원정
+function cbFillNext(card) {
+  const r = cb.rows[+card.dataset.i], el = card.querySelector('.cb-next');
+  if (!r || !el) return;
+  const now = Date.now();
+  const m = (cb.win || []).filter(x => (x.home_team === r.team || x.away_team === r.team) && !isDone(x) && !isLive(x) && new Date(x.date).getTime() > now)
+    .sort((a, b) => new Date(a.date) - new Date(b.date))[0];
+  if (!m) { el.innerHTML = ''; return; }
+  const home = m.home_team === r.team, opp = home ? m.away_team : m.home_team;
+  const days = Math.round((new Date(localDateStr(m.date)) - new Date(localDateStr(new Date()))) / 86400000);
+  el.innerHTML = `<span class="cb-dd">${days <= 0 ? '오늘' : `D-${days}`}</span>다음 경기 <img src="${logos[opp] || ''}" alt="" onerror="this.style.display='none'"><b>${shortName(opp)}</b><em>${home ? '홈' : '원정'}</em>`;
+}
+// 카드 배치: p = 가운데에 올 위치(소수 가능 — 멀리 이동할 때 연속으로 흐르게). 카드마다 거리 o = i − p로 위치·깊이·기울기·투명도 계산
+function cbPlace(p) {
+  const stage = document.getElementById('cb-track');
+  const narrow = innerWidth <= 600, gap = narrow ? 170 : 330;
+  stage.querySelectorAll('.cb-card').forEach(c => {
+    const i = +c.dataset.i, o = i - p, a = Math.abs(o);
+    if (a > 4.5) { if (!c.classList.contains('far')) { c.classList.add('far'); c.style.opacity = 0; } return; }   // 화면 밖 카드는 계산 안 함
+    c.classList.remove('far');
+    const sg = Math.sign(o);
+    const x = sg * (Math.min(a, 1) * gap + Math.max(0, a - 1) * gap * 0.62);
+    c.style.transform = `translateX(${x.toFixed(1)}px) translateZ(${(-Math.min(a, 3) * 150).toFixed(1)}px) rotateY(${(-sg * Math.min(a, 1) * 34).toFixed(2)}deg)`;
+    c.style.opacity = (a <= 1 ? 1 - 0.38 * a : a <= 2 ? 0.62 - 0.34 * (a - 1) : a <= 3 ? 0.28 - 0.28 * (a - 2) : 0).toFixed(3);
+    c.style.zIndex = 100 - Math.round(a * 10);
+    c.style.pointerEvents = a <= 2.2 ? '' : 'none';
+  });
+}
+function cbStripTo(i, smooth) {
+  document.querySelectorAll('#cb-strip .cb-dot').forEach((d, k) => d.classList.toggle('on', k === i));
+  const strip = document.getElementById('cb-strip'), on = strip.children[i];
+  if (!on) return;
+  const left = on.offsetLeft - strip.clientWidth / 2 + on.offsetWidth / 2;
+  if (smooth) strip.scrollTo({ left, behavior: 'smooth' }); else strip.scrollLeft = left;
 }
 function layoutCb(instant) {
   const stage = document.getElementById('cb-track');
-  const narrow = innerWidth <= 600, gap = narrow ? 170 : 330;
   stage.classList.toggle('instant', !!instant);
+  cbPlace(cb.cur);
   stage.querySelectorAll('.cb-card').forEach(c => {
-    const i = +c.dataset.i, o = i - cb.cur, a = Math.abs(o);
-    const x = Math.sign(o) * (Math.min(a, 1) * gap + Math.max(0, a - 1) * gap * 0.62);
-    c.style.transform = `translateX(${x}px) translateZ(${-Math.min(a, 3) * 150}px) rotateY(${-Math.sign(o) * Math.min(a, 1) * 34}deg)`;
-    c.style.opacity = a === 0 ? 1 : a === 1 ? 0.62 : a === 2 ? 0.28 : 0;
-    c.style.zIndex = 100 - a;
-    c.style.pointerEvents = a <= 2 ? '' : 'none';
+    const i = +c.dataset.i, o = i - cb.cur;
     c.classList.toggle('center', o === 0);
     c.classList.toggle('flipped', o === 0 && cb.flipped);
-    const lg = c.querySelector('.cb-logo3d'), deep = a === 0 ? '1' : '0';
-    if (lg.dataset.deep !== deep) { const r = cb.rows[i]; lg.dataset.deep = deep; lg.innerHTML = cbLogoLayers(logos[r.team] || r.logo || '', deep === '1'); }
+    const lg = c.querySelector('.cb-logo3d');
+    if (o !== 0 && lg.dataset.deep !== '0' || !lg.dataset.deep) {   // 가운데가 아니면 앞면 한 장만(층·광택 제거)
+      const r = cb.rows[i]; lg.dataset.deep = '0'; lg.classList.remove('deep');
+      lg.innerHTML = (logos[r.team] || r.logo) ? cbFrontHtml(logos[r.team] || r.logo) : '<div class="cb-l-empty"></div>';
+    }
   });
+  clearTimeout(cb.deepT);
+  const center = stage.querySelector('.cb-card.center');
+  if (center && !cb.sweep) cb.deepT = setTimeout(() => cbDeepen(center), instant ? 0 : 520);   // 넘어가는 애니메이션이 끝난 뒤에 두께를 쌓음
   if (instant) requestAnimationFrame(() => requestAnimationFrame(() => stage.classList.remove('instant')));
-  document.querySelectorAll('#cb-strip .cb-dot').forEach((d, i) => d.classList.toggle('on', i === cb.cur));
-  const on = document.querySelector('#cb-strip .cb-dot.on');
-  if (on) on.scrollIntoView({ block: 'nearest', inline: 'center', behavior: instant || cbReduce() ? 'instant' : 'smooth' });
+  cbStripTo(cb.cur, !instant && !cbReduce());
   document.getElementById('cb-prev').disabled = cb.cur <= 0;
   document.getElementById('cb-next').disabled = cb.cur >= cb.rows.length - 1;
+  cbTint(cb.rows[cb.cur]?.team);
+}
+// 카드 뒤 빛을 가운데 구단 색으로(흰색·검정 같은 무채색이면 두 번째 색, 둘 다 무채색이면 브랜드 파랑) — @property로 색이 부드럽게 바뀜
+function cbTint(team) {
+  const el = document.getElementById('club-browser');
+  if (!el || !team) return;
+  const pair = getClubColorPair(cb.meta[team]?.colors || teamInfoCache[team]?.clubColors) || [];
+  const hex2 = h => { const m = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(h || ''); return m ? m.slice(1).map(x => parseInt(x, 16)) : null; };
+  const neutral = c => { if (!c) return true; const mx = Math.max(...c), mn = Math.min(...c); return mx - mn < 28; };
+  const cols = pair.map(hex2).filter(Boolean);
+  const main = cols.find(c => !neutral(c)) || [88, 166, 255], sub = cols.find(c => c !== main && !neutral(c)) || main;
+  const key = main.join(',') + '|' + sub.join(',');
+  if (el.dataset.tint === key) return;
+  el.dataset.tint = key;
+  const gs = el.querySelectorAll('.cb-glow'), next = gs[0].classList.contains('on') ? gs[1] : gs[0], prev = next === gs[0] ? gs[1] : gs[0];
+  next.style.background = `radial-gradient(closest-side, rgba(${main.join(',')},0.30), rgba(${main.join(',')},0.10) 55%, transparent), radial-gradient(closest-side at 64% 66%, rgba(${sub.join(',')},0.16), transparent)`;
+  next.classList.add('on'); prev.classList.remove('on');
 }
 function renderCbStrip() {
   document.getElementById('cb-strip').innerHTML = cb.rows.map((r, i) =>
-    `<button class="cb-dot" onclick="cbSweepTo(${i})" title="${r.rank}위 ${cbAttr(shortName(r.team))}"><img src="${logos[r.team] || r.logo || ''}" alt="" onerror="this.style.visibility='hidden'"><span>${r.rank}</span></button>`).join('');
+    `<button class="cb-dot" onclick="cbSweepTo(${i})" title="${r.rank}위 ${cbAttr(shortName(r.team))}"><img src="${logos[r.team] || r.logo || ''}" alt="" onerror="this.style.visibility='hidden'"><span>${r.rank}${(() => { const d = (cb.move[cb.league] || {})[r.team]; return d ? `<i class="mv ${d > 0 ? 'up' : 'down'}">${d > 0 ? '▲' : '▼'}</i>` : ''; })()}</span></button>`).join('');
 }
 function cbStep(d) {
-  if (cb.sweep) { clearInterval(cb.sweep); cb.sweep = null; }
+  if (cb.sweep) { cancelAnimationFrame(cb.sweep); cb.sweep = null; }
   const n = Math.max(0, Math.min(cb.rows.length - 1, cb.cur + d));
   if (n === cb.cur) return;
   cb.cur = n; cb.flipped = false; layoutCb();
 }
-// 멀리 떨어진 구단으로 갈 때: 1위부터 순서대로 빠르게 넘겨 가며 도착(한 칸씩 넘기는 간격은 거리에 맞춰 짧게, 총 1.5초 안팎)
+// 멀리 떨어진 구단으로 갈 때: 1위부터 순서대로 넘겨 가며 도착 — 칸마다 점프하지 않고 위치를 연속으로 흘려서(매 프레임 보이는 카드만 이동,
+// CSS 전환 끔) 천천히 출발 → 빠르게 지나감 → 부드럽게 멈춤. 1→20위 약 1.2초. 예전엔 0.08초마다 한 칸씩 점프 + 칸마다 전환을 새로 시작해서 끊겼음
 function cbSweepTo(target) {
-  clearInterval(cb.sweep); cb.sweep = null; cb.flipped = false;
+  cancelAnimationFrame(cb.sweep); cb.sweep = null; cb.flipped = false;
   if (target === cb.cur) { layoutCb(); return; }
   if (cbReduce() || Math.abs(target - cb.cur) === 1) { cb.cur = target; layoutCb(); cbLanded(); return; }
-  const dir = Math.sign(target - cb.cur), steps = Math.abs(target - cb.cur);
-  const dt = Math.max(70, Math.min(200, 1500 / steps));
+  const from = cb.cur, d = target - from, dur = Math.min(1300, 380 + Math.abs(d) * 44);
   const trackEl = document.getElementById('cb-track');
-  trackEl.style.setProperty('--cbdur', `${Math.max(0.18, dt / 1000 * 1.6)}s`);
-  cb.sweep = setInterval(() => {
-    cb.cur += dir; layoutCb();
-    if (cb.cur === target) { clearInterval(cb.sweep); cb.sweep = null; trackEl.style.removeProperty('--cbdur'); cbLanded(); }
-  }, dt);
+  trackEl.classList.add('instant');
+  trackEl.querySelectorAll('.cb-card').forEach(c => c.classList.remove('center', 'flipped'));
+  // 지나가는 동안엔 가운데 카드도 앞면 한 장(층을 쌓으면 무거움)
+  trackEl.querySelectorAll('.cb-logo3d[data-deep="2"]').forEach(lg => { const r = cb.rows[+lg.closest('.cb-card').dataset.i]; lg.dataset.deep = '0'; lg.classList.remove('deep'); lg.innerHTML = cbFrontHtml(logos[r.team] || r.logo); });
+  const ease = t => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  const t0 = performance.now();
+  let lastIdx = from;
+  const frame = now => {
+    const t = Math.min(1, (now - t0) / dur), p = from + d * ease(t);
+    cbPlace(p);
+    const idx = Math.round(p);
+    if (idx !== lastIdx) { lastIdx = idx; cbStripTo(idx, false); cbTint(cb.rows[idx]?.team); }
+    if (t < 1) { cb.sweep = requestAnimationFrame(frame); return; }
+    cb.sweep = null; cb.cur = target;
+    trackEl.classList.remove('instant');
+    layoutCb(); cbLanded();
+  };
+  cb.sweep = requestAnimationFrame(frame);
 }
 function cbLanded() {
   const c = document.querySelector('#cb-track .cb-card.center');
@@ -7184,7 +7391,7 @@ async function cbLoadBack(i) {
   if (!xi) {
     const lg = tp?.comps?.[cb.league]?.players || [];
     xi = `<div class="tp-sec"><div class="tp-t">이번 시즌 공격 포인트 <span>베스트 11은 선수 평점 데이터 연결 후 제공돼요</span></div>${lg.length
-      ? lg.slice(0, 5).map(p => `<div class="cb-tp">${playerAvatarHtml(p, 'pl-photo')}<b>${p.name}</b><span>${p.goals}골 ${p.assists}도움</span></div>`).join('')
+      ? lg.slice(0, innerWidth <= 600 ? 3 : 5).map(p => `<div class="cb-tp">${playerAvatarHtml(p, 'pl-photo')}<b>${p.name}</b><span>${p.goals}골 ${p.assists}도움</span></div>`).join('')
       : '<div class="ti-empty" style="padding:10px 0">아직 기록이 없어요</div>'}</div>`;
   }
   back.innerHTML = `<div class="cb-back-in">
@@ -7212,6 +7419,37 @@ function cbToggleStar(team) {
   }
   document.querySelectorAll('#club-browser .cb-star').forEach(b => b.classList.toggle('on', cbIsStar(b.dataset.team)));
 }
+// ⚔ 대결: 한 구단을 고르고 다른 구단의 ⚔를 누르면 "A vs B" → AI 예측 화면으로(홈/원정 바꾸기 가능)
+function cbPickVs(team) {
+  const i = cb.vs.indexOf(team);
+  if (i >= 0) cb.vs.splice(i, 1);
+  else if (cb.vs.length >= 2) cb.vs = [cb.vs[0], team];
+  else cb.vs.push(team);
+  renderCbVs();
+}
+function renderCbVs() {
+  const bar = document.getElementById('cb-vsbar');
+  document.querySelectorAll('#club-browser .cb-vs-btn').forEach(b => b.classList.toggle('on', cb.vs.includes(b.dataset.team)));
+  if (!bar) return;
+  if (!cb.vs.length || cb.mode === 'pick') { bar.classList.remove('show'); return; }
+  const lg = t => `<span class="cb-vs-team"><img src="${logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'"><b>${shortName(t)}</b></span>`;
+  const [a, b] = cb.vs;
+  bar.innerHTML = b
+    ? `${lg(a)}<small>홈</small><i>vs</i><small>원정</small>${lg(b)}<button class="cb-vs-swap" onclick="cbVsSwap()" title="홈/원정 바꾸기">⇄</button><button class="cb-vs-go" onclick="cbVsGo()">AI 예측 보기</button><button class="cb-vs-x" onclick="cb.vs=[];renderCbVs()" aria-label="취소">✕</button>`
+    : `${lg(a)}<span class="cb-vs-hint">다른 구단의 ⚔ 대결을 누르면 두 팀이 붙었을 때 AI 예측을 볼 수 있어요</span><button class="cb-vs-x" onclick="cb.vs=[];renderCbVs()" aria-label="취소">✕</button>`;
+  bar.classList.add('show');
+}
+function cbVsSwap() { cb.vs.reverse(); renderCbVs(); }
+function cbVsGo() {
+  const [home, away] = cb.vs;
+  if (!home || !away) return;
+  const missing = unpredictableTeamsIn(home, away);
+  if (missing.length) { showToast(unpredictableMessage(missing)); return; }
+  track('club_vs', { match: `${shortName(home)} vs ${shortName(away)}` });
+  cb.vs = []; renderCbVs();
+  closeClubBrowser();
+  goToFullPrediction(home, away);
+}
 function renderCbFoot() {
   const foot = document.getElementById('cb-foot');
   if (cb.mode !== 'pick') { foot.innerHTML = '<span class="cb-hint">‹ › · 스와이프 · ← → 키로 넘기기 · 로고를 누르면 뒤집혀요</span>'; return; }
@@ -7229,17 +7467,19 @@ function finishOnboard() {
   loadMyTeamWidget(); loadTodayMatches();
   showToast(`${obPicked.length}팀을 내 팀으로 등록했어요 ⭐`);
 }
-// 검색: 5대 리그 이번 시즌 팀 — 영어 이름·짧은 이름·한국어 구단명(위키백과)
+// 구단 → 보여줄 리그(자국 5대 리그, 없으면 챔스에만 나오는 구단이라 챔피언스리그)
+const cbLeagueOf = t => getTeamLeagueCode(t) || ((LEAGUE_DATA.UCL?.teams || []).includes(t) ? 'CL' : null);
+// 검색: 5대 리그 + 챔스 이번 시즌 팀 — 영어 이름·짧은 이름·한국어 구단명(위키백과)
 async function cbSearch(q) {
   const box = document.getElementById('cb-results');
   q = q.trim().toLowerCase().replace(/\s+/g, '');
   if (!q) { box.innerHTML = ''; box.classList.remove('open'); return; }
-  const ko = await fetchTeamsKo();
-  const all = getAllTeamsForSearch().filter(t => getTeamLeagueCode(t));
+  const ko = Object.fromEntries(Object.entries(await fetchTeamsMeta()).map(([t, v]) => [t, v.ko]));
+  const all = getAllTeamsForSearch().filter(t => cbLeagueOf(t));
   const norm = s => String(s || '').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, '');
   const hits = all.filter(t => [t, shortName(t), cleanTeamName(t), ko[t]].some(n => norm(n).includes(norm(q)))).slice(0, 8);
-  box.innerHTML = hits.length ? hits.map((t, k) => `<button class="cb-res${k ? '' : ' first'}" data-team="${cbAttr(t)}" onclick="cbGoToTeam(this.dataset.team)"><img src="${logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'"><b>${shortName(t)}</b><small>${ko[t] || ''}</small><em>${(CB_LEAGUES.find(l => l[0] === getTeamLeagueCode(t)) || [])[1] || ''}</em></button>`).join('')
-    : '<div class="cb-res none">찾는 구단이 없어요 · 5대 리그 이번 시즌 구단만 있어요</div>';
+  box.innerHTML = hits.length ? hits.map((t, k) => `<button class="cb-res${k ? '' : ' first'}" data-team="${cbAttr(t)}" onclick="cbGoToTeam(this.dataset.team)"><img src="${logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'"><b>${shortName(t)}</b><small>${ko[t] || ''}</small><em>${(CB_LEAGUES.find(l => l[0] === cbLeagueOf(t)) || [])[1] || ''}</em></button>`).join('')
+    : '<div class="cb-res none">찾는 구단이 없어요 · 5대 리그·챔스 이번 시즌 구단만 있어요</div>';
   box.classList.add('open');
 }
 function cbSearchKey(e) {
@@ -7249,7 +7489,7 @@ function cbSearchKey(e) {
 async function cbGoToTeam(team) {
   const inp = document.getElementById('cb-search-input');
   inp.value = ''; cbSearch(''); inp.blur();
-  const code = getTeamLeagueCode(team);
+  const code = cbLeagueOf(team);
   if (!code) return;
   track('club_search', { team: shortName(team) });
   if (code !== cb.league) { await cbLoadLeague(code, team); return; }
@@ -7288,6 +7528,8 @@ document.addEventListener('keydown', e => {
     setTimeout(() => { cb.drag = null; }, 0);   // 드래그 직후의 click(뒤집기)은 무시
   };
   stage.addEventListener('pointerup', end); stage.addEventListener('pointercancel', () => { cb.drag = null; });
+  // 뒤집어서 정보를 본 뒤 카드 밖(빈 곳)을 누르면 다시 로고 면으로 — 옆 카드를 누르면 그 구단으로 넘어감(cbCardClick)
+  stage.addEventListener('click', e => { if (cb.flipped && !e.target.closest('.cb-card') && !cb.drag?.moved) cbFlip(false); });
   addEventListener('resize', () => { if (document.getElementById('club-browser').classList.contains('show')) layoutCb(true); });
 })();
 

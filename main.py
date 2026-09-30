@@ -1483,6 +1483,47 @@ def get_teams_ko():
     """구단 둘러보기 검색용: 팀 이름 → 한국어 구단명(위키백과 name_ko) — "맨체스터"·"바이에른"처럼 한글로도 찾게 (2026-09-30)"""
     return {t: w["name_ko"] for t, w in (_load_json("team_wiki.json") or {}).items() if w.get("name_ko")}
 
+@app.get("/teams/meta")
+def get_teams_meta():
+    """구단 둘러보기: 팀 이름 → 한국어 구단명(위키) + 구단 색(football-data clubColors, 카드 뒤 빛 색) — 팀 정보를 팀마다 받지 않게 한 번에 (2026-09-30)"""
+    return _teams_meta()
+
+@lru_cache(maxsize=1)
+def _teams_meta():
+    wiki, info = _load_json("team_wiki.json") or {}, _load_json("team_info.json") or {}
+    out = {}
+    for t in set(wiki) | set(info):
+        ko, col = (wiki.get(t) or {}).get("name_ko"), (info.get(t) or {}).get("clubColors")
+        if ko or col:
+            out[t] = {"ko": ko, "colors": col}
+    return out
+
+@app.get("/standings/{league_code}/movement")
+def get_standings_movement(league_code: str):
+    """구단 둘러보기 순위 변동: 지난 라운드(마지막으로 끝난 라운드 전)까지의 순위 대비 지금 순위(+면 오름). 첫 라운드뿐이면 비교 안 함 (2026-09-30)"""
+    return _rank_movement(league_code.upper())
+
+@lru_cache(maxsize=8)
+def _rank_movement(code):
+    ms = [m for m in (_load_json("schedule.json") or {}).get(code, []) if m.get("status") in DONE_STATUSES and m.get("home_goals") is not None]
+    if not ms:
+        return {"matchday": None, "delta": {}}
+    last = max(m.get("matchday") or 0 for m in ms)
+    if last <= 1:
+        return {"matchday": last, "delta": {}}
+    def ranks(sub):
+        tb = {}
+        for m in sub:
+            for t, gf, ga in ((m["home_team"], m["home_goals"], m["away_goals"]), (m["away_team"], m["away_goals"], m["home_goals"])):
+                r = tb.setdefault(t, [0, 0, 0])
+                r[0] += 3 if gf > ga else 1 if gf == ga else 0
+                r[1] += gf - ga
+                r[2] += gf
+        order = sorted(tb, key=lambda t: (-tb[t][0], -tb[t][1], -tb[t][2], t))
+        return {t: i + 1 for i, t in enumerate(order)}
+    now, prev = ranks(ms), ranks([m for m in ms if (m.get("matchday") or 0) < last])
+    return {"matchday": last, "delta": {t: prev[t] - r for t, r in now.items() if t in prev}}
+
 @app.get("/player/profile/{player_id}")
 def get_player_profile(player_id: int):
     """선수 카드 경력·트로피·부상 이력 — update_data.af_player_profile로 만든 fotdata_model/af_profiles.json {API-Football 선수 ID: ...}.
