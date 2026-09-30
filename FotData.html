@@ -7118,12 +7118,9 @@ function cbEdgeOpaque(img) {
   return op / n;
 }
 function cbSource(logo) {
+  // 2026-09-30: football-data SVG는 쓰지 않음 — SVG가 있는 140팀 중 95팀이 사이트 로고(PNG)와 디자인 자체가 다른 버전이었음
+  // (색·모양이 다름 → 가운데로 오면 로고가 바뀌어 보임) + 74팀은 배경이 있거나 없음. 사이트 전체와 같은 PNG로 통일(원본 그대로)
   if (!cbSrcCache[logo]) cbSrcCache[logo] = (async () => {
-    const svg = cbSvg(logo);
-    if (svg !== logo) {
-      const si = await cbLoadImg(`${API}/proxy/logo?url=${encodeURIComponent(svg)}`);
-      if (si) { try { if (cbEdgeOpaque(si) < 0.3) { cbSrcKnown[logo] = svg; return { front: svg, img: si }; } } catch (e) {} }
-    }
     cbSrcKnown[logo] = logo;
     return { front: logo, img: await cbLoadImg(`${API}/proxy/logo?url=${encodeURIComponent(logo)}`) };
   })();
