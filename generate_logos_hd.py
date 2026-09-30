@@ -39,6 +39,7 @@ EXCLUDE = {
     'Sabah FK',                    # 분홍색 버전(리브랜딩 불확실)
     'Venezia FC',                  # 방패 대신 "V" 로고
     'FC Metz',                     # 글자+십자가만 있는 로고
+    'Tottenham Hotspur FC',        # 남색 단색이라 사이트 어두운 배경에 묻힘(사용자 요청 — 예전 로고 유지)
 }
 
 
