@@ -1328,6 +1328,102 @@
       .ct-cell { font-size: 11px; }
     }
 
+
+    /* ── 구단 둘러보기(2026-09-30) ── 전체 화면 · 리그 칩 · 커버플로 카드(가운데 3D 로고) · 뒤집으면 구단 정보·베스트 11 */
+    body.cb-open { overflow: hidden; }
+    .cb-overlay { position: fixed; inset: 0; z-index: 950; display: flex; flex-direction: column; background: radial-gradient(ellipse at 50% 38%, #142033 0%, #0b1017 62%); visibility: hidden; opacity: 0; transition: opacity .25s ease, visibility .25s; }
+    .cb-overlay.show { visibility: visible; opacity: 1; }
+    .cb-glow { position: absolute; left: 50%; top: 44%; width: 560px; height: 560px; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, rgba(88,166,255,0.16), transparent 65%); pointer-events: none; }
+    .cb-top { position: relative; z-index: 3; display: flex; align-items: center; gap: 14px; padding: 14px 20px 8px; max-width: 1100px; width: 100%; margin: 0 auto; }
+    .cb-head { display: flex; flex-direction: column; min-width: 0; flex: 0 1 auto; }
+    .cb-head b { font-size: 18px; color: #fff; font-weight: 800; } .cb-head span { font-size: 11.5px; color: #8b949e; }
+    .cb-search { position: relative; flex: 1; max-width: 420px; margin-left: auto; }
+    .cb-search svg { position: absolute; left: 12px; top: 50%; width: 16px; height: 16px; transform: translateY(-50%); fill: none; stroke: #8b949e; stroke-width: 2; stroke-linecap: round; }
+    .cb-search input { width: 100%; box-sizing: border-box; padding: 10px 12px 10px 36px; border-radius: 12px; border: 0.5px solid #30363d; background: rgba(22,27,34,0.85); color: #e6edf3; font-size: 13.5px; font-family: inherit; outline: none; }
+    .cb-search input:focus { border-color: #58a6ff; box-shadow: 0 0 0 3px rgba(88,166,255,0.15); }
+    .cb-results { position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 10; display: none; flex-direction: column; padding: 6px; border-radius: 12px; background: rgba(22,27,34,0.97); border: 0.5px solid #30363d; box-shadow: 0 12px 32px rgba(0,0,0,0.5); }
+    .cb-results.open { display: flex; }
+    .cb-res { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: none; border-radius: 8px; background: transparent; color: #e6edf3; font-family: inherit; text-align: left; cursor: pointer; }
+    .cb-res:hover, .cb-res.first { background: rgba(88,166,255,0.1); }
+    .cb-res img { width: 22px; height: 22px; object-fit: contain; } .cb-res b { font-size: 13px; font-weight: 600; }
+    .cb-res small { font-size: 11px; color: #8b949e; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .cb-res em { font-style: normal; font-size: 10.5px; color: #7d8590; }
+    .cb-res.none { font-size: 12px; color: #8b949e; cursor: default; padding: 10px; }
+    .cb-close { flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%; border: 0.5px solid #30363d; background: rgba(22,27,34,0.85); color: #c9d1d9; font-size: 15px; cursor: pointer; }
+    .cb-close:hover { color: #fff; border-color: #484f58; }
+    .cb-leagues { position: relative; z-index: 2; display: flex; justify-content: center; gap: 6px; padding: 4px 16px 0; overflow-x: auto; scrollbar-width: none; }
+    .cb-leagues::-webkit-scrollbar { display: none; }
+    .cb-lg { flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; padding: 7px 13px; border-radius: 99px; border: 0.5px solid #30363d; background: rgba(22,27,34,0.7); color: #c9d1d9; font-size: 12.5px; font-weight: 600; font-family: inherit; cursor: pointer; }
+    .cb-lg img { width: 15px; height: 15px; object-fit: contain; } .cb-lg.on { border-color: #58a6ff; color: #fff; background: rgba(88,166,255,0.16); }
+    .cb-stage { position: relative; flex: 1; min-height: 0; perspective: 1200px; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+    .cb-track { position: absolute; inset: 0; transform-style: preserve-3d; }
+    .cb-loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: #8b949e; font-size: 13px; }
+    .cb-card { position: absolute; left: 50%; top: 50%; width: 340px; height: 440px; margin: -220px 0 0 -170px; transform-style: preserve-3d;
+      transition: transform var(--cbdur, .55s) cubic-bezier(.2,.8,.2,1), opacity var(--cbdur, .55s) ease; }
+    .cb-track.instant .cb-card { transition: none; }
+    .cb-flip { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform .85s cubic-bezier(.3,.75,.2,1); }
+    .cb-card.flipped .cb-flip { transform: rotateY(180deg); }
+    .cb-face { position: absolute; inset: 0; border-radius: 22px; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+    .cb-front { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; cursor: pointer; transform-style: preserve-3d; }
+    .cb-card:not(.center) .cb-front { cursor: pointer; }
+    .cb-back { transform: rotateY(180deg); background: linear-gradient(180deg, rgba(28,35,46,0.97), rgba(15,20,27,0.98)); border: 0.5px solid rgba(88,166,255,0.28); box-shadow: 0 24px 60px rgba(0,0,0,0.55); overflow: hidden; }
+    .cb-rank { font-size: 13px; color: #8b949e; font-weight: 600; } .cb-rank b { font-size: 22px; color: #fff; font-weight: 800; margin-right: 1px; } .cb-rank span { font-weight: 500; }
+    .cb-logo-wrap { position: relative; width: 210px; height: 210px; margin: 8px 0 10px; transform-style: preserve-3d; }
+    .cb-logo3d { position: absolute; inset: 0; transform-style: preserve-3d; }
+    .cb-card.center .cb-logo3d { animation: cbSway 7s ease-in-out infinite; }
+    @keyframes cbSway { 0%, 100% { transform: rotateY(-24deg) rotateX(6deg); } 50% { transform: rotateY(24deg) rotateX(-4deg); } }
+    .cb-l { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; backface-visibility: hidden; -webkit-backface-visibility: hidden; pointer-events: none; }
+    .cb-l.front { transform: translateZ(0.5px); filter: drop-shadow(0 0 0.5px rgba(255,255,255,0.25)); }
+    .cb-l-empty { position: absolute; inset: 20%; border-radius: 50%; background: #21262d; }
+    .cb-shadow { position: absolute; left: 18%; right: 18%; bottom: -18px; height: 22px; border-radius: 50%; background: radial-gradient(ellipse, rgba(0,0,0,0.55), transparent 70%); transform: translateZ(-40px); }
+    .cb-card:not(.center) .cb-shadow { opacity: 0.5; }
+    .cb-name { font-size: 26px; font-weight: 800; color: #fff; text-align: center; line-height: 1.15; max-width: 100%; padding: 0 10px; }
+    .cb-rec { font-size: 12px; color: #8b949e; font-variant-numeric: tabular-nums; }
+    .cb-star { width: 34px; height: 34px; margin-top: 6px; border-radius: 50%; border: 0.5px solid #30363d; background: rgba(22,27,34,0.8); color: #484f58; font-size: 16px; cursor: pointer; transition: color .15s, border-color .15s, transform .15s; }
+    .cb-star:hover { color: #c9d1d9; } .cb-star.on { color: #f2cc60; border-color: rgba(242,204,96,0.55); background: rgba(242,204,96,0.12); }
+    .cb-star:active { transform: scale(.9); }
+    .cb-card:not(.center) .cb-star, .cb-card:not(.center) .cb-rec { visibility: hidden; }
+    .cb-card.landed .cb-logo-wrap { animation: cbLand .7s cubic-bezier(.2,.8,.2,1); }
+    @keyframes cbLand { 0% { transform: scale(.86); filter: brightness(1.6); } 60% { transform: scale(1.05); } 100% { transform: none; filter: none; } }
+    .cb-back-in { height: 100%; overflow-y: auto; padding: 16px 16px 14px; box-sizing: border-box; overscroll-behavior: contain; }
+    .cb-bh { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .cb-bh img { width: 40px; height: 40px; object-fit: contain; }
+    .cb-bh > div { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.25; }
+    .cb-bh b { font-size: 16px; color: #fff; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .cb-bh small { font-size: 11px; color: #8b949e; }
+    .cb-turn { width: 30px; height: 30px; border-radius: 50%; border: 0.5px solid #30363d; background: rgba(13,17,23,0.6); color: #c9d1d9; font-size: 15px; cursor: pointer; flex-shrink: 0; }
+    .cb-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 12px; }
+    .cb-fact { padding: 8px 10px; border-radius: 10px; background: rgba(13,17,23,0.5); border: 0.5px solid rgba(139,148,158,0.16); min-width: 0; }
+    .cb-fact small { display: block; font-size: 10px; color: #8b949e; } .cb-fact b { display: block; font-size: 12px; color: #e6edf3; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cb-back .tp-t { font-size: 12.5px; flex-wrap: wrap; } .cb-back .tp-t span { font-size: 10px; }
+    .cb-back .bx-pitch { aspect-ratio: 68 / 60; }
+    .cb-back .bx-note { display: none; }
+    .cb-tp { display: flex; align-items: center; gap: 8px; padding: 5px 0; font-size: 12px; border-top: 0.5px solid rgba(139,148,158,0.1); }
+    .cb-tp b { flex: 1; min-width: 0; color: #e6edf3; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .cb-tp span { color: #8b949e; font-size: 11px; }
+    .cb-tp .pl-photo { width: 26px; height: 26px; }
+    .cb-actions { display: flex; gap: 8px; margin-top: 12px; }
+    .cb-more { flex: 1; padding: 10px; border-radius: 10px; border: none; background: #2f81f7; color: #fff; font-size: 12.5px; font-weight: 700; font-family: inherit; cursor: pointer; }
+    .cb-star.wide { width: auto; height: auto; margin: 0; padding: 0 14px; border-radius: 10px; font-size: 12.5px; font-weight: 700; font-family: inherit; }
+    .cb-nav { position: absolute; top: 50%; z-index: 200; width: 44px; height: 44px; margin-top: -22px; border-radius: 50%; border: 0.5px solid #30363d; background: rgba(22,27,34,0.8); color: #e6edf3; font-size: 22px; line-height: 1; cursor: pointer; transition: opacity .2s, border-color .15s; }
+    .cb-nav:hover:not(:disabled) { border-color: #58a6ff; } .cb-nav:disabled { opacity: .25; cursor: default; }
+    .cb-nav.prev { left: max(16px, calc(50% - 480px)); } .cb-nav.next { right: max(16px, calc(50% - 480px)); }
+    .cb-strip { position: relative; z-index: 2; display: flex; gap: 4px; padding: 6px 20px; margin: 0 auto; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+    .cb-strip::-webkit-scrollbar { display: none; }
+    .cb-dot { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 2px; width: 40px; padding: 5px 0 3px; border-radius: 10px; border: 0.5px solid transparent; background: transparent; color: #7d8590; font-size: 9.5px; font-weight: 700; font-family: inherit; cursor: pointer; opacity: .55; transition: opacity .2s, background .2s; }
+    .cb-dot img { width: 22px; height: 22px; object-fit: contain; }
+    .cb-dot:hover { opacity: .9; } .cb-dot.on { opacity: 1; background: rgba(88,166,255,0.14); border-color: rgba(88,166,255,0.45); color: #fff; }
+    .cb-foot { position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; padding: 8px 20px calc(14px + env(safe-area-inset-bottom)); }
+    .cb-hint { font-size: 11px; color: #7d8590; }
+    .cb-picked { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+    .cb-pick-btns { display: flex; gap: 8px; } .cb-pick-btns .ob-done { min-width: 180px; }
+    .cb-overlay:not(.pick) .cb-card .cb-star:not(.wide) { }
+    @media (max-width: 600px) {
+      .cb-top { flex-wrap: wrap; padding: 12px 14px 6px; gap: 8px; } .cb-head { flex: 1; } .cb-search { order: 3; flex-basis: 100%; max-width: none; }
+      .cb-leagues { justify-content: flex-start; }
+      .cb-card { width: 280px; height: 400px; margin: -200px 0 0 -140px; }
+      .cb-logo-wrap { width: 160px; height: 160px; } .cb-name { font-size: 22px; }
+      .cb-nav { display: none; }
+      .cb-pick-btns .ob-done { min-width: 150px; }
+    }
+    @media (prefers-reduced-motion: reduce) { .cb-card.center .cb-logo3d { animation: none; transform: rotateY(-18deg); } .cb-card, .cb-flip { transition-duration: .01s; } }
     /* 첫 방문 안내(2026-09-30) — 응원 팀 고르기(최대 5팀 → 즐겨찾기) */
     .modal.ob-modal { width: 460px; }
     .ob-body { padding: 10px 16px 16px; }
@@ -2223,25 +2319,33 @@
   </div>
 </div>
 
+<!-- 구단 둘러보기(2026-09-30): 상단 검색(⌘K)·첫 방문 안내. 리그별 현재 순위 순 카드 넘기기 + 3D 로고 뒤집기(구단 정보·베스트 11) -->
+<div class="cb-overlay" id="club-browser" aria-hidden="true" role="dialog" aria-labelledby="cb-title">
+  <div class="cb-glow" aria-hidden="true"></div>
+  <div class="cb-top">
+    <div class="cb-head"><b id="cb-title">구단 둘러보기</b><span id="cb-sub"></span></div>
+    <div class="cb-search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="cb-search-input" type="text" placeholder="구단 검색 (예: Arsenal, 바이에른)" autocomplete="off" oninput="cbSearch(this.value)" onkeydown="cbSearchKey(event)">
+      <div class="cb-results" id="cb-results"></div>
+    </div>
+    <button class="cb-close" onclick="closeClubBrowser()" aria-label="닫기">✕</button>
+  </div>
+  <div class="cb-leagues" id="cb-leagues"></div>
+  <div class="cb-stage" id="cb-stage">
+    <button class="cb-nav prev" id="cb-prev" onclick="cbStep(-1)" aria-label="이전 구단">‹</button>
+    <div class="cb-track" id="cb-track"></div>
+    <button class="cb-nav next" id="cb-next" onclick="cbStep(1)" aria-label="다음 구단">›</button>
+  </div>
+  <div class="cb-strip" id="cb-strip"></div>
+  <div class="cb-foot" id="cb-foot"></div>
+</div>
+
 <div class="modal-overlay pc-overlay" id="pc-modal" onclick="closePlayerCard(event)">
   <!-- 선수 카드(2026-09-30): 라인업·주요 선수·베스트 11·선수 목록에서 선수를 누르면. 다른 창 위에 뜸 -->
   <div class="modal mp-modal pc-modal" role="dialog" aria-label="선수 정보">
     <div class="mp-top"><span class="mp-title">선수 정보</span><span class="mp-meta"></span><span class="modal-close" aria-label="닫기" onclick="closePlayerCard()">✕</span></div>
     <div class="mp-body" id="pc-body"></div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="onboard-modal" onclick="closeOnboard(event)">
-  <!-- 첫 방문 안내(2026-09-30): 응원 팀 고르기 → 즐겨찾기(최대 5팀). 로그인 없이 이 브라우저에 "봤음" 표시만 남김 -->
-  <div class="modal mp-modal ob-modal" role="dialog" aria-labelledby="ob-title">
-    <div class="mp-top"><span class="mp-title" id="ob-title">응원하는 팀을 골라주세요</span><span class="mp-meta">최대 5팀</span><span class="modal-close" aria-label="닫기" onclick="closeOnboard()">✕</span></div>
-    <div class="ob-body">
-      <p class="ob-lead">고른 팀의 다음 경기와 AI 예측을 첫 화면에 먼저 보여드려요. 나중에 팀 정보의 ★로 언제든 바꿀 수 있어요.</p>
-      <div class="ob-leagues" id="ob-leagues"></div>
-      <div class="ob-grid" id="ob-grid"></div>
-      <div class="ob-picked" id="ob-picked"></div>
-      <div class="ob-foot"><button class="ob-skip" onclick="closeOnboard()">나중에 할게요</button><button class="ob-done" id="ob-done" onclick="finishOnboard()" disabled>팀을 골라주세요</button></div>
-    </div>
   </div>
 </div>
 
@@ -3090,7 +3194,8 @@ function selectGlobalSearchResult(team) {
   openTeamInfo(team);
 }
 async function openTeamSearch(mode) {
-  teamSearchMode = mode || 'info';
+  if (!mode || mode === 'info') return openClubBrowser();   // 상단 검색·⌘K = 구단 둘러보기(2026-09-30). 승부차기 팀 고르기만 아래 목록 창
+  teamSearchMode = mode;
   const modal = document.getElementById('team-search-modal');
   modal.classList.add('show');
   const input = document.getElementById('team-search-input');
@@ -6903,72 +7008,288 @@ initScrollFade(document.querySelector('.nav-tabs-scroll'));
   });
 });
 
-// ── 첫 방문 안내(2026-09-30): 응원 팀 고르기 → 즐겨찾기 ──
-// 로그인 없이 이 브라우저에 "봤음" 표시(fdOnboarded)만 남김(즐겨찾기와 같은 localStorage). 즐겨찾기가 이미 있는 사람(이 기능 전부터
-// 쓰던 사람)에겐 안 띄우고, 공유 링크·특정 탭 주소로 들어온 방문도 방해하지 않음(그땐 표시를 안 남겨서 다음 방문 때 뜸)
-let obPicked = [], obLeague = null, obDone = false;
+// ── 구단 둘러보기(2026-09-30): 상단 검색(⌘K)·첫 방문 안내를 대체 ──
+// 리그 칩 → 현재 순위 1위부터 구단을 한 장씩(가운데 = 로고 모양 그대로 두께가 있는 3D 로고). 로고를 누르면 뒤집혀 구단 정보 + 베스트 11.
+// ‹ › · 가로 스와이프 · 가로 휠 · ←→ 키로 넘김. 검색하면 그 리그 1위부터 찾은 구단까지 순위대로 빠르게 넘겨 감.
+// 첫 방문 안내(mode 'pick'): 같은 화면에서 ★로 응원 팀을 고름 — 로그인 없이 이 브라우저에 "봤음" 표시(fdOnboarded)만 남김.
+// 즐겨찾기가 이미 있는 사람·공유 링크(?match=)·탭 주소(#…)로 들어온 방문엔 안 띄움(표시도 안 남겨서 다음 방문 때 뜸)
+const CB_LEAGUES = [['PL', '프리미어리그', 'https://crests.football-data.org/PL.png', true], ['PD', '라리가', 'https://crests.football-data.org/laliga.png'],
+  ['BL1', '분데스리가', 'https://crests.football-data.org/BL1.png'], ['SA', '세리에 A', 'https://crests.football-data.org/c111.png'], ['FL1', '리그 1', 'https://crests.football-data.org/FL1.png']];
+const cb = { mode: 'browse', league: 'PL', rows: [], cur: 0, flipped: false, sweep: null, wheel: 0, wheelAt: 0, drag: null, stand: {} };
+let obPicked = [], obDone = false, teamsKoP = null;
+const cbReduce = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+const cbAttr = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+function fetchTeamsKo() { return teamsKoP || (teamsKoP = fetch(`${API}/teams/ko`).then(r => (r.ok ? r.json() : {})).catch(() => { teamsKoP = null; return {}; })); }
+
 function maybeOnboard() {
   try { if (localStorage.getItem('fdOnboarded')) return; } catch (e) { return; }
   if (getFavoriteTeams().length) { try { localStorage.setItem('fdOnboarded', '1'); } catch (e) {} return; }
   if (new URLSearchParams(location.search).get('match') || location.hash) return;
-  Promise.all([logosReady, ensureTeamPrestigeLoaded().catch(() => {})]).then(() => setTimeout(() => {
+  logosReady.then(() => setTimeout(() => {
     if (document.querySelector('.modal-overlay.show')) return;   // 다른 창이 떠 있으면 이번엔 생략
-    obPicked = []; obDone = false; obLeague = Object.keys(LEAGUE_DATA)[0];
-    renderOnboardLeagues(); renderOnboardGrid(); renderOnboardPicked();
-    document.getElementById('onboard-modal').classList.add('show');
+    obPicked = []; obDone = false;
+    openClubBrowser({ mode: 'pick' });
     track('onboard_open');
   }, 900));
 }
-const obAttr = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
-function renderOnboardLeagues() {
-  document.getElementById('ob-leagues').innerHTML = Object.entries(LEAGUE_DATA).map(([k, d]) =>
-    `<button class="ob-lg${k === obLeague ? ' active' : ''}" onclick="obPickLeague('${k}')"><img src="${d.logo}" alt="" style="${k === 'EPL' ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">${d.name.replace(/\s*\(.*\)\s*$/, '')}</button>`).join('');
+async function openClubBrowser(opts = {}) {
+  cb.mode = opts.mode || 'browse';
+  const el = document.getElementById('club-browser');
+  el.classList.toggle('pick', cb.mode === 'pick');
+  el.classList.add('show'); el.setAttribute('aria-hidden', 'false');
+  document.body.classList.add('cb-open');
+  document.getElementById('cb-title').textContent = cb.mode === 'pick' ? '응원하는 팀을 골라주세요' : '구단 둘러보기';
+  document.getElementById('cb-sub').textContent = cb.mode === 'pick' ? '★를 눌러 최대 5팀 · 고른 팀의 경기와 AI 예측을 첫 화면에 먼저 보여드려요' : '현재 순위 순 · 로고를 누르면 구단 정보와 베스트 11';
+  const inp = document.getElementById('cb-search-input'); inp.value = ''; cbSearch('');
+  renderCbLeagues(); renderCbFoot();
+  if (cb.mode === 'browse') track('club_browser');
+  fetchTeamsKo();
+  await cbLoadLeague(opts.league || cb.league, opts.team);
+  if (cb.mode === 'browse' && matchMedia('(pointer: fine)').matches) setTimeout(() => inp.focus(), 60);
 }
-function renderOnboardGrid() {
-  const pr = teamPrestigeCache || {};
-  const teams = [...LEAGUE_DATA[obLeague].teams].sort((a, b) => (pr[b] ?? -999) - (pr[a] ?? -999));   // 강팀·인기팀이 먼저
-  const grid = document.getElementById('ob-grid');
-  grid.innerHTML = teams.map(t => `<button class="ob-team${obPicked.includes(t) ? ' on' : ''}" data-team="${obAttr(t)}" onclick="obToggle(this.dataset.team)" aria-pressed="${obPicked.includes(t)}"><img src="${logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'"><span>${shortName(t)}</span></button>`).join('');
-  grid.scrollTop = 0;
+function closeClubBrowser() {
+  const el = document.getElementById('club-browser');
+  if (!el.classList.contains('show')) return;
+  clearInterval(cb.sweep); cb.sweep = null;
+  el.classList.remove('show'); el.setAttribute('aria-hidden', 'true');
+  document.body.classList.remove('cb-open');
+  if (cb.mode === 'pick') {
+    try { localStorage.setItem('fdOnboarded', '1'); } catch (_) {}
+    if (!obDone) track('onboard_skip');
+  }
 }
-function renderOnboardPicked() {
-  const n = obPicked.length, btn = document.getElementById('ob-done');
-  document.getElementById('ob-picked').innerHTML = n
-    ? obPicked.map(t => `<button class="ob-chip" data-team="${obAttr(t)}" onclick="obToggle(this.dataset.team)" title="빼기"><img src="${logos[t] || ''}" alt="" onerror="this.style.display='none'">${shortName(t)}<b>✕</b></button>`).join('')
-    : '리그를 바꿔 가며 여러 팀을 고를 수 있어요';
-  btn.disabled = !n;
-  btn.textContent = n ? `선택 완료 (${n}/${FAV_MAX})` : '팀을 골라주세요';
+function renderCbLeagues() {
+  document.getElementById('cb-leagues').innerHTML = CB_LEAGUES.map(([c, n, logo, inv]) =>
+    `<button class="cb-lg${c === cb.league ? ' on' : ''}" onclick="cbLoadLeague('${c}')"><img src="${logo}" alt="" style="${inv ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">${n}</button>`).join('');
 }
-function obPickLeague(k) { obLeague = k; renderOnboardLeagues(); renderOnboardGrid(); }
-function obToggle(team) {
-  const i = obPicked.indexOf(team);
-  if (i >= 0) obPicked.splice(i, 1);
-  else if (obPicked.length >= FAV_MAX) { showToast(`최대 ${FAV_MAX}팀까지 고를 수 있어요`); return; }
-  else obPicked.push(team);
-  // 격자는 다시 그리지 않고 칸 표시만 바꿈(다시 그리면 스크롤이 맨 위로 튐)
-  document.querySelectorAll('#ob-grid .ob-team').forEach(b => { const on = obPicked.includes(b.dataset.team); b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
-  renderOnboardPicked();
+async function cbLoadLeague(code, focusTeam) {
+  cb.league = code; cb.flipped = false; renderCbLeagues();
+  clearInterval(cb.sweep); cb.sweep = null;
+  const trackEl = document.getElementById('cb-track');
+  if (!cb.stand[code]) {
+    trackEl.innerHTML = `<div class="cb-loading">${BRAND_LOADER_ICON}순위 불러오는 중...</div>`;
+    document.getElementById('cb-strip').innerHTML = '';
+    try { cb.stand[code] = (await (await fetchWithRetry(`${API}/standings/${code}`)).json()).standings || []; }
+    catch (e) { trackEl.innerHTML = '<div class="cb-loading">순위를 불러올 수 없어요. 잠시 후 다시 시도해 주세요.</div>'; return; }
+  }
+  if (cb.league !== code) return;
+  await logosReady;
+  cb.rows = cb.stand[code]; cb.cur = 0;
+  buildCbCards(); layoutCb(true); renderCbStrip();
+  const i = focusTeam ? cb.rows.findIndex(r => r.team === focusTeam) : -1;
+  if (i > 0) setTimeout(() => cbSweepTo(i), cbReduce() ? 0 : 350);
 }
-function closeOnboard(e) {
-  const modal = document.getElementById('onboard-modal');
-  if (e && e.target !== modal) return;
-  modal.classList.remove('show');
-  try { localStorage.setItem('fdOnboarded', '1'); } catch (_) {}
-  if (!obDone) track('onboard_skip');
+// 3D 로고: 같은 로고 그림을 1px 간격으로 뒤로 겹겹이 쌓아(뒤쪽일수록 어둡게) 로고 모양 그대로 두께를 만듦 — 사각형 여백 없이 로고 윤곽만 입체.
+// 무거워서 가운데 카드만 층을 쌓고 나머지는 한 장
+function cbLogoLayers(logo, deep) {
+  if (!logo) return '<div class="cb-l-empty"></div>';
+  if (!deep) return `<img class="cb-l front" src="${logo}" alt="" draggable="false">`;
+  const N = 16;
+  let h = '';
+  for (let k = N; k >= 1; k--) h += `<img class="cb-l" src="${logo}" alt="" draggable="false" style="transform:translateZ(${(-k * 1.35).toFixed(2)}px);filter:brightness(${(0.2 + 0.28 * (1 - k / N)).toFixed(2)}) saturate(.75)">`;
+  return h + `<img class="cb-l front" src="${logo}" alt="" draggable="false">`;
+}
+const cbIsStar = t => (cb.mode === 'pick' ? obPicked.includes(t) : isFavoriteTeam(t));
+function buildCbCards() {
+  document.getElementById('cb-track').innerHTML = cb.rows.map((r, i) => `<div class="cb-card" data-i="${i}">
+    <div class="cb-flip">
+      <div class="cb-face cb-front" onclick="cbCardClick(${i})">
+        <div class="cb-rank"><b>${r.rank}</b>위 <span>· 승점 ${r.points}</span></div>
+        <div class="cb-logo-wrap"><div class="cb-logo3d"></div><i class="cb-shadow"></i></div>
+        <div class="cb-name">${shortName(r.team)}</div>
+        <div class="cb-rec">${r.played}경기 ${r.wins}승 ${r.draws}무 ${r.losses}패 · 득실 ${r.gd > 0 ? '+' : ''}${r.gd}</div>
+        <button class="cb-star${cbIsStar(r.team) ? ' on' : ''}" data-team="${cbAttr(r.team)}" onclick="event.stopPropagation();cbToggleStar(this.dataset.team)" aria-label="내 팀">★</button>
+      </div>
+      <div class="cb-face cb-back"></div>
+    </div></div>`).join('');
+}
+function layoutCb(instant) {
+  const stage = document.getElementById('cb-track');
+  const narrow = innerWidth <= 600, gap = narrow ? 170 : 330;
+  stage.classList.toggle('instant', !!instant);
+  stage.querySelectorAll('.cb-card').forEach(c => {
+    const i = +c.dataset.i, o = i - cb.cur, a = Math.abs(o);
+    const x = Math.sign(o) * (Math.min(a, 1) * gap + Math.max(0, a - 1) * gap * 0.62);
+    c.style.transform = `translateX(${x}px) translateZ(${-Math.min(a, 3) * 150}px) rotateY(${-Math.sign(o) * Math.min(a, 1) * 34}deg)`;
+    c.style.opacity = a === 0 ? 1 : a === 1 ? 0.62 : a === 2 ? 0.28 : 0;
+    c.style.zIndex = 100 - a;
+    c.style.pointerEvents = a <= 2 ? '' : 'none';
+    c.classList.toggle('center', o === 0);
+    c.classList.toggle('flipped', o === 0 && cb.flipped);
+    const lg = c.querySelector('.cb-logo3d'), deep = a === 0 ? '1' : '0';
+    if (lg.dataset.deep !== deep) { const r = cb.rows[i]; lg.dataset.deep = deep; lg.innerHTML = cbLogoLayers(logos[r.team] || r.logo || '', deep === '1'); }
+  });
+  if (instant) requestAnimationFrame(() => requestAnimationFrame(() => stage.classList.remove('instant')));
+  document.querySelectorAll('#cb-strip .cb-dot').forEach((d, i) => d.classList.toggle('on', i === cb.cur));
+  const on = document.querySelector('#cb-strip .cb-dot.on');
+  if (on) on.scrollIntoView({ block: 'nearest', inline: 'center', behavior: instant || cbReduce() ? 'instant' : 'smooth' });
+  document.getElementById('cb-prev').disabled = cb.cur <= 0;
+  document.getElementById('cb-next').disabled = cb.cur >= cb.rows.length - 1;
+}
+function renderCbStrip() {
+  document.getElementById('cb-strip').innerHTML = cb.rows.map((r, i) =>
+    `<button class="cb-dot" onclick="cbSweepTo(${i})" title="${r.rank}위 ${cbAttr(shortName(r.team))}"><img src="${logos[r.team] || r.logo || ''}" alt="" onerror="this.style.visibility='hidden'"><span>${r.rank}</span></button>`).join('');
+}
+function cbStep(d) {
+  if (cb.sweep) { clearInterval(cb.sweep); cb.sweep = null; }
+  const n = Math.max(0, Math.min(cb.rows.length - 1, cb.cur + d));
+  if (n === cb.cur) return;
+  cb.cur = n; cb.flipped = false; layoutCb();
+}
+// 멀리 떨어진 구단으로 갈 때: 1위부터 순서대로 빠르게 넘겨 가며 도착(한 칸씩 넘기는 간격은 거리에 맞춰 짧게, 총 1.5초 안팎)
+function cbSweepTo(target) {
+  clearInterval(cb.sweep); cb.sweep = null; cb.flipped = false;
+  if (target === cb.cur) { layoutCb(); return; }
+  if (cbReduce() || Math.abs(target - cb.cur) === 1) { cb.cur = target; layoutCb(); cbLanded(); return; }
+  const dir = Math.sign(target - cb.cur), steps = Math.abs(target - cb.cur);
+  const dt = Math.max(70, Math.min(200, 1500 / steps));
+  const trackEl = document.getElementById('cb-track');
+  trackEl.style.setProperty('--cbdur', `${Math.max(0.18, dt / 1000 * 1.6)}s`);
+  cb.sweep = setInterval(() => {
+    cb.cur += dir; layoutCb();
+    if (cb.cur === target) { clearInterval(cb.sweep); cb.sweep = null; trackEl.style.removeProperty('--cbdur'); cbLanded(); }
+  }, dt);
+}
+function cbLanded() {
+  const c = document.querySelector('#cb-track .cb-card.center');
+  if (!c || cbReduce()) return;
+  c.classList.remove('landed'); void c.offsetWidth; c.classList.add('landed');
+}
+function cbCardClick(i) {
+  if (cb.drag?.moved) return;
+  if (i !== cb.cur) { cbSweepTo(i); return; }
+  cbFlip(!cb.flipped);
+}
+function cbFlip(on) {
+  cb.flipped = on;
+  const c = document.querySelector('#cb-track .cb-card.center');
+  if (!c) return;
+  c.classList.toggle('flipped', on);
+  if (on) { cbLoadBack(cb.cur); track('club_flip', { team: shortName(cb.rows[cb.cur].team) }); }
+}
+// 뒷면: 구단 정보(한국어 이름·감독·연고지·경기장·창단) + 베스트 11(선수 평점 데이터 — 없으면 이번 시즌 공격 포인트 상위)
+async function cbLoadBack(i) {
+  const r = cb.rows[i], team = r.team;
+  const back = document.querySelector(`#cb-track .cb-card[data-i="${i}"] .cb-back`);
+  if (!back || back.dataset.loaded === team) return;
+  back.dataset.loaded = team;
+  back.innerHTML = `<div class="cb-back-in"><div class="mp-skel"><i style="width:60%;height:18px"></i><i style="width:100%;height:60px"></i><i style="width:100%;height:160px"></i></div></div>`;
+  const [info, sq, tp] = await Promise.all([fetchTeamInfo(team).catch(() => null), fetchAfSquad(team),
+    fetch(`${API}/team/players/${encodeURIComponent(team)}`).then(x => (x.ok ? x.json() : null)).catch(() => null)]);
+  if (back.dataset.loaded !== team) return;
+  const w = info?.wiki || {};
+  const fact = (label, v) => (v ? `<div class="cb-fact"><small>${label}</small><b>${v}</b></div>` : '');
+  const cap = w.capacity ? ` · ${Number(w.capacity).toLocaleString()}석` : '';
+  let xi = sq ? bestElevenHtml(sq, team) : '';
+  if (!xi) {
+    const lg = tp?.comps?.[cb.league]?.players || [];
+    xi = `<div class="tp-sec"><div class="tp-t">이번 시즌 공격 포인트 <span>베스트 11은 선수 평점 데이터 연결 후 제공돼요</span></div>${lg.length
+      ? lg.slice(0, 5).map(p => `<div class="cb-tp">${playerAvatarHtml(p, 'pl-photo')}<b>${p.name}</b><span>${p.goals}골 ${p.assists}도움</span></div>`).join('')
+      : '<div class="ti-empty" style="padding:10px 0">아직 기록이 없어요</div>'}</div>`;
+  }
+  back.innerHTML = `<div class="cb-back-in">
+    <div class="cb-bh"><img src="${logos[team] || r.logo || ''}" alt="" onerror="this.style.visibility='hidden'"><div><b>${w.name_ko || shortName(team)}</b><small>${team}</small></div>
+      <button class="cb-turn" onclick="event.stopPropagation();cbFlip(false)" aria-label="앞면으로">↺</button></div>
+    <div class="cb-facts">${fact('감독', w.coach || info?.coach)}${fact('연고지', w.city)}${fact('홈구장', (w.stadium || info?.venue || '') + cap)}${fact('창단', info?.founded ? `${info.founded}년` : '')}</div>
+    ${xi}
+    <div class="cb-actions"><button class="cb-more" onclick="event.stopPropagation();openTeamInfo('${escJs(team)}')">팀 정보 전체 보기</button>
+      <button class="cb-star wide${cbIsStar(team) ? ' on' : ''}" data-team="${cbAttr(team)}" onclick="event.stopPropagation();cbToggleStar(this.dataset.team)">★ 내 팀</button></div>
+  </div>`;
+}
+function cbToggleStar(team) {
+  if (cb.mode === 'pick') {
+    const i = obPicked.indexOf(team);
+    if (i >= 0) obPicked.splice(i, 1);
+    else if (obPicked.length >= FAV_MAX) { showToast(`최대 ${FAV_MAX}팀까지 고를 수 있어요`); return; }
+    else obPicked.push(team);
+    renderCbFoot();
+  } else {
+    const list = getFavoriteTeams();
+    if (list.includes(team)) { setFavoriteTeams(list.filter(t => t !== team)); showToast(`${shortName(team)} 즐겨찾기를 해제했어요`); }
+    else if (list.length >= FAV_MAX) { showToast(`즐겨찾기는 ${FAV_MAX}팀까지예요 · 다른 팀을 먼저 해제해 주세요`); return; }
+    else { setFavoriteTeams([...list, team]); showToast(`${shortName(team)}을(를) 내 팀으로 등록했어요 ⭐`); track('favorite_add', { team: shortName(team) }); }
+    loadMyTeamWidget(); loadTodayMatches();
+  }
+  document.querySelectorAll('#club-browser .cb-star').forEach(b => b.classList.toggle('on', cbIsStar(b.dataset.team)));
+}
+function renderCbFoot() {
+  const foot = document.getElementById('cb-foot');
+  if (cb.mode !== 'pick') { foot.innerHTML = '<span class="cb-hint">‹ › · 스와이프 · ← → 키로 넘기기 · 로고를 누르면 뒤집혀요</span>'; return; }
+  const n = obPicked.length;
+  foot.innerHTML = `<div class="cb-picked">${n ? obPicked.map(t => `<button class="ob-chip" data-team="${cbAttr(t)}" onclick="cbToggleStar(this.dataset.team)" title="빼기"><img src="${logos[t] || ''}" alt="" onerror="this.style.display='none'">${shortName(t)}<b>✕</b></button>`).join('') : '<span class="cb-hint">리그를 바꿔 가며 여러 팀을 고를 수 있어요</span>'}</div>
+    <div class="cb-pick-btns"><button class="ob-skip" onclick="closeClubBrowser()">나중에 할게요</button><button class="ob-done" onclick="finishOnboard()"${n ? '' : ' disabled'}>${n ? `선택 완료 (${n}/${FAV_MAX})` : '팀을 골라주세요'}</button></div>`;
 }
 function finishOnboard() {
   if (!obPicked.length) return;
   obDone = true;
   setFavoriteTeams([...obPicked]);
   track('onboard_done', { teams: obPicked.length });
-  closeOnboard();
+  closeClubBrowser();
   try { localStorage.setItem('todayView', 'fav'); } catch (_) {}   // 다음 경기 카드를 바로 "내 팀"으로
   loadMyTeamWidget(); loadTodayMatches();
   showToast(`${obPicked.length}팀을 내 팀으로 등록했어요 ⭐`);
 }
+// 검색: 5대 리그 이번 시즌 팀 — 영어 이름·짧은 이름·한국어 구단명(위키백과)
+async function cbSearch(q) {
+  const box = document.getElementById('cb-results');
+  q = q.trim().toLowerCase().replace(/\s+/g, '');
+  if (!q) { box.innerHTML = ''; box.classList.remove('open'); return; }
+  const ko = await fetchTeamsKo();
+  const all = getAllTeamsForSearch().filter(t => getTeamLeagueCode(t));
+  const norm = s => String(s || '').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, '');
+  const hits = all.filter(t => [t, shortName(t), cleanTeamName(t), ko[t]].some(n => norm(n).includes(norm(q)))).slice(0, 8);
+  box.innerHTML = hits.length ? hits.map((t, k) => `<button class="cb-res${k ? '' : ' first'}" data-team="${cbAttr(t)}" onclick="cbGoToTeam(this.dataset.team)"><img src="${logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'"><b>${shortName(t)}</b><small>${ko[t] || ''}</small><em>${(CB_LEAGUES.find(l => l[0] === getTeamLeagueCode(t)) || [])[1] || ''}</em></button>`).join('')
+    : '<div class="cb-res none">찾는 구단이 없어요 · 5대 리그 이번 시즌 구단만 있어요</div>';
+  box.classList.add('open');
+}
+function cbSearchKey(e) {
+  if (e.key === 'Enter') { const f = document.querySelector('#cb-results .cb-res.first'); if (f) cbGoToTeam(f.dataset.team); }
+  else if (e.key === 'Escape') { e.stopPropagation(); if (e.target.value) { e.target.value = ''; cbSearch(''); } else closeClubBrowser(); }
+}
+async function cbGoToTeam(team) {
+  const inp = document.getElementById('cb-search-input');
+  inp.value = ''; cbSearch(''); inp.blur();
+  const code = getTeamLeagueCode(team);
+  if (!code) return;
+  track('club_search', { team: shortName(team) });
+  if (code !== cb.league) { await cbLoadLeague(code, team); return; }
+  const i = cb.rows.findIndex(r => r.team === team);
+  if (i < 0) return;
+  // 같은 리그면 1위로 돌아간 뒤 순위대로 넘겨 감(요청하신 "1위부터 찾은 구단까지" 연출)
+  if (cb.cur !== 0 && !cbReduce()) { cb.cur = 0; cb.flipped = false; layoutCb(); setTimeout(() => cbSweepTo(i), 380); }
+  else cbSweepTo(i);
+}
+// 넘기기: 키보드(←→, 검색창 입력 중이 아닐 때) · 가로 휠 · 스와이프/드래그
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && document.getElementById('onboard-modal').classList.contains('show')) { e.stopImmediatePropagation(); closeOnboard(); }
+  const el = document.getElementById('club-browser');
+  if (!el?.classList.contains('show') || document.querySelector('.modal-overlay.show')) return;
+  if (e.key === 'Escape') { e.stopImmediatePropagation(); if (cb.flipped) cbFlip(false); else closeClubBrowser(); return; }
+  if (e.target.matches('input, textarea')) return;
+  if (e.key === 'ArrowRight') { e.preventDefault(); cbStep(1); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); cbStep(-1); }
+  else if (e.key === 'Enter' || e.key === ' ') { if (e.target.closest('.cb-front') || e.target === document.body) { e.preventDefault(); cbFlip(!cb.flipped); } }
 }, true);
+(function () {
+  const stage = document.getElementById('cb-stage');
+  if (!stage) return;
+  stage.addEventListener('wheel', e => {
+    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY) || e.target.closest('.cb-back')) return;
+    e.preventDefault();
+    cb.wheel += e.deltaX;
+    const now = Date.now();
+    if (Math.abs(cb.wheel) > 60 && now - cb.wheelAt > 280) { cbStep(Math.sign(cb.wheel)); cb.wheel = 0; cb.wheelAt = now; }
+  }, { passive: false });
+  stage.addEventListener('pointerdown', e => { if (e.target.closest('.cb-back, button')) return; cb.drag = { x: e.clientX, y: e.clientY, moved: false }; });
+  stage.addEventListener('pointermove', e => { if (cb.drag && Math.abs(e.clientX - cb.drag.x) > 8) cb.drag.moved = true; });
+  const end = e => {
+    if (!cb.drag) return;
+    const dx = e.clientX - cb.drag.x, dy = e.clientY - cb.drag.y;
+    if (cb.drag.moved && Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) cbStep(dx < 0 ? 1 : -1);
+    setTimeout(() => { cb.drag = null; }, 0);   // 드래그 직후의 click(뒤집기)은 무시
+  };
+  stage.addEventListener('pointerup', end); stage.addEventListener('pointercancel', () => { cb.drag = null; });
+  addEventListener('resize', () => { if (document.getElementById('club-browser').classList.contains('show')) layoutCb(true); });
+})();
 
 loadLogos();predictableTeamsReady=loadPredictableTeams();loadStandings('PL');loadAccuracy();loadTodayMatches();loadBigMatch();loadMyTeamWidget();loadTrackStrip();openSharedPrediction();maybeOnboard();
 

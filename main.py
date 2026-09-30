@@ -1478,6 +1478,11 @@ def get_team_squad(team_name: str):
         raise HTTPException(status_code=404, detail="선수 기록 데이터 없음")
     return d
 
+@app.get("/teams/ko")
+def get_teams_ko():
+    """구단 둘러보기 검색용: 팀 이름 → 한국어 구단명(위키백과 name_ko) — "맨체스터"·"바이에른"처럼 한글로도 찾게 (2026-09-30)"""
+    return {t: w["name_ko"] for t, w in (_load_json("team_wiki.json") or {}).items() if w.get("name_ko")}
+
 @app.get("/player/profile/{player_id}")
 def get_player_profile(player_id: int):
     """선수 카드 경력·트로피·부상 이력 — update_data.af_player_profile로 만든 fotdata_model/af_profiles.json {API-Football 선수 ID: ...}.
