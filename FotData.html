@@ -3959,9 +3959,11 @@ async function openSharedPrediction() {
 
 function goToFullPrediction(home, away) {
   closeMatchPredictModal();
+  const was = curPage();
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-predict').classList.add('active');
   setActiveTab('predict');
+  if (was !== 'predict') navPush('predict');
   selectTeamFromPopup('home', home);
   selectTeamFromPopup('away', away);
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -4660,7 +4662,7 @@ function setActiveTab(page) {
     if (t.dataset.page === page) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current');
   });
 }
-function showPage(page) {
+function showPage(page, fromHistory) {
   // 하단 탭바는 스크롤을 내린 채로 누르게 되므로 새 탭은 맨 위부터, 지금 탭을 다시 누르면 부드럽게 맨 위로(iOS 관례)
   const same = document.getElementById('page-'+page).classList.contains('active');
   window.scrollTo({ top: 0, behavior: same ? 'smooth' : 'instant' });
@@ -4674,7 +4676,7 @@ function showPage(page) {
   target.classList.add('page-enter');
   setActiveTab(page);
   track('__view', page);
-  if (page !== 'predict' && location.search.includes('match=')) { try { history.replaceState(null, '', location.pathname); } catch (e) {} }
+  if (!fromHistory) navPush(page);   // 탭 이동도 브라우저 기록에(뒤로가기 = 이전 탭) — 주소는 #탭, 경기 예측은 #없이
   if(page==='players'){loadPlayers();}
   if(page==='champion'){loadChampion('PL');}
   if(page==='schedule'){loadSchedule(currentScheduleLeague);}
@@ -6075,7 +6077,7 @@ function renderStatBoxes(data, homeLbl, awayLbl, RM) {
 
 function showResult(data,home,away){
   lastPrediction = { data, h2h: null, home, away };
-  try { history.replaceState(null, '', predictionUrl(home, away)); } catch (e) { /* file:// 등 */ }   // 주소창 = 공유 링크
+  try { history.replaceState(history.state, '', predictionUrl(home, away)); } catch (e) { /* file:// 등 */ }   // 기록 상태(탭·창)는 유지   // 주소창 = 공유 링크
   renderResultPitch();
   const prob=data.probabilities;
   const resultHomeLogo=document.getElementById('result-home-logo'), resultAwayLogo=document.getElementById('result-away-logo');
@@ -7456,6 +7458,64 @@ document.addEventListener('keydown', e => {
     cbStep(e.clientX < r.left + r.width / 2 ? -1 : 1);
   });
   addEventListener('resize', () => { if (document.getElementById('club-browser').classList.contains('show')) layoutCb(true); });
+})();
+
+// ── 뒤로가기(2026-09-30): 폰에서 창을 닫으려고 뒤로가기를 누르면 사이트를 나가버렸음(기록이 하나도 안 쌓였음) ──
+// · 탭 이동은 기록에 남김(주소 #standings 등 — 새로고침해도 그 탭) → 뒤로가기 = 이전 탭
+// · 창(선수 카드·팀 정보·미리보기·구단 둘러보기 등)이 떠 있는 동안 기록에 "창" 한 칸(fdGuard)을 얹어 둠 → 뒤로가기 = 가장 위 창 하나 닫기
+//   (구단 둘러보기가 뒤집혀 있으면 앞면으로). 버튼·배경·Esc로 닫아 창이 다 없어지면 그 칸을 history.back()으로 치움(안 치우면 다음 뒤로가기가 헛돎)
+// · 창 여닫는 함수는 그대로 두고 표시 클래스 변화를 지켜봄 — 새 창을 만들면 OVERLAYS에 한 줄만 추가
+const NAV_PAGES = ['predict', 'champion', 'standings', 'players', 'schedule', 'shootout'];
+const OVERLAYS = [   // 위에 뜨는 순서 = 뒤로가기로 먼저 닫히는 순서
+  ['pc-modal', () => closePlayerCard()],
+  ['team-search-modal', () => closeTeamSearch()],
+  ['ti-modal', () => closeTeamInfoModal()],
+  ['match-predict-modal', () => closeMatchPredictModal()],
+  ['track-record-modal', () => closeTrackRecordModal()],
+  ['t-modal', () => closeTModal()],
+  ['club-browser', () => { if (cb.flipped) cbFlip(false); else closeClubBrowser(); }],
+  ['kofi-panel', () => toggleKofiPanel(), 'open'],
+  ['home-popup', () => closePopup('home')],
+  ['away-popup', () => closePopup('away')],
+];
+const nav = { pendingBack: false, deferred: null };
+const ovOpen = ([id, , cls = 'show']) => !!document.getElementById(id)?.classList.contains(cls);
+const anyOverlay = () => OVERLAYS.some(ovOpen);
+function curPage() { return document.querySelector('.page.active')?.id.slice(5) || 'predict'; }
+function navPush(page) {
+  if (nav.pendingBack) { nav.deferred = page; return; }   // 창 칸을 치우는 중이면 그게 끝난 뒤에
+  const url = location.pathname + (page === 'predict' ? '' : '#' + page);
+  try {
+    // 창을 닫자마자 탭을 옮긴 경우(팀 정보 → "순위표 보기") 남은 창 칸을 새 탭으로 바꿔 씀
+    if (history.state?.fdGuard && !anyOverlay()) history.replaceState({ fdPage: page }, '', url);
+    else history.pushState({ fdPage: page }, '', url);
+  } catch (e) { /* file:// 등 */ }
+}
+function navSync() {
+  if (nav.pendingBack) return;
+  const guard = history.state?.fdGuard, open = anyOverlay();
+  try {
+    if (open && !guard) history.pushState({ fdPage: curPage(), fdGuard: true }, '');
+    else if (!open && guard) { nav.pendingBack = true; history.back(); }
+  } catch (e) {}
+}
+(function () {
+  try { history.scrollRestoration = 'manual'; } catch (e) {}
+  const h = location.hash.slice(1);
+  try { history.replaceState({ fdPage: NAV_PAGES.includes(h) ? h : 'predict' }, ''); } catch (e) {}
+  const mo = new MutationObserver(navSync);   // 같은 순간에 닫고 여는 경우(미리보기 → 팀 정보)는 한 번에 모여 와서 칸이 그대로 유지됨
+  OVERLAYS.forEach(([id]) => { const el = document.getElementById(id); if (el) mo.observe(el, { attributes: true, attributeFilter: ['class'] }); });
+  addEventListener('popstate', e => {
+    if (nav.pendingBack) {   // 우리가 치운 창 칸
+      nav.pendingBack = false;
+      if (nav.deferred) { const p = nav.deferred; nav.deferred = null; navPush(p); }
+      navSync();
+      return;
+    }
+    if (anyOverlay()) { OVERLAYS.find(ovOpen)[1](); setTimeout(navSync, 0); return; }
+    const page = e.state?.fdPage || location.hash.slice(1) || 'predict';
+    if (NAV_PAGES.includes(page) && page !== curPage()) showPage(page, true);
+  });
 })();
 
 loadLogos();predictableTeamsReady=loadPredictableTeams();loadStandings('PL');loadAccuracy();loadTodayMatches();loadBigMatch();loadMyTeamWidget();loadTrackStrip();openSharedPrediction();maybeOnboard();
