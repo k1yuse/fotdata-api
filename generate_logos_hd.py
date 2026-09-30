@@ -1,7 +1,9 @@
 """
 구단 로고 고화질·최신판 만들기 (2026-09-30) — 사이트 전체가 쓰는 로고를 football-data PNG(200px, 옛 버전 섞임) 대신
 영문 위키백과 구단 문서 머리 인포박스의 **현재 엠블럼**(대부분 SVG 원본)을 400px 투명 WebP로 바꿔 저장.
-  - 출력: logos/hd/<slug>.webp (Vercel이 그대로 서빙) + fotdata_model/team_logos_hd.json {팀 이름: 주소}
+  - 출력: logos/hd/<slug>.webp(160px — 목록·카드 등 사이트 대부분, 화면 최대 72px의 2배) + logos/hd/l/<slug>.webp(400px — 구단 둘러보기
+    가운데 카드·공유 이미지처럼 크게 띄우는 곳만, 프론트 logoLarge()) + fotdata_model/team_logos_hd.json {팀 이름: 160px 주소}
+    (처음엔 400px 하나만 썼더니 20~40px 칸에 40KB짜리가 내려가 첫 화면에서만 740KB 낭비 — PageSpeed 지적)
   - 서버(main.py _team_logos)가 team_logos.json 위에 덮어써서 /logos·순위표·빅매치·공유 썸네일이 모두 같은 로고를 씀
   - 실행: python generate_logos_hd.py  (키 불필요, 약 2~3분) — 승격팀이 생기거나 엠블럼이 바뀌면 다시 실행
 
@@ -27,7 +29,8 @@ from PIL import Image
 BASE = os.path.dirname(os.path.abspath(__file__))
 OUT_DIR = os.path.join(BASE, 'logos', 'hd')
 SITE = 'https://fotdata-api.vercel.app'
-SIZE = 400                      # 화면 로고 최대 200px × 2배 화면
+SIZE = 400                      # 큰 로고: 구단 둘러보기 200px × 2배 화면
+SMALL = 160                     # 기본 로고: 화면 최대 72px × 2배 화면
 UA = {'User-Agent': 'FotData/1.0 (https://fotdata-api.vercel.app; club crest refresh)'}
 API = 'https://en.wikipedia.org/w/api.php'
 # 사용자 검수(2026-09-30)에서 이상하게 잡힌 로고 → 지금(football-data) 로고 유지
@@ -91,6 +94,12 @@ def trim_square(im, size=SIZE, pad=0.02):
     return cv
 
 
+def save_both(hd, name):
+    os.makedirs(os.path.join(OUT_DIR, 'l'), exist_ok=True)
+    hd.save(os.path.join(OUT_DIR, 'l', name + '.webp'), 'WEBP', quality=90, method=6)
+    hd.resize((SMALL, SMALL), Image.LANCZOS).save(os.path.join(OUT_DIR, name + '.webp'), 'WEBP', quality=90, method=6)
+
+
 def one(team, en_title):
     if team in EXCLUDE:
         return team, None, 'excluded'
@@ -111,8 +120,7 @@ def one(team, en_title):
     hd = trim_square(im)
     if corners_opaque(hd) >= 3:
         return team, None, 'background'
-    path = os.path.join(OUT_DIR, slug(team) + '.webp')
-    hd.save(path, 'WEBP', quality=90, method=6)
+    save_both(hd, slug(team))
     return team, f'{SITE}/logos/hd/{slug(team)}.webp', 'ok'
 
 
@@ -135,7 +143,7 @@ def main():
     from collections import Counter
     print(Counter(s.split(':')[0].split(' ')[0] for _, _, s in res))
     print('유지(지금 로고):', [(t, s) for t, u, s in res if not u])
-    size = sum(os.path.getsize(os.path.join(OUT_DIR, f)) for f in os.listdir(OUT_DIR))
+    size = sum(os.path.getsize(os.path.join(dp, f)) for dp, _, fs in os.walk(OUT_DIR) for f in fs)
     print(f'✅ {len(hd)}팀 → logos/hd ({size / 1e6:.1f}MB)')
 
 

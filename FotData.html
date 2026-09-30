@@ -57,7 +57,13 @@
     }
   }
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- 첫 화면을 막지 않게: API·폰트 서버에 미리 연결하고, Inter 폰트 CSS는 비동기로(도착 전엔 기본 글꼴 → 오면 바뀜, display=swap).
+       예전엔 폰트 CSS를 받을 때까지 화면이 안 그려졌음(모바일 느린 4G 기준 약 0.75초) -->
+  <link rel="preconnect" href="https://fotdata-api.onrender.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; background: #0d1117; color: #e6edf3; min-height: 100vh; display: flex; flex-direction: column; }
@@ -89,7 +95,7 @@
     .bigmatch-banner.slot-wait { min-height: 331px; }
     .card.tr-strip.slot-wait { min-height: 67px; }
     .myteam-row.slot-wait { min-height: 53px; }
-    .today-matches-strip > .loading { min-height: 105px; box-sizing: border-box; }
+    .today-matches-strip > .loading { min-height: 113px; box-sizing: border-box; }
     @media (max-width: 768px) { .bigmatch-banner.slot-wait { min-height: 298px; } }
     @media (max-width: 400px) { .card.tr-strip.slot-wait { min-height: 83px; } }   /* 좁은 폰은 설명이 두 줄 */
     .card.tr-strip { display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; transition: border-color .15s, transform .15s; }
@@ -213,7 +219,8 @@
     .today-card-league { font-size: 10px; color: #8b949e; display: flex; align-items: center; gap: 4px; margin-bottom: 8px; white-space: nowrap; }
     .today-card-league img { width: 12px; height: 12px; object-fit: contain; }
     .today-card-row { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #e6edf3; margin-bottom: 4px; }
-    .today-card-hit { display: inline-flex; align-items: center; gap: 6px; min-width: 0; cursor: pointer; }
+    .today-card-hit { display: inline-flex; align-items: center; gap: 6px; min-width: 0; cursor: pointer; min-height: 24px; margin: -2px 0; }   /* 터치 영역 24px(두 팀 줄 간격 24px) */
+    .today-card-row { min-height: 20px; }
     .today-card-row img { width: 16px; height: 16px; object-fit: contain; flex-shrink: 0; }
     .today-card-row span.name { max-width: 92px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: color .15s; }
     .today-card-hit:hover span.name { color: #58a6ff; }
@@ -2034,12 +2041,12 @@
   <div class="page" id="page-standings">
     <div id="standings-card" class="card st-card">
       <div class="league-tabs st-leagues" id="league-tabs">
-        <div class="league-tab active" onclick="loadStandings('PL')" data-league="PL"><img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> EPL</div>
-        <div class="league-tab" onclick="loadStandings('PD')" data-league="PD"><img src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'"> 라리가</div>
-        <div class="league-tab" onclick="loadStandings('BL1')" data-league="BL1"><img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'"> 분데스리가</div>
-        <div class="league-tab" onclick="loadStandings('SA')" data-league="SA"><img src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'"> 세리에A</div>
-        <div class="league-tab" onclick="loadStandings('FL1')" data-league="FL1"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'"> 리그앙</div>
-        <div class="league-tab ucl-tab" onclick="loadCL()" data-league="CL"><img src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> 챔피언스리그</div>
+        <div class="league-tab active" onclick="loadStandings('PL')" data-league="PL"><img alt="" src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> EPL</div>
+        <div class="league-tab" onclick="loadStandings('PD')" data-league="PD"><img alt="" src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'"> 라리가</div>
+        <div class="league-tab" onclick="loadStandings('BL1')" data-league="BL1"><img alt="" src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'"> 분데스리가</div>
+        <div class="league-tab" onclick="loadStandings('SA')" data-league="SA"><img alt="" src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'"> 세리에A</div>
+        <div class="league-tab" onclick="loadStandings('FL1')" data-league="FL1"><img alt="" src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'"> 리그앙</div>
+        <div class="league-tab ucl-tab" onclick="loadCL()" data-league="CL"><img alt="" src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> 챔피언스리그</div>
       </div>
       <!-- 시즌(all_matches.csv가 담는 4시즌) + 챔스면 리그 스테이지/토너먼트 전환 -->
       <div class="st-controls">
@@ -2074,11 +2081,11 @@
     <div class="champ-head"><b>2026-27 시즌 순위 예측</b><span>현재 승점에서 출발해 남은 경기를 AI 예측 모델 확률로 수천 번 돌려본 결과(몬테카를로 시뮬레이션)</span></div>
     
     <div class="league-tabs" id="champion-league-tabs">
-      <button class="champ-league-btn active" onclick="loadChampion('PL', this)"><img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="width:16px;height:16px;filter:brightness(0) invert(1);vertical-align:middle;margin-right:4px">EPL</button>
-      <button class="champ-league-btn" onclick="loadChampion('PD', this)"><img src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">라리가</button>
-      <button class="champ-league-btn" onclick="loadChampion('BL1', this)"><img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">분데스리가</button>
-      <button class="champ-league-btn" onclick="loadChampion('SA', this)"><img src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">세리에A</button>
-      <button class="champ-league-btn" onclick="loadChampion('FL1', this)"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">리그앙</button>
+      <button class="champ-league-btn active" onclick="loadChampion('PL', this)"><img alt="" src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="width:16px;height:16px;filter:brightness(0) invert(1);vertical-align:middle;margin-right:4px">EPL</button>
+      <button class="champ-league-btn" onclick="loadChampion('PD', this)"><img alt="" src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">라리가</button>
+      <button class="champ-league-btn" onclick="loadChampion('BL1', this)"><img alt="" src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">분데스리가</button>
+      <button class="champ-league-btn" onclick="loadChampion('SA', this)"><img alt="" src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">세리에A</button>
+      <button class="champ-league-btn" onclick="loadChampion('FL1', this)"><img alt="" src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">리그앙</button>
     </div>
     <!-- <div id="champion-content"><div class="loading">불러오는 중...</div></div> -->
     <!-- 시뮬레이션 횟수(세그먼트) + 시작 버튼 — 순위표와 같은 컨트롤 모양 (2026-09-29) -->
@@ -2105,12 +2112,12 @@
 <div id="page-schedule" class="page">
   <div class="card">
     <div class="league-tabs" id="schedule-league-tabs">
-      <div class="league-tab active" onclick="loadSchedule('PL', this)" data-league="PL"><img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> EPL</div>
-      <div class="league-tab" onclick="loadSchedule('PD', this)" data-league="PD"><img src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'"> 라리가</div>
-      <div class="league-tab" onclick="loadSchedule('BL1', this)" data-league="BL1"><img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'"> 분데스리가</div>
-      <div class="league-tab" onclick="loadSchedule('SA', this)" data-league="SA"><img src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'"> 세리에A</div>
-      <div class="league-tab" onclick="loadSchedule('FL1', this)" data-league="FL1"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'"> 리그앙</div>
-      <div class="league-tab ucl-tab" onclick="loadSchedule('CL', this)" data-league="CL"><img src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> 챔피언스리그</div>
+      <div class="league-tab active" onclick="loadSchedule('PL', this)" data-league="PL"><img alt="" src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> EPL</div>
+      <div class="league-tab" onclick="loadSchedule('PD', this)" data-league="PD"><img alt="" src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'"> 라리가</div>
+      <div class="league-tab" onclick="loadSchedule('BL1', this)" data-league="BL1"><img alt="" src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'"> 분데스리가</div>
+      <div class="league-tab" onclick="loadSchedule('SA', this)" data-league="SA"><img alt="" src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'"> 세리에A</div>
+      <div class="league-tab" onclick="loadSchedule('FL1', this)" data-league="FL1"><img alt="" src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'"> 리그앙</div>
+      <div class="league-tab ucl-tab" onclick="loadSchedule('CL', this)" data-league="CL"><img alt="" src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> 챔피언스리그</div>
     </div>
     <div class="sched-month-nav">
       <button class="sched-month-arrow" id="sched-month-prev" onclick="stepScheduleMonth(-1)" aria-label="이전 달">‹</button>
@@ -2127,12 +2134,12 @@
   <div class="card">
     <div class="champ-head"><b id="players-title">선수 순위</b><span id="players-sub">이번 시즌 득점·도움 순위 · 매일 새벽 자동 갱신</span></div>
     <div class="league-tabs" id="players-league-tabs">
-      <button class="champ-league-btn active" data-league="PL" onclick="loadPlayers('PL', this)"><img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="width:16px;height:16px;filter:brightness(0) invert(1);vertical-align:middle;margin-right:4px">EPL</button>
-      <button class="champ-league-btn" data-league="PD" onclick="loadPlayers('PD', this)"><img src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">라리가</button>
-      <button class="champ-league-btn" data-league="BL1" onclick="loadPlayers('BL1', this)"><img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">분데스리가</button>
-      <button class="champ-league-btn" data-league="SA" onclick="loadPlayers('SA', this)"><img src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">세리에A</button>
-      <button class="champ-league-btn" data-league="FL1" onclick="loadPlayers('FL1', this)"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">리그앙</button>
-      <button class="champ-league-btn" data-league="CL" onclick="loadPlayers('CL', this)"><img src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'" style="width:16px;height:16px;filter:brightness(0) invert(1);vertical-align:middle;margin-right:4px">챔피언스리그</button>
+      <button class="champ-league-btn active" data-league="PL" onclick="loadPlayers('PL', this)"><img alt="" src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="width:16px;height:16px;filter:brightness(0) invert(1);vertical-align:middle;margin-right:4px">EPL</button>
+      <button class="champ-league-btn" data-league="PD" onclick="loadPlayers('PD', this)"><img alt="" src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">라리가</button>
+      <button class="champ-league-btn" data-league="BL1" onclick="loadPlayers('BL1', this)"><img alt="" src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">분데스리가</button>
+      <button class="champ-league-btn" data-league="SA" onclick="loadPlayers('SA', this)"><img alt="" src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">세리에A</button>
+      <button class="champ-league-btn" data-league="FL1" onclick="loadPlayers('FL1', this)"><img alt="" src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">리그앙</button>
+      <button class="champ-league-btn" data-league="CL" onclick="loadPlayers('CL', this)"><img alt="" src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'" style="width:16px;height:16px;filter:brightness(0) invert(1);vertical-align:middle;margin-right:4px">챔피언스리그</button>
     </div>
     <div style="display:flex;gap:24px;flex-wrap:wrap">
       <div class="player-col">
@@ -2185,12 +2192,12 @@
                 <span class="popup-close" onclick="closePopup('home')">✕</span>
               </div>
               <div class="popup-league-grid">
-                <div class="popup-league-btn active" onclick="selectLeagueTab('home','EPL',this)"><img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> EPL</div>
-                <div class="popup-league-btn" onclick="selectLeagueTab('home','LaLiga',this)"><img src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'"> 라리가</div>
-                <div class="popup-league-btn" onclick="selectLeagueTab('home','Bundesliga',this)"><img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'"> 분데스</div>
-                <div class="popup-league-btn" onclick="selectLeagueTab('home','SerieA',this)"><img src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'"> 세리에A</div>
-                <div class="popup-league-btn" onclick="selectLeagueTab('home','Ligue1',this)"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'"> 리그앙</div>
-                <div class="popup-league-btn" onclick="selectLeagueTab('home','UCL',this)"><img src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> UCL</div>
+                <div class="popup-league-btn active" onclick="selectLeagueTab('home','EPL',this)"><img alt="" src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> EPL</div>
+                <div class="popup-league-btn" onclick="selectLeagueTab('home','LaLiga',this)"><img alt="" src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'"> 라리가</div>
+                <div class="popup-league-btn" onclick="selectLeagueTab('home','Bundesliga',this)"><img alt="" src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'"> 분데스</div>
+                <div class="popup-league-btn" onclick="selectLeagueTab('home','SerieA',this)"><img alt="" src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'"> 세리에A</div>
+                <div class="popup-league-btn" onclick="selectLeagueTab('home','Ligue1',this)"><img alt="" src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'"> 리그앙</div>
+                <div class="popup-league-btn" onclick="selectLeagueTab('home','UCL',this)"><img alt="" src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> UCL</div>
               </div>
               <div class="popup-team-list" id="home-team-grid"></div>
              </div>
@@ -2214,12 +2221,12 @@
                 <span class="popup-close" onclick="closePopup('away')">✕</span>
               </div>
               <div class="popup-league-grid">
-                <div class="popup-league-btn active" onclick="selectLeagueTab('away','EPL',this)"><img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> EPL</div>
-                <div class="popup-league-btn" onclick="selectLeagueTab('away','LaLiga',this)"><img src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'"> 라리가</div>
-                <div class="popup-league-btn" onclick="selectLeagueTab('away','Bundesliga',this)"><img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'"> 분데스</div>
-                <div class="popup-league-btn" onclick="selectLeagueTab('away','SerieA',this)"><img src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'"> 세리에A</div>
-                <div class="popup-league-btn" onclick="selectLeagueTab('away','Ligue1',this)"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'"> 리그앙</div>
-                <div class="popup-league-btn" onclick="selectLeagueTab('away','UCL',this)"><img src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> UCL</div>
+                <div class="popup-league-btn active" onclick="selectLeagueTab('away','EPL',this)"><img alt="" src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> EPL</div>
+                <div class="popup-league-btn" onclick="selectLeagueTab('away','LaLiga',this)"><img alt="" src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'"> 라리가</div>
+                <div class="popup-league-btn" onclick="selectLeagueTab('away','Bundesliga',this)"><img alt="" src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'"> 분데스</div>
+                <div class="popup-league-btn" onclick="selectLeagueTab('away','SerieA',this)"><img alt="" src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'"> 세리에A</div>
+                <div class="popup-league-btn" onclick="selectLeagueTab('away','Ligue1',this)"><img alt="" src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'"> 리그앙</div>
+                <div class="popup-league-btn" onclick="selectLeagueTab('away','UCL',this)"><img alt="" src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> UCL</div>
               </div>
               <div class="popup-team-list" id="away-team-grid"></div>
              </div>
@@ -2388,7 +2395,7 @@
 <div class="modal-overlay" id="ti-modal" onclick="closeTeamInfoModal(event)">
   <div class="modal ti-modal">
     <div class="ti-header">
-      <img class="ti-logo" id="ti-logo" onerror="this.style.display='none'">
+      <img alt="" class="ti-logo" id="ti-logo" onerror="this.style.display='none'">
       <div>
         <div class="ti-name" id="ti-name"></div>
         <div class="ti-meta" id="ti-meta"></div>
@@ -2714,7 +2721,7 @@ function renderTodayCards(container, matches, opts = {}) {
       : (px ? `<span class="sp-mini tc-bar"><i class="h" style="width:${px[0]}%"></i><i class="d" style="width:${px[1]}%"></i><i class="a" style="width:${px[2]}%"></i></span>` : '') + `<div class="today-card-time">${timeStr}${px ? ` · <span class="${tc(px[1]) ? 'tc-d top' : 'tc-d'}">무 ${px[1]}%</span>` : ''}</div>`;
     const click = played ? `openMatchResultModal('${escJs(m.home_team)}','${escJs(m.away_team)}','${m.date}','${m.league}')` : `openMatchPredictModal('${escJs(m.home_team)}','${escJs(m.away_team)}')`;
     return `<div class="today-card${isFav ? ' today-card-fav' : ''}${live ? ' live' : ''}" onclick="${click}" style="cursor:pointer"${px ? ` title="${played ? '경기 전 AI 예측' : 'AI 예측'}: 홈승 ${px[0]}% · 무 ${px[1]}% · 원정승 ${px[2]}%"` : ''}>
-      <div class="today-card-league"><img src="${li.logo}" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">${li.name}${opts.showDate ? `<span class="today-card-date">${(() => { const d = new Date(m.date); return `${d.getMonth() + 1}.${d.getDate()} (${'일월화수목금토'[d.getDay()]})`; })()}</span>` : ''}</div>
+      <div class="today-card-league"><img alt="" src="${li.logo}" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">${li.name}${opts.showDate ? `<span class="today-card-date">${(() => { const d = new Date(m.date); return `${d.getMonth() + 1}.${d.getDate()} (${'일월화수목금토'[d.getDay()]})`; })()}</span>` : ''}</div>
       ${row(m.home_team, homeShort, 0, m.home_goals, w === 2)}${row(m.away_team, awayShort, 2, m.away_goals, w === 1)}
       ${foot}
     </div>`;
@@ -2829,16 +2836,16 @@ async function renderBigMatchBanner(m) {
   } catch (e) { /* 구장 정보 없으면 그냥 생략 */ }
 
   banner.innerHTML = `
-    <div class="bigmatch-label"><img src="${li.logo}" class="${li.wide ? 'wide' : ''}" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">빅매치 · ${li.name} · ${dateLabel}</div>
+    <div class="bigmatch-label"><img alt="" src="${li.logo}" class="${li.wide ? 'wide' : ''}" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">빅매치 · ${li.name} · ${dateLabel}</div>
     ${venueHtml}
     <div class="bigmatch-teams">
       <div class="bigmatch-team">
-        <div class="bigmatch-team-hit" onclick="openTeamInfo('${escJs(m.home_team)}')" onmouseenter="primeLogoGlow(this,'${escJs(m.home_team)}')"><img src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span class="bigmatch-team-name">${homeName}</span></div>
+        <div class="bigmatch-team-hit" onclick="openTeamInfo('${escJs(m.home_team)}')" onmouseenter="primeLogoGlow(this,'${escJs(m.home_team)}')"><img alt="" src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span class="bigmatch-team-name">${homeName}</span></div>
         ${homeProbHtml}
       </div>
       <div class="bigmatch-vs-col" onclick="openMatchPredictModal('${escJs(m.home_team)}','${escJs(m.away_team)}')">${probHtml}</div>
       <div class="bigmatch-team away">
-        <div class="bigmatch-team-hit" onclick="openTeamInfo('${escJs(m.away_team)}')" onmouseenter="primeLogoGlow(this,'${escJs(m.away_team)}')"><img src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"><span class="bigmatch-team-name">${awayName}</span></div>
+        <div class="bigmatch-team-hit" onclick="openTeamInfo('${escJs(m.away_team)}')" onmouseenter="primeLogoGlow(this,'${escJs(m.away_team)}')"><img alt="" src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"><span class="bigmatch-team-name">${awayName}</span></div>
         ${awayProbHtml}
       </div>
     </div>
@@ -3200,7 +3207,7 @@ function renderGlobalSearchResults(query) {
   if (!filtered.length) { container.innerHTML = '<div class="ti-empty">검색 결과가 없어요.</div>'; return; }
   container.innerHTML = filtered.map(t => `
     <div class="team-search-item" onclick="selectGlobalSearchResult('${escJs(t)}')">
-      <img src="${logos[t] || ''}" onerror="this.style.display='none'">
+      <img alt="" src="${logos[t] || ''}" onerror="this.style.display='none'">
       <span>${cleanTeamName(t)}</span>
     </div>
   `).join('');
@@ -4082,7 +4089,7 @@ async function switchTiTab(tab) {
         html += `<div class="ti-section-title">${POSITION_LABEL[pos]} (${players.length})</div>`;
         html += players.map(p => `<div class="ti-player-row">
           <div style="display:flex;align-items:center;gap:8px;min-width:0">
-            ${p.photo ? `<img src="${p.photo}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;background:#21262d" onerror="this.style.display='none'">` : ''}
+            ${p.photo ? `<img alt="" src="${p.photo}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;background:#21262d" onerror="this.style.display='none'">` : ''}
             <span class="ti-player-name" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.shirtNumber ? `<i class="pl-num">${p.shirtNumber}</i>` : ''}${p.name}</span>
           </div>
           <span class="ti-player-nation">${p.nationality || ''}</span>
@@ -4559,7 +4566,7 @@ function renderTeamGrid(side, leagueKey, search='') {
   let teams = [...(LEAGUE_DATA[leagueKey]?.teams||[])].sort((a,b)=>cleanTeamName(a).localeCompare(cleanTeamName(b)));
   if (search) teams=teams.filter(t=>t.toLowerCase().includes(search.toLowerCase()));
   if (!teams.length) { grid.innerHTML = '<div class="ti-empty">검색 결과가 없어요.</div>'; return; }
-  grid.innerHTML=teams.map(t=>`<div class="popup-team-row ${selectedTeams[side]===t?'selected':''}" onclick="selectTeamFromPopup('${side}','${t.replace(/'/g,"\\'")}')"><img src="${logos[t]||''}" onerror="this.style.display='none'"><span>${cleanTeamName(t)}</span>${unpredictableTeamsIn(t).length?'<span class="popup-team-nodata">예측 데이터 없음</span>':''}</div>`).join('');
+  grid.innerHTML=teams.map(t=>`<div class="popup-team-row ${selectedTeams[side]===t?'selected':''}" onclick="selectTeamFromPopup('${side}','${t.replace(/'/g,"\\'")}')"><img alt="" src="${logos[t]||''}" onerror="this.style.display='none'"><span>${cleanTeamName(t)}</span>${unpredictableTeamsIn(t).length?'<span class="popup-team-nodata">예측 데이터 없음</span>':''}</div>`).join('');
 }
 const teamPopupCloseTimers = {};
 function togglePopup(side) {
@@ -4615,10 +4622,10 @@ function filterTeams(side,val){renderTeamGrid(side,currentLeagueTab[side],val);}
 function selectTeamFromPopup(side,team){
   selectedTeams[side]=team; document.getElementById(`${side}-selected-text`).textContent=team; document.getElementById(`${side}-selected-text`).style.color='#e6edf3';
   const logoUrl=logos[team]||''; const logoDiv=document.getElementById(`${side}-logo`);
-  logoDiv.innerHTML=logoUrl?`<img src="${logoUrl}" style="width:100%;height:100%;object-fit:contain" onerror="this.parentNode.innerHTML=TEAM_LOGO_PLACEHOLDER">`:TEAM_LOGO_PLACEHOLDER;
+  logoDiv.innerHTML=logoUrl?`<img alt="" src="${logoUrl}" style="width:100%;height:100%;object-fit:contain" onerror="this.parentNode.innerHTML=TEAM_LOGO_PLACEHOLDER">`:TEAM_LOGO_PLACEHOLDER;
   const leagueInfo=getTeamLeague(team); const leagueDiv=document.getElementById(`${side}-league`);
-  if(leagueInfo){leagueDiv.innerHTML=`<img src="${leagueInfo.logo}" onerror="this.style.display='none'"> ${leagueInfo.name}`;}
-  else{leagueDiv.innerHTML=`<img src="https://crests.football-data.org/CL.png" style="width:12px;height:12px;object-fit:contain"> UEFA 챔피언스리그`;}
+  if(leagueInfo){leagueDiv.innerHTML=`<img alt="" src="${leagueInfo.logo}" onerror="this.style.display='none'"> ${leagueInfo.name}`;}
+  else{leagueDiv.innerHTML=`<img alt="" src="https://crests.football-data.org/CL.png" style="width:12px;height:12px;object-fit:contain"> UEFA 챔피언스리그`;}
   closePopup(side); renderTeamGrid(side,currentLeagueTab[side]);
   applyClubAccent(side, team);
 }
@@ -5358,7 +5365,7 @@ function renderStandings(data, leagueCode, keepSort) {
     const num = sort === 'rank' ? team.rank : `${i + 1}<small>(${team.rank})</small>`;
     html += `<tr class="st-row ${zc} ${champ ? 'champ' : ''} row-enter" style="animation-delay:${Math.min(i * 35, 600)}ms">
       <td><span class="st-rank">${num}</span></td>
-      <td><div class="team-cell clickable-team" onclick="openTeamInfo('${escJs(team.team)}')"><img src="${team.logo}" width="24" height="24" style="object-fit:contain" onerror="this.style.visibility='hidden'"><span>${cleanTeamName(team.team)}</span>${champ ? `<span class="st-crown" title="우승">${TROPHY_ICON}</span>` : ''}</div></td>
+      <td><div class="team-cell clickable-team" onclick="openTeamInfo('${escJs(team.team)}')"><img alt="" src="${team.logo}" width="24" height="24" style="object-fit:contain" onerror="this.style.visibility='hidden'"><span>${cleanTeamName(team.team)}</span>${champ ? `<span class="st-crown" title="우승">${TROPHY_ICON}</span>` : ''}</div></td>
       <td class="center">${team.played}</td><td class="center">${team.wins}</td><td class="center">${team.draws}</td><td class="center">${team.losses}</td>
       <td class="center hide-mobile col-gf">${team.gf}</td><td class="center hide-mobile col-ga">${team.ga}</td>
       <td class="center st-gd ${team.gd > 0 ? 'pos' : team.gd < 0 ? 'neg' : ''}">${team.gd > 0 ? '+' : ''}${team.gd}</td>
@@ -6188,6 +6195,8 @@ function showResult(data,home,away){
 // ── 예측 결과 공유 카드 ──
 // crests.football-data.org 이미지는 CORS 헤더가 없어 그냥 그리면 캔버스가
 // tainted되어 toBlob이 막힌다 — 백엔드 /proxy/logo(CORS 전체 허용)를 거쳐 로드한다.
+// 고화질 로고는 두 크기: logos/hd/x.webp(160px — 목록·카드 등 대부분) / logos/hd/l/x.webp(400px — 구단 둘러보기 가운데·공유 이미지처럼 크게 띄우는 곳만)
+function logoLarge(url) { return url && url.includes('/logos/hd/') && !url.includes('/logos/hd/l/') ? url.replace('/logos/hd/', '/logos/hd/l/') : url; }
 function proxiedLogo(url) {
   if (!url) return null;
   if (url.startsWith(location.origin + '/')) return url;   // 우리 고화질 로고(logos/hd)는 같은 주소라 캔버스에 바로 그려도 됨
@@ -6298,8 +6307,8 @@ async function shareResultCard() {
     const { data, h2h, home, away } = lastPrediction;
     const prob = data.probabilities, sp = data.score_prediction;
     const [homeImg, awayImg, ballImg] = await Promise.all([
-      loadImageForCanvas(proxiedLogo(logos[home])),
-      loadImageForCanvas(proxiedLogo(logos[away])),
+      loadImageForCanvas(proxiedLogo(logoLarge(logos[home]))),
+      loadImageForCanvas(proxiedLogo(logoLarge(logos[away]))),
       loadImageForCanvas('bg-ball.svg').catch(() => null),
     ]);
     await ensureTeamPrestigeLoaded();
@@ -6493,7 +6502,7 @@ function updateCountdown() {
     }
     return `
       <div style="background:#21262d;border:0.5px solid #30363d;padding:10px;border-radius:8px;display:flex;align-items:center;gap:8px">
-        <img src="${l.logo}" style="width:18px;height:18px;${l.filter?`filter:${l.filter}`:''}" onerror="this.style.display='none'">
+        <img alt="" src="${l.logo}" style="width:18px;height:18px;${l.filter?`filter:${l.filter}`:''}" onerror="this.style.display='none'">
         <div style="flex:1;min-width:0">
           <div style="font-size:10px;color:#c9d1d9">${l.name}</div>
           <div style="font-size:13px">${badge}</div>
@@ -6517,7 +6526,7 @@ function renderChampions() {
   if (!grid) return;
   grid.innerHTML = CHAMPIONS.map(c => `
     <div style="background:#21262d;border:0.5px solid #30363d;padding:10px;border-radius:8px;display:flex;align-items:center;gap:8px">
-      <img src="${c.logo}" style="width:24px;height:24px;object-fit:contain" onerror="this.style.display='none'">
+      <img alt="" src="${c.logo}" style="width:24px;height:24px;object-fit:contain" onerror="this.style.display='none'">
       <div style="flex:1;min-width:0">
         <div style="font-size:9px;color:#c9d1d9">${c.league}</div>
         <div style="font-size:11px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.team}</div>
@@ -6580,7 +6589,7 @@ function kickerAvatarError(img) {
 function kickerAvatarHtml(player) {
   if (player && player.photo) {
     const num = player.shirtNumber || '';
-    return `<img class="kicker-avatar" src="${player.photo}" data-num="${num}" onerror="kickerAvatarError(this)">`;
+    return `<img alt="" class="kicker-avatar" src="${player.photo}" data-num="${num}" onerror="kickerAvatarError(this)">`;
   }
   return kickerPlaceholderHtml(player);
 }
@@ -6756,7 +6765,7 @@ async function autoSetOpponentLineup() {
 function renderShootoutCoinTossHtml() {
   const s = shootoutState;
   const faceHtml = (team) => logos[team]
-    ? `<img src="${logos[team]}" onerror="this.style.display='none'">`
+    ? `<img alt="" src="${logos[team]}" onerror="this.style.display='none'">`
     : `<span style="font-size:12px;font-weight:700;color:#8b949e">${cleanTeamName(team).slice(0, 3)}</span>`;
   return `<div style="text-align:center;padding:40px 0">
     <div class="so-lead" style="margin-bottom:24px">동전 던지기로 먼저 찰 팀을 정해요</div>
@@ -6824,7 +6833,7 @@ function shootoutScoreSideHtml(mine) {
   return `
     <div class="shootout-score-side">
       <div class="shootout-mark ${mine ? 'mine' : ''}">${mine ? '내 팀' : '상대팀'}</div>
-      <img src="${logos[team] || ''}" onerror="this.style.display='none'">
+      <img alt="" src="${logos[team] || ''}" onerror="this.style.display='none'">
       <div class="shootout-score-name">${cleanTeamName(team)}</div>
       <div class="shootout-score-num">${score}</div>
       <div class="shootout-score-dots">${dots}</div>
@@ -6982,7 +6991,7 @@ function renderShootoutResultHtml() {
   const teamHtml = (mine) => `
     <div class="shootout-result-team">
       <div class="shootout-mark ${mine ? 'mine' : ''}">${mine ? '내 팀' : '상대팀'}</div>
-      <img src="${logos[mine ? s.myTeam : s.oppTeam] || ''}" onerror="this.style.display='none'">
+      <img alt="" src="${logos[mine ? s.myTeam : s.oppTeam] || ''}" onerror="this.style.display='none'">
       <div class="shootout-result-team-name">${cleanTeamName(mine ? s.myTeam : s.oppTeam)}</div>
       <div class="shootout-score-dots">${dotsRow(mine ? s.myLog : s.oppLog)}</div>
     </div>
@@ -7137,9 +7146,12 @@ function cbSource(logo) {
   // 2026-09-30: football-data SVG는 쓰지 않음 — SVG가 있는 140팀 중 95팀이 사이트 로고(PNG)와 디자인 자체가 다른 버전이었음
   // (색·모양이 다름 → 가운데로 오면 로고가 바뀌어 보임) + 74팀은 배경이 있거나 없음. 사이트 전체와 같은 로고로 통일(원본 그대로)
   // — 사이트 로고 자체가 고화질 최신 엠블럼(logos/hd, 400px)으로 바뀌어서 여기도 자동으로 선명해짐
+  // 카드는 작은 로고(160px)로 먼저 그리고, 가운데에 오면 cbDeepen이 큰 로고(400px)로 바꿈 — 20장을 전부 큰 로고로 받지 않게
   if (!cbSrcCache[logo]) cbSrcCache[logo] = (async () => {
-    cbSrcKnown[logo] = logo;
-    return { front: logo, img: await cbLoadImg(proxiedLogo(logo)) };
+    const big = logoLarge(logo);
+    const img = await cbLoadImg(proxiedLogo(big));
+    cbSrcKnown[logo] = img ? big : logo;
+    return { front: cbSrcKnown[logo], img: img || await cbLoadImg(proxiedLogo(logo)) };
   })();
   return cbSrcCache[logo];
 }
@@ -7548,7 +7560,7 @@ if(window.location.hash){setTimeout(()=>{const h=window.location.hash.replace('#
 </footer>
 <div id="toast-container"></div>
 <div class="pwa-install-banner" id="pwa-install-banner">
-  <img class="pwa-install-icon" src="/icon-192.png" onerror="this.style.display='none'">
+  <img alt="" class="pwa-install-icon" src="/icon-192.png" onerror="this.style.display='none'">
   <div class="pwa-install-text">
     <div class="t1">FotData 앱으로 설치하기</div>
     <div class="t2">홈 화면에 추가하고 더 빠르게 접속하세요</div>

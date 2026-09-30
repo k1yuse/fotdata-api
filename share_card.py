@@ -161,7 +161,7 @@ def _crest_url(url):
 def _crest_bytes(url):
     """로고 원본 바이트(압축된 PNG라 작음 — 디코딩한 이미지 대신 이걸 캐시). 실패하면 None(다음 요청 때 다시 시도하게 캐시 안 함)"""
     # 우리 고화질 로고(generate_logos_hd.py → logos/hd)는 저장소에 같이 있으니 디스크에서
-    local = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logos', 'hd', url.rsplit('/', 1)[-1])
+    local = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logos', 'hd', 'l', url.rsplit('/', 1)[-1])   # 큰 로고(400px)
     if '/logos/hd/' in url and os.path.exists(local):
         with open(local, 'rb') as f:
             return f.read()

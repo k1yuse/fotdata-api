@@ -1680,7 +1680,7 @@ def proxy_logo(url: str):
     if parsed.scheme != "https" or parsed.hostname not in PROXY_ALLOWED_HOSTS:
         raise HTTPException(status_code=400, detail="허용되지 않은 이미지 URL")
     # 우리 고화질 로고(logos/hd)는 저장소에 같이 배포돼 있으니 디스크에서 바로 (Vercel까지 왕복 안 함)
-    m = re.fullmatch(r"/logos/hd/([a-z0-9-]+\.webp)", parsed.path)
+    m = re.fullmatch(r"/logos/hd/((?:l/)?[a-z0-9-]+\.webp)", parsed.path)
     if parsed.hostname == "fotdata-api.vercel.app" and m and os.path.exists(os.path.join(_HD_LOGO_DIR, m.group(1))):
         with open(os.path.join(_HD_LOGO_DIR, m.group(1)), "rb") as f:
             return Response(content=f.read(), media_type="image/webp", headers={"Cache-Control": "public, max-age=86400"})
