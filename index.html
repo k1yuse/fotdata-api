@@ -554,6 +554,13 @@
     .footer-logo { font-size: 14px; font-weight: 700; color: var(--muted); }
     .footer-logo span { color: var(--blue); }
     .footer-text { font-size: 12px; color: var(--muted); }
+    /* 푸터 출처 표기 — football-data 이용 약관 7.1의 문구("Football data provided by the Football-Data.org API")는 그대로 둘 것 */
+    .ft-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; text-align: right; max-width: 680px; }
+    .ft-copy { font-size: 12px; color: #8b949e; }
+    .ft-credits { font-size: 11px; line-height: 1.55; color: #7d8590; }
+    .ft-credits a { color: inherit; text-decoration: underline; text-decoration-color: rgba(125,133,144,0.45); text-underline-offset: 2px; }
+    .ft-credits a:hover { color: #58a6ff; }
+    @media (max-width: 768px) { .ft-right { align-items: center; text-align: center; } }   /* 랜딩 모바일 푸터는 가운데 정렬(아래 footer 규칙) */
 
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(20px); }
@@ -1049,7 +1056,11 @@
     <span style="font-size:16px;font-weight:800;color:#58a6ff">Data</span>
   </div>
 </div>
-  <div class="footer-text">© 2026 FotData · AI 축구 분석 플랫폼</div>
+  <div class="ft-right">
+    <div class="ft-copy">© 2026 FotData · AI 축구 분석 플랫폼</div>
+    <div class="ft-credits">Football data provided by the <a href="https://www.football-data.org" target="_blank" rel="noopener">Football-Data.org API</a> · 선수 사진·이적 <a href="https://www.api-football.com" target="_blank" rel="noopener">API-Football</a> · 구단 소개 <a href="https://ko.wikipedia.org" target="_blank" rel="noopener">위키백과</a>(CC BY-SA)</div>
+    <div class="ft-credits">구단 로고·명칭은 각 구단의 상표이며 식별 목적으로만 사용해요 · AI 예측은 통계 모델의 참고 정보로 경기 결과를 보장하지 않아요</div>
+  </div>
 </footer>
 
 <script>

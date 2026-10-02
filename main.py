@@ -1872,3 +1872,95 @@ def _warm_share_cards(days=10):
                     _share_jpg(h, a)
             except Exception:
                 pass
+
+# ── 구단 일정 캘린더 구독(.ics) (2026-10-03, 정식 출시 전 킵 항목) ──
+# 앱의 "캘린더에 추가"가 webcal:// 주소로 구독하게 함 → 킥오프 시각이 바뀌거나(방송 일정 확정) 결과가 나면 캘린더 앱이
+# 다음 새로고침 때 따라 바뀜(파일 한 번 내려받기는 안 바뀜). Vercel /cal/* 이 여기로 넘겨줌(vercel.json)
+#   /calendar/liverpool.ics            한 팀(slug는 공유 링크와 같은 규칙)
+#   /calendar/my.ics?t=liverpool,arsenal  즐겨찾기 여러 팀(최대 5)
+CAL_EVENT_MINUTES = 115   # 경기 시간(전후반 + 하프타임 + 추가시간)
+
+def _ics_text(s):
+    """iCalendar 텍스트 값 이스케이프(RFC 5545 3.3.11)"""
+    return str(s).replace("\\", "\\\\").replace(";", "\;").replace(",", "\\,").replace("\n", "\\n")
+
+def _ics_fold(line):
+    """한 줄 75바이트 넘으면 접기(한글은 3바이트라 글자 중간에서 자르지 않게 바이트 단위로 셈)"""
+    out, cur = [], ""
+    for ch in line:
+        if len((cur + ch).encode("utf-8")) > (75 if not out else 74):
+            out.append(cur); cur = ch
+        else:
+            cur += ch
+    out.append(cur)
+    return "\r\n ".join(out)
+
+@lru_cache(maxsize=256)
+def _team_calendar(teams, version):
+    """teams: 예측에 쓰는 팀 이름 튜플. version은 캐시 무효화용(일정·라이브 반영 시각)"""
+    from datetime import datetime, timedelta, timezone
+    now = datetime.now(timezone.utc)
+    stamp = now.strftime("%Y%m%dT%H%M%SZ")
+    want = set(teams)
+    events = []
+    for code, ms in (_load_json("schedule.json") or {}).items():
+        preds, results = {}, {}
+        try:
+            sp = _schedule_predictions(code)
+            preds = {(p["home_team"], p["away_team"], p["date"]): p for p in sp["predictions"]}
+            results = {(p["home_team"], p["away_team"], p["date"]): p for p in sp["results"]}   # 경기 전에 기록된 예측의 적중 여부
+        except Exception:
+            pass
+        for m in ms:
+            h, a = TEAM_NAME_MAP.get(m["home_team"], m["home_team"]), TEAM_NAME_MAP.get(m["away_team"], m["away_team"])
+            if (h not in want and a not in want) or m.get("status") == "CANCELLED":
+                continue
+            dt = datetime.fromisoformat(m["date"].replace("Z", "+00:00"))
+            if dt < now - timedelta(days=45):   # 지난 경기는 최근 45일만(구독 파일이 커지지 않게)
+                continue
+            hs, as_ = _short_name(h), _short_name(a)
+            done = m.get("status") in DONE_STATUSES and m.get("home_goals") is not None
+            if done:
+                summary = f"⚽ {hs} {m['home_goals']}-{m['away_goals']} {as_}"
+            else:
+                summary = f"⚽ {hs} vs {as_}" + (" (연기)" if m.get("status") == "POSTPONED" else "")
+            lines = [f"{LEAGUE_KO.get(code, code)}" + (f" · {m['matchday']}라운드" if m.get("matchday") and code != "CL" else "")]
+            if m.get("status") == "SCHEDULED":
+                lines.append("킥오프 시각 미정 — 확정되면 자동으로 바뀌어요")
+            p = preds.get((m["home_team"], m["away_team"], m["date"]))
+            if p and not done:
+                hp, dp, ap = (round(x * 100) for x in p["p"])
+                lines.append(f"AI 예측: {hs} 승 {hp}% · 무 {dp}% · {as_} 승 {ap}%" + (" (참고용)" if p.get("limited") else ""))
+            res = results.get((m["home_team"], m["away_team"], m["date"]))
+            if res and done:
+                lines.append(f"AI 예측 {'적중' if res['correct'] else '빗나감'} (경기 전 기록)")
+            if m.get("penalties"):
+                lines.append(f"승부차기 {m['penalties'][0]}-{m['penalties'][1]}")
+            url = f"{SITE_URL}/m/{_team_slug(h)}-vs-{_team_slug(a)}"
+            lines.append(f"AI 분석 보기: {url}")
+            uid = f"{m['date'][:10]}-{_team_slug(h)}-{_team_slug(a)}@fotdata"
+            end = dt + timedelta(minutes=CAL_EVENT_MINUTES)
+            events.append([
+                "BEGIN:VEVENT", f"UID:{uid}", f"DTSTAMP:{stamp}",
+                f"DTSTART:{dt.strftime('%Y%m%dT%H%M%SZ')}", f"DTEND:{end.strftime('%Y%m%dT%H%M%SZ')}",
+                f"SUMMARY:{_ics_text(summary)}", f"DESCRIPTION:{_ics_text(chr(10).join(lines))}",
+                f"URL:{url}", "TRANSP:TRANSPARENT", "END:VEVENT"])
+    name = _short_name(teams[0]) if len(teams) == 1 else "내 팀"
+    head = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//FotData//Team Fixtures//KO", "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
+            f"X-WR-CALNAME:{_ics_text(f'⚽ {name} 경기 일정 · FotData')}",
+            f"X-WR-CALDESC:{_ics_text('FotData가 매일 갱신하는 경기 일정·결과와 AI 예측 — ' + SITE_URL)}",
+            "X-WR-TIMEZONE:Asia/Seoul", "REFRESH-INTERVAL;VALUE=DURATION:PT6H", "X-PUBLISHED-TTL:PT6H"]
+    body = head + [l for ev in sorted(events, key=lambda e: e[3]) for l in ev] + ["END:VCALENDAR"]
+    return "\r\n".join(_ics_fold(l) for l in body) + "\r\n"
+
+@app.get("/calendar/{name}")
+def team_calendar(name: str, t: str = ""):
+    sm = _slug_map()
+    slugs = [s for s in (t.split(",") if t else [re.sub(r"\.ics$", "", name.lower())]) if s][:5]
+    teams = tuple(dict.fromkeys(sm[s.strip().lower()] for s in slugs if s.strip().lower() in sm))
+    if not teams:
+        raise HTTPException(status_code=404, detail="팀을 찾을 수 없어요")
+    ics = _team_calendar(teams, _data_version())
+    fname = f"fotdata-{_team_slug(teams[0]) if len(teams) == 1 else 'my-teams'}.ics"
+    return Response(ics, media_type="text/calendar; charset=utf-8",
+                    headers={"Content-Disposition": f'inline; filename="{fname}"', "Cache-Control": "public, max-age=1800"})

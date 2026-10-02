@@ -22,7 +22,7 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   if (event.request.method !== 'GET' || url.origin !== self.location.origin) return;
   // 공유 미리보기(/m/…)·썸네일(/og/m/…)은 서버가 매번 만드는 것이라 캐시하지 않음
-  if (url.pathname.startsWith('/m/') || url.pathname.startsWith('/og/')) return;
+  if (url.pathname.startsWith('/m/') || url.pathname.startsWith('/og/') || url.pathname.startsWith('/cal/')) return;   // 캘린더 구독(/cal/…)도
   event.respondWith(
     fetch(event.request)
       .then((res) => {

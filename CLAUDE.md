@@ -61,7 +61,10 @@ fotdata-api/
 ├── index.html               # 루트(`/`)에서 서빙되는 파일 — landing.html의 사본 (아래 5.1 참고)
 ├── share_card.py            # 경기별 링크 공유 썸네일(1200×630 JPEG) 렌더러 — main.py `/og/match`가 씀(5.16)
 ├── fonts/                   # 썸네일용 한글 폰트(Pretendard 1.3.9 OFL을 한글 2,350자+라틴으로 추리고 이름을 FotData Card Sans로 바꾼 것, OFL.txt·README.txt)
-├── vercel.json              # Vercel 리라이트: `/m/*`·`/og/m/*` → Render 공유 페이지·썸네일(5.16)
+├── vercel.json              # Vercel 리라이트: `/m/*`·`/og/m/*` → Render 공유 페이지·썸네일(5.16), `/cal/*` → 캘린더 구독(5.24), logos/hd 캐시 헤더
+├── README.md                # 레포 소개(5.24)
+├── privacy.html / terms.html / legal.css   # 개인정보처리방침·이용약관(5.24 — 문의 이메일 정해지면 공개)
+├── generate_logos_hd.py · logos/hd/   # 고화질 구단 로고(5.22)
 ├── analytics.js             # 방문 통계(Umami) 로더 — FotData.html·landing.html 공용, 사이트 ID는 여기 한 곳(5.16)
 ├── FotData_01.ipynb        # 초기 개발용 주피터 노트북 — 지금은 update_data.py가 대체, 참고용
 ├── manifest.json            # PWA 매니페스트
@@ -362,6 +365,13 @@ cp landing.html index.html
 - **접근성**: 장식용 로고 `alt=""` 54곳, 다음 경기 카드 팀 이름 터치 영역 24px(줄 간격 24px), 본문 `role="main"`.
 - **PageSpeed 모바일(라이브)**: 성능 59 → 68~72(측정마다 흔들림 — 남은 건 Render API 응답 대기와 큰 인라인 스크립트), 접근성 87→100, 권장 100, 검색 92→100, CLS 0.461 → 0.03~0.07. 첫 방문은 구단 둘러보기(첫 방문 안내)가 떠서 PageSpeed의 LCP가 그 로고로 잡힘(API 대기 포함). 무키 PageSpeed API는 일일 한도가 0이라 pagespeed.web.dev 화면으로 측정.
 
+### 5.24 정식 출시 준비 — 출처 표기·캘린더 구독·README·정책 페이지 (2026-10-03)
+- **데이터 제공처 약관 확인**: football-data.org 이용약관(2018-06-01판) 7.1조 — 앱·사이트에 **"Football data provided by the Football-Data.org API"** 문구를 보이는 곳에 넣어야 함(이전엔 없었음) → 앱·랜딩 푸터에 그대로 넣음(문구 바꾸지 말 것). 약관 본문엔 상업 이용 금지 조항이 없지만, 운영자 블로그(2015)에 "무료 API는 비상업용만, 상업 이용이면 연락 달라"는 글이 있음 → **광고·유료화 전에 daniel@football-data.org에 상업 이용 문의 필요**(사용자 할 일). 약관 2.3조: API 키 하나는 앱 하나(도메인 하나)에만.
+- **푸터**(`.ft-right`/`.ft-credits`, 앱·랜딩 공통): 위 출처 문구 + API-Football·위키백과(CC BY-SA) + "구단 로고·명칭은 각 구단의 상표, 식별 목적" + "AI 예측은 참고 정보, 결과 보장 안 함". 모바일 앱은 왼쪽 정렬 + 아래 76px(떠 있는 후원 버튼에 안 가리게), 랜딩 모바일은 가운데.
+- **캘린더 구독**(킵 목록 "정식 출시 전" 항목): 서버 `/calendar/{slug}.ics`(한 팀) · `/calendar/my.ics?t=slug,slug`(최대 5팀) → Vercel `/cal/*` 리라이트. **파일 내려받기가 아니라 webcal 구독** — 킥오프 시각 확정·변경, 결과가 캘린더 앱의 다음 새로고침(REFRESH-INTERVAL 6시간) 때 반영. 일정마다 대회·라운드, 킥오프 미정 안내, AI 예측 확률(`_schedule_predictions`와 같은 숫자), 끝난 경기는 스코어 + 경기 전 기록 예측의 적중 여부, `/m/` 분석 링크. 지난 경기는 45일만. UID는 날짜+두 팀 slug(같은 경기 = 같은 일정이라 갱신 때 중복 안 생김). 한 줄 75바이트 접기는 바이트 단위(한글). 앱: 팀 정보 머리 📅(`openCalModal`) → [이 팀만 | ★ 내 팀 전체] + 아이폰·맥(webcal) / 구글 캘린더(`calendar.google.com/calendar/render?cid=webcal…`) / 주소 복사(삼성·아웃룩) / .ics 파일, 기기에 맞는 쪽에 "추천". 서비스워커는 `/cal/` 캐시 안 함. 뒤로가기 목록(`OVERLAYS`)·Esc 맨 위. 통계 이벤트 `calendar_open`·`calendar_add`(how).
+- **README.md**: 소개·기능·모델·구조·로컬 실행·데이터 출처.
+- **개인정보처리방침·이용약관**(`privacy.html`·`terms.html`·`legal.css`): 초안 작성, **문의 이메일(`__CONTACT_EMAIL__` 자리)을 사용자가 새로 만들면 넣고 공개**(그 전엔 커밋 안 함 — 사용자 결정: 운영자 표기 "FotData 운영팀", 연락처는 새 주소). 공개할 때 푸터에 두 링크 추가 + sitemap.xml에도. 내용: 회원가입·쿠키 없음, 기기 저장소 항목(즐겨찾기·첫 방문·보기 설정·테마·인트로·서비스워커 캐시), 호스팅 접속 기록, Umami(쿠키 없는 통계), 외부 서비스 표, Ko-fi는 창을 열 때만 / 약관: AI 예측 면책·도박 비권유, 데이터 출처와 권리(로고 상표·위키 CC BY-SA), 대량 수집·재판매 금지, 무료 서비스 변경·중단, 후원, 준거법 대한민국.
+
 ### 5.20 데이터 소스 구조(결제 시) — football-data + API-Football
 - 경기 결과·순위·일정·예측 모델은 **football-data 그대로**(지금 4시즌, 학습·팀 이름 기준). API-Football은 **선수·라인업·경기 상세·부상**과 **23-24 이전 과거 시즌**(EPL 기준 2010-11~) 담당 — 지금 데이터를 다시 만들 필요는 없음.
 - 섞일 때 문제는 **팀 이름 표기**(football-data "Wolverhampton Wanderers FC" ↔ API-Football "Wolves"). team_extra.json에 이미 30팀 `af_id` 매핑이 있으니 5대 리그+UCL 전 팀으로 넓힌 매핑 표(우리 이름 → af 팀 ID)를 만들고, 리그·시즌마다 "우리 팀 전부가 정확히 한 ID에 대응"하는지 검사할 것.
@@ -400,6 +410,7 @@ cp landing.html index.html
 | GET | `/teams/ko` | 구단 둘러보기 검색용 팀 이름 → 한국어 구단명(위키) (2026-09-30, 5.21) |
 | GET | `/player/profile/{player_id}` | 선수 카드 경력·트로피·부상 이력 — af_profiles.json, 결제 후 수집 전엔 404 (2026-09-30) |
 | GET | `/team/squad/{team_name}` · `/match/preview?home_team=&away_team=&date=` | 선수 카드·베스트 11·주요 선수 / 팀 소식(라인업·결장자) — 결제 후 수집 전엔 404 (2026-09-30, 5.19) |
+| GET | `/calendar/{slug}.ics` · `/calendar/my.ics?t=` | 구단 경기 일정 캘린더 구독(.ics, webcal) — Vercel `/cal/*`이 넘겨줌 (2026-10-03, 5.24) |
 | GET | `/matches/live` | 오늘 경기 최신 점수·상태만(진행 중일 때 화면이 1분마다 부름, `enabled` = Render에 키가 있는지) (2026-09-30, 5.17) |
 | GET | `/bigmatch` | 다가오는 빅매치 1경기(BIG_CLUBS끼리 가장 가까운 경기, 로고 URL 포함) — 경기예측 탭 배너·랜딩 연출 공용 (2026-09-28, 5.8 참고) |
 | GET | `/match/insights?home_team=&away_team=` | 예측 결과 화면 경기 분석: 두 팀 현재 리그 순위·홈팀 홈/원정팀 원정 최근 10경기·경기 성향(전 대회 최근 10경기)·파워 레이팅(ELO) 추이 (2026-09-27 추가, 5.9 참고) |
@@ -507,7 +518,7 @@ python update_data.py
 
 ### 12.2.1 보류(킵) 목록 — 2026-09-29 사용자 결정
 - ~~**모바일 환경 개선**~~ → 2026-09-30 완료(5.23): 뒤로가기 지원, 화면 밀림(CLS) 제거, 첫 로딩(폰트 비차단·로고 크기 분리), 접근성 100.
-- **정식 출시 전**: 캘린더에 추가(.ics) — 경기·내 팀 일정 내보내기.
+- ~~**정식 출시 전**: 캘린더에 추가(.ics)~~ → 2026-10-03 완료(5.24, 구독 방식).
 - **보류**: 내 예측 vs AI(예측 게임) — 메인 앱이 복잡해질 수 있어서.
 
 ### 12.3 기타

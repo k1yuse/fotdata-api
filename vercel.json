@@ -7,6 +7,10 @@
     {
       "source": "/og/m/:file",
       "destination": "https://fotdata-api.onrender.com/og/match/:file"
+    },
+    {
+      "source": "/cal/:file",
+      "destination": "https://fotdata-api.onrender.com/calendar/:file"
     }
   ],
   "headers": [
