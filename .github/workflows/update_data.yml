@@ -14,12 +14,12 @@ jobs:
 
     steps:
     - name: 코드 체크아웃
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Python 설치
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v6
       with:
         python-version: '3.11'
 
@@ -35,7 +35,10 @@ jobs:
         FOOTBALL_API_KEY: ${{ secrets.FOOTBALL_API_KEY }}
       run: python update_data.py
 
+    # 업데이트 스크립트는 실패한 단계가 있어도 나머지 결과를 저장한 뒤 종료 코드 1로 끝남(update_data.py main) —
+    # 그 결과도 커밋해야 하므로 앞 단계가 실패해도 실행(취소된 경우만 제외). 실행 결과는 빨간색으로 남아 알아챌 수 있음
     - name: 변경사항 커밋 & 푸시
+      if: ${{ !cancelled() }}
       run: |
         git config --global user.email "eattotoys@gmail.com"
         git config --global user.name "k1yuse"

@@ -18,12 +18,21 @@ BASE_URL = "https://api.football-data.org/v4"
 HEADERS = {"X-Auth-Token": API_KEY}
 
 def fd_get(url, **kw):
-    """football-data GET — 429(분당 10회 초과)면 서버가 알려준 초기화 시간만큼 쉬고 최대 3번 재시도.
+    """football-data GET — 429(분당 10회 초과)면 서버가 알려준 초기화 시간만큼, 연결 오류면 10·20·30초 쉬고 최대 3번 재시도.
     2026-09-30부터 Render 서버도 경기 당일 결과를 같은 키로 받아와서(1분에 최대 1회) 이 작업의 6초 간격(=분당 10회)과
     겹치면 429가 날 수 있음 — 예전엔 429면 그 리그를 조용히 건너뛰었음"""
     kw.setdefault("timeout", 30)
     for attempt in range(4):
-        r = requests.get(url, **kw)
+        try:
+            r = requests.get(url, **kw)
+        except requests.exceptions.RequestException as e:
+            # 연결이 중간에 끊기는 일시 오류(2026-10-01 SSL EOF로 라리가 일정 요청이 실패해 그날 업데이트 전체가 멈춤)도 재시도
+            if attempt == 3:
+                raise
+            wait = 10 * (attempt + 1)
+            print(f"  ⚠️ 연결 오류({type(e).__name__}) — {wait}초 쉬고 다시")
+            time.sleep(wait)
+            continue
         if r.status_code != 429 or attempt == 3:
             return r
         wait = int(r.headers.get("X-RequestCounter-Reset") or 0) or 15 * (attempt + 1)
@@ -363,8 +372,7 @@ def update_team_logos():
     for code in list(LEAGUES_V2.keys()):
         try:
             url = f"https://api.football-data.org/v4/competitions/{code}/teams"
-            headers = {"X-Auth-Token": os.environ.get("FOOTBALL_API_KEY")}
-            res = requests.get(url, headers=headers)
+            res = fd_get(url, headers=HEADERS)   # 429·연결 오류 재시도 공통
             data = res.json()
             for team in data.get('teams', []):
                 name = team['name']
@@ -1543,16 +1551,28 @@ def fetch_full_schedule():
     import json
     print("\n[전체 일정] 수집 중...")
     CURRENT_SEASON = 2026
+    # 받지 못한 리그는 기존 일정 유지 — 예전엔 그 리그가 schedule.json에서 통째로 빠져 일정 탭·순위 예측에서 사라졌음
+    prev = {}
+    if os.path.exists(f"{MODEL_DIR}/schedule.json"):
+        with open(f"{MODEL_DIR}/schedule.json", encoding='utf-8') as f:
+            prev = json.load(f)
     schedule = {}
     for code, name in LEAGUES_V2.items():
         print(f"  [{name}] 일정 수집 중...")
-        res = fd_get(
-            f"{BASE_URL}/competitions/{code}/matches",
-            headers=HEADERS,
-            params={"season": CURRENT_SEASON}
-        )
-        if res.status_code != 200:
-            print(f"  ❌ {name} 일정 오류: {res.status_code}")
+        try:
+            res = fd_get(
+                f"{BASE_URL}/competitions/{code}/matches",
+                headers=HEADERS,
+                params={"season": CURRENT_SEASON}
+            )
+            ok = res.status_code == 200
+            err = res.status_code
+        except Exception as e:
+            ok, err = False, e
+        if not ok:
+            print(f"  ❌ {name} 일정 오류: {err} — 기존 일정 유지")
+            if code in prev:
+                schedule[code] = prev[code]
             time.sleep(6)
             continue
 
@@ -1952,33 +1972,52 @@ def fetch_extra_leagues():
     print(f"  ✅ extra_matches.csv: {len(df)}경기")
 
 def main():
+    """단계마다 실패를 따로 잡아서 하나가 깨져도 나머지 단계는 계속 돌고 받은 데이터는 저장됨(각 단계는 성공했을 때만 파일을 씀).
+    예전엔 2026-10-01에 라리가 일정 요청 하나가 연결 오류로 실패하자 스크립트가 멈춰 그날 받은 경기·모델·일정이 전부 커밋되지 않았음.
+    실패한 단계가 있으면 끝에 종료 코드 1 → 워크플로우는 커밋을 하고(if: !cancelled()) 실행 결과는 빨간색으로 남아 알아챌 수 있음"""
+    import sys
     print("=== FotData 자동 업데이트 시작 ===")
+    failed = []
 
-    # 1~2. 경기 데이터 수집 + 기존 CSV와 병합 → all_matches.csv
-    df_total = collect_matches()
+    def step(name, fn, *args):
+        try:
+            return fn(*args)
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            print(f"  ❌ [{name}] 실패 — 이 단계만 건너뛰고 계속: {type(e).__name__}: {e}")
+            failed.append(name)
+            print(f"::warning::{name} 실패: {type(e).__name__}: {str(e)[:200]}")
+            return None
 
-    # 3. 3시즌 혼합 스탯 (예측용) — 경기 수 구간별 가중치 + prestige 보정
-    df_stats_current = calculate_blended_stats(df_total)
-    df_stats_current.to_csv(f"{MODEL_DIR}/team_stats.csv", index=False, encoding='utf-8-sig')
-    
-    # 4~6. 피처 생성 + 시간순 검증 + 서빙 모델 학습/저장 (+ team_state.json, accuracy.json)
-    accuracy_data = train_models(df_total)
+    def model_pipeline():
+        # 1~2. 경기 데이터 수집 + 기존 CSV와 병합 → all_matches.csv
+        df_total = collect_matches()
+        # 3. 3시즌 혼합 스탯 (예측용) — 경기 수 구간별 가중치 + prestige 보정
+        df_stats_current = calculate_blended_stats(df_total)
+        df_stats_current.to_csv(f"{MODEL_DIR}/team_stats.csv", index=False, encoding='utf-8-sig')
+        # 4~6. 피처 생성 + 시간순 검증 + 서빙 모델 학습/저장 (+ team_state.json, accuracy.json)
+        return df_total, train_models(df_total)
 
-# UCL 토너먼트
-    fetch_ucl_tournament()
+    res = step("경기 수집·모델 학습", model_pipeline)
+    df_total, accuracy_data = res if res else (None, None)
+
+    # UCL 토너먼트
+    step("UCL 토너먼트", fetch_ucl_tournament)
 
     # 전체 일정 (일정 탭용)
-    schedule = fetch_full_schedule()
+    schedule = step("전체 일정", fetch_full_schedule)
 
     # AI 예측 트랙레코드 (라이브 /predict를 호출하므로 반드시 위 모델 학습 이후,
     # 그리고 아직 이번 실행분 커밋을 push하기 전에 실행 — 그래야 "그 시점에 실제
-    # 서빙 중이던 모델"의 예측을 기록하게 됨)
-    try:
-        update_prediction_log(schedule)
-    except Exception as e:
-        print(f"⚠️ 예측 트랙레코드 갱신 실패(다음 실행에서 재시도): {e}")
+    # 서빙 중이던 모델"의 예측을 기록하게 됨). 실패해도 다음 실행에서 재시도(경고만)
+    if schedule:
+        try:
+            update_prediction_log(schedule)
+        except Exception as e:
+            print(f"⚠️ 예측 트랙레코드 갱신 실패(다음 실행에서 재시도): {e}")
 
-    fetch_top_scorers()
+    step("득점왕(API-Football)", fetch_top_scorers)
     try:
         fetch_scorers()
     except Exception as e:
@@ -1989,10 +2028,10 @@ def main():
         print(f"  ⚠️ 자국 리그 경기 수집 실패(기존 유지): {e}")
 
     # 로고 자동 업데이트
-    update_team_logos()
+    step("로고", update_team_logos)
 
     # 팀 상세정보 (홈구장/스쿼드 등)
-    fetch_team_info()
+    step("팀 상세정보", fetch_team_info)
 
     # 지난 시즌 팀 중 로고 없는 팀이 있으면 그때만(보통 새 시즌 첫날 한 번)
     try:
@@ -2012,14 +2051,18 @@ def main():
         print(f"  ⚠️ 지난 시즌 순위 구역 갱신 실패(기존 유지): {e}")
 
     # 스쿼드 사진/등번호 + 이적 기록 (API-Football, 현재는 PL만 — 요청 한도 때문에 리그별로 점진 확대 예정)
-    fetch_squad_transfers('PL')
+    step("스쿼드·이적(API-Football)", fetch_squad_transfers, 'PL')
 
     # (순위 예측은 main.py /predict/champion이 요청 때 현재 승점·남은 일정·모델 확률로 계산 — 2026-09-28부터
     #  예전 simulate_season/champion_predictions.json은 화면에 안 쓰여서 제거)
 
-    print(f"\n🏆 업데이트 완료!")
-    print(f"   데이터: {len(df_total)}경기")
-    print(f"   서빙 모델(LR) 시간순 검증 정확도: {accuracy_data['logistic_regression']}%")
+    if df_total is not None:
+        print(f"\n🏆 업데이트 완료!")
+        print(f"   데이터: {len(df_total)}경기")
+        print(f"   서빙 모델(LR) 시간순 검증 정확도: {accuracy_data['logistic_regression']}%")
+    if failed:
+        print(f"\n⚠️ 실패한 단계 {len(failed)}개: {', '.join(failed)} — 나머지 결과는 저장됨(커밋은 워크플로우가 진행)")
+        sys.exit(1)
 
 SCORER_COMPS = ["PL", "PD", "BL1", "SA", "FL1", "CL"]
 
