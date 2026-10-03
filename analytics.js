@@ -4,7 +4,7 @@
 // 페이지 쪽에선 window.fdTrack(이름, 데이터)로 이벤트, fdTrack('__view', 탭)으로 탭 화면 조회를 보냄 —
 // 이 파일이 늦게 로드돼도 그 전 호출은 window.fdQ에 쌓였다가 Umami가 준비되면 한 번에 보냄.
 (function () {
-  var UMAMI_ID = '';
+  var UMAMI_ID = 'dd80e172-7700-4498-a9f2-140e07f803f5';   // 2026-10-03 연결(fotdata.official 계정)
   var LIVE = location.hostname === 'fotdata-api.vercel.app';
   var q = window.fdQ = window.fdQ || [];
   if (!UMAMI_ID || !LIVE) { window.fdTrack = function () {}; q.length = 0; return; }
