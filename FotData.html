@@ -843,8 +843,9 @@
     .pg-more.compact .more-foot { display: none; }
     /* 높이 차이가 작아서 위 카드를 못 넣을 때: 짧은 쪽 카드의 섹션 간격을 고르게 넓혀서 맞춤 */
     .card.spread { display: flex; flex-direction: column; justify-content: space-between; }
-    .team-selector { display: grid; grid-template-columns: 1fr auto 1fr; align-items: start; gap: 24px; margin-bottom: 16px; }
-    .team-box { display: flex; flex-direction: column; align-items: center; gap: 8px; padding-top: 8px; }
+    .team-selector { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: start; gap: 24px; margin-bottom: 16px; }   /* minmax(0) — 긴 팀 이름(Borussia Mönchengladbach)이 칸을 넓혀 모바일 가로 넘침 */
+    .team-box { display: flex; flex-direction: column; align-items: center; gap: 8px; padding-top: 8px; min-width: 0; }
+    #home-selected-text, #away-selected-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .team-box label { font-size: 12px; color: #8b949e; text-transform: uppercase; letter-spacing: 1px; }
     .team-logo-wrap { width: 80px; height: 80px; border-radius: 50%; background: #21262d; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 8px; flex-shrink: 0; border: 3px solid transparent; transition: border-color .4s ease, box-shadow .4s ease; }
     .team-logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
@@ -1027,8 +1028,8 @@
     @media (prefers-reduced-motion: reduce) { .mi-chart .line { animation: none; stroke-dashoffset: 0; } .mi-chart .pt { animation: none; opacity: 1; } }
     .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; }
     /* 지표 칸(홈 위 줄·원정 아래 줄) */
-    .stats-grid.sb-grid { grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
-    .stat-box.sb { text-align: left; padding: 10px 12px; }
+    .stats-grid.sb-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }   /* minmax(0) — 긴 팀 이름(Manchester United FC)이면 칸이 안 줄어 모바일에서 화면이 32px 넓어졌음 */
+    .stat-box.sb { text-align: left; padding: 10px 12px; min-width: 0; }
     .sb-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
     .sb-label { font-size: 11px; color: #8b949e; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .sb-rank { flex-shrink: 0; font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 99px; color: #c9d1d9; background: rgba(139,148,158,0.14); font-variant-numeric: tabular-nums; }
@@ -6161,7 +6162,7 @@ function renderStatBoxes(data, homeLbl, awayLbl, RM) {
     const better = avg != null ? (atk ? v >= avg : v <= avg) : true;
     const tier = rank && n ? (rank <= Math.ceil(n / 4) ? 'good' : rank > n - Math.ceil(n / 4) ? 'bad' : '') : '';
     return `<div class="stat-box sb ${side}${better ? '' : ' worse'}">
-      <div class="sb-top"><span class="sb-label">${lbl} ${atk ? '공격' : '수비'}</span>${rank ? `<span class="sb-rank ${tier}">리그 ${rank}위</span>` : ''}</div>
+      <div class="sb-top"><span class="sb-label" title="${lbl} ${atk ? '공격' : '수비'}">${lbl}</span>${rank ? `<span class="sb-rank ${tier}">리그 ${rank}위</span>` : ''}</div>
       <div class="sb-val"><b data-v="${v}">0.00</b><small>${atk ? '경기당 득점' : '경기당 실점'}</small></div>
       <div class="sb-bar" title="${avg != null ? `리그 평균 ${avg.toFixed(2)}${atk ? '' : ' (낮을수록 좋음)'}` : ''}"><i data-fill="${Math.min(100, v / max * 100).toFixed(1)}"></i>${avg != null ? `<em style="left:${Math.min(100, avg / max * 100).toFixed(1)}%"></em>` : ''}</div>
     </div>`;
@@ -6195,7 +6196,7 @@ function showResult(data,home,away){
   revealTimers.forEach(clearTimeout); revealTimers = [];
   const RM = matchMedia('(prefers-reduced-motion: reduce)').matches, later = (fn, ms) => RM ? fn() : revealTimers.push(setTimeout(fn, ms));
   const badge=document.getElementById('pred-badge');
-  const finalBadge = data.prediction==='home_win' ? [`${home} 승리 예측`, 'badge home'] : data.prediction==='away_win' ? [`${away} 승리 예측`, 'badge away'] : ['무승부 예측', 'badge draw'];
+  const finalBadge = data.prediction==='home_win' ? [`${shortName(home)} 승리 예측`, 'badge home'] : data.prediction==='away_win' ? [`${shortName(away)} 승리 예측`, 'badge away'] : ['무승부 예측', 'badge draw'];
   const probRows = [...document.querySelectorAll('.prob-bars .prob-row')];
   probRows.forEach(r => r.classList.remove('win', 'dim'));
   const summary = document.getElementById('pred-summary');
@@ -6222,7 +6223,7 @@ function showResult(data,home,away){
     if (RM) document.getElementById(v).textContent = pct + '%';
     else later(() => animateCountUp(document.getElementById(v), pct, { suffix: '%', duration: 900 }), 250 + i * 180);
   });
-  const homeShortLabel=shortTeamName(home),awayShortLabel=shortTeamName(away);
+  const homeShortLabel=shortName(home),awayShortLabel=shortName(away);   // 확률 막대·지표 칸은 좁아서 짧은 이름(Man United)
   document.getElementById('prob-label-home').textContent=homeShortLabel+' 승';
   document.getElementById('prob-label-away').textContent=awayShortLabel+' 승';
   renderStatBoxes(data, homeShortLabel, awayShortLabel, RM);
