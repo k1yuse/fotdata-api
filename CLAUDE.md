@@ -63,7 +63,7 @@ fotdata-api/
 ├── fonts/                   # 썸네일용 한글 폰트(Pretendard 1.3.9 OFL을 한글 2,350자+라틴으로 추리고 이름을 FotData Card Sans로 바꾼 것, OFL.txt·README.txt)
 ├── vercel.json              # Vercel 리라이트: `/m/*`·`/og/m/*` → Render 공유 페이지·썸네일(5.16), `/cal/*` → 캘린더 구독(5.24), logos/hd 캐시 헤더
 ├── README.md                # 레포 소개(5.24)
-├── privacy.html / terms.html / legal.css   # 개인정보처리방침·이용약관(5.24 — 문의 이메일 정해지면 공개)
+├── privacy.html / terms.html / legal.css   # 개인정보처리방침·이용약관(5.24, 문의 fotdata.official@gmail.com)
 ├── generate_logos_hd.py · logos/hd/   # 고화질 구단 로고(5.22)
 ├── analytics.js             # 방문 통계(Umami) 로더 — FotData.html·landing.html 공용, 사이트 ID는 여기 한 곳(5.16)
 ├── FotData_01.ipynb        # 초기 개발용 주피터 노트북 — 지금은 update_data.py가 대체, 참고용
@@ -370,7 +370,7 @@ cp landing.html index.html
 - **푸터**(`.ft-right`/`.ft-credits`, 앱·랜딩 공통): 위 출처 문구 + API-Football·위키백과(CC BY-SA) + "구단 로고·명칭은 각 구단의 상표, 식별 목적" + "AI 예측은 참고 정보, 결과 보장 안 함". 모바일 앱은 왼쪽 정렬 + 아래 76px(떠 있는 후원 버튼에 안 가리게), 랜딩 모바일은 가운데.
 - **캘린더 구독**(킵 목록 "정식 출시 전" 항목): 서버 `/calendar/{slug}.ics`(한 팀) · `/calendar/my.ics?t=slug,slug`(최대 5팀) → Vercel `/cal/*` 리라이트. **파일 내려받기가 아니라 webcal 구독** — 킥오프 시각 확정·변경, 결과가 캘린더 앱의 다음 새로고침(REFRESH-INTERVAL 6시간) 때 반영. 일정마다 대회·라운드, 킥오프 미정 안내, AI 예측 확률(`_schedule_predictions`와 같은 숫자), 끝난 경기는 스코어 + 경기 전 기록 예측의 적중 여부, `/m/` 분석 링크. 지난 경기는 45일만. UID는 날짜+두 팀 slug(같은 경기 = 같은 일정이라 갱신 때 중복 안 생김). 한 줄 75바이트 접기는 바이트 단위(한글). 제목·캘린더 이름엔 이모지 없이 텍스트만("FotData · Liverpool 경기 일정", "Liverpool vs Man City") — 처음엔 ⚽를 붙였는데 사용자가 허접해 보인다고 해서 뺌. 일정 제목엔 그림을 넣을 수 없어서(캘린더 앱 공통) 브랜드 색(`COLOR`·`X-APPLE-CALENDAR-COLOR` #58A6FF — 애플 반영, 구글 무시) + 캘린더 아이콘(`IMAGE`, RFC 7986 — 지원 앱만)으로 대신. 이미 구독한 사람은 캘린더 이름·색이 구독할 때 값으로 남을 수 있음(일정은 새로고침 때 바뀜). 앱: 팀 정보 머리 📅(`openCalModal`) → [이 팀만 | ★ 내 팀 전체] + 아이폰·맥(webcal) / 구글 캘린더(`calendar.google.com/calendar/render?cid=webcal…`) / 주소 복사(삼성·아웃룩) / .ics 파일, 기기에 맞는 쪽에 "추천". 서비스워커는 `/cal/` 캐시 안 함. 뒤로가기 목록(`OVERLAYS`)·Esc 맨 위. 통계 이벤트 `calendar_open`·`calendar_add`(how).
 - **README.md**: 소개·기능·모델·구조·로컬 실행·데이터 출처.
-- **개인정보처리방침·이용약관**(`privacy.html`·`terms.html`·`legal.css`): 초안 작성, **문의 이메일(`__CONTACT_EMAIL__` 자리)을 사용자가 새로 만들면 넣고 공개**(그 전엔 커밋 안 함 — 사용자 결정: 운영자 표기 "FotData 운영팀", 연락처는 새 주소). 공개할 때 푸터에 두 링크 추가 + sitemap.xml에도. 내용: 회원가입·쿠키 없음, 기기 저장소 항목(즐겨찾기·첫 방문·보기 설정·테마·인트로·서비스워커 캐시), 호스팅 접속 기록, Umami(쿠키 없는 통계), 외부 서비스 표, Ko-fi는 창을 열 때만 / 약관: AI 예측 면책·도박 비권유, 데이터 출처와 권리(로고 상표·위키 CC BY-SA), 대량 수집·재판매 금지, 무료 서비스 변경·중단, 후원, 준거법 대한민국.
+- **개인정보처리방침·이용약관**(`privacy.html`·`terms.html`·`legal.css`): 2026-10-03 공개 — 운영자 "FotData 운영팀", 문의·개인정보 보호책임자 연락처 **fotdata.official@gmail.com**(사용자가 만든 운영용 Gmail — 앞으로 서비스 가입·제휴·football-data 문의도 이 주소로). 앱·랜딩 푸터 `.ft-links`(개인정보처리방침은 굵게) + sitemap.xml. 시행일을 바꾸거나 외부 서비스가 늘면(예: AdSense — 광고 쿠키가 생기므로 '쿠키를 사용하지 않습니다' 문구와 외부 서비스 표를 반드시 고칠 것) 두 페이지를 같이 고칠 것. 내용: 회원가입·쿠키 없음, 기기 저장소 항목(즐겨찾기·첫 방문·보기 설정·테마·인트로·서비스워커 캐시), 호스팅 접속 기록, Umami(쿠키 없는 통계), 외부 서비스 표, Ko-fi는 창을 열 때만 / 약관: AI 예측 면책·도박 비권유, 데이터 출처와 권리(로고 상표·위키 CC BY-SA), 대량 수집·재판매 금지, 무료 서비스 변경·중단, 후원, 준거법 대한민국.
 
 ### 5.20 데이터 소스 구조(결제 시) — football-data + API-Football
 - 경기 결과·순위·일정·예측 모델은 **football-data 그대로**(지금 4시즌, 학습·팀 이름 기준). API-Football은 **선수·라인업·경기 상세·부상**과 **23-24 이전 과거 시즌**(EPL 기준 2010-11~) 담당 — 지금 데이터를 다시 만들 필요는 없음.
