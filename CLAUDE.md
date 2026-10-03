@@ -65,6 +65,7 @@ fotdata-api/
 ├── README.md                # 레포 소개(5.24)
 ├── privacy.html / terms.html / legal.css   # 개인정보처리방침·이용약관(5.24, 문의 fotdata.official@gmail.com)
 ├── generate_logos_hd.py · logos/hd/   # 고화질 구단 로고(5.22)
+├── generate_promo.py        # 홍보 이미지(인스타 피드·스토리, 유튜브·네이버 카페 가로 배너) → promo/(커밋 안 함). 빅매치 포스터는 서버 실시간 예측 — 매주 다시 실행. 구단 엠블럼은 안 넣음(홍보물 상표 위험)
 ├── analytics.js             # 방문 통계(Umami) 로더 — FotData.html·landing.html 공용, 사이트 ID는 여기 한 곳(5.16)
 ├── FotData_01.ipynb        # 초기 개발용 주피터 노트북 — 지금은 update_data.py가 대체, 참고용
 ├── manifest.json            # PWA 매니페스트
