@@ -19,7 +19,7 @@
 | 항목 | 값 |
 |---|---|
 | 백엔드 API | https://fotdata-api.onrender.com (FastAPI, Render 무료 플랜) |
-| 프론트엔드 | **https://www.fotdata-official.com** (Vercel, 2026-10-03 도메인 이전 — 옛 https://fotdata-api.vercel.app은 새 주소로 영구 이동, 5.25) |
+| 프론트엔드 | **https://www.fotdata-official.com** (랜딩) · 앱 **/app** (Vercel, 2026-10-03 도메인 이전 — 옛 https://fotdata-api.vercel.app은 새 주소로 영구 이동, 5.25) |
 | GitHub | https://github.com/k1yuse/fotdata-api |
 | 로컬 경로 | `~/fotdata-api` (맥북 프로 M5) |
 | conda 환경 | `fotdata` (Python 3.10) |
@@ -380,6 +380,7 @@ cp landing.html index.html
 - **코드**: 링크는 전부 `https://www.fotdata-official.com`(main.py `SITE_URL`, FotData.html `SITE_ORIGIN`·공유 링크·og/canonical/JSON-LD, 랜딩·정책 페이지, sitemap·robots, generate_logos_hd `SITE` → team_logos_hd.json 152개, README), 화면에 보이는 글자(공유 썸네일·캔버스 공유 이미지·og-image.png·홍보 이미지)는 짧은 `fotdata-official.com`. og-image 다시 만들고 `?v=3`. `analytics.js` LIVE는 `fotdata-official.com`(www 포함)일 때만. 서버 `SITE_HOSTS`(새 주소 둘 + 옛 vercel.app) — 로고 프록시 허용·디스크 직접 읽기.
 - **옛 주소**: `vercel.json` `redirects` — 호스트가 `fotdata-api.vercel.app`이면 새 주소 같은 경로로 영구 이동(쿼리 유지), **단 `/cal/`은 제외**(이미 구독한 캘린더가 옛 주소로 계속 받아감 — 캘린더 앱이 리다이렉트를 안 따라갈 수도 있어서). 옛 주소에서 쓰던 브라우저 저장소(즐겨찾기·첫 방문 표시)는 주소가 바뀌면 안 넘어옴(출시 전이라 영향 작음).
 - 사용자 할 일: Umami 웹사이트 설정의 도메인도 새 주소로(표시용), 검색엔진 등록은 새 도메인으로.
+- **앱 주소 `/app`(2026-10-03, 사용자 요청 — 주소창에 `FotData.html`이 보이던 것)**: 파일은 그대로 `FotData.html`, `vercel.json` rewrites `/app` → `/FotData.html`, redirects `/FotData.html` → `/app`(쿼리 `?match=` 유지)·`/app/` → `/app`(끝 `/`가 붙으면 상대 경로 파일(analytics.js·bg-ball.js 등)이 `/app/…`로 깨져서). 랜딩 메뉴·버튼(`/app#standings` 등), 정책 페이지 "돌아가기", 공유 페이지가 사람을 보내는 주소(main.py `app_url`), canonical·og:url·JSON-LD, sitemap, 매니페스트 `start_url`(홈 화면 앱이 바로 앱으로 열리게), 서비스워커 앱 셸(`/app`, 캐시 v2)까지 교체. 앱 안의 공유 주소·탭 주소는 `location.pathname`을 써서 자동으로 `/app`.
 
 ### 5.20 데이터 소스 구조(결제 시) — football-data + API-Football
 - 경기 결과·순위·일정·예측 모델은 **football-data 그대로**(지금 4시즌, 학습·팀 이름 기준). API-Football은 **선수·라인업·경기 상세·부상**과 **23-24 이전 과거 시즌**(EPL 기준 2010-11~) 담당 — 지금 데이터를 다시 만들 필요는 없음.

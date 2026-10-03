@@ -1696,7 +1696,7 @@ def proxy_logo(url: str):
         headers={"Cache-Control": "public, max-age=86400"},
     )
 # ── 경기별 링크 공유 미리보기 (2026-09-30) ──
-# 카톡·페북·X의 링크 미리보기는 JS를 실행하지 않아서 FotData.html?match=... 로는 사이트 공통 썸네일만 떴음.
+# 카톡·페북·X의 링크 미리보기는 JS를 실행하지 않아서 앱 주소(/app?match=..., 예전 FotData.html?match=...)로는 사이트 공통 썸네일만 떴음.
 # 공유 링크를 https://www.fotdata-official.com/m/{홈}-vs-{원정} 으로 바꾸고, Vercel이 이 주소를 여기로 넘겨줌(vercel.json rewrites):
 #   /m/{slug}          → /share/match/{slug}  : 그 경기 예측이 담긴 og 태그 + 사람은 JS로 앱 예측 화면으로 이동
 #   /og/m/{slug}.jpg   → /og/match/{slug}.jpg : 1200×630 예측 카드(share_card.py)
@@ -1795,7 +1795,7 @@ def share_match_page(slug: str):
     from fastapi.responses import HTMLResponse
     from html import escape
     slug = slug.lower().strip()
-    app_url = f"{SITE_URL}/FotData.html?match={slug}"
+    app_url = f"{SITE_URL}/app?match={slug}"   # 앱 주소 /app(vercel.json이 FotData.html로 넘김)
     d = _share_data(slug)
     if d:
         hp, dp, ap = (round(x * 100) for x in d["probs"])
@@ -1836,7 +1836,7 @@ def share_match_page(slug: str):
 <a href="{e(app_url)}" style="color:#58a6ff">FotData에서 예측 보기</a>
 </body></html>"""
     # 사람은 곧바로 앱으로 넘어가고, 미리보기 봇(JS 실행 안 함)만 위 태그를 읽음. 링크 미리보기 봇이 og:url을
-    # 다시 긁어가도 같은 페이지라 안전(og:url을 FotData.html로 두면 페북이 그쪽 공통 태그로 덮어씀)
+    # 다시 긁어가도 같은 페이지라 안전(og:url을 앱 주소로 두면 페북이 그쪽 공통 태그로 덮어씀)
     return HTMLResponse(html, headers={"Cache-Control": "public, max-age=600, s-maxage=3600"})
 
 @app.get("/og/match/{name}")

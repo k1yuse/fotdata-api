@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/app",
+      "destination": "/FotData.html"
+    },
+    {
       "source": "/m/:slug",
       "destination": "https://fotdata-api.onrender.com/share/match/:slug"
     },
@@ -34,6 +38,16 @@
         }
       ],
       "destination": "https://www.fotdata-official.com/:path",
+      "permanent": true
+    },
+    {
+      "source": "/FotData.html",
+      "destination": "/app",
+      "permanent": true
+    },
+    {
+      "source": "/app/",
+      "destination": "/app",
       "permanent": true
     }
   ]

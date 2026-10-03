@@ -1,5 +1,5 @@
-const CACHE_NAME = 'fotdata-shell-v1';
-const APP_SHELL = ['/', '/FotData.html', '/manifest.json', '/icon-192.png', '/icon-512.png'];
+const CACHE_NAME = 'fotdata-shell-v2';   // v2: 앱 주소 /FotData.html → /app(2026-10-03)
+const APP_SHELL = ['/', '/app', '/manifest.json', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(

@@ -25,7 +25,7 @@
   <meta property="og:image:alt" content="FotData — 축구를 데이터로 예측하다">
   <meta property="og:site_name" content="FotData">
   <meta name="twitter:image" content="https://www.fotdata-official.com/og-image.png?v=3">
-  <meta property="og:url" content="https://www.fotdata-official.com/FotData.html">
+  <meta property="og:url" content="https://www.fotdata-official.com/app">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -38,14 +38,14 @@
   <link rel="apple-touch-icon" href="/icon-512.png">
   <link rel="icon" sizes="192x192" href="/icon-192.png">
   <link rel="icon" sizes="512x512" href="/icon-512.png">
-  <link rel="canonical" href="https://www.fotdata-official.com/FotData.html">
+  <link rel="canonical" href="https://www.fotdata-official.com/app">
   <title>FotData - AI 축구 분석</title>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "FotData",
-    "url": "https://www.fotdata-official.com/FotData.html",
+    "url": "https://www.fotdata-official.com/app",
     "description": "머신러닝 기반 EPL·라리가·분데스리가·세리에A·리그앙·UCL 경기 예측, 실시간 순위표, 상대전적, 선수 스탯을 제공하는 축구 분석 도구",
     "applicationCategory": "SportsApplication",
     "operatingSystem": "Any (Web)",
@@ -4009,7 +4009,7 @@ async function openMatchPredictModal(home, away) {
 function closeMatchPredictModal(e) {
   if (!e || e.target === document.getElementById('match-predict-modal')) document.getElementById('match-predict-modal').classList.remove('show');
 }
-// ── 예측 공유 링크: FotData.html?match=liverpool-vs-manchester-city ──
+// ── 예측 공유 링크: /app?match=liverpool-vs-manchester-city (앱 주소는 /app — vercel.json이 FotData.html로 넘김, 2026-10-03) ──
 // 팀 이름을 읽기 쉬운 slug로(악센트 제거·FC 같은 클럽 표기 제거). 들어오면 그 예측을 바로 보여줌
 function teamSlug(t) {
   return cleanTeamName(t).normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase()
@@ -4021,7 +4021,7 @@ function teamFromSlug(slug) {
 }
 function matchSlug(home, away) { return `${teamSlug(home)}-vs-${teamSlug(away)}`; }
 // 주소창용(이 페이지 그대로) / 공유용(/m/… — 카톡·SNS 미리보기에 그 경기 예측 카드가 뜸. Vercel이 서버 /share/match로 넘겨주고,
-// 사람은 곧바로 FotData.html?match=…로 이동 — main.py 공유 미리보기 주석 참고)
+// 사람은 곧바로 /app?match=…로 이동 — main.py 공유 미리보기 주석 참고)
 function predictionUrl(home, away) {
   return `${location.origin}${location.pathname}?match=${matchSlug(home, away)}`;
 }
