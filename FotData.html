@@ -186,6 +186,17 @@
 
     .card { background: #161b22; border: 0.5px solid #30363d; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.28), 0 1px 3px rgba(0,0,0,0.24); }
     .predict-selector-card { position: relative; z-index: 10; margin-bottom: 315px; }
+    /* 폰(≤600px): 팀 고르기·예측 버튼을 빅매치 바로 아래로(2026-10-03, 사용자 결정) — 예전 순서(다음 경기·트랙레코드 다음)에선 예측 버튼이 첫 화면 밖이었음.
+       예측 결과(#result-section)도 같은 순서(3)라 팀 고르기 바로 아래에 붙고, 다음 경기·트랙레코드는 그 뒤로. PC·태블릿은 원래 순서 */
+    @media (max-width: 600px) {
+      #page-predict.active { display: flex; flex-direction: column; }
+      #page-predict.active > * { order: 3; }
+      #page-predict.active > #myteam-widget { order: 1; }
+      #page-predict.active > #bigmatch-banner { order: 2; }
+      #page-predict.active > #today-card { order: 4; }
+      #page-predict.active > #tr-strip { order: 5; }
+      .predict-selector-card { margin-bottom: 16px; }   /* 팝업 자리(315px)는 아래 다음 경기·트랙레코드 카드가 채움 */
+    }
     .card-title { font-size: 13px; color: #8b949e; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
 
     .league-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
@@ -2221,7 +2232,7 @@
     <div class="myteam-row" id="myteam-widget" style="display:none"></div>
     <script>/* 즐겨찾기가 있으면 첫 화면부터 자리를 잡아 둠(늦게 나타나며 아래를 밀지 않게) */try{var fv=JSON.parse(localStorage.getItem('favoriteTeams')||'null');if((Array.isArray(fv)&&fv.length)||(!fv&&localStorage.getItem('favoriteTeam'))){var mw=document.getElementById('myteam-widget');mw.style.display='';mw.classList.add('slot-wait');}}catch(e){}</script>
     <div class="bigmatch-banner slot-wait" id="bigmatch-banner"></div>
-    <div class="card">
+    <div class="card" id="today-card">
       <div class="card-title today-head"><span id="today-matches-title">오늘의 경기</span>
         <div class="st-seg today-seg" id="today-view-seg" style="display:none" role="tablist" aria-label="보기"><button data-v="all" onclick="setTodayView('all')">전체</button><button data-v="fav" onclick="setTodayView('fav')">★ 내 팀</button></div>
       </div>
