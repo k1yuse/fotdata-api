@@ -91,7 +91,7 @@ def main():
         d.rounded_rectangle([x, y, x + tw + 60 * S, y + 72 * S], radius=36 * S, fill=(22, 27, 34, 230), outline=(56, 90, 140), width=2 * S)
         d.text((x + 30 * S, y + 14 * S), name, font=f_p, fill=BLUE)
         x += tw + 60 * S + 18 * S
-    d.text((L, 1110 * S), 'fotdata-api.vercel.app', font=font(34, REG), fill=(110, 118, 129))
+    d.text((L, 1110 * S), 'fotdata-official.com', font=font(34, REG), fill=(110, 118, 129))
     img.resize((OUT_W, OUT_H), Image.LANCZOS).convert('RGB').save('og-image.png', optimize=True)
     print('og-image.png', OUT_W, 'x', OUT_H)
 

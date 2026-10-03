@@ -23,5 +23,18 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/:path((?!cal/).*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "fotdata-api.vercel.app"
+        }
+      ],
+      "destination": "https://www.fotdata-official.com/:path",
+      "permanent": true
+    }
   ]
 }

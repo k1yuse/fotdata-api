@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://fotdata-api.vercel.app/sitemap.xml
+Sitemap: https://www.fotdata-official.com/sitemap.xml

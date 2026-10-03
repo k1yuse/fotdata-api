@@ -598,7 +598,7 @@ def _clean_squad(squad_raw, team_name, team_info):
 # 팀 이름 → 영어 위키백과 검색 → 위키데이터 항목이 "축구 클럽"(Q476028)인지 확인해서 동명 도시·경기장 문서를 거름.
 # 감독·홈구장 같은 건 바뀌므로 WIKI_REFRESH_DAYS마다 다시 받음. 2026-09-30 7일 → 1일(매일): 감독 교체가 위키에 반영돼도
 # 우리 쪽이 최대 7일 늦게 받아서 "위키백과가 느리다"로 보였음. 갱신 때는 검색하지 않고 이전에 찾은 문서를 그대로 씀(_wiki_one)
-WIKI_UA = {"User-Agent": "FotData/1.0 (https://fotdata-api.vercel.app)"}
+WIKI_UA = {"User-Agent": "FotData/1.0 (https://www.fotdata-official.com)"}
 WIKI_REFRESH_DAYS = 1
 # 검색이 엉뚱한 문서(동명 다른 클럽 등)를 고르는 팀: {"팀 이름": "영어 위키백과 문서 제목"} — 2026-09-29 전 팀 확인 후 추가
 WIKI_TITLE_OVERRIDE = {

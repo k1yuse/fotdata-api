@@ -18,14 +18,14 @@
   <meta name="description" content="5대 리그+UCL 실시간 순위, AI 경기 예측, 역대 맞대 기록. 전문가 수준의 축구 인사이트를 무료로.">
   <meta property="og:title" content="FotData - AI 축구 분석 플랫폼">
   <meta property="og:description" content="5대 리그+UCL 실시간 순위, AI 경기 예측, 역대 맞대 기록. 전문가 수준의 축구 인사이트를 무료로.">
-  <meta property="og:image" content="https://fotdata-api.vercel.app/og-image.png?v=2">
+  <meta property="og:image" content="https://www.fotdata-official.com/og-image.png?v=3">
   <meta property="og:image:width" content="2400">
   <meta property="og:image:height" content="1260">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:alt" content="FotData — 축구를 데이터로 예측하다">
   <meta property="og:site_name" content="FotData">
-  <meta name="twitter:image" content="https://fotdata-api.vercel.app/og-image.png?v=2">
-  <meta property="og:url" content="https://fotdata-api.vercel.app/FotData.html">
+  <meta name="twitter:image" content="https://www.fotdata-official.com/og-image.png?v=3">
+  <meta property="og:url" content="https://www.fotdata-official.com/FotData.html">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -38,14 +38,14 @@
   <link rel="apple-touch-icon" href="/icon-512.png">
   <link rel="icon" sizes="192x192" href="/icon-192.png">
   <link rel="icon" sizes="512x512" href="/icon-512.png">
-  <link rel="canonical" href="https://fotdata-api.vercel.app/FotData.html">
+  <link rel="canonical" href="https://www.fotdata-official.com/FotData.html">
   <title>FotData - AI 축구 분석</title>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "FotData",
-    "url": "https://fotdata-api.vercel.app/FotData.html",
+    "url": "https://www.fotdata-official.com/FotData.html",
     "description": "머신러닝 기반 EPL·라리가·분데스리가·세리에A·리그앙·UCL 경기 예측, 실시간 순위표, 상대전적, 선수 스탯을 제공하는 축구 분석 도구",
     "applicationCategory": "SportsApplication",
     "operatingSystem": "Any (Web)",
@@ -4026,7 +4026,7 @@ function predictionUrl(home, away) {
   return `${location.origin}${location.pathname}?match=${matchSlug(home, away)}`;
 }
 // ── 캘린더 구독(2026-10-03): 구독 주소는 우리 사이트(/cal/…) → Vercel이 Render /calendar로 넘김. 구독이라 킥오프 시각 변경·결과도 자동 반영 ──
-const SITE_ORIGIN = 'https://fotdata-api.vercel.app';
+const SITE_ORIGIN = 'https://www.fotdata-official.com';
 const escHtml = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 let calScope = 'team';
 function calUrl(teams) {
@@ -4070,7 +4070,7 @@ async function copyCalUrl(url) {
   catch (e) { prompt('구독 주소를 복사해 주세요', url); }
 }
 function sharePageUrl(home, away) {
-  return `https://fotdata-api.vercel.app/m/${matchSlug(home, away)}`;
+  return `https://www.fotdata-official.com/m/${matchSlug(home, away)}`;
 }
 async function sharePredictionLink() {
   if (!lastPrediction) return;
@@ -6560,7 +6560,7 @@ async function shareResultCard() {
 
     ctx.textAlign = 'center';
     ctx.font = `600 18px ${FONT}`; ctx.fillStyle = '#6e7681';
-    ctx.fillText('fotdata-api.vercel.app · AI 추정 결과이므로 참고용으로만 활용하세요', W / 2, H - 36);
+    ctx.fillText('fotdata-official.com · AI 추정 결과이므로 참고용으로만 활용하세요', W / 2, H - 36);
 
     canvas.toBlob(async (blob) => {
       btn.disabled = false; btn.innerHTML = origHtml;

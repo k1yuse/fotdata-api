@@ -22,7 +22,7 @@ import generate_bg_ball as ball
 BASE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(BASE, 'promo')
 API = 'https://fotdata-api.onrender.com'
-SITE = 'fotdata-api.vercel.app'
+SITE = 'fotdata-official.com'
 S = 2                                        # 2배로 그려서 줄임(안티앨리어싱)
 BLUE, ORANGE, TEXT, MUTED, DIM = (88, 166, 255), (240, 136, 62), (230, 237, 243), (139, 148, 158), (110, 118, 129)
 GRAY = (110, 118, 129)

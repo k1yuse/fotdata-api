@@ -284,9 +284,9 @@ def render(home_name, away_name, home_logo, away_logo, probs, score, prediction,
             d.text((x, by - 16), f'{lab} {num}', font=font(24, 'Bold' if on else 'SemiBold'), fill=TEXT if on else MUTED, anchor='ms')
     _bar(img, x0, x1, by, bh, pct, win)
 
-    foot = 'fotdata-api.vercel.app  ·  AI 예측은 참고용이에요'
+    foot = 'fotdata-official.com  ·  AI 예측은 참고용이에요'
     if limited:
-        foot = '5대 리그 밖 팀은 UCL 기록만으로 계산한 참고용 예측  ·  fotdata-api.vercel.app'
+        foot = '5대 리그 밖 팀은 UCL 기록만으로 계산한 참고용 예측  ·  fotdata-official.com'
     d.text((OUT_W / 2, 584), foot, font=font(18, 'SemiBold'), fill=(125, 133, 144), anchor='mm')
 
     buf = io.BytesIO()

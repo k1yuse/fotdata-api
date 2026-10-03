@@ -90,7 +90,7 @@ def get_logos_with_mapping():
     try:
         hd = _load_json("team_logos_hd.json") or {}
         if os.environ.get("LOGO_HD_BASE"):   # 로컬 확인용: 배포 전 로고를 로컬 정적 서버에서(예: http://127.0.0.1:8765)
-            hd = {t: u.replace("https://fotdata-api.vercel.app", os.environ["LOGO_HD_BASE"]) for t, u in hd.items()}
+            hd = {t: u.replace("https://www.fotdata-official.com", os.environ["LOGO_HD_BASE"]) for t, u in hd.items()}
         logos = {**(_load_json("team_logos.json") or {}), **hd}
         print(f"로고 수: {len(logos)} (고화질 {len(hd)})")
         for html_name, api_name in TEAM_NAME_MAP.items():
@@ -1671,7 +1671,8 @@ def get_team_info(team_name: str):
 # <canvas>에 로고를 그려 예측 결과 공유카드 이미지를 만들 때 canvas가 tainted되어
 # toDataURL/toBlob이 막힌다. 허용 호스트로 제한한 프록시를 거쳐 우리 서버(CORS 전체 허용)
 # 응답으로 내려주면 crossOrigin="anonymous"로 안전하게 로드해 캔버스에 사용할 수 있다.
-PROXY_ALLOWED_HOSTS = {"crests.football-data.org", "upload.wikimedia.org", "fotdata-api.vercel.app"}
+SITE_HOSTS = {"www.fotdata-official.com", "fotdata-official.com", "fotdata-api.vercel.app"}   # 우리 사이트 주소(옛 vercel.app 포함)
+PROXY_ALLOWED_HOSTS = {"crests.football-data.org", "upload.wikimedia.org"} | SITE_HOSTS
 _HD_LOGO_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "logos", "hd")
 
 @app.get("/proxy/logo")
@@ -1681,7 +1682,7 @@ def proxy_logo(url: str):
         raise HTTPException(status_code=400, detail="허용되지 않은 이미지 URL")
     # 우리 고화질 로고(logos/hd)는 저장소에 같이 배포돼 있으니 디스크에서 바로 (Vercel까지 왕복 안 함)
     m = re.fullmatch(r"/logos/hd/((?:l/)?[a-z0-9-]+\.webp)", parsed.path)
-    if parsed.hostname == "fotdata-api.vercel.app" and m and os.path.exists(os.path.join(_HD_LOGO_DIR, m.group(1))):
+    if parsed.hostname in SITE_HOSTS and m and os.path.exists(os.path.join(_HD_LOGO_DIR, m.group(1))):
         with open(os.path.join(_HD_LOGO_DIR, m.group(1)), "rb") as f:
             return Response(content=f.read(), media_type="image/webp", headers={"Cache-Control": "public, max-age=86400"})
     try:
@@ -1696,11 +1697,11 @@ def proxy_logo(url: str):
     )
 # ── 경기별 링크 공유 미리보기 (2026-09-30) ──
 # 카톡·페북·X의 링크 미리보기는 JS를 실행하지 않아서 FotData.html?match=... 로는 사이트 공통 썸네일만 떴음.
-# 공유 링크를 https://fotdata-api.vercel.app/m/{홈}-vs-{원정} 으로 바꾸고, Vercel이 이 주소를 여기로 넘겨줌(vercel.json rewrites):
+# 공유 링크를 https://www.fotdata-official.com/m/{홈}-vs-{원정} 으로 바꾸고, Vercel이 이 주소를 여기로 넘겨줌(vercel.json rewrites):
 #   /m/{slug}          → /share/match/{slug}  : 그 경기 예측이 담긴 og 태그 + 사람은 JS로 앱 예측 화면으로 이동
 #   /og/m/{slug}.jpg   → /og/match/{slug}.jpg : 1200×630 예측 카드(share_card.py)
 # slug 규칙은 FotData.html teamSlug()와 같아야 함(앱이 만든 링크를 여기서 풀어야 하므로)
-SITE_URL = "https://fotdata-api.vercel.app"
+SITE_URL = "https://www.fotdata-official.com"   # 2026-10-03 도메인 이전(예전 https://fotdata-api.vercel.app)
 LEAGUE_KO = {"PL": "프리미어리그", "PD": "라리가", "BL1": "분데스리가", "SA": "세리에 A", "FL1": "리그 1", "CL": "챔피언스리그"}
 _SLUG_CLUB = re.compile(r"\b(fc|afc|cf|ac|sc|ssc|us|as|rc|rcd|cd|sv|tsg|vfb|vfl|ogc|aj|bc)\b", re.ASCII)
 

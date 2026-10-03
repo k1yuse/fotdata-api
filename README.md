@@ -2,7 +2,7 @@
 
 **AI 축구 경기 예측·분석 플랫폼** — 유럽 5대 리그(EPL·라리가·분데스리가·세리에 A·리그 1)와 UEFA 챔피언스리그의 경기 결과를 머신러닝으로 예측하고, 순위·일정·선수·구단 정보를 한곳에서 보여줍니다.
 
-- 서비스: **https://fotdata-api.vercel.app**
+- 서비스: **https://www.fotdata-official.com**
 - API: https://fotdata-api.onrender.com
 
 ## 주요 기능

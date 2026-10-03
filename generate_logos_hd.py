@@ -28,10 +28,10 @@ from PIL import Image
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 OUT_DIR = os.path.join(BASE, 'logos', 'hd')
-SITE = 'https://fotdata-api.vercel.app'
+SITE = 'https://www.fotdata-official.com'
 SIZE = 400                      # 큰 로고: 구단 둘러보기 200px × 2배 화면
 SMALL = 160                     # 기본 로고: 화면 최대 72px × 2배 화면
-UA = {'User-Agent': 'FotData/1.0 (https://fotdata-api.vercel.app; club crest refresh)'}
+UA = {'User-Agent': 'FotData/1.0 (https://www.fotdata-official.com; club crest refresh)'}
 API = 'https://en.wikipedia.org/w/api.php'
 # 사용자 검수(2026-09-30)에서 이상하게 잡힌 로고 → 지금(football-data) 로고 유지
 EXCLUDE = {
