@@ -107,7 +107,7 @@
     .myteam-row.slot-wait { min-height: 53px; }
     .today-matches-strip > .loading { min-height: 113px; box-sizing: border-box; }
     @media (max-width: 768px) { .bigmatch-banner.slot-wait { min-height: 298px; } }
-    @media (max-width: 400px) { .card.tr-strip.slot-wait { min-height: 83px; } }   /* 좁은 폰은 설명이 두 줄 */
+    @media (max-width: 600px) { .bigmatch-banner.slot-wait { min-height: 175px; } }   /* 폰은 납작한 빅매치(2026-10-03) — 트랙레코드도 폰은 한 줄이라 67px 그대로 */
     .card.tr-strip { display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; transition: border-color .15s, transform .15s; }
     .card.tr-strip:hover { border-color: rgba(88,166,255,0.5); transform: translateY(-1px); }
     .trs-icon { width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: rgba(63,185,80,0.12); border: 0.5px solid rgba(63,185,80,0.35); }
@@ -117,6 +117,7 @@
     .trs-chip { font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 99px; color: #3fb950; background: rgba(63,185,80,0.13); white-space: nowrap; }
     .trs-chip.soon { color: #79b8ff; background: rgba(88,166,255,0.12); font-weight: 700; }
     .trs-s { margin-top: 3px; font-size: 11.5px; color: #8b949e; line-height: 1.45; word-break: keep-all; } .trs-s b { color: #e6edf3; }
+    @media (max-width: 600px) { .trs-s { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } }   /* 폰은 한 줄(첫 화면 높이 절약) */
     .trs-dots { display: flex; gap: 3px; flex-shrink: 0; } .trs-dots i { width: 7px; height: 7px; border-radius: 50%; } .trs-dots i.hit { background: #3fb950; } .trs-dots i.miss { background: #484f58; }
     .trs-chev { width: 16px; height: 16px; flex-shrink: 0; fill: none; stroke: #7d8590; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     @media (max-width: 480px) { .trs-dots { display: none; } }
@@ -208,6 +209,8 @@
     .standings-table tr:hover { background: #21262d; }
     .team-cell { display: flex; align-items: center; gap: 10px; }
     .team-cell img { width: 24px; height: 24px; object-fit: contain; }
+    .tn-short { display: none !important; }
+    @media (max-width: 480px) { .tn-full { display: none !important; } .tn-short { display: inline !important; } }
     .rank-num { font-size: 13px; color: #8b949e; width: 20px; text-align: center; }
     .rank-1 { color: #FFD700; }
     .rank-2 { color: #C0C0C0; }
@@ -327,6 +330,25 @@
       .bigmatch-unit { padding: 8px 0; width: 48px; }
       .bigmatch-unit .num { font-size: 20px; }
     }
+    /* 폰(≤600px): 빅매치 배너를 납작하게 — 예전엔 298px로 첫 화면의 1/3을 차지해서 팀 고르기·예측 버튼이 화면 밖으로 밀렸음(2026-10-03) */
+    @media (max-width: 600px) {
+      .bigmatch-banner { padding: 12px 14px; }
+      .bigmatch-label { font-size: 11.5px; margin-bottom: 8px; gap: 6px; }
+      .bigmatch-label img { width: 22px; height: 22px; } .bigmatch-label img.wide { width: 50px; }
+      .bigmatch-venue { display: none; }
+      .bigmatch-teams { gap: 8px; margin-bottom: 10px; }
+      .bigmatch-team { gap: 4px; }
+      .bigmatch-team-hit { gap: 5px; }
+      .bigmatch-team img { width: 40px; height: 40px; }
+      .bigmatch-team .bigmatch-team-name { font-size: 12.5px; -webkit-line-clamp: 1; }
+      .bigmatch-team .bigmatch-team-prob { font-size: 13px; }
+      .bigmatch-vs-col { gap: 6px; padding: 4px 6px; }
+      .bigmatch-vs { font-size: 13px; }
+      .bigmatch-countdown { gap: 6px; }
+      .bigmatch-unit { display: flex; align-items: baseline; justify-content: center; gap: 2px; width: auto; min-width: 54px; padding: 5px 8px; border-radius: 8px; }
+      .bigmatch-unit .num { font-size: 15px; }
+      .bigmatch-unit .lbl { margin-top: 0; font-size: 10px; }
+    }
     @media (max-width: 340px) {
       .bigmatch-teams { gap: 6px; }
       .bigmatch-prob-bar { width: 68px; }
@@ -357,6 +379,10 @@
     @media (max-width: 480px) { .pwa-install-banner { left: 10px; right: 10px; bottom: 10px; padding: 10px 12px; } }
     .kofi-float-btn { position: fixed; left: 16px; bottom: 76px; z-index: 400; display: inline-flex; align-items: center; gap: 8px; background: #58a6ff; color: #0d1117; font-size: 13px; font-weight: 700; padding: 11px 18px; border-radius: 999px; box-shadow: 0 8px 24px rgba(0,0,0,.35); border: none; cursor: pointer; font-family: inherit; }
     .kofi-float-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+    /* 폰: 아래로 스크롤하는 동안은 숨기고(내용을 가렸음 — 순위표 18~20위 번호 등), 위로 올리거나 맨 위면 다시 보임(2026-10-03) */
+    .kofi-float-btn { transition: transform .25s ease, opacity .25s ease; }
+    .kofi-float-btn.away { transform: translateY(18px) scale(.85); opacity: 0; pointer-events: none; }
+    @media (prefers-reduced-motion: reduce) { .kofi-float-btn { transition: none; } }
     @media (max-width: 480px) { .kofi-float-btn { left: 10px; bottom: 76px; width: 44px; height: 44px; padding: 0; justify-content: center; gap: 0; } .kofi-float-btn .kofi-label { display: none; } }
     .kofi-panel { position: fixed; left: 16px; bottom: 136px; width: 340px; max-width: 92vw; height: 560px; max-height: 70vh; border-radius: 14px; box-shadow: 0 16px 48px rgba(0,0,0,.45); overflow: hidden; z-index: 401; opacity: 0; pointer-events: none; transition: opacity .2s ease; will-change: transform, opacity; }
     @media (min-width: 640px) { .kofi-float-btn { display: none; } }
@@ -2877,12 +2903,12 @@ async function renderBigMatchBanner(m) {
     ${venueHtml}
     <div class="bigmatch-teams">
       <div class="bigmatch-team">
-        <div class="bigmatch-team-hit" onclick="openTeamInfo('${escJs(m.home_team)}')" onmouseenter="primeLogoGlow(this,'${escJs(m.home_team)}')"><img alt="" src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span class="bigmatch-team-name">${homeName}</span></div>
+        <div class="bigmatch-team-hit" onclick="openTeamInfo('${escJs(m.home_team)}')" onmouseenter="primeLogoGlow(this,'${escJs(m.home_team)}')"><img alt="" src="${logos[m.home_team] || ''}" onerror="this.style.display='none'"><span class="bigmatch-team-name"><span class="tn-full">${homeName}</span><span class="tn-short">${shortName(m.home_team)}</span></span></div>
         ${homeProbHtml}
       </div>
       <div class="bigmatch-vs-col" onclick="openMatchPredictModal('${escJs(m.home_team)}','${escJs(m.away_team)}')">${probHtml}</div>
       <div class="bigmatch-team away">
-        <div class="bigmatch-team-hit" onclick="openTeamInfo('${escJs(m.away_team)}')" onmouseenter="primeLogoGlow(this,'${escJs(m.away_team)}')"><img alt="" src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"><span class="bigmatch-team-name">${awayName}</span></div>
+        <div class="bigmatch-team-hit" onclick="openTeamInfo('${escJs(m.away_team)}')" onmouseenter="primeLogoGlow(this,'${escJs(m.away_team)}')"><img alt="" src="${logos[m.away_team] || ''}" onerror="this.style.display='none'"><span class="bigmatch-team-name"><span class="tn-full">${awayName}</span><span class="tn-short">${shortName(m.away_team)}</span></span></div>
         ${awayProbHtml}
       </div>
     </div>
@@ -3060,6 +3086,8 @@ const SHORT_NAMES = {
   'RCD Espanyol de Barcelona': 'Espanyol', 'RC Celta de Vigo': 'Celta', 'Real Racing Club de Santander': 'Racing', 'Stade Rennais FC 1901': 'Rennes',
   'RC Strasbourg Alsace': 'Strasbourg', 'FC Porto': 'Porto', 'AFC Ajax': 'Ajax', 'Girona FC': 'Girona', 'FK Kairat': 'Kairat', 'Paphos FC': 'Paphos',
 };
+// 표의 팀 이름: 넓으면 전체 이름, 좁은 폰(≤480px)이면 짧은 이름(Man United) — "Manchester U…"처럼 잘리던 것
+function teamNameHtml(t) { return `<span class="tn-full">${cleanTeamName(t)}</span><span class="tn-short">${shortName(t)}</span>`; }
 function shortName(name) {
   if (!name) return '';
   if (SHORT_NAMES[name]) return SHORT_NAMES[name];
@@ -4939,7 +4967,7 @@ function ctRowHtml(t, i, T, cells, ptsHtml) {
     <div class="ct-team">
       <img src="${t.logo}" onerror="this.style.visibility='hidden'" onclick="openTeamInfo('${escJs(t.team)}')" alt="">
       <div style="min-width:0">
-        <div class="ct-name clickable-team" onclick="openTeamInfo('${escJs(t.team)}')">${cleanTeamName(t.team)}</div>
+        <div class="ct-name clickable-team" onclick="openTeamInfo('${escJs(t.team)}')">${teamNameHtml(t.team)}</div>
         <div class="ct-sub">현재 ${t.points}점 · ${t.played}경기</div>
       </div>
     </div>
@@ -5447,7 +5475,7 @@ function renderStandings(data, leagueCode, keepSort) {
     const num = sort === 'rank' ? team.rank : `${i + 1}<small>(${team.rank})</small>`;
     html += `<tr class="st-row ${zc} ${champ ? 'champ' : ''} row-enter" style="animation-delay:${Math.min(i * 35, 600)}ms">
       <td><span class="st-rank">${num}</span></td>
-      <td><div class="team-cell clickable-team" onclick="openTeamInfo('${escJs(team.team)}')"><img alt="" src="${team.logo}" width="24" height="24" style="object-fit:contain" onerror="this.style.visibility='hidden'"><span>${cleanTeamName(team.team)}</span>${champ ? `<span class="st-crown" title="우승">${TROPHY_ICON}</span>` : ''}</div></td>
+      <td><div class="team-cell clickable-team" onclick="openTeamInfo('${escJs(team.team)}')"><img alt="" src="${team.logo}" width="24" height="24" style="object-fit:contain" onerror="this.style.visibility='hidden'"><span>${teamNameHtml(team.team)}</span>${champ ? `<span class="st-crown" title="우승">${TROPHY_ICON}</span>` : ''}</div></td>
       <td class="center">${team.played}</td><td class="center">${team.wins}</td><td class="center">${team.draws}</td><td class="center">${team.losses}</td>
       <td class="center hide-mobile col-gf">${team.gf}</td><td class="center hide-mobile col-ga">${team.ga}</td>
       <td class="center st-gd ${team.gd > 0 ? 'pos' : team.gd < 0 ? 'neg' : ''}">${team.gd > 0 ? '+' : ''}${team.gd}</td>
@@ -7694,6 +7722,23 @@ function positionKofiPanel() {
     panel.style.height = '';
   }
 }
+// 후원 버튼: 아래로 스크롤하면 숨기고 위로 올리면 다시(패널이 열려 있으면 그대로)
+(function () {
+  let lastY = scrollY, ticking = false;
+  addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      ticking = false;
+      const y = scrollY, btn = document.querySelector('.kofi-float-btn');
+      if (!btn) return;
+      if (document.getElementById('kofi-panel')?.classList.contains('open') || y < 120) btn.classList.remove('away');
+      else if (y > lastY + 6) btn.classList.add('away');
+      else if (y < lastY - 6) btn.classList.remove('away');
+      if (Math.abs(y - lastY) > 6) lastY = y;
+    });
+  }, { passive: true });
+})();
 function toggleKofiPanel() {
   const panel = document.getElementById('kofi-panel');
   const inner = panel.querySelector('.kofi-panel-inner');
