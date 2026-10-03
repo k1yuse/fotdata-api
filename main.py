@@ -1921,9 +1921,9 @@ def _team_calendar(teams, version):
             hs, as_ = _short_name(h), _short_name(a)
             done = m.get("status") in DONE_STATUSES and m.get("home_goals") is not None
             if done:
-                summary = f"⚽ {hs} {m['home_goals']}-{m['away_goals']} {as_}"
+                summary = f"{hs} {m['home_goals']}-{m['away_goals']} {as_}"
             else:
-                summary = f"⚽ {hs} vs {as_}" + (" (연기)" if m.get("status") == "POSTPONED" else "")
+                summary = f"{hs} vs {as_}" + (" (연기)" if m.get("status") == "POSTPONED" else "")
             lines = [f"{LEAGUE_KO.get(code, code)}" + (f" · {m['matchday']}라운드" if m.get("matchday") and code != "CL" else "")]
             if m.get("status") == "SCHEDULED":
                 lines.append("킥오프 시각 미정 — 확정되면 자동으로 바뀌어요")
@@ -1947,7 +1947,10 @@ def _team_calendar(teams, version):
                 f"URL:{url}", "TRANSP:TRANSPARENT", "END:VEVENT"])
     name = _short_name(teams[0]) if len(teams) == 1 else "내 팀"
     head = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//FotData//Team Fixtures//KO", "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
-            f"X-WR-CALNAME:{_ics_text(f'⚽ {name} 경기 일정 · FotData')}",
+            f"X-WR-CALNAME:{_ics_text(f'FotData · {name} 경기 일정')}",
+            # 일정 제목엔 그림을 넣을 수 없어서(캘린더 앱 공통) 이모지 대신 브랜드 색 + 캘린더 아이콘(RFC 7986, 지원하는 앱만)
+            "COLOR:dodgerblue", "X-APPLE-CALENDAR-COLOR:#58A6FF",
+            f"IMAGE;VALUE=URI;DISPLAY=BADGE;FMTTYPE=image/png:{SITE_URL}/icon-192.png",
             f"X-WR-CALDESC:{_ics_text('FotData가 매일 갱신하는 경기 일정·결과와 AI 예측 — ' + SITE_URL)}",
             "X-WR-TIMEZONE:Asia/Seoul", "REFRESH-INTERVAL;VALUE=DURATION:PT6H", "X-PUBLISHED-TTL:PT6H"]
     body = head + [l for ev in sorted(events, key=lambda e: e[3]) for l in ev] + ["END:VCALENDAR"]
