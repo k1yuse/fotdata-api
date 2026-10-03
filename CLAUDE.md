@@ -28,10 +28,13 @@
 1. `git remote -v`의 origin URL에 GitHub Personal Access Token이 평문으로 박혀 있었음(`https://k1yuse:ghp_...@github.com/...`) — 로컬 `.git/config`에만 있던 것이라 레포 자체가 노출된 건 아니었지만, 토큰을 폐기하고 새로 발급받아 remote URL을 교체했다.
 2. **(더 심각) `FotData_01.ipynb`에 football-data.org API 키가 하드코딩된 채 GitHub에 커밋되어 있었고, 레포가 public이라 실제로 전 세계에 노출된 상태였음.** 키를 재발급(무효화)하고, 노트북 코드는 `os.environ["FOOTBALL_API_KEY"]`로 환경변수에서 읽도록 수정했다. 같은 키가 들어있던 `.ipynb_checkpoints/FotData_01-checkpoint.ipynb`도 삭제하고, `.gitignore`를 추가해 체크포인트/`__pycache__`/`.env`가 다시 커밋되지 않게 했다.
 
+3. **(2026-10-03 재발)** `git remote -v`에 토큰(`ghp_…`, GitHub 토큰 이름 "fotdata-api")이 다시 평문으로 들어가 있었음 — 원격 주소를 `https://github.com/k1yuse/fotdata-api.git`으로 바꾸고, 토큰은 확인 출력에 찍혀 대화 기록에 남아서 폐기 대상. 대신 **GitHub CLI(`gh`, brew 설치, `gh auth login` + `gh auth setup-git`)로 push 인증**(토큰은 맥 키체인에 보관, scopes: repo·workflow·gist·read:org). 덤으로 `gh run view <id> --log-failed`로 Actions 실패 로그를 직접 읽을 수 있음(예전엔 로그인한 브라우저에서 사용자가 복사해 줘야 했음).
+
 **앞으로 지킬 규칙**:
 - API 키/토큰은 절대 코드나 노트북에 하드코딩하지 말고 `os.environ.get(...)`으로만 읽을 것
 - 새 노트북 셀을 추가할 때도 이 규칙 유지 — 노트북은 실수로 키를 박아넣기 가장 쉬운 곳
-- `git remote -v` 결과에 자격증명이 보이면 즉시 정리 (credential helper로 이전)
+- `git remote -v` 결과에 자격증명이 보이면 즉시 정리 (credential helper로 이전 — 지금은 `gh auth git-credential`)
+- Actions 실패 원인은 `gh run list --workflow update_data.yml` → `gh run view <id> --log-failed`로 직접 확인
 
 ## 3. 기술 스택
 
