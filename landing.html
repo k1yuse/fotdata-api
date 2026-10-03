@@ -153,9 +153,9 @@
 })();
 </script>
   <meta charset="UTF-8">
-  <meta name="description" content="5대 리그+UCL 실시간 순위, AI 경기 예측, 역대 맞대 기록. 전문가 수준의 축구 인사이트를 무료로.">
+  <meta name="description" content="5대 리그+UCL 순위·일정, AI 경기 예측, 최근 4시즌 맞대결 기록. 데이터로 보는 축구 인사이트를 무료로.">
   <meta property="og:title" content="FotData - AI 축구 분석 플랫폼">
-  <meta property="og:description" content="5대 리그+UCL 실시간 순위, AI 경기 예측, 역대 맞대 기록. 전문가 수준의 축구 인사이트를 무료로.">
+  <meta property="og:description" content="5대 리그+UCL 순위·일정, AI 경기 예측, 최근 4시즌 맞대결 기록. 데이터로 보는 축구 인사이트를 무료로.">
   <meta property="og:image" content="https://www.fotdata-official.com/og-image.png?v=3">
   <meta property="og:image:width" content="2400">
   <meta property="og:image:height" content="1260">
@@ -184,7 +184,7 @@
     "@type": "WebApplication",
     "name": "FotData",
     "url": "https://www.fotdata-official.com/",
-    "description": "5대 리그+UCL 실시간 순위, AI 경기 예측, 역대 맞대 기록을 제공하는 AI 축구 분석 플랫폼",
+    "description": "5대 리그+UCL 순위·일정, AI 경기 예측, 최근 4시즌 맞대결 기록을 제공하는 AI 축구 분석 플랫폼",
     "applicationCategory": "SportsApplication",
     "operatingSystem": "Any (Web)",
     "inLanguage": "ko",
@@ -672,6 +672,9 @@
     @media (max-width: 768px) { .kofi-float-btn { bottom: 120px; } .kofi-panel { bottom: 180px; } }
     @media (max-width: 480px) { .kofi-float-btn { left: 10px; padding: 10px 14px; font-size: 12px; } }
     @media (min-width: 769px) { .kofi-float-btn { display: none; } }
+    /* 폰: 첫 화면(히어로)에선 숨김 — 예측 정확도 숫자를 가렸음. 히어로를 지나면 나타나고, 아래로 내릴 땐 숨김·위로 올리면 다시(앱과 같은 규칙) */
+    .kofi-float-btn { transition: transform .25s ease, opacity .25s ease; }
+    .kofi-float-btn.away { transform: translateY(18px) scale(.85); opacity: 0; pointer-events: none; }
     .kofi-panel { position: fixed; left: 16px; bottom: 152px; width: 340px; max-width: 92vw; height: 560px; max-height: 70vh; border-radius: 14px; box-shadow: 0 16px 48px rgba(0,0,0,.45); overflow: hidden; z-index: 401; opacity: 0; pointer-events: none; transition: opacity .2s ease; will-change: transform, opacity; }
     .kofi-panel.open { opacity: 1; pointer-events: auto; }
     .kofi-panel-inner { width: 100%; height: 100%; background: #fff; display: flex; flex-direction: column; transform: translateY(100%); transition: transform .32s cubic-bezier(.22,.68,0,1.01); will-change: transform; }
@@ -732,7 +735,7 @@
     AI 기반 축구 분석 플랫폼
   </div>
   <h1>축구를 데이터로<br><em>예측하다</em></h1>
-  <p>5대 리그+UCL 실시간 순위, AI 경기 예측, 역대 맞대 기록. 전문가 수준의 축구&nbsp;인사이트를 무료로.</p>
+  <p>5대 리그+UCL 순위·일정, AI 경기 예측, 최근 4시즌 맞대결 기록. 데이터로 보는 축구&nbsp;인사이트를 무료로.</p>
   <div class="hero-btns">
     <a href="/app" class="btn-primary" data-umami-event="landing_cta" data-umami-event-where="hero">경기 예측하기</a>
     <a href="/app#standings" class="btn-secondary" data-umami-event="landing_cta" data-umami-event-where="hero_standings">순위표 보기</a>
@@ -893,9 +896,9 @@
       <h2>AI가 분석하는<br>경기 결과</h2>
       <p>머신러닝 모델이 팀 공격력, 수비력, 최근 폼, 홈 어드밴티지를 종합 분석해 승/무/패 확률을 예측합니다.</p>
       <ul class="check-list">
-        <li>팀별 공격력 · 수비력 실시간 분석</li>
+        <li>팀별 공격력 · 수비력 분석</li>
         <li>최근 5경기 폼 자동 반영</li>
-        <li>최근 4시즌 H2H 맞대 기록</li>
+        <li>최근 4시즌 H2H 맞대결 기록</li>
         <li>홈 어드밴티지 자동 계산</li>
       </ul>
     </div>
@@ -961,7 +964,7 @@
   </div>
   </div>
     <div>
-      <div class="preview-label">실시간 순위표</div>
+      <div class="preview-label">최신 순위표</div>
       <h2>6개 리그<br>최신 순위 한눈에</h2>
       <p style="font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:24px">EPL, 라리가, 분데스리가, 세리에A, 리그앙, 챔피언스리그의  최신 순위를 확인하세요. 매 경기 결과가 자동으로 반영됩니다.</p>
       <ul class="check-list">
@@ -983,8 +986,8 @@
     <div class="feat-grid">
       <div class="feat-card reveal">
         <div class="feat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/><path d="M9 6h11M9 12h11M9 18h11"/></svg></div>
-        <h3>실시간 순위표</h3>
-        <p>6개 리그 최신 순위, 폼, 득실 현황을 한눈에 확인하세요.</p>
+        <h3>최신 순위표</h3>
+        <p>6개 리그 순위, 폼, 득실 현황을 한눈에 — 매일 새벽 자동 갱신, 경기 당일 결과도 바로 반영.</p>
       </div>
       <div class="feat-card reveal">
         <div class="feat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1" fill="#58a6ff"/></svg></div>
@@ -993,8 +996,8 @@
       </div>
       <div class="feat-card reveal">
         <div class="feat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4L3 12l6 8M15 4l6 8-6 8"/></svg></div>
-        <h3>H2H 맞대 기록</h3>
-        <p>두 팀의 최근 4시즌 맞대 기록과 상세 경기 결과.</p>
+        <h3>H2H 맞대결 기록</h3>
+        <p>두 팀의 최근 4시즌 맞대결 기록과 상세 경기 결과.</p>
       </div>
       <div class="feat-card reveal">
         <div class="feat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V11M10 20V4M16 20V14M22 20V8"/></svg></div>
@@ -1312,6 +1315,23 @@ window.addEventListener('load', () => window.scrollTo(0, 0));
   </div>
 </div>
 <script>
+(function () {
+  const btn = document.querySelector('.kofi-float-btn'), hero = document.querySelector('.hero');
+  if (!btn) return;
+  let lastY = scrollY, ticking = false;
+  const update = () => {
+    ticking = false;
+    const y = scrollY, heroEnd = hero ? hero.offsetTop + hero.offsetHeight - innerHeight * 0.4 : 120;
+    if (document.getElementById('kofi-panel')?.classList.contains('open')) btn.classList.remove('away');
+    else if (y < heroEnd) btn.classList.add('away');
+    else if (y + innerHeight > document.documentElement.scrollHeight - 160) btn.classList.remove('away');   // 맨 아래(시작하기·푸터)에선 보이게
+    else if (y > lastY + 6) btn.classList.add('away');
+    else if (y < lastY - 6) btn.classList.remove('away');
+    if (Math.abs(y - lastY) > 6) lastY = y;
+  };
+  btn.classList.add('away');
+  addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+})();
 let kofiCloseTimer = null;
 function positionKofiPanel() {
   const panel = document.getElementById('kofi-panel');

@@ -1202,6 +1202,13 @@ def _squad_photo(team, name):
             return p["photo"]
     return None
 
+def _done_matchday(code, upto=None):
+    """득점 순위가 "몇 라운드까지" 반영됐는지: 그 날짜(upto, 수집일)까지 끝난 경기의 가장 큰 라운드.
+    football-data scorers의 season.currentMatchday는 "다음(진행 중) 라운드"라서 5라운드까지 치렀는데 "6라운드 기준"으로 나왔음(2026-10-03)"""
+    ms = [m for m in (_load_json("schedule.json") or {}).get(code, [])
+          if m.get("status") in DONE_STATUSES and m.get("matchday") and (not upto or str(m.get("date", ""))[:10] <= upto)]
+    return max((m["matchday"] for m in ms), default=None)
+
 @lru_cache(maxsize=8)
 def _leaders(code):
     """이번 시즌 득점·도움 순위(scorers.json — update_data.fetch_scorers). 도움 순위는 football-data가
@@ -1212,7 +1219,7 @@ def _leaders(code):
     rows = [{**r, "photo": _squad_photo(r.get("team"), r.get("name"))} for r in d["scorers"]]
     goals = sorted(rows, key=lambda r: (-r["goals"], -r["assists"], r.get("played") or 99))[:20]
     assists = sorted([r for r in rows if r["assists"] > 0], key=lambda r: (-r["assists"], -r["goals"], r.get("played") or 99))[:20]
-    return {"league": code, "season": d.get("season"), "matchday": d.get("matchday"), "updated": d.get("updated"),
+    return {"league": code, "season": d.get("season"), "matchday": _done_matchday(code, d.get("updated")) or d.get("matchday"), "updated": d.get("updated"),
             "pool": len(rows), "goals": goals, "assists": assists}
 
 @lru_cache(maxsize=256)
@@ -1228,7 +1235,7 @@ def _team_players(team):
             continue
         rows = [{**r, "photo": _squad_photo(team, r.get("name"))} for r in d.get("scorers", []) if r.get("team") == team]
         rows.sort(key=lambda r: (-r["goals"], -r["assists"], r.get("played") or 99))
-        comps[code] = {"season": d.get("season"), "matchday": d.get("matchday"), "updated": d.get("updated"), "players": rows}
+        comps[code] = {"season": d.get("season"), "matchday": _done_matchday(code, d.get("updated")) or d.get("matchday"), "updated": d.get("updated"), "players": rows}
     # 이번 시즌 리그 득점(비중 계산용)
     team_goals = None
     if lg:
