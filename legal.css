@@ -1,7 +1,7 @@
 /* 개인정보처리방침·이용약관 공용 스타일 — 사이트와 같은 다크 테마, 읽기 위주(외부 글꼴 없음) */
 :root { color-scheme: dark; }
 * { box-sizing: border-box; }
-body { margin: 0; background: #0d1117; color: #c9d1d9; font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif; line-height: 1.75; -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: #0d1117; color: #c9d1d9; font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif; line-height: 1.75; -webkit-text-size-adjust: 100%; word-break: keep-all; overflow-wrap: break-word; }
 .legal { max-width: 760px; margin: 0 auto; padding: 32px 20px calc(56px + env(safe-area-inset-bottom)); }
 .back { display: inline-block; font-size: 13px; color: #58a6ff; text-decoration: none; margin-bottom: 20px; }
 .back:hover { text-decoration: underline; }

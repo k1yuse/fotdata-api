@@ -216,7 +216,7 @@
       --red: #f85149;
     }
     html { scroll-behavior: smooth; }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; word-break: keep-all; overflow-wrap: break-word; }
 
     /* 인트로(세션당 1회, v2): 경기장 선 + 데이터 점 → 돌아가는 3D 와이어프레임 공 → FotData → 다가오며 히어로 3D 공으로 */
     .intro-overlay { position: fixed; inset: 0; z-index: 9999; background: radial-gradient(ellipse at 50% 42%, #101a28 0%, var(--bg) 62%); cursor: pointer; transition: opacity .55s ease; }

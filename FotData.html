@@ -66,7 +66,9 @@
   <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: #0d1117; color: #e6edf3; min-height: 100vh; display: flex; flex-direction: column; }
+    html.modal-open, html.modal-open body { overflow: hidden; }
+    .modal-overlay, #ti-modal, #match-predict-modal, #track-record-modal, #t-modal, #team-search-modal { overscroll-behavior: contain; }
+    body { font-family: 'Inter', sans-serif; background: #0d1117; color: #e6edf3; min-height: 100vh; display: flex; flex-direction: column; word-break: keep-all; overflow-wrap: break-word; }
     body > .container { flex: 1 0 auto; }
     footer { flex-shrink: 0; }
     /* 푸터 출처 표기 — football-data 이용 약관 7.1의 문구("Football data provided by the Football-Data.org API")는 그대로 둘 것 */
@@ -221,7 +223,7 @@
     .team-cell { display: flex; align-items: center; gap: 10px; }
     .team-cell img { width: 24px; height: 24px; object-fit: contain; }
     .tn-short { display: none !important; }
-    @media (max-width: 480px) { .tn-full { display: none !important; } .tn-short { display: inline !important; } }
+    @media (max-width: 768px) { .tn-full { display: none !important; } .tn-short { display: inline !important; } }
     .rank-num { font-size: 13px; color: #8b949e; width: 20px; text-align: center; }
     .rank-1 { color: #FFD700; }
     .rank-2 { color: #C0C0C0; }
@@ -3129,7 +3131,7 @@ const SHORT_NAMES = {
   'Parma Calcio 1913': 'Parma', 'AS Saint-Étienne': 'Saint-Étienne', 'Clermont Foot 63': 'Clermont', 'Montpellier HSC': 'Montpellier', 'Stade de Reims': 'Reims',
 };
 // 표의 팀 이름: 넓으면 전체 이름, 좁은 폰(≤480px)이면 짧은 이름(Man United) — "Manchester U…"처럼 잘리던 것
-function teamNameHtml(t, full) { return `<span class="tn-full">${full ?? cleanTeamName(t)}</span><span class="tn-short">${shortName(t)}</span>`; }
+function teamNameHtml(t, full) { return `<span class="tn-full">${full ?? shortTeamName(t)}</span><span class="tn-short">${shortName(t)}</span>`; }
 function shortName(name) {
   if (!name) return '';
   if (SHORT_NAMES[name]) return SHORT_NAMES[name];
@@ -4238,6 +4240,7 @@ async function switchTiTab(tab) {
       if (!squad.length) { panel.innerHTML = '<div class="ti-empty">스쿼드 정보가 없어요.</div>'; return; }
       const groups = {};
       squad.forEach(p => { (groups[p.position] = groups[p.position] || []).push(p); });
+      const hasNum = squad.some(p => p.shirtNumber);   // 번호가 있는 팀이면 번호 없는 선수도 빈 칸을 둬서 이름 줄을 맞춤
       let html = '';
       Object.keys(POSITION_LABEL).forEach(pos => {
         const players = groups[pos];
@@ -4246,7 +4249,7 @@ async function switchTiTab(tab) {
         html += players.map(p => `<div class="ti-player-row">
           <div style="display:flex;align-items:center;gap:8px;min-width:0">
             ${p.photo ? `<img alt="" src="${p.photo}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;background:#21262d" onerror="this.style.display='none'">` : ''}
-            <span class="ti-player-name" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.shirtNumber ? `<i class="pl-num">${p.shirtNumber}</i>` : ''}${p.name}</span>
+            <span class="ti-player-name" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${hasNum ? `<i class="pl-num">${p.shirtNumber || ''}</i>` : ''}${p.name}</span>
           </div>
           <span class="ti-player-nation">${p.nationality || ''}</span>
         </div>`).join('');
@@ -7563,7 +7566,7 @@ function cbToggleStar(team) {
 }
 function renderCbFoot() {
   const foot = document.getElementById('cb-foot');
-  if (cb.mode !== 'pick') { foot.innerHTML = '<span class="cb-hint">‹ › · 스와이프 · ← → 키로 넘기기 · 로고를 누르면 뒤집혀요</span>'; return; }
+  if (cb.mode !== 'pick') { foot.innerHTML = `<span class="cb-hint">${matchMedia('(hover: none)').matches ? '옆으로 밀어서 넘기기' : '‹ › · ← → 키 · 가로 스크롤로 넘기기'} · 로고를 누르면 뒤집혀요</span>`; return; }
   const n = obPicked.length;
   foot.innerHTML = `<div class="cb-picked">${n ? obPicked.map(t => `<button class="ob-chip" data-team="${cbAttr(t)}" onclick="cbToggleStar(this.dataset.team)" title="빼기"><img src="${logos[t] || ''}" alt="" onerror="this.style.display='none'">${shortName(t)}<b>✕</b></button>`).join('') : '<span class="cb-hint">리그를 바꿔 가며 여러 팀을 고를 수 있어요</span>'}</div>
     <div class="cb-pick-btns"><button class="ob-skip" onclick="closeClubBrowser()">나중에 할게요</button><button class="ob-done" onclick="finishOnboard()"${n ? '' : ' disabled'}>${n ? `선택 완료 (${n}/${FAV_MAX})` : '팀을 골라주세요'}</button></div>`;
@@ -7682,7 +7685,9 @@ function navPush(page) {
     else history.pushState({ fdPage: page }, '', url);
   } catch (e) { /* file:// 등 */ }
 }
+const SCROLL_LOCK = ['cal-modal', 'pc-modal', 'team-search-modal', 'ti-modal', 'match-predict-modal', 'track-record-modal', 't-modal'];   // 화면을 덮는 창만(후원·팀 선택 팝업 제외, 구단 둘러보기는 자체 잠금)
 function navSync() {
+  document.documentElement.classList.toggle('modal-open', SCROLL_LOCK.some(id => document.getElementById(id)?.classList.contains('show')));
   if (nav.pendingBack) return;
   const guard = history.state?.fdGuard, open = anyOverlay();
   try {
