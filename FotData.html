@@ -1482,12 +1482,27 @@
     .cb-card:not(.center) .cb-star, .cb-card:not(.center) .cb-rec { visibility: hidden; }
     /* 내 팀 강조(즐겨찾기 — 순위표·순위 예측·일정) */
     .st-row.is-fav td { background: rgba(88,166,255,0.07); }
-    .st-row.is-fav .team-cell > span:not(.st-crown) { color: #79b8ff; font-weight: 700; }
     .fav-star { color: #f0c040; font-size: 11px; margin-left: 4px; flex-shrink: 0; }
     .ct-row.is-fav { background: rgba(88,166,255,0.08); }
     .ct-row.is-fav .ct-name { color: #79b8ff; font-weight: 700; }
     .sched-match.is-fav { background: rgba(88,166,255,0.06); border-radius: 8px; }
     .sched-team-hit.fav span { color: #79b8ff; font-weight: 700; }
+    /* 폰 순위표: 숨겨진 "최근 5경기" 칸 대신 팀 이름 아래 작은 점 5개(2026-10-04) */
+    .tc-nm { display: flex; flex-direction: column; min-width: 0; }
+    .st-row.is-fav .tc-nm > span { color: #79b8ff; font-weight: 700; }
+    .st-mini-form { display: none; gap: 3px; margin-top: 3px; font-style: normal; }
+    .st-mini-form b { width: 6px; height: 6px; border-radius: 50%; background: #6e7681; }
+    .st-mini-form b.W { background: #3fb950; } .st-mini-form b.L { background: #f85149; } .st-mini-form b.D { background: #8b949e; }
+    @media (max-width: 768px) { .st-mini-form { display: flex; } }
+    /* 용어 도움말 ⓘ(2026-10-04): 누르면 말풍선 — 처음 온 사람이 숫자의 뜻을 바로 알게 */
+    .ii { display: inline-flex; align-items: center; justify-content: center; width: 15px; height: 15px; margin-left: 5px; padding: 0; border-radius: 50%; border: 1px solid #484f58; background: transparent; color: #8b949e; font: italic 700 9.5px/1 Georgia, 'Times New Roman', serif; cursor: pointer; vertical-align: 1px; flex-shrink: 0; text-transform: none; letter-spacing: 0; transition: color .15s, border-color .15s, background .15s; }
+    .ii:hover, .ii[aria-expanded="true"] { color: #58a6ff; border-color: #58a6ff; background: rgba(88,166,255,0.1); }
+    .ii::after { content: ''; position: absolute; inset: -10px; }   /* 손가락으로 누르기 쉽게 터치 영역만 넓힘 */
+    .ii { position: relative; }
+    #tip-pop { position: fixed; z-index: 1300; max-width: min(280px, calc(100vw - 24px)); padding: 11px 13px; border-radius: 10px; background: rgba(22,27,34,0.97); border: 0.5px solid rgba(88,166,255,0.35); box-shadow: 0 10px 30px rgba(0,0,0,0.45); color: #c9d1d9; font-size: 12px; line-height: 1.6; text-align: left; opacity: 0; transform: translateY(4px); transition: opacity .15s, transform .15s; pointer-events: none; }
+    #tip-pop.show { opacity: 1; transform: none; pointer-events: auto; }
+    #tip-pop b { color: #e6edf3; display: block; margin-bottom: 3px; font-size: 12.5px; }
+    @media (prefers-reduced-motion: reduce) { #tip-pop { transition: none; } }
     /* 순위 변동(지난 라운드 대비) */
     .st-rank-cell { display: inline-flex; align-items: center; gap: 3px; }
     .st-mv { font-size: 9.5px; font-weight: 800; font-style: normal; line-height: 1; font-variant-numeric: tabular-nums; }
@@ -2193,7 +2208,7 @@
   <!-- 우승 예측 페이지 -->
 <div id="page-champion" class="page">
   <div class="card">
-    <div class="champ-head"><b>2026-27 시즌 순위 예측</b><span>현재 승점에서 출발해 남은 경기를 AI 예측 모델 확률로 수천 번 돌려본 결과(몬테카를로 시뮬레이션)</span></div>
+    <div class="champ-head"><b>2026-27 시즌 순위 예측</b><span>현재 승점에서 출발해 남은 경기를 AI 예측 모델 확률로 수천 번 돌려본 결과(몬테카를로 시뮬레이션)<button type="button" class="ii" data-tip="mc" aria-label="몬테카를로 시뮬레이션 설명">i</button></span></div>
     
     <div class="league-tabs" id="champion-league-tabs">
       <button class="champ-league-btn active" onclick="loadChampion('PL', this)"><img alt="" src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="width:16px;height:16px;filter:brightness(0) invert(1);vertical-align:middle;margin-right:4px">EPL</button>
@@ -2351,7 +2366,7 @@
       </div>
       <button class="predict-btn" onclick="predict()">경기 예측하기</button>
       <div class="error-msg" id="error-msg"></div>
-      <div style="text-align:center;font-size:11px;color:#8b949e;margin-top:10px;cursor:pointer;text-decoration:underline;text-underline-offset:2px" id="model-accuracy-note" onclick="openTrackRecordModal()"></div>
+      <div style="text-align:center;margin-top:10px"><span style="font-size:11px;color:#8b949e;cursor:pointer;text-decoration:underline;text-underline-offset:2px" id="model-accuracy-note" onclick="openTrackRecordModal()"></span><button type="button" class="ii" data-tip="acc" aria-label="정확도 설명">i</button></div>
     </div>
 
     <div class="result-section" id="result-section">
@@ -2373,7 +2388,7 @@
             <div class="prob-row" style="grid-template-columns:120px 1fr 45px"><span class="prob-label" id="prob-label-away">원정승</span><div class="prob-bar-bg"><div class="prob-bar away" id="bar-away" style="width:0%"></div></div><span class="prob-value" id="val-away"></span></div>
           </div>
           <div style="margin-top:16px;padding-top:16px;border-top:0.5px solid #30363d">
-            <div style="font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">예측 근거 <span style="font-size:10px;color:#7d8590;text-transform:none;letter-spacing:0">(이 예측에서 크게 반영된 요인 순)</span></div>
+            <div style="font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">예측 근거 <span style="font-size:10px;color:#7d8590;text-transform:none;letter-spacing:0">(이 예측에서 크게 반영된 요인 순)</span><button type="button" class="ii" data-tip="factors" aria-label="예측 근거 설명">i</button></div>
             <div id="explanation-factors"></div>
           </div>
           <div class="stats-grid sb-grid" id="stat-boxes"></div>
@@ -2382,7 +2397,7 @@
             <div id="radar-chart-wrap"></div>
           </div>
           <div style="margin-top:16px;padding-top:16px;border-top:0.5px solid #30363d">
-            <div style="font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">예상 스코어 <span style="font-size:10px;color:#7d8590;text-transform:none;letter-spacing:0">(AI 추정·참고용)</span></div>
+            <div style="font-size:11px;color:#8b949e;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">예상 스코어 <span style="font-size:10px;color:#7d8590;text-transform:none;letter-spacing:0">(AI 추정·참고용)</span><button type="button" class="ii" data-tip="xg" aria-label="예상 스코어 설명">i</button></div>
             <div style="text-align:center;margin-bottom:10px">
               <div style="font-size:32px;font-weight:800;color:#58a6ff" id="score-most-likely">- : -</div>
               <div style="font-size:11px;color:#8b949e;margin-top:2px" id="score-most-likely-sub"></div>
@@ -2824,6 +2839,48 @@ function applyLive(rows) {
       renderScheduleContent(currentScheduleLeague, currentScheduleMonth);
   });
 }
+
+// ── 용어 도움말 ⓘ(2026-10-04): data-tip 버튼을 누르면 말풍선 1개(다시 누르거나 바깥·스크롤·Esc면 닫힘) ──
+const TIPS = {
+  elo: ['파워 레이팅(ELO)', '경기마다 이기면 오르고 지면 내려가는 전력 점수예요. 강팀을 이길수록 많이 오르고, 홈 경기는 홈 이점을 감안해요. 1500이 출발점이고 높을수록 강팀 — AI 예측 모델이 실제로 쓰는 값이에요.'],
+  xg: ['예상 스코어 · 기대 득점', '기대 득점은 두 팀의 공격·수비 기록으로 계산한 이 경기의 평균 예상 골이에요. 예상 스코어는 그중 가장 가능성 높은 스코어라, 실제로 정확히 그 스코어가 나올 확률은 보통 10% 안팎이에요.'],
+  factors: ['예측 근거', 'AI가 이 결과를 고를 때 각 요인이 얼마나 영향을 줬는지의 비중이에요(합계 100%). 팀 전력 = 파워 레이팅·승률, 공격력·수비력 = 최근 경기 득점·실점, 최근 폼 = 최근 5경기 승점, 상대전적 = 최근 맞대결.'],
+  mc: ['몬테카를로 시뮬레이션', '남은 경기를 AI 예측 확률대로 주사위 굴리듯 끝까지 치러 보는 걸 수천 번 반복해요. 우승 확률 46% = 1,000번 중 약 460번 우승했다는 뜻이고, 시즌 중 팀 전력이 오르내리는 것도 반영해요.'],
+  simcols: ['표 읽는 법', '예상 승점 = 시뮬레이션 평균 최종 승점, 아래 범위 = 10번 중 8번 들어오는 구간. UCL권 = 다음 시즌 챔피언스리그 진출 순위(EPL·라리가 5위, 분데스·세리에A·리그앙 4위까지). 강등 = 하위 3팀(분데스·리그앙은 2팀).'],
+  acc: ['정확도(시간순 검증)', '과거 경기로만 학습한 모델에게 학습에 안 쓴 가장 최근 경기들을 맞히게 해서 낸 적중률이에요. 승·무·패 중 하나를 맞히는 거라 무작위로 찍으면 33%, 전부 홈승으로 찍으면 약 44%예요.'],
+  baseline: ['기준선', '같은 경기들을 전부 "홈팀 승"으로 찍었을 때의 적중률이에요. 축구는 홈팀이 이기는 경우가 가장 많아서, AI가 이것보다 높아야 의미가 있어요.'],
+};
+let tipFor = null;
+function closeTip() {
+  const pop = document.getElementById('tip-pop');
+  if (pop) pop.classList.remove('show');
+  if (tipFor) tipFor.setAttribute('aria-expanded', 'false');
+  tipFor = null;
+}
+function openTip(btn) {
+  const t = TIPS[btn.dataset.tip];
+  if (!t) return;
+  let pop = document.getElementById('tip-pop');
+  if (!pop) { pop = document.createElement('div'); pop.id = 'tip-pop'; pop.setAttribute('role', 'tooltip'); document.body.appendChild(pop); }
+  if (tipFor) tipFor.setAttribute('aria-expanded', 'false');
+  tipFor = btn; btn.setAttribute('aria-expanded', 'true');
+  pop.innerHTML = `<b>${t[0]}</b>${t[1]}`;
+  pop.classList.remove('show'); pop.style.left = '0px'; pop.style.top = '0px';
+  const r = btn.getBoundingClientRect(), w = pop.offsetWidth, h = pop.offsetHeight;
+  const left = Math.min(Math.max(12, r.left + r.width / 2 - w / 2), innerWidth - w - 12);
+  const below = r.bottom + 8 + h < innerHeight - 70;   // 폰 아래 탭바 자리 피함
+  pop.style.left = left + 'px';
+  pop.style.top = (below ? r.bottom + 8 : Math.max(8, r.top - h - 8)) + 'px';
+  requestAnimationFrame(() => pop.classList.add('show'));
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('.ii[data-tip]');
+  if (b) { e.stopPropagation(); e.preventDefault(); if (tipFor === b) closeTip(); else openTip(b); return; }
+  if (tipFor && !e.target.closest('#tip-pop')) closeTip();
+}, true);
+addEventListener('scroll', () => { if (tipFor) closeTip(); }, { passive: true, capture: true });
+addEventListener('resize', () => { if (tipFor) closeTip(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && tipFor) { closeTip(); e.stopImmediatePropagation(); } }, true);
 
 // ── 킥오프까지 남은 시간(2026-10-04): data-ko 요소를 1초마다 갱신 — 24시간 안이면 "3시간 후", 1시간 안이면 "킥오프 42:15" 카운트다운.
 // long(경기 미리보기)이면 하루 넘게 남아도 "2일 후". 킥오프가 지나면 "곧 시작" → 진행 중 점수 갱신(liveTick)을 깨움
@@ -4081,7 +4138,7 @@ async function openMatchPredictModal(home, away) {
         <div class="a${tc(aw)}"><b>${aw}%</b><span>원정승</span></div>
       </div>
       ${sp && sp.top_scores ? `<div class="mp-sec"><div class="mp-sec-t">가능성 높은 스코어</div><div class="mp-scores">${sp.top_scores.slice(0, 4).map((x, i) => `<span class="${i ? '' : 'first ' + side}"><b>${x.score.replace('-', ' : ')}</b>${Math.round(x.prob)}%</span>`).join('')}</div></div>` : ''}
-      ${expl.length ? `<div class="mp-sec"><div class="mp-sec-t">예측 근거 <span class="mp-sec-n">▲ 이 예측 쪽으로 · ▼ 반대로 · % 영향 비중</span></div><div class="mp-why">${expl.map(e => `<span class="${e.direction === 'support' ? 'up' : 'down'}">${e.direction === 'support' ? '▲' : '▼'} ${e.label}<small>${Math.round(e.influence_pct)}%</small></span>`).join('')}</div></div>` : ''}
+      ${expl.length ? `<div class="mp-sec"><div class="mp-sec-t">예측 근거<button type="button" class="ii" data-tip="factors" aria-label="예측 근거 설명">i</button> <span class="mp-sec-n">▲ 이 예측 쪽으로 · ▼ 반대로 · % 영향 비중</span></div><div class="mp-why">${expl.map(e => `<span class="${e.direction === 'support' ? 'up' : 'down'}">${e.direction === 'support' ? '▲' : '▼'} ${e.label}<small>${Math.round(e.influence_pct)}%</small></span>`).join('')}</div></div>` : ''}
       <div id="mp-news"></div>
       <button class="mp-cta" onclick="goToFullPrediction('${escJs(home)}','${escJs(away)}')">전체 분석 보기<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
     `;
@@ -4572,7 +4629,7 @@ function renderTiStats() {
   const f1 = v => v == null ? '-' : v.toFixed(2);
   const seg = seasons.map((x, i) => `<button class="ts-seg${i === idx ? ' active' : ''}" onclick="selectTiStatsSeason(${i})">${x.season}</button>`).join('');
   const P = data.power;
-  const powerHtml = P ? `<div class="ts-section-title">AI 파워 레이팅 <span>예측 모델이 쓰는 최근 전력 · 오늘 기준</span></div>
+  const powerHtml = P ? `<div class="ts-section-title">AI 파워 레이팅<button type="button" class="ii" data-tip="elo" aria-label="파워 레이팅 설명">i</button> <span>예측 모델이 쓰는 최근 전력 · 오늘 기준</span></div>
     <div class="ts-kpis three">
       <div class="ts-kpi"><div class="ti-fact-label">파워 레이팅(ELO)</div><div class="ts-kpi-val">${Math.round(P.elo)}</div>${tsRankChip(P.elo_rank, P.peers)}</div>
       <div class="ts-kpi"><div class="ti-fact-label">공격 지수 <small>최근 38경기 경기당 득점</small></div><div class="ts-kpi-val">${f1(P.attack)}</div>${tsRankChip(P.attack_rank, P.peers)}</div>
@@ -5160,7 +5217,7 @@ function renderChampionResults(data) {
     ${sumTeam(byRele[0], '강등 위험 1순위', `강등 확률 ${pctTxt(byRele[0].relegation_prob)}`, 'rel')}
     <div class="st-sum"><span class="st-sum-label">시뮬레이션</span><span class="st-sum-team"><b>${data.nSim.toLocaleString()}회</b></span><span class="st-sum-sub">남은 ${data.remaining}경기 · 약 0.1초</span></div>
   </div>`;
-  content.innerHTML = `<div class="ct-meta">남은 <b>${data.remaining}경기</b>를 <b>${data.nSim.toLocaleString()}번</b> 시뮬레이션한 결과 · 예상 승점 순</div>` + CT_HEAD +
+  content.innerHTML = `<div class="ct-meta">남은 <b>${data.remaining}경기</b>를 <b>${data.nSim.toLocaleString()}번</b> 시뮬레이션한 결과 · 예상 승점 순<button type="button" class="ii" data-tip="simcols" aria-label="예상 승점·UCL권·강등 설명">i</button></div>` + CT_HEAD +
     teams.map((t, i) => ctRowHtml(t, i, T,
       cell(t.champion_prob, '240,192,64') + cell(t.ucl_prob, '88,166,255') + cell(t.relegation_prob, '248,81,73'),
       `<div class="ct-pts">${Math.round(t.exp_pts)}<small>${t.pts_range[0]}~${t.pts_range[1]}</small></div>`)).join('') +
@@ -5617,7 +5674,7 @@ function renderStandings(data, leagueCode, keepSort) {
     const mvHtml = mv == null ? '' : mv > 0 ? `<i class="st-mv up" title="지난 라운드보다 ${mv}계단 상승">▲<b>${mv}</b></i>` : mv < 0 ? `<i class="st-mv down" title="지난 라운드보다 ${-mv}계단 하락">▼<b>${-mv}</b></i>` : '<i class="st-mv same" title="지난 라운드와 같음">–</i>';
     html += `<tr class="st-row ${zc} ${champ ? 'champ' : ''}${fav ? ' is-fav' : ''} row-enter" style="animation-delay:${Math.min(i * 35, 600)}ms">
       <td><span class="st-rank-cell"><span class="st-rank">${num}</span>${mvHtml}</span></td>
-      <td><div class="team-cell clickable-team" onclick="openTeamInfo('${escJs(team.team)}')"><img alt="" src="${team.logo}" width="24" height="24" style="object-fit:contain" onerror="this.style.visibility='hidden'"><span>${teamNameHtml(team.team)}</span>${fav ? '<span class="fav-star" title="내 팀">★</span>' : ''}${champ ? `<span class="st-crown" title="우승">${TROPHY_ICON}</span>` : ''}</div></td>
+      <td><div class="team-cell clickable-team" onclick="openTeamInfo('${escJs(team.team)}')"><img alt="" src="${team.logo}" width="24" height="24" style="object-fit:contain" onerror="this.style.visibility='hidden'"><div class="tc-nm"><span>${teamNameHtml(team.team)}</span>${team.form && team.form.length ? `<i class="st-mini-form" title="최근 ${team.form.length}경기: ${team.form.map(f => ({ W: '승', D: '무', L: '패' })[f] || f).join(' ')}">${team.form.map(f => `<b class="${f}"></b>`).join('')}</i>` : ''}</div>${fav ? '<span class="fav-star" title="내 팀">★</span>' : ''}${champ ? `<span class="st-crown" title="우승">${TROPHY_ICON}</span>` : ''}</div></td>
       <td class="center">${team.played}</td><td class="center">${team.wins}</td><td class="center">${team.draws}</td><td class="center">${team.losses}</td>
       <td class="center hide-mobile col-gf">${team.gf}</td><td class="center hide-mobile col-ga">${team.ga}</td>
       <td class="center st-gd ${team.gd > 0 ? 'pos' : team.gd < 0 ? 'neg' : ''}">${team.gd > 0 ? '+' : ''}${team.gd}</td>
@@ -5773,7 +5830,7 @@ async function openTrackRecordModal() {
         ${tile('최근 7일', `${l7.pct ?? '-'}%`, `${l7.correct}/${l7.n}경기`)}
         ${tile('고확신 예측', cf.n ? `${cf.pct}%` : '-', cf.n ? `확률 60%+ · ${cf.correct}/${cf.n}` : '확률 60%+ 없음')}
       </div>
-      <div class="mp-sec"><div class="mp-sec-t">기준선 대비 <span class="mp-sec-n">기준선 = 같은 경기를 전부 홈승으로 예측</span></div>
+      <div class="mp-sec"><div class="mp-sec-t">기준선 대비<button type="button" class="ii" data-tip="baseline" aria-label="기준선 설명">i</button> <span class="mp-sec-n">기준선 = 같은 경기를 전부 홈승으로 예측</span></div>
         <div class="trm-cmp"><span>AI 모델</span><div><i class="ai" style="width:${sm.accuracy_pct}%"></i></div><b>${sm.accuracy_pct}%</b></div>
         <div class="trm-cmp"><span>기준선</span><div><i style="width:${sm.baseline_home_pct}%"></i></div><b>${sm.baseline_home_pct}%</b></div>
       </div>
@@ -6121,7 +6178,7 @@ function renderMatchInsights(ins) {
   // D. 파워 레이팅 추이
   const hh = h.power.history || [], ah = a.power.history || [];
   if (hh.length >= 2 || ah.length >= 2) {
-    html += `<div class="mi-section">${miSectionHead('파워 레이팅 추이', `최근 ${Math.max(hh.length, ah.length)}경기`)}
+    html += `<div class="mi-section">${miSectionHead('파워 레이팅 추이<button type="button" class="ii" data-tip="elo" aria-label="파워 레이팅 설명">i</button>', `최근 ${Math.max(hh.length, ah.length)}경기`)}
       <div class="mi-power-legend">${miPowerItem(h, 'home')}${miPowerItem(a, 'away')}</div>
       <div class="mi-chart" id="mi-power-chart"></div>
       <div class="mi-caption">AI 예측 모델이 실제로 쓰는 팀 전력 점수(ELO)예요. 이기면 오르고 지면 내려가며, 강팀을 잡을수록 크게 올라요.</div>
