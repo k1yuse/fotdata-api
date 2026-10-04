@@ -373,6 +373,15 @@
     .share-result-btn { width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(88,166,255,0.1); border: 1px solid rgba(88,166,255,0.4); color: #58a6ff; font-size: 14px; font-weight: 700; padding: 13px; border-radius: 9px; cursor: pointer; margin-top: 18px; transition: background .15s, border-color .15s, transform .1s; }
     .share-result-btn:hover { background: rgba(88,166,255,0.18); border-color: #58a6ff; }
     .share-result-btn:active { transform: scale(0.98); }
+    /* 순위 예측 결과 공유 이미지(2026-10-04): A 우승 확률 TOP5(1080×1350) · B 최종 순위표(1080×1920) */
+    .sim-share { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0 0 14px; padding: 10px 12px; border-radius: 12px; background: rgba(88,166,255,0.06); border: 0.5px solid rgba(88,166,255,0.25); }
+    .sim-share-t { font-size: 12px; color: #8b949e; margin-right: auto; display: inline-flex; align-items: center; gap: 6px; }
+    .sim-share-t svg { width: 15px; height: 15px; stroke: #58a6ff; }
+    .sim-share button { display: inline-flex; align-items: center; gap: 6px; padding: 8px 13px; border-radius: 9px; border: 1px solid rgba(88,166,255,0.4); background: rgba(88,166,255,0.1); color: #79b8ff; font: 700 12.5px inherit; font-family: inherit; cursor: pointer; transition: background .15s, border-color .15s, transform .1s; }
+    .sim-share button:hover { background: rgba(88,166,255,0.18); border-color: #58a6ff; }
+    .sim-share button:active { transform: scale(0.97); }
+    .sim-share button:disabled { opacity: .6; pointer-events: none; }
+    @media (max-width: 480px) { .sim-share-t { width: 100%; } .sim-share button { flex: 1 1 0; justify-content: center; } }
     .share-result-btn svg { width: 17px; height: 17px; }
     .share-result-btn:disabled { opacity: 0.6; cursor: default; }
     .share-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 18px; } .share-row .share-result-btn { margin-top: 0; }
@@ -5190,7 +5199,9 @@ function toggleChampDist(row) {
     <div class="cd-chart">${bars}</div>
   </div>`);
 }
+let lastSimData = null;   // 공유 이미지용: 방금 돌린 시뮬레이션 결과 + 리그
 function renderChampionResults(data) {
+  lastSimData = { ...data, league: currentLeagueCode, at: new Date() };
   const content = document.getElementById('champion-content');
   champDist = {}; data.teams.forEach(t => { champDist[t.team] = t; });
   const teams = data.teams, T = teams.length;
@@ -5217,7 +5228,8 @@ function renderChampionResults(data) {
     ${sumTeam(byRele[0], '강등 위험 1순위', `강등 확률 ${pctTxt(byRele[0].relegation_prob)}`, 'rel')}
     <div class="st-sum"><span class="st-sum-label">시뮬레이션</span><span class="st-sum-team"><b>${data.nSim.toLocaleString()}회</b></span><span class="st-sum-sub">남은 ${data.remaining}경기 · 약 0.1초</span></div>
   </div>`;
-  content.innerHTML = `<div class="ct-meta">남은 <b>${data.remaining}경기</b>를 <b>${data.nSim.toLocaleString()}번</b> 시뮬레이션한 결과 · 예상 승점 순<button type="button" class="ii" data-tip="simcols" aria-label="예상 승점·UCL권·강등 설명">i</button></div>` + CT_HEAD +
+  const shareBar = `<div class="sim-share"><span class="sim-share-t"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>결과를 이미지로 공유</span><button type="button" onclick="shareSimCard('top5', this)">우승 확률 TOP 5</button><button type="button" onclick="shareSimCard('table', this)">최종 순위표</button></div>`;
+  content.innerHTML = shareBar + `<div class="ct-meta">남은 <b>${data.remaining}경기</b>를 <b>${data.nSim.toLocaleString()}번</b> 시뮬레이션한 결과 · <span style="white-space:nowrap">예상 승점 순<button type="button" class="ii" data-tip="simcols" aria-label="예상 승점·UCL권·강등 설명">i</button></span></div>` + CT_HEAD +
     teams.map((t, i) => ctRowHtml(t, i, T,
       cell(t.champion_prob, '240,192,64') + cell(t.ucl_prob, '88,166,255') + cell(t.relegation_prob, '248,81,73'),
       `<div class="ct-pts">${Math.round(t.exp_pts)}<small>${t.pts_range[0]}~${t.pts_range[1]}</small></div>`)).join('') +
@@ -6610,6 +6622,133 @@ function pitchPerspectiveSegments() {
   return segs;
 }
 const PITCH_SIDE_COLOR = { home: '#58a6ff', away: '#f0883e', mid: '#8fb8ff' };
+
+// ── 순위 예측 공유 이미지(2026-10-04) — 시안 A(우승 확률 TOP 5, 1080×1350 인스타 피드·카톡) / B(최종 순위표, 1080×1920 스토리).
+// 화면의 시뮬레이션 결과(lastSimData)를 그대로 그림. 저장·공유 방식은 예측 결과 이미지(shareResultCard)와 같음
+const SIM_LEAGUE_KO = { PL: '프리미어리그', PD: '라리가', BL1: '분데스리가', SA: '세리에 A', FL1: '리그 1' };
+function drawBrandBall(ctx, x, y, size, color = '#58a6ff') {
+  const k = size / 24, P = (px, py) => [x + px * k, y + py * k];
+  ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = Math.max(1.5, 1.4 * k); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  ctx.beginPath(); ctx.arc(x + 12 * k, y + 12 * k, 9 * k, 0, Math.PI * 2); ctx.stroke();
+  const pent = [[12, 7.7], [16.09, 10.67], [14.53, 15.48], [9.47, 15.48], [7.91, 10.67]];
+  ctx.beginPath(); pent.forEach(([a, b], i) => { const [px, py] = P(a, b); i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); }); ctx.closePath(); ctx.stroke();
+  [[12, 7.7, 12, 3.8], [16.09, 10.67, 19.8, 9.47], [14.53, 15.48, 16.82, 18.63], [9.47, 15.48, 7.18, 18.63], [7.91, 10.67, 4.2, 9.47]].forEach(([a, b, c, d]) => {
+    ctx.beginPath(); ctx.moveTo(...P(a, b)); ctx.lineTo(...P(c, d)); ctx.stroke();
+  });
+  ctx.restore();
+}
+function fitCanvasText(ctx, text, maxW) {
+  if (ctx.measureText(text).width <= maxW) return text;
+  let t = text;
+  while (t.length > 1 && ctx.measureText(t + '…').width > maxW) t = t.slice(0, -1);
+  return t + '…';
+}
+async function shareSimCard(kind, btn) {
+  const d = lastSimData;
+  if (!d) return;
+  track('share_image', { kind: kind === 'top5' ? 'sim_top5' : 'sim_table', league: d.league });
+  const orig = btn ? btn.innerHTML : '';
+  if (btn) { btn.disabled = true; btn.textContent = '만드는 중...'; }
+  const done = () => { if (btn) { btn.disabled = false; btn.innerHTML = orig; } };
+  try {
+    const FONT = '-apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", sans-serif';
+    const isA = kind === 'top5';
+    const W = 1080, H = isA ? 1350 : 1920;
+    const teams = d.teams, T = teams.length;
+    const top = isA ? teams.slice().sort((a, b) => b.champion_prob - a.champion_prob || b.exp_pts - a.exp_pts).slice(0, 5) : teams;
+    const [ballImg, ...logoImgs] = await Promise.all([loadImageForCanvas('bg-ball.svg'), ...top.map(t => loadImageForCanvas(proxiedLogo(logoLarge(t.logo || logos[t.team]))))]);
+    const canvas = document.createElement('canvas'); canvas.width = W; canvas.height = H;
+    const ctx = canvas.getContext('2d');
+    const pctTxt = p => p >= 99.95 ? '100%' : p === 0 ? '–' : p < 1 ? '<1%' : Math.round(p) + '%';
+    const GOLD = '#f0c040', BLUE = '#58a6ff', RED = '#f85149', TEXT = '#e6edf3', MUTED = '#8b949e', DIM = '#6e7681';
+    // 배경: 진한 남색 + 빛번짐 + 와이어프레임 공(예측 결과 이미지와 같은 톤)
+    const bg = ctx.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#0b0f14'); bg.addColorStop(1, '#0f141b');
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+    const glow = (x, y, r, c) => { const g = ctx.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, c); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); };
+    glow(W * 0.9, H * 0.1, 640, 'rgba(88,166,255,0.17)');
+    glow(W * 0.02, H * 0.98, 600, isA ? 'rgba(240,192,64,0.07)' : 'rgba(163,113,247,0.08)');
+    if (ballImg && isA) { ctx.globalAlpha = 0.3; ctx.drawImage(ballImg, W - 400, -110, 560, 560); ctx.globalAlpha = 1; }
+    const panel = (x, y, w, h, r, fill, stroke, lw = 1.5) => { roundRectPath(ctx, x, y, w, h, r); ctx.fillStyle = fill; ctx.fill(); if (stroke) { ctx.lineWidth = lw; ctx.strokeStyle = stroke; ctx.stroke(); } };
+    const txt = (s, x, y, size, color, weight = 700, align = 'left', base = 'alphabetic') => { ctx.font = `${weight} ${size}px ${FONT}`; ctx.fillStyle = color; ctx.textAlign = align; ctx.textBaseline = base; ctx.fillText(s, x, y); };
+    const season = (document.querySelector('.champ-head b')?.textContent.match(/\d{4}-\d{2}/) || [''])[0];
+    const L = isA ? 70 : 60;
+    // 머리
+    const hy = isA ? 80 : 170;
+    txt(`${SIM_LEAGUE_KO[d.league] || d.league} ${season}`.trim(), L, hy + 30, 30, BLUE, 600);
+    txt(isA ? '우승 확률' : '최종 순위 예측', L, hy + 112, 68, TEXT, 800);
+    txt(`남은 ${d.remaining}경기를 AI 예측 확률로 ${d.nSim.toLocaleString()}번 시뮬레이션`, L, hy + 166, 27, MUTED, 600);
+    if (isA) {
+      let y = 330; const mx = Math.max(top[0].champion_prob, 1);
+      top.forEach((t, i) => {
+        const first = i === 0, h = first ? 168 : 138;
+        panel(L, y, W - 2 * L, h, 24, first ? 'rgba(240,192,64,0.09)' : 'rgba(22,27,34,0.84)', first ? 'rgba(240,192,64,0.6)' : 'rgba(139,148,158,0.2)', first ? 2 : 1.5);
+        txt(String(i + 1), L + 46, y + h / 2, first ? 40 : 34, first ? GOLD : MUTED, 800, 'center', 'middle');
+        const ls = first ? 92 : 74;
+        drawImageContain(ctx, logoImgs[i], L + 92 + ls / 2, y + h / 2, ls);
+        const nx = L + 92 + ls + 28, right = W - L - 36;
+        ctx.font = `800 ${first ? 64 : 50}px ${FONT}`; const pw = ctx.measureText(pctTxt(t.champion_prob)).width;
+        ctx.font = `800 ${first ? 40 : 34}px ${FONT}`;
+        txt(fitCanvasText(ctx, shortName(t.team), right - pw - 24 - nx), nx, y + h / 2 - (first ? 16 : 12), first ? 40 : 34, TEXT, 800);
+        txt(`예상 ${Math.round(t.exp_pts)}점 (${t.pts_range[0]}~${t.pts_range[1]})`, nx, y + h / 2 + (first ? 26 : 22), 22, MUTED, 600);
+        txt(pctTxt(t.champion_prob), right, y + h / 2 + (first ? 6 : 4), first ? 64 : 50, first ? GOLD : BLUE, 800, 'right', 'middle');
+        const bx0 = nx, bx1 = right, by = y + h - 26;
+        panel(bx0, by, bx1 - bx0, 8, 4, 'rgba(48,54,61,1)');
+        if (t.champion_prob > 0) panel(bx0, by, Math.max(8, (bx1 - bx0) * t.champion_prob / mx), 8, 4, first ? GOLD : BLUE);
+        y += h + 18;
+      });
+    } else {
+      const y0 = 430, colX = [W - L - 375, W - L - 265, W - L - 155, W - L - 45], labels = ['승점', '우승', 'UCL권', '강등'];
+      labels.forEach((lab, i) => txt(lab, colX[i], y0, 21, MUTED, 600, 'center'));
+      const rh = (H - 340 - (y0 + 26)) / T;
+      const fs = Math.min(27, rh * 0.48);
+      teams.forEach((t, i) => {
+        const y = y0 + 26 + i * rh, cy = y + rh / 2;
+        const zc = i < d.uclSpots ? BLUE : i >= T - d.releSpots ? RED : null;
+        if (i % 2 === 0) panel(L, y + 2, W - 2 * L, rh - 4, 10, 'rgba(22,27,34,0.72)');
+        if (zc) panel(L, y + 9, 5, rh - 18, 2, zc);
+        txt(String(i + 1), L + 40, cy, fs - 2, zc || MUTED, 800, 'center', 'middle');
+        drawImageContain(ctx, logoImgs[i], L + 92, cy, Math.min(42, rh * 0.72));
+        ctx.font = `600 ${fs}px ${FONT}`;
+        txt(fitCanvasText(ctx, shortName(t.team), colX[0] - 50 - (L + 128)), L + 128, cy, fs, TEXT, 600, 'left', 'middle');
+        txt(String(Math.round(t.exp_pts)), colX[0], cy, fs + 1, TEXT, 800, 'center', 'middle');
+        [[t.champion_prob, '240,192,64'], [t.ucl_prob, '88,166,255'], [t.relegation_prob, '248,81,73']].forEach(([v, rgb], k) => {
+          const cx = colX[k + 1];
+          if (v > 0) panel(cx - 46, y + 8, 92, rh - 16, 9, `rgba(${rgb},${(0.12 + Math.min(v, 100) / 100 * 0.55).toFixed(3)})`);
+          txt(pctTxt(v), cx, cy, fs - 4, v >= 50 ? '#fff' : v > 0 ? `rgb(${rgb})` : DIM, 700, 'center', 'middle');
+        });
+      });
+    }
+    // 바닥: 로고·주소·안내(스토리는 아래 UI 자리를 비움)
+    const fy = isA ? H - 112 : H - 240;
+    drawBrandBall(ctx, 70, fy, 46);
+    txt('Fot', 128, fy + 37, 40, TEXT, 800);
+    ctx.font = `800 40px ${FONT}`; const fw = ctx.measureText('Fot').width;
+    txt('Data', 128 + fw, fy + 37, 40, BLUE, 800);
+    const at = d.at || new Date();
+    txt('fotdata-official.com', W - 70, fy + 22, 26, TEXT, 600, 'right');
+    txt(`${at.getMonth() + 1}.${at.getDate()} 기준 · AI 시뮬레이션 · 참고용 정보`, W - 70, fy + 58, 20, DIM, 600, 'right');
+
+    canvas.toBlob(async blob => {
+      done();
+      if (!blob) { showToast('이미지 생성에 실패했어요'); return; }
+      const ymd = `${at.getMonth() + 1}${String(at.getDate()).padStart(2, '0')}`;
+      const filename = `fotdata_${d.league}_${isA ? '우승확률' : '순위예측'}_${ymd}.png`;
+      const file = new File([blob], filename, { type: 'image/png' });
+      const touch = window.matchMedia('(pointer: coarse)').matches;   // 터치 기기만 공유 시트(카톡 등), 나머지는 바로 저장 — shareResultCard와 같은 규칙
+      if (touch && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try { await navigator.share({ files: [file], title: 'FotData 순위 예측', text: `${SIM_LEAGUE_KO[d.league] || ''} ${isA ? '우승 확률' : '최종 순위 예측'} · FotData` }); } catch (e) { /* 공유 취소 */ }
+      } else {
+        const url = URL.createObjectURL(blob), a = document.createElement('a');
+        a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        showToast('순위 예측 이미지가 저장됐어요');
+      }
+    }, 'image/png');
+  } catch (e) {
+    done();
+    showToast('이미지를 만들지 못했어요');
+  }
+}
 
 async function shareResultCard() {
   if (!lastPrediction) return;

@@ -16,7 +16,65 @@ from functools import lru_cache
 
 app = FastAPI(title="FotData API", version="1.0.0")
 
-# CORS 설정 (나중에 웹/앱에서 호출 가능하게)
+# ── 요청 제한 + 기본 보안 헤더 (2026-10-04) ──
+# 무료 서버 한 대라 누가 스크립트로 수천 번 부르면 모두가 느려짐 → IP마다 1분에 일반 240번·/predict 90번까지.
+# 평소 사용(첫 화면 20번 안팎, 예측 1번에 5번)과 매일 자동 업데이트의 트랙레코드 기록(/predict를 1초 간격)은 넉넉히 들어옴.
+# Vercel을 거쳐 오는 공유 페이지·썸네일·캘린더(/share/·/og/·/calendar/)는 IP가 Vercel 것이라 제외(어차피 캐시됨),
+# 서버 깨우기 핑("/")·CORS 사전 요청(OPTIONS)도 제외. 사용자 IP를 못 찾으면 제한하지 않음(전원이 한 칸에 묶이는 사고 방지).
+# 이 미들웨어를 CORS보다 먼저 등록해야 CORS가 바깥에서 감싸서 429 응답에도 CORS 헤더가 붙음(안 붙으면 브라우저엔 CORS 오류로 보임).
+import time as _time
+from collections import deque as _deque
+from starlette.middleware.base import BaseHTTPMiddleware
+from fastapi.responses import JSONResponse
+
+RATE_LIMITS = {"predict": 90, "default": 240}   # 1분당 횟수
+RATE_WINDOW = 60
+RATE_EXEMPT_PREFIX = ("/share/", "/og/", "/calendar/")
+_rate_hits = {}
+_rate_calls = 0
+
+def _client_ip(request):
+    for h in ("cf-connecting-ip", "true-client-ip", "x-real-ip"):
+        v = request.headers.get(h)
+        if v:
+            return v.strip()
+    xff = request.headers.get("x-forwarded-for")
+    return xff.split(",")[0].strip() if xff else None
+
+class RateLimitMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        global _rate_calls
+        path = request.url.path
+        ip = _client_ip(request)
+        limited = ip and request.method != "OPTIONS" and path != "/" and not path.startswith(RATE_EXEMPT_PREFIX)
+        remaining = None
+        if limited:
+            bucket = "predict" if path == "/predict" else "default"
+            limit, now = RATE_LIMITS[bucket], _time.monotonic()
+            q = _rate_hits.setdefault((ip, bucket), _deque())
+            while q and now - q[0] > RATE_WINDOW:
+                q.popleft()
+            if len(q) >= limit:
+                retry = max(1, int(RATE_WINDOW - (now - q[0])) + 1)
+                return JSONResponse({"detail": "요청이 너무 많아요. 잠시 후 다시 시도해주세요."}, status_code=429,
+                                    headers={"Retry-After": str(retry), "X-RateLimit-Limit": str(limit), "X-RateLimit-Remaining": "0"})
+            q.append(now)
+            remaining = limit - len(q)
+            _rate_calls += 1
+            if _rate_calls % 500 == 0:   # 1분 넘게 조용한 IP는 정리(메모리가 계속 늘지 않게)
+                for k in [k for k, v in _rate_hits.items() if not v or now - v[-1] > RATE_WINDOW]:
+                    _rate_hits.pop(k, None)
+        response = await call_next(request)
+        response.headers.setdefault("X-Content-Type-Options", "nosniff")
+        response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
+        if remaining is not None:
+            response.headers["X-RateLimit-Limit"] = str(RATE_LIMITS["predict" if path == "/predict" else "default"])
+            response.headers["X-RateLimit-Remaining"] = str(remaining)
+        return response
+
+app.add_middleware(RateLimitMiddleware)
+
+# CORS 설정 (나중에 웹/앱에서 호출 가능하게) — 요청 제한보다 나중에 등록 = 바깥에서 감쌈
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

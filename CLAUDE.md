@@ -67,6 +67,7 @@ fotdata-api/
 ├── vercel.json              # Vercel 리라이트: `/m/*`·`/og/m/*` → Render 공유 페이지·썸네일(5.16), `/cal/*` → 캘린더 구독(5.24), logos/hd 캐시 헤더
 ├── README.md                # 레포 소개(5.24)
 ├── privacy.html / terms.html / legal.css   # 개인정보처리방침·이용약관(5.24, 문의 fotdata.official@gmail.com)
+├── 404.html                 # 없는 주소 안내 페이지(5.26)
 ├── generate_logos_hd.py · logos/hd/   # 고화질 구단 로고(5.22)
 ├── generate_promo.py        # 홍보 이미지(인스타 피드·스토리, 유튜브·네이버 카페 가로 배너) → promo/(커밋 안 함). 빅매치 포스터는 서버 실시간 예측 — 매주 다시 실행. 구단 엠블럼은 안 넣음(홍보물 상표 위험)
 ├── analytics.js             # 방문 통계(Umami) 로더 — FotData.html·landing.html 공용, 사이트 ID는 여기 한 곳(5.16)
@@ -388,6 +389,12 @@ cp landing.html index.html
 - **옛 주소**: `vercel.json` `redirects` — 호스트가 `fotdata-api.vercel.app`이면 새 주소 같은 경로로 영구 이동(쿼리 유지), **단 `/cal/`은 제외**(이미 구독한 캘린더가 옛 주소로 계속 받아감 — 캘린더 앱이 리다이렉트를 안 따라갈 수도 있어서). 옛 주소에서 쓰던 브라우저 저장소(즐겨찾기·첫 방문 표시)는 주소가 바뀌면 안 넘어옴(출시 전이라 영향 작음).
 - 사용자 할 일: Umami 웹사이트 설정의 도메인도 새 주소로(표시용), 검색엔진 등록은 새 도메인으로.
 - **앱 주소 `/app`(2026-10-03, 사용자 요청 — 주소창에 `FotData.html`이 보이던 것)**: 파일은 그대로 `FotData.html`, `vercel.json` rewrites `/app` → `/FotData.html`, redirects `/FotData.html` → `/app`(쿼리 `?match=` 유지)·`/app/` → `/app`(끝 `/`가 붙으면 상대 경로 파일(analytics.js·bg-ball.js 등)이 `/app/…`로 깨져서). 랜딩 메뉴·버튼(`/app#standings` 등), 정책 페이지 "돌아가기", 공유 페이지가 사람을 보내는 주소(main.py `app_url`), canonical·og:url·JSON-LD, sitemap, 매니페스트 `start_url`(홈 화면 앱이 바로 앱으로 열리게), 서비스워커 앱 셸(`/app`, 캐시 v2)까지 교체. 앱 안의 공유 주소·탭 주소는 `location.pathname`을 써서 자동으로 `/app`.
+
+### 5.26 보안 헤더·요청 제한·404·순위 예측 공유 이미지 (2026-10-04)
+- **보안 헤더**(`vercel.json` headers `/(.*)`): `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY` + CSP `frame-ancestors 'none'`(다른 사이트가 우리 페이지를 틀 안에 넣는 클릭재킹 차단), `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy`(카메라·마이크·위치·USB·topics 끔 — **payment는 끄지 않음**: Ko-fi 후원 창 안 결제가 막힐 수 있어서), CSP는 스크립트를 제한하지 않는 안전한 항목만(`base-uri 'self'; object-src 'none'; form-action 'self'; upgrade-insecure-requests`) — 인라인 스크립트·CDN·Umami·Ko-fi를 다 허용 목록에 넣는 전체 CSP는 깨질 위험이 커서 안 함. HTTPS 강제(HSTS)는 Vercel 기본.
+- **API 요청 제한**(main.py `RateLimitMiddleware`): IP마다 1분 슬라이딩 창 — 일반 240번, `POST /predict` 90번(매일 자동 업데이트의 트랙레코드 기록이 1초 간격으로 부르므로 60번/분 안). 초과 시 429 + `Retry-After` + 한국어 메시지(프론트 `fetchWithRetry`는 429를 재시도). IP는 `cf-connecting-ip` → `true-client-ip` → `x-real-ip` → `x-forwarded-for` 첫 값, **못 찾으면 제한 안 함**(전원이 한 칸에 묶이는 사고 방지). 제외: `/`(cron 깨우기)·OPTIONS·`/share/`·`/og/`·`/calendar/`(Vercel을 거쳐 와서 IP가 Vercel 것). **CORS보다 먼저 등록**해야 429에도 CORS 헤더가 붙음. 응답에 `X-RateLimit-Limit/Remaining`, `X-Content-Type-Options`. 로컬 TestClient로 241번째 429·다른 IP 영향 없음·제외 경로 확인.
+- **404 페이지**(`404.html`): 예전엔 Vercel 영어 "NOT_FOUND". 사이트 디자인 + 들어온 주소 표시(textContent) + 경기 예측/홈 버튼 + 순위표·일정·순위 예측·선수 바로가기, noindex, 통계(analytics.js — 깨진 링크 찾기용). 어느 깊이 주소에서든 열리므로 파일 경로는 전부 `/`로 시작.
+- **순위 예측 공유 이미지**(`shareSimCard('top5'|'table')`, 결과 표 위 "결과를 이미지로 공유" 줄): A 우승 확률 TOP 5(1080×1350, 1위 금색 카드·막대·예상 승점 범위) / B 최종 순위표(1080×1920 스토리 — 전 팀, 우승·UCL권·강등 확률 칸, 구역 막대, 18팀 리그는 줄 높이 자동). 방금 돌린 결과(`lastSimData`)를 그대로, 바닥에 "N.N 기준 · AI 시뮬레이션 · 참고용". 저장은 예측 결과 이미지와 같은 규칙(터치 기기 = 공유 시트, 그 외 = 다운로드), 통계 이벤트 `share_image`(kind sim_top5/sim_table). 시안 3종 중 사용자가 A·B 선택(C 우승 경쟁 2파전 시안은 보류).
 
 ### 5.20 데이터 소스 구조(결제 시) — football-data + API-Football
 - **API-Football 리그별 데이터 범위(2026-10-03 `/leagues?id=` 실측, 중간에 빠진 시즌 없음)**: 5대 리그 모두 2010-11~26-27(17시즌) — 경기 결과·순위·이벤트·라인업·선수·득점 순위는 2010-11부터, 팀 경기 통계는 EPL·라리가 2014-15/나머지 2015-16부터, 선수별 경기 스탯·평점은 EPL 2014-15/나머지 2015-16부터, 부상자는 2020-21부터. UCL은 2011-12부터(통계 2015-16, 부상 2020-21). 요금제는 기능 차이 없이 요청 수만 다름(Pro $19 7,500/일·Ultra $29·Mega $39). football-data 유료는 선수 사진·이적·선수 스탯이 어느 요금제에도 없어서 결제 대상 아님.
