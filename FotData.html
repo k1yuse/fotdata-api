@@ -1480,6 +1480,29 @@
     .cb-star:hover { color: #c9d1d9; } .cb-star.on { color: #f2cc60; border-color: rgba(242,204,96,0.55); background: rgba(242,204,96,0.12); }
     .cb-star:active { transform: scale(.9); }
     .cb-card:not(.center) .cb-star, .cb-card:not(.center) .cb-rec { visibility: hidden; }
+    /* 내 팀 강조(즐겨찾기 — 순위표·순위 예측·일정) */
+    .st-row.is-fav td { background: rgba(88,166,255,0.07); }
+    .st-row.is-fav .team-cell > span:not(.st-crown) { color: #79b8ff; font-weight: 700; }
+    .fav-star { color: #f0c040; font-size: 11px; margin-left: 4px; flex-shrink: 0; }
+    .ct-row.is-fav { background: rgba(88,166,255,0.08); }
+    .ct-row.is-fav .ct-name { color: #79b8ff; font-weight: 700; }
+    .sched-match.is-fav { background: rgba(88,166,255,0.06); border-radius: 8px; }
+    .sched-team-hit.fav span { color: #79b8ff; font-weight: 700; }
+    /* 순위 변동(지난 라운드 대비) */
+    .st-rank-cell { display: inline-flex; align-items: center; gap: 3px; }
+    .st-mv { font-size: 9.5px; font-weight: 800; font-style: normal; line-height: 1; font-variant-numeric: tabular-nums; }
+    .st-mv.up { color: #3fb950; } .st-mv.down { color: #ff7b72; } .st-mv.same { color: #484f58; }
+    @media (max-width: 480px) { .st-mv b { display: none; } .st-mv { font-size: 8px; } }
+    /* 킥오프까지 남은 시간 — 1시간 전부터 초 단위 카운트다운 */
+    .ko-rel:empty { display: none; }
+    .ko-rel { display: inline-block; font-size: 10px; font-weight: 600; color: #8b949e; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .ko-rel.soon { color: #ffa657; font-weight: 800; }
+    .ko-rel.soon::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #ffa657; margin-right: 4px; vertical-align: 1px; animation: koPulse 1s ease-in-out infinite; }
+    @keyframes koPulse { 50% { opacity: .25; } }
+    @media (prefers-reduced-motion: reduce) { .ko-rel.soon::before { animation: none; } }
+    .today-card-time .ko-rel { display: block; margin-top: 2px; }
+    .sched-vs .ko-rel { font-size: 9.5px; }
+    .mp-meta .ko-rel, #mp-meta .ko-rel { margin-left: 6px; }
     .cb-mv { font-style: normal; font-size: 11px; font-weight: 800; margin: 0 2px; } .cb-mv.up { color: #3fb950; } .cb-mv.down { color: #ff7b72; } .cb-mv.same { color: #7d8590; }
     .cb-dot .mv { font-size: 8px; line-height: 1; } .cb-dot .mv.up { color: #3fb950; } .cb-dot .mv.down { color: #ff7b72; }
     .cb-card.landed .cb-logo-wrap { animation: cbLand .7s cubic-bezier(.2,.8,.2,1); }
@@ -2802,6 +2825,34 @@ function applyLive(rows) {
   });
 }
 
+// ── 킥오프까지 남은 시간(2026-10-04): data-ko 요소를 1초마다 갱신 — 24시간 안이면 "3시간 후", 1시간 안이면 "킥오프 42:15" 카운트다운.
+// long(경기 미리보기)이면 하루 넘게 남아도 "2일 후". 킥오프가 지나면 "곧 시작" → 진행 중 점수 갱신(liveTick)을 깨움
+const koRel = (date, long) => `<span class="ko-rel" data-ko="${date}"${long ? ' data-long="1"' : ''}></span>`;
+function koText(t, long) {
+  const diff = t - Date.now();
+  if (diff > 86400000) return long ? { txt: `${Math.round(diff / 86400000)}일 후` } : null;
+  if (diff > 3600000) { const h = Math.floor(diff / 3600000), m = Math.floor(diff % 3600000 / 60000); return { txt: h < 3 && m ? `${h}시간 ${m}분 후` : `${h}시간 후` }; }
+  if (diff > 0) { const sec = Math.ceil(diff / 1000); return { txt: `킥오프 ${String(Math.floor(sec / 60)).padStart(2, '0')}:${String(sec % 60).padStart(2, '0')}`, soon: true }; }
+  if (diff > -600000) return { txt: '곧 시작', soon: true };
+  return null;
+}
+let koTimer = null;
+function koTick() {
+  const els = document.querySelectorAll('.ko-rel[data-ko]');
+  if (!els.length) { clearInterval(koTimer); koTimer = null; return; }
+  if (document.hidden) return;
+  let kicked = false;
+  els.forEach(el => {
+    const t = Date.parse(el.dataset.ko), r = koText(t, el.dataset.long);
+    const txt = r ? r.txt : '';
+    if (el.textContent !== txt) el.textContent = txt;
+    el.classList.toggle('soon', !!(r && r.soon));
+    if (r && r.txt === '곧 시작' && !el.dataset.kicked) { el.dataset.kicked = '1'; kicked = true; }
+  });
+  if (kicked && typeof liveTimer !== 'undefined' && !liveTimer) scheduleLiveTick();
+}
+function koStart() { koTick(); if (!koTimer) koTimer = setInterval(koTick, 1000); }
+
 function renderTodayCards(container, matches, opts = {}) {
   const favs = getFavoriteTeams();
   container.innerHTML = matches.map(m => {
@@ -2818,7 +2869,7 @@ function renderTodayCards(container, matches, opts = {}) {
     const row = (t, nm, k, g, lose) => `<div class="today-card-row${lose ? ' lose' : ''}"><span class="today-card-hit" onclick="event.stopPropagation();openTeamInfo('${escJs(t)}')"><img src="${logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'"><span class="name">${nm}</span></span>${right(k, g)}</div>`;
     const foot = live ? `<div class="today-card-time">${liveChip(m)}</div>` : played
       ? (px ? `<div class="today-card-time"><span class="sp-verdict ${x.correct ? 'hit' : 'miss'}">${x.correct ? 'AI 적중' : 'AI 빗나감'}</span></div>` : '<div class="today-card-time">종료</div>')
-      : (px ? `<span class="sp-mini tc-bar"><i class="h" style="width:${px[0]}%"></i><i class="d" style="width:${px[1]}%"></i><i class="a" style="width:${px[2]}%"></i></span>` : '') + `<div class="today-card-time">${timeStr}${px ? ` · <span class="${tc(px[1]) ? 'tc-d top' : 'tc-d'}">무 ${px[1]}%</span>` : ''}</div>`;
+      : (px ? `<span class="sp-mini tc-bar"><i class="h" style="width:${px[0]}%"></i><i class="d" style="width:${px[1]}%"></i><i class="a" style="width:${px[2]}%"></i></span>` : '') + `<div class="today-card-time">${timeStr}${px ? ` · <span class="${tc(px[1]) ? 'tc-d top' : 'tc-d'}">무 ${px[1]}%</span>` : ''}${koRel(m.date)}</div>`;
     const click = played ? `openMatchResultModal('${escJs(m.home_team)}','${escJs(m.away_team)}','${m.date}','${m.league}')` : `openMatchPredictModal('${escJs(m.home_team)}','${escJs(m.away_team)}')`;
     return `<div class="today-card${isFav ? ' today-card-fav' : ''}${live ? ' live' : ''}" onclick="${click}" style="cursor:pointer"${px ? ` title="${played ? '경기 전 AI 예측' : 'AI 예측'}: 홈승 ${px[0]}% · 무 ${px[1]}% · 원정승 ${px[2]}%"` : ''}>
       <div class="today-card-league"><img alt="" src="${li.logo}" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">${li.name}${opts.showDate ? `<span class="today-card-date">${(() => { const d = new Date(m.date); return `${d.getMonth() + 1}.${d.getDate()} (${'일월화수목금토'[d.getDay()]})`; })()}</span>` : ''}</div>
@@ -2826,6 +2877,7 @@ function renderTodayCards(container, matches, opts = {}) {
       ${foot}
     </div>`;
   }).join('');
+  koStart();
 }
 // 다음 경기 카드: [전체 | ★ 내 팀] — 즐겨찾기가 있으면 전환 버튼이 보임(선택은 기기에 기억)
 function getTodayView() { try { return localStorage.getItem('todayView') || 'all'; } catch (e) { return 'all'; } }
@@ -3493,7 +3545,8 @@ function mpSetHeader(home, away, title) {
 function mpMetaHtml(league, date) {
   const d = new Date(date), li = TODAY_LEAGUE_INFO[league];
   const W = ['일', '월', '화', '수', '목', '금', '토'];
-  return `${li ? `<img src="${li.logo}" alt="" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">${li.name} · ` : ''}${d.getMonth() + 1}.${d.getDate()} (${W[d.getDay()]}) ${d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false })}`;
+  if (d > Date.now()) setTimeout(koStart, 0);
+  return `${li ? `<img src="${li.logo}" alt="" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">${li.name} · ` : ''}${d.getMonth() + 1}.${d.getDate()} (${W[d.getDay()]}) ${d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false })}${d > Date.now() ? koRel(date, true) : ''}`;
 }
 
 // ── 경기 상세(2026-09-30): 결과 창의 [요약 | 라인업 | 통계] ──
@@ -4182,6 +4235,16 @@ function getFavoriteTeams() {
 }
 function setFavoriteTeams(list) {
   try { localStorage.setItem('favoriteTeams', JSON.stringify(list.slice(0, FAV_MAX))); localStorage.removeItem('favoriteTeam'); } catch (e) { /* 저장 불가 환경(프라이빗 모드 등)이면 그냥 무시 */ }
+  setTimeout(refreshFavMarks, 0);
+}
+// 내 팀 강조를 지금 보이는 순위표·일정·순위 예측에 바로 반영
+function refreshFavMarks() {
+  try {
+    if (standingsView.data && document.getElementById('standings-content')?.offsetParent) renderStandings(standingsView.data, standingsView.leagueCode, true);
+    if (currentScheduleMonth && scheduleData[currentScheduleLeague]) renderScheduleContent(currentScheduleLeague, currentScheduleMonth);
+    const favs = getFavoriteTeams();
+    document.querySelectorAll('#champion-content .ct-row').forEach(r => r.classList.toggle('is-fav', favs.includes(r.dataset.team)));
+  } catch (e) {}
 }
 const isFavoriteTeam = t => getFavoriteTeams().includes(t);
 function getFavoriteTeam() { return getFavoriteTeams()[0] || null; }
@@ -5015,7 +5078,7 @@ const CT_HEAD = `<div class="ct-head"><span>#</span><span>팀</span><span><span 
 function ctRowHtml(t, i, T, cells, ptsHtml) {
   const zone = MI_ZONE_INFO[getZoneClass(currentLeagueCode, i, T)];
   // 순위표와 같은 모양: 존 색 알약 + 왼쪽 존 색 막대
-  return `<div class="ct-row" data-team="${t.team.replace(/"/g, '&quot;')}" style="${zone ? `--zc:${zone.color}` : ''}">
+  return `<div class="ct-row${isFavoriteTeam(t.team) ? ' is-fav' : ''}" data-team="${t.team.replace(/"/g, '&quot;')}" style="${zone ? `--zc:${zone.color}` : ''}">
     <div class="ct-rank"><span class="st-rank">${i + 1}</span></div>
     <div class="ct-team">
       <img src="${t.logo}" onerror="this.style.visibility='hidden'" onclick="openTeamInfo('${escJs(t.team)}')" alt="">
@@ -5288,6 +5351,7 @@ function renderScheduleMonths(league) {
   updateScheduleNavButtons(months, months.indexOf(defaultMonth));
 
   renderScheduleContent(league, defaultMonth);
+  requestAnimationFrame(scrollToNextScheduled);
 }
 
 function selectScheduleMonth(mk) {
@@ -5337,6 +5401,7 @@ function schedRowHtml(m, league, opts = {}) {
   const homeShort = m.home_team.replace(' FC', '').replace(' CF', '');
   const awayShort = m.away_team.replace(' FC', '').replace(' CF', '');
   const x = schedPredOf(m, league);
+  const favSet = new Set(getFavoriteTeams());
   const px = x && !live && (!played || x.correct != null) ? x.p.map(v => Math.round(v * 100)) : null;
   const top = px ? Math.max(...px) : -1;
   const tc = v => v === top ? ' top' : '';
@@ -5344,13 +5409,14 @@ function schedRowHtml(m, league, opts = {}) {
   const tip = px ? `${played ? '경기 전 AI 예측' : 'AI 예측'}: 홈승 ${px[0]}% · 무 ${px[1]}% · 원정승 ${px[2]}%${x.limited ? ' (참고용 — 5대 리그 밖 팀은 UCL 기록만으로 계산)' : ''}` : '';
   const mid = live ? `<span class="sched-score">${m.home_goals ?? 0} - ${m.away_goals ?? 0}</span>${liveChip(m)}` : played
     ? `<span class="sched-score">${m.home_goals} - ${m.away_goals}</span>` + (px ? `<span class="sp-verdict ${x.correct ? 'hit' : 'miss'}">${x.correct ? 'AI 적중' : 'AI 빗나감'}</span>` : '')
-    : `<span class="sched-time">${timeStr}</span>` + (px ? `<span class="sp-mini"><i class="h" style="width:${px[0]}%"></i><i class="d" style="width:${px[1]}%"></i><i class="a" style="width:${px[2]}%"></i></span><span class="sp-d${tc(px[1])}">무 ${px[1]}%${x.limited ? ' · 참고용' : ''}</span>` : '');
+    : `<span class="sched-time">${timeStr}</span>${koRel(m.date)}` + (px ? `<span class="sp-mini"><i class="h" style="width:${px[0]}%"></i><i class="d" style="width:${px[1]}%"></i><i class="a" style="width:${px[2]}%"></i></span><span class="sp-d${tc(px[1])}">무 ${px[1]}%${x.limited ? ' · 참고용' : ''}</span>` : '');
   const lg = league || m.league || '';
   const click = (opts.team ? 'closeTeamInfoModal();' : '') + (played
     ? `openMatchResultModal('${escJs(m.home_team)}','${escJs(m.away_team)}','${m.date}','${lg}')`
     : `openMatchPredictModal('${escJs(m.home_team)}','${escJs(m.away_team)}')`);
-  const me = t => opts.team === t ? ' me' : '';
-  return `<div class="sched-match${px || live ? ' has-pred' : ''}${played ? ' done' : ''}${live ? ' live' : ''}${opts.next ? ' ti-fx-next' : ''}" onclick="${click}" style="cursor:pointer"${tip ? ` title="${tip}"` : ''}>
+  const me = t => opts.team === t ? ' me' : (!opts.team && favSet.has(t) ? ' fav' : '');
+  const fav = !opts.team && (favSet.has(m.home_team) || favSet.has(m.away_team));
+  return `<div class="sched-match${px || live ? ' has-pred' : ''}${played ? ' done' : ''}${live ? ' live' : ''}${opts.next ? ' ti-fx-next' : ''}${fav ? ' is-fav' : ''}" onclick="${click}" style="cursor:pointer"${tip ? ` title="${tip}"` : ''}>
     <div class="sched-team ${res[0]}"><span class="sched-team-hit${me(m.home_team)}" onclick="event.stopPropagation();openTeamInfo('${escJs(m.home_team)}')"><img src="${logos[m.home_team] || ''}" alt="" onerror="this.style.visibility='hidden'"><span>${teamNameHtml(m.home_team, homeShort)}</span></span>${px ? `<b class="sp-pct home${tc(px[0])}">${px[0]}%</b>` : ''}</div>
     <div class="sched-vs">${mid}</div>
     <div class="sched-team away ${res[1]}">${px ? `<b class="sp-pct away${tc(px[2])}">${px[2]}%</b>` : ''}<span class="sched-team-hit${me(m.away_team)}" onclick="event.stopPropagation();openTeamInfo('${escJs(m.away_team)}')"><span>${teamNameHtml(m.away_team, awayShort)}</span><img src="${logos[m.away_team] || ''}" alt="" onerror="this.style.visibility='hidden'"></span></div>
@@ -5384,17 +5450,31 @@ function renderScheduleContent(league, monthKey) {
   const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토'];
   let html = '';
   let lastDate = null;
+  // 다음 경기(진행 중 포함 — 아직 안 끝난 첫 경기)가 있는 날짜에 "다음 경기"/"오늘" 표시 → 탭을 열면 그 자리로 스크롤(renderScheduleMonths)
+  const nextUp = matches.find(m => !isDone(m));
+  const todayKey = new Date().toDateString();
   matches.forEach(m => {
     const d = new Date(m.date);
     const dateStr = `${d.getMonth() + 1}.${d.getDate()} (${WEEKDAY[d.getDay()]})`;
     if (dateStr !== lastDate) {
       const roundLabel = league === 'CL' ? (STAGE_LABEL[m.stage] || '') : (m.matchday ? `${m.matchday}라운드` : '');
-      html += `<div class="sched-date-header">${dateStr}${roundLabel ? ' · ' + roundLabel : ''}</div>`;
+      const isNextDay = nextUp && new Date(nextUp.date).toDateString() === d.toDateString();
+      const tag = d.toDateString() === todayKey ? '<span class="ti-fx-tag next">오늘</span>' : isNextDay ? '<span class="ti-fx-tag next">다음 경기</span>' : '';
+      html += `<div class="sched-date-header${isNextDay ? ' sched-next-head' : ''}">${dateStr}${roundLabel ? ' · ' + roundLabel : ''}${tag}</div>`;
       lastDate = dateStr;
     }
     html += schedRowHtml(m, league);
   });
   content.innerHTML = (schedulePreds[league] ? SCHED_PRED_LEGEND : '') + html;
+  koStart();
+}
+// 일정 탭을 열거나 리그를 바꾸면 다음 경기 날짜로 바로(끝난 경기를 한참 내려야 했음). 이미 그 근처면 그대로
+function scrollToNextScheduled() {
+  if (!document.getElementById('page-schedule').classList.contains('active')) return;
+  const head = document.querySelector('#schedule-content .sched-next-head');
+  if (!head || head === document.querySelector('#schedule-content .sched-date-header')) return;   // 첫 날짜면 맨 위 그대로
+  const navH = (document.querySelector('nav')?.offsetHeight || 60) + 12;
+  window.scrollTo({ top: Math.max(0, head.getBoundingClientRect().top + scrollY - navH), behavior: 'smooth' });
 }
 
 let currentStandingsSeason = 'current';   // 'current' 또는 시즌 시작 연도('2025' 등 — 서버 /standings?season=)
@@ -5429,11 +5509,14 @@ async function loadStandings(leagueCode) {
   const content = document.getElementById('standings-content'), season = currentStandingsSeason;
   document.getElementById('st-summary').innerHTML = '';
   content.innerHTML = skeletonRows(10);
+  // 이번 시즌 전체 보기면 지난 라운드 대비 순위 변동도 같이(동시에) 요청 — 실패해도 순위표는 그대로
+  const mvP = season === 'current' && view === 'all' ? fetch(`${API}/standings/${leagueCode}/movement`).then(r => r.ok ? r.json() : null).catch(() => null) : null;
   try {
     const res = await fetchWithRetry(`${API}/standings/${leagueCode}?season=${season}${view !== 'all' ? `&view=${view}` : ''}`, {}, {
       onRetry: (a, r) => { content.innerHTML = wakingUpHtml(a, r); }
     });
     const data = await res.json();
+    if (mvP) { const mv = await Promise.race([mvP, new Promise(r => setTimeout(r, 1500))]); data.movement = mv && mv.delta; }
     // 그 사이 다른 리그·시즌을 눌렀으면 버림
     const active = document.querySelector('#league-tabs .league-tab.active');
     if (season !== currentStandingsSeason || view !== (leagueCode === 'CL' ? 'all' : currentStandingsView) || (active && active.dataset.league !== leagueCode)) return;
@@ -5514,8 +5597,11 @@ function renderStandings(data, leagueCode, keepSort) {
   // 정렬: 순위(기본) / 득점 많은 순 / 실점 적은 순(동률은 원래 순위)
   const shown = sort === 'gf' ? rows.slice().sort((a, b) => b.gf - a.gf || a.rank - b.rank)
     : sort === 'ga' ? rows.slice().sort((a, b) => a.ga - b.ga || a.rank - b.rank) : rows;
+  const favSet = new Set(getFavoriteTeams());
+  // 지난 라운드 대비 순위 변동: 이번 시즌 "전체" 순위표에서만(서버가 같이 받아 둔 data.movement)
+  const mvMap = view === 'all' && !finished && data.movement && Object.keys(data.movement).length ? data.movement : null;
   const sortBar = sort !== 'rank' ? `<div class="st-sortbar"><span>${sort === 'gf' ? '득점 많은 순' : '실점 적은 순'}으로 보는 중 · 왼쪽 숫자는 ${sort === 'gf' ? '득점' : '실점'} 순위, 괄호는 리그 순위</span><button onclick="setStandingsSort('rank')">순위표로 돌아가기</button></div>` : '';
-  let html = `${sortBar}<div class="st-table-wrap"><table class="standings-table st-table sort-${sort}"><thead><tr><th style="width:44px">#</th><th>팀</th><th class="center">경기</th><th class="center">승</th><th class="center">무</th><th class="center">패</th><th class="center hide-mobile col-gf">득점</th><th class="center hide-mobile col-ga">실점</th><th class="center">득실</th><th class="center hide-mobile">최근 5경기</th><th class="center">승점</th></tr></thead><tbody>`;
+  let html = `${sortBar}<div class="st-table-wrap"><table class="standings-table st-table sort-${sort}"><thead><tr><th style="width:${mvMap ? 58 : 44}px">#</th><th>팀</th><th class="center">경기</th><th class="center">승</th><th class="center">무</th><th class="center">패</th><th class="center hide-mobile col-gf">득점</th><th class="center hide-mobile col-ga">실점</th><th class="center">득실</th><th class="center hide-mobile">최근 5경기</th><th class="center">승점</th></tr></thead><tbody>`;
   shown.forEach((team, i) => {
     const idx = team.rank - 1;
     let zc = '';
@@ -5526,9 +5612,12 @@ function renderStandings(data, leagueCode, keepSort) {
     const fb = team.form.map(f => `<div class="form-badge ${f}">${f}</div>`).join('');
     const champ = view === 'all' && finished && !isCL && team.rank === 1;   // 챔스 리그 스테이지 1위는 우승이 아님
     const num = sort === 'rank' ? team.rank : `${i + 1}<small>(${team.rank})</small>`;
-    html += `<tr class="st-row ${zc} ${champ ? 'champ' : ''} row-enter" style="animation-delay:${Math.min(i * 35, 600)}ms">
-      <td><span class="st-rank">${num}</span></td>
-      <td><div class="team-cell clickable-team" onclick="openTeamInfo('${escJs(team.team)}')"><img alt="" src="${team.logo}" width="24" height="24" style="object-fit:contain" onerror="this.style.visibility='hidden'"><span>${teamNameHtml(team.team)}</span>${champ ? `<span class="st-crown" title="우승">${TROPHY_ICON}</span>` : ''}</div></td>
+    const fav = favSet.has(team.team);
+    const mv = mvMap && sort === 'rank' ? mvMap[team.team] : null;
+    const mvHtml = mv == null ? '' : mv > 0 ? `<i class="st-mv up" title="지난 라운드보다 ${mv}계단 상승">▲<b>${mv}</b></i>` : mv < 0 ? `<i class="st-mv down" title="지난 라운드보다 ${-mv}계단 하락">▼<b>${-mv}</b></i>` : '<i class="st-mv same" title="지난 라운드와 같음">–</i>';
+    html += `<tr class="st-row ${zc} ${champ ? 'champ' : ''}${fav ? ' is-fav' : ''} row-enter" style="animation-delay:${Math.min(i * 35, 600)}ms">
+      <td><span class="st-rank-cell"><span class="st-rank">${num}</span>${mvHtml}</span></td>
+      <td><div class="team-cell clickable-team" onclick="openTeamInfo('${escJs(team.team)}')"><img alt="" src="${team.logo}" width="24" height="24" style="object-fit:contain" onerror="this.style.visibility='hidden'"><span>${teamNameHtml(team.team)}</span>${fav ? '<span class="fav-star" title="내 팀">★</span>' : ''}${champ ? `<span class="st-crown" title="우승">${TROPHY_ICON}</span>` : ''}</div></td>
       <td class="center">${team.played}</td><td class="center">${team.wins}</td><td class="center">${team.draws}</td><td class="center">${team.losses}</td>
       <td class="center hide-mobile col-gf">${team.gf}</td><td class="center hide-mobile col-ga">${team.ga}</td>
       <td class="center st-gd ${team.gd > 0 ? 'pos' : team.gd < 0 ? 'neg' : ''}">${team.gd > 0 ? '+' : ''}${team.gd}</td>
