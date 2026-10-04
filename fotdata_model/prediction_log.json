@@ -2683,5 +2683,35 @@
     "actual": null,
     "actual_score": null,
     "correct": null
+  },
+  "SA|Frosinone Calcio|US Lecce|2026-10-29": {
+    "league": "SA",
+    "home_team": "Frosinone Calcio",
+    "away_team": "US Lecce",
+    "date": "2026-10-29T17:30:00Z",
+    "predicted": "home_win",
+    "home_win_prob": 0.439,
+    "draw_prob": 0.325,
+    "away_win_prob": 0.235,
+    "predicted_score": "1-0",
+    "logged_at": "2026-10-04T21:03:23.069969",
+    "actual": null,
+    "actual_score": null,
+    "correct": null
+  },
+  "SA|ACF Fiorentina|Atalanta BC|2026-10-29": {
+    "league": "SA",
+    "home_team": "ACF Fiorentina",
+    "away_team": "Atalanta BC",
+    "date": "2026-10-29T19:45:00Z",
+    "predicted": "away_win",
+    "home_win_prob": 0.327,
+    "draw_prob": 0.278,
+    "away_win_prob": 0.395,
+    "predicted_score": "0-1",
+    "logged_at": "2026-10-04T21:03:23.069969",
+    "actual": null,
+    "actual_score": null,
+    "correct": null
   }
 }
