@@ -24,8 +24,8 @@ OUT_W, OUT_H = 1200, 630
 S = 2
 W, H = OUT_W * S, OUT_H * S
 FONT_DIR = os.path.join(os.path.dirname(__file__), 'fonts')
-BLUE, ORANGE, GREY = (88, 166, 255), (240, 136, 62), (139, 148, 158)
-TEXT, MUTED = (230, 237, 243), (139, 148, 158)
+BLUE, ORANGE, GREY = (88, 166, 255), (240, 136, 62), (143, 156, 146)
+TEXT, MUTED = (238, 242, 234), (143, 156, 146)
 
 
 @lru_cache(maxsize=48)
@@ -109,7 +109,7 @@ def _background():
     """경기와 상관없는 부분 전부(1배로 줄여서 캐시)"""
     img = np.empty((H, W, 3), dtype=np.float32)
     y = np.linspace(0, 1, H)[:, None, None]
-    img[...] = np.array([11, 15, 20]) * (1 - y) + np.array([15, 20, 27]) * y
+    img[...] = np.array([11, 18, 15]) * (1 - y) + np.array([16, 25, 20]) * y
     _glow(img, W * 0.5, H * 0.34, W * 0.36, (34, 70, 130), 0.42)       # 가운데(스코어) 뒤
     _glow(img, HOME_X * S, TEAM_Y * S, W * 0.2, (40, 90, 170), 0.38)   # 홈 파랑
     _glow(img, AWAY_X * S, TEAM_Y * S, W * 0.2, (150, 80, 30), 0.30)   # 원정 주황
@@ -210,7 +210,7 @@ def _team(img, d, cx, color, name, crest):
             c = c.resize((max(1, int(c.width * k)), max(1, int(c.height * k))), Image.LANCZOS)
         img.alpha_composite(c, (int(cx - c.width / 2), int(TEAM_Y - c.height / 2)))
     else:
-        d.text((cx, TEAM_Y), ''.join(w[0] for w in name.split()[:2]).upper(), font=font(56), fill=(40, 48, 58), anchor='mm')
+        d.text((cx, TEAM_Y), ''.join(w[0] for w in name.split()[:2]).upper(), font=font(56), fill=(40, 52, 45), anchor='mm')
     d.text((cx, TEAM_Y + BADGE_R + 50), name, font=_fit(d, name, 34, 'Bold', 300), fill=TEXT, anchor='mm')
 
 
@@ -228,7 +228,7 @@ def _bar(img, x0, x1, y, h, pct, win):
     w = x1 - x0
     piece = Image.new('RGBA', (w * S, h * S), (0, 0, 0, 0))
     pd = ImageDraw.Draw(piece)
-    pd.rectangle([0, 0, w * S, h * S], fill=(33, 38, 45, 255))
+    pd.rectangle([0, 0, w * S, h * S], fill=(30, 42, 36, 255))
     total, x = max(1, sum(pct)), 0.0
     cuts = []
     for i, col in enumerate((BLUE, GREY, ORANGE)):
@@ -238,7 +238,7 @@ def _bar(img, x0, x1, y, h, pct, win):
         x += seg
         cuts.append(x)
     for xx in cuts[:2]:
-        pd.line([xx * S, 0, xx * S, h * S], fill=(13, 17, 23, 255), width=int(3 * S))
+        pd.line([xx * S, 0, xx * S, h * S], fill=(14, 21, 18, 255), width=int(3 * S))
     mask = Image.new('L', piece.size, 0)
     ImageDraw.Draw(mask).rounded_rectangle([0, 0, w * S - 1, h * S - 1], radius=h / 2 * S, fill=255)
     piece.putalpha(mask)
@@ -287,7 +287,7 @@ def render(home_name, away_name, home_logo, away_logo, probs, score, prediction,
     foot = 'fotdata-official.com  ·  AI 예측은 참고용이에요'
     if limited:
         foot = '5대 리그 밖 팀은 UCL 기록만으로 계산한 참고용 예측  ·  fotdata-official.com'
-    d.text((OUT_W / 2, 584), foot, font=font(18, 'SemiBold'), fill=(125, 133, 144), anchor='mm')
+    d.text((OUT_W / 2, 584), foot, font=font(18, 'SemiBold'), fill=(127, 140, 130), anchor='mm')
 
     buf = io.BytesIO()
     img.convert('RGB').save(buf, 'JPEG', quality=90, subsampling=0, optimize=True, progressive=True)   # PNG 290KB → ~110KB, 인코딩도 빠름

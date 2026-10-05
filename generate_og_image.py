@@ -14,13 +14,13 @@ S = 2                                   # 슈퍼샘플링 배율
 W, H = OUT_W * S, OUT_H * S
 FONT = '/System/Library/Fonts/AppleSDGothicNeo.ttc'
 BOLD, SEMI, REG = 6, 4, 0               # AppleSDGothicNeo.ttc 인덱스(Bold / SemiBold / Regular)
-BLUE, TEXT, MUTED = (88, 166, 255), (230, 237, 243), (139, 148, 158)
+BLUE, TEXT, MUTED = (88, 166, 255), (238, 242, 234), (143, 156, 146)
 font = lambda size, idx: ImageFont.truetype(FONT, size * S, index=idx)
 
 
 def background():
     y = np.linspace(0, 1, H)[:, None]
-    base = np.array([11, 15, 20]) * (1 - y[..., None]) + np.array([15, 20, 27]) * y[..., None]
+    base = np.array([11, 18, 15]) * (1 - y[..., None]) + np.array([16, 25, 20]) * y[..., None]
     img = np.broadcast_to(base, (H, W, 3)).astype(np.float32).copy()
     yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
     def glow(cx, cy, r, rgb, a):
@@ -81,14 +81,15 @@ def main():
     d.text((L + 150 * S, 262 * S), 'A I   F O O T B A L L', font=font(30, SEMI), fill=MUTED)
     # 헤드라인
     f_h = font(118, BOLD)
-    d.text((L, 430 * S), '축구를 데이터로', font=f_h, fill=TEXT)
-    d.text((L, 580 * S), '예측하다', font=f_h, fill=BLUE)
+    # 헤드라인은 한 색(2026-10-05 — 한 줄만 파랗게 칠하는 강조는 흔한 기본형이라 뺌), 랜딩 첫 화면 문구와 같게
+    d.text((L, 430 * S), 'AI가 먼저 계산한', font=f_h, fill=TEXT)
+    d.text((L, 580 * S), '경기 결과', font=f_h, fill=TEXT)
     d.text((L, 770 * S), '5대 리그 + 챔피언스리그 · AI 경기 예측 · 순위 예측 시뮬레이션', font=font(40, REG), fill=MUTED)
     # 리그 태그
     x, y, f_p = L, 880 * S, font(34, SEMI)
     for name in ['EPL', '라리가', '분데스리가', '세리에A', '리그앙', 'UCL']:
         tw = d.textlength(name, font=f_p)
-        d.rounded_rectangle([x, y, x + tw + 60 * S, y + 72 * S], radius=36 * S, fill=(22, 27, 34, 230), outline=(56, 90, 140), width=2 * S)
+        d.rounded_rectangle([x, y, x + tw + 60 * S, y + 72 * S], radius=36 * S, fill=(22, 32, 27, 230), outline=(56, 90, 140), width=2 * S)
         d.text((x + 30 * S, y + 14 * S), name, font=f_p, fill=BLUE)
         x += tw + 60 * S + 18 * S
     d.text((L, 1110 * S), 'fotdata-official.com', font=font(34, REG), fill=(110, 118, 129))
