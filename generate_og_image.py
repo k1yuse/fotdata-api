@@ -14,13 +14,13 @@ S = 2                                   # 슈퍼샘플링 배율
 W, H = OUT_W * S, OUT_H * S
 FONT = '/System/Library/Fonts/AppleSDGothicNeo.ttc'
 BOLD, SEMI, REG = 6, 4, 0               # AppleSDGothicNeo.ttc 인덱스(Bold / SemiBold / Regular)
-BLUE, TEXT, MUTED = (88, 166, 255), (238, 242, 234), (143, 156, 146)
+BLUE, TEXT, MUTED = (88, 166, 255), (236, 241, 250), (142, 154, 179)
 font = lambda size, idx: ImageFont.truetype(FONT, size * S, index=idx)
 
 
 def background():
     y = np.linspace(0, 1, H)[:, None]
-    base = np.array([11, 18, 15]) * (1 - y[..., None]) + np.array([16, 25, 20]) * y[..., None]
+    base = np.array([8, 13, 26]) * (1 - y[..., None]) + np.array([12, 20, 36]) * y[..., None]
     img = np.broadcast_to(base, (H, W, 3)).astype(np.float32).copy()
     yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
     def glow(cx, cy, r, rgb, a):
@@ -89,7 +89,7 @@ def main():
     x, y, f_p = L, 880 * S, font(34, SEMI)
     for name in ['EPL', '라리가', '분데스리가', '세리에A', '리그앙', 'UCL']:
         tw = d.textlength(name, font=f_p)
-        d.rounded_rectangle([x, y, x + tw + 60 * S, y + 72 * S], radius=36 * S, fill=(22, 32, 27, 230), outline=(56, 90, 140), width=2 * S)
+        d.rounded_rectangle([x, y, x + tw + 60 * S, y + 72 * S], radius=36 * S, fill=(17, 26, 46, 230), outline=(56, 90, 140), width=2 * S)
         d.text((x + 30 * S, y + 14 * S), name, font=f_p, fill=BLUE)
         x += tw + 60 * S + 18 * S
     d.text((L, 1110 * S), 'fotdata-official.com', font=font(34, REG), fill=(110, 118, 129))

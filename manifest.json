@@ -4,7 +4,7 @@
   "description": "5대 리그+UCL 실시간 순위, AI 경기 예측",
   "start_url": "/app",
   "display": "standalone",
-  "background_color": "#0e1512",
+  "background_color": "#0a1020",
   "theme_color": "#58a6ff",
   "icons": [
     {

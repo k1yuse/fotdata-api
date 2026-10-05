@@ -24,7 +24,7 @@ OUT = os.path.join(BASE, 'promo')
 API = 'https://fotdata-api.onrender.com'
 SITE = 'fotdata-official.com'
 S = 2                                        # 2배로 그려서 줄임(안티앨리어싱)
-BLUE, ORANGE, TEXT, MUTED, DIM = (88, 166, 255), (240, 136, 62), (238, 242, 234), (143, 156, 146), (110, 118, 129)
+BLUE, ORANGE, TEXT, MUTED, DIM = (88, 166, 255), (240, 136, 62), (236, 241, 250), (142, 154, 179), (110, 118, 129)
 GRAY = (110, 118, 129)
 FONTS = {w: os.path.join(BASE, 'fonts', f'FotDataCardSans-{w}.otf') for w in ('Bold', 'SemiBold')}
 LEAGUE_KO = {'PL': '프리미어리그', 'PD': '라리가', 'BL1': '분데스리가', 'SA': '세리에 A', 'FL1': '리그 1', 'CL': '챔피언스리그'}
@@ -50,7 +50,7 @@ def tlen(d, s, size, w='Bold'):
 def background(w, h, glows):
     W, H = w * S, h * S
     y = np.linspace(0, 1, H)[:, None]
-    base = np.array([11, 18, 15]) * (1 - y[..., None]) + np.array([16, 25, 20]) * y[..., None]
+    base = np.array([8, 13, 26]) * (1 - y[..., None]) + np.array([12, 20, 36]) * y[..., None]
     img = np.broadcast_to(base, (H, W, 3)).astype(np.float32).copy()
     yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
     for cx, cy, r, rgb, a in glows:
@@ -109,7 +109,7 @@ def rrect(d, box, r, fill=None, outline=None, width=1):
     d.rounded_rectangle([v * S for v in box], radius=r * S, fill=fill, outline=outline, width=int(width * S))
 
 
-def pill(d, x, y, s, size=26, fg=BLUE, bg=(22, 32, 27, 235), border=(56, 90, 140)):
+def pill(d, x, y, s, size=26, fg=BLUE, bg=(17, 26, 46, 235), border=(56, 90, 140)):
     w = tlen(d, s, size, 'SemiBold') + size * 1.6
     h = size * 2.1
     rrect(d, (x, y, x + w, y + h), h / 2, fill=bg, outline=border, width=1.5)
@@ -166,7 +166,7 @@ def match_card(img, d, x, y, w, m, scale=1.0):
     """빅매치 예측 카드(엠블럼 대신 홈 파랑·원정 주황 원) — 높이를 돌려줌"""
     s = scale
     h = 500 * s
-    rrect(d, (x, y, x + w, y + h), 28 * s, fill=(22, 32, 27, 215), outline=(44, 58, 51), width=1.5)
+    rrect(d, (x, y, x + w, y + h), 28 * s, fill=(17, 26, 46, 215), outline=(38, 51, 77), width=1.5)
     text(d, (x + w / 2, y + 46 * s), f"{m['league']} · {m['when']}", 24 * s, (121, 184, 255), 'SemiBold', anchor='mm')
     hp, dp, ap = m['p']
     cy = y + 170 * s
@@ -176,7 +176,7 @@ def match_card(img, d, x, y, w, m, scale=1.0):
         for g in range(10):   # 원 바깥 빛
             rr = r + g * 3 * s
             d.ellipse([(cx - rr) * S, (cy - rr) * S, (cx + rr) * S, (cy + rr) * S], outline=col + (int(40 * (1 - g / 10)),), width=int(3 * S))
-        d.ellipse([(cx - r) * S, (cy - r) * S, (cx + r) * S, (cy + r) * S], fill=(14, 21, 18, 255), outline=col, width=int(5 * s * S))
+        d.ellipse([(cx - r) * S, (cy - r) * S, (cx + r) * S, (cy + r) * S], fill=(10, 16, 32, 255), outline=col, width=int(5 * s * S))
         text(d, (cx, cy + 2 * s), f'{pct}%', 44 * s, col, anchor='mm')
         text(d, (cx, cy + r + 40 * s), name, 30 * s, TEXT, anchor='mm')
     text(d, (x + w / 2, cy - 18 * s), 'VS', 30 * s, MUTED, anchor='mm')
@@ -184,7 +184,7 @@ def match_card(img, d, x, y, w, m, scale=1.0):
     # 확률 막대
     bx, by, bw, bh = x + 40 * s, y + 330 * s, w - 80 * s, 16 * s
     cur = bx
-    for pct, col in [(hp, BLUE), (dp, (74, 86, 78)), (ap, ORANGE)]:
+    for pct, col in [(hp, BLUE), (dp, (71, 84, 112)), (ap, ORANGE)]:
         seg = bw * pct / max(1, hp + dp + ap)
         d.rectangle([cur * S, by * S, (cur + seg - 3 * s) * S, (by + bh) * S], fill=col)
         cur += seg
@@ -221,7 +221,7 @@ def feed_brand():
              ('AI 트랙레코드', '킥오프 전에 기록하고, 경기 후 그대로 채점')]
     y = 630
     for i, (t, sub) in enumerate(feats):
-        rrect(d, (L, y, L + 620, y + 118), 22, fill=(22, 32, 27, 220), outline=(44, 58, 51), width=1.5)
+        rrect(d, (L, y, L + 620, y + 118), 22, fill=(17, 26, 46, 220), outline=(38, 51, 77), width=1.5)
         d.ellipse([(L + 28) * S, (y + 31) * S, (L + 84) * S, (y + 87) * S], fill=(88, 166, 255, 40), outline=BLUE, width=int(2 * S))
         text(d, (L + 56, y + 59), str(i + 1), 28, BLUE, anchor='mm')
         text(d, (L + 108, y + 26), t, 32, TEXT)
@@ -248,7 +248,7 @@ def feed_bigmatch(m):
     text(d, (w / 2, 1060), '맞대결·최근 폼·순위 분석까지 전체 보기', 32, TEXT, anchor='mm')
     pw = tlen(d, SITE, 30) + 80
     rrect(d, (w / 2 - pw / 2, 1110, w / 2 + pw / 2, 1180), 35, fill=BLUE)
-    text(d, (w / 2, 1145), SITE, 30, (14, 21, 18), anchor='mm')
+    text(d, (w / 2, 1145), SITE, 30, (10, 16, 32), anchor='mm')
     text(d, (w / 2, 1280), 'AI 예측은 통계 모델의 참고 정보이며 경기 결과를 보장하지 않아요', 20, DIM, 'SemiBold', anchor='mm')
     save(img, w, h, 'feed_bigmatch.png')
 
@@ -266,7 +266,7 @@ def story(m):
     text(d, (w / 2, 668), '이번 주 빅매치, AI의 예측', 32, MUTED, 'SemiBold', anchor='mm')
     match_card(img, d, 80, 730, w - 160, m, 1.0)
     rrect(d, (190, 1320, w - 190, 1412), 46, fill=BLUE)
-    text(d, (w / 2, 1366), '프로필 링크에서 무료로 보기', 34, (14, 21, 18), anchor='mm')
+    text(d, (w / 2, 1366), '프로필 링크에서 무료로 보기', 34, (10, 16, 32), anchor='mm')
     text(d, (w / 2, 1462), SITE, 28, MUTED, 'SemiBold', anchor='mm')
     text(d, (w / 2, 1508), 'AI 예측은 참고 정보예요', 20, DIM, 'SemiBold', anchor='mm')
     save(img, w, h, 'story.png')

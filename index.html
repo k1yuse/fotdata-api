@@ -156,18 +156,18 @@
   <meta name="description" content="5대 리그+UCL 순위·일정, AI 경기 예측, 최근 4시즌 맞대결 기록. 데이터로 보는 축구 인사이트를 무료로.">
   <meta property="og:title" content="FotData - AI 축구 분석 플랫폼">
   <meta property="og:description" content="5대 리그+UCL 순위·일정, AI 경기 예측, 최근 4시즌 맞대결 기록. 데이터로 보는 축구 인사이트를 무료로.">
-  <meta property="og:image" content="https://www.fotdata-official.com/og-image.png?v=4">
+  <meta property="og:image" content="https://www.fotdata-official.com/og-image.png?v=5">
   <meta property="og:image:width" content="2400">
   <meta property="og:image:height" content="1260">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:alt" content="FotData — 축구를 데이터로 예측하다">
   <meta property="og:site_name" content="FotData">
-  <meta name="twitter:image" content="https://www.fotdata-official.com/og-image.png?v=4">
+  <meta name="twitter:image" content="https://www.fotdata-official.com/og-image.png?v=5">
   <meta property="og:url" content="https://www.fotdata-official.com">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#0e1512">
+  <meta name="theme-color" content="#0a1020">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -213,12 +213,12 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     button, input, select, textarea { font-family: inherit; }   /* 버튼도 사이트 글꼴(브라우저 기본 Arial 방지) */
     :root {
-      --bg: #0e1512;
-      --bg2: #16201b;
-      --bg3: #1e2a24;
-      --border: #2c3a33;
-      --text: #eef2ea;
-      --muted: #8f9c92;
+      --bg: #0a1020;
+      --bg2: #111a2e;
+      --bg3: #18233a;
+      --border: #26334d;
+      --text: #ecf1fa;
+      --muted: #8e9ab3;
       --blue: #58a6ff;
       --green: #238636;
       --yellow: #d29922;
@@ -250,7 +250,7 @@
     @keyframes introTagL { to { opacity: 1; transform: none; } }
     /* 퇴장: 글자는 위로 흐려지고 공은 캔버스에서 커지며 사라짐 */
     .intro-overlay.out .intro-words { opacity: 0; transform: translateY(-14px); }
-    .intro-skip { position: absolute; right: 20px; bottom: calc(20px + env(safe-area-inset-bottom)); background: rgba(22,32,27,0.7); border: 0.5px solid #2c3a33; color: var(--muted); font-size: 12px; font-family: inherit; padding: 7px 14px; border-radius: 99px; cursor: pointer; }
+    .intro-skip { position: absolute; right: 20px; bottom: calc(20px + env(safe-area-inset-bottom)); background: rgba(17,26,46,0.7); border: 0.5px solid #26334d; color: var(--muted); font-size: 12px; font-family: inherit; padding: 7px 14px; border-radius: 99px; cursor: pointer; }
     .intro-skip:hover { color: var(--text); border-color: var(--blue); }
     @media (max-width: 600px) { .intro-brand { font-size: 32px; } .intro-tag { font-size: 10.5px; } }
     @media (prefers-reduced-motion: reduce) { .intro-overlay { display: none; } }
@@ -259,7 +259,7 @@
     /* NAV */
     nav {
       position: sticky; top: 0; z-index: 100;
-      background: rgba(14,21,18,0.85);
+      background: rgba(10,16,32,0.85);
       backdrop-filter: blur(12px);
       border-bottom: 0.5px solid var(--border);
       padding: 0 48px;
@@ -272,12 +272,12 @@
        tag는 width:0 + min-width:100%라 묶음 폭을 늘리지 않고 FotData 폭만큼만 퍼짐. 크기 비율 ≈ 1 : 0.33 */
     .brand-lockup { display: inline-flex; flex-direction: column; align-items: stretch; }
     .brand-word { display: flex; align-items: baseline; font-size: 27px; font-weight: 800; letter-spacing: -1px; line-height: 1; }
-    .brand-tag { display: flex; justify-content: space-between; width: 0; min-width: 100%; margin-top: 5px; padding: 0 1px 0 2px; font-size: 9px; font-weight: 700; line-height: 1; color: #8f9c92; }
+    .brand-tag { display: flex; justify-content: space-between; width: 0; min-width: 100%; margin-top: 5px; padding: 0 1px 0 2px; font-size: 9px; font-weight: 700; line-height: 1; color: #8e9ab3; }
     .brand-tag .sp { width: 3px; }
     .nav-links { display: flex; gap: 28px; justify-self: center; }
     .nav-links a { font-size: 13px; color: var(--muted); text-decoration: none; transition: color .2s; }
     .nav-links a:hover { color: var(--text); }
-    .nav-cta { justify-self: end; padding: 8px 18px; background: var(--blue); border: none; border-radius: 6px; color: #0e1512; font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; transition: opacity .2s; }
+    .nav-cta { justify-self: end; padding: 8px 18px; background: var(--blue); border: none; border-radius: 6px; color: #0a1020; font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; transition: opacity .2s; }
     .nav-cta:hover { opacity: .85; }
     .nav-donate-btn { display: none; }
     @media (min-width: 769px) {
@@ -331,7 +331,7 @@
     .hb-when b { color: var(--text); font-weight: 700; }
     .hb-grid { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: 18px; }
     .hb-team { display: flex; flex-direction: column; align-items: center; gap: 10px; min-width: 0; color: var(--text); text-decoration: none; font-size: 16px; font-weight: 700; }
-    .hb-team img { width: 64px; height: 64px; object-fit: contain; filter: drop-shadow(0 0 1px rgba(238,242,234,0.35)); }
+    .hb-team img { width: 64px; height: 64px; object-fit: contain; filter: drop-shadow(0 0 1px rgba(236,241,250,0.35)); }
     .hb-team span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .hb-team:hover span { color: var(--blue); }
     .hb-nums { display: flex; align-items: baseline; gap: 22px; font-family: var(--font-num); font-variant-numeric: tabular-nums; line-height: .9; }
@@ -342,7 +342,7 @@
     .hb-d small { font-family: var(--font-ui); font-size: 12px; font-weight: 600; margin-bottom: 4px; }
     .hb-bar { display: flex; height: 6px; border-radius: 99px; overflow: hidden; margin: 22px auto 0; max-width: 520px; background: var(--bg3); }
     .hb-bar i { display: block; height: 100%; width: 0; transition: width 1s cubic-bezier(.22,.8,.2,1); }
-    .hb-bar .h { background: var(--blue); } .hb-bar .d { background: #8f9c92; } .hb-bar .a { background: #f0883e; }
+    .hb-bar .h { background: var(--blue); } .hb-bar .d { background: #8e9ab3; } .hb-bar .a { background: #f0883e; }
     .hero-board.on ~ h1 { font-size: 34px; letter-spacing: -0.5px; margin-bottom: 12px; }
     /* 폰: 큰 숫자가 가운데를 차지해 팀 이름이 "Man …"으로 잘렸음 → 팀은 윗줄 양끝, 숫자는 아랫줄 가운데 */
     @media (max-width: 600px) {
@@ -366,7 +366,7 @@
       margin-bottom: 72px;
       animation: fadeUp .6s .3s ease both;
     }
-    .btn-primary { padding: 14px 32px; background: linear-gradient(135deg, #78b8ff, var(--blue)); border: none; border-radius: 8px; color: #0e1512; font-size: 15px; font-weight: 700; cursor: pointer; transition: box-shadow .2s, transform .1s; text-decoration: none; display: inline-block; box-shadow: 0 4px 16px rgba(88,166,255,0.3); }
+    .btn-primary { padding: 14px 32px; background: linear-gradient(135deg, #78b8ff, var(--blue)); border: none; border-radius: 8px; color: #0a1020; font-size: 15px; font-weight: 700; cursor: pointer; transition: box-shadow .2s, transform .1s; text-decoration: none; display: inline-block; box-shadow: 0 4px 16px rgba(88,166,255,0.3); }
     .btn-primary:active { transform: scale(0.98); }
     .btn-primary:hover { opacity: .85; }
     .btn-secondary { padding: 14px 32px; background: transparent; border: 0.5px solid var(--border); border-radius: 8px; color: var(--text); font-size: 15px; cursor: pointer; transition: border-color .2s, background .2s; text-decoration: none; display: inline-block; }
@@ -454,7 +454,7 @@
     .mock-bar-fill { height: 100%; border-radius: 99px; width: var(--w); }
     .mock-bar-fill.home { background: linear-gradient(90deg, #1f6feb, #58a6ff); } .mock-bar-fill.draw { background: #6e7681; } .mock-bar-fill.away { background: linear-gradient(90deg, #f0883e, #ffa657); }
     .mock-bar-val { font-size: 13px; font-weight: 800; text-align: right; font-variant-numeric: tabular-nums; }
-    .mock-bar-val.home { color: #79b8ff; } .mock-bar-val.draw { color: #8f9c92; } .mock-bar-val.away { color: #ffa657; }
+    .mock-bar-val.home { color: #79b8ff; } .mock-bar-val.draw { color: #8e9ab3; } .mock-bar-val.away { color: #ffa657; }
     .mock-bar-bg { position: relative; }
     /* 목업 등장 모션(.mock-on) — 모션 최소화면 처음부터 최종 모습 */
     @media (prefers-reduced-motion: no-preference) {
@@ -475,7 +475,7 @@
       .mock-card .mock-vs { transition: opacity .5s ease .25s; } .mock-card:not(.mock-on) .mock-vs { opacity: 0; }
       .mock-card .mock-badge { transition: opacity .45s ease .3s, background .3s ease, color .3s ease; }
       .mock-card:not(.mock-on) .mock-badge { opacity: 0; }
-      .mock-badge.thinking { background: rgba(143,156,146,0.14); color: #cbd3c8; }
+      .mock-badge.thinking { background: rgba(142,154,179,0.14); color: #c5cedf; }
       /* 이긴 쪽(홈) 막대가 채워진 뒤 빛이 한 번 훑고 지나감 */
       .mock-card.mock-done .mock-bar-row:nth-child(1) .mock-bar-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,.6), transparent); transform: translateX(-100%); animation: mockSheen .9s ease both; }
       .mock-card.mock-done .mock-bar-row:nth-child(1) .mock-bar-val { animation: mockGlow 1s ease both; }
@@ -560,7 +560,7 @@
     .standings-mock-header { padding: 14px 18px; border-bottom: 0.5px solid var(--border); display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; }
     .standings-mock-header img { width: 18px; height: 18px; object-fit: contain; }
     /* 승점 칸 폭 고정(예전 auto라 승점이 두 자리면 폼 점들이 한 글자만큼 왼쪽으로 밀렸음) */
-    .standings-row { display: grid; grid-template-columns: 28px 1fr auto 30px; gap: 10px; align-items: center; padding: 10px 18px; border-bottom: 0.5px solid rgba(44,58,51,0.5); font-size: 13px; }
+    .standings-row { display: grid; grid-template-columns: 28px 1fr auto 30px; gap: 10px; align-items: center; padding: 10px 18px; border-bottom: 0.5px solid rgba(38,51,77,0.5); font-size: 13px; }
     .standings-row:last-child { border-bottom: none; }
     .standings-rank { color: var(--muted); font-size: 12px; text-align: center; }
     .standings-team { display: flex; align-items: center; gap: 8px; }
@@ -597,13 +597,13 @@
     .footer-text { font-size: 12px; color: var(--muted); }
     /* 푸터 출처 표기 — football-data 이용 약관 7.1의 문구("Football data provided by the Football-Data.org API")는 그대로 둘 것 */
     .ft-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; text-align: right; max-width: 680px; }
-    .ft-copy { font-size: 12px; color: #8f9c92; }
-    .ft-credits { font-size: 11px; line-height: 1.55; color: #7f8c82; }
-    .ft-credits a { color: inherit; text-decoration: underline; text-decoration-color: rgba(127,140,130,0.45); text-underline-offset: 2px; }
+    .ft-copy { font-size: 12px; color: #8e9ab3; }
+    .ft-credits { font-size: 11px; line-height: 1.55; color: #7c88a1; }
+    .ft-credits a { color: inherit; text-decoration: underline; text-decoration-color: rgba(124,136,161,0.45); text-underline-offset: 2px; }
     .ft-credits a:hover { color: #58a6ff; }
-    .ft-links { font-size: 11.5px; color: #7f8c82; margin-top: 2px; }   /* 개인정보처리방침은 굵게(다른 링크와 구분 — 개인정보보호법 안내 관례) */
-    .ft-links a { color: #8f9c92; text-decoration: none; } .ft-links a:hover { color: #58a6ff; text-decoration: underline; }
-    .ft-links b { color: #cbd3c8; font-weight: 700; }
+    .ft-links { font-size: 11.5px; color: #7c88a1; margin-top: 2px; }   /* 개인정보처리방침은 굵게(다른 링크와 구분 — 개인정보보호법 안내 관례) */
+    .ft-links a { color: #8e9ab3; text-decoration: none; } .ft-links a:hover { color: #58a6ff; text-decoration: underline; }
+    .ft-links b { color: #c5cedf; font-weight: 700; }
     @media (max-width: 768px) { .ft-right { align-items: center; text-align: center; } }   /* 랜딩 모바일 푸터는 가운데 정렬(아래 footer 규칙) */
 
     @keyframes fadeUp {
@@ -652,7 +652,7 @@
     .story-step p { font-size: 15px; color: var(--muted); line-height: 1.75; word-break: keep-all; }
     .story-counter { margin-top: 26px; font-size: 58px; font-weight: 800; letter-spacing: -1.5px; font-variant-numeric: tabular-nums; line-height: 1; }
     .story-counter small { font-size: 14px; color: var(--muted); font-weight: 500; letter-spacing: 0; margin-left: 10px; }
-    .story-match { margin-top: 24px; background: rgba(22,32,27,0.72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 0.5px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+    .story-match { margin-top: 24px; background: rgba(17,26,46,0.72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 0.5px solid var(--border); border-radius: 12px; padding: 16px 18px; }
     .story-match-when { font-size: 11px; color: var(--muted); margin-bottom: 10px; }
     .story-match-teams { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 15px; margin-bottom: 14px; }
     .story-match-teams span { display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
@@ -708,7 +708,7 @@
     .story.static .story-step h2 { font-size: 30px; }
     .story.static .story-bars i { width: var(--target) !important; }
     @media (max-width: 768px) { .story.static .story-steps { padding: 48px 24px; } }
-    .kofi-float-btn { position: fixed; left: 16px; bottom: 92px; z-index: 400; display: inline-flex; align-items: center; gap: 8px; background: var(--blue); color: #0e1512; font-size: 13px; font-weight: 700; padding: 11px 18px; border-radius: 999px; box-shadow: 0 8px 24px rgba(0,0,0,.35); border: none; cursor: pointer; font-family: inherit; }
+    .kofi-float-btn { position: fixed; left: 16px; bottom: 92px; z-index: 400; display: inline-flex; align-items: center; gap: 8px; background: var(--blue); color: #0a1020; font-size: 13px; font-weight: 700; padding: 11px 18px; border-radius: 999px; box-shadow: 0 8px 24px rgba(0,0,0,.35); border: none; cursor: pointer; font-family: inherit; }
     .kofi-float-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
     @media (max-width: 768px) { .kofi-float-btn { bottom: 120px; } .kofi-panel { bottom: 180px; } }
     @media (max-width: 480px) { .kofi-float-btn { left: 10px; padding: 10px 14px; font-size: 12px; } }
@@ -1010,7 +1010,7 @@
           EPL 2026-27 순위표
         </div>
       <div id="landing-standings-preview">
-    <div class="standings-row mini-loader-row" style="padding:12px 0"><svg class="logo-bars animate" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg><span style="color:#8f9c92">불러오는 중...</span></div>
+    <div class="standings-row mini-loader-row" style="padding:12px 0"><svg class="logo-bars animate" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg><span style="color:#8e9ab3">불러오는 중...</span></div>
   </div>
   </div>
     <div>
@@ -1108,7 +1108,7 @@
   <div style="display:flex;align-items:center;gap:9px">
   <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg>
   <div style="display:flex">
-    <span style="font-size:16px;font-weight:800;color:#eef2ea">Fot</span>
+    <span style="font-size:16px;font-weight:800;color:#ecf1fa">Fot</span>
     <span style="font-size:16px;font-weight:800;color:#58a6ff">Data</span>
   </div>
 </div>
@@ -1312,7 +1312,7 @@ document.addEventListener('DOMContentLoaded', () => {
       io.observe(mockEl);
     }
   } catch(e) {
-    document.getElementById('landing-standings-preview').innerHTML = '<div class="standings-row"><span style="color:#8f9c92;padding:12px 0">순위표를 불러올 수 없습니다</span></div>';
+    document.getElementById('landing-standings-preview').innerHTML = '<div class="standings-row"><span style="color:#8e9ab3;padding:12px 0">순위표를 불러올 수 없습니다</span></div>';
   }
 })();
 </script>

@@ -1,22 +1,22 @@
 /* 개인정보처리방침·이용약관 공용 스타일 — 사이트와 같은 다크 테마, 읽기 위주(외부 글꼴 없음) */
 :root { color-scheme: dark; }
 * { box-sizing: border-box; }
-body { margin: 0; background: #0e1512; color: #cbd3c8; font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif; line-height: 1.75; -webkit-text-size-adjust: 100%; word-break: keep-all; overflow-wrap: break-word; }
+body { margin: 0; background: #0a1020; color: #c5cedf; font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif; line-height: 1.75; -webkit-text-size-adjust: 100%; word-break: keep-all; overflow-wrap: break-word; }
 .legal { max-width: 760px; margin: 0 auto; padding: 32px 20px calc(56px + env(safe-area-inset-bottom)); }
 .back { display: inline-block; font-size: 13px; color: #58a6ff; text-decoration: none; margin-bottom: 20px; }
 .back:hover { text-decoration: underline; }
-h1 { font-size: 26px; color: #eef2ea; margin: 0 0 4px; letter-spacing: -0.3px; }
-.date { font-size: 13px; color: #7f8c82; margin: 0 0 24px; }
-.lead { font-size: 15px; color: #eef2ea; padding: 14px 16px; border-radius: 12px; background: rgba(88,166,255,0.08); border: 0.5px solid rgba(88,166,255,0.3); }
-h2 { font-size: 16px; color: #eef2ea; margin: 32px 0 8px; padding-top: 14px; border-top: 0.5px solid #1e2a24; }
+h1 { font-size: 26px; color: #ecf1fa; margin: 0 0 4px; letter-spacing: -0.3px; }
+.date { font-size: 13px; color: #7c88a1; margin: 0 0 24px; }
+.lead { font-size: 15px; color: #ecf1fa; padding: 14px 16px; border-radius: 12px; background: rgba(88,166,255,0.08); border: 0.5px solid rgba(88,166,255,0.3); }
+h2 { font-size: 16px; color: #ecf1fa; margin: 32px 0 8px; padding-top: 14px; border-top: 0.5px solid #18233a; }
 p, li { font-size: 14.5px; }
 ul { padding-left: 20px; margin: 8px 0; }
 li { margin: 4px 0; }
-b { color: #eef2ea; font-weight: 600; }
+b { color: #ecf1fa; font-weight: 600; }
 a { color: #58a6ff; }
-.small { font-size: 12.5px; color: #8f9c92; }
+.small { font-size: 12.5px; color: #8e9ab3; }
 table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 13.5px; }
-th, td { text-align: left; padding: 8px 10px; border-bottom: 0.5px solid #2c3a33; vertical-align: top; }
-th { color: #8f9c92; font-weight: 600; font-size: 12.5px; }
-.links { margin-top: 40px; font-size: 13px; color: #7f8c82; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 0.5px solid #26334d; vertical-align: top; }
+th { color: #8e9ab3; font-weight: 600; font-size: 12.5px; }
+.links { margin-top: 40px; font-size: 13px; color: #7c88a1; }
 @media (max-width: 480px) { h1 { font-size: 22px; } table { font-size: 12.5px; } th, td { padding: 7px 6px; } }

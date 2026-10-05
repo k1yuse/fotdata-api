@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>페이지를 찾을 수 없어요 · FotData</title>
   <meta name="robots" content="noindex">
-  <meta name="theme-color" content="#0e1512">
+  <meta name="theme-color" content="#0a1020">
   <link rel="icon" sizes="192x192" href="/icon-192.png">
   <!-- 없는 주소로 들어오면 Vercel이 이 파일을 404 상태로 보여줌(2026-10-04 — 예전엔 영어 "NOT_FOUND" 기본 화면).
        어느 깊이의 주소에서든 열리므로 파일·링크는 전부 "/"로 시작하는 절대 경로 -->
@@ -13,36 +13,36 @@
     :root { color-scheme: dark; }
     * { box-sizing: border-box; }
     html, body { height: 100%; }
-    body { margin: 0; background: #0e1512; color: #cbd3c8; font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif; -webkit-text-size-adjust: 100%; word-break: keep-all; overflow-wrap: break-word; display: flex; flex-direction: column; }
+    body { margin: 0; background: #0a1020; color: #c5cedf; font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif; -webkit-text-size-adjust: 100%; word-break: keep-all; overflow-wrap: break-word; display: flex; flex-direction: column; }
     body::before { content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(ellipse 60% 50% at 82% 12%, rgba(88,166,255,0.14), transparent 70%), radial-gradient(ellipse 55% 45% at 8% 92%, rgba(163,113,247,0.08), transparent 70%); }
     body::after { content: ''; position: fixed; z-index: -1; pointer-events: none; width: min(70vw, 560px); aspect-ratio: 1; right: max(-18vw, -150px); bottom: max(-16vw, -130px); background: url('/bg-ball.svg') center / contain no-repeat; opacity: 0.22; }
     header { padding: 18px 20px; }
-    .brand { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: #eef2ea; font-weight: 800; font-size: 19px; letter-spacing: -0.3px; }
+    .brand { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: #ecf1fa; font-weight: 800; font-size: 19px; letter-spacing: -0.3px; }
     .brand b { color: #58a6ff; }
     main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px 20px 64px; }
     .box { max-width: 440px; width: 100%; text-align: center; }
     .ball { width: 84px; height: 84px; margin: 0 auto 14px; animation: roll 2.4s cubic-bezier(.45,0,.3,1) infinite; }
     @keyframes roll { 0%, 55% { transform: rotate(0); } 85%, 100% { transform: rotate(360deg); } }
     @media (prefers-reduced-motion: reduce) { .ball { animation: none; } }
-    .code { font-size: 64px; font-weight: 800; letter-spacing: 2px; color: #eef2ea; line-height: 1; margin: 0 0 12px; font-variant-numeric: tabular-nums; }
+    .code { font-size: 64px; font-weight: 800; letter-spacing: 2px; color: #ecf1fa; line-height: 1; margin: 0 0 12px; font-variant-numeric: tabular-nums; }
     .code span { color: #58a6ff; }
-    h1 { font-size: 21px; color: #eef2ea; margin: 0 0 10px; letter-spacing: -0.2px; }
-    p { font-size: 14.5px; line-height: 1.7; color: #8f9c92; margin: 0 0 26px; }
-    .path { display: inline-block; max-width: 100%; margin-top: 6px; padding: 2px 8px; border-radius: 6px; background: rgba(143,156,146,0.12); color: #cbd3c8; font: 12.5px ui-monospace, SFMono-Regular, Menlo, monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle; }
+    h1 { font-size: 21px; color: #ecf1fa; margin: 0 0 10px; letter-spacing: -0.2px; }
+    p { font-size: 14.5px; line-height: 1.7; color: #8e9ab3; margin: 0 0 26px; }
+    .path { display: inline-block; max-width: 100%; margin-top: 6px; padding: 2px 8px; border-radius: 6px; background: rgba(142,154,179,0.12); color: #c5cedf; font: 12.5px ui-monospace, SFMono-Regular, Menlo, monospace; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle; }
     .btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
     .btn { display: inline-flex; align-items: center; justify-content: center; min-width: 150px; padding: 12px 20px; border-radius: 12px; font-size: 14.5px; font-weight: 700; text-decoration: none; transition: transform .15s, background .15s, border-color .15s; }
-    .btn.primary { background: #58a6ff; color: #0e1512; }
+    .btn.primary { background: #58a6ff; color: #0a1020; }
     .btn.primary:hover { background: #79b8ff; }
-    .btn.ghost { color: #eef2ea; border: 1px solid #2c3a33; background: rgba(22,32,27,0.7); }
+    .btn.ghost { color: #ecf1fa; border: 1px solid #26334d; background: rgba(17,26,46,0.7); }
     .btn.ghost:hover { border-color: #58a6ff; }
     .btn:active { transform: scale(.97); }
-    .quick { margin-top: 30px; padding-top: 20px; border-top: 0.5px solid #1e2a24; }
-    .quick-t { font-size: 12px; color: #7f8c82; margin-bottom: 10px; }
-    .quick a { display: inline-block; margin: 3px 4px; padding: 6px 12px; border-radius: 99px; font-size: 13px; color: #cbd3c8; text-decoration: none; border: 0.5px solid #2c3a33; background: rgba(22,32,27,0.6); }
+    .quick { margin-top: 30px; padding-top: 20px; border-top: 0.5px solid #18233a; }
+    .quick-t { font-size: 12px; color: #7c88a1; margin-bottom: 10px; }
+    .quick a { display: inline-block; margin: 3px 4px; padding: 6px 12px; border-radius: 99px; font-size: 13px; color: #c5cedf; text-decoration: none; border: 0.5px solid #26334d; background: rgba(17,26,46,0.6); }
     .quick a:hover { color: #58a6ff; border-color: rgba(88,166,255,0.5); }
     a:focus-visible { outline: 2px solid #58a6ff; outline-offset: 2px; }
     footer { padding: 18px 20px calc(18px + env(safe-area-inset-bottom)); text-align: center; font-size: 12px; color: #6e7681; }
-    footer a { color: #8f9c92; }
+    footer a { color: #8e9ab3; }
     @media (max-width: 480px) { .code { font-size: 54px; } .btn { min-width: 0; flex: 1 1 140px; } }
   </style>
 </head>
