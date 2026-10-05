@@ -335,7 +335,6 @@
     .hb-when b { color: var(--text); font-weight: 700; }
     .hb-when, .hb-when span { white-space: nowrap; }
     .hb-when img { width: 18px; height: 18px; object-fit: contain; }
-    .hb-when img.wide { width: 40px; object-fit: cover; }
     .hb-nav { width: 34px; height: 34px; border-radius: 50%; border: 0.5px solid var(--border); background: rgba(24,35,58,0.6); color: var(--text-2); font-size: 18px; line-height: 1; cursor: pointer; transition: border-color .2s, color .2s; }
     .hb-nav:hover { border-color: var(--blue); color: var(--blue); }
     .hb-grid { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: 18px; }
@@ -420,7 +419,6 @@
     @keyframes crestPop { from { transform: scale(.5); opacity: 0; filter: drop-shadow(0 0 0 rgba(88,166,255,0)); } 60% { filter: drop-shadow(0 0 8px rgba(88,166,255,.6)); } to { transform: none; opacity: 1; filter: none; } }
     .leader-card .team-crest { width: 28px; height: 28px; object-fit: contain; flex-shrink: 0; }
     .leader-card .league-crest { width: 16px; height: 16px; object-fit: contain; }
-    .leader-card .league-crest[src$="/PL.png"] { width: 37px; object-fit: cover; }   /* EPL 로고는 가로형이라 넓은 칸에 꽉 채움(2026-10-05) */
     .leader-league { font-size: 11px; color: var(--muted); text-transform: none; letter-spacing: 0.3px; display: flex; align-items: center; gap: 4px; }
     .leader-team { font-size: 13px; font-weight: 700; color: var(--text); white-space: nowrap; margin-top: 2px; }
     @media (max-width: 768px) {
@@ -915,11 +913,11 @@
     { league: '챔피언스리그', team: 'Paris Saint-Germain', logo: 'https://crests.football-data.org/524.png' },
   ];
   const LEAGUE_SEASONS = [
-    { name: 'EPL', logo: 'https://crests.football-data.org/PL.png', filter: 'brightness(0) invert(1)', date: '2026-08-22' },
-    { name: '라리가', logo: 'https://crests.football-data.org/laliga.png', filter: '', date: '2026-08-15' },
-    { name: '분데스리가', logo: 'https://crests.football-data.org/BL1.png', filter: '', date: '2026-08-28' },
-    { name: '세리에A', logo: 'https://crests.football-data.org/c111.png', filter: '', date: '2026-08-23' },
-    { name: '리그앙', logo: 'https://crests.football-data.org/FL1.png', filter: '', date: '2026-08-23' },
+    { name: 'EPL', logo: 'logos/league/PL.png', filter: '', date: '2026-08-22' },
+    { name: '라리가', logo: 'logos/league/PD.png', filter: '', date: '2026-08-15' },
+    { name: '분데스리가', logo: 'logos/league/BL1.png', filter: '', date: '2026-08-28' },
+    { name: '세리에A', logo: 'logos/league/SA.png', filter: '', date: '2026-08-23' },
+    { name: '리그앙', logo: 'logos/league/FL1.png', filter: '', date: '2026-08-23' },
 ];
   
   const cg = document.getElementById('landing-champions');
@@ -1032,7 +1030,7 @@
   <div class="standings-inner">
     <div class="standings-mock">
       <div class="standings-mock-header">
-          <img src="https://crests.football-data.org/PL.png" alt="" style="filter:brightness(0) invert(1)" onerror="this.style.display='none'">
+          <img src="logos/league/PL.png" alt="" onerror="this.style.display='none'">
           EPL 2026-27 순위표
         </div>
       <div id="landing-standings-preview">
@@ -1113,12 +1111,12 @@
   <div class="leagues-inner">
     <h3>지원하는 리그</h3>
     <div class="league-pills">
-      <div class="league-pill"><img src="https://crests.football-data.org/PL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> EPL (잉글랜드)</div>
-      <div class="league-pill"><img src="https://crests.football-data.org/laliga.png" onerror="this.style.display='none'"> 라리가 (스페인)</div>
-      <div class="league-pill"><img src="https://crests.football-data.org/BL1.png" onerror="this.style.display='none'"> 분데스리가 (독일)</div>
-      <div class="league-pill"><img src="https://crests.football-data.org/c111.png" onerror="this.style.display='none'"> 세리에A (이탈리아)</div>
-      <div class="league-pill"><img src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'"> 리그앙 (프랑스)</div>
-      <div class="league-pill"><img src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> 챔피언스리그</div>
+      <div class="league-pill"><img src="logos/league/PL.png" onerror="this.style.display='none'"> EPL (잉글랜드)</div>
+      <div class="league-pill"><img src="logos/league/PD.png" onerror="this.style.display='none'"> 라리가 (스페인)</div>
+      <div class="league-pill"><img src="logos/league/BL1.png" onerror="this.style.display='none'"> 분데스리가 (독일)</div>
+      <div class="league-pill"><img src="logos/league/SA.png" onerror="this.style.display='none'"> 세리에A (이탈리아)</div>
+      <div class="league-pill"><img src="logos/league/FL1.png" onerror="this.style.display='none'"> 리그앙 (프랑스)</div>
+      <div class="league-pill"><img src="logos/league/CL.png" onerror="this.style.display='none'"> 챔피언스리그</div>
 
     </div>
   </div>
@@ -1266,12 +1264,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const strip = document.getElementById('landing-leaders-strip');
   if (!strip) return;
   const LEADER_LEAGUES = [
-    { code: 'PL', name: 'EPL', logo: 'https://crests.football-data.org/PL.png', invert: true },
-    { code: 'PD', name: '라리가', logo: 'https://crests.football-data.org/laliga.png' },
-    { code: 'BL1', name: '분데스리가', logo: 'https://crests.football-data.org/BL1.png' },
-    { code: 'SA', name: '세리에A', logo: 'https://crests.football-data.org/c111.png' },
-    { code: 'FL1', name: '리그앙', logo: 'https://crests.football-data.org/FL1.png' },
-    { code: 'CL', name: '챔피언스리그', logo: 'https://crests.football-data.org/CL.png', invert: true },
+    { code: 'PL', name: 'EPL', logo: 'logos/league/PL.png' },
+    { code: 'PD', name: '라리가', logo: 'logos/league/PD.png' },
+    { code: 'BL1', name: '분데스리가', logo: 'logos/league/BL1.png' },
+    { code: 'SA', name: '세리에A', logo: 'logos/league/SA.png' },
+    { code: 'FL1', name: '리그앙', logo: 'logos/league/FL1.png' },
+    { code: 'CL', name: '챔피언스리그', logo: 'logos/league/CL.png' },
   ];
   try {
     const results = await Promise.all(LEADER_LEAGUES.map(async (l) => {
@@ -1477,7 +1475,7 @@ window.addEventListener('resize', () => { if (document.getElementById('kofi-pane
   const short = t => SHORT[t] || SHORT[clean(t)] || clean(t);
   const slug = t => t.replace(/^\d+\.\s*/, '').normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase()
     .replace(/\b(fc|afc|cf|ac|sc|ssc|us|as|rc|rcd|cd|sv|tsg|vfb|vfl|ogc|aj|bc)\b/g, ' ').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-  const LEAGUE = { PL: ['프리미어리그', 'PL.png', true, true], PD: ['라리가', 'laliga.png'], BL1: ['분데스리가', 'BL1.png'], SA: ['세리에 A', 'c111.png'], FL1: ['리그 1', 'FL1.png'], CL: ['챔피언스리그', 'CL.png', true] };
+  const LEAGUE = { PL: ['프리미어리그'], PD: ['라리가'], BL1: ['분데스리가'], SA: ['세리에 A'], FL1: ['리그 1'], CL: ['챔피언스리그'] };   // 아이콘은 logos/league/<코드>.png
   // 한국 시간 "10월 11일 (일) 오전 1:30" (폰에서도 한 줄)
   const kst = iso => {
     const d = new Date(new Date(iso).getTime() + 9 * 3600e3);
@@ -1498,7 +1496,7 @@ window.addEventListener('resize', () => { if (document.getElementById('kofi-pane
   function show(i, user) {
     if (!slides.length) return;
     idx = (i + slides.length) % slides.length;
-    const m = slides[idx], [lgName, lgFile, invert, wide] = LEAGUE[m.league] || [m.league, ''];
+    const m = slides[idx], [lgName] = LEAGUE[m.league] || [m.league];
     const stage = $('hb-stage');
     const paint = () => {
       $('hb-when').innerHTML = when;
@@ -1509,7 +1507,7 @@ window.addEventListener('resize', () => { if (document.getElementById('kofi-pane
       const cta = $('hb-cta'); if (cta) { cta.href = href; cta.textContent = '이 경기 예측 보기'; }
       stage.classList.remove('swap');
     };
-    const when = `${lgFile ? `<img src="https://crests.football-data.org/${lgFile}" alt=""${invert ? ' style="filter:brightness(0) invert(1)"' : ''}${wide ? ' class="wide"' : ''}>` : ''}${m.big ? '<b>빅매치</b>' : `<b class="lg">${lgName}</b>`}<span>${kst(m.date)}</span>`;
+    const when = `${LEAGUE[m.league] ? `<img src="logos/league/${m.league}.png" alt="">` : ''}${m.big ? '<b>빅매치</b>' : `<b class="lg">${lgName}</b>`}<span>${kst(m.date)}</span>`;
     if (reduce || cur.every(v => v === 0)) paint(); else { stage.classList.add('swap'); setTimeout(paint, 200); }
     const v = m.p.map(x => Math.round(x * 100));
     roll($('hb-h'), cur[0], v[0], n => String(n)); roll($('hb-d'), cur[1], v[1], n => n + '%'); roll($('hb-a'), cur[2], v[2], n => String(n));
