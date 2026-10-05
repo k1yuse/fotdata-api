@@ -2975,10 +2975,10 @@ function koTick() {
 }
 function koStart() { koTick(); if (!koTimer) koTimer = setInterval(koTick, 1000); }
 
-// 경기 시각 표기(2026-10-05): "오전 01:30" 대신 "새벽 1:30"·"오전 9:00"·"오후 8:30"·"밤 11:00" — 새벽 경기가 많은 해외축구라(랜딩 전광판과 같은 규칙)
+// 경기 시각 표기: "오전 1:30"·"오후 8:30"(앞자리 0 없이). 하루 "새벽·밤" 표기를 썼다가 사용자 결정으로 오전·오후로(2026-10-05)
 function koClock(dt) {
   const d = new Date(dt), h = d.getHours(), m = String(d.getMinutes()).padStart(2, '0');
-  return `${h < 6 ? '새벽' : h < 12 ? '오전' : h < 18 ? '오후' : '밤'} ${h % 12 === 0 ? 12 : h % 12}:${m}`;
+  return `${h < 12 ? '오전' : '오후'} ${h % 12 === 0 ? 12 : h % 12}:${m}`;
 }
 function renderTodayCards(container, matches, opts = {}) {
   const favs = getFavoriteTeams();

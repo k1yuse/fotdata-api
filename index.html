@@ -1447,11 +1447,11 @@ window.addEventListener('resize', () => { if (document.getElementById('kofi-pane
   const slug = t => t.replace(/^\d+\.\s*/, '').normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase()
     .replace(/\b(fc|afc|cf|ac|sc|ssc|us|as|rc|rcd|cd|sv|tsg|vfb|vfl|ogc|aj|bc)\b/g, ' ').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
   const LEAGUE = { PL: '프리미어리그', PD: '라리가', BL1: '분데스리가', SA: '세리에 A', FL1: '리그 1', CL: '챔피언스리그' };
-  // 한국 시간 표기: 새벽(0~5시)·오전·오후·밤 — 새벽 경기가 많은 해외축구라 "새벽 1시 30분"처럼
+  // 한국 시간 표기: "10월 11일 (일) 오전 1시 30분"(앱과 같은 오전·오후 규칙)
   const kst = iso => {
     const d = new Date(new Date(iso).getTime() + 9 * 3600e3);
     const h = d.getUTCHours(), m = d.getUTCMinutes(), wd = '일월화수목금토'[d.getUTCDay()];
-    const part = h < 6 ? '새벽' : h < 12 ? '오전' : h < 18 ? '오후' : '밤';
+    const part = h < 12 ? '오전' : '오후';
     const h12 = h % 12 === 0 ? 12 : h % 12;
     return `${d.getUTCMonth() + 1}월 ${d.getUTCDate()}일 (${wd}) ${part} ${h12}시${m ? ` ${m}분` : ''}`;
   };
