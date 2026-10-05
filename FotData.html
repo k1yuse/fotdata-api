@@ -959,6 +959,22 @@
     @media (max-width: 480px) { .league-badge-sm img[src$="/PL.png"] { width: 32px; height: 15px; } .league-badge-sm { gap: 4px; font-size: 11px; } }   /* 좁은 폰: 한 줄 유지 */
     .league-badge-sm img { width: 18px; height: 18px; object-fit: contain; }
     .vs-center { font-size: 22px; font-weight: 700; color: var(--muted); margin-top: 50px; }
+    /* 홈·원정 바꾸기 버튼(VS 자리) — VS 글자 + 화살표 동그라미 + "바꾸기", 누르면 화살표가 반 바퀴 돌고 두 로고가 서로 건너감 */
+    .vs-swap { display: flex; flex-direction: column; align-items: center; gap: 6px; margin-top: 34px; padding: 4px 6px; border: none; background: transparent; color: var(--muted); cursor: pointer; border-radius: var(--r-md); -webkit-tap-highlight-color: transparent; }
+    .vs-swap .vs-txt { font-size: 22px; font-weight: 700; line-height: 1; }
+    .vs-swap .vs-ico { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); background: color-mix(in srgb, var(--surface-2) 80%, transparent); color: var(--text-2); transition: border-color .2s, color .2s, background .2s, transform .45s cubic-bezier(.34,1.4,.5,1); }
+    .vs-swap .vs-ico svg { width: 17px; height: 17px; }
+    .vs-swap .vs-cap { font-size: 11px; font-weight: 600; color: var(--faint); transition: color .2s; }
+    .vs-swap:hover .vs-ico, .vs-swap:focus-visible .vs-ico { border-color: var(--blue); color: var(--blue); background: color-mix(in srgb, var(--blue) 12%, transparent); }
+    .vs-swap:hover .vs-cap { color: var(--blue-text); }
+    .vs-swap.spin .vs-ico { transform: rotate(180deg); }
+    .vs-swap:disabled { cursor: default; opacity: .45; }
+    .vs-swap.nudge .vs-ico { animation: vsNudge .35s ease; }   /* 고른 팀이 없을 때 누르면 살짝 흔들림 */
+    @keyframes vsNudge { 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+    .team-logo-wrap.swap-move { transition: transform .42s cubic-bezier(.65,0,.35,1); position: relative; z-index: 3; }
+    .league-badge-sm.swap-fade, .select-trigger.swap-fade { transition: opacity .18s ease; opacity: 0; }
+    @media (prefers-reduced-motion: reduce) { .vs-swap .vs-ico, .team-logo-wrap.swap-move { transition: none; } .vs-swap.nudge .vs-ico { animation: none; } }
+    @media (max-width: 480px) { .vs-swap { margin-top: 30px; gap: 5px; } .vs-swap .vs-txt { font-size: 20px; } .vs-swap .vs-ico { width: 32px; height: 32px; } }
     .popup-relative { position: relative; width: 100%; }
     .select-trigger { display: flex; align-items: center; gap: 8px; padding: 10px 14px; max-width: 480px; margin: 0 auto; background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 10px; cursor: pointer; font-size: 13px; color: var(--text); user-select: none; }
     .select-trigger:hover { border-color: var(--blue); }
@@ -2399,7 +2415,12 @@
             </div>
           </div>
         </div>
-        <div class="vs-center">VS</div>
+        <!-- 홈·원정 바꾸기(2026-10-05): VS를 누르면 두 팀 자리가 바뀜(로고가 서로 건너가는 연출), 예측 결과가 떠 있으면 바뀐 대진으로 다시 예측 -->
+        <button type="button" class="vs-swap" id="vs-swap" onclick="swapTeams()" aria-label="홈팀과 원정팀 바꾸기" title="홈·원정 바꾸기">
+          <span class="vs-txt">VS</span>
+          <span class="vs-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h14l-3.5-3.5"/><path d="M20 16H6l3.5 3.5"/></svg></span>
+          <span class="vs-cap">바꾸기</span>
+        </button>
         <div class="team-box">
           <label>원정팀</label>
           <div class="team-logo-wrap" id="away-logo"><div class="team-logo-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg></div></div>
@@ -4975,6 +4996,45 @@ function closePopup(side){
 }
 function selectLeagueTab(side,leagueKey,el){currentLeagueTab[side]=leagueKey;el.closest('.popup-league-grid').querySelectorAll('.popup-league-btn').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.getElementById(`${side}-search`).value='';renderTeamGrid(side,leagueKey);}
 function filterTeams(side,val){renderTeamGrid(side,currentLeagueTab[side],val);}
+// ── 홈·원정 바꾸기(2026-10-05) ──
+// 두 팀 자리를 바꿈: 로고가 서로의 자리로 건너가는 연출(0.42초) 뒤 실제로 바꿔 그림. 한쪽만 골랐으면 그 팀이 반대편으로 옮겨감.
+// 지금 그 대진의 예측 결과가 떠 있으면 바뀐 대진으로 바로 다시 예측(홈 이점이 반대로 들어간 결과를 비교하기 좋게)
+let swapBusy = false;
+function clearTeamSide(side) {
+  selectedTeams[side] = '';
+  const t = document.getElementById(`${side}-selected-text`); t.textContent = '팀 선택'; t.style.color = '#8e9ab3';
+  document.getElementById(`${side}-logo`).innerHTML = TEAM_LOGO_PLACEHOLDER;
+  document.getElementById(`${side}-league`).innerHTML = '';
+  applyClubAccent(side, '');
+}
+function swapTeams() {
+  const btn = document.getElementById('vs-swap');
+  const h = selectedTeams.home, a = selectedTeams.away;
+  if (swapBusy) return;
+  if (!h && !a) { btn.classList.remove('nudge'); void btn.offsetWidth; btn.classList.add('nudge'); showToast('먼저 팀을 골라주세요'); return; }
+  swapBusy = true;
+  ['home', 'away'].forEach(closePopup);
+  const showing = !!(lastPrediction && h && a && lastPrediction.home === h && lastPrediction.away === a);
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hl = document.getElementById('home-logo'), al = document.getElementById('away-logo');
+  const fades = [...document.querySelectorAll('#home-league, #away-league, #home-trigger, #away-trigger')];
+  btn.classList.toggle('spin');
+  const apply = () => {
+    [hl, al].forEach(el => { el.classList.remove('swap-move'); el.style.transform = ''; });
+    if (a) selectTeamFromPopup('home', a); else clearTeamSide('home');
+    if (h) selectTeamFromPopup('away', h); else clearTeamSide('away');
+    requestAnimationFrame(() => fades.forEach(el => el.classList.remove('swap-fade')));
+    swapBusy = false;
+    track('swap_teams', { with_result: showing });
+    if (showing) predict();
+  };
+  if (reduce) return apply();
+  const dx = al.getBoundingClientRect().left - hl.getBoundingClientRect().left;
+  fades.forEach(el => el.classList.add('swap-fade'));
+  [hl, al].forEach(el => el.classList.add('swap-move'));
+  hl.style.transform = `translateX(${dx}px)`; al.style.transform = `translateX(${-dx}px)`;
+  setTimeout(apply, 430);
+}
 function selectTeamFromPopup(side,team){
   selectedTeams[side]=team; document.getElementById(`${side}-selected-text`).innerHTML=teamNameHtml(team); document.getElementById(`${side}-selected-text`).style.color='#ecf1fa';
   const logoUrl=logos[team]||''; const logoDiv=document.getElementById(`${side}-logo`);

@@ -87,7 +87,8 @@ function init(THREE) {
   for (let k = 0; k <= 160; k++) { const a = k / 160 * Math.PI * 2; ringPts.push(Math.cos(a), Math.sin(a), 0); }
   const ringGeo = new THREE.BufferGeometry(); ringGeo.setAttribute('position', new THREE.Float32BufferAttribute(ringPts, 3));
   const ring = new THREE.Line(ringGeo, new THREE.LineBasicMaterial({ color: 0x78b8ff, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending, depthWrite: false }));
-  ring.scale.setScalar(rimRadius(BALL_R, D)); scene.add(ring);
+  const rimR = rimRadius(BALL_R, D);
+  ring.scale.setScalar(rimR); scene.add(ring);
 
   function resize() {
     const w = canvas.clientWidth, h = canvas.clientHeight;
@@ -130,8 +131,13 @@ function init(THREE) {
     group.rotation.y = yaw;
     group.rotation.x = -0.28 + Math.sin(t * 0.21) * 0.06;   // 살짝 기울어진 채 천천히 흔들림
     pointMat.uniforms.uScatter.value = scatter;
-    wireMat.uniforms.uOp.value = 0.5 * (1 - scatter * 0.85);
-    ring.material.opacity = 0.6 * (1 - scatter * 0.7);
+    // 흩어질 때 윤곽 원·모서리 선이 남으면 "공은 그대로인데 점만 튄" 것처럼 보였음(2026-10-05 사용자 지적 — 같은 순간 캔버스가 2배 또렷해져서 더 눈에 띔)
+    // → 원은 바깥으로 살짝 퍼지며 흩어짐 30% 안에 완전히 사라지고, 선은 50% 안에 사라짐. 다시 모일 땐 점이 거의 다 모인 뒤에 돌아옴(같은 식이 거꾸로)
+    const ringFade = Math.max(0, 1 - scatter / 0.3), wireFade = Math.max(0, 1 - scatter / 0.5);
+    wireMat.uniforms.uOp.value = 0.5 * wireFade * wireFade;
+    ring.material.opacity = 0.6 * ringFade * ringFade;
+    ring.visible = ringFade > 0.001;
+    ring.scale.setScalar(rimR * (1 + scatter * 0.45));
     renderer.render(scene, camera);
   }
   const play = () => { if (!running && !document.hidden) { running = true; prev = performance.now(); requestAnimationFrame(frame); } };
