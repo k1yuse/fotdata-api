@@ -325,6 +325,7 @@
       margin-bottom: 20px;
       animation: fadeUp .6s .1s ease both;
     }
+    .hero h1 em { color: var(--blue); font-style: normal; }
     /* 첫 화면 전광판(2026-10-05, 안 1) — 헤드라인 아래, 다가오는 경기들의 확률이 넘어감. 숫자는 Barlow Condensed(전광판), 홈 파랑·무 회색·원정 주황 */
     .hero-board { max-width: 680px; margin: 6px auto 34px; padding: 18px 22px 16px; border-radius: 20px; border: 0.5px solid var(--border);
       background: linear-gradient(180deg, rgba(17,26,46,0.78), rgba(10,16,32,0.62)); box-shadow: 0 18px 48px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
@@ -787,10 +788,14 @@
 </nav>
 
 <section class="hero">
-  <!-- 첫 화면(2026-10-05, 안 1): 무엇을 하는 곳인지 한 문장 + 그 증거로 다가오는 경기들의 실제 AI 확률이 넘어가는 전광판.
+  <!-- 첫 화면(2026-10-05, 안 1): 원래 문구(배지·"축구를 데이터로 예측하다") + 그 아래 다가오는 경기들의 실제 AI 확률이 넘어가는 전광판.
        전광판은 빅매치부터 리그별 가장 가까운 경기까지 최대 6경기를 4.5초마다 넘김(‹ › · 점 · 밀어서도). 데이터가 안 오면 전광판만 숨음 -->
-  <h1>킥오프 전에,<br>AI가 먼저 계산합니다</h1>
-  <p>유럽 5대 리그와 챔피언스리그, 다가오는 모든 경기의 승·무·패 확률을 무료로 보여드려요.</p>
+  <div class="hero-badge">
+    <span class="hero-badge-dot"></span>
+    AI 기반 축구 분석 플랫폼
+  </div>
+  <h1>축구를 데이터로<br><em>예측하다</em></h1>
+  <p>5대 리그+UCL 순위·일정, AI 경기 예측, 최근 4시즌 맞대결 기록. 데이터로 보는 축구&nbsp;인사이트를 무료로.</p>
   <div class="hero-board" id="hero-board" hidden>
     <div class="hb-top">
       <button type="button" class="hb-nav" id="hb-prev" aria-label="이전 경기">‹</button>
