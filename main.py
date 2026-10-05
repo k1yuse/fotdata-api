@@ -1874,7 +1874,7 @@ def share_match_page(slug: str):
         desc += " — FotData AI 축구 경기 예측"
         image = f"{SITE_URL}/og/m/{d['slug']}.jpg?v={_data_version()}"
     else:
-        title, desc, image = "FotData — AI 축구 경기 예측", "5대 리그 + 챔피언스리그 AI 경기 예측", f"{SITE_URL}/og-image.png?v=5"
+        title, desc, image = "FotData — AI 축구 경기 예측", "5대 리그 + 챔피언스리그 AI 경기 예측", f"{SITE_URL}/og-image.png?v=6"
     e = lambda s: escape(s, quote=True)
     html = f"""<!doctype html>
 <html lang="ko"><head><meta charset="utf-8">
@@ -1909,7 +1909,7 @@ def share_match_image(name: str):
     slug = re.sub(r"\.(jpe?g|png)$", "", name.lower())
     d = _share_data(slug)
     if not d:
-        return Response(status_code=302, headers={"Location": f"{SITE_URL}/og-image.png?v=5"})
+        return Response(status_code=302, headers={"Location": f"{SITE_URL}/og-image.png?v=6"})
     return Response(_share_jpg(d["home"], d["away"]), media_type="image/jpeg",
                     headers={"Cache-Control": "public, max-age=86400, s-maxage=43200"})
 

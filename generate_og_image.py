@@ -81,9 +81,9 @@ def main():
     d.text((L + 150 * S, 262 * S), 'A I   F O O T B A L L', font=font(30, SEMI), fill=MUTED)
     # 헤드라인
     f_h = font(118, BOLD)
-    # 헤드라인은 한 색(2026-10-05 — 한 줄만 파랗게 칠하는 강조는 흔한 기본형이라 뺌), 랜딩 첫 화면 문구와 같게
-    d.text((L, 430 * S), 'AI가 먼저 계산한', font=f_h, fill=TEXT)
-    d.text((L, 580 * S), '경기 결과', font=f_h, fill=TEXT)
+    # 랜딩 첫 화면 문구와 같게(2026-10-05 한때 "AI가 먼저 계산한 경기 결과"였다가 사용자 결정으로 원래 문구로)
+    d.text((L, 430 * S), '축구를 데이터로', font=f_h, fill=TEXT)
+    d.text((L, 580 * S), '예측하다', font=f_h, fill=BLUE)
     d.text((L, 770 * S), '5대 리그 + 챔피언스리그 · AI 경기 예측 · 순위 예측 시뮬레이션', font=font(40, REG), fill=MUTED)
     # 리그 태그
     x, y, f_p = L, 880 * S, font(34, SEMI)
