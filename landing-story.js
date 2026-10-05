@@ -82,8 +82,8 @@ function renderText() {
     $(labels[i]).dataset.target = pct;
     $(labels[i]).style.setProperty('--target', pct + '%');
   });
-  $('story-home-label').textContent = shortName(m.home) + ' 승';
-  $('story-away-label').textContent = shortName(m.away) + ' 승';
+  $('story-home-label').textContent = compactName(m.home) + ' 승';   // 막대 라벨 칸이 좁아 "Manchester United 승"이 잘렸음
+  $('story-away-label').textContent = compactName(m.away) + ' 승';
   $('story-remaining').textContent = data.sim.remaining;
   $('story-sim-list').innerHTML = data.sim.top.map((t, i) =>
     `<li><span class="rk${i === 0 ? ' first' : ''}">${i + 1}</span><span class="nm">${t.logo ? `<img src="${t.logo}" alt="" onerror="this.style.display='none'">` : ''}${shortName(t.team)}</span><span class="pc">${Math.round(t.prob * 100)}%</span></li>`).join('');
