@@ -552,6 +552,13 @@
     }
     .league-pill:hover { border-color: var(--blue); }
     .league-pill img { width: 18px; height: 18px; object-fit: contain; }
+    /* 폰: 양옆 여백 48px 때문에 칩이 한 줄에 하나씩 쌓이고 마지막 줄만 두 개였음(2026-10-06) → 여백을 줄이고 2칸 격자(3줄 × 2개) */
+    @media (max-width: 600px) {
+      .leagues { padding: 44px 16px; }
+      .league-pills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; max-width: 420px; margin: 0 auto; }
+      .league-pill { justify-content: center; padding: 10px 8px; white-space: nowrap; min-width: 0; }
+    }
+    @media (max-width: 360px) { .league-pill { font-size: 12px; gap: 6px; } .league-pill img { width: 16px; height: 16px; } }
     .league-pill { position: relative; overflow: hidden; }
     /* 지원하는 리그 순차 등장(.pills-on) — 칩: 흐림·아래에서 떠오름 70ms 간격, 로고: 살짝 튀어오름, 끝나면 빛줄기가 한 번 스침 */
     @media (prefers-reduced-motion: no-preference) {
