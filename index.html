@@ -325,39 +325,55 @@
       margin-bottom: 20px;
       animation: fadeUp .6s .1s ease both;
     }
-    /* 빅매치 전광판(2026-10-05) — 첫 화면의 주인공. 숫자는 Barlow Condensed(전광판), 홈 파랑·무 회색·원정 주황 */
-    .hero-board { max-width: 760px; margin: 0 auto 30px; animation: fadeUp .6s .05s ease both; }
-    .hb-when { font-size: 14px; color: var(--muted); margin-bottom: 14px; }
+    /* 첫 화면 전광판(2026-10-05, 안 1) — 헤드라인 아래, 다가오는 경기들의 확률이 넘어감. 숫자는 Barlow Condensed(전광판), 홈 파랑·무 회색·원정 주황 */
+    .hero-board { max-width: 680px; margin: 6px auto 34px; padding: 18px 22px 16px; border-radius: 20px; border: 0.5px solid var(--border);
+      background: linear-gradient(180deg, rgba(17,26,46,0.78), rgba(10,16,32,0.62)); box-shadow: 0 18px 48px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); animation: fadeUp .6s .25s ease both; touch-action: pan-y; }
+    .hb-top { display: grid; grid-template-columns: 34px 1fr 34px; align-items: center; gap: 8px; margin-bottom: 14px; }
+    .hb-when { font-size: 13px; color: var(--muted); display: flex; align-items: center; justify-content: center; gap: 7px; min-height: 22px; }
     .hb-when b { color: var(--text); font-weight: 700; }
+    .hb-when, .hb-when span { white-space: nowrap; }
+    .hb-when img { width: 18px; height: 18px; object-fit: contain; }
+    .hb-when img.wide { width: 40px; object-fit: cover; }
+    .hb-nav { width: 34px; height: 34px; border-radius: 50%; border: 0.5px solid var(--border); background: rgba(24,35,58,0.6); color: var(--text-2); font-size: 18px; line-height: 1; cursor: pointer; transition: border-color .2s, color .2s; }
+    .hb-nav:hover { border-color: var(--blue); color: var(--blue); }
     .hb-grid { display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: 18px; }
-    .hb-team { display: flex; flex-direction: column; align-items: center; gap: 10px; min-width: 0; color: var(--text); text-decoration: none; font-size: 16px; font-weight: 700; }
-    .hb-team img { width: 64px; height: 64px; object-fit: contain; filter: drop-shadow(0 0 1px rgba(236,241,250,0.35)); }
+    .hb-team { display: flex; flex-direction: column; align-items: center; gap: 9px; min-width: 0; color: var(--text); text-decoration: none; font-size: 15px; font-weight: 700; transition: opacity .22s ease, transform .22s ease; }
+    .hb-team img { width: 56px; height: 56px; object-fit: contain; filter: drop-shadow(0 0 1px rgba(236,241,250,0.35)); }
     .hb-team span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .hb-team:hover span { color: var(--blue); }
-    .hb-nums { display: flex; align-items: baseline; gap: 22px; font-family: var(--font-num); font-variant-numeric: tabular-nums; line-height: .9; }
-    .hb-nums b { font-size: 112px; font-weight: 700; letter-spacing: -1px; }
+    .hb-grid.swap .hb-team { opacity: 0; transform: translateY(6px); }   /* 다음 경기로 넘어갈 때 팀이 잠깐 사라졌다 나타남(숫자는 굴러가며 바뀜) */
+    .hb-nums { display: flex; align-items: baseline; gap: 18px; font-family: var(--font-num); font-variant-numeric: tabular-nums; line-height: .9; }
+    .hb-nums b { font-size: 96px; font-weight: 700; letter-spacing: -1px; min-width: 1.05em; text-align: center; }
     .hb-nums b::after { content: '%'; font-size: .38em; margin-left: 2px; opacity: .75; }
     .hb-h { color: var(--blue); } .hb-a { color: #f0883e; }
-    .hb-d { display: flex; flex-direction: column; align-items: center; font-size: 34px; font-weight: 600; color: var(--muted); }
+    .hb-d { display: flex; flex-direction: column; align-items: center; font-size: 30px; font-weight: 600; color: var(--muted); min-width: 2.2em; }
     .hb-d small { font-family: var(--font-ui); font-size: 12px; font-weight: 600; margin-bottom: 4px; }
-    .hb-bar { display: flex; height: 6px; border-radius: 99px; overflow: hidden; margin: 22px auto 0; max-width: 520px; background: var(--bg3); }
-    .hb-bar i { display: block; height: 100%; width: 0; transition: width 1s cubic-bezier(.22,.8,.2,1); }
+    .hb-bar { display: flex; height: 6px; border-radius: 99px; overflow: hidden; margin: 18px auto 0; max-width: 520px; background: var(--bg3); }
+    .hb-bar i { display: block; height: 100%; width: 0; transition: width .7s cubic-bezier(.22,.8,.2,1); }
     .hb-bar .h { background: var(--blue); } .hb-bar .d { background: #8e9ab3; } .hb-bar .a { background: #f0883e; }
-    .hero-board.on ~ h1 { font-size: 34px; letter-spacing: -0.5px; margin-bottom: 12px; }
-    /* 폰: 큰 숫자가 가운데를 차지해 팀 이름이 "Man …"으로 잘렸음 → 팀은 윗줄 양끝, 숫자는 아랫줄 가운데 */
+    .hb-dots { display: flex; justify-content: center; gap: 6px; margin-top: 14px; }
+    .hb-dots button { position: relative; width: 22px; height: 4px; border: none; border-radius: 99px; background: rgba(142,154,179,0.28); padding: 0; cursor: pointer; overflow: hidden; }
+    .hb-dots button::after { content: ''; position: absolute; inset: -8px 0; }   /* 누르기 쉽게 터치 영역만 넓힘 */
+    .hb-dots button.on { background: rgba(88,166,255,0.25); }
+    .hb-dots button.on i { position: absolute; inset: 0; background: var(--blue); transform-origin: left; animation: hbProgress var(--hb-t, 4.5s) linear forwards; }
+    .hero-board.paused .hb-dots button.on i { animation-play-state: paused; }
+    @keyframes hbProgress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
     @media (max-width: 600px) {
-      .hb-grid { grid-template-columns: 1fr 1fr; grid-template-areas: "home away" "nums nums"; row-gap: 6px; column-gap: 12px; }
+      .hero-board { padding: 14px 12px 12px; border-radius: 16px; margin-bottom: 28px; }
+      .hb-grid { grid-template-columns: 1fr 1fr; grid-template-areas: "home away" "nums nums"; row-gap: 8px; column-gap: 10px; }
       .hb-team.home { grid-area: home; flex-direction: row; justify-content: flex-start; }
       .hb-team.away { grid-area: away; flex-direction: row-reverse; justify-content: flex-start; }
-      .hb-nums { grid-area: nums; justify-content: center; gap: 14px; }
-      .hb-team { font-size: 15px; gap: 8px; } .hb-team img { width: 36px; height: 36px; }
-      .hb-nums b { font-size: 80px; } .hb-d { font-size: 24px; }
-      .hero-board.on ~ h1 { font-size: 24px; }
+      .hb-nums { grid-area: nums; justify-content: center; gap: 12px; }
+      .hb-team { font-size: 14px; gap: 8px; } .hb-team img { width: 32px; height: 32px; }
+      .hb-nums b { font-size: 72px; } .hb-d { font-size: 22px; }
+      .hb-top { grid-template-columns: 30px 1fr 30px; } .hb-nav { width: 30px; height: 30px; font-size: 16px; }
+      .hb-when { font-size: 12.5px; } .hb-when .lg { display: none; }   /* 폰은 리그 로고만(이름까지 넣으면 두 줄) */
     }
-    @media (prefers-reduced-motion: reduce) { .hb-bar i { transition: none; } }
+    @media (prefers-reduced-motion: reduce) { .hb-bar i, .hb-team { transition: none; } .hb-dots button.on i { animation: none; transform: none; } }
     .hero p {
       font-size: 17px; color: var(--muted);
-      max-width: 560px; margin: 0 auto 40px;
+      max-width: 560px; margin: 0 auto 28px;
       word-break: keep-all;
       animation: fadeUp .6s .2s ease both;
     }
@@ -771,21 +787,26 @@
 </nav>
 
 <section class="hero">
-  <!-- 첫 화면(2026-10-05): 다가오는 빅매치의 실제 AI 확률을 전광판 숫자로 — 이 서비스가 하는 일을 그대로 보여줌.
-       데이터가 안 오면(서버 깨우는 중 등) 전광판은 숨고 헤드라인·설명만 남음 -->
-  <div class="hero-board" id="hero-board" hidden aria-live="polite">
-    <div class="hb-when" id="hb-when"></div>
-    <div class="hb-grid">
+  <!-- 첫 화면(2026-10-05, 안 1): 무엇을 하는 곳인지 한 문장 + 그 증거로 다가오는 경기들의 실제 AI 확률이 넘어가는 전광판.
+       전광판은 빅매치부터 리그별 가장 가까운 경기까지 최대 6경기를 4.5초마다 넘김(‹ › · 점 · 밀어서도). 데이터가 안 오면 전광판만 숨음 -->
+  <h1>킥오프 전에,<br>AI가 먼저 계산합니다</h1>
+  <p>유럽 5대 리그와 챔피언스리그, 다가오는 모든 경기의 승·무·패 확률을 무료로 보여드려요.</p>
+  <div class="hero-board" id="hero-board" hidden>
+    <div class="hb-top">
+      <button type="button" class="hb-nav" id="hb-prev" aria-label="이전 경기">‹</button>
+      <div class="hb-when" id="hb-when" aria-live="polite"></div>
+      <button type="button" class="hb-nav" id="hb-next" aria-label="다음 경기">›</button>
+    </div>
+    <div class="hb-grid" id="hb-stage">
       <a class="hb-team home" id="hb-home" href="/app"><img id="hb-home-logo" alt=""><span id="hb-home-name"></span></a>
       <div class="hb-nums" aria-label="AI 예측 확률">
-        <b class="hb-h" id="hb-h">–</b><span class="hb-d"><small>무</small><span id="hb-d">–</span></span><b class="hb-a" id="hb-a">–</b>
+        <b class="hb-h" id="hb-h">0</b><span class="hb-d"><small>무</small><span id="hb-d">0%</span></span><b class="hb-a" id="hb-a">0</b>
       </div>
       <a class="hb-team away" id="hb-away" href="/app"><img id="hb-away-logo" alt=""><span id="hb-away-name"></span></a>
     </div>
     <div class="hb-bar" aria-hidden="true"><i class="h" id="hb-bar-h"></i><i class="d" id="hb-bar-d"></i><i class="a" id="hb-bar-a"></i></div>
+    <div class="hb-dots" id="hb-dots" role="tablist" aria-label="경기 고르기"></div>
   </div>
-  <h1>AI가 먼저 계산한 경기 결과</h1>
-  <p>유럽 5대 리그와 챔피언스리그, 다가오는 모든 경기의 승·무·패 확률을 무료로 보여드려요.</p>
   <div class="hero-btns">
     <a href="/app" class="btn-primary" id="hb-cta" data-umami-event="landing_cta" data-umami-event-where="hero">경기 예측하기</a>
     <a href="/app#standings" class="btn-secondary" data-umami-event="landing_cta" data-umami-event-where="hero_standings">순위표 보기</a>
@@ -1433,60 +1454,119 @@ window.addEventListener('resize', () => { if (document.getElementById('kofi-pane
 </script>
 <script type="module" src="landing-story.js"></script>
 <script>
-// ── 첫 화면 빅매치 전광판(2026-10-05): 서버 /bigmatch(앱 빅매치 배너와 같은 경기) + /predict 확률 → 전광판 숫자.
-// 실패하면 전광판은 숨긴 채(헤드라인·설명만) 끝냄. 링크는 앱의 그 경기 예측 화면(/app?match=…, 앱 teamSlug와 같은 규칙)
+// ── 첫 화면 전광판(2026-10-05, 안 1): 빅매치(/bigmatch — 앱 배너와 같은 경기) + 리그별 가장 가까운 경기(/matches/window)를 최대 6경기,
+// 확률은 일정 탭과 같은 /predict/schedule(앱 /predict와 같은 숫자). 4.5초마다 다음 경기 — 숫자는 이전 값에서 굴러가며 바뀌고 팀은 잠깐 사라졌다 나타남.
+// ‹ › · 아래 점 · 좌우로 밀어서 넘김, 마우스를 올리거나 누르고 있으면 멈춤, 탭이 안 보이면 멈춤, 모션 최소화면 자동으로 안 넘김.
 (function () {
   const API = 'https://fotdata-api.onrender.com';
   const board = document.getElementById('hero-board');
   if (!board) return;
+  const $ = id => document.getElementById(id);
   const SHORT = { 'Manchester United': 'Man United', 'Manchester City': 'Man City', 'Tottenham Hotspur': 'Tottenham', 'Brighton & Hove Albion': 'Brighton',
-    'Paris Saint-Germain': 'PSG', 'FC Bayern München': 'Bayern', 'Bayern München': 'Bayern', 'Club Atlético de Madrid': 'Atlético', 'FC Internazionale Milano': 'Inter',
-    'Borussia Dortmund': 'Dortmund', 'Bayer 04 Leverkusen': 'Leverkusen', 'Newcastle United': 'Newcastle', 'Nottingham Forest': 'Forest', 'Wolverhampton Wanderers': 'Wolves' };
-  const clean = t => t.replace(/ (FC|CF|AFC)$/, '').replace(/^(FC|AC|SSC) /, '');
+    'Paris Saint-Germain': 'PSG', 'FC Bayern München': 'Bayern', 'Club Atlético de Madrid': 'Atlético', 'FC Internazionale Milano': 'Inter',
+    'Borussia Dortmund': 'Dortmund', 'Bayer 04 Leverkusen': 'Leverkusen', 'Newcastle United': 'Newcastle', 'Nottingham Forest': 'Forest',
+    'Wolverhampton Wanderers': 'Wolves', 'SV Werder Bremen': 'Bremen', 'Real Betis Balompié': 'Betis', 'Real Sociedad de Fútbol': 'Real Sociedad',
+    'Olympique de Marseille': 'Marseille', 'Olympique Lyonnais': 'Lyon', 'Racing Club de Lens': 'Lens', 'Eintracht Frankfurt': 'Frankfurt',
+    'Borussia Mönchengladbach': 'Gladbach', 'TSG 1899 Hoffenheim': 'Hoffenheim', 'RCD Espanyol de Barcelona': 'Espanyol', 'Rayo Vallecano de Madrid': 'Rayo' };
+  const clean = t => t.replace(/ (FC|CF|AFC|CFC)$/, '').replace(/^(FC|AC|ACF|SSC|AS|US|RC|RCD|SV|1\. FC|1\. FSV) /, '');
   const short = t => SHORT[t] || SHORT[clean(t)] || clean(t);
   const slug = t => t.replace(/^\d+\.\s*/, '').normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase()
     .replace(/\b(fc|afc|cf|ac|sc|ssc|us|as|rc|rcd|cd|sv|tsg|vfb|vfl|ogc|aj|bc)\b/g, ' ').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-  const LEAGUE = { PL: '프리미어리그', PD: '라리가', BL1: '분데스리가', SA: '세리에 A', FL1: '리그 1', CL: '챔피언스리그' };
-  // 한국 시간 표기: "10월 11일 (일) 오전 1시 30분"(앱과 같은 오전·오후 규칙)
+  const LEAGUE = { PL: ['프리미어리그', 'PL.png', true, true], PD: ['라리가', 'laliga.png'], BL1: ['분데스리가', 'BL1.png'], SA: ['세리에 A', 'c111.png'], FL1: ['리그 1', 'FL1.png'], CL: ['챔피언스리그', 'CL.png', true] };
+  // 한국 시간 "10월 11일 (일) 오전 1:30" (폰에서도 한 줄)
   const kst = iso => {
     const d = new Date(new Date(iso).getTime() + 9 * 3600e3);
     const h = d.getUTCHours(), m = d.getUTCMinutes(), wd = '일월화수목금토'[d.getUTCDay()];
-    const part = h < 12 ? '오전' : '오후';
-    const h12 = h % 12 === 0 ? 12 : h % 12;
-    return `${d.getUTCMonth() + 1}월 ${d.getUTCDate()}일 (${wd}) ${part} ${h12}시${m ? ` ${m}분` : ''}`;
+    return `${d.getUTCMonth() + 1}월 ${d.getUTCDate()}일 (${wd}) ${h < 12 ? '오전' : '오후'} ${h % 12 === 0 ? 12 : h % 12}:${String(m).padStart(2, '0')}`;
   };
-  const $ = id => document.getElementById(id);
-  (async () => {
-    try {
-      const bm = (await fetch(`${API}/bigmatch`).then(r => r.json())).match;
-      if (!bm) return;
-      const pr = await fetch(`${API}/predict`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ home_team: bm.home_team, away_team: bm.away_team }) }).then(r => (r.ok ? r.json() : null));
-      if (!pr || !pr.probabilities) return;
-      const p = pr.probabilities, pct = v => Math.round(v * 100);
-      const href = `/app?match=${slug(bm.home_team)}-vs-${slug(bm.away_team)}`;
-      $('hb-when').innerHTML = `다음 빅매치 <b>${LEAGUE[bm.league] || ''}</b> ${kst(bm.date)}`;
-      $('hb-home-name').textContent = short(bm.home_team); $('hb-away-name').textContent = short(bm.away_team);
-      $('hb-home-logo').src = bm.home_logo || ''; $('hb-away-logo').src = bm.away_logo || '';
-      [$('hb-home-logo'), $('hb-away-logo')].forEach(img => { img.onerror = () => { img.style.visibility = 'hidden'; }; });
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const DWELL = 4500;
+  let slides = [], idx = -1, timer = null, paused = false, cur = [0, 0, 0], logos = {};
+
+  // 숫자를 이전 값에서 새 값으로 굴려 바꿈(전광판처럼)
+  const roll = (el, from, to, fmt) => {
+    if (reduce || from === to) { el.textContent = fmt(to); return; }
+    const t0 = performance.now(), dur = 520;
+    const step = now => { const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3); el.textContent = fmt(Math.round(from + (to - from) * e)); if (k < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  };
+  function show(i, user) {
+    if (!slides.length) return;
+    idx = (i + slides.length) % slides.length;
+    const m = slides[idx], [lgName, lgFile, invert, wide] = LEAGUE[m.league] || [m.league, ''];
+    const stage = $('hb-stage');
+    const paint = () => {
+      $('hb-when').innerHTML = when;
+      $('hb-home-name').textContent = short(m.home_team); $('hb-away-name').textContent = short(m.away_team);
+      [['hb-home-logo', m.home_team], ['hb-away-logo', m.away_team]].forEach(([id, t]) => { const img = $(id); img.style.visibility = ''; img.src = logos[t] || ''; img.onerror = () => { img.style.visibility = 'hidden'; }; });
+      const href = `/app?match=${slug(m.home_team)}-vs-${slug(m.away_team)}`;
       $('hb-home').href = $('hb-away').href = href;
       const cta = $('hb-cta'); if (cta) { cta.href = href; cta.textContent = '이 경기 예측 보기'; }
-      const vals = [pct(p.home_win), pct(p.draw), pct(p.away_win)];
-      board.hidden = false; board.classList.add('on');
-      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const fill = () => {
-        $('hb-h').textContent = vals[0]; $('hb-d').textContent = vals[1] + '%'; $('hb-a').textContent = vals[2];
-        requestAnimationFrame(() => { $('hb-bar-h').style.width = vals[0] + '%'; $('hb-bar-d').style.width = vals[1] + '%'; $('hb-bar-a').style.width = vals[2] + '%'; });
-      };
-      // 숫자는 인트로가 끝난 뒤 한 번 올라감(카운트업은 랜딩 공통 countUp이 있으면 사용)
-      const start = () => {
-        if (reduce || typeof countUp !== 'function') return fill();
-        countUp($('hb-h'), vals[0], { dur: 1100 }); countUp($('hb-a'), vals[2], { dur: 1100, delay: 120 });
-        $('hb-d').textContent = vals[1] + '%';
-        setTimeout(() => { $('hb-bar-h').style.width = vals[0] + '%'; $('hb-bar-d').style.width = vals[1] + '%'; $('hb-bar-a').style.width = vals[2] + '%'; }, 150);
-      };
+      stage.classList.remove('swap');
+    };
+    const when = `${lgFile ? `<img src="https://crests.football-data.org/${lgFile}" alt=""${invert ? ' style="filter:brightness(0) invert(1)"' : ''}${wide ? ' class="wide"' : ''}>` : ''}${m.big ? '<b>빅매치</b>' : `<b class="lg">${lgName}</b>`}<span>${kst(m.date)}</span>`;
+    if (reduce || cur.every(v => v === 0)) paint(); else { stage.classList.add('swap'); setTimeout(paint, 200); }
+    const v = m.p.map(x => Math.round(x * 100));
+    roll($('hb-h'), cur[0], v[0], n => String(n)); roll($('hb-d'), cur[1], v[1], n => n + '%'); roll($('hb-a'), cur[2], v[2], n => String(n));
+    cur = v;
+    $('hb-bar-h').style.width = v[0] + '%'; $('hb-bar-d').style.width = v[1] + '%'; $('hb-bar-a').style.width = v[2] + '%';
+    [...$('hb-dots').children].forEach((d, k) => { d.classList.toggle('on', k === idx); d.setAttribute('aria-selected', k === idx); d.innerHTML = k === idx ? '<i></i>' : ''; });
+    schedule();
+    if (user && typeof window.fdTrack === 'function') window.fdTrack('landing_board', { action: user });
+  }
+  function schedule() {
+    clearTimeout(timer);
+    if (reduce || paused || document.hidden || slides.length < 2) return;
+    timer = setTimeout(() => show(idx + 1), DWELL);
+  }
+  const pause = on => { paused = on; board.classList.toggle('paused', on); if (on) clearTimeout(timer); else schedule(); };
+
+  $('hb-prev').addEventListener('click', () => show(idx - 1, 'prev'));
+  $('hb-next').addEventListener('click', () => show(idx + 1, 'next'));
+  board.addEventListener('mouseenter', () => pause(true)); board.addEventListener('mouseleave', () => pause(false));
+  board.addEventListener('focusin', () => pause(true)); board.addEventListener('focusout', () => pause(false));
+  let sx = null, sy = null;
+  board.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; pause(true); }, { passive: true });
+  board.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+    if (sx != null && Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) show(idx + (dx < 0 ? 1 : -1), 'swipe');
+    sx = null; pause(false);
+  });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) clearTimeout(timer); else schedule(); });
+
+  (async () => {
+    try {
+      const [bmRes, winRes, logoRes] = await Promise.all([
+        fetch(`${API}/bigmatch`).then(r => r.json()).catch(() => ({})),
+        fetch(`${API}/matches/window`).then(r => r.json()),
+        fetch(`${API}/logos`).then(r => r.json()).catch(() => ({})),
+      ]);
+      logos = logoRes || {};
+      const now = Date.now();
+      const up = (winRes.matches || []).filter(m => !['FINISHED', 'AWARDED', 'IN_PLAY', 'PAUSED'].includes(m.status) && Date.parse(m.date) > now);
+      const picks = [];
+      const bm = bmRes && bmRes.match;
+      if (bm) { picks.push({ ...bm, big: true }); if (bm.home_logo) logos[bm.home_team] = bm.home_logo; if (bm.away_logo) logos[bm.away_team] = bm.away_logo; }
+      for (const lg of ['PL', 'PD', 'BL1', 'SA', 'FL1', 'CL']) {
+        const m = up.find(x => x.league === lg && !(bm && x.home_team === bm.home_team && x.away_team === bm.away_team));
+        if (m) picks.push(m);
+      }
+      picks.sort((x, y) => (y.big ? 1 : 0) - (x.big ? 1 : 0) || Date.parse(x.date) - Date.parse(y.date));   // 빅매치 먼저, 나머지는 킥오프 순
+      const leagues = [...new Set(picks.map(m => m.league))];
+      const preds = {};
+      await Promise.all(leagues.map(lg => fetch(`${API}/predict/schedule/${lg}`).then(r => r.json()).then(d => {
+        (d.predictions || []).forEach(p => { preds[`${p.home_team}|${p.away_team}|${p.date}`] = p.p; });
+      }).catch(() => {})));
+      slides = picks.map(m => ({ ...m, p: preds[`${m.home_team}|${m.away_team}|${m.date}`] })).filter(m => m.p).slice(0, 6);
+      if (!slides.length) return;
+      $('hb-dots').innerHTML = slides.map((m, k) => `<button type="button" role="tab" aria-label="${short(m.home_team)} 대 ${short(m.away_team)}"></button>`).join('');
+      [...$('hb-dots').children].forEach((d, k) => d.addEventListener('click', () => show(k, 'dot')));
+      if (slides.length < 2) { $('hb-prev').hidden = $('hb-next').hidden = true; $('hb-dots').hidden = true; }
+      board.style.setProperty('--hb-t', DWELL / 1000 + 's');
+      board.hidden = false;
+      const start = () => show(0);
       if (window.__introDone) start(); else addEventListener('intro-exit', start, { once: true });
-    } catch (e) { /* 전광판 없이 헤드라인만 */ }
+    } catch (e) { /* 전광판 없이 헤드라인·설명만 */ }
   })();
 })();
 </script>
