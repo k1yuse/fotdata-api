@@ -993,6 +993,108 @@ def fetch_season_zones():
     with open(path, 'w', encoding='utf-8') as f:
         json.dump(out, f, ensure_ascii=False, indent=1, sort_keys=True)
 
+# ── 역대 우승·준우승(리그 페이지 "시즌" 탭, 2026-10-06) ──
+# 영문 위키백과 리그별 우승 목록 문서 한 장씩(키 불필요). 문서마다 표 모양이 달라서 "시즌 링크가 있는 줄 → 그다음 구단 칸 둘"로 읽음
+# (챔스 결승 목록은 시즌 · 나라 · 우승 · 점수 · 준우승 순 — 나라 틀·점수 칸은 건너뜀). 끝난 시즌만, HISTORY_FROM부터
+LEAGUE_HISTORY_PAGES = {"PL": "List of English football champions", "PD": "List of Spanish football champions",
+                        "BL1": "List of German football champions", "SA": "List of Italian football champions",
+                        "FL1": "List of French football champions", "CL": "List of European Cup and UEFA Champions League finals"}
+HISTORY_FROM = 2000
+
+def _wiki_cells(row):
+    """위키 표 한 줄 → 칸 목록(속성 부분 'style=…|' 은 떼고 내용만)"""
+    row = row.replace("||", "\n|").replace("!!", "\n!")
+    cells = []
+    for line in row.split("\n"):
+        if not line.startswith(("|", "!")) or line.startswith(("|}", "|+", "{|")):
+            continue
+        c = line[1:]
+        # 첫 '|'가 [[ ]]·{{ }} 밖에 있으면 그 앞은 속성
+        depth, cut = 0, None
+        for i, ch in enumerate(c):
+            if c.startswith(("[[", "{{"), i): depth += 1
+            elif c.startswith(("]]", "}}"), i): depth -= 1
+            elif ch == "|" and depth == 0:
+                cut = i; break
+        cells.append((c[cut + 1:] if cut is not None and "=" in c[:cut] else c).strip())
+    return cells
+
+def _club_of(cell):
+    """칸 → (보이는 이름, 영문 문서 제목) — 구단이 아닌 칸(나라 틀·점수·숫자)이면 None"""
+    stripped = re.search(r"<del>(.*?)</del>", cell)   # 박탈된 우승(세리에A 04-05 유벤투스 — 칼초폴리)
+    if stripped:
+        return re.sub(r"\[\[(?:[^\]|]+\|)?([^\]]+)\]\]", r"\1", stripped.group(1)).strip(), None, True
+    s = re.sub(r"<sup.*?</sup>|<ref.*?(</ref>|/>)|<!--.*?-->", "", cell, flags=re.S)
+    s = re.sub(r"\{\{sortname\|([^{}|]*)\|([^{}|]*)[^{}]*\}\}", r"\1 \2", s)
+    s = re.sub(r"\{\{(?:nowrap|small|center)\|((?:[^{}]|\{\{[^{}]*\}\})*)\}\}", r"\1", s)
+    link = re.search(r"\[\[([^\]|]+)(?:\|([^\]]+))?\]\]", s)
+    s2 = re.sub(r"\{\{[^{}]*\}\}", "", s)
+    s2 = re.sub(r"\[\[(?:[^\]|]+\|)?([^\]]+)\]\]", r"\1", s2)
+    s2 = re.sub(r"'''?|†|‡|\*|\(\d+\)|\[\w\]", "", s2).strip(" ,")
+    if not s2 or re.fullmatch(r"[\d\s–\-:.,()a-z]*", s2) or re.search(r"\d+\s*[–-]\s*\d+", s2):
+        return None
+    title = link.group(1) if link and (link.group(2) or link.group(1)).strip() in s2 else None
+    return s2, title, False
+
+def fetch_league_history():
+    import json
+    path = f"{MODEL_DIR}/league_history.json"
+    out = {}
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as f:
+            out = json.load(f)
+    wiki = {}
+    if os.path.exists(f"{MODEL_DIR}/team_wiki.json"):
+        with open(f"{MODEL_DIR}/team_wiki.json", encoding="utf-8") as f:
+            wiki = json.load(f)
+    by_title = {v.get("en_title"): t for t, v in wiki.items() if v.get("en_title")}
+    ours = {}
+    if os.path.exists(f"{MODEL_DIR}/team_logos.json"):
+        with open(f"{MODEL_DIR}/team_logos.json", encoding="utf-8") as f:
+            ours = {_norm_club(t): t for t in json.load(f)}
+    def to_ours(name, title):
+        if title and title in by_title:
+            return by_title[title]
+        for n in (_norm_club(title or ""), _norm_club(name)):
+            if n and n in ours:
+                return ours[n]
+        n = _norm_club(name)
+        cand = [t for k, t in ours.items() if n and k and (k.startswith(n + " ") or k.endswith(" " + n) or n.startswith(k + " "))]
+        return cand[0] if len(cand) == 1 else None
+    print("\n[역대 우승·준우승]")
+    for code, page in LEAGUE_HISTORY_PAGES.items():
+        try:
+            w = _wiki_get("https://en.wikipedia.org/w/api.php", {"action": "parse", "page": page, "prop": "wikitext", "format": "json", "redirects": 1})["parse"]["wikitext"]["*"]
+        except Exception as e:
+            print(f"  ❌ {code}: {e}"); continue
+        seasons = {}
+        for row in re.split(r"\n\|-", w):
+            cells = _wiki_cells(row.split("\n|}")[0])   # 표 끝(|}) 뒤에 붙은 다른 틀은 떼어냄
+            if any(re.match(r"^\s*[a-z_][a-z_0-9 ]*=", c) for c in cells):   # 인포박스 칸(| champions = …)은 표가 아님
+                continue
+            for i, c in enumerate(cells):
+                m = re.search(r"\[\[[^\]|]*\|?\s*(\d{4})[–-](\d{2}|\d{4})\s*\]\]", c)
+                if m and not re.search(r"\]\]\s*,", c):   # 구단별 표("1936–37, 1967–68, …")는 건너뜀
+                    yr = int(m.group(1))
+                    clubs = [x for x in (_club_of(c2) for c2 in cells[i + 1:]) if x][:2]
+                    if yr >= HISTORY_FROM and yr not in seasons and len(clubs) == 2:
+                        seasons[yr] = clubs
+                    break
+        rows = []
+        for yr in sorted(seasons, reverse=True):
+            (cn, ct, cx), (rn, rt, _) = seasons[yr]
+            champ = {"name": cn, "team": to_ours(cn, ct)}
+            if cx:
+                champ["stripped"] = True   # 화면: "우승 박탈" 표시
+            rows.append({"season": yr, "champion": champ, "runner_up": {"name": rn, "team": to_ours(rn, rt)}})
+        if len(rows) < 10:
+            print(f"  ⚠️ {code}: {len(rows)}시즌만 읽힘 (기존 유지)"); continue
+        out[code] = {"source": f"https://en.wikipedia.org/wiki/{requests.utils.quote(page.replace(' ', '_'))}", "seasons": rows}
+        miss = sorted({x["name"] for r in rows for x in (r["champion"], r["runner_up"]) if not x["team"] and not x.get("stripped")})
+        print(f"  ✅ {code}: {rows[-1]['season']}–{rows[0]['season']} {len(rows)}시즌{' · 우리 팀 목록에 없는 구단 ' + ', '.join(miss) if miss else ''}")
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(out, f, ensure_ascii=False, indent=1, sort_keys=True)
+
 def _wiki_sections(title):
     return _wiki_get("https://en.wikipedia.org/w/api.php", {"action": "parse", "page": title, "prop": "sections",
                                                             "format": "json", "redirects": 1}).get("parse", {}).get("sections")
@@ -2049,6 +2151,10 @@ def main():
         fetch_season_zones()
     except Exception as e:
         print(f"  ⚠️ 지난 시즌 순위 구역 갱신 실패(기존 유지): {e}")
+    try:   # 역대 우승·준우승(리그 페이지 시즌 탭) — 위키 문서 6장, 시즌이 끝나면 새 줄이 자동으로 들어옴
+        fetch_league_history()
+    except Exception as e:
+        print(f"  ⚠️ 역대 우승 목록 갱신 실패(기존 유지): {e}")
 
     # 스쿼드 사진/등번호 + 이적 기록 (API-Football, 현재는 PL만 — 요청 한도 때문에 리그별로 점진 확대 예정)
     step("스쿼드·이적(API-Football)", fetch_squad_transfers, 'PL')
@@ -2208,6 +2314,8 @@ if __name__ == "__main__":
         fetch_ucl_tournament()
         fetch_team_wiki()
         fetch_season_zones()
+    elif "--league-history" in sys.argv:
+        fetch_league_history()
     elif "--scorers-only" in sys.argv:
         fetch_scorers()
     elif "--extra-leagues" in sys.argv:

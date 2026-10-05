@@ -1,0 +1,1749 @@
+{
+ "BL1": {
+  "seasons": [
+   {
+    "champion": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "runner_up": {
+     "name": "Borussia Dortmund",
+     "team": "Borussia Dortmund"
+    },
+    "season": 2025
+   },
+   {
+    "champion": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "runner_up": {
+     "name": "Bayer Leverkusen",
+     "team": "Bayer 04 Leverkusen"
+    },
+    "season": 2024
+   },
+   {
+    "champion": {
+     "name": "Bayer Leverkusen",
+     "team": "Bayer 04 Leverkusen"
+    },
+    "runner_up": {
+     "name": "VfB Stuttgart",
+     "team": "VfB Stuttgart"
+    },
+    "season": 2023
+   },
+   {
+    "champion": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "runner_up": {
+     "name": "Borussia Dortmund",
+     "team": "Borussia Dortmund"
+    },
+    "season": 2022
+   },
+   {
+    "champion": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "runner_up": {
+     "name": "Borussia Dortmund",
+     "team": "Borussia Dortmund"
+    },
+    "season": 2021
+   },
+   {
+    "champion": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "runner_up": {
+     "name": "RB Leipzig",
+     "team": "RB Leipzig"
+    },
+    "season": 2020
+   },
+   {
+    "champion": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "runner_up": {
+     "name": "Borussia Dortmund",
+     "team": "Borussia Dortmund"
+    },
+    "season": 2019
+   },
+   {
+    "champion": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "runner_up": {
+     "name": "Borussia Dortmund",
+     "team": "Borussia Dortmund"
+    },
+    "season": 2018
+   },
+   {
+    "champion": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "runner_up": {
+     "name": "Schalke 04",
+     "team": "FC Schalke 04"
+    },
+    "season": 2017
+   },
+   {
+    "champion": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "runner_up": {
+     "name": "RB Leipzig",
+     "team": "RB Leipzig"
+    },
+    "season": 2016
+   },
+   {
+    "champion": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "runner_up": {
+     "name": "Borussia Dortmund",
+     "team": "Borussia Dortmund"
+    },
+    "season": 2015
+   },
+   {
+    "champion": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "runner_up": {
+     "name": "VfL Wolfsburg",
+     "team": "VfL Wolfsburg"
+    },
+    "season": 2014
+   },
+   {
+    "champion": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "runner_up": {
+     "name": "Borussia Dortmund",
+     "team": "Borussia Dortmund"
+    },
+    "season": 2013
+   },
+   {
+    "champion": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "runner_up": {
+     "name": "Borussia Dortmund",
+     "team": "Borussia Dortmund"
+    },
+    "season": 2012
+   },
+   {
+    "champion": {
+     "name": "Borussia Dortmund",
+     "team": "Borussia Dortmund"
+    },
+    "runner_up": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "season": 2011
+   },
+   {
+    "champion": {
+     "name": "Borussia Dortmund",
+     "team": "Borussia Dortmund"
+    },
+    "runner_up": {
+     "name": "Bayer Leverkusen",
+     "team": "Bayer 04 Leverkusen"
+    },
+    "season": 2010
+   },
+   {
+    "champion": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "runner_up": {
+     "name": "Schalke 04",
+     "team": "FC Schalke 04"
+    },
+    "season": 2009
+   },
+   {
+    "champion": {
+     "name": "VfL Wolfsburg",
+     "team": "VfL Wolfsburg"
+    },
+    "runner_up": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "season": 2008
+   },
+   {
+    "champion": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "runner_up": {
+     "name": "Werder Bremen",
+     "team": "SV Werder Bremen"
+    },
+    "season": 2007
+   },
+   {
+    "champion": {
+     "name": "VfB Stuttgart",
+     "team": "VfB Stuttgart"
+    },
+    "runner_up": {
+     "name": "Schalke 04",
+     "team": "FC Schalke 04"
+    },
+    "season": 2006
+   },
+   {
+    "champion": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "runner_up": {
+     "name": "Werder Bremen",
+     "team": "SV Werder Bremen"
+    },
+    "season": 2005
+   },
+   {
+    "champion": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "runner_up": {
+     "name": "Schalke 04",
+     "team": "FC Schalke 04"
+    },
+    "season": 2004
+   },
+   {
+    "champion": {
+     "name": "Werder Bremen",
+     "team": "SV Werder Bremen"
+    },
+    "runner_up": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "season": 2003
+   },
+   {
+    "champion": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "runner_up": {
+     "name": "VfB Stuttgart",
+     "team": "VfB Stuttgart"
+    },
+    "season": 2002
+   },
+   {
+    "champion": {
+     "name": "Borussia Dortmund",
+     "team": "Borussia Dortmund"
+    },
+    "runner_up": {
+     "name": "Bayer Leverkusen",
+     "team": "Bayer 04 Leverkusen"
+    },
+    "season": 2001
+   },
+   {
+    "champion": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "runner_up": {
+     "name": "Schalke 04",
+     "team": "FC Schalke 04"
+    },
+    "season": 2000
+   }
+  ],
+  "source": "https://en.wikipedia.org/wiki/List_of_German_football_champions"
+ },
+ "CL": {
+  "seasons": [
+   {
+    "champion": {
+     "name": "Paris Saint-Germain",
+     "team": "Paris Saint-Germain FC"
+    },
+    "runner_up": {
+     "name": "Arsenal",
+     "team": "Arsenal FC"
+    },
+    "season": 2025
+   },
+   {
+    "champion": {
+     "name": "Paris Saint-Germain",
+     "team": "Paris Saint-Germain FC"
+    },
+    "runner_up": {
+     "name": "Inter Milan",
+     "team": "FC Internazionale Milano"
+    },
+    "season": 2024
+   },
+   {
+    "champion": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "runner_up": {
+     "name": "Borussia Dortmund",
+     "team": "Borussia Dortmund"
+    },
+    "season": 2023
+   },
+   {
+    "champion": {
+     "name": "Manchester City",
+     "team": "Manchester City FC"
+    },
+    "runner_up": {
+     "name": "Inter Milan",
+     "team": "FC Internazionale Milano"
+    },
+    "season": 2022
+   },
+   {
+    "champion": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "runner_up": {
+     "name": "Liverpool",
+     "team": "Liverpool FC"
+    },
+    "season": 2021
+   },
+   {
+    "champion": {
+     "name": "Chelsea",
+     "team": "Chelsea FC"
+    },
+    "runner_up": {
+     "name": "Manchester City",
+     "team": "Manchester City FC"
+    },
+    "season": 2020
+   },
+   {
+    "champion": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "runner_up": {
+     "name": "Paris Saint-Germain",
+     "team": "Paris Saint-Germain FC"
+    },
+    "season": 2019
+   },
+   {
+    "champion": {
+     "name": "Liverpool",
+     "team": "Liverpool FC"
+    },
+    "runner_up": {
+     "name": "Tottenham Hotspur",
+     "team": "Tottenham Hotspur FC"
+    },
+    "season": 2018
+   },
+   {
+    "champion": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "runner_up": {
+     "name": "Liverpool",
+     "team": "Liverpool FC"
+    },
+    "season": 2017
+   },
+   {
+    "champion": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "runner_up": {
+     "name": "Juventus",
+     "team": "Juventus FC"
+    },
+    "season": 2016
+   },
+   {
+    "champion": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "runner_up": {
+     "name": "Atlético Madrid",
+     "team": "Club Atlético de Madrid"
+    },
+    "season": 2015
+   },
+   {
+    "champion": {
+     "name": "Barcelona",
+     "team": "FC Barcelona"
+    },
+    "runner_up": {
+     "name": "Juventus",
+     "team": "Juventus FC"
+    },
+    "season": 2014
+   },
+   {
+    "champion": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "runner_up": {
+     "name": "Atlético Madrid",
+     "team": "Club Atlético de Madrid"
+    },
+    "season": 2013
+   },
+   {
+    "champion": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "runner_up": {
+     "name": "Borussia Dortmund",
+     "team": "Borussia Dortmund"
+    },
+    "season": 2012
+   },
+   {
+    "champion": {
+     "name": "Chelsea",
+     "team": "Chelsea FC"
+    },
+    "runner_up": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "season": 2011
+   },
+   {
+    "champion": {
+     "name": "Barcelona",
+     "team": "FC Barcelona"
+    },
+    "runner_up": {
+     "name": "Manchester United",
+     "team": "Manchester United FC"
+    },
+    "season": 2010
+   },
+   {
+    "champion": {
+     "name": "Inter Milan",
+     "team": "FC Internazionale Milano"
+    },
+    "runner_up": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "season": 2009
+   },
+   {
+    "champion": {
+     "name": "Barcelona",
+     "team": "FC Barcelona"
+    },
+    "runner_up": {
+     "name": "Manchester United",
+     "team": "Manchester United FC"
+    },
+    "season": 2008
+   },
+   {
+    "champion": {
+     "name": "Manchester United",
+     "team": "Manchester United FC"
+    },
+    "runner_up": {
+     "name": "Chelsea",
+     "team": "Chelsea FC"
+    },
+    "season": 2007
+   },
+   {
+    "champion": {
+     "name": "Milan",
+     "team": "AC Milan"
+    },
+    "runner_up": {
+     "name": "Liverpool",
+     "team": "Liverpool FC"
+    },
+    "season": 2006
+   },
+   {
+    "champion": {
+     "name": "Barcelona",
+     "team": "FC Barcelona"
+    },
+    "runner_up": {
+     "name": "Arsenal",
+     "team": "Arsenal FC"
+    },
+    "season": 2005
+   },
+   {
+    "champion": {
+     "name": "Liverpool",
+     "team": "Liverpool FC"
+    },
+    "runner_up": {
+     "name": "Milan",
+     "team": "AC Milan"
+    },
+    "season": 2004
+   },
+   {
+    "champion": {
+     "name": "Porto",
+     "team": "FC Porto"
+    },
+    "runner_up": {
+     "name": "Monaco",
+     "team": "AS Monaco FC"
+    },
+    "season": 2003
+   },
+   {
+    "champion": {
+     "name": "Milan",
+     "team": "AC Milan"
+    },
+    "runner_up": {
+     "name": "Juventus",
+     "team": "Juventus FC"
+    },
+    "season": 2002
+   },
+   {
+    "champion": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "runner_up": {
+     "name": "Bayer Leverkusen",
+     "team": "Bayer 04 Leverkusen"
+    },
+    "season": 2001
+   },
+   {
+    "champion": {
+     "name": "Bayern Munich",
+     "team": "FC Bayern München"
+    },
+    "runner_up": {
+     "name": "Valencia",
+     "team": "Valencia CF"
+    },
+    "season": 2000
+   }
+  ],
+  "source": "https://en.wikipedia.org/wiki/List_of_European_Cup_and_UEFA_Champions_League_finals"
+ },
+ "FL1": {
+  "seasons": [
+   {
+    "champion": {
+     "name": "Paris Saint-Germain",
+     "team": "Paris Saint-Germain FC"
+    },
+    "runner_up": {
+     "name": "Lens",
+     "team": "Racing Club de Lens"
+    },
+    "season": 2025
+   },
+   {
+    "champion": {
+     "name": "Paris Saint-Germain",
+     "team": "Paris Saint-Germain FC"
+    },
+    "runner_up": {
+     "name": "Marseille",
+     "team": "Olympique de Marseille"
+    },
+    "season": 2024
+   },
+   {
+    "champion": {
+     "name": "Paris Saint-Germain",
+     "team": "Paris Saint-Germain FC"
+    },
+    "runner_up": {
+     "name": "Monaco",
+     "team": "AS Monaco FC"
+    },
+    "season": 2023
+   },
+   {
+    "champion": {
+     "name": "Paris Saint-Germain",
+     "team": "Paris Saint-Germain FC"
+    },
+    "runner_up": {
+     "name": "Lens",
+     "team": "Racing Club de Lens"
+    },
+    "season": 2022
+   },
+   {
+    "champion": {
+     "name": "Paris Saint-Germain",
+     "team": "Paris Saint-Germain FC"
+    },
+    "runner_up": {
+     "name": "Marseille",
+     "team": "Olympique de Marseille"
+    },
+    "season": 2021
+   },
+   {
+    "champion": {
+     "name": "Lille",
+     "team": "Lille OSC"
+    },
+    "runner_up": {
+     "name": "Paris Saint-Germain",
+     "team": "Paris Saint-Germain FC"
+    },
+    "season": 2020
+   },
+   {
+    "champion": {
+     "name": "Paris Saint-Germain",
+     "team": "Paris Saint-Germain FC"
+    },
+    "runner_up": {
+     "name": "Marseille",
+     "team": "Olympique de Marseille"
+    },
+    "season": 2019
+   },
+   {
+    "champion": {
+     "name": "Paris Saint-Germain",
+     "team": "Paris Saint-Germain FC"
+    },
+    "runner_up": {
+     "name": "Lille",
+     "team": "Lille OSC"
+    },
+    "season": 2018
+   },
+   {
+    "champion": {
+     "name": "Paris Saint-Germain",
+     "team": "Paris Saint-Germain FC"
+    },
+    "runner_up": {
+     "name": "Monaco",
+     "team": "AS Monaco FC"
+    },
+    "season": 2017
+   },
+   {
+    "champion": {
+     "name": "Monaco",
+     "team": "AS Monaco FC"
+    },
+    "runner_up": {
+     "name": "Paris Saint-Germain",
+     "team": "Paris Saint-Germain FC"
+    },
+    "season": 2016
+   },
+   {
+    "champion": {
+     "name": "Paris Saint-Germain",
+     "team": "Paris Saint-Germain FC"
+    },
+    "runner_up": {
+     "name": "Lyon",
+     "team": "Olympique Lyonnais"
+    },
+    "season": 2015
+   },
+   {
+    "champion": {
+     "name": "Paris Saint-Germain",
+     "team": "Paris Saint-Germain FC"
+    },
+    "runner_up": {
+     "name": "Lyon",
+     "team": "Olympique Lyonnais"
+    },
+    "season": 2014
+   },
+   {
+    "champion": {
+     "name": "Paris Saint-Germain",
+     "team": "Paris Saint-Germain FC"
+    },
+    "runner_up": {
+     "name": "Monaco",
+     "team": "AS Monaco FC"
+    },
+    "season": 2013
+   },
+   {
+    "champion": {
+     "name": "Paris Saint-Germain",
+     "team": "Paris Saint-Germain FC"
+    },
+    "runner_up": {
+     "name": "Marseille",
+     "team": "Olympique de Marseille"
+    },
+    "season": 2012
+   },
+   {
+    "champion": {
+     "name": "Montpellier",
+     "team": "Montpellier HSC"
+    },
+    "runner_up": {
+     "name": "Paris Saint-Germain",
+     "team": "Paris Saint-Germain FC"
+    },
+    "season": 2011
+   },
+   {
+    "champion": {
+     "name": "Lille",
+     "team": "Lille OSC"
+    },
+    "runner_up": {
+     "name": "Marseille",
+     "team": "Olympique de Marseille"
+    },
+    "season": 2010
+   },
+   {
+    "champion": {
+     "name": "Marseille",
+     "team": "Olympique de Marseille"
+    },
+    "runner_up": {
+     "name": "Lyon",
+     "team": "Olympique Lyonnais"
+    },
+    "season": 2009
+   },
+   {
+    "champion": {
+     "name": "Bordeaux",
+     "team": null
+    },
+    "runner_up": {
+     "name": "Marseille",
+     "team": "Olympique de Marseille"
+    },
+    "season": 2008
+   },
+   {
+    "champion": {
+     "name": "Lyon",
+     "team": "Olympique Lyonnais"
+    },
+    "runner_up": {
+     "name": "Bordeaux",
+     "team": null
+    },
+    "season": 2007
+   },
+   {
+    "champion": {
+     "name": "Lyon",
+     "team": "Olympique Lyonnais"
+    },
+    "runner_up": {
+     "name": "Marseille",
+     "team": "Olympique de Marseille"
+    },
+    "season": 2006
+   },
+   {
+    "champion": {
+     "name": "Lyon",
+     "team": "Olympique Lyonnais"
+    },
+    "runner_up": {
+     "name": "Bordeaux",
+     "team": null
+    },
+    "season": 2005
+   },
+   {
+    "champion": {
+     "name": "Lyon",
+     "team": "Olympique Lyonnais"
+    },
+    "runner_up": {
+     "name": "Lille",
+     "team": "Lille OSC"
+    },
+    "season": 2004
+   },
+   {
+    "champion": {
+     "name": "Lyon",
+     "team": "Olympique Lyonnais"
+    },
+    "runner_up": {
+     "name": "Paris Saint-Germain",
+     "team": "Paris Saint-Germain FC"
+    },
+    "season": 2003
+   },
+   {
+    "champion": {
+     "name": "Lyon",
+     "team": "Olympique Lyonnais"
+    },
+    "runner_up": {
+     "name": "Monaco",
+     "team": "AS Monaco FC"
+    },
+    "season": 2002
+   },
+   {
+    "champion": {
+     "name": "Lyon",
+     "team": "Olympique Lyonnais"
+    },
+    "runner_up": {
+     "name": "Lens",
+     "team": "Racing Club de Lens"
+    },
+    "season": 2001
+   },
+   {
+    "champion": {
+     "name": "Nantes",
+     "team": "FC Nantes"
+    },
+    "runner_up": {
+     "name": "Lyon",
+     "team": "Olympique Lyonnais"
+    },
+    "season": 2000
+   }
+  ],
+  "source": "https://en.wikipedia.org/wiki/List_of_French_football_champions"
+ },
+ "PD": {
+  "seasons": [
+   {
+    "champion": {
+     "name": "Barcelona",
+     "team": "FC Barcelona"
+    },
+    "runner_up": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "season": 2025
+   },
+   {
+    "champion": {
+     "name": "Barcelona",
+     "team": "FC Barcelona"
+    },
+    "runner_up": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "season": 2024
+   },
+   {
+    "champion": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "runner_up": {
+     "name": "Barcelona",
+     "team": "FC Barcelona"
+    },
+    "season": 2023
+   },
+   {
+    "champion": {
+     "name": "Barcelona",
+     "team": "FC Barcelona"
+    },
+    "runner_up": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "season": 2022
+   },
+   {
+    "champion": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "runner_up": {
+     "name": "Barcelona",
+     "team": "FC Barcelona"
+    },
+    "season": 2021
+   },
+   {
+    "champion": {
+     "name": "Atlético Madrid",
+     "team": "Club Atlético de Madrid"
+    },
+    "runner_up": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "season": 2020
+   },
+   {
+    "champion": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "runner_up": {
+     "name": "Barcelona",
+     "team": "FC Barcelona"
+    },
+    "season": 2019
+   },
+   {
+    "champion": {
+     "name": "Barcelona",
+     "team": "FC Barcelona"
+    },
+    "runner_up": {
+     "name": "Atlético Madrid",
+     "team": "Club Atlético de Madrid"
+    },
+    "season": 2018
+   },
+   {
+    "champion": {
+     "name": "Barcelona",
+     "team": "FC Barcelona"
+    },
+    "runner_up": {
+     "name": "Atlético Madrid",
+     "team": "Club Atlético de Madrid"
+    },
+    "season": 2017
+   },
+   {
+    "champion": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "runner_up": {
+     "name": "Barcelona",
+     "team": "FC Barcelona"
+    },
+    "season": 2016
+   },
+   {
+    "champion": {
+     "name": "Barcelona",
+     "team": "FC Barcelona"
+    },
+    "runner_up": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "season": 2015
+   },
+   {
+    "champion": {
+     "name": "Barcelona",
+     "team": "FC Barcelona"
+    },
+    "runner_up": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "season": 2014
+   },
+   {
+    "champion": {
+     "name": "Atlético Madrid",
+     "team": "Club Atlético de Madrid"
+    },
+    "runner_up": {
+     "name": "Barcelona",
+     "team": "FC Barcelona"
+    },
+    "season": 2013
+   },
+   {
+    "champion": {
+     "name": "Barcelona",
+     "team": "FC Barcelona"
+    },
+    "runner_up": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "season": 2012
+   },
+   {
+    "champion": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "runner_up": {
+     "name": "Barcelona",
+     "team": "FC Barcelona"
+    },
+    "season": 2011
+   },
+   {
+    "champion": {
+     "name": "Barcelona",
+     "team": "FC Barcelona"
+    },
+    "runner_up": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "season": 2010
+   },
+   {
+    "champion": {
+     "name": "Barcelona",
+     "team": "FC Barcelona"
+    },
+    "runner_up": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "season": 2009
+   },
+   {
+    "champion": {
+     "name": "Barcelona",
+     "team": "FC Barcelona"
+    },
+    "runner_up": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "season": 2008
+   },
+   {
+    "champion": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "runner_up": {
+     "name": "Villarreal",
+     "team": "Villarreal CF"
+    },
+    "season": 2007
+   },
+   {
+    "champion": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "runner_up": {
+     "name": "Barcelona",
+     "team": "FC Barcelona"
+    },
+    "season": 2006
+   },
+   {
+    "champion": {
+     "name": "Barcelona",
+     "team": "FC Barcelona"
+    },
+    "runner_up": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "season": 2005
+   },
+   {
+    "champion": {
+     "name": "Barcelona",
+     "team": "FC Barcelona"
+    },
+    "runner_up": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "season": 2004
+   },
+   {
+    "champion": {
+     "name": "Valencia",
+     "team": "Valencia CF"
+    },
+    "runner_up": {
+     "name": "Barcelona",
+     "team": "FC Barcelona"
+    },
+    "season": 2003
+   },
+   {
+    "champion": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "runner_up": {
+     "name": "Real Sociedad",
+     "team": "Real Sociedad de Fútbol"
+    },
+    "season": 2002
+   },
+   {
+    "champion": {
+     "name": "Valencia",
+     "team": "Valencia CF"
+    },
+    "runner_up": {
+     "name": "Deportivo La Coruña",
+     "team": "RC Deportivo La Coruña"
+    },
+    "season": 2001
+   },
+   {
+    "champion": {
+     "name": "Real Madrid",
+     "team": "Real Madrid CF"
+    },
+    "runner_up": {
+     "name": "Deportivo La Coruña",
+     "team": "RC Deportivo La Coruña"
+    },
+    "season": 2000
+   }
+  ],
+  "source": "https://en.wikipedia.org/wiki/List_of_Spanish_football_champions"
+ },
+ "PL": {
+  "seasons": [
+   {
+    "champion": {
+     "name": "Arsenal",
+     "team": "Arsenal FC"
+    },
+    "runner_up": {
+     "name": "Manchester City",
+     "team": "Manchester City FC"
+    },
+    "season": 2025
+   },
+   {
+    "champion": {
+     "name": "Liverpool",
+     "team": "Liverpool FC"
+    },
+    "runner_up": {
+     "name": "Arsenal",
+     "team": "Arsenal FC"
+    },
+    "season": 2024
+   },
+   {
+    "champion": {
+     "name": "Manchester City",
+     "team": "Manchester City FC"
+    },
+    "runner_up": {
+     "name": "Arsenal",
+     "team": "Arsenal FC"
+    },
+    "season": 2023
+   },
+   {
+    "champion": {
+     "name": "Manchester City",
+     "team": "Manchester City FC"
+    },
+    "runner_up": {
+     "name": "Arsenal",
+     "team": "Arsenal FC"
+    },
+    "season": 2022
+   },
+   {
+    "champion": {
+     "name": "Manchester City",
+     "team": "Manchester City FC"
+    },
+    "runner_up": {
+     "name": "Liverpool",
+     "team": "Liverpool FC"
+    },
+    "season": 2021
+   },
+   {
+    "champion": {
+     "name": "Manchester City",
+     "team": "Manchester City FC"
+    },
+    "runner_up": {
+     "name": "Manchester United",
+     "team": "Manchester United FC"
+    },
+    "season": 2020
+   },
+   {
+    "champion": {
+     "name": "Liverpool",
+     "team": "Liverpool FC"
+    },
+    "runner_up": {
+     "name": "Manchester City",
+     "team": "Manchester City FC"
+    },
+    "season": 2019
+   },
+   {
+    "champion": {
+     "name": "Manchester City",
+     "team": "Manchester City FC"
+    },
+    "runner_up": {
+     "name": "Liverpool",
+     "team": "Liverpool FC"
+    },
+    "season": 2018
+   },
+   {
+    "champion": {
+     "name": "Manchester City",
+     "team": "Manchester City FC"
+    },
+    "runner_up": {
+     "name": "Manchester United",
+     "team": "Manchester United FC"
+    },
+    "season": 2017
+   },
+   {
+    "champion": {
+     "name": "Chelsea",
+     "team": "Chelsea FC"
+    },
+    "runner_up": {
+     "name": "Tottenham Hotspur",
+     "team": "Tottenham Hotspur FC"
+    },
+    "season": 2016
+   },
+   {
+    "champion": {
+     "name": "Leicester City",
+     "team": "Leicester City FC"
+    },
+    "runner_up": {
+     "name": "Arsenal",
+     "team": "Arsenal FC"
+    },
+    "season": 2015
+   },
+   {
+    "champion": {
+     "name": "Chelsea",
+     "team": "Chelsea FC"
+    },
+    "runner_up": {
+     "name": "Manchester City",
+     "team": "Manchester City FC"
+    },
+    "season": 2014
+   },
+   {
+    "champion": {
+     "name": "Manchester City",
+     "team": "Manchester City FC"
+    },
+    "runner_up": {
+     "name": "Liverpool",
+     "team": "Liverpool FC"
+    },
+    "season": 2013
+   },
+   {
+    "champion": {
+     "name": "Manchester United",
+     "team": "Manchester United FC"
+    },
+    "runner_up": {
+     "name": "Manchester City",
+     "team": "Manchester City FC"
+    },
+    "season": 2012
+   },
+   {
+    "champion": {
+     "name": "Manchester City",
+     "team": "Manchester City FC"
+    },
+    "runner_up": {
+     "name": "Manchester United",
+     "team": "Manchester United FC"
+    },
+    "season": 2011
+   },
+   {
+    "champion": {
+     "name": "Manchester United",
+     "team": "Manchester United FC"
+    },
+    "runner_up": {
+     "name": "Chelsea",
+     "team": "Chelsea FC"
+    },
+    "season": 2010
+   },
+   {
+    "champion": {
+     "name": "Chelsea",
+     "team": "Chelsea FC"
+    },
+    "runner_up": {
+     "name": "Manchester United",
+     "team": "Manchester United FC"
+    },
+    "season": 2009
+   },
+   {
+    "champion": {
+     "name": "Manchester United",
+     "team": "Manchester United FC"
+    },
+    "runner_up": {
+     "name": "Liverpool",
+     "team": "Liverpool FC"
+    },
+    "season": 2008
+   },
+   {
+    "champion": {
+     "name": "Manchester United",
+     "team": "Manchester United FC"
+    },
+    "runner_up": {
+     "name": "Chelsea",
+     "team": "Chelsea FC"
+    },
+    "season": 2007
+   },
+   {
+    "champion": {
+     "name": "Manchester United",
+     "team": "Manchester United FC"
+    },
+    "runner_up": {
+     "name": "Chelsea",
+     "team": "Chelsea FC"
+    },
+    "season": 2006
+   },
+   {
+    "champion": {
+     "name": "Chelsea",
+     "team": "Chelsea FC"
+    },
+    "runner_up": {
+     "name": "Manchester United",
+     "team": "Manchester United FC"
+    },
+    "season": 2005
+   },
+   {
+    "champion": {
+     "name": "Chelsea",
+     "team": "Chelsea FC"
+    },
+    "runner_up": {
+     "name": "Arsenal",
+     "team": "Arsenal FC"
+    },
+    "season": 2004
+   },
+   {
+    "champion": {
+     "name": "Arsenal",
+     "team": "Arsenal FC"
+    },
+    "runner_up": {
+     "name": "Chelsea",
+     "team": "Chelsea FC"
+    },
+    "season": 2003
+   },
+   {
+    "champion": {
+     "name": "Manchester United",
+     "team": "Manchester United FC"
+    },
+    "runner_up": {
+     "name": "Arsenal",
+     "team": "Arsenal FC"
+    },
+    "season": 2002
+   },
+   {
+    "champion": {
+     "name": "Arsenal",
+     "team": "Arsenal FC"
+    },
+    "runner_up": {
+     "name": "Liverpool",
+     "team": "Liverpool FC"
+    },
+    "season": 2001
+   },
+   {
+    "champion": {
+     "name": "Manchester United",
+     "team": "Manchester United FC"
+    },
+    "runner_up": {
+     "name": "Arsenal",
+     "team": "Arsenal FC"
+    },
+    "season": 2000
+   }
+  ],
+  "source": "https://en.wikipedia.org/wiki/List_of_English_football_champions"
+ },
+ "SA": {
+  "seasons": [
+   {
+    "champion": {
+     "name": "Internazionale",
+     "team": "FC Internazionale Milano"
+    },
+    "runner_up": {
+     "name": "Napoli",
+     "team": "SSC Napoli"
+    },
+    "season": 2025
+   },
+   {
+    "champion": {
+     "name": "Napoli",
+     "team": "SSC Napoli"
+    },
+    "runner_up": {
+     "name": "Internazionale",
+     "team": "FC Internazionale Milano"
+    },
+    "season": 2024
+   },
+   {
+    "champion": {
+     "name": "Internazionale",
+     "team": "FC Internazionale Milano"
+    },
+    "runner_up": {
+     "name": "Milan",
+     "team": "AC Milan"
+    },
+    "season": 2023
+   },
+   {
+    "champion": {
+     "name": "Napoli",
+     "team": "SSC Napoli"
+    },
+    "runner_up": {
+     "name": "Lazio",
+     "team": "SS Lazio"
+    },
+    "season": 2022
+   },
+   {
+    "champion": {
+     "name": "Milan",
+     "team": "AC Milan"
+    },
+    "runner_up": {
+     "name": "Internazionale",
+     "team": "FC Internazionale Milano"
+    },
+    "season": 2021
+   },
+   {
+    "champion": {
+     "name": "Internazionale",
+     "team": "FC Internazionale Milano"
+    },
+    "runner_up": {
+     "name": "Milan",
+     "team": "AC Milan"
+    },
+    "season": 2020
+   },
+   {
+    "champion": {
+     "name": "Juventus",
+     "team": "Juventus FC"
+    },
+    "runner_up": {
+     "name": "Internazionale",
+     "team": "FC Internazionale Milano"
+    },
+    "season": 2019
+   },
+   {
+    "champion": {
+     "name": "Juventus",
+     "team": "Juventus FC"
+    },
+    "runner_up": {
+     "name": "Napoli",
+     "team": "SSC Napoli"
+    },
+    "season": 2018
+   },
+   {
+    "champion": {
+     "name": "Juventus",
+     "team": "Juventus FC"
+    },
+    "runner_up": {
+     "name": "Napoli",
+     "team": "SSC Napoli"
+    },
+    "season": 2017
+   },
+   {
+    "champion": {
+     "name": "Juventus",
+     "team": "Juventus FC"
+    },
+    "runner_up": {
+     "name": "Roma",
+     "team": "AS Roma"
+    },
+    "season": 2016
+   },
+   {
+    "champion": {
+     "name": "Juventus",
+     "team": "Juventus FC"
+    },
+    "runner_up": {
+     "name": "Napoli",
+     "team": "SSC Napoli"
+    },
+    "season": 2015
+   },
+   {
+    "champion": {
+     "name": "Juventus",
+     "team": "Juventus FC"
+    },
+    "runner_up": {
+     "name": "Roma",
+     "team": "AS Roma"
+    },
+    "season": 2014
+   },
+   {
+    "champion": {
+     "name": "Juventus",
+     "team": "Juventus FC"
+    },
+    "runner_up": {
+     "name": "Roma",
+     "team": "AS Roma"
+    },
+    "season": 2013
+   },
+   {
+    "champion": {
+     "name": "Juventus",
+     "team": "Juventus FC"
+    },
+    "runner_up": {
+     "name": "Napoli",
+     "team": "SSC Napoli"
+    },
+    "season": 2012
+   },
+   {
+    "champion": {
+     "name": "Juventus",
+     "team": "Juventus FC"
+    },
+    "runner_up": {
+     "name": "Milan",
+     "team": "AC Milan"
+    },
+    "season": 2011
+   },
+   {
+    "champion": {
+     "name": "Milan",
+     "team": "AC Milan"
+    },
+    "runner_up": {
+     "name": "Internazionale",
+     "team": "FC Internazionale Milano"
+    },
+    "season": 2010
+   },
+   {
+    "champion": {
+     "name": "Internazionale",
+     "team": "FC Internazionale Milano"
+    },
+    "runner_up": {
+     "name": "Roma",
+     "team": "AS Roma"
+    },
+    "season": 2009
+   },
+   {
+    "champion": {
+     "name": "Internazionale",
+     "team": "FC Internazionale Milano"
+    },
+    "runner_up": {
+     "name": "Juventus",
+     "team": "Juventus FC"
+    },
+    "season": 2008
+   },
+   {
+    "champion": {
+     "name": "Internazionale",
+     "team": "FC Internazionale Milano"
+    },
+    "runner_up": {
+     "name": "Roma",
+     "team": "AS Roma"
+    },
+    "season": 2007
+   },
+   {
+    "champion": {
+     "name": "Internazionale",
+     "team": "FC Internazionale Milano"
+    },
+    "runner_up": {
+     "name": "Roma",
+     "team": "AS Roma"
+    },
+    "season": 2006
+   },
+   {
+    "champion": {
+     "name": "Internazionale",
+     "team": "FC Internazionale Milano"
+    },
+    "runner_up": {
+     "name": "Roma",
+     "team": "AS Roma"
+    },
+    "season": 2005
+   },
+   {
+    "champion": {
+     "name": "Juventus",
+     "stripped": true,
+     "team": "Juventus FC"
+    },
+    "runner_up": {
+     "name": "Milan",
+     "team": "AC Milan"
+    },
+    "season": 2004
+   },
+   {
+    "champion": {
+     "name": "Milan",
+     "team": "AC Milan"
+    },
+    "runner_up": {
+     "name": "Roma",
+     "team": "AS Roma"
+    },
+    "season": 2003
+   },
+   {
+    "champion": {
+     "name": "Juventus",
+     "team": "Juventus FC"
+    },
+    "runner_up": {
+     "name": "Internazionale",
+     "team": "FC Internazionale Milano"
+    },
+    "season": 2002
+   },
+   {
+    "champion": {
+     "name": "Juventus",
+     "team": "Juventus FC"
+    },
+    "runner_up": {
+     "name": "Roma",
+     "team": "AS Roma"
+    },
+    "season": 2001
+   },
+   {
+    "champion": {
+     "name": "Roma",
+     "team": "AS Roma"
+    },
+    "runner_up": {
+     "name": "Juventus",
+     "team": "Juventus FC"
+    },
+    "season": 2000
+   }
+  ],
+  "source": "https://en.wikipedia.org/wiki/List_of_Italian_football_champions"
+ }
+}

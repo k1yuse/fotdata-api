@@ -253,9 +253,9 @@
     .league-tab { padding: 8px 16px; border-radius: 10px; font-size: 13px; cursor: pointer; border: 0.5px solid var(--border); background: var(--surface); color: var(--muted); display: flex; align-items: center; gap: 6px; transition: all .15s; }
     .league-tab img, .champ-league-btn img { width: 20px; height: 20px; object-fit: contain; }
     /* 작은 리그 아이콘 키움(2026-10-05): EPL 로고는 원본의 가운데 42%만 그림이라(사자+글자 가로형) 정사각형 칸에선 몇 px로 보였음 → 가로 2.3배 칸에 꽉 채움 */
-    .league-tab img[src$="/PL.png"], .champ-league-btn img[src$="/PL.png"], .ti-fx-comp[src$="/PL.png"] { width: 46px; object-fit: cover; }
-    .today-card-league img[src$="/PL.png"] { width: 37px; object-fit: cover; }
-    .league-badge-sm img[src$="/PL.png"], .mp-meta img[src$="/PL.png"] { width: 41px; object-fit: cover; }
+    .league-tab img[src$="org/PL.png"], .champ-league-btn img[src$="org/PL.png"], .ti-fx-comp[src$="org/PL.png"] { width: 46px; object-fit: cover; }
+    .today-card-league img[src$="org/PL.png"] { width: 37px; object-fit: cover; }
+    .league-badge-sm img[src$="org/PL.png"], .mp-meta img[src$="org/PL.png"] { width: 41px; object-fit: cover; }
     .league-tab:hover { border-color: var(--blue); transform: translateY(-1px); }
     .league-tab.active { background: var(--blue-strong); border-color: var(--blue-strong); color: #fff; font-weight: 600; }
     .league-tab.ucl-tab { border-color: var(--border); color: var(--muted); background: var(--surface); }
@@ -960,7 +960,7 @@
     .team-logo-placeholder { display: flex; align-items: center; justify-content: center; color: var(--disabled); }
     .team-logo-placeholder svg { width: 36px; height: 36px; display: block; }
     .league-badge-sm { font-size: 12px; color: var(--muted); display: flex; align-items: center; justify-content: center; gap: 5px; min-height: 20px; white-space: nowrap; }
-    @media (max-width: 480px) { .league-badge-sm img[src$="/PL.png"] { width: 32px; height: 15px; } .league-badge-sm { gap: 4px; font-size: 11px; } }   /* 좁은 폰: 한 줄 유지 */
+    @media (max-width: 480px) { .league-badge-sm img[src$="org/PL.png"] { width: 32px; height: 15px; } .league-badge-sm { gap: 4px; font-size: 11px; } }   /* 좁은 폰: 한 줄 유지 */
     .league-badge-sm img { width: 18px; height: 18px; object-fit: contain; }
     .vs-center { font-size: 22px; font-weight: 700; color: var(--muted); margin-top: 50px; }
     /* 홈·원정 바꾸기 버튼(VS 자리) — VS 글자 + 화살표 동그라미 + "바꾸기", 누르면 화살표가 반 바퀴 돌고 두 로고가 서로 건너감 */
@@ -1412,14 +1412,19 @@
     .lg-item:hover { background: rgba(88,166,255,0.08); color: var(--text); }
     .lg-item.active { background: rgba(88,166,255,0.14); color: var(--blue-text, var(--blue)); font-weight: 700; }
     .lg-item-logo { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
-    .lg-item-logo { filter: drop-shadow(0 0 1px rgba(236,241,250,0.45)); }   /* 남색 리그앙 로고 등이 어두운 바탕에 묻혀서(흰색 반전 로고는 인라인 filter가 우선) */
-    .lg-item-logo[src$="/PL.png"] { object-fit: cover; object-position: 8% 50%; }   /* EPL은 가로형(사자+글자) — 작은 칸에선 사자만 */
+    .lg-item-star { margin-left: auto; color: var(--gold); font-size: 11px; flex-shrink: 0; }
     .lg-chips { display: none; }
     .lg-head { padding: 18px 20px 0; }
     .lg-head-top { display: flex; align-items: center; gap: 14px; }
-    .lg-head-logo-wrap { width: 52px; height: 52px; border-radius: var(--r-md); background: rgba(236,241,250,0.06); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
-    .lg-head-logo { width: 38px; height: 38px; object-fit: contain; }
-    .lg-head-logo.wide { width: 52px; height: 30px; object-fit: cover; }
+    /* 리그 아이콘은 박스 없이 심볼만(2026-10-06, 사용자 요청 — logos/league/*.png는 글자를 빼고 잘라 둔 것) */
+    .lg-head-logo { width: 48px; height: 48px; object-fit: contain; flex-shrink: 0; }
+    .lg-head-txt { min-width: 0; }
+    /* 시즌 고르기 — 머리 오른쪽 알약 */
+    .lg-season { position: relative; margin-left: auto; flex-shrink: 0; }
+    .lg-season select { appearance: none; -webkit-appearance: none; background: var(--surface-2); border: 0.5px solid var(--border); color: var(--text); font-family: inherit; font-size: 14px; font-weight: 600; padding: 9px 34px 9px 15px; border-radius: var(--r-pill); cursor: pointer; font-variant-numeric: tabular-nums; }
+    .lg-season select:hover, .lg-season select:focus-visible { border-color: var(--blue); outline: none; }
+    .lg-season svg { position: absolute; right: 12px; top: 50%; width: 14px; height: 14px; margin-top: -7px; fill: none; stroke: var(--muted); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
+    #page-league #season-tabs { display: none !important; }   /* 순위표 패널의 예전 시즌 버튼 — 머리의 시즌 고르기가 대신함 */
     .lg-head-name { font-size: var(--fs-2xl, 24px); font-weight: 800; color: var(--text); letter-spacing: -0.4px; line-height: 1.2; }
     .lg-head-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
     .lg-tabs { display: flex; gap: 4px; margin: 14px -20px 0; padding: 0 12px; border-top: 0.5px solid var(--border); overflow-x: auto; scrollbar-width: none; }
@@ -1436,8 +1441,9 @@
     }
     @media (max-width: 600px) {
       .lg-head { padding: 14px 14px 0; }
-      .lg-head-logo-wrap { width: 44px; height: 44px; }
-      .lg-head-logo { width: 32px; height: 32px; } .lg-head-logo.wide { width: 44px; height: 26px; }
+      .lg-head-logo { width: 38px; height: 38px; }
+      .lg-season select { font-size: 13px; padding: 8px 30px 8px 12px; }
+      .lg-season svg { right: 10px; }
       .lg-head-name { font-size: 20px; }
       .lg-tabs { margin: 12px -14px 0; padding: 0 6px; }
       .lg-tab { padding: 12px 10px 10px; font-size: 13.5px; }
@@ -1475,6 +1481,47 @@
     .lo-table tr.is-fav td { background: rgba(88,166,255,0.08); }
     .lo-table tr.is-fav .lo-team { color: var(--blue); font-weight: 700; }
     .lo-note { font-size: 11px; color: var(--faint); margin-top: 10px; line-height: 1.5; }
+    .lo-table .fav-star { margin-left: 2px; }
+    .lo-ded { font-family: var(--font-ui); font-size: 10px; color: var(--red); margin-left: 3px; font-weight: 600; }
+    /* 지난 시즌 개요: 시즌 결과(우승·준우승·강등) */
+    .lo-res-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--r-md); cursor: pointer; margin-bottom: 8px; background: rgba(24,35,58,0.55); border: 0.5px solid var(--border); }
+    .lo-res-row.gold { background: rgba(240,192,64,0.08); border-color: rgba(240,192,64,0.35); }
+    .lo-res-row img { width: 32px; height: 32px; object-fit: contain; }
+    .lo-res-row b { font-size: 15px; color: var(--text); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .lo-res-row small { margin-left: auto; font-size: 12px; color: var(--muted); white-space: nowrap; }
+    .lo-res-row:hover b { color: var(--blue); }
+    .lo-res-badge { display: inline-flex; align-items: center; gap: 4px; min-width: 58px; font-size: 12px; font-weight: 700; color: var(--muted); }
+    .lo-res-row.gold .lo-res-badge { color: var(--gold); }
+    .lo-res-badge svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .lo-res-rel { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 4px; font-size: 12px; color: var(--muted); }
+    .lo-res-rel > span { margin-right: 4px; color: var(--red); font-weight: 600; }
+    .lo-res-rel button { display: inline-flex; align-items: center; gap: 5px; padding: 4px 9px; border-radius: var(--r-pill); border: 0.5px solid var(--border); background: none; color: var(--text-2); font-family: inherit; font-size: 12px; cursor: pointer; }
+    .lo-res-rel button:hover { border-color: var(--blue); color: var(--text); }
+    .lo-res-rel img { width: 16px; height: 16px; object-fit: contain; }
+    .lo-res-rel small { color: var(--amber); font-size: 10px; }
+    /* 시즌 탭: 역대 우승·준우승 */
+    .lh-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; margin: 4px 2px 12px; }
+    .lh-head b { font-size: 16px; color: var(--text); } .lh-head span { font-size: 12px; color: var(--muted); }
+    .lh-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+    .lh-grid .lh-card { margin: 0; padding: 14px 16px; }
+    .lh-card.has-data, .lh-now { cursor: pointer; transition: border-color .15s; }
+    .lh-card.has-data:hover, .lh-now:hover { border-color: rgba(88,166,255,0.55); }
+    .lh-now { border-color: rgba(88,166,255,0.35); }
+    .lh-season { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-family: var(--font-num); font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 10px; letter-spacing: 0.3px; }
+    .lh-go { font-family: var(--font-ui); font-size: 12px; font-weight: 500; color: var(--blue); }
+    .lh-live { font-family: var(--font-ui); font-size: 11px; font-weight: 600; color: var(--blue-text, var(--blue)); background: rgba(88,166,255,0.12); padding: 3px 8px; border-radius: var(--r-pill); }
+    .lh-team { display: flex; align-items: center; gap: 10px; padding: 6px 0; cursor: pointer; min-width: 0; }
+    .lh-team.plain { cursor: default; }
+    .lh-team img, .lh-ini { width: 30px; height: 30px; object-fit: contain; flex-shrink: 0; }
+    .lh-ini { border-radius: 50%; background: var(--surface-2); color: var(--muted); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .lh-team > span { display: flex; flex-direction: column; min-width: 0; }
+    .lh-team b { font-size: 14px; color: var(--text); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .lh-team:not(.plain):hover b { color: var(--blue); }
+    .lh-team small { font-size: 11px; color: var(--muted); }
+    .lh-team.gold small { color: var(--gold); font-weight: 600; }
+    .lh-stripped { text-decoration: line-through; color: var(--muted) !important; }
+    .lh-src { margin-top: 14px; } .lh-src a { color: var(--muted); }
+    @media (max-width: 480px) { .lh-grid { grid-template-columns: minmax(0, 1fr); } }
     .lo-sim-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 18px; }
     .lo-sub { font-size: 12px; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
     .lo-sim-row { display: grid; grid-template-columns: 20px minmax(0, 1fr) 46px 36px; align-items: center; gap: 8px; padding: 6px 0; cursor: pointer; font-size: 13px; }
@@ -1516,7 +1563,7 @@
     .mt-lg { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: var(--muted); width: fit-content; }
     .mt-lg:hover { color: var(--blue); }
     .mt-lg img, .mt-comp img { width: 16px; height: 16px; object-fit: contain; }
-    .mt-lg img[src$="/PL.png"], .mt-comp img[src$="/PL.png"] { width: 32px; object-fit: cover; }
+    .mt-lg img[src$="org/PL.png"], .mt-comp img[src$="org/PL.png"] { width: 32px; object-fit: cover; }
     .mt-rank { text-align: right; flex-shrink: 0; }
     .mt-rank b { display: block; font-family: var(--font-num); font-size: 28px; color: var(--text); line-height: 1; }
     .mt-rank b small { font-size: 13px; color: var(--muted); font-family: var(--font-ui); margin-left: 1px; }
@@ -2216,6 +2263,19 @@
     #schedule-month-select, .sched-month-select { background: var(--surface-2); border: 0.5px solid var(--border); color: var(--text); font-size: 14px; font-weight: 600; padding: 8px 16px; border-radius: 10px; cursor: pointer; text-align: center; text-align-last: center; min-width: 140px; }
     #schedule-month-select:hover, .sched-month-select:hover { border-color: var(--blue); }
     #schedule-content { max-width: 640px; margin: 0 auto; }
+    .sched-bar { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px 12px; max-width: 640px; margin: 0 auto 12px; }
+    .sched-bar .sched-fav-toggle { position: static; transform: none; margin: 0; }
+    .sched-pick-wrap { display: inline-flex; align-items: center; gap: 8px; }
+    .sched-pick-wrap img { width: 26px; height: 26px; object-fit: contain; }
+    @media (max-width: 600px) {   /* 팀별 보기에서 긴 팀 이름이 고르기 칸을 넓혀 › 가 다음 줄로 밀렸음 */
+      .sched-month-nav { flex-wrap: nowrap !important; gap: 8px; }
+      .sched-pick-wrap { min-width: 0; flex: 0 1 auto; }
+      #schedule-month-select { min-width: 0; max-width: 52vw; padding: 8px 10px; }
+      .sched-pick-wrap img { width: 22px; height: 22px; }
+    }
+    .sched-team-sum { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px 14px; max-width: 640px; margin: -4px auto 12px; font-size: 13px; color: var(--muted); }
+    .sched-team-sum b { color: var(--text); cursor: pointer; } .sched-team-sum b:hover { color: var(--blue); }
+    .sched-team-sum i { font-style: normal; font-weight: 600; } .sched-team-sum i.w { color: var(--green); } .sched-team-sum i.l { color: var(--red); } .sched-team-sum i.d { color: var(--text-2); }
     .sched-date-header { font-size: 12px; color: var(--muted); font-weight: 600; margin: 18px 0 8px; padding-bottom: 6px; border-bottom: 0.5px solid var(--border); }
     .sched-date-header:first-child { margin-top: 0; }
     .sched-match { display: flex; align-items: center; padding: 10px 4px; border-bottom: 0.5px solid var(--surface-2); font-size: 13px; border-radius: 10px; transition: background-color .15s; }
@@ -2420,10 +2480,12 @@
     <div class="lg-main">
       <div class="lg-chips" id="lg-chips" role="tablist" aria-label="리그"></div>
       <div class="card lg-head">
-        <div class="lg-head-top"><span class="lg-head-logo-wrap"><img class="lg-head-logo" id="lg-head-logo" alt=""></span><div class="lg-head-txt"><div class="lg-head-name" id="lg-head-name"></div><div class="lg-head-sub" id="lg-head-sub"></div></div></div>
+        <div class="lg-head-top"><img class="lg-head-logo" id="lg-head-logo" alt=""><div class="lg-head-txt"><div class="lg-head-name" id="lg-head-name"></div><div class="lg-head-sub" id="lg-head-sub"></div></div>
+          <label class="lg-season"><select id="lg-season" onchange="setLeagueSeason(this.value)" aria-label="시즌 선택"></select><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10l5 5 5-5"/></svg></label></div>
         <div class="lg-tabs" id="lg-tabs" role="tablist" aria-label="리그 보기"></div>
       </div>
       <div class="lg-panel" id="page-overview"><div id="lo-root"></div></div>
+      <div class="lg-panel" id="page-history"><div id="lh-root"></div></div>
   <div class="lg-panel" id="page-standings">
     <div id="standings-card" class="card st-card">
       <div class="league-tabs st-leagues" id="league-tabs">
@@ -2505,12 +2567,19 @@
       <div class="league-tab" onclick="loadSchedule('FL1', this)" data-league="FL1"><img alt="" src="https://crests.football-data.org/FL1.png" onerror="this.style.display='none'"> 리그앙</div>
       <div class="league-tab ucl-tab" onclick="loadSchedule('CL', this)" data-league="CL"><img alt="" src="https://crests.football-data.org/CL.png" onerror="this.style.display='none'" style="filter:brightness(0) invert(1)"> 챔피언스리그</div>
     </div>
-    <div class="sched-month-nav">
-      <button class="sched-month-arrow" id="sched-month-prev" onclick="stepScheduleMonth(-1)" aria-label="이전 달">‹</button>
-      <select id="schedule-month-select" onchange="selectScheduleMonth(this.value)"></select>
-      <button class="sched-month-arrow" id="sched-month-next" onclick="stepScheduleMonth(1)" aria-label="다음 달">›</button>
+    <!-- 일정 보기(2026-10-06): 날짜별(달) · 라운드별 · 팀별 — 위 줄에서 보기를 고르고, 아래 줄 ‹ 고르기 › 로 넘김(팀별은 ‹ ›가 이전·다음 팀) -->
+    <div class="sched-bar">
+      <div class="st-seg sched-views" id="sched-views" role="tablist" aria-label="일정 보기">
+        <button data-v="date" onclick="setSchedView('date')">날짜별</button><button data-v="round" onclick="setSchedView('round')">라운드별</button><button data-v="team" onclick="setSchedView('team')">팀별</button>
+      </div>
       <button class="sched-fav-toggle" id="sched-fav-toggle" style="display:none" onclick="toggleSchedFav()" aria-pressed="false">★ 내 팀만</button>
     </div>
+    <div class="sched-month-nav">
+      <button class="sched-month-arrow" id="sched-month-prev" onclick="stepSchedPick(-1)" aria-label="이전">‹</button>
+      <span class="sched-pick-wrap"><img id="sched-pick-logo" alt="" hidden><select id="schedule-month-select" onchange="selectSchedPick(this.value)" aria-label="고르기"></select></span>
+      <button class="sched-month-arrow" id="sched-month-next" onclick="stepSchedPick(1)" aria-label="다음">›</button>
+    </div>
+    <div id="sched-team-sum" class="sched-team-sum" hidden></div>
     <div id="schedule-content"><div class="loading"><svg class="logo-bars animate" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg>일정 불러오는 중...</div></div>
   </div>
 </div>
@@ -2943,49 +3012,80 @@ const LEAGUE_DATA = {
 // 주소 #league/PL(개요) · #league/PL/standings. 예전 주소(#standings 등)는 마지막으로 본 리그의 그 탭으로.
 // 패널은 예전 페이지(#page-standings 등)를 그대로 옮긴 것 — 로더(loadStandings·loadSchedule·loadChampion·loadPlayers)도 그대로 씀
 const LG_LIST = [
-  { code: 'PL', name: '프리미어리그', country: '잉글랜드', logo: 'https://crests.football-data.org/PL.png', inv: true },
-  { code: 'PD', name: '라리가', country: '스페인', logo: 'https://crests.football-data.org/laliga.png' },
-  { code: 'BL1', name: '분데스리가', country: '독일', logo: 'https://crests.football-data.org/BL1.png' },
-  { code: 'SA', name: '세리에 A', country: '이탈리아', logo: 'https://crests.football-data.org/c111.png' },
-  { code: 'FL1', name: '리그앙', country: '프랑스', logo: 'https://crests.football-data.org/FL1.png' },
-  { code: 'CL', name: '챔피언스리그', country: '유럽', logo: 'https://crests.football-data.org/CL.png', inv: true },
-];
+  { code: 'PL', name: '프리미어리그', country: '잉글랜드' },
+  { code: 'PD', name: '라리가', country: '스페인' },
+  { code: 'BL1', name: '분데스리가', country: '독일' },
+  { code: 'SA', name: '세리에 A', country: '이탈리아' },
+  { code: 'FL1', name: '리그앙', country: '프랑스' },
+  { code: 'CL', name: '챔피언스리그', country: '유럽' },
+].map(l => ({ ...l, logo: `logos/league/${l.code}.png` }));   // 글자 없이 심볼만 자른 아이콘(generate_league_logos.py — 2026-10-06)
 const LG_BY = Object.fromEntries(LG_LIST.map(l => [l.code, l]));
-const LG_TAB_NAME = { overview: '개요', standings: '순위', schedule: '경기', champion: '순위 예측', players: '선수' };
+const LG_TAB_NAME = { overview: '개요', standings: '순위', schedule: '경기', champion: '순위 예측', players: '선수', history: '시즌' };
 const LEGACY_LG_PAGES = ['standings', 'schedule', 'champion', 'players'];
-const lgTabsFor = code => code === 'CL' ? ['overview', 'standings', 'schedule', 'players'] : ['overview', 'standings', 'schedule', 'champion', 'players'];
-let lgState = { code: (() => { try { const c = localStorage.getItem('fdLeague'); return LG_BY[c] ? c : 'PL'; } catch (e) { return 'PL'; } })(), tab: 'overview' };
-const lgLoaded = {};   // 패널별로 지금 그려진 리그 — 같은 리그로 돌아오면 다시 받지 않음(순위 예측 결과·고른 시즌이 그대로 남게)
-const lgLogoImg = (l, cls) => `<img class="${cls}" src="${l.logo}" alt="" onerror="this.style.visibility='hidden'"${l.inv ? ' style="filter:brightness(0) invert(1)"' : ''}>`;
+const LG_CUR_YEAR = 2026;   // 서버 CURRENT_SEASON_YEAR와 같이(시즌 전환 체크리스트)
+// 탭은 시즌에 따라: 순위 예측은 이번 시즌 리그만, 선수(득점·도움)는 이번 시즌만(지난 시즌 선수 기록은 API-Football Pro 결제 후)
+const lgTabsFor = (code, season = 'current') => {
+  const cur = season === 'current';
+  return ['overview', 'standings', 'schedule', ...(cur && code !== 'CL' ? ['champion'] : []), ...(cur ? ['players'] : []), 'history'];
+};
+const lgSeasonNorm = s => (s == null || s === '' || s === 'current' || +s === LG_CUR_YEAR) ? 'current' : String(s);
+const lgSeasonLabel = s => { const y = s === 'current' ? LG_CUR_YEAR : +s; return `${y}/${String((y + 1) % 100).padStart(2, '0')}`; };
+let lgState = { code: (() => { try { const c = localStorage.getItem('fdLeague'); return LG_BY[c] ? c : 'PL'; } catch (e) { return 'PL'; } })(), tab: 'overview', season: 'current' };
+const lgLoaded = {};   // 패널별로 지금 그려진 "리그:시즌" — 같은 것으로 돌아오면 다시 받지 않음(순위 예측 결과·보기 설정이 그대로 남게)
+const lgSeasonsCache = {};
+function lgSeasons(code) {   // 이 리그에 데이터가 있는 시즌 목록(서버 /league/seasons — 과거 시즌을 더 받으면 여기만 늘어남)
+  if (!lgSeasonsCache[code]) lgSeasonsCache[code] = fetch(`${API}/league/seasons/${code}`).then(r => r.ok ? r.json() : null).then(d => d ? d.seasons : null)
+    .then(s => { if (!s) delete lgSeasonsCache[code]; return s; }).catch(() => { delete lgSeasonsCache[code]; return null; });
+  return lgSeasonsCache[code];
+}
+const lgLogoImg = (l, cls) => `<img class="${cls}" src="${l.logo}" alt="" onerror="this.style.visibility='hidden'">`;
 const lgPanelOn = tab => document.getElementById('page-league')?.classList.contains('active') && lgState.tab === tab;
-const lgRoute = () => `league/${lgState.code}${lgState.tab === 'overview' ? '' : '/' + lgState.tab}`;
+const lgRoute = () => { const { code, tab, season } = lgState; return `league/${code}${tab === 'overview' && season === 'current' ? '' : '/' + tab}${season === 'current' ? '' : '/' + season}`; };
 
 function renderLgChrome() {
-  const l = LG_BY[lgState.code];
+  const l = LG_BY[lgState.code], season = lgState.season;
   const item = x => `<button type="button" class="lg-item${x.code === l.code ? ' active' : ''}" data-lg="${x.code}" onclick="openLeague('${x.code}')"${x.code === l.code ? ' aria-current="page"' : ''}>${lgLogoImg(x, 'lg-item-logo')}<span>${x.name}</span></button>`;
   const favs = getFavoriteTeams();
   document.getElementById('lg-side').innerHTML = `<div class="lg-side-t">리그</div>${LG_LIST.map(item).join('')}` +
-    (favs.length ? `<div class="lg-side-t">내 팀</div>${favs.map(t => `<button type="button" class="lg-item" onclick="openTeamInfo('${escJs(t)}')"><img class="lg-item-logo" src="${logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'"><span>${shortName(t)}</span></button>`).join('')}` : '');
+    (favs.length ? `<div class="lg-side-t">내 팀</div>${favs.map(t => `<button type="button" class="lg-item" onclick="openTeamInfo('${escJs(t)}')"><img class="lg-item-logo" src="${logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'"><span>${shortName(t)}</span><span class="lg-item-star" aria-label="내 팀">★</span></button>`).join('')}` : '');
   const chips = document.getElementById('lg-chips');
   chips.innerHTML = LG_LIST.map(x => `<button type="button" class="league-tab${x.code === l.code ? ' active' : ''}" data-lg="${x.code}" role="tab" aria-selected="${x.code === l.code}" onclick="openLeague('${x.code}')">${lgLogoImg(x, '')}${x.code === 'PL' ? 'EPL' : x.name}</button>`).join('');
   const act = chips.querySelector('.active');
   if (act) chips.scrollTo({ left: act.offsetLeft - chips.clientWidth / 2 + act.offsetWidth / 2, behavior: 'smooth' });
-  const logo = document.getElementById('lg-head-logo');
-  logo.src = l.logo; logo.style.filter = l.inv ? 'brightness(0) invert(1)' : ''; logo.classList.toggle('wide', l.code === 'PL');
+  document.getElementById('lg-head-logo').src = l.logo;
   document.getElementById('lg-head-name').textContent = l.name;
-  document.getElementById('lg-head-sub').textContent = `${l.country} · 2026-27 시즌`;
-  document.getElementById('lg-tabs').innerHTML = lgTabsFor(l.code).map(t => `<button type="button" class="lg-tab${t === lgState.tab ? ' active' : ''}" role="tab" aria-selected="${t === lgState.tab}" onclick="openLeague('${l.code}','${t}')">${l.code === 'CL' && t === 'standings' ? '순위·대진' : LG_TAB_NAME[t]}</button>`).join('');
+  document.getElementById('lg-head-sub').textContent = `${l.country} · ${season === 'current' ? '이번 시즌' : '지난 시즌 기록'}`;
+  renderLgSeasonSelect();
+  document.getElementById('lg-tabs').innerHTML = lgTabsFor(l.code, season).map(t => `<button type="button" class="lg-tab${t === lgState.tab ? ' active' : ''}" role="tab" aria-selected="${t === lgState.tab}" onclick="openLeague('${l.code}','${t}')">${l.code === 'CL' && t === 'standings' ? '순위·대진' : LG_TAB_NAME[t]}</button>`).join('');
   const at = document.querySelector('#lg-tabs .active');
   if (at) { const tb = document.getElementById('lg-tabs'); tb.scrollTo({ left: at.offsetLeft - tb.clientWidth / 2 + at.offsetWidth / 2 }); }
 }
+// 시즌 고르기(머리 오른쪽) — 목록이 오기 전엔 지금 시즌 하나만, 오면 데이터가 있는 시즌 전부
+function renderLgSeasonSelect() {
+  const sel = document.getElementById('lg-season'), code = lgState.code;
+  const fill = list => {
+    if (lgState.code !== code) return;
+    const opts = (list && list.length ? list : [{ year: LG_CUR_YEAR, label: lgSeasonLabel('current') }]);
+    if (lgState.season !== 'current' && !opts.some(o => String(o.year) === lgState.season)) opts.push({ year: +lgState.season, label: lgSeasonLabel(lgState.season) });
+    sel.innerHTML = opts.map(o => `<option value="${o.year === LG_CUR_YEAR ? 'current' : o.year}"${lgSeasonNorm(o.year) === lgState.season ? ' selected' : ''}>${o.label}</option>`).join('');
+  };
+  fill(null);
+  lgSeasons(code).then(fill);
+}
+function setLeagueSeason(v) {
+  track('league_season', { league: lgState.code, season: v });
+  openLeague(lgState.code, lgState.tab, false, v);
+}
 
-function openLeague(code, tab, fromHistory) {
+function openLeague(code, tab, fromHistory, season) {
   code = LG_BY[code] ? code : lgState.code;
+  // 시즌은 같은 리그 안에서 탭을 옮길 땐 그대로, 다른 리그로 가면 이번 시즌부터
+  season = lgSeasonNorm(season === undefined ? (code === lgState.code ? lgState.season : 'current') : season);
   tab = tab || lgState.tab || 'overview';
-  if (!lgTabsFor(code).includes(tab)) tab = 'overview';   // 챔스엔 순위 예측이 없음
+  if (!lgTabsFor(code, season).includes(tab)) tab = tab === 'champion' || tab === 'players' ? 'standings' : 'overview';   // 지난 시즌엔 순위 예측·선수가 없음
   const page = document.getElementById('page-league');
   const wasActive = page.classList.contains('active');
-  if (wasActive && lgState.code === code && lgState.tab === tab) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+  if (wasActive && lgState.code === code && lgState.tab === tab && lgState.season === season) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
   if (!wasActive) {
     window.scrollTo({ top: 0, behavior: 'instant' });
     window.fotBg?.turn();
@@ -2998,7 +3098,7 @@ function openLeague(code, tab, fromHistory) {
     const y = head.getBoundingClientRect().top + scrollY - navH;
     if (scrollY > y) window.scrollTo({ top: y, behavior: 'instant' });
   }
-  lgState = { code, tab };
+  lgState = { code, tab, season };
   try { localStorage.setItem('fdLeague', code); } catch (e) {}
   renderLgChrome();
   document.querySelectorAll('#page-league .lg-panel').forEach(p => p.classList.toggle('active', p.id === 'page-' + tab));
@@ -3009,43 +3109,68 @@ function openLeague(code, tab, fromHistory) {
   logosReady.then(() => { if (lgState.code === code) renderLgChrome(); });   // 옆 목록 내 팀 로고(로고 목록이 늦게 오면 빈 칸이었음)
 }
 function loadLgPanel(code, tab, force) {
-  if (!force && lgLoaded[tab] === code) { if (tab === 'schedule') scrollToNextScheduled(); return; }
-  lgLoaded[tab] = code;
-  if (tab === 'overview') return loadLeagueOverview(code);
-  if (tab === 'standings') return code === 'CL' ? loadCL() : loadStandings(code);
-  if (tab === 'schedule') return loadSchedule(code);
+  const season = lgState.season, key = `${code}:${season}`;
+  if (!force && lgLoaded[tab] === key) { if (tab === 'schedule') scrollToNextScheduled(); return; }
+  lgLoaded[tab] = key;
+  if (tab === 'overview') return loadLeagueOverview(code, season);
+  if (tab === 'standings') {
+    // 순위표 시즌 = 머리의 시즌(패널 안 예전 시즌 버튼 줄은 숨김 — 로더가 그 값을 읽으므로 활성 표시만 맞춤)
+    currentStandingsSeason = season;
+    document.querySelectorAll('#season-tabs button').forEach(t => t.classList.toggle('active', t.dataset.season === season));
+    return code === 'CL' ? loadCL() : loadStandings(code);
+  }
+  if (tab === 'schedule') return loadSchedule(code, null, season);
   if (tab === 'champion') return loadChampion(code);
   if (tab === 'players') return loadPlayers(code);
+  if (tab === 'history') return loadLeagueHistory(code);
 }
 
-// ── 리그 개요: 시즌 숫자 4칸 · 순위(짧은 표) · 다음 경기 AI 예측 · 우승/강등 확률 · 득점/도움 TOP 3 ──
+// 리그·시즌 일정(이번 시즌 = scheduleData[리그], 지난 시즌 = scheduleData['리그@연도'] — 끝난 시즌은 날짜만 있고 시각은 없음)
+const schedKeyOf = (code, season) => !season || season === 'current' ? code : `${code}@${season}`;
+async function getLeagueSchedule(code, season, onRetry) {
+  const k = schedKeyOf(code, season);
+  if (!scheduleData[k]) {
+    const res = await fetchWithRetry(`${API}/schedule/${code}${k === code ? '' : `?season=${season}`}`, {}, onRetry ? { onRetry } : {});
+    scheduleData[k] = (await res.json()).matches;
+  }
+  return scheduleData[k];
+}
+
+// ── 리그 개요: 시즌 숫자 4칸 · 순위(짧은 표) · 다음 경기 AI 예측(지난 시즌은 시즌 결과·마지막 라운드) · 우승/강등 확률 · 득점/도움 TOP 3 ──
 let loSeq = 0;
 const LO_ZONE_C = { 'zone-cl': 'var(--blue)', 'zone-cl-q': 'var(--purple)', 'zone-el': 'var(--away)', 'zone-ecl': 'var(--green)', 'zone-rel-po': 'var(--amber)', 'zone-rel': 'var(--red-strong)' };
 const loMore = (tab, label) => `<button type="button" class="lo-more" onclick="openLeague(lgState.code,'${tab}')">${label} <span aria-hidden="true">›</span></button>`;
-async function loadLeagueOverview(code) {
-  const seq = ++loSeq, cl = code === 'CL', root = document.getElementById('lo-root');
+const LG_ROUNDS = { PL: 38, PD: 38, SA: 38, BL1: 34, FL1: 34 };
+async function loadLeagueOverview(code, season = 'current') {
+  const seq = ++loSeq, cl = code === 'CL', cur = season === 'current', root = document.getElementById('lo-root');
   const box = (id, title, tab, label, body) => `<div class="card lo-card" id="${id}"><div class="lo-card-h"><b>${title}</b>${loMore(tab, label)}</div><div class="lo-body">${body}</div></div>`;
   root.innerHTML = `<div class="lo-stats" id="lo-stats">${'<div class="lo-stat"><div class="skeleton skeleton-line" style="width:60%;margin:0 auto 6px"></div><div class="skeleton skeleton-line" style="width:40%;margin:0 auto"></div></div>'.repeat(4)}</div>
     <div class="lo-grid">
-      <div class="lo-col">${box('lo-next', '다음 경기 · AI 예측', 'schedule', '전체 일정', skeletonMatchRows(4))}
-        ${box('lo-players', '득점 · 도움 순위', 'players', '선수 순위', skeletonRows(3))}</div>
-      <div class="lo-col">${box('lo-table', cl ? '리그 스테이지 순위' : '순위', 'standings', cl ? '전체 순위·대진' : '전체 순위표', skeletonRows(10))}
-        ${cl ? '' : box('lo-sim', '우승 · 강등 확률', 'champion', '순위 예측', skeletonRows(4))}</div>
+      <div class="lo-col">${cur ? '' : box('lo-result', `${lgSeasonLabel(season)} 시즌 결과`, 'history', '역대 우승', skeletonRows(3))}
+        ${box('lo-next', cur ? '다음 경기 · AI 예측' : (cl ? '결승' : '마지막 라운드'), 'schedule', '전체 일정', skeletonMatchRows(4))}
+        ${cur ? box('lo-players', '득점 · 도움 순위', 'players', '선수 순위', skeletonRows(3)) : ''}</div>
+      <div class="lo-col">${box('lo-table', cl ? '리그 스테이지 순위' : (cur ? '순위' : '최종 순위'), 'standings', cl ? '전체 순위·대진' : '전체 순위표', skeletonRows(10))}
+        ${cl || !cur ? '' : box('lo-sim', '우승 · 강등 확률', 'champion', '순위 예측', skeletonRows(4))}</div>
     </div>`;
-  const live = () => seq === loSeq && lgState.code === code;
-  const fail = id => { const el = document.querySelector(`#${id} .lo-body`); if (el) el.innerHTML = '<div class="ti-empty">불러오지 못했어요. 잠시 후 다시 시도해주세요.</div>'; };
+  const live = () => seq === loSeq && lgState.code === code && lgState.season === season;
+  const fail = (id, msg) => { const el = document.querySelector(`#${id} .lo-body`); if (el) el.innerHTML = `<div class="ti-empty">${msg || '불러오지 못했어요. 잠시 후 다시 시도해주세요.'}</div>`; };
   await logosReady;
-  // 순위표
-  fetchWithRetry(`${API}/standings/${code}?season=current`).then(r => r.json()).then(d => { if (live()) renderLoTable(code, d.standings || []); }).catch(() => live() && fail('lo-table'));
-  // 일정 → 시즌 숫자 + 다음 경기
+  // 순위표(챔스 23-24는 조별리그라 한 줄 순위표가 없음)
+  const standP = fetchWithRetry(`${API}/standings/${code}?season=${season}`).then(r => r.json()).then(d => d.standings || []);
+  standP.then(rows => { if (live()) renderLoTable(code, rows, season); })
+    .catch(() => live() && fail('lo-table', cl && +season <= 2023 ? '23-24 시즌까지는 조별리그라 한 줄 순위표가 없어요 · 순위·대진 탭에서 조별 순위를 볼 수 있어요' : null));
+  // 일정 → 시즌 숫자 + 다음 경기(지난 시즌은 마지막 라운드·결승)
   (async () => {
-    const predsP = ensureSchedulePreds(code);
-    if (!scheduleData[code]) scheduleData[code] = (await (await fetchWithRetry(`${API}/schedule/${code}`)).json()).matches;
-    if (!schedulePreds[code]) await Promise.race([predsP, new Promise(r => setTimeout(r, 700))]);
+    const predsP = cur ? ensureSchedulePreds(code) : Promise.resolve(null);
+    const ms = await getLeagueSchedule(code, season);
+    if (cur && !schedulePreds[code]) await Promise.race([predsP, new Promise(r => setTimeout(r, 700))]);
     if (!live()) return;
-    renderLoStats(code, scheduleData[code]); renderLoNext(code, scheduleData[code]);
-    if (!schedulePreds[code]) predsP.then(m => { if (m && live()) renderLoNext(code, scheduleData[code]); });
-  })().catch(() => { if (live()) { fail('lo-next'); document.getElementById('lo-stats').innerHTML = ''; } });
+    renderLoStats(code, ms, cur);
+    if (cur) { renderLoNext(code, ms); if (!schedulePreds[code]) predsP.then(m => { if (m && live()) renderLoNext(code, ms); }); }
+    else renderLoLast(code, ms);
+    if (!cur) renderLoResult(code, season, ms, await standP.catch(() => []));
+  })().catch(() => { if (live()) { fail('lo-next'); fail('lo-result'); document.getElementById('lo-stats').innerHTML = ''; } });
+  if (!cur) return;
   // 우승·강등 확률(순위 예측 탭과 같은 계산, 2,000회)
   if (!cl) fetchWithRetry(`${API}/predict/champion/${code}`).then(r => r.json()).then(d => {
     if (!live()) return;
@@ -3054,9 +3179,9 @@ async function loadLeagueOverview(code) {
   }).catch(() => live() && fail('lo-sim'));
   // 득점·도움
   fetch(`${API}/players/leaders/${code}`).then(r => { if (!r.ok) throw r; return r.json(); }).then(d => { if (live()) renderLoPlayers(d); })
-    .catch(() => { if (!live()) return; const el = document.querySelector('#lo-players .lo-body'); if (el) el.innerHTML = '<div class="ti-empty">이번 시즌 득점 순위를 준비 중이에요.</div>'; });
+    .catch(() => { if (live()) fail('lo-players', '이번 시즌 득점 순위를 준비 중이에요.'); });
 }
-function renderLoStats(code, ms) {
+function renderLoStats(code, ms, cur = true) {
   const done = ms.filter(m => isDone(m) && m.home_goals != null), n = done.length;
   const el = document.getElementById('lo-stats');
   if (!n) { el.innerHTML = ''; return; }
@@ -3064,10 +3189,19 @@ function renderLoStats(code, ms) {
   const hw = done.filter(m => m.home_goals > m.away_goals).length, dr = done.filter(m => m.home_goals === m.away_goals).length;
   const md = Math.max(0, ...done.map(m => m.matchday || 0));
   const stat = (v, k) => `<div class="lo-stat"><b>${v}</b><span>${k}</span></div>`;
-  el.innerHTML = (code === 'CL' ? stat(`${n}<small>/${ms.length}</small>`, '진행한 경기') : stat(`${md}<small>/${(LG_ROUNDS[code] || 38)}</small>`, '라운드')) +
+  el.innerHTML = (code === 'CL' ? (cur ? stat(`${n}<small>/${ms.length}</small>`, '진행한 경기') : stat(n, '전체 경기')) : stat(`${md}<small>/${(LG_ROUNDS[code] || 38)}</small>`, cur ? '라운드' : '라운드 · 시즌 종료')) +
     stat((goals / n).toFixed(2), '경기당 골') + stat(Math.round(hw / n * 100) + '<small>%</small>', '홈 팀 승리') + stat(Math.round(dr / n * 100) + '<small>%</small>', '무승부');
 }
-const LG_ROUNDS = { PL: 38, PD: 38, SA: 38, BL1: 34, FL1: 34 };
+const loDateHead = d => `${d.getMonth() + 1}월 ${d.getDate()}일 (${'일월화수목금토'[d.getDay()]})`;
+function loMatchList(list, code) {
+  let html = '', last = '';
+  list.forEach(m => {
+    const ds = loDateHead(new Date(m.date));
+    if (ds !== last) { html += `<div class="sched-date-header">${ds}</div>`; last = ds; }
+    html += schedRowHtml(m, code);
+  });
+  return html;
+}
 function renderLoNext(code, ms) {
   const el = document.querySelector('#lo-next .lo-body'); if (!el) return;
   const now = Date.now();
@@ -3078,25 +3212,54 @@ function renderLoNext(code, ms) {
   const list = code !== 'CL' && md ? up.filter(m => m.matchday === md).slice(0, 12) : up.slice(0, 8);
   const h = document.querySelector('#lo-next .lo-card-h b');
   if (h) h.textContent = code !== 'CL' && md ? `${md}라운드 · AI 예측` : '다음 경기 · AI 예측';
-  let html = '', last = '';
-  list.forEach(m => {
-    const d = new Date(m.date), ds = `${d.getMonth() + 1}월 ${d.getDate()}일 (${'일월화수목금토'[d.getDay()]})`;
-    if (ds !== last) { html += `<div class="sched-date-header">${ds}</div>`; last = ds; }
-    html += schedRowHtml(m, code);
-  });
-  el.innerHTML = html; koStart();
+  el.innerHTML = loMatchList(list, code); koStart();
 }
-function renderLoTable(code, rows) {
+// 지난 시즌: 리그는 마지막 라운드 전 경기, 챔스는 결승
+function renderLoLast(code, ms) {
+  const el = document.querySelector('#lo-next .lo-body'); if (!el) return;
+  const done = ms.filter(isDone);
+  if (!done.length) { el.innerHTML = '<div class="ti-empty">경기 기록이 없어요.</div>'; return; }
+  let list;
+  if (code === 'CL') list = done.filter(m => m.stage === 'FINAL');
+  else { const md = Math.max(...done.map(m => m.matchday || 0)); list = done.filter(m => m.matchday === md); }
+  if (!list.length) list = done.slice(-1);
+  const h = document.querySelector('#lo-next .lo-card-h b');
+  if (h && code !== 'CL' && list[0].matchday) h.textContent = `마지막 라운드 · ${list[0].matchday}라운드`;
+  el.innerHTML = loMatchList(list, code);
+}
+// 지난 시즌 결과: 우승·준우승(리그는 최종 순위 1·2위, 챔스는 결승) + 강등 팀
+async function renderLoResult(code, season, ms, rows) {
+  const el = document.querySelector('#lo-result .lo-body'); if (!el) return;
+  const teamLine = (cls, label, team, sub) => team ? `<div class="lo-res-row ${cls}" onclick="openTeamInfo('${escJs(team)}')">
+      <span class="lo-res-badge">${cls === 'gold' ? TROPHY_ICON : ''}${label}</span><img src="${logos[team] || ''}" alt="" onerror="this.style.visibility='hidden'"><b>${teamNameHtml(team)}</b><small>${sub || ''}</small></div>` : '';
+  let html = '';
+  if (code === 'CL') {
+    const f = ms.find(m => m.stage === 'FINAL');
+    if (f) {
+      const homeWon = f.home_goals > f.away_goals || (f.home_goals === f.away_goals && f.penalties && f.penalties.home > f.penalties.away);
+      const [w, l] = homeWon ? [f.home_team, f.away_team] : [f.away_team, f.home_team];
+      html = teamLine('gold', '우승', w, `결승 ${f.home_goals}-${f.away_goals}`) + teamLine('silver', '준우승', l, '');
+    }
+  } else if (rows.length) {
+    const pts = r => `${r.points}점 · ${r.wins}승 ${r.draws}무 ${r.losses}패`;
+    html = teamLine('gold', '우승', rows[0].team, pts(rows[0])) + teamLine('silver', '준우승', rows[1]?.team, rows[1] ? pts(rows[1]) : '');
+    const rel = rows.filter(r => r.zone === 'rel' || r.zone === 'rel-po');
+    if (rel.length) html += `<div class="lo-res-rel"><span>강등${rel.some(r => r.zone === 'rel-po') ? '·승강 PO' : ''}</span>${rel.map(r => `<button type="button" onclick="openTeamInfo('${escJs(r.team)}')"><img src="${logos[r.team] || ''}" alt="" onerror="this.style.visibility='hidden'">${shortName(r.team)}${r.zone === 'rel-po' ? '<small>PO</small>' : ''}</button>`).join('')}</div>`;
+  }
+  el.innerHTML = html || '<div class="ti-empty">시즌 결과를 불러오지 못했어요.</div>';
+}
+function renderLoTable(code, rows, season = 'current') {
   const el = document.querySelector('#lo-table .lo-body'); if (!el) return;
   if (!rows.length) { el.innerHTML = '<div class="ti-empty">아직 순위가 없어요.</div>'; return; }
   const cl = code === 'CL', favs = new Set(getFavoriteTeams()), n = rows.length;
   const shown = cl ? rows.slice(0, 12) : rows;
-  const zc = i => cl ? (i < 8 ? 'var(--gold)' : i < 24 ? 'var(--away)' : '') : (LO_ZONE_C[getZoneClass(code, i, n)] || '');
-  el.innerHTML = `<table class="lo-table"><thead><tr><th>#</th><th class="lo-tm">팀</th><th>경기</th><th>득실</th><th>승점</th></tr></thead><tbody>${shown.map((r, i) => `
-    <tr class="${favs.has(r.team) ? 'is-fav' : ''}" style="${zc(i) ? `--zc:${zc(i)}` : ''}" onclick="openTeamInfo('${escJs(r.team)}')">
+  // 끝난 시즌은 그 시즌 공식 구역(컵 우승 팀 진출 등 — 서버 row.zone), 이번 시즌은 표준 배정
+  const zc = (r, i) => cl ? (i < 8 ? 'var(--gold)' : i < 24 ? 'var(--away)' : '') : (r.zone !== undefined ? (LO_ZONE_C['zone-' + r.zone] || '') : (LO_ZONE_C[getZoneClass(code, i, n)] || ''));
+  el.innerHTML = `<table class="lo-table"><thead><tr><th>#</th><th class="lo-tm">팀</th><th>경기</th><th>승</th><th>무</th><th>패</th><th>승점</th></tr></thead><tbody>${shown.map((r, i) => `
+    <tr class="${favs.has(r.team) ? 'is-fav' : ''}" style="${zc(r, i) ? `--zc:${zc(r, i)}` : ''}" onclick="openTeamInfo('${escJs(r.team)}')">
       <td><span class="lo-rank">${r.rank}</span></td>
-      <td class="lo-tm"><span class="lo-team"><img src="${logos[r.team] || r.logo || ''}" alt="" onerror="this.style.visibility='hidden'">${teamNameHtml(r.team)}</span></td>
-      <td>${r.played}</td><td class="${r.gd > 0 ? 'pos' : r.gd < 0 ? 'neg' : ''}">${r.gd > 0 ? '+' : ''}${r.gd}</td><td><b>${r.points}</b></td>
+      <td class="lo-tm"><span class="lo-team"><img src="${logos[r.team] || r.logo || ''}" alt="" onerror="this.style.visibility='hidden'">${teamNameHtml(r.team)}${favs.has(r.team) ? '<span class="fav-star" title="내 팀">★</span>' : ''}</span></td>
+      <td>${r.played}</td><td>${r.wins}</td><td>${r.draws}</td><td>${r.losses}</td><td><b>${r.points}${r.deduction ? `<small class="lo-ded" title="승점 감점">${r.deduction}</small>` : ''}</b></td>
     </tr>`).join('')}</tbody></table>${cl ? `<div class="lo-note">상위 12팀 · 1~8위 16강 직행(금색) · 9~24위 플레이오프(주황)</div>` : ''}`;
 }
 function renderLoSim(results, n) {
@@ -3114,6 +3277,43 @@ function renderLoPlayers(d) {
   const row = (p, v, unit) => `<div class="lo-pl-row">${playerAvatarHtml({ ...p }, 'lo-pl-photo')}<span class="lo-pl-info"><b>${p.name}</b><small>${shortName(p.team || '')}</small></span><span class="lo-pl-val"><b>${v}</b>${unit}</span></div>`;
   el.innerHTML = `<div class="lo-sim-grid"><div><div class="lo-sub">득점</div>${(d.goals || []).slice(0, 3).map(p => row(p, p.goals, '골')).join('') || '<div class="ti-empty">기록 없음</div>'}</div>
     <div><div class="lo-sub">도움</div>${(d.assists || []).slice(0, 3).map(p => row(p, p.assists, '도움')).join('') || '<div class="ti-empty">기록 없음</div>'}</div></div>`;
+}
+
+// ── 시즌 탭: 역대 우승·준우승(서버 /league/history — 영문 위키백과 우승 목록, 2000-01~) ──
+// 우리 경기 데이터가 있는 시즌(23-24~)은 카드를 누르면 그 시즌 순위로
+const lgHistoryCache = {};
+async function loadLeagueHistory(code) {
+  const root = document.getElementById('lh-root');
+  root.innerHTML = '<div class="lh-grid">' + Array(6).fill('<div class="card lh-card">' + skeletonRows(2) + '</div>').join('') + '</div>';
+  try {
+    if (!lgHistoryCache[code]) lgHistoryCache[code] = await (await fetchWithRetry(`${API}/league/history/${code}`)).json();
+    const h = lgHistoryCache[code];
+    await logosReady;
+    if (lgState.code !== code || lgState.tab !== 'history') return;
+    const cur = await getLeagueSchedule(code, 'current').catch(() => null);
+    const curRows = code === 'CL' ? null : await fetchWithRetry(`${API}/standings/${code}?season=current`).then(r => r.json()).then(d => d.standings).catch(() => null);
+    const side = (x, label, cls) => {
+      const t = x.team, logo = (t && logos[t]) || x.logo;
+      const nm = t ? shortTeamName(t) : x.name;
+      return `<div class="lh-team ${cls}${t ? '' : ' plain'}"${t ? ` onclick="event.stopPropagation();openTeamInfo('${escJs(t)}')"` : ''}>
+        ${logo ? `<img src="${logo}" alt="" onerror="this.style.visibility='hidden'">` : `<span class="lh-ini">${nm.slice(0, 2)}</span>`}
+        <span><b${x.stripped ? ' class="lh-stripped"' : ''}>${nm}</b><small>${x.stripped ? '우승 박탈 · 우승팀 없음' : label}</small></span></div>`;
+    };
+    // 이번 시즌(진행 중) 카드 — 리그는 지금 1·2위
+    let curCard = '';
+    if (curRows && curRows.length >= 2 && curRows[0].played > 0) {
+      curCard = `<div class="card lh-card lh-now" onclick="openLeague('${code}','standings',false,'current')" role="button" tabindex="0">
+        <div class="lh-season">${lgSeasonLabel('current')}<span class="lh-live">진행 중 · ${curRows[0].played}경기</span></div>
+        ${side({ team: curRows[0].team }, `선두 · ${curRows[0].points}점`, 'gold')}${side({ team: curRows[1].team }, `2위 · ${curRows[1].points}점`, 'silver')}</div>`;
+    }
+    root.innerHTML = `<div class="lh-head"><b>역대 ${code === 'CL' ? '우승·준우승(결승)' : '우승·준우승'}</b><span>${h.seasons.length ? `${lgSeasonLabel(String(h.seasons[h.seasons.length - 1].season))} ~ ${h.seasons[0].label}` : ''} · 23-24 시즌부터는 누르면 그 시즌 기록</span></div>
+      <div class="lh-grid">${curCard}${h.seasons.map(s => `<div class="card lh-card${s.has_data ? ' has-data' : ''}"${s.has_data ? ` onclick="openLeague('${code}','standings',false,'${s.season}')" role="button" tabindex="0"` : ''}>
+        <div class="lh-season">${s.label}${s.has_data ? '<span class="lh-go">기록 보기 ›</span>' : ''}</div>
+        ${side(s.champion, '우승', 'gold')}${side(s.runner_up, '준우승', 'silver')}</div>`).join('')}</div>
+      <div class="lo-note lh-src">출처: <a href="${h.source}" target="_blank" rel="noopener">위키백과</a> (CC BY-SA)</div>`;
+  } catch (e) {
+    if (lgState.code === code) root.innerHTML = '<div class="card"><div class="ti-empty">역대 기록을 불러오지 못했어요. 잠시 후 다시 시도해주세요.</div></div>';
+  }
 }
 
 // ── 내 팀 페이지 ──
@@ -4134,7 +4334,8 @@ function mpMetaHtml(league, date) {
   const d = new Date(date), li = TODAY_LEAGUE_INFO[league];
   const W = ['일', '월', '화', '수', '목', '금', '토'];
   if (d > Date.now()) setTimeout(koStart, 0);
-  return `${li ? `<img src="${li.logo}" alt="" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">${li.name} · ` : ''}${d.getMonth() + 1}.${d.getDate()} (${W[d.getDay()]}) ${d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false })}${d > Date.now() ? koRel(date, true) : ''}`;
+  const dateOnly = /T00:00:00Z$/.test(date) && d < Date.now(), yr = d.getFullYear() !== new Date().getFullYear() ? `${d.getFullYear()}.` : '';
+  return `${li ? `<img src="${li.logo}" alt="" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">${li.name} · ` : ''}${yr}${d.getMonth() + 1}.${d.getDate()} (${W[d.getDay()]})${dateOnly ? '' : ' ' + d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false })}${d > Date.now() ? koRel(date, true) : ''}`;
 }
 
 // ── 경기 상세(2026-09-30): 결과 창의 [요약 | 라인업 | 통계] ──
@@ -4570,8 +4771,9 @@ async function openMatchResultModal(home, away, date, league) {
   const modal = document.getElementById('match-predict-modal');
   const body = document.getElementById('match-predict-body');
   // 다음 경기 카드에서 누르면 그 리그 일정을 아직 안 받았을 수 있어서 가까운 경기 목록에서도 찾음
-  const m = (scheduleData[league] || []).find(x => x.home_team === home && x.away_team === away && x.date === date)
-    || (windowMatchesList || []).find(x => x.home_team === home && x.away_team === away && x.date === date);
+  const same = x => x.home_team === home && x.away_team === away && x.date === date;
+  const m = (scheduleData[league] || []).find(same) || (windowMatchesList || []).find(same)
+    || Object.values(scheduleData).flat().find(same);   // 지난 시즌 일정(scheduleData['리그@연도'])
   if (!m) return;
   mpSetHeader(home, away, '경기 결과');
   document.getElementById('mp-meta').innerHTML = mpMetaHtml(league, date);
@@ -4599,7 +4801,8 @@ async function openMatchResultModal(home, away, date, league) {
     const x = schedPredOf(m, league), box = document.getElementById('mr-pred');
     if (!box) return;
     if (!x || x.correct == null) {
-      box.innerHTML = `<div class="mr-nolog">이 경기는 경기 전 AI 예측 기록이 없어요<br><small>예측을 경기 전에 미리 기록해 두는 건 10월 10일 경기부터예요</small></div>`;
+      box.innerHTML = new Date(date) < new Date('2026-07-01') ? `<div class="mr-nolog">AI 예측 기록을 시작하기 전 시즌 경기예요<br><small>경기 전 예측 기록은 2026-27 시즌 10월 10일 경기부터예요</small></div>`
+        : `<div class="mr-nolog">이 경기는 경기 전 AI 예측 기록이 없어요<br><small>예측을 경기 전에 미리 기록해 두는 건 10월 10일 경기부터예요</small></div>`;
       return;
     }
     const [h, d, a] = x.p.map(v => Math.round(v * 100)), top = Math.max(h, d, a), tc = v => v === top ? ' top' : '';
@@ -4832,7 +5035,7 @@ function refreshFavMarks() {
     if (currentScheduleMonth && scheduleData[currentScheduleLeague]) renderScheduleContent(currentScheduleLeague, currentScheduleMonth);
     const favs = getFavoriteTeams();
     document.querySelectorAll('#champion-content .ct-row').forEach(r => r.classList.toggle('is-fav', favs.includes(r.dataset.team)));
-    if (document.getElementById('page-league').classList.contains('active')) { renderLgChrome(); if (lgState.tab === 'overview') loadLeagueOverview(lgState.code); }
+    if (document.getElementById('page-league').classList.contains('active')) { renderLgChrome(); if (lgState.tab === 'overview') loadLeagueOverview(lgState.code, lgState.season); }
     if (document.getElementById('page-myteams').classList.contains('active')) loadMyTeamsPage();
   } catch (e) {}
 }
@@ -5533,7 +5736,7 @@ function setActiveTab(page) {
   });
 }
 function showPage(page, fromHistory) {
-  if (page === 'league') return openLeague(lgState.code, lgState.tab, fromHistory);
+  if (page === 'league') return openLeague(lgState.code, lgState.tab, fromHistory, lgState.season);
   if (LEGACY_LG_PAGES.includes(page)) return openLeague(lgState.code, page, fromHistory);   // 예전 주소·버튼(#standings 등) → 마지막으로 본 리그의 그 탭
   // 하단 탭바는 스크롤을 내린 채로 누르게 되므로 새 탭은 맨 위부터, 지금 탭을 다시 누르면 부드럽게 맨 위로(iOS 관례)
   const same = document.getElementById('page-'+page).classList.contains('active');
@@ -5566,7 +5769,10 @@ function refreshCurrentTab() {
   if (page === 'league') page = lgState.tab;
   let job;
   if (page === 'overview') {
-    job = loadLeagueOverview(lgState.code);
+    job = loadLeagueOverview(lgState.code, lgState.season);
+  } else if (page === 'history') {
+    delete lgHistoryCache[lgState.code];
+    job = loadLeagueHistory(lgState.code);
   } else if (page === 'myteams') {
     job = loadMyTeamsPage();
   } else if (page === 'predict') {
@@ -5582,7 +5788,8 @@ function refreshCurrentTab() {
       job = lg === 'CL' ? (uclView === 'standings' && currentStandingsSeason === '2023' ? loadUclGroups() : loadStandings('CL')) : loadStandings(lg);
     }
   } else if (page === 'schedule') {
-    job = loadSchedule(currentScheduleLeague);
+    delete scheduleData[schedKeyOf(lgState.code, lgState.season)];
+    job = loadSchedule(lgState.code, null, lgState.season);
   } else if (page === 'players') {
     job = loadPlayers();
   } else if (page === 'shootout') {
@@ -5912,35 +6119,37 @@ function renderPlayerList(players, type) {
 // ── 일정 탭 ──
 let scheduleData = {};
 let currentScheduleLeague = 'PL';
-let currentScheduleMonth = null;
-const STAGE_LABEL = { PLAYOFFS: '플레이오프', LEAGUE_STAGE: '리그 스테이지', LAST_16: '16강', QUARTER_FINALS: '8강', SEMI_FINALS: '4강', FINAL: '결승' };
+let currentScheduleMonth = null;   // 지금 고른 값(날짜별 = 달, 라운드별 = 라운드 키, 팀별 = 팀) — 예전 이름 그대로(다른 곳에서 "일정이 떠 있는지" 검사에 씀)
+let schedSeason = 'current';
+// 일정 보기(2026-10-06): 날짜별(달) · 라운드별 · 팀별 — 고른 보기는 기억, 보기마다 고른 값도 따로 기억
+let schedView = (() => { try { const v = localStorage.getItem('schedView'); return ['date', 'round', 'team'].includes(v) ? v : 'date'; } catch (e) { return 'date'; } })();
+const schedPicks = { date: null, round: null, team: null };
+const STAGE_LABEL = { PLAYOFFS: '플레이오프', LEAGUE_STAGE: '리그 스테이지', GROUP_STAGE: '조별리그', LAST_16: '16강', QUARTER_FINALS: '8강', SEMI_FINALS: '4강', FINAL: '결승', KNOCKOUT: '토너먼트' };
+const KO_ORDER = ['PLAYOFFS', 'LAST_16', 'QUARTER_FINALS', 'SEMI_FINALS', 'FINAL', 'KNOCKOUT'];
+const schedList = () => scheduleData[schedKeyOf(currentScheduleLeague, schedSeason)] || [];
 
-async function loadSchedule(league, btn) {
-  currentScheduleLeague = league;
+async function loadSchedule(league, btn, season = 'current') {
+  if (league !== currentScheduleLeague || season !== schedSeason) { schedPicks.date = schedPicks.round = null; }
+  currentScheduleLeague = league; schedSeason = season;
   if (btn) {
     document.querySelectorAll('#schedule-league-tabs .league-tab').forEach(t => t.classList.remove('active'));
     btn.classList.add('active');
   }
   const content = document.getElementById('schedule-content');
   content.innerHTML = skeletonMatchRows(6);
-  // 일정과 AI 예측을 동시에 요청(예전엔 일정이 온 뒤에야 예측을 요청해서 막대가 한 박자 늦게 떴음)
-  const predsP = ensureSchedulePreds(league);
+  const cur = season === 'current';
+  // 일정과 AI 예측을 동시에 요청(예전엔 일정이 온 뒤에야 예측을 요청해서 막대가 한 박자 늦게 떴음) — 지난 시즌은 예측 없음
+  const predsP = cur ? ensureSchedulePreds(league) : null;
   try {
     await logosReady;
-    if (!scheduleData[league]) {
-      const res = await fetchWithRetry(`${API}/schedule/${league}`, {}, {
-        onRetry: (a, r) => { content.innerHTML = wakingUpHtml(a, r); }
-      });
-      const data = await res.json();
-      scheduleData[league] = data.matches;
-      if (!liveTimer) scheduleLiveTick();   // 진행 중 경기가 있으면 1분마다 점수 갱신
-    }
+    const fresh = !scheduleData[schedKeyOf(league, season)];
+    await getLeagueSchedule(league, season, (a, r) => { content.innerHTML = wakingUpHtml(a, r); });
+    if (cur && fresh && !liveTimer) scheduleLiveTick();   // 진행 중 경기가 있으면 1분마다 점수 갱신
     // 예측이 곧 오면(보통 일정과 거의 같이 옴) 기다렸다가 한 번에 그림 — 늦으면 일정 먼저, 도착하면 다시 그림
-    if (!schedulePreds[league]) await Promise.race([predsP, new Promise(r => setTimeout(r, 700))]);
-    if (currentScheduleLeague !== league) return;
-    renderScheduleMonths(league);
-    syncSchedFavToggle();
-    if (!schedulePreds[league]) predsP.then(map => { if (map && currentScheduleLeague === league && currentScheduleMonth) renderScheduleContent(league, currentScheduleMonth); });
+    if (cur && !schedulePreds[league]) await Promise.race([predsP, new Promise(r => setTimeout(r, 700))]);
+    if (currentScheduleLeague !== league || schedSeason !== season) return;
+    renderSchedule(true);
+    if (cur && !schedulePreds[league]) predsP.then(map => { if (map && currentScheduleLeague === league && schedSeason === season) renderSchedule(); });
   } catch (e) {
     content.innerHTML = '<div class="loading">일정을 불러올 수 없어요. 잠시 후 다시 시도해주세요.</div>';
   }
@@ -5950,64 +6159,121 @@ function scheduleMonthKey(dateStr) {
   const d = new Date(dateStr);
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
 }
-
 function scheduleMonthLabel(mk) {
   const [y, m] = mk.split('-');
   return `${y}년 ${parseInt(m)}월`;
 }
-
-function getScheduleMonths(league) {
-  const matches = scheduleData[league] || [];
-  return [...new Set(matches.map(m => scheduleMonthKey(m.date)))].sort();
+// 라운드 키: 리그 "R6", 챔스 리그 스테이지·조별리그 "L3", 토너먼트는 단계 이름(PLAYOFFS·LAST_16…)
+function schedRoundKey(m) {
+  if (currentScheduleLeague !== 'CL') return `R${m.matchday || 0}`;
+  return m.stage === 'LEAGUE_STAGE' || m.stage === 'GROUP_STAGE' ? `L${m.matchday || 0}` : (m.stage || 'KNOCKOUT');
+}
+function schedRoundLabel(k) {
+  if (/^R\d+$/.test(k)) return k === 'R0' ? '라운드 미정' : `${k.slice(1)}라운드`;
+  if (/^L\d+$/.test(k)) return `${schedSeason !== 'current' && +schedSeason <= 2023 ? '조별리그' : '리그 스테이지'} ${k.slice(1)}차전`;
+  return STAGE_LABEL[k] || k;
+}
+const schedRoundOrder = k => /^[RL]\d+$/.test(k) ? +k.slice(1) : 100 + KO_ORDER.indexOf(k);   // LAST_16도 L로 시작해서 숫자까지 봄
+function schedKeys(view) {
+  const ms = schedList();
+  if (view === 'date') return [...new Set(ms.map(m => scheduleMonthKey(m.date)))].sort();
+  if (view === 'round') return [...new Set(ms.map(schedRoundKey))].sort((a, b) => schedRoundOrder(a) - schedRoundOrder(b));
+  return [...new Set(ms.flatMap(m => [m.home_team, m.away_team]))].sort((a, b) => shortName(a).localeCompare(shortName(b)));
+}
+const schedMatchesOf = (view, key) => schedList().filter(m => view === 'date' ? scheduleMonthKey(m.date) === key
+  : view === 'round' ? schedRoundKey(m) === key : m.home_team === key || m.away_team === key);
+// 처음 고르는 값: 이번 시즌은 다음 경기가 있는 달·라운드(지난 시즌은 마지막), 팀별은 내 팀 → 지난번 팀 → 첫 팀
+function schedDefaultPick(view, keys) {
+  const ms = schedList(), next = schedSeason === 'current' ? ms.find(m => !isDone(m)) : null;
+  if (view === 'team') return getFavoriteTeams().find(t => keys.includes(t)) || keys[0];
+  if (!next) return keys[keys.length - 1];
+  return view === 'date' ? scheduleMonthKey(next.date) : schedRoundKey(next);
+}
+function setSchedView(v) {
+  if (v === schedView) return;
+  schedView = v;
+  try { localStorage.setItem('schedView', v); } catch (e) {}
+  track('schedule_view', { view: v });
+  renderSchedule(true);
+}
+function selectSchedPick(v) { schedPicks[schedView] = v; renderSchedule(schedView === 'team'); }
+function stepSchedPick(delta) {
+  const keys = schedKeys(schedView), i = keys.indexOf(schedPicks[schedView]);
+  const j = Math.min(Math.max(i + delta, 0), keys.length - 1);
+  if (j === i) return;
+  schedPicks[schedView] = keys[j];
+  renderSchedule(schedView === 'team');
 }
 
-function updateScheduleNavButtons(months, currentIdx) {
-  const prevBtn = document.getElementById('sched-month-prev');
-  const nextBtn = document.getElementById('sched-month-next');
-  if (prevBtn) prevBtn.disabled = currentIdx <= 0;
-  if (nextBtn) nextBtn.disabled = currentIdx >= months.length - 1;
+// 일정 탭 "★ 내 팀만": 즐겨찾기 팀이 있을 때만 버튼이 보이고, 켜면 지금 고른 달·라운드에서 그 팀들 경기만(팀별 보기에선 숨김)
+let schedFavOnly = false;
+function syncSchedFavToggle() {
+  const btn = document.getElementById('sched-fav-toggle'), favs = getFavoriteTeams();
+  if (!btn) return;
+  if (!favs.length) schedFavOnly = false;
+  btn.style.display = favs.length && schedView !== 'team' ? '' : 'none';
+  btn.classList.toggle('on', schedFavOnly); btn.setAttribute('aria-pressed', schedFavOnly);
 }
+function toggleSchedFav() { schedFavOnly = !schedFavOnly; syncSchedFavToggle(); renderSchedule(); }
+function renderScheduleContent() { renderSchedule(); }   // 예전 이름(진행 중 점수 갱신·즐겨찾기 변경이 부름)
 
-function renderScheduleMonths(league) {
-  const months = getScheduleMonths(league);
-  if (!months.length) {
-    document.getElementById('schedule-content').innerHTML = '<div class="loading">일정 데이터가 없습니다.</div>';
-    return;
+function renderSchedule(scrollNext) {
+  const content = document.getElementById('schedule-content'), view = schedView, league = currentScheduleLeague;
+  document.querySelectorAll('#sched-views button').forEach(b => { const on = b.dataset.v === view; b.classList.toggle('active', on); b.setAttribute('aria-selected', on); });
+  syncSchedFavToggle();
+  const keys = schedKeys(view);
+  const sel = document.getElementById('schedule-month-select'), logo = document.getElementById('sched-pick-logo'), sum = document.getElementById('sched-team-sum');
+  if (!keys.length) { content.innerHTML = '<div class="loading">일정 데이터가 없어요.</div>'; sel.innerHTML = ''; sum.hidden = true; return; }
+  let pick = schedPicks[view];
+  if (!keys.includes(pick)) pick = schedPicks[view] = schedDefaultPick(view, keys);
+  currentScheduleMonth = pick;
+  const label = k => view === 'date' ? scheduleMonthLabel(k) : view === 'round' ? schedRoundLabel(k) : shortTeamName(k);
+  sel.innerHTML = keys.map(k => `<option value="${k.replace(/"/g, '&quot;')}"${k === pick ? ' selected' : ''}>${label(k)}</option>`).join('');
+  sel.setAttribute('aria-label', view === 'date' ? '달 고르기' : view === 'round' ? '라운드 고르기' : '팀 고르기');
+  logo.hidden = view !== 'team';
+  if (view === 'team') { logo.src = logos[pick] || ''; logo.onerror = () => { logo.hidden = true; }; }
+  const i = keys.indexOf(pick);
+  document.getElementById('sched-month-prev').disabled = i <= 0;
+  document.getElementById('sched-month-next').disabled = i >= keys.length - 1;
+  document.getElementById('sched-month-prev').setAttribute('aria-label', view === 'team' ? '이전 팀' : view === 'round' ? '이전 라운드' : '이전 달');
+  document.getElementById('sched-month-next').setAttribute('aria-label', view === 'team' ? '다음 팀' : view === 'round' ? '다음 라운드' : '다음 달');
+
+  let matches = schedMatchesOf(view, pick).sort((a, b) => new Date(a.date) - new Date(b.date));
+  // 팀별: 위에 이 팀 시즌 성적 한 줄(치른 경기 승·무·패, 남은 경기)
+  if (view === 'team') {
+    const done = matches.filter(isDone), rec = { W: 0, D: 0, L: 0 };
+    done.forEach(m => { const gf = m.home_team === pick ? m.home_goals : m.away_goals, ga = m.home_team === pick ? m.away_goals : m.home_goals; rec[gf > ga ? 'W' : gf < ga ? 'L' : 'D']++; });
+    sum.innerHTML = `<span>${done.length ? '치른 ' : ''}${done.length}경기 <i class="w">${rec.W}승</i> <i class="d">${rec.D}무</i> <i class="l">${rec.L}패</i></span>${matches.length - done.length ? `<span>남은 경기 ${matches.length - done.length}</span>` : ''}`;
+    sum.hidden = false;
+  } else sum.hidden = true;
+  const favs = getFavoriteTeams();
+  if (schedFavOnly && favs.length && view !== 'team') {
+    matches = matches.filter(m => favs.includes(m.home_team) || favs.includes(m.away_team));
+    if (!matches.length) { content.innerHTML = `<div class="loading">${view === 'round' ? '이 라운드' : '이번 달'}엔 내 팀 경기가 없어요.</div>`; return; }
   }
-  // 달력상 현재 월이 아니라 "다음 경기가 있는 월"을 기준으로 열어야, 국제 A매치
-  // 기간처럼 이번 달 남은 경기가 없을 때도 곧바로 다음 달(다음 라운드)로 넘어감.
-  const matches = scheduleData[league] || [];
-  const nextMatch = matches.find(m => m.status !== 'FINISHED');
-  const defaultMonth = nextMatch ? scheduleMonthKey(nextMatch.date) : months[months.length - 1];
-  currentScheduleMonth = defaultMonth;
-
-  const select = document.getElementById('schedule-month-select');
-  select.innerHTML = months.map(mk =>
-    `<option value="${mk}" ${mk === defaultMonth ? 'selected' : ''}>${scheduleMonthLabel(mk)}</option>`
-  ).join('');
-  updateScheduleNavButtons(months, months.indexOf(defaultMonth));
-
-  renderScheduleContent(league, defaultMonth);
-  requestAnimationFrame(scrollToNextScheduled);
-}
-
-function selectScheduleMonth(mk) {
-  currentScheduleMonth = mk;
-  const months = getScheduleMonths(currentScheduleLeague);
-  updateScheduleNavButtons(months, months.indexOf(mk));
-  renderScheduleContent(currentScheduleLeague, mk);
-}
-
-function stepScheduleMonth(delta) {
-  const months = getScheduleMonths(currentScheduleLeague);
-  const idx = months.indexOf(currentScheduleMonth);
-  const newIdx = Math.min(Math.max(idx + delta, 0), months.length - 1);
-  if (newIdx === idx) return;
-  const mk = months[newIdx];
-  currentScheduleMonth = mk;
-  document.getElementById('schedule-month-select').value = mk;
-  updateScheduleNavButtons(months, newIdx);
-  renderScheduleContent(currentScheduleLeague, mk);
+  if (!matches.length) { content.innerHTML = '<div class="loading">경기가 없어요.</div>'; return; }
+  const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토'];
+  const past = schedSeason !== 'current';
+  let html = '', lastDate = null;
+  // 다음 경기(진행 중 포함 — 아직 안 끝난 첫 경기)가 있는 날짜에 "다음 경기"/"오늘" 표시 → 탭을 열면 그 자리로 스크롤
+  const nextUp = past ? null : matches.find(m => !isDone(m));
+  const todayKey = new Date().toDateString();
+  matches.forEach(m => {
+    const d = new Date(m.date);
+    const dateStr = `${past || view === 'team' && d.getFullYear() !== new Date().getFullYear() ? `${String(d.getFullYear()).slice(2)}.` : ''}${d.getMonth() + 1}.${d.getDate()} (${WEEKDAY[d.getDay()]})`;
+    const rk = schedRoundKey(m), roundLabel = view === 'round' ? '' : (rk === 'R0' ? '' : schedRoundLabel(rk));
+    const head = dateStr + (roundLabel ? ' · ' + roundLabel : '');
+    if (head !== lastDate) {
+      const isNextDay = nextUp && new Date(nextUp.date).toDateString() === d.toDateString();
+      const tag = !past && d.toDateString() === todayKey ? '<span class="ti-fx-tag next">오늘</span>' : isNextDay ? '<span class="ti-fx-tag next">다음 경기</span>' : '';
+      html += `<div class="sched-date-header${isNextDay ? ' sched-next-head' : ''}">${head}${tag}</div>`;
+      lastDate = head;
+    }
+    html += schedRowHtml(m, league, view === 'team' ? { me: pick } : {});
+  });
+  content.innerHTML = (!past && schedulePreds[league] ? SCHED_PRED_LEGEND : '') + (past ? `<div class="sched-pred-legend"><span class="note">${lgSeasonLabel(schedSeason)} 시즌 기록 · 지난 시즌은 경기 날짜만 있어요(시각 없음)</span></div>` : '') + html;
+  koStart();
+  if (scrollNext) requestAnimationFrame(scrollToNextScheduled);
 }
 
 // ── 일정 탭 AI 예측(/predict/schedule — 경기 하나 예측과 같은 숫자) ──
@@ -6051,7 +6317,7 @@ function schedRowHtml(m, league, opts = {}) {
   const click = (opts.team ? 'closeTeamInfoModal();' : '') + (played
     ? `openMatchResultModal('${escJs(m.home_team)}','${escJs(m.away_team)}','${m.date}','${lg}')`
     : `openMatchPredictModal('${escJs(m.home_team)}','${escJs(m.away_team)}')`);
-  const me = t => opts.team === t ? ' me' : (!opts.team && favSet.has(t) ? ' fav' : '');
+  const me = t => (opts.team || opts.me) === t ? ' me' : (!opts.team && favSet.has(t) ? ' fav' : '');   // opts.me = 일정 팀별 보기의 그 팀
   const fav = !opts.team && (favSet.has(m.home_team) || favSet.has(m.away_team));
   return `<div class="sched-match${px || live ? ' has-pred' : ''}${played ? ' done' : ''}${live ? ' live' : ''}${opts.next ? ' ti-fx-next' : ''}${fav ? ' is-fav' : ''}" onclick="${click}" style="cursor:pointer"${tip ? ` title="${tip}"` : ''}>
     <div class="sched-team ${res[0]}"><span class="sched-team-hit${me(m.home_team)}" onclick="event.stopPropagation();openTeamInfo('${escJs(m.home_team)}')"><img src="${logos[m.home_team] || ''}" alt="" onerror="this.style.visibility='hidden'"><span>${teamNameHtml(m.home_team, homeShort)}</span></span>${px ? `<b class="sp-pct home${tc(px[0])}">${px[0]}%</b>` : ''}</div>
@@ -6061,50 +6327,6 @@ function schedRowHtml(m, league, opts = {}) {
 }
 const SCHED_PRED_LEGEND = `<div class="sched-pred-legend"><span><i class="h"></i>홈승</span><span><i class="d"></i>무</span><span><i class="a"></i>원정승</span><span class="note">팀 옆 숫자 = 승리 확률 · 경기를 누르면 예측/결과</span></div>`;
 
-// 일정 탭 "★ 내 팀만": 즐겨찾기 팀이 있을 때만 버튼이 보이고, 켜면 지금 리그·달에서 그 팀들 경기만
-let schedFavOnly = false;
-function syncSchedFavToggle() {
-  const btn = document.getElementById('sched-fav-toggle'), favs = getFavoriteTeams();
-  if (!btn) return;
-  if (!favs.length) schedFavOnly = false;
-  btn.style.display = favs.length ? '' : 'none';
-  btn.classList.toggle('on', schedFavOnly); btn.setAttribute('aria-pressed', schedFavOnly);
-  if (currentScheduleMonth && scheduleData[currentScheduleLeague]) renderScheduleContent(currentScheduleLeague, currentScheduleMonth);
-}
-function toggleSchedFav() { schedFavOnly = !schedFavOnly; syncSchedFavToggle(); }
-function renderScheduleContent(league, monthKey) {
-  const content = document.getElementById('schedule-content');
-  const favs = getFavoriteTeams();
-  let matches = (scheduleData[league] || []).filter(m => scheduleMonthKey(m.date) === monthKey);
-  if (schedFavOnly && favs.length) {
-    matches = matches.filter(m => favs.includes(m.home_team) || favs.includes(m.away_team));
-    if (!matches.length) { content.innerHTML = `<div class="loading">이번 달 이 리그에 내 팀 경기가 없어요.</div>`; return; }
-  }
-  if (!matches.length) {
-    content.innerHTML = '<div class="loading">해당 월에 예정된 경기가 없습니다.</div>';
-    return;
-  }
-  const WEEKDAY = ['일', '월', '화', '수', '목', '금', '토'];
-  let html = '';
-  let lastDate = null;
-  // 다음 경기(진행 중 포함 — 아직 안 끝난 첫 경기)가 있는 날짜에 "다음 경기"/"오늘" 표시 → 탭을 열면 그 자리로 스크롤(renderScheduleMonths)
-  const nextUp = matches.find(m => !isDone(m));
-  const todayKey = new Date().toDateString();
-  matches.forEach(m => {
-    const d = new Date(m.date);
-    const dateStr = `${d.getMonth() + 1}.${d.getDate()} (${WEEKDAY[d.getDay()]})`;
-    if (dateStr !== lastDate) {
-      const roundLabel = league === 'CL' ? (STAGE_LABEL[m.stage] || '') : (m.matchday ? `${m.matchday}라운드` : '');
-      const isNextDay = nextUp && new Date(nextUp.date).toDateString() === d.toDateString();
-      const tag = d.toDateString() === todayKey ? '<span class="ti-fx-tag next">오늘</span>' : isNextDay ? '<span class="ti-fx-tag next">다음 경기</span>' : '';
-      html += `<div class="sched-date-header${isNextDay ? ' sched-next-head' : ''}">${dateStr}${roundLabel ? ' · ' + roundLabel : ''}${tag}</div>`;
-      lastDate = dateStr;
-    }
-    html += schedRowHtml(m, league);
-  });
-  content.innerHTML = (schedulePreds[league] ? SCHED_PRED_LEGEND : '') + html;
-  koStart();
-}
 // 일정 탭을 열거나 리그를 바꾸면 다음 경기 날짜로 바로(끝난 경기를 한참 내려야 했음). 이미 그 근처면 그대로
 function scrollToNextScheduled() {
   if (!lgPanelOn('schedule')) return;
@@ -8513,7 +8735,7 @@ const NAV_PAGES = ['predict', 'league', 'myteams', 'more', 'shootout'];
 // 주소(#…) → 화면. league/PL/standings, 예전 #standings 등도 받음
 function isRoute(r) { return !!r && (NAV_PAGES.includes(r) || LEGACY_LG_PAGES.includes(r) || /^league(\/|$)/.test(r)); }
 function goRoute(r, fromHistory) {
-  if (/^league(\/|$)/.test(r)) { const [, c, t] = r.split('/'); return openLeague(c || lgState.code, t || 'overview', fromHistory); }
+  if (/^league(\/|$)/.test(r)) { const [, c, t, ss] = r.split('/'); return openLeague(c || lgState.code, t || 'overview', fromHistory, ss || 'current'); }
   if (LEGACY_LG_PAGES.includes(r)) return openLeague(lgState.code, r, fromHistory);
   if (NAV_PAGES.includes(r)) showPage(r, fromHistory);
 }

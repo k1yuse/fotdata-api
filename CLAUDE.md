@@ -69,6 +69,7 @@ fotdata-api/
 ├── privacy.html / terms.html / legal.css   # 개인정보처리방침·이용약관(5.24, 문의 fotdata.official@gmail.com)
 ├── 404.html                 # 없는 주소 안내 페이지(5.26)
 ├── generate_logos_hd.py · logos/hd/   # 고화질 구단 로고(5.22)
+├── generate_league_logos.py · logos/league/   # 리그 심볼 아이콘(글자 뺀 것, 5.31)
 ├── generate_promo.py        # 홍보 이미지(인스타 피드·스토리, 유튜브·네이버 카페 가로 배너) → promo/(커밋 안 함). 빅매치 포스터는 서버 실시간 예측 — 매주 다시 실행. 구단 엠블럼은 안 넣음(홍보물 상표 위험)
 ├── analytics.js             # 방문 통계(Umami) 로더 — FotData.html·landing.html 공용, 사이트 ID는 여기 한 곳(5.16)
 ├── FotData_01.ipynb        # 초기 개발용 주피터 노트북 — 지금은 update_data.py가 대체, 참고용
@@ -95,6 +96,7 @@ fotdata-api/
     ├── prediction_log.json        # AI 예측 트랙레코드 로그 (2026-09-21 추가, 5.6 참고)
     ├── team_wiki.json             # 구단 소개(위키백과)·별칭·홈구장 수용 인원·연고지·감독(위키데이터) — 팀 정보 개요 탭 (2026-09-29, 5.12)
     ├── season_zones.json          # 지난 시즌 공식 최종 순위·유럽 대항전/강등 구역·승점 감점(위키백과 시즌 표, 5.14)
+    ├── league_history.json        # 리그별 역대 우승·준우승 2000-01~(위키백과 우승 목록, 5.31)
     └── rivals.json                # 구단별 라이벌(수동 관리, 5.14)
 ```
 
@@ -429,6 +431,17 @@ cp landing.html index.html
 - **더보기**(`#page-more`): 승부차기 · 구단 둘러보기 · AI 트랙레코드 · 후원하기 · FotData 소개 + 정책 링크.
 - 확인: 1280·820·390px — 개요(EPL·분데스·세리에·챔스)·순위·경기·순위 예측(시뮬레이션)·선수·내 팀·더보기, 가로 넘침 0·JS 오류 0, 뒤로/앞으로가기(탭·리그·내 팀·더보기·승부차기·팀 정보 창), 예전 주소 `#standings` → `#league/PL/standings`, 경기 예측 탭(공유 링크 예측 결과 포함) 그대로.
 
+### 5.31 리그 아이콘·시즌 고르기·일정 보기 3종·시즌(역대 우승) 탭 (2026-10-06, 사용자 요청 — 풋몹 참고)
+- **리그 아이콘**: 리그 머리의 네모 박스를 없애고 심볼만. `generate_league_logos.py` → `logos/league/{PL,PD,BL1,SA,FL1,CL}.png`(높이 128px, 글자 로고를 떼어 냄 — EPL은 사자만·흰색, 분데스는 빨간 사각형만(검정 "BUNDESLIGA" 글자가 어두운 바탕에 안 보였음), 챔스 별 공은 흰색, 나머지는 위쪽 심볼 덩어리만). 리그 페이지(머리·옆 목록·칩)·내 팀이 씀. **주의**: 예전 EPL 가로 로고용 CSS `img[src$="/PL.png"]`가 새 아이콘(`…/league/PL.png`)에도 걸려 늘어났음 → 선택자를 `[src$="org/PL.png"]`(football-data 주소만)로 좁힘.
+- **시즌 고르기**(리그 머리 오른쪽 `#lg-season`): 목록은 서버 `/league/seasons/{리그}`(경기 데이터가 있는 시즌 — 지금 23-24~26-27, `players`·`simulation` 플래그) → 고른 시즌이 모든 탭에 적용(`lgState.season`, 주소 `#league/PL/standings/2024`, 이번 시즌은 주소에 안 붙음). **탭은 시즌에 따라**: 지난 시즌 = 개요·순위·경기·시즌(순위 예측·선수 없음 — 사용자 결정: 선수 기록은 API-Football Pro로, 위키백과로 대신하지 않음). 다른 리그로 가면 이번 시즌부터. 순위표 패널의 예전 시즌 버튼 줄(`#season-tabs`)은 숨기고 값만 맞춤(`currentStandingsSeason`).
+- **지난 시즌 일정**: `/schedule/{리그}?season=연도` → `_past_schedule`(all_matches.csv — **날짜만, 시각 없음**: `date_only`, 화면은 시각 대신 연도 표시). 챔스 토너먼트는 ucl_tournament.json의 1·2차전으로 단계(PLAYOFFS~FINAL)·시각을 찾아 붙임, 리그 스테이지/조별리그는 2월 1일 전. 프론트 `getLeagueSchedule(code, season)` — `scheduleData['PL@2024']`. 결과 창은 모든 시즌 일정에서 경기를 찾음.
+- **지난 시즌 개요**: 시즌 숫자(시즌 종료 라운드·경기당 골·홈 승률·무승부율) + "시즌 결과"(우승·준우승 승점·승무패, 강등·승강 PO 칩 — 공식 구역 `row.zone`; 챔스는 결승 승자·패자) + 마지막 라운드 전 경기(챔스는 결승) + 최종 순위(공식 구역 색·감점). 순위 예측·득점 카드 없음.
+- **개요 순위표**: 경기·**승·무·패**·승점(득실 뺌 — 사용자 요청), 내 팀 줄에 ★(금색). 리그 페이지 옆 목록 내 팀에도 ★.
+- **일정 보기 3종**(경기 탭 위 세그먼트 `setSchedView`, 고른 보기는 localStorage `schedView`): 날짜별(달 — 예전 그대로) · 라운드별(리그 N라운드, 챔스 리그 스테이지/조별리그 N차전 → 플레이오프·16강·8강·4강·결승 — 키 `R6`/`L3`/단계 이름, **`LAST_16`도 L로 시작해서 숫자까지 확인**) · 팀별(팀 고르기 + 로고, **‹ ›는 이전·다음 팀**(풋몹은 아래 페이지 넘김 — 일부러 다르게), 위에 "치른 N경기 W승 D무 L패 · 남은 경기", 그 팀 줄 강조). 처음 고르는 값: 다음 경기가 있는 달·라운드(지난 시즌은 마지막), 팀별은 내 팀 → 첫 팀. ★ 내 팀만은 팀별 보기에서 숨김. 폰은 고르기 칸 최대 52vw(긴 팀 이름 때문에 ›가 다음 줄로 밀렸음).
+- **시즌 탭**(역대 우승·준우승): `update_data.fetch_league_history()` → `fotdata_model/league_history.json`(영문 위키백과 리그별 우승 목록 문서 6장 — "List of English/Spanish/German/Italian/French football champions", "List of European Cup and UEFA Champions League finals". 키 불필요, 매일 실행(시즌이 끝나면 새 줄 자동), `--league-history`로 따로). 표 모양이 문서마다 달라서 "시즌 링크가 있는 줄 → 다음 구단 칸 둘"로 읽음(인포박스 `| x = …` 줄 제외, 표 끝 `|}` 뒤 틀 제외, 나라 틀·점수 칸 건너뜀). 2000-01~25-26 리그별 26시즌, 박탈된 우승은 `stripped`(세리에A 04-05 유벤투스 — 취소선 + "우승 박탈"). 우리 팀 이름 매칭은 team_wiki `en_title` → `_norm_club`(못 찾으면 이름만, 로고 대신 머리글자 — 보르도). 서버 `/league/history/{리그}`(로고·`has_data`). 화면: 이번 시즌 카드(진행 중 · 선두·2위, 챔스 제외) + 시즌 카드(우승 금색·준우승), 23-24 이후는 누르면 그 시즌 순위로, 출처 링크(CC BY-SA).
+- **⚠️ API-Football 지난 시즌 선수 기록 문제(2026-10-06 원본 응답으로 확인)**: 무료 플랜(2022~24)의 `/players/topscorers?season=2023` EPL이 팔머 "Manchester City 34경기 22골 22도움"(실제 첼시 22골 11도움), 쿠냐 "Manchester United 64경기 24골"(실제 울버햄튼)처럼 **지금 소속팀으로 기록을 합쳐서** 줌(5.19의 `/players` 함정과 같은 문제). → Pro 결제 후에도 지난 시즌 선수 순위는 `/players/topscorers`를 그대로 쓰지 말고 경기 상세(`/fixtures?id=` 선수별 기록)를 시즌별로 합산할 것(5.19 방침). 결제 후 결정할 것: 그 합산으로 지난 시즌 선수 탭 열기 + 22-23 이전 시즌 경기·순위(팀 이름 매핑 — 5.20).
+- 확인: 1280·390px — 이번/지난 시즌 개요(EPL·분데스 23-24), 시즌 탭(세리에A·EPL), 일정 3종(EPL 이번 시즌·챔스 24-25 라운드), 시즌 전환·뒤로가기·챔스 23-24 조별리그, 경기 예측(공유 링크)·선수·내 팀 — JS 오류 0·가로 넘침 0.
+
 ### 5.20 데이터 소스 구조(결제 시) — football-data + API-Football
 - **API-Football 리그별 데이터 범위(2026-10-03 `/leagues?id=` 실측, 중간에 빠진 시즌 없음)**: 5대 리그 모두 2010-11~26-27(17시즌) — 경기 결과·순위·이벤트·라인업·선수·득점 순위는 2010-11부터, 팀 경기 통계는 EPL·라리가 2014-15/나머지 2015-16부터, 선수별 경기 스탯·평점은 EPL 2014-15/나머지 2015-16부터, 부상자는 2020-21부터. UCL은 2011-12부터(통계 2015-16, 부상 2020-21). 요금제는 기능 차이 없이 요청 수만 다름(Pro $19 7,500/일·Ultra $29·Mega $39). football-data 유료는 선수 사진·이적·선수 스탯이 어느 요금제에도 없어서 결제 대상 아님.
 - 경기 결과·순위·일정·예측 모델은 **football-data 그대로**(지금 4시즌, 학습·팀 이름 기준). API-Football은 **선수·라인업·경기 상세·부상**과 **23-24 이전 과거 시즌**(EPL 기준 2010-11~) 담당 — 지금 데이터를 다시 만들 필요는 없음.
@@ -468,6 +481,7 @@ cp landing.html index.html
 | GET | `/teams/ko` | 구단 둘러보기 검색용 팀 이름 → 한국어 구단명(위키) (2026-09-30, 5.21) |
 | GET | `/player/profile/{player_id}` | 선수 카드 경력·트로피·부상 이력 — af_profiles.json, 결제 후 수집 전엔 204 빈 응답(2026-10-05까지 404 — 콘솔 오류로 찍혀서 변경) (2026-09-30) |
 | GET | `/team/squad/{team_name}` · `/match/preview?home_team=&away_team=&date=` | 선수 카드·베스트 11·주요 선수 / 팀 소식(라인업·결장자) — 결제 후 수집 전엔 204 빈 응답(2026-10-05까지 404 — 콘솔 오류로 찍혀서 변경) (2026-09-30, 5.19) |
+| GET | `/league/seasons/{league_code}` · `/league/history/{league_code}` | 리그 페이지: 데이터가 있는 시즌 목록(선수·시뮬레이션 여부) / 역대 우승·준우승 (2026-10-06, 5.31). `/schedule/{league_code}?season=연도`는 끝난 시즌 일정(all_matches.csv, 날짜만) |
 | GET | `/calendar/{slug}.ics` · `/calendar/my.ics?t=` | 구단 경기 일정 캘린더 구독(.ics, webcal) — Vercel `/cal/*`이 넘겨줌 (2026-10-03, 5.24) |
 | GET | `/matches/live` | 오늘 경기 최신 점수·상태만(진행 중일 때 화면이 1분마다 부름, `enabled` = Render에 키가 있는지) (2026-09-30, 5.17) |
 | GET | `/bigmatch` | 다가오는 빅매치 1경기(BIG_CLUBS끼리 가장 가까운 경기, 로고 URL 포함) — 경기예측 탭 배너·랜딩 연출 공용 (2026-09-28, 5.8 참고) |

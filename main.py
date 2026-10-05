@@ -1649,10 +1649,84 @@ def get_matches_window():
     out.sort(key=lambda m: m['date'])
     return {"from": lo.isoformat(), "to": hi.isoformat(), "matches": out}
 
+# ── 리그 페이지 시즌 선택(2026-10-06) ──
+# 시즌 목록은 데이터에서: 경기(all_matches.csv — 지금 football-data 무료 4시즌)가 있는 시즌만, 선수(득점·도움)는 이번 시즌만(scorers.json).
+# API-Football Pro를 붙여 과거 시즌 경기·선수를 받으면 여기 목록만 늘어나면 됨(프론트는 이 목록대로 드롭다운·탭을 그림)
+@lru_cache(maxsize=8)
+def _league_seasons(code):
+    if code not in LEAGUE_MAP:
+        raise HTTPException(status_code=404, detail="리그를 찾을 수 없습니다")
+    yrs = sorted({int(y) for y in df_matches_all.loc[df_matches_all['league'] == code, 'season'].dropna()}, reverse=True)
+    if CURRENT_SEASON_YEAR not in yrs:
+        yrs.insert(0, CURRENT_SEASON_YEAR)
+    sc = (_load_json("scorers.json") or {}).get(code)
+    out = []
+    for y in yrs:
+        cur = y == CURRENT_SEASON_YEAR
+        out.append({"year": y, "label": f"{y}/{(y + 1) % 100:02d}", "current": cur,
+                    "players": bool(cur and sc and sc.get("scorers")),
+                    "simulation": cur and code in SIM_LEAGUES,
+                    "group_stage": code == "CL" and y <= 2023})
+    return out
+
+@app.get("/league/seasons/{league_code}")
+def get_league_seasons(league_code: str):
+    return {"league": league_code.upper(), "seasons": _league_seasons(league_code.upper())}
+
+@lru_cache(maxsize=32)
+def _past_schedule(code, yr):
+    """끝난 시즌 일정 = all_matches.csv(시각은 없음 — 날짜만). 챔스 토너먼트는 ucl_tournament.json의 1·2차전으로 라운드·시각·승부차기를 찾음"""
+    df = df_matches_all[(df_matches_all['league'] == code) & (df_matches_all['season'] == yr)].sort_values(['date', 'home_team'])
+    if df.empty:
+        raise HTTPException(status_code=404, detail="해당 시즌 데이터 없음")
+    legs = {}
+    if code == "CL":
+        for stage, ties in (((_load_json("ucl_tournament.json") or {}).get("seasons") or {}).get(str(yr)) or {}).items():
+            if not isinstance(ties, list):
+                continue
+            for t in ties:
+                for lg in t.get("legs") or []:
+                    legs[(lg.get("home_team"), lg.get("away_team"), str(lg.get("date", ""))[:10])] = (stage, lg.get("date"), t.get("pens") if lg is (t.get("legs") or [None])[-1] else None)
+    league_end = pd.Timestamp(f"{yr + 1}-02-01")
+    out = []
+    for _, r in df.iterrows():
+        d = r['date'].strftime('%Y-%m-%d')
+        m = {"date": f"{d}T00:00:00Z", "date_only": True, "matchday": int(r['matchday']) if pd.notna(r['matchday']) and r['matchday'] > 0 else None,
+             "stage": "REGULAR_SEASON", "home_team": r['home_team'], "away_team": r['away_team'],
+             "home_goals": int(r['home_goals']), "away_goals": int(r['away_goals']), "status": "FINISHED"}
+        if code == "CL":
+            hit = legs.get((r['home_team'], r['away_team'], d))
+            if hit:
+                m["stage"], m["date"], m["date_only"] = hit[0], hit[1] or m["date"], not hit[1]
+                m["matchday"] = None
+                if hit[2]:
+                    m["penalties"] = hit[2]
+            else:
+                m["stage"] = ("GROUP_STAGE" if yr <= 2023 else "LEAGUE_STAGE") if r['date'] < league_end else "KNOCKOUT"
+        out.append(m)
+    return out
+
+# ── 역대 우승·준우승(리그 페이지 "시즌" 탭) — league_history.json(update_data.fetch_league_history, 영문 위키백과 우승 목록) ──
+@app.get("/league/history/{league_code}")
+def get_league_history(league_code: str):
+    code = league_code.upper()
+    h = (_load_json("league_history.json") or {}).get(code)
+    if not h:
+        raise HTTPException(status_code=404, detail="기록 없음")
+    have = {s["year"] for s in _league_seasons(code)}
+    logos = team_logos_cache
+    side = lambda x: {**x, "logo": logos.get(x.get("team") or "", "")}
+    return {"league": code, "source": h.get("source"),
+            "seasons": [{"season": r["season"], "label": f"{r['season']}/{(r['season'] + 1) % 100:02d}", "has_data": r["season"] in have,
+                         "champion": side(r["champion"]), "runner_up": side(r["runner_up"])} for r in h["seasons"]]}
+
 # ── 전체 일정 API ──
 @app.get("/schedule/{league_code}")
-def get_schedule(league_code: str):
-    """리그 전체 시즌 일정 (완료 + 예정 경기 전부)"""
+def get_schedule(league_code: str, season: str = "current"):
+    """리그 전체 시즌 일정 (완료 + 예정 경기 전부). season=연도면 끝난 시즌(all_matches.csv)"""
+    yr = _season_year(season)
+    if yr != CURRENT_SEASON_YEAR:
+        return {"league": league_code.upper(), "season": yr, "matches": _past_schedule(league_code.upper(), yr)}
     data = _load_json("schedule.json")
     if data is None:
         raise HTTPException(status_code=404, detail="일정 데이터 없음")
