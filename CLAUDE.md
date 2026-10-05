@@ -330,7 +330,7 @@ cp landing.html index.html
 - 라인업 선수를 누르면 선수 카드, 시즌 기록이 없는 선수는 라인업 정보(사진·등번호·포지션·그 경기 평점)로 간단한 카드(`mdPlayerIndex`).
 
 - **선수 카드 보강(2026-09-30, 풋몹 참고)**: 시즌 기록 [합계 | 90분당] 전환(`pcSetMode`), **순위 막대** = 같은 리그·같은 포지션에서 450분 이상 뛴 선수 대비 90분당 백분위(`update_data.add_percentiles` → `p.pct`, 상위 1/3 초록·중간 노랑·하위 1/3 빨강, 표본 5명 미만 포지션은 계산 안 함) — 막대가 있으면 모든 줄을 같은 칸 배치로(숫자 열 정렬), 90분당 골+도움·드리블 성공률·경합 승률 칩, **최근 경기**(`p.matches` — 수집 때 경기 상세의 선수별 기록으로: 날짜·상대·결과·출전·골·도움·카드·평점), **경력·트로피·부상 이력**(`/player/profile/{id}` → `playerProfileHtml`, 클럽/국가대표 구분·트로피 대회별 우승 횟수·최근 부상 5건) — 서버 주소·수집은 결제 후(형태 확인용 `probe_af3`: `/players/teams`·`/trophies`·`/transfers?player`·`/sidelined`).
-- **경력·트로피·부상 이력 형태(사카 샘플로 확인, 2026-09-30)**: `/players/teams`는 날짜 없이 "뛴 시즌 목록"만(유스 팀 섞임) → "2018/19 – 현재 · 9시즌", 1군 클럽·국가대표(연령별 포함)만 표시. `/trophies`엔 친선 대회(Emirates Cup 5회·Florida Cup·MLS All-Star)·유스 대회가 섞이고, **같은 트로피가 시즌 없이 한 번 더** 옴 → 친선 제외(`AF_FRIENDLY_CUPS`), 유스 표시, 시즌 있는 기록이 있으면 시즌 없는 중복 버림(안 하면 사카 FA컵 우승이 2회로 셈). 우승(금색)·준우승(회색) 나눠 대회별 횟수. `/sidelined` 최근 10건(부상 종류 한국어 `INJ_KO`). `/transfers?player`는 이적 없는 선수면 빈 목록 — 경력은 시즌 목록으로 만듦. 변환 `update_data.af_player_profile`, 서버 `/player/profile/{id}`(af_profiles.json, 결제 후 수집 전엔 404).
+- **경력·트로피·부상 이력 형태(사카 샘플로 확인, 2026-09-30)**: `/players/teams`는 날짜 없이 "뛴 시즌 목록"만(유스 팀 섞임) → "2018/19 – 현재 · 9시즌", 1군 클럽·국가대표(연령별 포함)만 표시. `/trophies`엔 친선 대회(Emirates Cup 5회·Florida Cup·MLS All-Star)·유스 대회가 섞이고, **같은 트로피가 시즌 없이 한 번 더** 옴 → 친선 제외(`AF_FRIENDLY_CUPS`), 유스 표시, 시즌 있는 기록이 있으면 시즌 없는 중복 버림(안 하면 사카 FA컵 우승이 2회로 셈). 우승(금색)·준우승(회색) 나눠 대회별 횟수. `/sidelined` 최근 10건(부상 종류 한국어 `INJ_KO`). `/transfers?player`는 이적 없는 선수면 빈 목록 — 경력은 시즌 목록으로 만듦. 변환 `update_data.af_player_profile`, 서버 `/player/profile/{id}`(af_profiles.json, 결제 후 수집 전엔 204 빈 응답(2026-10-05까지 404 — 콘솔 오류로 찍혀서 변경)).
 - **API-Football로 안 되는 것(풋몹에 있지만)**: 이적 시장 가치(Transfermarkt 데이터 — 긁어오기는 약관 위반), 계약 만료일, 주발, 선수별 xG·xGOT·xA, 히트맵, 슈팅 맵(Opta급 이벤트 좌표 데이터). 세부 포지션(LW 등)은 라인업 `grid` 위치로 대략 추정만 가능.
 - **선수 탭 이번 시즌 득점·도움은 football-data**(`fetch_scorers`, 2026-09-29 첫 자동 수집 성공 — 무료 플랜도 26-27 가능). "24-25만 가능"은 API-Football 무료 플랜 제한이었음(예전 EPL 득점왕 데이터).
 
@@ -437,11 +437,11 @@ cp landing.html index.html
 | GET | `/team/stats/{team_name}` | 팀 통계 탭: 시즌별 실제 리그 기록·리그 내 순위·리그 평균·홈/원정·상대 수준별·순위 변동 + AI 파워 레이팅 (2026-09-29, 5.12 참고) |
 | GET | `/matches/window` | 지금 −30시간 ~ +21일 사이 5대 리그+UCL 경기(리그 코드 `league` 포함, 날짜순, 보통 100~150경기) — 홈 위젯(오늘/다음 경기·내 팀)·"다른 경기도 예측해보기" 공용. 예전엔 이 셋이 리그 전체 일정 6개(~1,300경기)를 받았음. 내 팀 경기가 21일 안에 없으면 프론트가 그 팀 리그 일정만 따로 받음. 서버에 이 엔드포인트가 없으면 전체 일정으로 대체(`fetchWindowMatches`) (2026-09-29) |
 | GET | `/share/match/{slug}` · `/og/match/{slug}.jpg` | 경기별 공유 페이지(og 태그 + 앱으로 이동)·썸네일 — Vercel `/m/`·`/og/m/`이 넘겨줌 (2026-09-30, 5.16) |
-| GET | `/match/detail?home_team=&away_team=&date=` | 경기 결과 창 상세(이벤트·라인업·평점·팀 통계) — match_details.json, 결제 후 수집 전엔 404 (2026-09-30, 5.18) |
+| GET | `/match/detail?home_team=&away_team=&date=` | 경기 결과 창 상세(이벤트·라인업·평점·팀 통계) — match_details.json, 결제 후 수집 전엔 204 빈 응답(2026-10-05까지 404 — 콘솔 오류로 찍혀서 변경) (2026-09-30, 5.18) |
 | GET | `/teams/meta` · `/standings/{league_code}/movement` | 구단 둘러보기: 한국어 구단명+구단 색 / 지난 라운드 대비 순위 변동 (2026-09-30, 5.21) |
 | GET | `/teams/ko` | 구단 둘러보기 검색용 팀 이름 → 한국어 구단명(위키) (2026-09-30, 5.21) |
-| GET | `/player/profile/{player_id}` | 선수 카드 경력·트로피·부상 이력 — af_profiles.json, 결제 후 수집 전엔 404 (2026-09-30) |
-| GET | `/team/squad/{team_name}` · `/match/preview?home_team=&away_team=&date=` | 선수 카드·베스트 11·주요 선수 / 팀 소식(라인업·결장자) — 결제 후 수집 전엔 404 (2026-09-30, 5.19) |
+| GET | `/player/profile/{player_id}` | 선수 카드 경력·트로피·부상 이력 — af_profiles.json, 결제 후 수집 전엔 204 빈 응답(2026-10-05까지 404 — 콘솔 오류로 찍혀서 변경) (2026-09-30) |
+| GET | `/team/squad/{team_name}` · `/match/preview?home_team=&away_team=&date=` | 선수 카드·베스트 11·주요 선수 / 팀 소식(라인업·결장자) — 결제 후 수집 전엔 204 빈 응답(2026-10-05까지 404 — 콘솔 오류로 찍혀서 변경) (2026-09-30, 5.19) |
 | GET | `/calendar/{slug}.ics` · `/calendar/my.ics?t=` | 구단 경기 일정 캘린더 구독(.ics, webcal) — Vercel `/cal/*`이 넘겨줌 (2026-10-03, 5.24) |
 | GET | `/matches/live` | 오늘 경기 최신 점수·상태만(진행 중일 때 화면이 1분마다 부름, `enabled` = Render에 키가 있는지) (2026-09-30, 5.17) |
 | GET | `/bigmatch` | 다가오는 빅매치 1경기(BIG_CLUBS끼리 가장 가까운 경기, 로고 URL 포함) — 경기예측 탭 배너·랜딩 연출 공용 (2026-09-28, 5.8 참고) |

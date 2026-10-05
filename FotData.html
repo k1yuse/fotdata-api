@@ -3663,7 +3663,7 @@ function fetchMatchDetail(home, away, date) {
   const k = `${home}|${away}|${date.slice(0, 10)}`;
   if (!(k in matchDetailCache)) {
     matchDetailCache[k] = fetch(`${API}/match/detail?home_team=${encodeURIComponent(home)}&away_team=${encodeURIComponent(away)}&date=${date.slice(0, 10)}`)
-      .then(r => (r.ok ? r.json() : null)).catch(() => { delete matchDetailCache[k]; return null; });
+      .then(r => (r.ok && r.status !== 204 ? r.json() : null)).catch(() => { delete matchDetailCache[k]; return null; });
   }
   return matchDetailCache[k];
 }
@@ -3824,13 +3824,13 @@ function mdStatsHtml(d, home, away) {
 // ── 선수 기록·팀 소식(2026-09-30): /team/squad(선수 프로필·시즌 기록) · /match/preview(라인업·결장자) — 결제 후 수집 전엔 404라 안 보임 ──
 const afSquadCache = {}, matchPreviewCache = {};
 function fetchAfSquad(team) {
-  if (!(team in afSquadCache)) afSquadCache[team] = fetch(`${API}/team/squad/${encodeURIComponent(team)}`).then(r => (r.ok ? r.json() : null)).catch(() => { delete afSquadCache[team]; return null; });
+  if (!(team in afSquadCache)) afSquadCache[team] = fetch(`${API}/team/squad/${encodeURIComponent(team)}`).then(r => (r.ok && r.status !== 204 ? r.json() : null)).catch(() => { delete afSquadCache[team]; return null; });
   return afSquadCache[team];
 }
 function fetchMatchPreview(home, away, date) {
   const k = `${home}|${away}|${date ? date.slice(0, 10) : ''}`;
   if (!(k in matchPreviewCache)) matchPreviewCache[k] = fetch(`${API}/match/preview?home_team=${encodeURIComponent(home)}&away_team=${encodeURIComponent(away)}${date ? `&date=${date.slice(0, 10)}` : ''}`)
-    .then(r => (r.ok ? r.json() : null)).catch(() => { delete matchPreviewCache[k]; return null; });
+    .then(r => (r.ok && r.status !== 204 ? r.json() : null)).catch(() => { delete matchPreviewCache[k]; return null; });
   return matchPreviewCache[k];
 }
 const POS_KO = { GK: '골키퍼', DF: '수비수', MF: '미드필더', FW: '공격수' };
@@ -3940,7 +3940,7 @@ function pcSetMode(m) {
 // 클럽 경력·트로피·부상 이력(서버 /player/profile/{id} — API-Football 선수별 조회, 결제 후 수집 전엔 404라 안 보임)
 const playerProfileCache = {};
 function fetchPlayerProfile(id) {
-  if (!(id in playerProfileCache)) playerProfileCache[id] = fetch(`${API}/player/profile/${id}`).then(r => (r.ok ? r.json() : null)).catch(() => { delete playerProfileCache[id]; return null; });
+  if (!(id in playerProfileCache)) playerProfileCache[id] = fetch(`${API}/player/profile/${id}`).then(r => (r.ok && r.status !== 204 ? r.json() : null)).catch(() => { delete playerProfileCache[id]; return null; });
   return playerProfileCache[id];
 }
 async function loadPlayerProfile(id) {
@@ -7597,7 +7597,7 @@ async function cbLoadLeague(code, focusTeam) {
     document.getElementById('cb-strip').innerHTML = '';
     try {
       const [st, mv] = await Promise.all([fetchWithRetry(`${API}/standings/${code}`).then(r => r.json()),
-        fetch(`${API}/standings/${code}/movement`).then(r => (r.ok ? r.json() : null)).catch(() => null)]);
+        fetch(`${API}/standings/${code}/movement`).then(r => (r.ok && r.status !== 204 ? r.json() : null)).catch(() => null)]);
       cb.stand[code] = st.standings || []; cb.move[code] = mv?.delta || {};
     }
     catch (e) { trackEl.innerHTML = '<div class="cb-loading">순위를 불러올 수 없어요. 잠시 후 다시 시도해 주세요.</div>'; return; }

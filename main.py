@@ -1531,7 +1531,7 @@ def get_match_detail(home_team: str, away_team: str, date: str):
     수집은 API-Football Pro 결제 후에 붙일 예정이라 지금은 파일이 없어서 404 → 화면은 예전처럼(탭 없이) 보여줌 (2026-09-30)"""
     d = (_load_json("match_details.json") or {}).get(f"{home_team}|{away_team}|{date[:10]}")
     if not d:
-        raise HTTPException(status_code=404, detail="경기 상세 데이터 없음")
+        return Response(status_code=204)   # 경기 상세 데이터 없음 — 결제 후 수집 전이라 정상 상태(404면 브라우저 콘솔에 빨간 오류로 찍혀서 빈 응답으로, 2026-10-05)
     return d
 
 @app.get("/team/squad/{team_name}")
@@ -1541,7 +1541,7 @@ def get_team_squad(team_name: str):
     team = TEAM_NAME_MAP.get(team_name, team_name)
     d = (_load_json("af_squads.json") or {}).get(team)
     if not d:
-        raise HTTPException(status_code=404, detail="선수 기록 데이터 없음")
+        return Response(status_code=204)   # 선수 기록 데이터 없음 — 결제 후 수집 전이라 정상 상태(404면 브라우저 콘솔에 빨간 오류로 찍혀서 빈 응답으로, 2026-10-05)
     return d
 
 @app.get("/teams/ko")
@@ -1596,7 +1596,7 @@ def get_player_profile(player_id: int):
     결제 후 수집 전엔 404 (2026-09-30)"""
     d = (_load_json("af_profiles.json") or {}).get(str(player_id))
     if not d:
-        raise HTTPException(status_code=404, detail="선수 경력 데이터 없음")
+        return Response(status_code=204)   # 선수 경력 데이터 없음 — 결제 후 수집 전이라 정상 상태(404면 브라우저 콘솔에 빨간 오류로 찍혀서 빈 응답으로, 2026-10-05)
     return d
 
 @app.get("/match/preview")
@@ -1626,7 +1626,7 @@ def get_match_preview(home_team: str, away_team: str, date: str = None):
         if pred["home"] or pred["away"]:
             pv["predicted"] = pred
     if not pv.get("lineups") and not pv.get("predicted") and not pv.get("injuries"):
-        raise HTTPException(status_code=404, detail="팀 소식 데이터 없음")
+        return Response(status_code=204)   # 팀 소식 데이터 없음 — 결제 후 수집 전이라 정상 상태(404면 브라우저 콘솔에 빨간 오류로 찍혀서 빈 응답으로, 2026-10-05)
     return {**pv, "date": date}
 
 @app.get("/matches/live")
