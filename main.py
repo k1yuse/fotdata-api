@@ -1734,7 +1734,8 @@ def get_matches_live():
     """오늘 경기 최신 상태만(가벼움) — 화면이 진행 중 경기가 있을 때 1분마다 부름"""
     live = _live_overlay()
     return {"matches": [{"home_team": k.split("|")[0], "away_team": k.split("|")[1], **v} for k, v in live.items()],
-            "enabled": bool(os.environ.get("FOOTBALL_API_KEY"))}
+            "enabled": bool(os.environ.get("FOOTBALL_API_KEY")),
+            "af_enabled": bool(os.environ.get("API_FOOTBALL_KEY"))}   # API-Football 요청 때 받기(확정 라인업·선수 경력)가 켜졌는지 — 값은 안 내보냄
 
 @app.get("/matches/window")
 def get_matches_window():
