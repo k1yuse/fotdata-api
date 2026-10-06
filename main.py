@@ -1007,7 +1007,7 @@ def _table(long_df):
     t['rank'] = range(1, len(t) + 1)
     return t
 
-@lru_cache(maxsize=64)
+@lru_cache(maxsize=None)   # 5대 리그 × 17시즌 = 85개 — 예전 64개 한도로는 과거 시즌을 넣은 뒤 캐시가 계속 밀려나 팀 통계 첫 호출이 20초 걸렸음
 def _league_season_stats(league, season):
     df = df_seasons[(df_seasons['league'] == league) & (df_seasons['season'] == season)]
     df = df.dropna(subset=['home_goals', 'away_goals'])
@@ -1051,7 +1051,7 @@ def _league_season_stats(league, season):
             ranks[t][key] = 1 + sum(1 for o in vals.values() if (o > v if higher else o < v))
     return {"rows": rows, "ranks": ranks, "avg": avg, "teams": n, "long": L}
 
-@lru_cache(maxsize=64)
+@lru_cache(maxsize=None)
 def _season_rank_progress(league, season):
     """리그·시즌 전체 팀의 "경기를 치를 때마다의 순위"를 한 번에 — 날짜순으로 승점·득실·득점을 누적하며 그날 경기가 끝난
     뒤의 순위를 기록(예전엔 팀마다 경기 날짜마다 순위표를 새로 계산해서 팀 통계 첫 호출이 ~0.3초 걸렸음)"""
@@ -1091,6 +1091,7 @@ def _warm_team_stats():
         _warm_share_cards()
     except Exception:
         pass
+    _team_season_league()
     for lg in ("PL", "PD", "BL1", "SA", "FL1"):
         for yr in STAT_SEASONS:
             try:
@@ -1098,6 +1099,11 @@ def _warm_team_stats():
                     _season_rank_progress(lg, yr)
             except Exception:
                 pass
+    for t in list(team_state)[:200]:   # 팀 통계 응답도 미리(첫 사용자 대기 0)
+        try:
+            _team_stats(t)
+        except Exception:
+            pass
 
 @app.on_event("startup")
 def _start_warmup():
@@ -1110,6 +1116,18 @@ def get_team_stats(team_name: str):
     team = TEAM_NAME_MAP.get(team_name, team_name)
     return _team_stats(team)
 
+@lru_cache(maxsize=1)
+def _team_season_league():
+    """(팀, 시즌) → 그 시즌에 가장 많이 뛴 리그 — 예전엔 요청마다 3만 줄을 17번 걸러서 느렸음"""
+    d = df_seasons[df_seasons['league'] != 'CL']
+    long = pd.concat([d[['season', 'league', 'home_team']].rename(columns={'home_team': 'team'}),
+                      d[['season', 'league', 'away_team']].rename(columns={'away_team': 'team'})])
+    cnt = long.groupby(['team', 'season', 'league']).size().reset_index(name='n').sort_values('n', ascending=False)
+    out = {}
+    for r in cnt.itertuples():
+        out.setdefault((r.team, int(r.season)), r.league)
+    return out
+
 @lru_cache(maxsize=256)
 def _team_stats(team):
     league = _team_current_league(team)
@@ -1119,11 +1137,9 @@ def _team_stats(team):
     seasons = []
     for yr, label in STAT_SEASONS.items():
         # 그 시즌에 뛴 리그(승강한 팀은 시즌마다 다를 수 있음 — 5대 리그 안에서만)
-        played = df_seasons[(df_seasons['season'] == yr) & (df_seasons['league'] != 'CL') &
-                            ((df_seasons['home_team'] == team) | (df_seasons['away_team'] == team))]
-        if played.empty:
+        lg = _team_season_league().get((team, yr))
+        if not lg:
             continue
-        lg = played['league'].mode().iloc[0]
         st = _league_season_stats(lg, yr)
         if not st or team not in st["rows"]:
             continue
@@ -1601,6 +1617,8 @@ AF_KEY = os.environ.get("API_FOOTBALL_KEY", "")
 AF_URL = "https://v3.football.api-sports.io"
 MD_DIR = os.path.join(MODEL_DIR, "match_details")
 _af_mem = {}   # 요청 때 받은 것(키 → (받은 시각, 값)) — 프로세스가 살아 있는 동안만
+import threading as _threading
+_AF_SEM = _threading.BoundedSemaphore(10)   # 서버 전체 동시 요청 10개까지(분당 300회 한도 — 여러 사람이 선수 카드를 한꺼번에 열어도 한도 오류가 안 나게)
 
 def _af_live_get(path, ttl, **params):
     """API-Football을 요청 때 바로(키가 있을 때만). 같은 요청은 ttl초 동안 다시 안 부름(실패도 1분 기억 — 한도 보호)"""
@@ -1610,11 +1628,20 @@ def _af_live_get(path, ttl, **params):
     hit = _af_mem.get(k)
     if hit and _time.time() - hit[0] < (ttl if hit[1] is not None else 60):
         return hit[1]
-    try:
-        d = requests.get(AF_URL + path, headers={"x-apisports-key": AF_KEY}, params=params, timeout=12).json()
-        val = None if d.get("errors") else d.get("response")
-    except Exception:
-        val = None
+    val = None
+    for attempt in range(3):   # 한꺼번에 많이 보내면 가끔 한도 오류(errors.rateLimit)가 와서 — 잠깐 쉬고 다시(예전엔 빈 값으로 넘어가 트로피가 엉뚱한 구단에 붙었음)
+        try:
+            with _AF_SEM:
+                d = requests.get(AF_URL + path, headers={"x-apisports-key": AF_KEY}, params=params, timeout=12).json()
+            if d.get("errors"):
+                if re.search(r"rate|limit|requests", str(d["errors"]), re.I) and attempt < 2:
+                    _time.sleep(1.0 + attempt)
+                    continue
+                break
+            val = d.get("response")
+            break
+        except Exception:
+            _time.sleep(0.5)
     _af_mem[k] = (_time.time(), val)
     return val
 
@@ -1665,7 +1692,7 @@ def get_match_detail(home_team: str, away_team: str, date: str):
 # ── 선수 시즌 기록(이번 시즌 = match_details 합산, 지난 시즌 = af_seasons/ — 2026-10-06) ──
 PS_DIR = os.path.join(MODEL_DIR, "af_seasons")
 
-@lru_cache(maxsize=12)
+@lru_cache(maxsize=32)
 def _ps_file(code, yr):
     p = os.path.join(PS_DIR, f"{code}_{yr}.json.gz")
     return md_read(p) if os.path.exists(p) else None
@@ -1695,7 +1722,7 @@ def _cur_details(code):
                 out.append({**d, "round": _af_round_of(e)})
     return out
 
-@lru_cache(maxsize=16)
+@lru_cache(maxsize=48)
 def _league_rows(code, yr):
     """(팀, 선수)별 시즌 기록 목록 — 이번 시즌은 경기 상세 합산 + 프로필, 지난 시즌은 af_seasons 파일. 없으면 None"""
     if yr == CURRENT_SEASON_YEAR:
@@ -1819,7 +1846,7 @@ def get_team_squad(team_name: str, season: int = None):
 _LP_KEYS = ("id", "team", "full_name", "name", "photo", "pos", "apps", "starts", "minutes", "goals", "assists", "rating", "rated", "shots", "shots_on",
             "key_passes", "dribbles_won", "tackles", "interceptions", "blocks", "duels_won", "clean_sheets", "saves", "yellow", "red", "pen_scored", "number", "nationality")
 
-@lru_cache(maxsize=16)
+@lru_cache(maxsize=48)
 def _league_players_compact(code, yr):
     rows = _league_rows(code, yr)
     if not rows:
@@ -1922,14 +1949,16 @@ def _af_season_stats(pid, yr):
 def get_player_profile(player_id: int):
     """선수 카드 경력·트로피·부상 이력 + 기본 정보(나이·국적·키 — 지난 시즌 선수처럼 우리 프로필 파일에 없는 선수용). 키가 없거나 못 받으면 204"""
     from concurrent.futures import ThreadPoolExecutor
-    teams = _af_live_get("/players/teams", 86400, player=player_id)
-    if teams is None:
-        return Response(status_code=204)
-    years = sorted({y for t in teams for y in (t.get("seasons") or []) if y >= 2010}, reverse=True)[:16]
-    with ThreadPoolExecutor(6) as ex:
+    # 한 번에 동시 요청(예전엔 6개씩 나눠 받아 선수당 6~7초 — 요청 하나가 0.4~1초라 다 같이 보내면 2초 안팎)
+    with ThreadPoolExecutor(20) as ex:
+        fut_tm = ex.submit(_af_live_get, "/players/teams", 86400, player=player_id)
         fut_tr = ex.submit(_af_live_get, "/trophies", 86400, player=player_id)
         fut_sd = ex.submit(_af_live_get, "/sidelined", 86400, player=player_id)
         fut_tf = ex.submit(_af_live_get, "/transfers", 86400, player=player_id)
+        teams = fut_tm.result()
+        if teams is None:
+            return Response(status_code=204)
+        years = sorted({y for t in teams for y in (t.get("seasons") or []) if y >= 2010}, reverse=True)[:16]
         stats = dict(zip(years, ex.map(lambda y: _af_season_stats(player_id, y), years)))
         trophies, sidelined, transfers = fut_tr.result() or [], fut_sd.result() or [], fut_tf.result() or []
     latest = next((stats[y] for y in years if stats.get(y)), None)
@@ -2011,7 +2040,10 @@ def get_player_profile(player_id: int):
         items = sorted(g.pop("items").values(), key=lambda x: (-len(x["wins"]), -len(x["runner"])))
         g["items"], g["wins"] = items, sum(len(x["wins"]) for x in items)
         tgroups.append(g)
-    tgroups.sort(key=lambda g: (g["national"], -g["wins"]))
+    # 구단 순서 = 경력 순서(지금 팀 → 최근에 떠난 팀 → 그 전), 국가대표는 맨 뒤 — 예전엔 우승 횟수 순이라 옛 팀이 위로 올라왔음
+    order = {c.get("team_id"): i for i, c in enumerate(base["career"]) if not c.get("national")}
+    last = lambda g: max([int(str(s)[:4]) for it in g["items"] for s in it["wins"] + it["runner"] if str(s)[:4].isdigit()] or [0])
+    tgroups.sort(key=lambda g: (g["national"], order.get(g.get("team_id"), 999), -last(g)))
     return {**base, "bio": bio, "trophy_groups": tgroups,
             "trophies": [t for t in tro if not t["youth"]]}   # 예전 화면 호환(평평한 목록)
 
@@ -2057,6 +2089,9 @@ def _warm_af():
     try:
         for c in ("PL", "PD", "BL1", "SA", "FL1"):
             _af_league_squads(c)
+        _league_rows("CL", CURRENT_SEASON_YEAR)
+        _ps_index()
+        _dpos_hint()   # 지난 시즌 베스트 11 자리 추정용(첫 호출 1~2초)
     except Exception as e:
         print("⚠️ 선수 기록 미리 계산 실패:", e)
 

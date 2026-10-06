@@ -2154,138 +2154,138 @@
     .lo-xi-nav button { width: 28px; height: 28px; border-radius: 50%; border: 0.5px solid var(--border); background: rgba(10,16,32,0.5); color: var(--text-2); font-size: 15px; cursor: pointer; }
     .lo-xi-nav button:disabled { opacity: .35; cursor: default; }
     .lo-xi-nav select { font: inherit; font-size: 12px; font-weight: 700; color: var(--text); background: rgba(10,16,32,0.6); border: 0.5px solid var(--border); border-radius: 8px; padding: 5px 6px; cursor: pointer; }
-    /* ── 선수 카드 v2(2026-10-06): 머리 + 탭 — 밤하늘 남색 바탕에 구단 색 빛, 숫자는 전광판 글꼴 ── */
+    /* ── 선수 카드(2026-10-07 정리): 상자 안 상자·빛·그라데이션 없이 글자 위계와 정렬로. 칸은 왼쪽 정렬, 숫자는 같은 기준선 ── */
     .modal.pc-modal { width: 520px; }
-    .pc-modal .mp-top { padding-bottom: 2px; }
-    .pc2-skel { display: flex; align-items: center; gap: 14px; padding: 8px 0 16px; }
+    .pc-modal .mp-top { padding-bottom: 0; }
+    .pc2-skel { display: flex; align-items: center; gap: 16px; padding: 12px 0 18px; }
     .pc2-skel i { display: block; height: 12px; border-radius: 6px; margin: 6px 0; background: rgba(142,154,179,0.14); }
-    .pc2-skel i.c { width: 84px; height: 84px; border-radius: 50%; margin: 0; flex-shrink: 0; } .pc2-skel > div { flex: 1; }
-    .pc2-hero { position: relative; display: flex; align-items: center; gap: 16px; margin: 4px -16px 0; padding: 16px 18px 18px; overflow: hidden;
-      background: radial-gradient(120% 140% at 0% 0%, color-mix(in srgb, var(--c1) 30%, transparent) 0%, transparent 55%),
-                  radial-gradient(90% 120% at 100% 100%, color-mix(in srgb, var(--c2) 14%, transparent) 0%, transparent 60%); }
-    .pc2-hero::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(142,154,179,0.25), transparent); }
-    .pc2-ph { position: relative; flex-shrink: 0; }
-    .pc2-photo { width: 84px; height: 84px; border-radius: 50%; object-fit: cover; background: var(--surface-2); border: 2px solid color-mix(in srgb, var(--c1) 70%, #fff 10%); box-shadow: 0 0 28px color-mix(in srgb, var(--c1) 40%, transparent); display: block; }
-    .pc2-crest { position: absolute; right: -4px; bottom: -2px; width: 30px; height: 30px; object-fit: contain; padding: 3px; border-radius: 50%; background: var(--surface); border: 0.5px solid var(--border); }
-    .pc2-id { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
-    .pc2-name { font-size: 22px; font-weight: 800; color: #fff; line-height: 1.15; letter-spacing: -0.3px; }
-    .pc2-legal { font-size: 11px; color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: -2px; }
-    .pc2-team { display: flex; align-items: center; gap: 8px; font-size: 13px; }
-    .pc2-team button { background: none; border: none; padding: 0; color: var(--text-2); font: inherit; font-weight: 600; cursor: pointer; }
-    .pc2-team button:hover { color: var(--blue-text); }
-    .pc2-num { font-family: var(--font-num); font-size: 15px; font-weight: 700; color: var(--muted); }
-    .pc2-num::before { content: 'No.'; font-size: 11px; margin-right: 2px; color: var(--faint); font-family: var(--font-ui); font-weight: 600; }
-    .pc2-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 2px; }
-    .pc2-tags em { display: inline-flex; align-items: center; gap: 5px; font-style: normal; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 99px; background: rgba(142,154,179,0.14); color: var(--text-2); }
-    .pc2-tags em img { width: 15px; height: 11px; object-fit: cover; border-radius: 2px; }
-    .pc2-pos.GK { color: var(--gold); background: rgba(240,192,64,0.13); } .pc2-pos.DF { color: var(--green); background: rgba(63,185,80,0.13); }
-    .pc2-pos.MF { color: var(--blue-text); background: rgba(88,166,255,0.13); } .pc2-pos.FW { color: var(--away); background: rgba(240,136,62,0.13); }
-    .pc2-tags .pc2-cap { color: var(--gold); background: rgba(240,192,64,0.13); } .pc2-tags .pc2-inj { color: var(--red); background: rgba(248,81,73,0.13); }
-    .pc2-rt { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 3px; }
-    .pc2-rt b { font-family: var(--font-num); font-size: 30px; font-weight: 700; line-height: 1; padding: 6px 10px 5px; border-radius: 12px; color: var(--bg); background: var(--muted); font-variant-numeric: tabular-nums; }
-    .pc2-rt.r8 b { background: var(--blue); } .pc2-rt.r7 b { background: var(--green); } .pc2-rt.r6 b { background: var(--amber); } .pc2-rt.r5 b { background: var(--away); }
+    .pc2-skel i.c { width: 72px; height: 72px; border-radius: 50%; margin: 0; flex-shrink: 0; } .pc2-skel > div { flex: 1; }
+    .pc2-hero { display: grid; grid-template-columns: 72px minmax(0, 1fr) auto; align-items: center; gap: 16px; padding: 12px 0 18px; }
+    .pc2-photo { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; background: var(--surface-2); }
+    .pc2-id { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 5px; }
+    .pc2-name { margin: 0; font-size: 22px; font-weight: 700; line-height: 1.2; letter-spacing: -0.2px; color: var(--text); }
+    .pc2-club { display: inline-flex; align-items: center; gap: 6px; padding: 0; border: none; background: none; font: inherit; font-size: 14px; font-weight: 600; color: var(--text-2); cursor: pointer; line-height: 20px; }
+    .pc2-club img { width: 20px; height: 20px; object-fit: contain; }
+    .pc2-club:hover span { color: var(--blue-text); }
+    .pc2-meta { display: flex; flex-wrap: wrap; font-size: 13px; color: var(--muted); line-height: 18px; }
+    .pc2-meta span + span::before { content: ''; display: inline-block; width: 1px; height: 10px; margin: 0 8px; background: var(--border); vertical-align: -1px; }
+    .pc2-meta .inj { color: var(--red); }
+    .pc2-rt { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+    .pc2-rt b { font-family: var(--font-num); font-size: 26px; font-weight: 700; line-height: 1; padding: 5px 8px 4px; border-radius: 6px; color: var(--bg); background: var(--muted); font-variant-numeric: tabular-nums; }
+    .pc2-rt b.r8 { background: var(--blue); } .pc2-rt b.r7 { background: var(--green); } .pc2-rt b.r6 { background: var(--amber); } .pc2-rt b.r5 { background: var(--away); }
     .pc2-rt small { font-size: 11px; color: var(--muted); white-space: nowrap; }
-    .pc2-tabs { position: sticky; top: -1px; z-index: 3; display: flex; gap: 4px; margin: 0 -16px 4px; padding: 8px 12px; background: inherit; border-bottom: 0.5px solid rgba(142,154,179,0.14); }
-    html.theme-glass .pc2-tabs { background: rgba(17,26,46,0.94); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-    .pc2-tabs button { flex: 1; border: none; background: transparent; color: var(--muted); font: inherit; font-size: 13px; font-weight: 700; padding: 8px 4px; border-radius: 10px; cursor: pointer; }
+    .pc2-tabs { position: sticky; top: -1px; z-index: 3; display: flex; gap: 24px; margin: 0 -16px; padding: 0 16px; background: var(--surface); border-bottom: 1px solid var(--border); }
+    html.theme-glass .pc2-tabs { background: rgba(17,26,46,0.96); }
+    .pc2-tabs button { position: relative; border: none; background: none; color: var(--muted); font: inherit; font-size: 14px; font-weight: 600; padding: 12px 0 11px; cursor: pointer; }
     .pc2-tabs button:hover { color: var(--text); }
-    .pc2-tabs button.on { color: var(--text); background: rgba(88,166,255,0.13); box-shadow: inset 0 -2px 0 var(--blue); }
-    .pc2-pane { padding-top: 8px; min-height: 260px; }
-    .pc2-sec { margin-top: 14px; }
-    .pc2-sec:first-child { margin-top: 6px; }
-    .pc2-sec-t { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
-    .pc2-sec-t > span:not(.pc-mode):not(.pc2-sea-one) { font-size: 11px; font-weight: 500; color: var(--faint); }
-    .pc2-sea, .bx-sea { font: inherit; font-size: 12px; font-weight: 700; color: var(--text); background: rgba(10,16,32,0.6); border: 0.5px solid var(--border); border-radius: 8px; padding: 5px 8px; max-width: 70%; cursor: pointer; }
-    .pc2-sea-one, .bx-sea-one { font-size: 12px; font-weight: 700; color: var(--text-2); }
-    .pc2-link { background: none; border: none; color: var(--blue-text); font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; padding: 0; }
-    .pc2-cells { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
-    .pc2-cell { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 10px 4px; border-radius: 10px; background: rgba(10,16,32,0.45); border: 0.5px solid rgba(142,154,179,0.14); min-width: 0; text-align: center; }
-    .pc2-cell small { font-size: 11px; color: var(--muted); }
-    .pc2-cell b { display: flex; align-items: center; gap: 5px; font-size: 14px; font-weight: 700; color: var(--text); max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .pc2-cell span { font-size: 11px; color: var(--faint); font-variant-numeric: tabular-nums; }
-    .pc2-flag { width: 18px; height: 13px; object-fit: cover; border-radius: 2px; flex-shrink: 0; }
-    .pc2-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
-    .pc2-tile { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 10px 4px 9px; border-radius: 12px; background: linear-gradient(180deg, rgba(88,166,255,0.09), rgba(88,166,255,0.03)); border: 0.5px solid rgba(88,166,255,0.18); }
-    .pc2-tile b { font-family: var(--font-num); font-size: 28px; font-weight: 700; line-height: 1.05; color: #fff; font-variant-numeric: tabular-nums; }
-    .pc2-tile.g b { color: var(--blue-text); }
-    .pc2-tile small { font-size: 11px; color: var(--muted); }
-    .pc2-pos-row { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 14px; align-items: center; }
-    .pc2-mini { position: relative; aspect-ratio: 105 / 68; border-radius: 10px; background: linear-gradient(180deg, rgba(24,35,58,0.9), rgba(17,26,46,0.9)); border: 0.5px solid rgba(142,154,179,0.18); }
-    .pc2-mini .xi-lines { position: absolute; inset: 6px; width: calc(100% - 12px); height: calc(100% - 12px); }
-    .pc2-dot { position: absolute; transform: translate(-50%, -50%); min-width: 26px; height: 18px; padding: 0 4px; border-radius: 99px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; color: var(--text); background: rgba(88,166,255,0.35); border: 0.5px solid rgba(88,166,255,0.6); }
-    .pc2-dot.main { background: var(--blue); color: var(--bg); box-shadow: 0 0 14px rgba(88,166,255,0.55); z-index: 1; }
-    .pc2-pos-list div { display: flex; justify-content: space-between; gap: 8px; padding: 6px 0; font-size: 12px; color: var(--muted); border-bottom: 0.5px solid rgba(142,154,179,0.1); }
-    .pc2-pos-list div.main { color: var(--text); font-weight: 700; }
-    .pc2-pos-list b { font-family: var(--font-num); font-size: 14px; font-weight: 700; color: var(--text-2); }
-    .pc2-m { display: grid; grid-template-columns: 38px minmax(0, 1fr) 36px auto 34px; align-items: center; gap: 8px; padding: 7px 0; border-top: 0.5px solid rgba(142,154,179,0.1); font-size: 12px; color: var(--text-2); }
-    .pc2-m .dt { color: var(--faint); font-size: 11px; font-variant-numeric: tabular-nums; }
-    .pc2-m .opp { display: flex; align-items: center; gap: 6px; min-width: 0; } .pc2-m .opp img { width: 18px; height: 18px; object-fit: contain; flex-shrink: 0; }
-    .pc2-m .opp em { font-style: normal; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .pc2-m .res { font-family: var(--font-num); font-size: 14px; font-weight: 700; text-align: center; border-radius: 6px; padding: 1px 0; }
-    .pc2-m .res.w { color: var(--green); background: rgba(63,185,80,0.12); } .pc2-m .res.d { color: var(--text-2); background: rgba(142,154,179,0.12); } .pc2-m .res.l { color: var(--red); background: rgba(248,81,73,0.12); }
-    .pc2-m .st { display: flex; align-items: center; gap: 4px; justify-content: flex-end; }
-    .pc2-m .st i { font-style: normal; font-size: 11px; font-weight: 700; padding: 1px 5px; border-radius: 5px; }
-    .pc2-m .st i.g { color: var(--blue-text); background: rgba(88,166,255,0.13); } .pc2-m .st i.a { color: var(--green); background: rgba(63,185,80,0.12); }
-    .pc2-m .st small { color: var(--faint); font-size: 11px; min-width: 22px; text-align: right; }
-    .pc2-m .md-rt { justify-self: end; }
-    .pc2-sum { font-size: 12px; color: var(--muted); margin: -2px 0 10px; }
-    .pc2-chips { display: grid; grid-template-columns: repeat(auto-fit, minmax(104px, 1fr)); gap: 6px; margin-bottom: 10px; }
-    .pc2-chip { display: flex; flex-direction: column; gap: 1px; padding: 8px 10px; border-radius: 10px; background: rgba(10,16,32,0.45); border: 0.5px solid rgba(142,154,179,0.14); }
-    .pc2-chip small { font-size: 11px; color: var(--muted); } .pc2-chip b { font-family: var(--font-num); font-size: 20px; font-weight: 700; color: var(--text); }
-    .pc2-grps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 18px; }
+    .pc2-tabs button.on { color: var(--text); }
+    .pc2-tabs button.on::after { content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--blue); border-radius: 2px 2px 0 0; }
+    .pc2-pane { padding-top: 20px; min-height: 280px; }
+    .pc2-pane > .pc2-sec:first-child, .pc2-pane > .pc2-tro-sum:first-child { margin-top: 0; }
+    .pc2-sec { margin-top: 22px; }
+    .pc2-sec h4 { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 10px; font-size: 14px; font-weight: 700; color: var(--text); }
+    .pc2-sec h4 small { font-size: 12px; font-weight: 500; color: var(--muted); }
+    .pc2-sea { position: relative; display: inline-flex; align-items: center; min-width: 0; }
+    .pc2-sea select { appearance: none; -webkit-appearance: none; font: inherit; font-size: 14px; font-weight: 700; color: var(--text); background: none; border: none; padding: 0 18px 0 0; cursor: pointer; max-width: 100%; text-overflow: ellipsis; }
+    .pc2-sea:not(.one)::after { content: ''; position: absolute; right: 2px; top: 50%; width: 6px; height: 6px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: translateY(-70%) rotate(45deg); pointer-events: none; }
+    .pc2-sea select option { background: var(--surface); }
+    .pc2-link { flex-shrink: 0; background: none; border: none; color: var(--blue-text); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; padding: 0; }
+    /* 정보 4칸 · 숫자 칸 — 같은 격자, 왼쪽 정렬, 칸 사이 가는 선 */
+    .pc2-info, .pc2-figs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; }
+    .pc2-info > div, .pc2-fig { min-width: 0; padding: 0 12px; border-left: 1px solid var(--border); }
+    .pc2-info > div:first-child, .pc2-fig:first-child { padding-left: 0; border-left: none; }
+    .pc2-info dt { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+    .pc2-info dd { margin: 0; display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 20px; }
+    .pc2-info dd img { width: 20px; height: 14px; object-fit: cover; border-radius: 2px; flex-shrink: 0; }
+    .pc2-fig b { display: block; font-family: var(--font-num); font-size: 32px; font-weight: 700; line-height: 1; color: var(--text); font-variant-numeric: tabular-nums; }
+    .pc2-fig.acc b { color: var(--blue-text); }
+    .pc2-fig span { display: block; margin-top: 6px; font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pc2-figs.sm { margin: 4px 0 14px; } .pc2-figs.sm .pc2-fig b { font-size: 22px; }
+    .pc2-pos-row { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 20px; align-items: center; }
+    .pc2-mini { position: relative; aspect-ratio: 105 / 68; border-radius: 6px; background: var(--surface-2); }
+    .pc2-mini .xi-lines { position: absolute; inset: 5px; width: calc(100% - 10px); height: calc(100% - 10px); }
+    .pc2-dot { position: absolute; transform: translate(-50%, -50%); min-width: 26px; height: 18px; padding: 0 4px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: var(--text-2); background: var(--border); }
+    .pc2-dot.main { background: var(--blue); color: var(--bg); z-index: 1; }
+    .pc2-pos-list { list-style: none; margin: 0; padding: 0; }
+    .pc2-pos-list li { display: flex; justify-content: space-between; gap: 8px; padding: 7px 0; font-size: 13px; color: var(--muted); border-top: 1px solid var(--border); }
+    .pc2-pos-list li:first-child { border-top: none; }
+    .pc2-pos-list li.main { color: var(--text); font-weight: 600; }
+    .pc2-pos-list b { font-weight: 600; font-variant-numeric: tabular-nums; }
+    /* 표 공통: 줄 사이 가는 선, 숫자 열 오른쪽 정렬 */
+    .pc2-ms, .pc2-car, .pc2-inj { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .pc2-ms td, .pc2-car td, .pc2-inj td { padding: 9px 0; border-top: 1px solid var(--border); vertical-align: middle; color: var(--text-2); }
+    .pc2-ms tr:first-child td, .pc2-inj tr:first-child td { border-top: none; }
+    .pc2-ms .dt, .pc2-inj .dt { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .pc2-ms .dt { width: 44px; }
+    .pc2-ms .opp { max-width: 0; width: 40%; } .pc2-ms .opp img { width: 18px; height: 18px; object-fit: contain; vertical-align: middle; margin-right: 8px; }
+    .pc2-ms .opp span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: middle; }
+    .pc2-ms .res { width: 64px; white-space: nowrap; font-variant-numeric: tabular-nums; color: var(--text); font-weight: 600; }
+    .pc2-ms .res i { display: inline-block; width: 18px; margin-right: 6px; font-style: normal; font-size: 12px; font-weight: 700; text-align: center; }
+    .pc2-ms .res i.w { color: var(--green); } .pc2-ms .res i.d { color: var(--muted); } .pc2-ms .res i.l { color: var(--red); }
+    .pc2-ms .ga { color: var(--blue-text); font-size: 12px; font-weight: 600; white-space: nowrap; text-align: right; padding-right: 12px; }
+    .pc2-ms .ga .md-card { margin-left: 6px; vertical-align: -2px; }
+    .pc2-ms .min { width: 36px; text-align: right; color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+    .pc2-ms .rt { width: 44px; text-align: right; }
+    .pc2-sum { margin: -2px 0 12px; font-size: 13px; color: var(--muted); }
+    .pc2-seg { display: inline-flex; flex-shrink: 0; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+    .pc2-seg button { border: none; background: none; color: var(--muted); font: inherit; font-size: 12px; font-weight: 600; padding: 4px 10px; cursor: pointer; }
+    .pc2-seg button.on { background: var(--surface-2); color: var(--text); }
+    .pc2-grps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 28px; }
     .pc2-grp { min-width: 0; }
-    .pc2-grp-t { font-size: 11px; font-weight: 700; color: var(--faint); margin: 8px 0 2px; }
-    .pc2-kv { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px; padding: 6px 0; font-size: 12px; border-bottom: 0.5px solid rgba(142,154,179,0.08); }
-    .pc2-grps.bars .pc2-kv { grid-template-columns: minmax(0, 1fr) 40px 56px; }
-    .pc2-kv span { color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .pc2-kv b { color: var(--text); font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
-    .pc2-car-h { display: grid; grid-template-columns: minmax(0, 1fr) 44px 44px; gap: 6px; font-size: 13px; font-weight: 700; color: var(--text); padding-bottom: 6px; }
-    .pc2-car-h .n { font-size: 11px; font-weight: 600; color: var(--faint); text-align: center; }
-    .pc2-car { display: grid; grid-template-columns: 30px minmax(0, 1fr) 44px 44px; align-items: center; gap: 6px 10px; padding: 9px 0; border-top: 0.5px solid rgba(142,154,179,0.1); }
-    .pc2-car > img { width: 30px; height: 30px; object-fit: contain; }
-    .pc2-car > img.flag { width: 28px; height: 20px; object-fit: cover; border-radius: 3px; }
-    .pc2-car > div { min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
-    .pc2-car b { font-size: 13px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .pc2-car small { font-size: 11px; color: var(--muted); }
-    .pc2-car .n { font-family: var(--font-num); font-size: 18px; font-weight: 700; text-align: center; color: var(--text-2); font-variant-numeric: tabular-nums; }
-    .pc2-car .n.g { color: var(--blue-text); }
-    .pc2-car.now b::after { content: '현재'; margin-left: 6px; font-size: 10px; font-weight: 800; color: var(--blue-text); background: rgba(88,166,255,0.13); padding: 1px 5px; border-radius: 4px; vertical-align: 1px; }
-    .pc2-inj { display: flex; justify-content: space-between; gap: 8px; padding: 7px 0; font-size: 12px; color: var(--text-2); border-top: 0.5px solid rgba(142,154,179,0.1); }
-    .pc2-inj small { color: var(--faint); font-size: 11px; white-space: nowrap; }
-    .pc2-note { font-size: 11px; color: var(--faint); margin-top: 12px; }
-    .pc2-tro-sum { display: flex; align-items: baseline; gap: 8px; margin: 4px 0 10px; }
-    .pc2-tro-sum b { font-family: var(--font-num); font-size: 34px; font-weight: 700; color: var(--gold); line-height: 1; }
-    .pc2-tro-sum span { font-size: 12px; color: var(--muted); }
-    .pc2-tro { border-radius: 14px; border: 0.5px solid rgba(142,154,179,0.16); background: rgba(10,16,32,0.35); overflow: hidden; margin-bottom: 10px; }
-    .pc2-tro-h { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: rgba(24,35,58,0.7); }
-    .pc2-tro-h > img { width: 30px; height: 30px; object-fit: contain; } .pc2-tro-h > img.flag { width: 28px; height: 20px; object-fit: cover; border-radius: 3px; }
-    .pc2-tro-h > div { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
-    .pc2-tro-h b { font-size: 14px; font-weight: 700; color: var(--text); } .pc2-tro-h small { font-size: 11px; color: var(--muted); }
-    .pc2-tro-n { font-family: var(--font-num); font-size: 18px; font-weight: 700; color: var(--gold); }
-    .pc2-tro-i { display: grid; grid-template-columns: 22px 30px minmax(0, 1fr); align-items: center; gap: 10px; padding: 9px 12px; border-top: 0.5px solid rgba(142,154,179,0.08); }
-    .pc2-tro-i .cnt { font-family: var(--font-num); font-size: 18px; font-weight: 700; color: var(--gold); text-align: center; }
-    .pc2-tro-i.ru .cnt { color: var(--muted); }
-    .pc2-tro-i > div { min-width: 0; display: flex; flex-direction: column; line-height: 1.35; }
-    .pc2-tro-i b { font-size: 13px; font-weight: 600; color: var(--text); }
-    .pc2-tro-i small { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
-    .pc2-tro-i small em { font-style: normal; color: var(--faint); margin-left: 8px; } .pc2-tro-i.ru small em { margin-left: 0; }
-    .pc2-tro-i.ru b { color: var(--text-2); }
-    /* 대회 아이콘(트로피·우승 기록·경력) — 둥근 칸 안에 맞춤 */
-    .comp-ic { width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: rgba(236,241,250,0.06); border: 0.5px solid rgba(142,154,179,0.18); flex-shrink: 0; }
-    .comp-ic img { width: 20px; height: 20px; object-fit: contain; }
-    .comp-ic.tro svg, .comp-ic svg { width: 17px; height: 17px; fill: none; stroke: var(--gold); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    .pc2-grp h5 { margin: 14px 0 2px; font-size: 12px; font-weight: 600; color: var(--muted); }
+    .pc2-kv { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 7px 0; font-size: 13px; border-top: 1px solid var(--border); }
+    .pc2-grp h5 + .pc2-kv { border-top: none; }
+    .pc2-grps.bars .pc2-kv { grid-template-columns: minmax(0, 1fr) 44px 48px; }
+    .pc2-kv span { color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pc2-kv b { color: var(--text); font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
+    .pc2-kv .pc-bar { height: 4px; }
+    .pc2-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; margin: 14px 0 0; font-size: 12px; color: var(--muted); }
+    .pc2-legend i { width: 10px; height: 4px; border-radius: 2px; margin-left: 6px; } .pc2-legend i:first-child { margin-left: 0; }
+    .pc2-legend i.hi { background: var(--green); } .pc2-legend i.mid { background: var(--amber); } .pc2-legend i.lo { background: var(--red); }
+    .pc2-legend span { flex-basis: 100%; color: var(--faint); }
+    .pc2-car th { padding: 0 0 8px; font-size: 12px; font-weight: 600; color: var(--muted); text-align: right; width: 48px; }
+    .pc2-car th:first-child { text-align: left; width: auto; font-size: 14px; font-weight: 700; color: var(--text); }
+    .pc2-car .lg { width: 36px; } .pc2-car .lg img { display: block; width: 26px; height: 26px; object-fit: contain; } .pc2-car .lg img.flag { width: 26px; height: 18px; object-fit: cover; border-radius: 2px; }
+    .pc2-car .nm { max-width: 0; } .pc2-car .nm b, .pc2-car .nm span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pc2-car .nm b { font-size: 14px; font-weight: 600; color: var(--text); } .pc2-car .nm span { font-size: 12px; color: var(--muted); margin-top: 2px; font-variant-numeric: tabular-nums; }
+    .pc2-car .n, .pc2-inj .n { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; color: var(--text); }
+    .pc2-car tr.now .nm span { color: var(--blue-text); }
+    .pc2-inj td:first-child { color: var(--text); } .pc2-inj .dt { text-align: right; padding-right: 12px; } .pc2-inj .n { width: 44px; color: var(--muted); font-weight: 500; }
+    .pc2-note { margin: 16px 0 0; font-size: 12px; color: var(--faint); }
+    .pc2-tro-sum { display: flex; align-items: baseline; gap: 4px; margin: 14px 0 4px; font-size: 14px; color: var(--text-2); }
+    .pc2-tro-sum b { font-family: var(--font-num); font-size: 32px; font-weight: 700; color: var(--text); line-height: 1; margin-right: 2px; }
+    .pc2-tro-sum span { margin-left: auto; font-size: 12px; color: var(--muted); }
+    .pc2-tro { margin-top: 20px; }
+    .pc2-tro h4 { display: flex; align-items: center; gap: 10px; margin: 0 0 4px; padding-bottom: 10px; border-bottom: 1px solid var(--border); font-size: 15px; font-weight: 700; color: var(--text); }
+    .pc2-tro h4 img { width: 28px; height: 28px; object-fit: contain; } .pc2-tro h4 img.flag { width: 26px; height: 18px; object-fit: cover; border-radius: 2px; }
+    .pc2-tro h4 span { display: flex; flex-direction: column; line-height: 1.25; } .pc2-tro h4 small { font-size: 12px; font-weight: 500; color: var(--muted); }
+    .pc2-tro ul { list-style: none; margin: 0; padding: 0; }
+    .pc2-tro li { display: grid; grid-template-columns: 24px 30px minmax(0, 1fr); align-items: center; gap: 12px; padding: 9px 0; border-top: 1px solid var(--border); }
+    .pc2-tro li:first-child { border-top: none; }
+    .pc2-tro .cnt { font-family: var(--font-num); font-size: 20px; font-weight: 700; color: var(--gold); text-align: center; }
+    .pc2-tro li.ru .cnt { color: var(--muted); }
+    .pc2-tro li > span { min-width: 0; display: flex; flex-direction: column; line-height: 1.35; }
+    .pc2-tro em { font-style: normal; font-size: 14px; font-weight: 600; color: var(--text); }
+    .pc2-tro li.ru em { color: var(--text-2); }
+    .pc2-tro small { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+    /* 대회 아이콘(트로피·우승 기록) */
+    .comp-ic { width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .comp-ic img { width: 26px; height: 26px; object-fit: contain; }
+    .comp-ic svg { width: 20px; height: 20px; fill: none; stroke: var(--gold); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
     @media (max-width: 600px) {
       .modal.pc-modal { width: 100%; max-width: 100%; max-height: calc(100dvh - 24px); }
-      .pc2-hero { gap: 12px; padding: 14px 16px 16px; }
-      .pc2-photo { width: 68px; height: 68px; } .pc2-crest { width: 26px; height: 26px; }
-      .pc2-name { font-size: 18px; }
-      .pc2-rt b { font-size: 24px; padding: 5px 8px 4px; }
-      .pc2-cells { gap: 4px; } .pc2-cell { padding: 8px 2px; } .pc2-cell b { font-size: 12px; gap: 3px; } .pc2-cell span { font-size: 10px; }
-      .pc2-flag { width: 15px; height: 11px; }
-      .pc2-tiles { gap: 4px; } .pc2-tile b { font-size: 24px; }
+      .pc2-hero { grid-template-columns: 60px minmax(0, 1fr) auto; gap: 12px; }
+      .pc2-photo { width: 60px; height: 60px; }
+      .pc2-name { font-size: 19px; }
+      .pc2-rt b { font-size: 22px; }
+      .pc2-tabs { gap: 20px; } .pc2-tabs button { font-size: 13px; }
+      .pc2-info { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 14px; }
+      .pc2-info > div:nth-child(3) { padding-left: 0; border-left: none; }
+      .pc2-fig { padding: 0 8px; } .pc2-fig b { font-size: 26px; } .pc2-fig span { font-size: 11px; }
+      .pc2-figs.sm { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 12px; } .pc2-figs.sm .pc2-fig:nth-child(3) { padding-left: 0; border-left: none; }
       .pc2-grps { grid-template-columns: minmax(0, 1fr); }
-      .pc2-pos-row { gap: 10px; }
-      .pc2-tabs button { font-size: 12px; }
+      .pc2-pos-row { gap: 14px; }
+      .pc2-ms .ga { padding-right: 8px; }
     }
 
     /* ── 베스트 11 경기장(구단 시즌 베스트·리그 이번 라운드의 팀) ── */
@@ -2293,33 +2293,34 @@
       background: radial-gradient(60% 50% at 50% 50%, rgba(88,166,255,0.10), transparent 70%), linear-gradient(180deg, #121c33 0%, #0e172b 100%);
       border: 0.5px solid rgba(142,154,179,0.2); }
     .xi-pitch.v { aspect-ratio: 68 / 100; } .xi-pitch.h { aspect-ratio: 105 / 58; } .xi-pitch.h.compact { aspect-ratio: 105 / 72; }
-    .xi-pitch.compact .xi-p { width: 70px; gap: 3px; } .xi-pitch.compact .xi-ph { width: 36px; height: 36px; }
+    .xi-pitch.compact .xi-p { width: 70px; gap: 3px; transform: translate(-50%, -18px); } .xi-pitch.compact .xi-ph { width: 36px; height: 36px; }
     .xi-pitch.compact .xi-rt { font-size: 11px; right: -17px; top: -7px; } .xi-pitch.compact .xi-nm { max-width: 70px; font-size: 10px; }
     .xi-pitch.compact .xi-crest { width: 17px; height: 17px; left: -7px; }
     .xi-lines { position: absolute; inset: 0; width: 100%; height: 100%; fill: none; stroke: rgba(236,241,250,0.11); stroke-width: 0.35; vector-effect: non-scaling-stroke; }
     .xi-lines * { vector-effect: non-scaling-stroke; stroke-width: 1; }
-    .xi-p { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 4px; width: 78px; padding: 0; border: none; background: none; cursor: pointer; font: inherit; z-index: 1; }
-    .xi-ph { position: relative; width: 44px; height: 44px; border-radius: 50%; background: var(--surface-2); border: 1.5px solid rgba(236,241,250,0.55); box-shadow: 0 4px 12px rgba(0,0,0,0.45); }
+    .xi-p { position: absolute; transform: translate(-50%, -22px);   /* 사진 가운데를 자리에 — 골·도움 줄이 있는 선수만 아래로 길어져도 한 줄의 사진 높이가 같게 */ display: flex; flex-direction: column; align-items: center; gap: 4px; width: 78px; padding: 0; border: none; background: none; cursor: pointer; font: inherit; z-index: 1; }
+    .xi-ph { position: relative; width: 44px; height: 44px; border-radius: 50%; background: var(--surface-2); border: 1px solid rgba(236,241,250,0.35); }
     .xi-ph > img:first-child { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
-    .xi-rt { position: absolute; top: -8px; right: -20px; font-family: var(--font-num); font-size: 12px; font-weight: 700; line-height: 1; padding: 3px 5px 2px; border-radius: 6px; color: var(--bg); background: var(--muted); font-variant-numeric: tabular-nums; }
+    .xi-rt { position: absolute; top: -6px; right: -18px; font-family: var(--font-num); font-size: 12px; font-weight: 700; line-height: 1; padding: 3px 4px 2px; border-radius: 4px; color: var(--bg); background: var(--muted); font-variant-numeric: tabular-nums; }
     .xi-rt.r8 { background: var(--blue); } .xi-rt.r7 { background: var(--green); } .xi-rt.r6 { background: var(--amber); } .xi-rt.r5 { background: var(--away); }
     .xi-crest { position: absolute; left: -8px; bottom: -4px; width: 20px; height: 20px; object-fit: contain; padding: 2px; border-radius: 50%; background: var(--surface); }
-    .xi-ga { position: absolute; right: -14px; bottom: -6px; display: flex; gap: 2px; }
-    .xi-ga i { display: inline-flex; align-items: center; gap: 1px; height: 16px; padding: 0 3px; border-radius: 99px; background: var(--surface); border: 0.5px solid var(--border); font-style: normal; font-size: 10px; font-weight: 800; color: var(--text); }
-    .xi-ga svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 1.8; }
-    .xi-ga i.g { color: var(--blue-text); } .xi-ga i.a { color: var(--green); }
     .xi-nm { max-width: 78px; font-size: 11px; font-weight: 600; color: var(--text); text-shadow: 0 1px 4px rgba(0,0,0,0.95); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .xi-nm i { font-style: normal; color: var(--faint); margin-right: 3px; font-variant-numeric: tabular-nums; }
+    .xi-st { margin-top: -2px; font-size: 10px; font-weight: 600; color: var(--blue-text); white-space: nowrap; text-shadow: 0 1px 3px rgba(0,0,0,0.9); }
     .xi-p:hover .xi-nm { color: var(--blue-text); } .xi-p:hover .xi-ph { border-color: var(--blue); }
     .xi-p:focus-visible { outline: none; } .xi-p:focus-visible .xi-ph { outline: 2px solid var(--blue); outline-offset: 2px; }
     @media (max-width: 480px) {
-      .xi-p { width: 62px; gap: 3px; } .xi-ph { width: 36px; height: 36px; }
+      .xi-p { width: 62px; gap: 3px; transform: translate(-50%, -18px); } .xi-ph { width: 36px; height: 36px; }
       .xi-rt { font-size: 11px; right: -16px; top: -7px; } .xi-nm { max-width: 62px; font-size: 10px; }
       .xi-crest { width: 17px; height: 17px; left: -7px; }
     }
     .bx-card { margin-top: 4px; }
     .bx-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
     .bx-head > b { font-size: 14px; font-weight: 700; color: var(--text); }
+    .bx-sea { appearance: none; -webkit-appearance: none; font: inherit; font-size: 13px; font-weight: 600; color: var(--text); background: transparent; border: 1px solid var(--border); border-radius: 6px; padding: 4px 24px 4px 10px; cursor: pointer;
+      background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: right 11px center, right 7px center; background-size: 4px 4px; background-repeat: no-repeat; }
+    .bx-sea option { background: var(--surface); }
+    .bx-sea-one { font-size: 13px; font-weight: 600; color: var(--text-2); }
     .bx-meta { margin-left: auto; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
     .bx-note { font-size: 11px; color: var(--faint); margin-top: 8px; }
     /* 캘린더 구독 창 */
@@ -4878,20 +4879,18 @@ const PITCH_SVG = {
 function xiPitchHtml(xi, o = {}) {
   if (!xi || !xi.lines) return '';
   const orient = o.orient || 'v', n = xi.lines.length;
-  const BALL = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/></svg>';
-  const BOOT = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15.5V9l4-1 2.2 3.2c2.4.6 6 1.1 9.3 1.6 1.6.3 2.5 1.4 2.5 2.8V17H3z"/><path d="M3 17h18"/></svg>';
   const dots = xi.lines.map((line, r) => line.map((p, i) => {
     const along = n === 1 ? 50 : 8 + (r / (n - 1)) * 80, across = (i + 0.5) / line.length * 100;
     const pos = orient === 'v' ? `left:${across}%;top:${100 - along}%` : `left:${along}%;top:${across}%`;
     const nm = p.name || p.full_name || '';
-    const badges = (p.goals ? `<i class="g">${BALL}${p.goals > 1 ? p.goals : ''}</i>` : '') + (p.assists ? `<i class="a">${BOOT}${p.assists > 1 ? p.assists : ''}</i>` : '');
+    const st = [p.goals ? `${p.goals}골` : '', p.assists ? `${p.assists}도움` : ''].filter(Boolean).join(' ');
     const team = p.team || o.team || '';
     return `<button type="button" class="xi-p" style="${pos}" onclick="openPlayerCard('${escJs(team)}', ${p.id}, ${o.season || 'null'})" title="${(p.full_name || nm).replace(/"/g, '&quot;')} · 평점 ${p.rating != null ? p.rating.toFixed(2) : '-'}">
       <span class="xi-ph"><img src="${p.photo || `https://media.api-sports.io/football/players/${p.id}.png`}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
         ${p.rating != null ? `<b class="xi-rt ${mdRatingClass(p.rating)}">${(o.dec2 ? p.rating.toFixed(2) : p.rating.toFixed(1))}</b>` : ''}
         ${o.teamLogo && logos[team] ? `<img class="xi-crest" src="${logos[team]}" alt="" onerror="this.remove()">` : ''}
-        ${badges ? `<span class="xi-ga">${badges}</span>` : ''}</span>
-      <span class="xi-nm">${o.num && p.num != null ? `<i>${p.num}</i>` : ''}${mdShortName(nm)}</span></button>`;
+</span>
+      <span class="xi-nm">${o.num && p.num != null ? `<i>${p.num}</i>` : ''}${mdShortName(nm)}</span>${st ? `<span class="xi-st">${st}</span>` : ''}</button>`;
   }).join('')).join('');
   return `<div class="xi-pitch ${orient}${o.compact ? ' compact' : ''}">${PITCH_SVG[orient]}${dots}</div>`;
 }
@@ -4923,6 +4922,14 @@ const LG_SHORT = { PL: '프리미어리그', PD: '라리가', BL1: '분데스리
 let pcCur = null;   // {team, pid, season, tab, mode, p, sq, prof, seasons}
 let pcSeq = 0;
 const mdPlayerIndex = {};
+// 선수에 마우스를 올리면 경력·트로피를 미리 받아 둠(누를 때쯤이면 도착) — 터치 기기는 누를 때 시작
+document.addEventListener('mouseover', e => {
+  const el = e.target.closest?.('[onclick*="openPlayerCard("]');
+  if (!el || el._pf) return;
+  el._pf = 1;
+  const m = /openPlayerCard\('(?:[^'\\]|\\.)*',\s*(\d+)/.exec(el.getAttribute('onclick'));
+  if (m) setTimeout(() => { if (el.matches(':hover')) fetchPlayerProfile(+m[1]); }, 150);
+}, { passive: true });
 async function openPlayerCard(team, pid, season, keepTab) {
   const modal = document.getElementById('pc-modal'), body = document.getElementById('pc-body');
   if (!modal || pid == null) return;
@@ -4931,6 +4938,7 @@ async function openPlayerCard(team, pid, season, keepTab) {
   if (!keepTab) body.innerHTML = '<div class="pc2-skel"><i class="c"></i><div><i style="width:60%"></i><i style="width:40%"></i></div></div><div class="mp-skel"><i style="width:100%;height:36px"></i><i style="width:100%;height:120px"></i></div>';
   modal.classList.add('show');
   if (!keepTab) { track('player_card', { team: shortName(team) }); fetchTeamInfo(team).catch(() => null); }
+  fetchPlayerProfile(pid);   // 경력·트로피는 서버가 API-Football을 불러와야 해서(처음 1~2초) 시즌 기록과 동시에 시작
   const [sq, seasons] = await Promise.all([fetchAfSquad(team, season), fetchPlayerSeasons(pid)]);
   if (seq !== pcSeq) return;
   let p = sq?.players?.find(x => x.id === pid);
@@ -4966,52 +4974,52 @@ function pcRender(soft) {
     <div class="pc2-pane">${c.tab === 'overview' ? pcOverviewHtml(c) : c.tab === 'stats' ? pcStatsHtml(c) : c.tab === 'career' ? pcCareerHtml(c) : pcTrophiesHtml(c)}</div>`;
   if (soft && keepScroll) document.querySelector('#pc-modal .modal').scrollTop = keepScroll;
 }
+// 2026-10-07 정리: 상자 안 상자·빛·그라데이션을 빼고 글자 위계와 정렬만으로 — 칸은 왼쪽 정렬, 숫자는 같은 기준선
 function pcHeroHtml(c) {
   const p = c.p, bio = c.prof?.bio || {}, team = c.team;
-  const pair = getClubColorPair(teamInfoCache[team]?.clubColors) || ['#58a6ff', '#58a6ff'];
   const dp = dposTop(p.dpos);
   const posKo = dp ? DPOS_KO[dp] : POS_KO[p.pos] || '';
-  const nat = p.nationality || bio.nationality, flag = c.prof?.bio?.flag || flagOf(nat);
   const name = afFullName(p) || bio.name || p.name;
   const legal = [p.firstname || bio.firstname, p.lastname || bio.lastname].filter(Boolean).join(' ');
-  return `<div class="pc2-hero" style="--c1:${pair[0]};--c2:${pair[1]}">
-    <div class="pc2-ph"><img class="pc2-photo" src="${p.photo || bio.photo || `https://media.api-sports.io/football/players/${p.id}.png`}" alt="" onerror="this.style.visibility='hidden'">
-      ${logos[team] ? `<img class="pc2-crest" src="${logos[team]}" alt="" onerror="this.remove()">` : ''}</div>
+  return `<div class="pc2-hero">
+    <img class="pc2-photo" src="${p.photo || bio.photo || `https://media.api-sports.io/football/players/${p.id}.png`}" alt="" onerror="this.style.visibility='hidden'">
     <div class="pc2-id">
-      <b class="pc2-name">${name}</b>
-      ${legal && legal !== name ? `<small class="pc2-legal">${legal}</small>` : ''}
-      <span class="pc2-team"><button type="button" onclick="closePlayerCard();openTeamInfo('${escJs(team)}')">${shortName(team)}</button>${p.number != null ? `<span class="pc2-num">${p.number}</span>` : ''}</span>
-      <span class="pc2-tags">${posKo ? `<em class="pc2-pos ${p.pos || ''}">${posKo}</em>` : ''}${nat ? `<em class="pc2-nat">${flag ? `<img src="${flag}" alt="">` : ''}${natKo(nat)}</em>` : ''}${p.captain ? '<em class="pc2-cap">주장</em>' : ''}${p.injured ? '<em class="pc2-inj">부상</em>' : ''}</span>
+      <h3 class="pc2-name"${legal && legal !== name ? ` title="${legal.replace(/"/g, '&quot;')}"` : ''}>${name}</h3>
+      <button type="button" class="pc2-club" onclick="closePlayerCard();openTeamInfo('${escJs(team)}')">${logos[team] ? `<img src="${logos[team]}" alt="" onerror="this.remove()">` : ''}<span>${shortName(team)}</span></button>
+      <div class="pc2-meta">${[posKo, p.number != null ? `${p.number}번` : '', p.captain ? '주장' : ''].filter(Boolean).map(x => `<span>${x}</span>`).join('')}${p.injured ? '<span class="inj">부상</span>' : ''}</div>
     </div>
-    ${p.rating ? `<div class="pc2-rt ${mdRatingClass(p.rating)}"><b>${p.rating.toFixed(2)}</b><small>${seasonLabel(c.season)} 평점</small></div>` : ''}
+    ${p.rating ? `<div class="pc2-rt"><b class="${mdRatingClass(p.rating)}">${p.rating.toFixed(2)}</b><small>${seasonLabel(c.season)} 평점</small></div>` : ''}
   </div>`;
 }
 function pcSeasonSelect(c) {
   const list = (c.seasons || []).filter(s => s[0] !== 'CL');
-  if (list.length < 2) return `<span class="pc2-sea-one">${seasonLabel(c.season)} ${LG_SHORT[c.sq?.league] || ''}</span>`;
-  return `<select class="pc2-sea" onchange="pcSetSeason(this.value)" aria-label="시즌">${list.map(([code, yr, team]) =>
-    `<option value="${yr}|${team.replace(/"/g, '&quot;')}"${yr === c.season && team === c.team ? ' selected' : ''}>${seasonLabel(yr)} ${LG_SHORT[code] || code} · ${shortName(team)}</option>`).join('')}</select>`;
+  if (list.length < 2) return `<span class="pc2-sea one">${seasonLabel(c.season)} ${LG_SHORT[c.sq?.league] || ''}</span>`;
+  return `<label class="pc2-sea"><select onchange="pcSetSeason(this.value)" aria-label="시즌">${list.map(([code, yr, team]) =>
+    `<option value="${yr}|${team.replace(/"/g, '&quot;')}"${yr === c.season && team === c.team ? ' selected' : ''}>${seasonLabel(yr)} ${LG_SHORT[code] || code} · ${shortName(team)}</option>`).join('')}</select></label>`;
 }
+// 숫자 칸 한 줄(라벨 아래, 왼쪽 정렬, 칸 사이 가는 선) — 개요·시즌 기록·정보 공용
+const pcFigs = (items, cls = '') => `<div class="pc2-figs ${cls}">${items.map(([v, label, k]) => `<div class="pc2-fig${k ? ' ' + k : ''}"><b>${v ?? '–'}</b><span>${label}</span></div>`).join('')}</div>`;
 function pcOverviewHtml(c) {
   const p = c.p, bio = c.prof?.bio || {}, gk = p.pos === 'GK';
   const age = p.age ?? bio.age, bd = (p.birth_date || bio.birth_date || '').replace(/-/g, '.');
   const h = p.height || (bio.height ? parseInt(bio.height) : null), w = p.weight || (bio.weight ? parseInt(bio.weight) : null);
   const nat = p.nationality || bio.nationality, flag = bio.flag || flagOf(nat);
-  const cell = (label, v, sub) => `<div class="pc2-cell"><small>${label}</small><b>${v ?? '-'}</b>${sub ? `<span>${sub}</span>` : ''}</div>`;
-  const tile = (v, label, cls = '') => `<div class="pc2-tile ${cls}"><b>${v ?? '-'}</b><small>${label}</small></div>`;
-  const cs = p.clean_sheets;
-  const tiles = gk ? tile(p.apps, '경기') + tile(p.conceded ?? '-', '실점') + tile(cs ?? '-', '클린시트') + tile(p.saves ?? '-', '선방')
-    : tile(p.apps, '경기') + tile(p.goals, '골', 'g') + tile(p.assists, '도움', 'a') + tile(p.minutes ? Math.round(p.minutes).toLocaleString() : 0, '출전(분)');
+  const info = `<dl class="pc2-info">
+    <div><dt>국적</dt><dd>${nat ? `${flag ? `<img src="${flag}" alt="">` : ''}${natKo(nat)}` : '–'}</dd></div>
+    <div><dt>나이</dt><dd${bd ? ` title="${bd}"` : ''}>${age != null ? `${age}세` : '–'}</dd></div>
+    <div><dt>키</dt><dd>${h ? `${h}cm` : '–'}</dd></div>
+    <div><dt>몸무게</dt><dd>${w ? `${w}kg` : '–'}</dd></div></dl>`;
+  const figs = gk ? [[p.apps, '경기'], [p.conceded ?? '–', '실점'], [p.clean_sheets ?? '–', '클린시트'], [p.saves ?? '–', '선방']]
+    : [[p.apps, '경기'], [p.goals, '골', 'acc'], [p.assists, '도움'], [p.minutes ? Math.round(p.minutes).toLocaleString() : 0, '출전 시간(분)']];
   // 포지션 지도: 이번 시즌 선발 자리 횟수(dpos) — 22-23 시즌 전 기록엔 없음
   const dp = p.dpos && typeof p.dpos === 'object' ? Object.entries(p.dpos).sort((a, b) => b[1] - a[1]) : [];
   const tot = dp.reduce((s, [, v]) => s + v, 0);
-  const posHtml = dp.length ? `<div class="pc2-sec"><div class="pc2-sec-t">포지션 <span>${seasonLabel(c.season)} 리그 선발 ${tot}경기 기준</span></div>
-    <div class="pc2-pos-row"><div class="pc2-mini">${PITCH_SVG.h}${dp.map(([k, v], i) => { const [x, y] = DPOS_XY[k] || [50, 50];
-      return `<span class="pc2-dot${i ? '' : ' main'}" style="left:${x}%;top:${y}%;opacity:${i ? Math.max(0.45, v / dp[0][1]) : 1}">${k}</span>`; }).join('')}</div>
-      <div class="pc2-pos-list">${dp.slice(0, 4).map(([k, v], i) => `<div class="${i ? '' : 'main'}"><span>${DPOS_KO[k] || k}</span><b>${Math.round(v / tot * 100)}%</b></div>`).join('')}</div></div></div>` : '';
-  return `<div class="pc2-cells">${cell('나이', age != null ? `${age}세` : null, bd)}${cell('국적', nat ? `${flag ? `<img class="pc2-flag" src="${flag}" alt="">` : ''}${natKo(nat)}` : null)}${cell('키', h ? `${h}cm` : null)}${cell('몸무게', w ? `${w}kg` : null)}</div>
-    <div class="pc2-sec"><div class="pc2-sec-t">${pcSeasonSelect(c)}<button type="button" class="pc2-link" onclick="pcTab('stats')">자세히 ›</button></div>
-      <div class="pc2-tiles">${tiles}</div></div>
+  const posHtml = dp.length ? `<section class="pc2-sec"><h4>포지션<small>리그 선발 ${tot}경기</small></h4>
+    <div class="pc2-pos-row"><div class="pc2-mini">${PITCH_SVG.h}${dp.map(([k], i) => { const [x, y] = DPOS_XY[k] || [50, 50];
+      return `<span class="pc2-dot${i ? '' : ' main'}" style="left:${x}%;top:${y}%">${k}</span>`; }).join('')}</div>
+      <ul class="pc2-pos-list">${dp.slice(0, 4).map(([k, v], i) => `<li class="${i ? '' : 'main'}"><span>${DPOS_KO[k] || k}</span><b>${Math.round(v / tot * 100)}%</b></li>`).join('')}</ul></div></section>` : '';
+  return `${info}
+    <section class="pc2-sec"><h4>${pcSeasonSelect(c)}<button type="button" class="pc2-link" onclick="pcTab('stats')">시즌 기록 전체</button></h4>${pcFigs(figs)}</section>
     ${posHtml}
     ${pcMatchesHtml(p, c)}`;
 }
@@ -5033,68 +5041,69 @@ function pcStatsHtml(c) {
   (gk ? PC_STATS.gk : PC_STATS.field).forEach(([g, label, k]) => { const v = val(k); if (v != null) (groups[g] = groups[g] || []).push([label, v, p.pct?.[k]]); });
   const hasPct = Object.values(groups).some(rows => rows.some(r => r[2] != null));
   const ratio = (a, b) => (a != null && b ? `${Math.round(a / b * 100)}%` : null);
-  const extra = gk ? [['경기당 실점', p.apps && p.conceded != null ? (p.conceded / p.apps).toFixed(2) : null]]
-    : [['90분당 골+도움', p.minutes >= 90 ? (((p.goals || 0) + (p.assists || 0)) / p.minutes * 90).toFixed(2) : null], ['드리블 성공률', ratio(p.dribbles_won, p.dribbles)], ['볼 경합 승률', ratio(p.duels_won, p.duels)], ['패스 성공률', p.pass_acc != null ? `${p.pass_acc}%` : null]];
-  const chips = extra.filter(([, v]) => v != null).map(([k, v]) => `<div class="pc2-chip"><small>${k}</small><b>${v}</b></div>`).join('');
-  const grp = Object.entries(groups).map(([g, rows]) => `<div class="pc2-grp"><div class="pc2-grp-t">${g}</div>${rows.map(([label, v, pc]) =>
+  const extra = gk ? [[p.apps && p.conceded != null ? (p.conceded / p.apps).toFixed(2) : null, '경기당 실점']]
+    : [[p.minutes >= 90 ? (((p.goals || 0) + (p.assists || 0)) / p.minutes * 90).toFixed(2) : null, '90분당 골+도움'], [ratio(p.dribbles_won, p.dribbles), '드리블 성공률'], [ratio(p.duels_won, p.duels), '볼 경합 승률'], [p.pass_acc != null ? `${p.pass_acc}%` : null, '패스 성공률']];
+  const head = `<h4>${pcSeasonSelect(c)}${p.minutes >= 90 ? `<span class="pc2-seg"><button class="${mode === 'total' ? 'on' : ''}" onclick="pcSetMode('total')">합계</button><button class="${mode === 'p90' ? 'on' : ''}" onclick="pcSetMode('p90')">90분당</button></span>` : ''}</h4>`;
+  if (!p.minutes) return `<section class="pc2-sec">${head}<div class="ti-empty">이 시즌 리그 출전 기록이 없어요.</div></section>`;
+  const grp = Object.entries(groups).map(([g, rows]) => `<div class="pc2-grp"><h5>${g}</h5>${rows.map(([label, v, pc]) =>
     `<div class="pc2-kv"><span>${label}</span><b>${v}</b>${hasPct ? (pc != null ? `<i class="pc-bar" title="같은 리그 ${posKo} 중 상위 ${Math.max(1, 100 - pc)}% (90분당 기준)"><u class="${pcTier(pc)}" style="width:${Math.max(3, pc)}%"></u></i>` : '<i></i>') : ''}</div>`).join('')}</div>`).join('');
-  if (!p.minutes) return `<div class="pc2-sec"><div class="pc2-sec-t">${pcSeasonSelect(c)}</div><div class="ti-empty">이 시즌 리그 출전 기록이 없어요.</div></div>`;
-  return `<div class="pc2-sec"><div class="pc2-sec-t">${pcSeasonSelect(c)}${p.minutes >= 90 ? `<span class="pc-mode"><button class="${mode === 'total' ? 'on' : ''}" onclick="pcSetMode('total')">합계</button><button class="${mode === 'p90' ? 'on' : ''}" onclick="pcSetMode('p90')">90분당</button></span>` : ''}</div>
-      <div class="pc2-sum">${p.apps}경기 · 선발 ${p.starts ?? '-'} · ${Math.round(p.minutes).toLocaleString()}분${p.rating ? ` · 평점 ${p.rating.toFixed(2)}` : ''}</div>
-      ${chips ? `<div class="pc2-chips">${chips}</div>` : ''}
+  return `<section class="pc2-sec">${head}
+      <p class="pc2-sum">${p.apps}경기 출전, 선발 ${p.starts ?? '–'}경기, ${Math.round(p.minutes).toLocaleString()}분</p>
+      ${pcFigs(extra.filter(([v]) => v != null), 'sm')}
       <div class="pc2-grps${hasPct ? ' bars' : ''}">${grp}</div>
-      ${hasPct ? `<div class="pc-legend"><span><i class="hi"></i>상위 1/3</span><span><i class="mid"></i>중간</span><span><i class="lo"></i>하위 1/3</span><em>막대 = 같은 리그 ${posKo} 중 꾸준히 뛴 선수 대비 90분당 순위</em></div>` : ''}
-    </div>`;
+      ${hasPct ? `<p class="pc2-legend"><i class="hi"></i>상위 1/3 <i class="mid"></i>중간 <i class="lo"></i>하위 1/3<span>같은 리그 ${posKo} 중 꾸준히 뛴 선수와 90분당 기록 비교</span></p>` : ''}
+    </section>`;
 }
 // 최근 경기(이번 시즌만 — 지난 시즌은 경기별 기록을 저장하지 않음)
 function pcMatchesHtml(p, c) {
   const ms = (p.matches || []).slice(0, 6);
   if (!ms.length) return '';
-  return `<div class="pc2-sec"><div class="pc2-sec-t">최근 경기 <span>리그</span></div>
+  return `<section class="pc2-sec"><h4>최근 경기<small>리그</small></h4><table class="pc2-ms"><tbody>
     ${ms.map(m => { const res = m.gf > m.ga ? 'w' : m.gf < m.ga ? 'l' : 'd';
-      return `<div class="pc2-m"><span class="dt">${m.date.slice(5).replace('-', '.')}</span>
-        <span class="opp"><img src="${logos[m.opp] || ''}" alt="" onerror="this.style.visibility='hidden'"><em>${m.home ? '' : '@ '}${shortName(m.opp)}</em></span>
-        <span class="res ${res}">${m.gf}-${m.ga}</span>
-        <span class="st">${m.goals ? `<i class="g">${m.goals}골</i>` : ''}${m.assists ? `<i class="a">${m.assists}도움</i>` : ''}${m.red ? '<i class="md-card r"></i>' : m.yellow ? '<i class="md-card y"></i>' : ''}<small>${m.minutes ?? 0}'</small></span>
-        ${mdRating(m.rating) || '<span class="md-rt">-</span>'}</div>`; }).join('')}</div>`;
+      const ga = [m.goals ? `${m.goals}골` : '', m.assists ? `${m.assists}도움` : ''].filter(Boolean).join(' ');
+      return `<tr><td class="dt">${m.date.slice(5).replace('-', '.')}</td>
+        <td class="opp"><img src="${logos[m.opp] || ''}" alt="" onerror="this.style.visibility='hidden'"><span>${m.home ? '' : '@ '}${shortName(m.opp)}</span></td>
+        <td class="res"><i class="${res}">${{ w: '승', d: '무', l: '패' }[res]}</i>${m.gf}–${m.ga}</td>
+        <td class="ga">${ga}${m.red ? '<i class="md-card r"></i>' : m.yellow ? '<i class="md-card y"></i>' : ''}</td>
+        <td class="min">${m.minutes ?? 0}′</td><td class="rt">${mdRating(m.rating) || '–'}</td></tr>`; }).join('')}</tbody></table></section>`;
 }
-const pcMonth = s => { const [y, m] = s.split('-'); return `${y}년 ${+m}월`; };
+const pcMonth = s => { const [y, m] = s.split('-'); return `${y}.${m}`; };
 function pcCareerHtml(c) {
   const d = c.prof;
-  if (!d) return '<div class="mp-skel"><i style="width:100%;height:48px"></i><i style="width:100%;height:48px"></i><i style="width:100%;height:48px"></i></div>';
+  if (!d) return '<div class="mp-skel"><i style="width:100%;height:40px"></i><i style="width:100%;height:40px"></i><i style="width:100%;height:40px"></i></div>';
   const career = d.career || [];
   if (!career.length) return '<div class="ti-empty">경력 정보가 없어요.</div>';
   const span = x => {
-    const from = x.from_date ? pcMonth(x.from_date) : `${x.from}/${String((x.from + 1) % 100).padStart(2, '0')}`;
-    const to = !x.to ? '현재' : x.to_date ? pcMonth(x.to_date) : `${x.to}/${String((x.to + 1) % 100).padStart(2, '0')}`;
+    const from = x.from_date ? pcMonth(x.from_date) : `${x.from}`;
+    const to = !x.to ? '현재' : x.to_date ? pcMonth(x.to_date) : `${x.to + 1}`;
     return from === to ? from : `${from} – ${to}`;
   };
-  const row = x => `<div class="pc2-car${x.to ? '' : ' now'}">${x.flag ? `<img class="flag" src="${x.flag}" alt="">` : `<img src="${logos[x.team] || x.logo || ''}" alt="" onerror="this.style.visibility='hidden'">`}
-    <div><b>${x.national && x.team === (d.bio?.nationality) ? natKo(x.team) : x.team}</b><small>${span(x)}</small></div>
-    <span class="n">${x.apps ?? '-'}</span><span class="n g">${x.goals ?? '-'}</span></div>`;
-  const sec = (title, list) => list.length ? `<div class="pc2-sec"><div class="pc2-car-h"><span>${title}</span><span class="n">경기</span><span class="n">골</span></div>${list.map(row).join('')}</div>` : '';
+  const row = x => `<tr${x.to ? '' : ' class="now"'}><td class="lg">${x.flag ? `<img class="flag" src="${x.flag}" alt="">` : `<img src="${logos[x.team] || x.logo || ''}" alt="" onerror="this.style.visibility='hidden'">`}</td>
+    <td class="nm"><b>${x.national && x.team === (d.bio?.nationality) ? natKo(x.team) : x.team}</b><span>${span(x)}</span></td>
+    <td class="n">${x.apps ?? '–'}</td><td class="n">${x.goals ?? '–'}</td></tr>`;
+  const sec = (title, list) => list.length ? `<section class="pc2-sec"><table class="pc2-car"><thead><tr><th colspan="2">${title}</th><th>경기</th><th>골</th></tr></thead><tbody>${list.map(row).join('')}</tbody></table></section>` : '';
   const clubs = career.filter(x => !x.national && !x.youth), youth = career.filter(x => !x.national && x.youth), nats = career.filter(x => x.national);
   const inj = (d.sidelined || []).slice(0, 6);
-  return sec('1군 경력', clubs) + sec('국가대표', nats) + sec('유소년 경력', youth) +
-    (inj.length ? `<div class="pc2-sec"><div class="pc2-sec-t">부상·결장 이력 <span>최근 ${inj.length}건</span></div>${inj.map(x => {
+  return sec('1군', clubs) + sec('국가대표', nats) + sec('유소년', youth) +
+    (inj.length ? `<section class="pc2-sec"><h4>부상·결장<small>최근 ${inj.length}건</small></h4><table class="pc2-inj"><tbody>${inj.map(x => {
       const days = x.start && x.end ? Math.max(1, Math.round((new Date(x.end) - new Date(x.start)) / 86400000)) : null;
-      return `<div class="pc2-inj"><span>${injReason(x.type)}</span><small>${(x.start || '').replace(/-/g, '.')} ~ ${x.end ? x.end.slice(5).replace('-', '.') : '진행 중'}${days != null ? ` · ${days}일` : ''}</small></div>`; }).join('')}</div>` : '') +
-    '<div class="pc2-note">경기 수·골은 모든 대회 합산(2010-11 시즌부터) · API-Football</div>';
+      return `<tr><td>${injReason(x.type)}</td><td class="dt">${(x.start || '').replace(/-/g, '.')} – ${x.end ? x.end.slice(5).replace('-', '.') : '진행 중'}</td><td class="n">${days != null ? `${days}일` : ''}</td></tr>`; }).join('')}</tbody></table></section>` : '') +
+    '<p class="pc2-note">경기·골은 모든 대회 합산, 2010-11 시즌부터</p>';
 }
 function pcTrophiesHtml(c) {
   const d = c.prof;
-  if (!d) return '<div class="mp-skel"><i style="width:100%;height:48px"></i><i style="width:100%;height:120px"></i></div>';
+  if (!d) return '<div class="mp-skel"><i style="width:100%;height:40px"></i><i style="width:100%;height:120px"></i></div>';
   const gs = d.trophy_groups || [];
   if (!gs.length) return '<div class="ti-empty">우승 기록이 없어요.</div>';
   const total = gs.reduce((s, g) => s + g.wins, 0);
   const ss = s => String(s || '').replace(/^(\d{4})\/(\d{4})$/, (_, a, b) => `${a.slice(2)}/${b.slice(2)}`);
-  return `<div class="pc2-tro-sum"><b>${total}</b><span>우승 · 친선·유스 대회 제외</span></div>` + gs.map(g => `<div class="pc2-tro">
-    <div class="pc2-tro-h">${g.national ? (g.logo ? `<img class="flag" src="${g.logo}" alt="">` : '') : `<img src="${logos[g.team] || g.logo || ''}" alt="" onerror="this.style.visibility='hidden'">`}
-      <div><b>${g.national ? natKo(g.team) : g.team}</b><small>${g.national ? '국가대표' : natKo(g.country) || ''}</small></div>${g.wins ? `<span class="pc2-tro-n">${g.wins}</span>` : ''}</div>
-    ${g.items.map(it => `<div class="pc2-tro-i${it.wins.length ? '' : ' ru'}">
-      <span class="cnt">${it.wins.length || it.runner.length}</span>${compIconHtml(it.comp_id)}
-      <div><b>${compName(it.comp_id, it.name, it.country)}</b><small>${it.wins.length ? it.wins.map(ss).join(' · ') : ''}${it.wins.length && it.runner.length ? '  ' : ''}${it.runner.length ? `<em>준우승 ${it.runner.map(ss).join(' · ')}</em>` : ''}</small></div></div>`).join('')}
-  </div>`).join('');
+  return `<p class="pc2-tro-sum"><b>${total}</b>개 우승<span>친선·유스 대회 제외, 최근 소속 팀부터</span></p>` + gs.map(g => `<section class="pc2-tro">
+    <h4>${g.national ? (g.logo ? `<img class="flag" src="${g.logo}" alt="">` : '') : `<img src="${logos[g.team] || g.logo || ''}" alt="" onerror="this.style.visibility='hidden'">`}
+      <span>${g.national ? natKo(g.team) : g.team}<small>${g.national ? '국가대표' : natKo(g.country) || ''}</small></span></h4>
+    <ul>${g.items.map(it => `<li${it.wins.length ? '' : ' class="ru"'}>
+      <b class="cnt">${it.wins.length || it.runner.length}</b>${compIconHtml(it.comp_id)}
+      <span><em>${compName(it.comp_id, it.name, it.country)}</em><small>${it.wins.length ? it.wins.map(ss).join(', ') : `준우승 ${it.runner.map(ss).join(', ')}`}${it.wins.length && it.runner.length ? ` · 준우승 ${it.runner.map(ss).join(', ')}` : ''}</small></span></li>`).join('')}</ul>
+  </section>`).join('');
 }
 
 // ── 구단 베스트 11: 서버가 시즌 평균 평점으로 고른 11명(출전 시간이 팀 최다의 25% 이상, 자리에 맞는 선수) ──
