@@ -1198,7 +1198,8 @@ def af_sync(season=None):
             date = om["date"] if om and abs((pd.Timestamp(om["date"]) - ko).days) <= 3 else ko.strftime("%Y-%m-%dT%H:%M:%SZ")
             e = {"id": f["fixture"]["id"], "league": code, "home_team": h, "away_team": a, "date": date, "kickoff": ko.strftime("%Y-%m-%dT%H:%M:%SZ"),
                  "status": f["fixture"]["status"]["short"], "home_id": f["teams"]["home"]["id"], "away_id": f["teams"]["away"]["id"],
-                 "home_goals": f["goals"]["home"], "away_goals": f["goals"]["away"], "file": md_file(h, a, date)}
+                 "home_goals": f["goals"]["home"], "away_goals": f["goals"]["away"], "file": md_file(h, a, date),
+                 "round": int(rm.group(1)) if (rm := re.search(r"^(?:Regular Season|League Stage) - (\d+)$", f["league"].get("round") or "")) else None}
             index.append(e)
     if unmapped:
         print(f"  ⚠️ 우리 이름을 못 찾은 팀(그 경기는 건너뜀): {', '.join(sorted(unmapped))}")
@@ -1452,6 +1453,126 @@ def fetch_history_seasons(seasons=None):
     with open(f"{MODEL_DIR}/history_logos.json", "w", encoding="utf-8") as f:
         json.dump({k: v for k, v in hlogos.items() if v}, f, ensure_ascii=False, indent=1, sort_keys=True)
     print(f"  ✅ {len(out)}경기 · 옛 팀(우리 목록 밖) {len(hlogos)}팀")
+
+# ── 과거 시즌 선수 기록(2026-10-06, API-Football Pro) — 14-15 ~ 25-26 ──
+# 경기별 선수 기록(평점·골·도움·출전 시간 + 17-18부터 포메이션·칸)을 받아 리그·시즌마다 합산만 저장(경기 원본은 무거워서 안 남김):
+#   fotdata_model/af_seasons/<리그>_<연도>.json.gz  {"players": [(팀, 선수)별 시즌 기록 + 90분당 백분위], "teams", "matches"}
+#   fotdata_model/af_seasons/index.json             {"players": {선수 ID: [[리그, 연도, 팀], …]}, "teams": {팀: {연도: [리그…]}}}
+# 선수 탭(과거 시즌 순위·전체 목록)·리그 시즌 베스트 11·구단 시즌 베스트 11·선수 카드 시즌 기록이 씀. 이번 시즌은 match_details/에서 바로 합산.
+# 끝난 시즌이라 한 번만: python update_data.py --history-players [연도…]  (리그·시즌마다 경기 목록 1번 + 20경기씩 상세, 전부 약 1,250회)
+# 선수별 경기 기록이 있는 시즌은 리그마다 다름(/leagues coverage.statistics_players — EPL 14-15부터, 나머지 15-16부터) → 없는 시즌은 건너뜀
+AF_PLAYER_SEASONS = list(range(2014, 2026))
+PS_DIR = f"{MODEL_DIR}/af_seasons"
+
+def _history_name_votes(code, yr, fxs, teammap):
+    """API-Football 팀 ID → 우리 순위표·일정에 쓰는 이름(그 리그·시즌 경기 파일과 같은 날·같은 점수 + 이름 비슷함으로 투표)"""
+    import json
+    from collections import defaultdict
+    src = f"{MODEL_DIR}/history_matches.csv" if yr < min(MATCH_SEASONS) else f"{MODEL_DIR}/all_matches.csv"
+    df = pd.read_csv(src)
+    df = df[(df.league == code) & (df.season == yr)]
+    by_day = defaultdict(list)
+    for r in df.itertuples():
+        by_day[str(r.date)[:10]].append(r)
+    votes = defaultdict(Counter)
+    for f in fxs:
+        if f["goals"]["home"] is None:
+            continue
+        day = pd.Timestamp(f["fixture"]["date"]).tz_convert("UTC").strftime("%Y-%m-%d")
+        h, a = f["teams"]["home"], f["teams"]["away"]
+        best, bs = None, 0
+        for r in by_day.get(day, []):
+            sc = _af_name_sim(h["name"], r.home_team) + _af_name_sim(a["name"], r.away_team)
+            if int(r.home_goals) == f["goals"]["home"] and int(r.away_goals) == f["goals"]["away"]:
+                sc += 0.8
+            if sc > bs:
+                best, bs = r, sc
+        if best is not None and bs >= 1.0:
+            votes[h["id"]][best.home_team] += 1; votes[a["id"]][best.away_team] += 1
+    out = {str(t): c.most_common(1)[0][0] for t, c in votes.items()}
+    return lambda t: out.get(str(t["id"])) or teammap.get(str(t["id"])) or t["name"]
+
+def _history_players_one(code, yr, teammap):
+    import json
+    lid = AF_COMPS[code]
+    fxs = _af("/fixtures", league=lid, season=yr).get("response") or []
+    keep = []
+    for f in fxs:
+        if f["fixture"]["status"]["short"] not in AF_DONE or f["goals"]["home"] is None:
+            continue
+        base = (f["league"].get("round") or "").split(" - ")[0].strip()
+        if code == "CL":
+            if not (base.startswith("Group") or base.startswith("League Stage") or AF_ROUND_STAGE.get(base) or base == "Knockout Round Play-offs"):
+                continue   # 예선 제외
+        elif not base.startswith("Regular Season"):
+            continue
+        keep.append(f)
+    if not keep:
+        return None
+    nm = _history_name_votes(code, yr, keep, teammap)
+    dets = []
+    for i in range(0, len(keep), 20):
+        ids = [f["fixture"]["id"] for f in keep[i:i + 20]]
+        for fx in _af("/fixtures", ids="-".join(map(str, ids))).get("response") or []:
+            det = af_match_detail(fx)
+            if not det["pstats"]["home"] and not det["pstats"]["away"]:
+                continue
+            md = re.search(r" - (\d+)$", fx["league"].get("round") or "")
+            dets.append({"home_team": nm(fx["teams"]["home"]), "away_team": nm(fx["teams"]["away"]),
+                         "date": pd.Timestamp(fx["fixture"]["date"]).tz_convert("UTC").strftime("%Y-%m-%d"),
+                         "home_goals": fx["goals"]["home"], "away_goals": fx["goals"]["away"], "round": int(md.group(1)) if md else None,
+                         "detail": {"pstats": det["pstats"], "lineups": det["lineups"]}})
+    if len(dets) < 0.5 * len(keep):
+        print(f"  ⚠️ {code} {yr}: 선수 기록이 있는 경기 {len(dets)}/{len(keep)} — 저장 안 함")
+        return None
+    rows = list(af_league_agg(dets, use_grid=yr >= GRID_FROM).values())
+    add_percentiles(rows, min_minutes=450)
+    for r in rows:
+        r.pop("matches", None)
+    teams = sorted({d["home_team"] for d in dets} | {d["away_team"] for d in dets})
+    md_write(f"{PS_DIR}/{code}_{yr}.json.gz", {"league": code, "season": yr, "matches": len(dets), "fixtures": len(keep),
+                                                "grid": yr >= GRID_FROM,
+                                                "teams": teams, "players": rows})
+    print(f"  ✅ {code} {yr}-{(yr + 1) % 100:02d}: {len(dets)}/{len(keep)}경기 · 선수 {len(rows)}명 · 팀 {len(teams)}")
+    return True
+
+def build_player_season_index():
+    import json, glob
+    from collections import defaultdict
+    players, teams = defaultdict(list), defaultdict(lambda: defaultdict(list))
+    for p in sorted(glob.glob(f"{PS_DIR}/*_*.json.gz")):
+        d = md_read(p)
+        for r in d["players"]:
+            players[str(r["id"])].append([d["league"], d["season"], r["team"]])
+        for t in d["teams"]:
+            teams[t][str(d["season"])].append(d["league"])
+    with open(f"{PS_DIR}/index.json", "w", encoding="utf-8") as f:
+        json.dump({"players": players, "teams": teams}, f, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
+    print(f"  index.json: 선수 {len(players)}명 · 팀 {len(teams)}")
+
+def fetch_history_players(seasons=None, force=False):
+    import json
+    from concurrent.futures import ThreadPoolExecutor
+    if not API_FOOTBALL_KEY:
+        print("  ⚠️ API_FOOTBALL_KEY가 없어 건너뜀"); return
+    seasons = seasons or AF_PLAYER_SEASONS
+    os.makedirs(PS_DIR, exist_ok=True)
+    teammap = json.load(open(f"{MODEL_DIR}/af_team_map.json", encoding="utf-8"))
+    cov = {}
+    for code, lid in AF_COMPS.items():
+        r = (_af("/leagues", id=lid).get("response") or [{}])[0]
+        cov[code] = {s["year"] for s in r.get("seasons") or [] if ((s.get("coverage") or {}).get("fixtures") or {}).get("statistics_players")}
+    jobs = [(c, y) for y in seasons for c in AF_COMPS if y in cov[c] and (force or not os.path.exists(f"{PS_DIR}/{c}_{y}.json.gz"))]
+    print(f"\n[과거 시즌 선수 기록] {len(jobs)}개 리그·시즌")
+    def run(j):
+        try:
+            return _history_players_one(j[0], j[1], teammap)
+        except Exception as e:
+            import traceback; traceback.print_exc()
+            print(f"  ❌ {j}: {e}")
+    with ThreadPoolExecutor(3) as ex:
+        list(ex.map(run, jobs))
+    build_player_season_index()
 
 def _wiki_sections(title):
     return _wiki_get("https://en.wikipedia.org/w/api.php", {"action": "parse", "page": title, "prop": "sections",
@@ -2492,6 +2613,10 @@ if __name__ == "__main__":
         fetch_season_zones()
     elif "--history-seasons" in sys.argv:
         fetch_history_seasons([int(a) for a in sys.argv[2:] if a.isdigit()] or None)
+    elif "--history-players" in sys.argv:
+        fetch_history_players([int(a) for a in sys.argv[2:] if a.isdigit()] or None, force="--force" in sys.argv)
+    elif "--player-index" in sys.argv:
+        build_player_season_index()
     elif "--af-sync" in sys.argv:
         af_sync()
     elif "--league-history" in sys.argv:

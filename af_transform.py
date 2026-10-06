@@ -27,6 +27,11 @@ def af_match_detail(fx):
     hid = fx["teams"]["home"]["id"]
     side = lambda tid: "home" if tid == hid else "away"
     num = lambda v: None if v in (None, "") else float(str(v).rstrip("%"))
+    def fnum(v):   # 평점 등 — 옛 시즌은 "–"처럼 숫자가 아닌 값이 옴
+        try:
+            return float(v) if v not in (None, "") else None
+        except (TypeError, ValueError):
+            return None
     pinfo = {}   # 선수 ID → 평점·출전 시간·사진
     pstats = {"home": [], "away": []}   # 선수별 이 경기 기록(시즌 기록·선수 카드는 이걸 합산 — /players 시즌 기록은 다른 팀 기록이 섞여 와서 안 씀, 5.19)
     for tp in fx.get("players") or []:
@@ -34,7 +39,8 @@ def af_match_detail(fx):
         for p in tp.get("players") or []:
             st = (p.get("statistics") or [{}])[0] or {}
             g = st.get("games") or {}
-            pinfo[p["player"]["id"]] = {"rating": round(float(g["rating"]), 1) if g.get("rating") else None,
+            rt = fnum(g.get("rating"))
+            pinfo[p["player"]["id"]] = {"rating": round(rt, 1) if rt else None,
                                         "minutes": g.get("minutes"), "photo": p["player"].get("photo")}
             if not g.get("minutes"):
                 continue
@@ -42,7 +48,7 @@ def af_match_detail(fx):
             pac = ps.get("accuracy")
             pstats[sd].append({"id": p["player"]["id"], "name": p["player"].get("name"), "photo": p["player"].get("photo"),
                                "num": g.get("number"), "pos": g.get("position"), "cap": bool(g.get("captain")), "sub": bool(g.get("substitute")),
-                               "min": g["minutes"], "rt": float(g["rating"]) if g.get("rating") else None,
+                               "min": g["minutes"], "rt": rt,
                                "g": gl.get("total") or 0, "a": gl.get("assists") or 0, "con": gl.get("conceded"), "sv": gl.get("saves"),
                                "sh": sh.get("total"), "sho": sh.get("on"), "ps": ps.get("total"), "kp": ps.get("key"),
                                "pac": int(pac) if str(pac or "").isdigit() else None,   # 경기 기록의 accuracy는 정확한 패스 "수"(시즌 기록은 %)
@@ -167,7 +173,8 @@ def add_percentiles(players, min_minutes=450):
 # MLS All-Star)와 유스 대회(FA Youth Cup 등)가 섞여 있어 그대로 세면 부풀려짐 → 친선은 빼고 유스는 표시만
 AF_FRIENDLY_CUPS = {"Emirates Cup", "Florida Cup", "MLS All-Star", "Trofeo Joan Gamper", "Club Friendlies", "Audi Cup", "Premier League Summer Series",
                     "International Champions Cup", "Trofeo Santiago Bernabéu", "Uhrencup", "Trofeo Teresa Herrera", "Franz Beckenbauer Supercup",
-                    "Trofeo Luigi Berlusconi", "Trofeo Colombino", "Trofeo Carranza", "Friendlies", "Friendlies Clubs"}
+                    "Trofeo Luigi Berlusconi", "Trofeo Colombino", "Trofeo Carranza", "Friendlies", "Friendlies Clubs",
+                    "J.League World Challenge", "The Atlantic Cup", "Atlantic Cup", "Copa Paz del Chaco", "Supercopa Euroamericana"}
 AF_YOUTH_RE = re.compile(r"\bU\d{2}\b|\bYouth\b|Premier League 2|Primavera|Juvenil|Junior|Reserve", re.I)
 
 def af_player_profile(teams, trophies, sidelined, nationality=None, current_season=None):
@@ -285,3 +292,220 @@ def af_profile_row(p):
     r = af_player_row(p)
     keep = ("id", "name", "full_name", "firstname", "lastname", "age", "birth_date", "birth_place", "nationality", "height", "weight", "photo", "injured", "pos")
     return {k: r.get(k) for k in keep}
+
+
+# ── 세부 포지션·라인업 칸·베스트 11(2026-10-06) ──
+# API-Football 포지션은 G/D/M/F 넷뿐 → 선발 라인업의 포메이션("4-2-3-1")과 칸("줄:칸", 칸 1 = 그 팀 왼쪽 — 로버트슨 2:1·비니시우스 4:1로 확인)으로
+# 세부 포지션을 추정(풋몹처럼 오른쪽 윙어·센터백 등). 칸은 22-23 시즌부터만 믿을 수 있음 — 17-18~21-22도 칸이 오지만 좌우가 뒤집히거나
+# 줄이 뒤섞여 있었음(리버풀: 알렉산더아널드 2:1, 엠레 찬이 공격수 줄, 살라가 4:1 — 2026-10-06 확인) → 그 전 시즌은 G/D/M/F만
+DPOS_SIDE = {"LB": "L", "LWB": "L", "LM": "L", "LW": "L", "RB": "R", "RWB": "R", "RM": "R", "RW": "R"}
+DPOS_LINE = {"GK": "GK", "LB": "DF", "CB": "DF", "RB": "DF", "LWB": "DF", "RWB": "DF", "DM": "MF", "CM": "MF", "AM": "MF",
+             "LM": "MF", "RM": "MF", "LW": "FW", "RW": "FW", "ST": "FW"}
+
+def dpos_of(formation, grid):
+    """포메이션 + 칸 → 세부 포지션(GK·LB·CB·RB·LWB·RWB·DM·CM·AM·LM·RM·LW·RW·ST). 모르면 None"""
+    try:
+        lines = [int(x) for x in str(formation).split("-")]
+        r, c = (int(x) for x in str(grid).split(":"))
+    except Exception:
+        return None
+    if r == 1:
+        return "GK"
+    if r - 2 >= len(lines):
+        return None
+    n = lines[r - 2]
+    c = max(1, min(c, n))
+    edge = "L" if c == 1 else "R" if c == n else None
+    if r == 2:   # 수비 줄
+        if n >= 5 and edge:
+            return edge + "WB"
+        return edge + "B" if (n == 4 and edge) else "CB"
+    if r - 2 == len(lines) - 1:   # 맨 앞 줄
+        return (edge + "W") if (n >= 3 and edge) else "ST"
+    mids = lines[1:-1]
+    j, k = r - 3, len(lines) - 2   # 미드필더 줄 중 몇 번째(0 = 가장 아래)
+    back3 = lines[0] == 3
+    if n >= 4 and edge:   # 넓은 줄의 양 끝
+        return edge + ("WB" if back3 and j == 0 else "M")
+    if k >= 2 and j == k - 1 and n == 3 and edge:   # 4-2-3-1의 "3" 양 끝 = 윙어
+        return edge + "W"
+    if k >= 2 and j == 0 and n <= 2:
+        return "DM"
+    if k >= 2 and j == k - 1 and n <= 3:
+        return "AM"
+    if k == 1 and n == 5 and c == 3:
+        return "DM"
+    return "CM"
+
+def _lateral(dpos_counts):
+    """주로 선 쪽(L/C/R) — 베스트 11 줄 안에서 왼쪽→오른쪽 배치용"""
+    s = {"L": 0, "C": 0, "R": 0}
+    for k, v in (dpos_counts or {}).items():
+        s[DPOS_SIDE.get(k, "C")] += v
+    if not sum(s.values()):
+        return "C"
+    return max(s, key=lambda x: (s[x], x == "C"))
+
+def af_lineup_dpos(lineups):
+    """경기 상세 lineups → {선수 ID: 세부 포지션}(선발만)"""
+    out = {}
+    for l in (lineups or {}).values():
+        for p in l.get("start") or []:
+            d = dpos_of(l.get("formation"), p.get("grid"))
+            if d and p.get("id"):
+                out[p["id"]] = d
+    return out
+
+# 베스트 11 포메이션: 줄마다 자리(왼쪽 → 오른쪽). 세부 포지션이 있으면 자리에 맞는 선수만(풋몹처럼 풀백 자리에 센터백이 안 들어가게),
+# 없으면(21-22 이전 시즌·교체 선수) 줄(G/D/M/F)만 맞춤
+XI_FORMS = {
+    "4-3-3": [["GK"], ["LB", "CB", "CB", "RB"], ["CM", "CM", "CM"], ["LW", "ST", "RW"]],
+    "4-2-3-1": [["GK"], ["LB", "CB", "CB", "RB"], ["DM", "DM"], ["LW", "AM", "RW"], ["ST"]],
+    "4-4-2": [["GK"], ["LB", "CB", "CB", "RB"], ["LM", "CM", "CM", "RM"], ["ST", "ST"]],
+    "3-4-3": [["GK"], ["CB", "CB", "CB"], ["LWB", "CM", "CM", "RWB"], ["LW", "ST", "RW"]],
+    "3-5-2": [["GK"], ["CB", "CB", "CB"], ["LWB", "CM", "CM", "CM", "RWB"], ["ST", "ST"]],
+    "4-1-4-1": [["GK"], ["LB", "CB", "CB", "RB"], ["DM"], ["LM", "CM", "CM", "RM"], ["ST"]],
+}
+XI_FORMS_PLAIN = {   # 세부 포지션이 없는 시즌
+    "4-3-3": [["GK"], ["DF"] * 4, ["MF"] * 3, ["FW"] * 3], "4-4-2": [["GK"], ["DF"] * 4, ["MF"] * 4, ["FW"] * 2],
+    "4-5-1": [["GK"], ["DF"] * 4, ["MF"] * 5, ["FW"]],
+}   # 스리백은 뺌 — 풀백·센터백 구분이 없어 풀백 셋이 스리백에 서는 식으로 어색해짐
+SLOT_OK = {"GK": {"GK"}, "LB": {"LB", "LWB"}, "RB": {"RB", "RWB"}, "CB": {"CB"}, "LWB": {"LWB", "LB", "LM"}, "RWB": {"RWB", "RB", "RM"},
+           "DM": {"DM", "CM"}, "CM": {"CM", "DM", "AM"}, "AM": {"AM", "CM"}, "LM": {"LM", "LW", "LWB"}, "RM": {"RM", "RW", "RWB"},
+           "LW": {"LW", "LM"}, "RW": {"RW", "RM"}, "ST": {"ST"}}
+
+def _fill(slots, players, key, plain):
+    """자리마다 평점 높은 선수부터(자리에 딱 맞는 선수 우선) — 줄 순서대로 채움. 못 채우면 None"""
+    used, out = set(), []
+    for line in slots:
+        row = []
+        for sl in line:
+            if plain:
+                ok = [p for p in players if p["id"] not in used and p.get("line") == sl]
+            else:
+                ok = [p for p in players if p["id"] not in used and (sl in SLOT_OK and (p.get("can") or set()) & SLOT_OK[sl])]
+                exact = [p for p in ok if sl in (p.get("can") or set())]
+                ok = exact if exact and exact[0][key] >= (ok[0][key] if ok else 0) - 0.3 else ok
+            if not ok:
+                return None
+            p = ok[0]
+            used.add(p["id"])
+            row.append({**p, "slot": sl})
+        out.append(row)
+    return out
+
+def plain_can(r):
+    """세부 포지션이 없는 시즌(21-22 이전)의 자리 후보 — 수비수는 기록으로 풀백/센터백을 가름:
+    90분당 (키패스 + 드리블 성공 − 블록) 0.6 이상 = 풀백(23-24 EPL 수비수 30명으로 확인 — 쿠쿠레야 하나만 틀림)"""
+    pos = r.get("pos")
+    if pos == "GK":
+        return {"GK"}
+    if pos == "DF":
+        m = (r.get("minutes") or 0) / 90
+        if not m:
+            return {"CB"}
+        fb = ((r.get("key_passes") or 0) + (r.get("dribbles_won") or 0) - (r.get("blocks") or 0)) / m
+        return {"LB", "RB"} if fb >= 0.6 else {"CB"}
+    if pos == "MF":
+        return {"CM", "DM", "AM"}
+    if pos == "FW":
+        return {"ST", "LW", "RW"}
+    return set()
+
+def pick_xi(players, key="rating"):
+    """베스트 11: players = [{id, line(GK/DF/MF/FW), rating, can(세부 포지션 집합 — 없으면 줄만으로), ...}]
+    → {formation, avg, lines: [[GK], [수비…], …]} 줄 안은 왼쪽 → 오른쪽. 포메이션 후보 중 평균 평점이 가장 높은 것"""
+    ps = sorted([p for p in players if p.get(key) and p.get("line")], key=lambda p: -p[key])
+    if not ps:
+        return None
+    plain = not any(p.get("can") for p in ps)
+    if not plain:   # 세부 포지션이 없는 선수(교체로 들어온 선수 등)는 줄로 자리 후보를 대신
+        line_slots = {"GK": {"GK"}, "DF": {"CB", "LB", "RB"}, "MF": {"CM", "DM", "AM"}, "FW": {"ST", "LW", "RW"}}
+        ps = [p if p.get("can") else {**p, "can": line_slots.get(p["line"], set())} for p in ps]
+    best = None
+    for name, slots in (XI_FORMS_PLAIN if plain else XI_FORMS).items():
+        got = _fill(slots, ps, key, plain)
+        if not got:
+            continue
+        avg = sum(p[key] for l in got for p in l) / 11
+        if not best or avg > best["avg"] + 0.005:
+            best = {"formation": name, "avg": round(avg, 2), "lines": got}
+    return best
+
+GRID_FROM = 2022   # 이 시즌부터 라인업 칸으로 세부 포지션
+
+def af_league_agg(details, keep_matches=False, use_grid=True):
+    """한 리그(대회)의 경기 상세들 → {(팀, 선수 ID): 시즌 기록}. details 각 항목 {home_team, away_team, date, home_goals, away_goals, round?,
+    detail 또는 그 자체에 pstats·lineups}. 세부 포지션(dpos 횟수)·무실점(골키퍼 60분 이상 + 팀 실점 0)·출전 경기 목록(keep_matches)까지"""
+    from collections import Counter
+    acc = {}
+    for m in details:
+        det = m.get("detail") or m
+        dp = af_lineup_dpos(det.get("lineups")) if use_grid else {}
+        for sd in ("home", "away"):
+            home = sd == "home"
+            team = m["home_team"] if home else m["away_team"]
+            gf, ga = (m["home_goals"], m["away_goals"]) if home else (m["away_goals"], m["home_goals"])
+            for x in (det.get("pstats") or {}).get(sd) or []:
+                a = acc.get((team, x["id"]))
+                if a is None:
+                    a = acc[(team, x["id"])] = {"id": x["id"], "team": team, "name": x.get("name"), "photo": x.get("photo"), "apps": 0, "starts": 0,
+                                                "minutes": 0, "clean_sheets": 0, "_rt": [], "_pos": Counter(), "_dpos": Counter(), "_pac": 0, "_pst": 0,
+                                                "_last": "", "matches": []}
+                a["apps"] += 1; a["starts"] += 0 if x.get("sub") else 1; a["minutes"] += x.get("min") or 0
+                if x.get("rt"): a["_rt"].append(x["rt"])
+                if x.get("pos"): a["_pos"][x["pos"]] += 1
+                if dp.get(x["id"]): a["_dpos"][dp[x["id"]]] += 1
+                if x.get("num") is not None and m["date"] >= a["_last"]:
+                    a["number"] = x["num"]; a["_last"] = m["date"]
+                if x.get("cap"): a["captain"] = True
+                if x.get("pos") == "G" and (x.get("min") or 0) >= 60 and ga == 0:
+                    a["clean_sheets"] += 1
+                for k, kk in _SUM_KEYS.items():
+                    if x.get(k) is not None:
+                        a[kk] = (a.get(kk) or 0) + x[k]
+                if x.get("pac") is not None and x.get("ps"):
+                    a["_pac"] += x["pac"]; a["_pst"] += x["ps"]
+                if keep_matches:
+                    a["matches"].append({"date": m["date"][:10], "opp": m["away_team"] if home else m["home_team"], "home": home, "gf": gf, "ga": ga,
+                                         "minutes": x.get("min"), "goals": x.get("g") or 0, "assists": x.get("a") or 0, "yellow": x.get("y") or 0,
+                                         "red": x.get("r") or 0, "rating": round(x["rt"], 1) if x.get("rt") else None, "pos": dp.get(x["id"])})
+    out = {}
+    for key, a in acc.items():
+        row = {k: v for k, v in a.items() if not k.startswith("_")}
+        row["pos"] = _POS1.get(a["_pos"].most_common(1)[0][0]) if a["_pos"] else None
+        row["dpos"] = dict(a["_dpos"].most_common())
+        row["rating"] = round(sum(a["_rt"]) / len(a["_rt"]), 2) if a["_rt"] else None
+        row["rated"] = len(a["_rt"])
+        row["pass_acc"] = round(a["_pac"] / a["_pst"] * 100) if a["_pst"] else None
+        for k in ("goals", "assists", "yellow", "red"):
+            row[k] = row.get(k) or 0
+        row["matches"] = row["matches"][::-1] if keep_matches else []
+        out[key] = row
+    return out
+
+def xi_line(p):
+    """선수 → 베스트 11 줄: 세부 포지션이 있으면 그걸로(4-2-3-1 측면 공격수가 MF로 잡히지 않게), 없으면 G/D/M/F"""
+    dp = p.get("dpos") or {}
+    if dp:
+        top = max(dp, key=dp.get)
+        return DPOS_LINE.get(top, p.get("pos"))
+    return p.get("pos")
+
+def round_xi(details, min_minutes=45):
+    """한 라운드 경기들 → 이번 라운드의 팀(평점 순, 45분 이상)"""
+    ps = []
+    for m in details:
+        det = m.get("detail") or m
+        dp = af_lineup_dpos(det.get("lineups"))
+        for sd in ("home", "away"):
+            team = m["home_team"] if sd == "home" else m["away_team"]
+            for x in (det.get("pstats") or {}).get(sd) or []:
+                if not x.get("rt") or (x.get("min") or 0) < min_minutes:
+                    continue
+                d = dp.get(x["id"])
+                line = DPOS_LINE.get(d) if d else _POS1.get(x.get("pos"))
+                ps.append({"id": x["id"], "name": x.get("name"), "photo": x.get("photo"), "team": team, "rating": x["rt"], "line": line,
+                           "can": {d} if d else set(), "dpos": d, "goals": x.get("g") or 0, "assists": x.get("a") or 0,
+                           "num": x.get("num")})
+    return pick_xi(ps)

@@ -70,6 +70,7 @@ fotdata-api/
 ├── privacy.html / terms.html / legal.css   # 개인정보처리방침·이용약관(5.24, 문의 fotdata.official@gmail.com)
 ├── 404.html                 # 없는 주소 안내 페이지(5.26)
 ├── generate_logos_hd.py · logos/hd/   # 고화질 구단 로고(5.22)
+├── generate_comp_logos.py · logos/comp/   # 컵대회·국가대표 대회 아이콘(API-Football 대회 ID, 5.34)
 ├── generate_league_logos.py · logos/league/   # 리그 심볼 아이콘(글자 뺀 것, 5.31)
 ├── generate_promo.py        # 홍보 이미지(인스타 피드·스토리, 유튜브·네이버 카페 가로 배너) → promo/(커밋 안 함). 빅매치 포스터는 서버 실시간 예측 — 매주 다시 실행. 구단 엠블럼은 안 넣음(홍보물 상표 위험)
 ├── analytics.js             # 방문 통계(Umami) 로더 — FotData.html·landing.html 공용, 사이트 ID는 여기 한 곳(5.16)
@@ -88,6 +89,8 @@ fotdata-api/
     ├── scaler.pkl                 # LR 입력 스케일러
     ├── team_logos.json / league_logos.json
     ├── team_logos_hd.json         # 고화질 최신 엠블럼 주소(logos/hd, generate_logos_hd.py — 5.22)
+    ├── af_seasons/                # 지난 시즌(15-16~25-26) 리그·챔스 선수 시즌 기록 합산 + index.json (5.34)
+    ├── af_leagues.json / af_countries.json   # API-Football 대회 이름 → ID, 나라 → 국기 (5.34)
     ├── accuracy.json             # 모델 정확도 (3개 모델 비교 + best, 시간순 검증 — 5.3 참고)
     ├── ucl_tournament.json       # UCL 브래킷 데이터 (PO→R16→QF→SF→Final)
     ├── players.json               # 득점왕/도움왕 (현재 EPL만)
@@ -460,6 +463,18 @@ cp landing.html index.html
 - **화면**: 시즌 고르기 17개(2010/11~), 시즌 탭 2010-11 이후 카드 누르면 그 시즌 기록, 챔스 23-24 이전 = 조별리그(`uclGroupEra()` — 예전엔 `=== '2023'`만), 팀 통계 탭 시즌은 최근 4개 버튼 + "이전 시즌" 고르기(버튼 17개면 두 줄로 깨졌음).
 - 확인: EPL 15-16 레스터 81점(강등 뉴캐슬·노리치·빌라), 세리에 19-20 유벤투스 83점, 리그앙 19-20(코로나 조기 종료) 27~28경기, 챔스 16-17 조별리그(A조 아스널 14·PSG 12), 18-19 대진(리버풀 우승), 리버풀 팀 통계 14-15(6위 62점).
 
+### 5.34 선수 카드 v2 · 베스트 11 · 선수 통계 · 과거 시즌 선수 기록 (2026-10-06, 풋몹 참고 — 사용자 요청 6가지)
+- **과거 시즌 선수 기록**(`update_data.fetch_history_players()`, 끝난 시즌이라 한 번만 — `python update_data.py --history-players [연도…] [--force]`, 약 1,250회): 리그·챔스 × 15-16~25-26(EPL 14-15는 기록 3/380경기라 저장 안 함) 경기 목록 + `/fixtures?ids=` 20경기씩 → `af_transform.af_league_agg()`로 (팀, 선수)별 합산만 `fotdata_model/af_seasons/<리그>_<연도>.json.gz`(경기 원본은 안 남김, 전부 4.4MB) + 90분당 백분위 + `index.json`(선수 ID → [리그, 시즌, 팀], 팀 → 시즌별 리그). 팀 이름은 그 시즌 경기 파일과 같은 날·같은 점수로 투표(`_history_name_votes`). 이번 시즌은 지금처럼 match_details/에서 서버가 바로 합산(`_league_rows`). **시즌이 끝나 26-27이 지난 시즌이 되면** `--history-players 2026` 한 번 + `AF_PLAYER_SEASONS` 범위 늘리기.
+- **세부 포지션**(`af_transform.dpos_of` — 라인업 포메이션 + 칸 "줄:칸", 칸 1 = 그 팀 왼쪽): GK·CB·LB·RB·LWB·RWB·DM·CM·AM·LM·RM·LW·RW·ST. **22-23 시즌부터만 믿을 수 있음**(`GRID_FROM`) — 17-18~21-22도 칸이 오지만 좌우가 뒤집히고 줄이 뒤섞여 있었음(리버풀 알렉산더아널드 2:1, 엠레 찬이 공격수 줄), 15-16은 포메이션 없음. 그 전 시즌은 G/D/M/F + 같은 선수의 22-23 이후 포지션을 빌려 쓰고(`_dpos_hint`, 같은 줄일 때만), 없으면 기록으로 수비수를 풀백/센터백으로 가름(`plain_can` — 90분당 키패스+드리블 성공−블록 ≥ 0.6 = 풀백).
+- **베스트 11**(`af_transform.pick_xi` — 서버 하나에서만 고름): 포메이션(4-3-3·4-2-3-1·4-4-2·3-4-3·3-5-2·4-1-4-1)마다 자리(왼쪽→오른쪽)에 맞는 선수만(`SLOT_OK`, 풀백 자리에 센터백 X) 평점 순으로 채워 평균이 가장 높은 것. 구단 = 출전 시간 팀 최다의 25%+(`/team/squad`의 `best11`), 리그 시즌 = 40%+, 이번 라운드의 팀 = 그 라운드 45분+(`round_xi`). 화면 `xiPitchHtml`(세로/가로 — 칸 폭 400px 이상이면 가로, 600 미만은 compact), 선수 사진·평점(색)·골/도움 배지·이름, 누르면 선수 카드(그 시즌).
+- **선수 카드 v2**(`openPlayerCard(team, id, season)`): 머리(사진 + 구단 엠블럼, 이름, 구단·등번호, 세부 포지션 칩·국기, 시즌 평점) + 탭 [개요 | 시즌 기록 | 경력 | 트로피] — 예전 한 줄 이어 붙이기(세로 2,300px+)를 나눔. 개요 = 나이·국적(국기)·키·몸무게 + 시즌 고르기(그 선수가 뛴 리그·시즌, `/player/seasons/{id}`) + 경기·골·도움·출전 + 포지션 지도(가로 경기장 위 자리·비율) + 최근 경기(이번 시즌만). 경력 = 풋몹처럼 구단별 기간(이적 날짜 "2022년 7월 – 현재")·경기·골(모든 대회, 2010-11~) — 1군·국가대표·유소년. 트로피 = 구단(국가대표)별 묶음 + 대회 아이콘·한국어 이름·시즌, 준우승은 흐리게.
+  - 서버 `/player/profile/{id}` 개편: 경력 1 + 이적 1 + 트로피 1 + 부상 1 + 시즌별 `/players?id=&season=`(최근 16시즌) — 병렬 6, 하루 캐시(지난 시즌 30일). 트로피 → 구단: 그 시즌 그 선수의 기록 중 같은 대회 → 같은 나라 리그 → 출전 많은 구단, 국가대표 대회(`AF_NATIONAL_COMPS`)는 국가대표. 친선 대회에 J.League World Challenge·Atlantic Cup 추가.
+- **대회 아이콘·이름**(`COMP_INFO` — API-Football 대회 ID): 5대 리그·챔스 = logos/league, **컵대회 = `logos/comp/<ID>.png`(`generate_comp_logos.py`)** — FA컵·EFL컵·커뮤니티 실드·코파 델 레이·수페르코파·DFB-포칼·DFL-슈퍼컵·코파 이탈리아·수페르코파 이탈리아나·쿠프 드 프랑스·쿠프 드 라 리그·트로페 데 샹피옹·유로파·컨퍼런스·UEFA 슈퍼컵·인터콘티넨탈컵·유로·네이션스리그·코파 아메리카·아프리카 네이션스컵·아시안컵·올림픽(어두운 로고 4개는 흰색). 월드컵·클럽 월드컵은 API 로고가 "WORLD CUP" 글자 임시 이미지라 금색 트로피 아이콘. 나머지 대회는 API-Football 로고 주소 그대로, 이름은 "오스트리아 컵"처럼 나라 + 이름. **나중에 컵대회 탭을 만들 때 이 표를 그대로 씀.** 대회 목록 `fotdata_model/af_leagues.json`(이름|나라 → ID), 국기 `af_countries.json`(→ 서버 `/meta/countries`, 화면 `flagOf()`).
+- **팀 개요**: "최근 시즌 최종 순위" 글자 한 줄(17시즌이라 세 줄로 넘쳤음) → **시즌별 리그 순위 막대**(막대 높이 = 순위, 구역 색, 우승 금색, 5대 리그 밖 시즌은 빈 칸, 진행 중 시즌은 흐리게, 폰은 옆으로 넘김·최근 시즌이 보이게). 우승 기록 칸에 대회 아이콘(`TROPHY_COMP`). **시즌 베스트 11** 카드(시즌 고르기). 플레이어 통계 탭도 시즌 고르기(베스트 11 + 선수별 기록이 같이 바뀜), API-Football 기록이 있으면 football-data 득점 순위 칸은 뺌. 스쿼드 탭: 선수를 누르면 선수 카드, 세부 포지션·국기.
+- **리그 개요**: 이번 라운드의 팀(‹ 라운드 › + 시즌 전체, 챔스는 "N차전") / 지난 시즌은 시즌 베스트 11, 득점·도움 TOP 3도 지난 시즌까지(누르면 선수 카드). 라운드는 af_fixtures의 `round`(af_sync가 넣음, 없으면 일정 matchday).
+- **선수 탭**: 분야별 TOP 3 카드 — 주요 통계(득점·도움·공격 포인트·평점·출전 시간·PK 골)·공격(유효 슈팅·키패스·드리블)·수비(태클·가로채기·볼 경합)·골키퍼·규율(클린시트·선방·경고), 1위는 파란 알약(평점은 평점 색). 카드를 누르면 **전체 순위**(기록 0인 선수 제외, 같은 기록 같은 순위, 50명씩 더 보기, 기록 고르기에 블록·퇴장도) — 선수를 누르면 선수 카드. 평점은 출전 시간 리그 최다의 40% 이상만. 15-16 시즌부터(`lgTabsFor`), 데이터가 없으면 예전 football-data 득점·도움 화면(`loadPlayersLegacy`). 폰은 묶음마다 옆으로 넘기는 카드(세로 4,000px → 1,600px).
+- 서버: `/league/players/{리그}?season=`, `/league/bestxi/{리그}?season=&round=`, `/team/squad/{팀}?season=`(지난 시즌 + `best11`·`seasons`), `/player/seasons/{id}`, `/meta/countries`. **GZip 응답 압축 추가**(선수 목록 등 큰 JSON).
+
 ### 5.20 데이터 소스 구조(결제 시) — football-data + API-Football
 - **2026-10-06 Pro 결제 완료**(사용자 개인 계정, 키는 그대로 `~/.fotdata_keys`, 하루 7,500회, 만료 2026-11-06 — 매달 갱신). 실제 호출로 확인한 것: 26-27 5대 리그·챔스 전부 경기·이벤트·라인업(킥오프 약 1시간 전)·팀 경기 통계(xG 포함)·선수별 경기 기록·순위·선수·득점/도움 순위·부상자(EPL 529건)·스쿼드(등번호·사진)·이적·트로피·부상 이력·팀 시즌 통계(폼·포메이션)·실시간(`/fixtures?live=all`)·맞대결(2010~) 열림. 컵대회(FA컵 26-27 283경기 등)도 열림. 감독은 `/coachs`(철자 주의 — `/coaches`는 없는 주소, 결과가 이력 목록이라 현재 감독을 골라야 함). 배당(`/odds`)·API-Football 자체 예측(`/predictions`)도 오지만 배당은 쓰지 않기로(약관 도박 비권유).
 - **과거 시즌 깊이(샘플 실측)**: 경기 결과·이벤트(골·도움·카드)는 2010-11부터, **선수별 경기 기록·평점은 2015-16부터**(커버리지 표엔 EPL 2014-15라고 나오지만 실제 2014-15 경기는 선수 기록 0명), 챔스는 본선만(예선 경기는 2019-20까지 선수 기록 없음). 2020-21부터는 교체 선수까지 기록(경기당 36~46명).
@@ -504,6 +519,8 @@ cp landing.html index.html
 | GET | `/league/seasons/{league_code}` · `/league/history/{league_code}` | 리그 페이지: 데이터가 있는 시즌 목록(선수·시뮬레이션 여부) / 역대 우승·준우승 (2026-10-06, 5.31). `/schedule/{league_code}?season=연도`는 끝난 시즌 일정(all_matches.csv, 날짜만) |
 | GET | `/calendar/{slug}.ics` · `/calendar/my.ics?t=` | 구단 경기 일정 캘린더 구독(.ics, webcal) — Vercel `/cal/*`이 넘겨줌 (2026-10-03, 5.24) |
 | GET | `/matches/live` | 오늘 경기 최신 점수·상태만(진행 중일 때 화면이 1분마다 부름, `enabled` = Render에 키가 있는지) (2026-09-30, 5.17) |
+| GET | `/league/players/{league_code}?season=` · `/league/bestxi/{league_code}?season=&round=` | 선수 탭 분야별 순위·전체 목록 / 리그 베스트 11(이번 라운드의 팀·시즌) — API-Football 경기별 기록 합산, 15-16~ (2026-10-06, 5.34) |
+| GET | `/player/seasons/{player_id}` · `/meta/countries` | 선수 카드 시즌 고르기(리그·시즌·팀) / 나라 → 국기 (2026-10-06, 5.34) |
 | GET | `/bigmatch` | 다가오는 빅매치 1경기(BIG_CLUBS끼리 가장 가까운 경기, 로고 URL 포함) — 경기예측 탭 배너·랜딩 연출 공용 (2026-09-28, 5.8 참고) |
 | GET | `/match/insights?home_team=&away_team=` | 예측 결과 화면 경기 분석: 두 팀 현재 리그 순위·홈팀 홈/원정팀 원정 최근 10경기·경기 성향(전 대회 최근 10경기)·파워 레이팅(ELO) 추이 (2026-09-27 추가, 5.9 참고) |
 

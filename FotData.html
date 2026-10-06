@@ -742,12 +742,24 @@
     .ti-season-next { display: flex; align-items: center; gap: 8px; margin-top: 6px; font-size: 16px; font-weight: 700; color: var(--text); }
     .ti-season-next img { width: 26px; height: 26px; object-fit: contain; }
     .ti-season-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
-    .ti-history { grid-column: 1 / -1; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; border: 0.5px solid var(--border); border-radius: 14px; padding: 10px 14px; cursor: pointer; background: rgba(10,16,32,0.4); transition: border-color .15s; }
+    /* 개요: 시즌별 리그 순위(2026-10-06 — 시즌이 17개로 늘어 한 줄 글자 목록이 세 줄로 넘쳐서 작은 막대 차트로) */
+    .ti-history { grid-column: 1 / -1; border: 0.5px solid var(--border); border-radius: 14px; padding: 12px 14px 10px; cursor: pointer; background: rgba(10,16,32,0.4); transition: border-color .15s; min-width: 0; }
     .ti-history:hover { border-color: var(--blue); }
-    .ti-history .ti-fact-label { margin-right: 4px; }
-    .ti-history-item { display: inline-flex; align-items: baseline; gap: 5px; }
-    .ti-history-item small { font-size: 11px; color: var(--faint); }
-    .ti-history-item b { font-size: 14px; color: var(--text); font-variant-numeric: tabular-nums; }
+    .rh-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px; }
+    .rh-head small { margin-left: auto; font-size: 11px; color: var(--faint); }
+    .rh-scroll { overflow-x: auto; scrollbar-width: none; } .rh-scroll::-webkit-scrollbar { display: none; }
+    .rh-cols { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(26px, 1fr); gap: 4px; min-width: max-content; width: 100%; height: 92px; align-items: end; }
+    .rh-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 3px; min-width: 26px; }
+    .rh-col b { font-family: var(--font-num); font-size: 14px; font-weight: 700; color: var(--text); line-height: 1; font-variant-numeric: tabular-nums; }
+    .rh-col i { display: block; width: 100%; max-width: 22px; border-radius: 4px 4px 2px 2px; background: rgba(142,154,179,0.35); }
+    .rh-col small { font-size: 10px; color: var(--faint); font-variant-numeric: tabular-nums; }
+    .rh-col.champ b { color: var(--gold); } .rh-col.champ i { background: linear-gradient(180deg, #f6d66b, var(--gold)); box-shadow: 0 0 10px rgba(240,192,64,0.35); }
+    .rh-col.none b { color: var(--disabled); } .rh-col.none i { background: none; border: 0.5px dashed rgba(142,154,179,0.3); height: 6px !important; }
+    .rh-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 8px; font-size: 11px; color: var(--muted); }
+    .rh-legend span { display: inline-flex; align-items: center; gap: 4px; } .rh-legend i { width: 8px; height: 8px; border-radius: 2px; }
+    /* 개요: 시즌 베스트 11 */
+    .ti-bx { border: 0.5px solid var(--border); border-radius: 14px; padding: 12px 14px; background: rgba(10,16,32,0.4); margin-bottom: 12px; }
+    .ti-bx:empty { display: none; }
     .ti-ha { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 99px; flex-shrink: 0; }
     .ti-ha.home { color: var(--blue-text); background: rgba(88,166,255,0.14); } .ti-ha.away { color: var(--away); background: rgba(240,136,62,0.14); }
     .ti-season-card.sk, .ti-history.sk { cursor: default; }
@@ -761,12 +773,13 @@
     .tr-title { font-size: 13px; font-weight: 700; color: var(--text); }
     .tr-total { margin-left: auto; font-size: 11px; color: var(--gold); font-weight: 600; }
     .tr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 6px; }
-    .tr-tile { border-radius: 10px; padding: 8px 9px; background: rgba(142,154,179,0.08); border: 0.5px solid rgba(142,154,179,0.14); display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+    .tr-tile { position: relative; border-radius: 10px; padding: 8px 9px; background: rgba(142,154,179,0.08); border: 0.5px solid rgba(142,154,179,0.14); display: flex; flex-direction: column; gap: 1px; min-width: 0; }
     .tr-tile b { font-size: 20px; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; line-height: 1.1; }
     .tr-tile span { font-size: 11px; color: var(--text-2); word-break: keep-all; }
     .tr-tile small { font-size: 11px; color: var(--faint); }
     .tr-tile.gold { background: linear-gradient(160deg, rgba(227,179,65,0.16), rgba(227,179,65,0.04)); border-color: rgba(227,179,65,0.35); }
     .tr-tile.gold b { color: #f2cc60; }
+    .tr-tile .comp-ic { position: absolute; top: 7px; right: 7px; width: 26px; height: 26px; } .tr-tile .comp-ic img { width: 17px; height: 17px; } .tr-tile .comp-ic svg { width: 14px; height: 14px; }
     .tr-sub, .tr-empty { font-size: 12px; color: var(--muted); margin-top: 8px; }
     .tr-empty { margin-top: 0; }
     .tr-foot { margin-top: auto; padding-top: 10px; text-align: right; font-size: 11px; }
@@ -897,7 +910,11 @@
     .ti-section-title:first-child { margin-top: 0; }
     .ti-player-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 2px; border-bottom: 0.5px solid var(--surface-2); font-size: 12px; }
     .ti-player-name { color: var(--text); }
-    .ti-player-nation { color: var(--muted); font-size: 11px; }
+    .ti-player-nation { display: inline-flex; align-items: center; gap: 5px; color: var(--muted); font-size: 11px; white-space: nowrap; }
+    .ti-player-nation img { width: 16px; height: 12px; object-fit: cover; border-radius: 2px; }
+    .ti-dpos { font-style: normal; color: var(--text-2); margin-right: 6px; }
+    .ti-player-row.link { cursor: pointer; } .ti-player-row.link:hover .ti-player-name { color: var(--blue-text); }
+    @media (max-width: 480px) { .ti-dpos { display: none; } }
     .ti-empty { text-align: center; color: var(--muted); font-size: 12px; padding: 20px 0; }
     .ti-standings-table { width: 100%; border-collapse: collapse; font-size: 12px; }
     .ti-standings-table th { text-align: left; color: var(--muted); font-weight: 500; font-size: 11px; padding: 6px 4px; border-bottom: 0.5px solid var(--border); }
@@ -1543,7 +1560,7 @@
     @media (max-width: 900px) {   /* 한 줄: 다음 경기 → 순위 → 우승·강등 → 득점 */
       .lo-grid { display: flex; flex-direction: column; align-items: stretch; gap: 0; }
       .lo-col { display: contents; }
-      #lo-next { order: 1; } #lo-table { order: 2; } #lo-sim { order: 3; } #lo-players { order: 4; }
+      #lo-result { order: 0; } #lo-next { order: 1; } #lo-table { order: 2; } #lo-sim { order: 3; } #lo-xi { order: 4; } #lo-players { order: 5; }
     }
     @media (max-width: 600px) {
       .lo-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
@@ -2088,6 +2105,223 @@
     .tn-info small { font-size: 11px; color: var(--muted); }
     /* 선수 카드 — 다른 창(경기 결과·팀 정보) 위에 뜸 */
     .modal-overlay.pc-overlay { z-index: 1100; }
+    /* ── 선수 탭(2026-10-06): 분야별 TOP 3 카드 + 전체 순위 ── */
+    .pls-gt { font-size: 13px; font-weight: 700; color: var(--muted); margin: 18px 2px 8px; }
+    .pls-gt:first-child { margin-top: 4px; }
+    .pls-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+    .pls-card { border-radius: 14px; border: 0.5px solid rgba(142,154,179,0.16); background: rgba(10,16,32,0.4); padding: 4px 12px 6px; min-width: 0; }
+    .pls-card-h { display: flex; align-items: baseline; gap: 6px; width: 100%; padding: 10px 0 8px; border: none; background: none; color: var(--text); font: inherit; cursor: pointer; text-align: left; }
+    .pls-card-h b { font-size: 14px; font-weight: 700; } .pls-card-h small { font-size: 11px; color: var(--faint); }
+    .pls-card-h span { margin-left: auto; font-size: 18px; color: var(--muted); line-height: 1; }
+    .pls-card-h:hover b, .pls-card-h:hover span { color: var(--blue-text); }
+    .pls-row, .pls-lrow { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 8px 0; border-top: 0.5px solid rgba(142,154,179,0.1); cursor: pointer; }
+    .pls-row:hover .pls-nm b, .pls-lrow:hover .pls-nm b { color: var(--blue-text); }
+    .pls-ph { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; background: var(--surface-2); }
+    .pls-nm { min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
+    .pls-nm b { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pls-nm small { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; }
+    .pls-nm small img { width: 14px; height: 14px; object-fit: contain; }
+    .pls-v { min-width: 34px; text-align: center; font-family: var(--font-num); font-size: 18px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; padding: 2px 7px; border-radius: 99px; }
+    .pls-v.top { background: var(--blue); color: var(--bg); }
+    .pls-v.r8.top { background: var(--blue); } .pls-v.r7.top { background: var(--green); } .pls-v.r6.top { background: var(--amber); }
+    .pls-note { font-size: 11px; color: var(--faint); margin-top: 12px; }
+    .pls-lhead { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+    .pls-back { border: 0.5px solid var(--border); background: rgba(10,16,32,0.5); color: var(--text-2); font: inherit; font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 99px; cursor: pointer; }
+    .pls-back:hover { color: var(--text); border-color: var(--blue); }
+    .pls-ltitle { display: flex; flex-direction: column; line-height: 1.25; } .pls-ltitle b { font-size: 18px; font-weight: 800; color: var(--text); } .pls-ltitle small { font-size: 11px; color: var(--muted); }
+    .pls-sel { margin-left: auto; font: inherit; font-size: 12px; font-weight: 700; color: var(--text); background: rgba(10,16,32,0.6); border: 0.5px solid var(--border); border-radius: 8px; padding: 6px 8px; cursor: pointer; }
+    .pls-lcols, .pls-lrow { display: grid; grid-template-columns: 28px 34px minmax(0, 1fr) 44px 64px 64px; align-items: center; gap: 8px; }
+    .pls-lcols { font-size: 11px; color: var(--faint); padding: 0 0 6px; }
+    .pls-lrow { padding: 7px 0; }
+    .pls-rk { font-family: var(--font-num); font-size: 15px; font-weight: 700; color: var(--muted); text-align: center; }
+    .pls-c { text-align: center; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .pls-lcols .pls-v { font-family: inherit; font-size: 11px; color: var(--faint); font-weight: 500; }
+    .pls-lrow .pls-v { justify-self: center; }
+    @media (max-width: 600px) {
+      /* 폰: 묶음마다 옆으로 넘기는 카드(세로로 17장이 쌓여 4,000px 가까이 됐음) */
+      .pls-grid { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 84%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; margin: 0 -4px; padding: 0 4px; }
+      .pls-grid::-webkit-scrollbar { display: none; } .pls-card { scroll-snap-align: start; }
+      .pls-lcols, .pls-lrow { grid-template-columns: 24px 30px minmax(0, 1fr) 34px 58px; }
+      .pls-lcols > :nth-child(5), .pls-lrow > :nth-child(5) { display: none; }
+      .pls-ph { width: 30px; height: 30px; }
+      .pls-sel { margin-left: 0; }
+    }
+    /* 리그 개요: 이번 라운드의 팀 */
+    .lo-xi-t { margin-right: auto; }
+    #lo-xi .lo-card-h b { display: flex; align-items: center; gap: 8px; flex: 1; }
+    #lo-xi .lo-card-h .lo-more { display: none; }
+    .lo-xi-nav { display: inline-flex; align-items: center; gap: 4px; }
+    .lo-xi-nav button { width: 28px; height: 28px; border-radius: 50%; border: 0.5px solid var(--border); background: rgba(10,16,32,0.5); color: var(--text-2); font-size: 15px; cursor: pointer; }
+    .lo-xi-nav button:disabled { opacity: .35; cursor: default; }
+    .lo-xi-nav select { font: inherit; font-size: 12px; font-weight: 700; color: var(--text); background: rgba(10,16,32,0.6); border: 0.5px solid var(--border); border-radius: 8px; padding: 5px 6px; cursor: pointer; }
+    /* ── 선수 카드 v2(2026-10-06): 머리 + 탭 — 밤하늘 남색 바탕에 구단 색 빛, 숫자는 전광판 글꼴 ── */
+    .modal.pc-modal { width: 520px; }
+    .pc-modal .mp-top { padding-bottom: 2px; }
+    .pc2-skel { display: flex; align-items: center; gap: 14px; padding: 8px 0 16px; }
+    .pc2-skel i { display: block; height: 12px; border-radius: 6px; margin: 6px 0; background: rgba(142,154,179,0.14); }
+    .pc2-skel i.c { width: 84px; height: 84px; border-radius: 50%; margin: 0; flex-shrink: 0; } .pc2-skel > div { flex: 1; }
+    .pc2-hero { position: relative; display: flex; align-items: center; gap: 16px; margin: 4px -16px 0; padding: 16px 18px 18px; overflow: hidden;
+      background: radial-gradient(120% 140% at 0% 0%, color-mix(in srgb, var(--c1) 30%, transparent) 0%, transparent 55%),
+                  radial-gradient(90% 120% at 100% 100%, color-mix(in srgb, var(--c2) 14%, transparent) 0%, transparent 60%); }
+    .pc2-hero::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(142,154,179,0.25), transparent); }
+    .pc2-ph { position: relative; flex-shrink: 0; }
+    .pc2-photo { width: 84px; height: 84px; border-radius: 50%; object-fit: cover; background: var(--surface-2); border: 2px solid color-mix(in srgb, var(--c1) 70%, #fff 10%); box-shadow: 0 0 28px color-mix(in srgb, var(--c1) 40%, transparent); display: block; }
+    .pc2-crest { position: absolute; right: -4px; bottom: -2px; width: 30px; height: 30px; object-fit: contain; padding: 3px; border-radius: 50%; background: var(--surface); border: 0.5px solid var(--border); }
+    .pc2-id { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+    .pc2-name { font-size: 22px; font-weight: 800; color: #fff; line-height: 1.15; letter-spacing: -0.3px; }
+    .pc2-legal { font-size: 11px; color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: -2px; }
+    .pc2-team { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+    .pc2-team button { background: none; border: none; padding: 0; color: var(--text-2); font: inherit; font-weight: 600; cursor: pointer; }
+    .pc2-team button:hover { color: var(--blue-text); }
+    .pc2-num { font-family: var(--font-num); font-size: 15px; font-weight: 700; color: var(--muted); }
+    .pc2-num::before { content: 'No.'; font-size: 11px; margin-right: 2px; color: var(--faint); font-family: var(--font-ui); font-weight: 600; }
+    .pc2-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 2px; }
+    .pc2-tags em { display: inline-flex; align-items: center; gap: 5px; font-style: normal; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 99px; background: rgba(142,154,179,0.14); color: var(--text-2); }
+    .pc2-tags em img { width: 15px; height: 11px; object-fit: cover; border-radius: 2px; }
+    .pc2-pos.GK { color: var(--gold); background: rgba(240,192,64,0.13); } .pc2-pos.DF { color: var(--green); background: rgba(63,185,80,0.13); }
+    .pc2-pos.MF { color: var(--blue-text); background: rgba(88,166,255,0.13); } .pc2-pos.FW { color: var(--away); background: rgba(240,136,62,0.13); }
+    .pc2-tags .pc2-cap { color: var(--gold); background: rgba(240,192,64,0.13); } .pc2-tags .pc2-inj { color: var(--red); background: rgba(248,81,73,0.13); }
+    .pc2-rt { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .pc2-rt b { font-family: var(--font-num); font-size: 30px; font-weight: 700; line-height: 1; padding: 6px 10px 5px; border-radius: 12px; color: var(--bg); background: var(--muted); font-variant-numeric: tabular-nums; }
+    .pc2-rt.r8 b { background: var(--blue); } .pc2-rt.r7 b { background: var(--green); } .pc2-rt.r6 b { background: var(--amber); } .pc2-rt.r5 b { background: var(--away); }
+    .pc2-rt small { font-size: 11px; color: var(--muted); white-space: nowrap; }
+    .pc2-tabs { position: sticky; top: -1px; z-index: 3; display: flex; gap: 4px; margin: 0 -16px 4px; padding: 8px 12px; background: inherit; border-bottom: 0.5px solid rgba(142,154,179,0.14); }
+    html.theme-glass .pc2-tabs { background: rgba(17,26,46,0.94); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+    .pc2-tabs button { flex: 1; border: none; background: transparent; color: var(--muted); font: inherit; font-size: 13px; font-weight: 700; padding: 8px 4px; border-radius: 10px; cursor: pointer; }
+    .pc2-tabs button:hover { color: var(--text); }
+    .pc2-tabs button.on { color: var(--text); background: rgba(88,166,255,0.13); box-shadow: inset 0 -2px 0 var(--blue); }
+    .pc2-pane { padding-top: 8px; min-height: 260px; }
+    .pc2-sec { margin-top: 14px; }
+    .pc2-sec:first-child { margin-top: 6px; }
+    .pc2-sec-t { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .pc2-sec-t > span:not(.pc-mode):not(.pc2-sea-one) { font-size: 11px; font-weight: 500; color: var(--faint); }
+    .pc2-sea, .bx-sea { font: inherit; font-size: 12px; font-weight: 700; color: var(--text); background: rgba(10,16,32,0.6); border: 0.5px solid var(--border); border-radius: 8px; padding: 5px 8px; max-width: 70%; cursor: pointer; }
+    .pc2-sea-one, .bx-sea-one { font-size: 12px; font-weight: 700; color: var(--text-2); }
+    .pc2-link { background: none; border: none; color: var(--blue-text); font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; padding: 0; }
+    .pc2-cells { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+    .pc2-cell { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 10px 4px; border-radius: 10px; background: rgba(10,16,32,0.45); border: 0.5px solid rgba(142,154,179,0.14); min-width: 0; text-align: center; }
+    .pc2-cell small { font-size: 11px; color: var(--muted); }
+    .pc2-cell b { display: flex; align-items: center; gap: 5px; font-size: 14px; font-weight: 700; color: var(--text); max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pc2-cell span { font-size: 11px; color: var(--faint); font-variant-numeric: tabular-nums; }
+    .pc2-flag { width: 18px; height: 13px; object-fit: cover; border-radius: 2px; flex-shrink: 0; }
+    .pc2-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+    .pc2-tile { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 10px 4px 9px; border-radius: 12px; background: linear-gradient(180deg, rgba(88,166,255,0.09), rgba(88,166,255,0.03)); border: 0.5px solid rgba(88,166,255,0.18); }
+    .pc2-tile b { font-family: var(--font-num); font-size: 28px; font-weight: 700; line-height: 1.05; color: #fff; font-variant-numeric: tabular-nums; }
+    .pc2-tile.g b { color: var(--blue-text); }
+    .pc2-tile small { font-size: 11px; color: var(--muted); }
+    .pc2-pos-row { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 14px; align-items: center; }
+    .pc2-mini { position: relative; aspect-ratio: 105 / 68; border-radius: 10px; background: linear-gradient(180deg, rgba(24,35,58,0.9), rgba(17,26,46,0.9)); border: 0.5px solid rgba(142,154,179,0.18); }
+    .pc2-mini .xi-lines { position: absolute; inset: 6px; width: calc(100% - 12px); height: calc(100% - 12px); }
+    .pc2-dot { position: absolute; transform: translate(-50%, -50%); min-width: 26px; height: 18px; padding: 0 4px; border-radius: 99px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; color: var(--text); background: rgba(88,166,255,0.35); border: 0.5px solid rgba(88,166,255,0.6); }
+    .pc2-dot.main { background: var(--blue); color: var(--bg); box-shadow: 0 0 14px rgba(88,166,255,0.55); z-index: 1; }
+    .pc2-pos-list div { display: flex; justify-content: space-between; gap: 8px; padding: 6px 0; font-size: 12px; color: var(--muted); border-bottom: 0.5px solid rgba(142,154,179,0.1); }
+    .pc2-pos-list div.main { color: var(--text); font-weight: 700; }
+    .pc2-pos-list b { font-family: var(--font-num); font-size: 14px; font-weight: 700; color: var(--text-2); }
+    .pc2-m { display: grid; grid-template-columns: 38px minmax(0, 1fr) 36px auto 34px; align-items: center; gap: 8px; padding: 7px 0; border-top: 0.5px solid rgba(142,154,179,0.1); font-size: 12px; color: var(--text-2); }
+    .pc2-m .dt { color: var(--faint); font-size: 11px; font-variant-numeric: tabular-nums; }
+    .pc2-m .opp { display: flex; align-items: center; gap: 6px; min-width: 0; } .pc2-m .opp img { width: 18px; height: 18px; object-fit: contain; flex-shrink: 0; }
+    .pc2-m .opp em { font-style: normal; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pc2-m .res { font-family: var(--font-num); font-size: 14px; font-weight: 700; text-align: center; border-radius: 6px; padding: 1px 0; }
+    .pc2-m .res.w { color: var(--green); background: rgba(63,185,80,0.12); } .pc2-m .res.d { color: var(--text-2); background: rgba(142,154,179,0.12); } .pc2-m .res.l { color: var(--red); background: rgba(248,81,73,0.12); }
+    .pc2-m .st { display: flex; align-items: center; gap: 4px; justify-content: flex-end; }
+    .pc2-m .st i { font-style: normal; font-size: 11px; font-weight: 700; padding: 1px 5px; border-radius: 5px; }
+    .pc2-m .st i.g { color: var(--blue-text); background: rgba(88,166,255,0.13); } .pc2-m .st i.a { color: var(--green); background: rgba(63,185,80,0.12); }
+    .pc2-m .st small { color: var(--faint); font-size: 11px; min-width: 22px; text-align: right; }
+    .pc2-m .md-rt { justify-self: end; }
+    .pc2-sum { font-size: 12px; color: var(--muted); margin: -2px 0 10px; }
+    .pc2-chips { display: grid; grid-template-columns: repeat(auto-fit, minmax(104px, 1fr)); gap: 6px; margin-bottom: 10px; }
+    .pc2-chip { display: flex; flex-direction: column; gap: 1px; padding: 8px 10px; border-radius: 10px; background: rgba(10,16,32,0.45); border: 0.5px solid rgba(142,154,179,0.14); }
+    .pc2-chip small { font-size: 11px; color: var(--muted); } .pc2-chip b { font-family: var(--font-num); font-size: 20px; font-weight: 700; color: var(--text); }
+    .pc2-grps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 18px; }
+    .pc2-grp { min-width: 0; }
+    .pc2-grp-t { font-size: 11px; font-weight: 700; color: var(--faint); margin: 8px 0 2px; }
+    .pc2-kv { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px; padding: 6px 0; font-size: 12px; border-bottom: 0.5px solid rgba(142,154,179,0.08); }
+    .pc2-grps.bars .pc2-kv { grid-template-columns: minmax(0, 1fr) 40px 56px; }
+    .pc2-kv span { color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pc2-kv b { color: var(--text); font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
+    .pc2-car-h { display: grid; grid-template-columns: minmax(0, 1fr) 44px 44px; gap: 6px; font-size: 13px; font-weight: 700; color: var(--text); padding-bottom: 6px; }
+    .pc2-car-h .n { font-size: 11px; font-weight: 600; color: var(--faint); text-align: center; }
+    .pc2-car { display: grid; grid-template-columns: 30px minmax(0, 1fr) 44px 44px; align-items: center; gap: 6px 10px; padding: 9px 0; border-top: 0.5px solid rgba(142,154,179,0.1); }
+    .pc2-car > img { width: 30px; height: 30px; object-fit: contain; }
+    .pc2-car > img.flag { width: 28px; height: 20px; object-fit: cover; border-radius: 3px; }
+    .pc2-car > div { min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
+    .pc2-car b { font-size: 13px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pc2-car small { font-size: 11px; color: var(--muted); }
+    .pc2-car .n { font-family: var(--font-num); font-size: 18px; font-weight: 700; text-align: center; color: var(--text-2); font-variant-numeric: tabular-nums; }
+    .pc2-car .n.g { color: var(--blue-text); }
+    .pc2-car.now b::after { content: '현재'; margin-left: 6px; font-size: 10px; font-weight: 800; color: var(--blue-text); background: rgba(88,166,255,0.13); padding: 1px 5px; border-radius: 4px; vertical-align: 1px; }
+    .pc2-inj { display: flex; justify-content: space-between; gap: 8px; padding: 7px 0; font-size: 12px; color: var(--text-2); border-top: 0.5px solid rgba(142,154,179,0.1); }
+    .pc2-inj small { color: var(--faint); font-size: 11px; white-space: nowrap; }
+    .pc2-note { font-size: 11px; color: var(--faint); margin-top: 12px; }
+    .pc2-tro-sum { display: flex; align-items: baseline; gap: 8px; margin: 4px 0 10px; }
+    .pc2-tro-sum b { font-family: var(--font-num); font-size: 34px; font-weight: 700; color: var(--gold); line-height: 1; }
+    .pc2-tro-sum span { font-size: 12px; color: var(--muted); }
+    .pc2-tro { border-radius: 14px; border: 0.5px solid rgba(142,154,179,0.16); background: rgba(10,16,32,0.35); overflow: hidden; margin-bottom: 10px; }
+    .pc2-tro-h { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: rgba(24,35,58,0.7); }
+    .pc2-tro-h > img { width: 30px; height: 30px; object-fit: contain; } .pc2-tro-h > img.flag { width: 28px; height: 20px; object-fit: cover; border-radius: 3px; }
+    .pc2-tro-h > div { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
+    .pc2-tro-h b { font-size: 14px; font-weight: 700; color: var(--text); } .pc2-tro-h small { font-size: 11px; color: var(--muted); }
+    .pc2-tro-n { font-family: var(--font-num); font-size: 18px; font-weight: 700; color: var(--gold); }
+    .pc2-tro-i { display: grid; grid-template-columns: 22px 30px minmax(0, 1fr); align-items: center; gap: 10px; padding: 9px 12px; border-top: 0.5px solid rgba(142,154,179,0.08); }
+    .pc2-tro-i .cnt { font-family: var(--font-num); font-size: 18px; font-weight: 700; color: var(--gold); text-align: center; }
+    .pc2-tro-i.ru .cnt { color: var(--muted); }
+    .pc2-tro-i > div { min-width: 0; display: flex; flex-direction: column; line-height: 1.35; }
+    .pc2-tro-i b { font-size: 13px; font-weight: 600; color: var(--text); }
+    .pc2-tro-i small { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .pc2-tro-i small em { font-style: normal; color: var(--faint); margin-left: 8px; } .pc2-tro-i.ru small em { margin-left: 0; }
+    .pc2-tro-i.ru b { color: var(--text-2); }
+    /* 대회 아이콘(트로피·우승 기록·경력) — 둥근 칸 안에 맞춤 */
+    .comp-ic { width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: rgba(236,241,250,0.06); border: 0.5px solid rgba(142,154,179,0.18); flex-shrink: 0; }
+    .comp-ic img { width: 20px; height: 20px; object-fit: contain; }
+    .comp-ic.tro svg, .comp-ic svg { width: 17px; height: 17px; fill: none; stroke: var(--gold); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    @media (max-width: 600px) {
+      .modal.pc-modal { width: 100%; max-width: 100%; max-height: calc(100dvh - 24px); }
+      .pc2-hero { gap: 12px; padding: 14px 16px 16px; }
+      .pc2-photo { width: 68px; height: 68px; } .pc2-crest { width: 26px; height: 26px; }
+      .pc2-name { font-size: 18px; }
+      .pc2-rt b { font-size: 24px; padding: 5px 8px 4px; }
+      .pc2-cells { gap: 4px; } .pc2-cell { padding: 8px 2px; } .pc2-cell b { font-size: 12px; gap: 3px; } .pc2-cell span { font-size: 10px; }
+      .pc2-flag { width: 15px; height: 11px; }
+      .pc2-tiles { gap: 4px; } .pc2-tile b { font-size: 24px; }
+      .pc2-grps { grid-template-columns: minmax(0, 1fr); }
+      .pc2-pos-row { gap: 10px; }
+      .pc2-tabs button { font-size: 12px; }
+    }
+
+    /* ── 베스트 11 경기장(구단 시즌 베스트·리그 이번 라운드의 팀) ── */
+    .xi-pitch { position: relative; width: 100%; border-radius: 14px; overflow: hidden;
+      background: radial-gradient(60% 50% at 50% 50%, rgba(88,166,255,0.10), transparent 70%), linear-gradient(180deg, #121c33 0%, #0e172b 100%);
+      border: 0.5px solid rgba(142,154,179,0.2); }
+    .xi-pitch.v { aspect-ratio: 68 / 100; } .xi-pitch.h { aspect-ratio: 105 / 58; } .xi-pitch.h.compact { aspect-ratio: 105 / 72; }
+    .xi-pitch.compact .xi-p { width: 70px; gap: 3px; } .xi-pitch.compact .xi-ph { width: 36px; height: 36px; }
+    .xi-pitch.compact .xi-rt { font-size: 11px; right: -17px; top: -7px; } .xi-pitch.compact .xi-nm { max-width: 70px; font-size: 10px; }
+    .xi-pitch.compact .xi-crest { width: 17px; height: 17px; left: -7px; }
+    .xi-lines { position: absolute; inset: 0; width: 100%; height: 100%; fill: none; stroke: rgba(236,241,250,0.11); stroke-width: 0.35; vector-effect: non-scaling-stroke; }
+    .xi-lines * { vector-effect: non-scaling-stroke; stroke-width: 1; }
+    .xi-p { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 4px; width: 78px; padding: 0; border: none; background: none; cursor: pointer; font: inherit; z-index: 1; }
+    .xi-ph { position: relative; width: 44px; height: 44px; border-radius: 50%; background: var(--surface-2); border: 1.5px solid rgba(236,241,250,0.55); box-shadow: 0 4px 12px rgba(0,0,0,0.45); }
+    .xi-ph > img:first-child { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
+    .xi-rt { position: absolute; top: -8px; right: -20px; font-family: var(--font-num); font-size: 12px; font-weight: 700; line-height: 1; padding: 3px 5px 2px; border-radius: 6px; color: var(--bg); background: var(--muted); font-variant-numeric: tabular-nums; }
+    .xi-rt.r8 { background: var(--blue); } .xi-rt.r7 { background: var(--green); } .xi-rt.r6 { background: var(--amber); } .xi-rt.r5 { background: var(--away); }
+    .xi-crest { position: absolute; left: -8px; bottom: -4px; width: 20px; height: 20px; object-fit: contain; padding: 2px; border-radius: 50%; background: var(--surface); }
+    .xi-ga { position: absolute; right: -14px; bottom: -6px; display: flex; gap: 2px; }
+    .xi-ga i { display: inline-flex; align-items: center; gap: 1px; height: 16px; padding: 0 3px; border-radius: 99px; background: var(--surface); border: 0.5px solid var(--border); font-style: normal; font-size: 10px; font-weight: 800; color: var(--text); }
+    .xi-ga svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+    .xi-ga i.g { color: var(--blue-text); } .xi-ga i.a { color: var(--green); }
+    .xi-nm { max-width: 78px; font-size: 11px; font-weight: 600; color: var(--text); text-shadow: 0 1px 4px rgba(0,0,0,0.95); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .xi-nm i { font-style: normal; color: var(--faint); margin-right: 3px; font-variant-numeric: tabular-nums; }
+    .xi-p:hover .xi-nm { color: var(--blue-text); } .xi-p:hover .xi-ph { border-color: var(--blue); }
+    .xi-p:focus-visible { outline: none; } .xi-p:focus-visible .xi-ph { outline: 2px solid var(--blue); outline-offset: 2px; }
+    @media (max-width: 480px) {
+      .xi-p { width: 62px; gap: 3px; } .xi-ph { width: 36px; height: 36px; }
+      .xi-rt { font-size: 11px; right: -16px; top: -7px; } .xi-nm { max-width: 62px; font-size: 10px; }
+      .xi-crest { width: 17px; height: 17px; left: -7px; }
+    }
+    .bx-card { margin-top: 4px; }
+    .bx-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+    .bx-head > b { font-size: 14px; font-weight: 700; color: var(--text); }
+    .bx-meta { margin-left: auto; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .bx-note { font-size: 11px; color: var(--faint); margin-top: 8px; }
     /* 캘린더 구독 창 */
     .ti-cal-btn:hover { color: var(--blue); }
     .cal-modal { width: 380px; }
@@ -2587,7 +2821,7 @@
 <div id="page-players" class="lg-panel">
   <div class="card">
     <div class="champ-head"><b id="players-title">선수 순위</b><span id="players-sub">이번 시즌 득점·도움 순위 · 매일 새벽 자동 갱신</span></div>
-    <div class="league-tabs" id="players-league-tabs">
+    <div class="league-tabs" id="players-league-tabs" hidden>
       <button class="champ-league-btn active" data-league="PL" onclick="loadPlayers('PL', this)"><img alt="" src="logos/league/PL.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">EPL</button>
       <button class="champ-league-btn" data-league="PD" onclick="loadPlayers('PD', this)"><img alt="" src="logos/league/PD.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">라리가</button>
       <button class="champ-league-btn" data-league="BL1" onclick="loadPlayers('BL1', this)"><img alt="" src="logos/league/BL1.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">분데스리가</button>
@@ -2595,7 +2829,8 @@
       <button class="champ-league-btn" data-league="FL1" onclick="loadPlayers('FL1', this)"><img alt="" src="logos/league/FL1.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">리그앙</button>
       <button class="champ-league-btn" data-league="CL" onclick="loadPlayers('CL', this)"><img alt="" src="logos/league/CL.png" onerror="this.style.display='none'" style="width:16px;height:16px;vertical-align:middle;margin-right:4px">챔피언스리그</button>
     </div>
-    <div style="display:flex;gap:24px;flex-wrap:wrap">
+    <div id="pls-root"></div>
+    <div id="pls-legacy" style="display:none;gap:24px;flex-wrap:wrap">
       <div class="player-col">
         <h3 class="pl-col-t">득점 순위</h3>
         <div id="topscorers-list"><div class="loading"><svg class="logo-bars animate" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg>불러오는 중...</div></div>
@@ -3022,10 +3257,11 @@ const LG_BY = Object.fromEntries(LG_LIST.map(l => [l.code, l]));
 const LG_TAB_NAME = { overview: '개요', standings: '순위', schedule: '경기', champion: '순위 예측', players: '선수', history: '시즌' };
 const LEGACY_LG_PAGES = ['standings', 'schedule', 'champion', 'players'];
 const LG_CUR_YEAR = 2026;   // 서버 CURRENT_SEASON_YEAR와 같이(시즌 전환 체크리스트)
-// 탭은 시즌에 따라: 순위 예측은 이번 시즌 리그만, 선수(득점·도움)는 이번 시즌만(지난 시즌 선수 기록은 API-Football Pro 결제 후)
+// 탭은 시즌에 따라: 순위 예측은 이번 시즌 리그만, 선수는 15-16 시즌부터
 const lgTabsFor = (code, season = 'current') => {
   const cur = season === 'current';
-  return ['overview', 'standings', 'schedule', ...(cur && code !== 'CL' ? ['champion'] : []), ...(cur ? ['players'] : []), 'history'];
+  // 선수 기록(API-Football 경기별 평점·골·도움)은 15-16 시즌부터
+  return ['overview', 'standings', 'schedule', ...(cur && code !== 'CL' ? ['champion'] : []), ...(cur || +season >= 2015 ? ['players'] : []), 'history'];
 };
 const lgSeasonNorm = s => (s == null || s === '' || s === 'current' || +s === LG_CUR_YEAR) ? 'current' : String(s);
 const lgSeasonLabel = s => { const y = s === 'current' ? LG_CUR_YEAR : +s; return `${y}/${String((y + 1) % 100).padStart(2, '0')}`; };
@@ -3081,7 +3317,7 @@ function openLeague(code, tab, fromHistory, season) {
   // 시즌은 같은 리그 안에서 탭을 옮길 땐 그대로, 다른 리그로 가면 이번 시즌부터
   season = lgSeasonNorm(season === undefined ? (code === lgState.code ? lgState.season : 'current') : season);
   tab = tab || lgState.tab || 'overview';
-  if (!lgTabsFor(code, season).includes(tab)) tab = tab === 'champion' || tab === 'players' ? 'standings' : 'overview';   // 지난 시즌엔 순위 예측·선수가 없음
+  if (!lgTabsFor(code, season).includes(tab)) tab = tab === 'champion' || tab === 'players' ? 'standings' : 'overview';   // 지난 시즌엔 순위 예측이 없음(선수는 14-15 이전 없음)
   const page = document.getElementById('page-league');
   const wasActive = page.classList.contains('active');
   if (wasActive && lgState.code === code && lgState.tab === tab && lgState.season === season) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
@@ -3147,7 +3383,8 @@ async function loadLeagueOverview(code, season = 'current') {
     <div class="lo-grid">
       <div class="lo-col">${cur ? '' : box('lo-result', `${lgSeasonLabel(season)} 시즌 결과`, 'history', '역대 우승', skeletonRows(3))}
         ${box('lo-next', cur ? '다음 경기 · AI 예측' : (cl ? '결승' : '마지막 라운드'), 'schedule', '전체 일정', skeletonMatchRows(4))}
-        ${cur ? box('lo-players', '득점 · 도움 순위', 'players', '선수 순위', skeletonRows(3)) : ''}</div>
+        ${cur || +season >= 2015 ? box('lo-xi', cur ? '이번 라운드의 팀' : '시즌 베스트 11', 'players', '선수 통계', '<div class="skeleton" style="height:320px;border-radius:14px"></div>') : ''}
+        ${cur || +season >= 2015 ? box('lo-players', '득점 · 도움 순위', 'players', '선수 통계', skeletonRows(3)) : ''}</div>
       <div class="lo-col">${box('lo-table', cl ? '리그 스테이지 순위' : (cur ? '순위' : '최종 순위'), 'standings', cl ? '전체 순위·대진' : '전체 순위표', skeletonRows(10))}
         ${cl || !cur ? '' : box('lo-sim', '우승 · 강등 확률', 'champion', '순위 예측', skeletonRows(4))}</div>
     </div>`;
@@ -3169,6 +3406,17 @@ async function loadLeagueOverview(code, season = 'current') {
     else renderLoLast(code, ms);
     if (!cur) renderLoResult(code, season, ms, await standP.catch(() => []));
   })().catch(() => { if (live()) { fail('lo-next'); fail('lo-result'); document.getElementById('lo-stats').innerHTML = ''; } });
+  // 이번 라운드의 팀 · 득점·도움(API-Football 경기별 기록 — 15-16 시즌부터, 없으면 이번 시즌만 예전 football-data 순위)
+  if (cur || +season >= 2015) {
+    loadLoXI(code, season);
+    fetchLeaguePlayers(code, season).then(d => {
+      if (!live()) return;
+      if (d) return renderLoPlayers(d, true);
+      if (!cur) return document.getElementById('lo-players')?.remove();
+      fetch(`${API}/players/leaders/${code}`).then(r => { if (!r.ok) throw r; return r.json(); }).then(x => { if (live()) renderLoPlayers(x); })
+        .catch(() => { if (live()) fail('lo-players', '이번 시즌 득점 순위를 준비 중이에요.'); });
+    });
+  }
   if (!cur) return;
   // 우승·강등 확률(순위 예측 탭과 같은 계산, 2,000회)
   if (!cl) fetchWithRetry(`${API}/predict/champion/${code}`).then(r => r.json()).then(d => {
@@ -3176,9 +3424,6 @@ async function loadLeagueOverview(code, season = 'current') {
     const n = 2000, { results } = simulateSeason(d, n, code);
     renderLoSim(results, n);
   }).catch(() => live() && fail('lo-sim'));
-  // 득점·도움
-  fetch(`${API}/players/leaders/${code}`).then(r => { if (!r.ok) throw r; return r.json(); }).then(d => { if (live()) renderLoPlayers(d); })
-    .catch(() => { if (live()) fail('lo-players', '이번 시즌 득점 순위를 준비 중이에요.'); });
 }
 function renderLoStats(code, ms, cur = true) {
   const done = ms.filter(m => isDone(m) && m.home_goals != null), n = done.length;
@@ -3271,8 +3516,15 @@ function renderLoSim(results, n) {
     <div><div class="lo-sub">강등 위험</div>${rel.map(r => row(r, r.relegation_prob, 'red')).join('')}</div></div>
     <div class="lo-note">남은 경기를 AI 예측 확률로 ${n.toLocaleString()}번 돌린 결과 · 돌릴 때마다 조금씩 달라요</div>`;
 }
-function renderLoPlayers(d) {
+function renderLoPlayers(d, af) {
   const el = document.querySelector('#lo-players .lo-body'); if (!el) return;
+  if (af) {   // API-Football 합산 기록(선수 탭과 같은 데이터) — 누르면 선수 카드
+    const top = k => plsRanked(d, PLS_BY[k]).list.slice(0, 3);
+    const r = (x, unit) => `<div class="lo-pl-row" onclick="openPlayerCard('${escJs(x.p.team)}', ${x.p.id}, ${d.season})" style="cursor:pointer"><img class="lo-pl-photo" src="${plsPhoto(x.p)}" alt="" onerror="this.style.visibility='hidden'"><span class="lo-pl-info"><b>${x.p.full_name || x.p.name}</b><small>${shortName(x.p.team)}</small></span><span class="lo-pl-val"><b>${x.v}</b>${unit}</span></div>`;
+    el.innerHTML = `<div class="lo-sim-grid"><div><div class="lo-sub">득점</div>${top('goals').map(x => r(x, '골')).join('') || '<div class="ti-empty">기록 없음</div>'}</div>
+      <div><div class="lo-sub">도움</div>${top('assists').map(x => r(x, '도움')).join('') || '<div class="ti-empty">기록 없음</div>'}</div></div>`;
+    return;
+  }
   const row = (p, v, unit) => `<div class="lo-pl-row">${playerAvatarHtml({ ...p }, 'lo-pl-photo')}<span class="lo-pl-info"><b>${p.name}</b><small>${shortName(p.team || '')}</small></span><span class="lo-pl-val"><b>${v}</b>${unit}</span></div>`;
   el.innerHTML = `<div class="lo-sim-grid"><div><div class="lo-sub">득점</div>${(d.goals || []).slice(0, 3).map(p => row(p, p.goals, '골')).join('') || '<div class="ti-empty">기록 없음</div>'}</div>
     <div><div class="lo-sub">도움</div>${(d.assists || []).slice(0, 3).map(p => row(p, p.assists, '도움')).join('') || '<div class="ti-empty">기록 없음</div>'}</div></div>`;
@@ -4506,10 +4758,6 @@ function mdStatsHtml(d, home, away) {
 
 // ── 선수 기록·팀 소식(2026-09-30): /team/squad(선수 프로필·시즌 기록) · /match/preview(라인업·결장자) — 결제 후 수집 전엔 404라 안 보임 ──
 const afSquadCache = {}, matchPreviewCache = {};
-function fetchAfSquad(team) {
-  if (!(team in afSquadCache)) afSquadCache[team] = fetch(`${API}/team/squad/${encodeURIComponent(team)}`).then(r => (r.ok && r.status !== 204 ? r.json() : null)).catch(() => { delete afSquadCache[team]; return null; });
-  return afSquadCache[team];
-}
 function fetchMatchPreview(home, away, date) {
   const k = `${home}|${away}|${date ? date.slice(0, 10) : ''}`;
   // 3분 지나면 다시 받음 — 킥오프 약 1시간 전 확정 라인업이 발표되면 창을 다시 열 때 예상 → 확정으로 바뀌게(예전엔 페이지를 새로 열 때까지 그대로)
@@ -4533,6 +4781,11 @@ const NAT_KO = { England: '잉글랜드', Spain: '스페인', France: '프랑스
   Canada: '캐나다', Mexico: '멕시코', Ecuador: '에콰도르', Paraguay: '파라과이', Chile: '칠레', Greece: '그리스', 'Czech Republic': '체코', Czechia: '체코', Slovakia: '슬로바키아',
   Slovenia: '슬로베니아', Hungary: '헝가리', Georgia: '조지아', Mali: '말리', 'Guinea': '기니', Jamaica: '자메이카', Australia: '호주', Iceland: '아이슬란드', Finland: '핀란드' };
 const natKo = n => (n ? NAT_KO[n] || n : null);
+// 국기(서버 /meta/countries — API-Football 나라 목록). 표기가 다른 나라 몇 개는 맞춰 줌
+let FLAGS = {};
+const FLAG_ALIAS = { 'Korea Republic': 'South-Korea', 'South Korea': 'South-Korea', "Côte d'Ivoire": 'Ivory-Coast', 'Ivory Coast': 'Ivory-Coast', 'United States': 'USA', 'Czechia': 'Czech-Republic', 'Czech Republic': 'Czech-Republic', 'Türkiye': 'Turkey', 'Bosnia and Herzegovina': 'Bosnia', 'Bosnia-Herzegovina': 'Bosnia', 'DR Congo': 'Congo-DR', 'Congo DR': 'Congo-DR', 'Republic of Ireland': 'Ireland', 'North Macedonia': 'Macedonia' };
+const flagOf = n => (n ? FLAGS[n] || FLAGS[FLAG_ALIAS[n]] || FLAGS[String(n).replace(/ /g, '-')] || null : null);
+const flagsReady = fetch(`${API}/meta/countries`).then(r => (r.ok ? r.json() : {})).then(d => { FLAGS = d || {}; }).catch(() => {});
 const mdHex = c => (c && /^#?[0-9a-f]{6}$/i.test(c) ? (c[0] === '#' ? c : '#' + c) : null);
 
 // 주요 선수: 출전 시간이 팀 최다의 25% 이상인 선수 중 평점 순 3명(평점이 없으면 공격 포인트 순)
@@ -4581,173 +4834,283 @@ async function loadTeamNews(el, home, away, date, isLive = () => true) {
   return !!html;
 }
 
-// ── 선수 카드(2026-09-30): 사진·포지션·나이·국적·키·몸무게 + 리그 시즌 기록·평균 평점 ──
-async function openPlayerCard(team, pid) {
-  const modal = document.getElementById('pc-modal'), body = document.getElementById('pc-body');
-  if (!modal || pid == null) return;
-  body.innerHTML = '<div class="mp-skel"><i style="width:100%;height:64px"></i><i style="width:100%;height:10px"></i><i style="width:70%"></i><i style="width:100%;height:120px"></i></div>';
-  modal.classList.add('show');
-  track('player_card', { team: shortName(team) });
-  const sq = await fetchAfSquad(team);
-  const p = sq?.players?.find(x => x.id === pid);
-  if (p) { pcCur = null; body.innerHTML = playerCardHtml(p, team, sq); loadPlayerProfile(pid); return; }
-  // 시즌 기록이 없는 선수(상대 팀·새로 온 선수 등): 라인업에 있던 정보(사진·등번호·포지션·그 경기 평점)로 간단히
-  const f = mdPlayerIndex[pid];
-  if (!f) { body.innerHTML = '<div class="ti-empty">이 선수의 시즌 기록이 아직 없어요.</div>'; return; }
-  const pos = { G: 'GK', D: 'DF', M: 'MF', F: 'FW' }[f.pos] || f.pos;
-  const photo = f.photo || `https://media.api-sports.io/football/players/${pid}.png`;
-  body.innerHTML = `<div class="pc-hero"><img class="pc-photo" src="${photo}" alt="" onerror="this.style.visibility='hidden'">
-      <div class="pc-id"><b class="pc-name">${f.name}</b><span class="pc-team"><img src="${logos[f.team] || ''}" alt="" onerror="this.style.display='none'">${shortName(f.team)}${f.number != null ? ` · ${f.number}번` : ''}</span>
-        <span class="pc-tags"><em class="pc-pos ${pos || ''}">${POS_KO[pos] || '-'}</em></span></div>
-      ${f.rating ? `<div class="pc-rt"><span class="md-rt ${mdRatingClass(f.rating)}">${f.rating.toFixed(1)}</span><small>이 경기 평점</small></div>` : ''}</div>
-    <div class="mr-nolog">이 선수의 시즌 기록은 아직 없어요</div>`;
-}
-const mdPlayerIndex = {};
-function closePlayerCard(e) { const m = document.getElementById('pc-modal'); if (!e || e.target === m) m.classList.remove('show'); }
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && document.getElementById('pc-modal')?.classList.contains('show')) { e.stopImmediatePropagation(); closePlayerCard(); }
-}, true);
-// 시즌 기록 표: [묶음, 라벨, 키] — 합계/90분당 전환, 순위 막대는 같은 리그·같은 포지션 선수 대비 90분당 백분위(p.pct — 수집 때 계산)
-const PC_STATS = {
-  field: [['공격', '골', 'goals'], ['공격', '슈팅', 'shots'], ['공격', '유효 슈팅', 'shots_on'], ['공격', '드리블 성공', 'dribbles_won'], ['공격', '페널티킥 골', 'pen_scored'],
-    ['패스', '도움', 'assists'], ['패스', '키패스', 'key_passes'], ['패스', '패스', 'passes'],
-    ['수비', '태클', 'tackles'], ['수비', '가로채기', 'interceptions'], ['수비', '블록', 'blocks'], ['수비', '볼 경합 승리', 'duels_won'],
-    ['규율', '경고', 'yellow'], ['규율', '퇴장', 'red'], ['규율', '파울', 'fouls'], ['규율', '얻어낸 파울', 'fouled']],
-  gk: [['골키퍼', '실점', 'conceded'], ['골키퍼', '선방', 'saves'], ['골키퍼', '패스', 'passes'], ['규율', '경고', 'yellow'], ['규율', '퇴장', 'red']],
+// ── 대회 정보(2026-10-06): API-Football 대회 ID → 한국어 이름·아이콘 — 트로피·경력·(앞으로) 컵대회 탭 공용 ──
+// 아이콘: 5대 리그·챔스 = logos/league(심볼만), 컵대회 = logos/comp(generate_comp_logos.py), 나머지 = API-Football 로고, 월드컵·클럽 월드컵 = 금색 트로피
+const COMP_INFO = {
+  39: { ko: '프리미어리그', icon: 'logos/league/PL.png', code: 'PL' }, 140: { ko: '라리가', icon: 'logos/league/PD.png', code: 'PD' },
+  78: { ko: '분데스리가', icon: 'logos/league/BL1.png', code: 'BL1' }, 135: { ko: '세리에 A', icon: 'logos/league/SA.png', code: 'SA' },
+  61: { ko: '리그앙', icon: 'logos/league/FL1.png', code: 'FL1' }, 2: { ko: '챔피언스리그', icon: 'logos/league/CL.png', code: 'CL' },
+  45: { ko: 'FA컵', icon: 'logos/comp/45.png', cup: 'PL' }, 48: { ko: 'EFL컵', icon: 'logos/comp/48.png', cup: 'PL' }, 528: { ko: '커뮤니티 실드', icon: 'logos/comp/528.png', cup: 'PL' },
+  143: { ko: '코파 델 레이', icon: 'logos/comp/143.png', cup: 'PD' }, 556: { ko: '수페르코파 데 에스파냐', icon: 'logos/comp/556.png', cup: 'PD' },
+  81: { ko: 'DFB-포칼', icon: 'logos/comp/81.png', cup: 'BL1' }, 529: { ko: 'DFL-슈퍼컵', icon: 'logos/comp/529.png', cup: 'BL1' },
+  137: { ko: '코파 이탈리아', icon: 'logos/comp/137.png', cup: 'SA' }, 547: { ko: '수페르코파 이탈리아나', icon: 'logos/comp/547.png', cup: 'SA' },
+  66: { ko: '쿠프 드 프랑스', icon: 'logos/comp/66.png', cup: 'FL1' }, 65: { ko: '쿠프 드 라 리그', icon: 'logos/comp/65.png', cup: 'FL1' }, 526: { ko: '트로페 데 샹피옹', icon: 'logos/comp/526.png', cup: 'FL1' },
+  3: { ko: '유로파리그', icon: 'logos/comp/3.png' }, 848: { ko: '컨퍼런스리그', icon: 'logos/comp/848.png' }, 531: { ko: 'UEFA 슈퍼컵', icon: 'logos/comp/531.png' },
+  15: { ko: 'FIFA 클럽 월드컵', icon: null }, 1168: { ko: 'FIFA 인터콘티넨탈컵', icon: 'logos/comp/1168.png' },
+  1: { ko: 'FIFA 월드컵', icon: null }, 4: { ko: 'UEFA 유로', icon: 'logos/comp/4.png' }, 5: { ko: 'UEFA 네이션스리그', icon: 'logos/comp/5.png' },
+  9: { ko: '코파 아메리카', icon: 'logos/comp/9.png' }, 6: { ko: '아프리카 네이션스컵', icon: 'logos/comp/6.png' }, 7: { ko: 'AFC 아시안컵', icon: 'logos/comp/7.png' }, 480: { ko: '올림픽', icon: 'logos/comp/480.png' },
 };
-let pcCur = null;   // 지금 열린 선수 카드 {p, team, sq, mode: 'total' | 'p90'}
-function pcSetMode(m) {
-  if (!pcCur) return;
-  pcCur.mode = m;
-  document.getElementById('pc-body').innerHTML = playerCardHtml(pcCur.p, pcCur.team, pcCur.sq);
-  if (pcCur.profileHtml) document.getElementById('pc-profile').innerHTML = pcCur.profileHtml;   // 다시 그려도 경력·트로피는 유지
+const COMP_TROPHY_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>';
+function compIconHtml(id, cls = 'comp-ic') {
+  const c = COMP_INFO[id];
+  const src = c ? c.icon : (id ? `https://media.api-sports.io/football/leagues/${id}.png` : null);
+  return src ? `<span class="${cls}"><img src="${src}" alt="" loading="lazy" onerror="this.parentNode.innerHTML='${COMP_TROPHY_SVG.replace(/"/g, '&quot;')}'"></span>`
+    : `<span class="${cls} tro">${COMP_TROPHY_SVG}</span>`;
 }
-// 클럽 경력·트로피·부상 이력(서버 /player/profile/{id} — API-Football 선수별 조회, 결제 후 수집 전엔 404라 안 보임)
+const COMP_GENERIC = { 'Cup': '컵', 'Super Cup': '슈퍼컵', 'League Cup': '리그컵', 'Bundesliga': '분데스리가', 'Premier League': '프리미어리그', 'Super League': '슈퍼리그', 'Primera División': '1부 리그' };
+// 5대 리그 밖 대회는 "오스트리아 컵"처럼 나라 + 이름(API-Football 이름이 "Cup"·"Bundesliga"처럼 나라 없이 와서)
+const compName = (id, name, country) => COMP_INFO[id]?.ko || (country && !['World', 'Europe'].includes(country) && (COMP_GENERIC[name] || name.length < 14) ? `${natKo(country)} ${COMP_GENERIC[name] || name}` : name || '');
+
+// ── 세부 포지션(서버가 라인업 포메이션·칸으로 추정, 22-23 시즌부터) ──
+const DPOS_KO = { GK: '골키퍼', CB: '센터백', LB: '왼쪽 풀백', RB: '오른쪽 풀백', LWB: '왼쪽 윙백', RWB: '오른쪽 윙백', DM: '수비형 미드필더', CM: '중앙 미드필더',
+  AM: '공격형 미드필더', LM: '왼쪽 미드필더', RM: '오른쪽 미드필더', LW: '왼쪽 윙어', RW: '오른쪽 윙어', ST: '스트라이커' };
+// 가로 경기장(오른쪽으로 공격) 위 자리 — x: 자기 골문 0 → 상대 골문 100, y: 위 = 그 팀 왼쪽
+const DPOS_XY = { GK: [7, 50], CB: [23, 50], LB: [27, 15], RB: [27, 85], LWB: [42, 12], RWB: [42, 88], DM: [39, 50], CM: [53, 50], AM: [67, 50],
+  LM: [58, 14], RM: [58, 86], LW: [77, 17], RW: [77, 83], ST: [87, 50] };
+const dposTop = d => { if (!d) return null; if (typeof d === 'string') return d; const ks = Object.keys(d); return ks.length ? ks.reduce((a, b) => (d[b] > d[a] ? b : a)) : null; };
+
+// ── 베스트 11 경기장(구단·리그 베스트 11, 이번 라운드의 팀 공용) ──
+// xi = 서버 {formation, avg, lines: [[GK], [수비 왼→오], …]}. orient 'v' = 세로(아래 골키퍼), 'h' = 가로(왼쪽 골키퍼 — 넓은 칸에서 키가 너무 커지지 않게)
+const PITCH_SVG = {
+  v: '<svg class="xi-lines" viewBox="0 0 68 105" preserveAspectRatio="none" aria-hidden="true"><rect x="1" y="1" width="66" height="103" rx="2"/><path d="M1 52.5h66"/><circle cx="34" cy="52.5" r="9.15"/><path d="M13.84 1v16.5h40.32V1M24.84 1v5.5h18.32V1M13.84 104V87.5h40.32V104M24.84 104v-5.5h18.32V104"/></svg>',
+  h: '<svg class="xi-lines" viewBox="0 0 105 68" preserveAspectRatio="none" aria-hidden="true"><rect x="1" y="1" width="103" height="66" rx="2"/><path d="M52.5 1v66"/><circle cx="52.5" cy="34" r="9.15"/><path d="M1 13.84h16.5v40.32H1M1 24.84h5.5v18.32H1M104 13.84H87.5v40.32H104M104 24.84h-5.5v18.32H104"/></svg>',
+};
+function xiPitchHtml(xi, o = {}) {
+  if (!xi || !xi.lines) return '';
+  const orient = o.orient || 'v', n = xi.lines.length;
+  const BALL = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/></svg>';
+  const BOOT = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15.5V9l4-1 2.2 3.2c2.4.6 6 1.1 9.3 1.6 1.6.3 2.5 1.4 2.5 2.8V17H3z"/><path d="M3 17h18"/></svg>';
+  const dots = xi.lines.map((line, r) => line.map((p, i) => {
+    const along = n === 1 ? 50 : 8 + (r / (n - 1)) * 80, across = (i + 0.5) / line.length * 100;
+    const pos = orient === 'v' ? `left:${across}%;top:${100 - along}%` : `left:${along}%;top:${across}%`;
+    const nm = p.name || p.full_name || '';
+    const badges = (p.goals ? `<i class="g">${BALL}${p.goals > 1 ? p.goals : ''}</i>` : '') + (p.assists ? `<i class="a">${BOOT}${p.assists > 1 ? p.assists : ''}</i>` : '');
+    const team = p.team || o.team || '';
+    return `<button type="button" class="xi-p" style="${pos}" onclick="openPlayerCard('${escJs(team)}', ${p.id}, ${o.season || 'null'})" title="${(p.full_name || nm).replace(/"/g, '&quot;')} · 평점 ${p.rating != null ? p.rating.toFixed(2) : '-'}">
+      <span class="xi-ph"><img src="${p.photo || `https://media.api-sports.io/football/players/${p.id}.png`}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+        ${p.rating != null ? `<b class="xi-rt ${mdRatingClass(p.rating)}">${(o.dec2 ? p.rating.toFixed(2) : p.rating.toFixed(1))}</b>` : ''}
+        ${o.teamLogo && logos[team] ? `<img class="xi-crest" src="${logos[team]}" alt="" onerror="this.remove()">` : ''}
+        ${badges ? `<span class="xi-ga">${badges}</span>` : ''}</span>
+      <span class="xi-nm">${o.num && p.num != null ? `<i>${p.num}</i>` : ''}${mdShortName(nm)}</span></button>`;
+  }).join('')).join('');
+  return `<div class="xi-pitch ${orient}${o.compact ? ' compact' : ''}">${PITCH_SVG[orient]}${dots}</div>`;
+}
+// 가로 경기장은 400px 이상(좁으면 선수 표시를 줄인 compact) — 세로는 키가 폭의 1.5배라 넓은 칸에선 너무 길어짐
+const xiOrient = el => (el && el.clientWidth >= 400 ? 'h' : 'v');
+
+// ── 선수 기록 받기(시즌별) ──
+function fetchAfSquad(team, season) {
+  const k = `${team}@${season || 'cur'}`;
+  if (!(k in afSquadCache)) afSquadCache[k] = fetch(`${API}/team/squad/${encodeURIComponent(team)}${season && season !== LG_CUR_YEAR ? `?season=${season}` : ''}`)
+    .then(r => (r.ok && r.status !== 204 ? r.json() : null)).catch(() => { delete afSquadCache[k]; return null; });
+  return afSquadCache[k];
+}
+const playerSeasonsCache = {};
+function fetchPlayerSeasons(id) {
+  if (!(id in playerSeasonsCache)) playerSeasonsCache[id] = fetch(`${API}/player/seasons/${id}`).then(r => (r.ok ? r.json() : null)).then(d => d?.seasons || []).catch(() => { delete playerSeasonsCache[id]; return []; });
+  return playerSeasonsCache[id];
+}
 const playerProfileCache = {};
 function fetchPlayerProfile(id) {
   if (!(id in playerProfileCache)) playerProfileCache[id] = fetch(`${API}/player/profile/${id}`).then(r => (r.ok && r.status !== 204 ? r.json() : null)).catch(() => { delete playerProfileCache[id]; return null; });
   return playerProfileCache[id];
 }
-async function loadPlayerProfile(id) {
-  const d = await fetchPlayerProfile(id);
-  const el = document.getElementById('pc-profile');
-  if (!d || !el || pcCur?.p?.id !== id) return;
-  pcCur.profileHtml = playerProfileHtml(d);
-  el.innerHTML = pcCur.profileHtml;
-}
-function playerProfileHtml(d) {
-  // 경력은 날짜 없이 "뛴 시즌"만 와서 "2018/19 – 현재" 식으로. 1군 클럽 → 국가대표(연령별 포함) 순, 유스 클럽은 뺌
-  const ss = y => `${y}/${String((y + 1) % 100).padStart(2, '0')}`;
-  const row = c => `<div class="pp-row"><img src="${c.logo || logos[c.team] || ''}" alt="" onerror="this.style.visibility='hidden'"><div><b>${c.team}</b><small>${ss(c.from)}${c.to === c.from ? '' : ` – ${c.to ? ss(c.to) : '현재'}`} · ${c.seasons}시즌</small></div>${c.to ? '' : '<em class="pp-now">현재</em>'}</div>`;
-  const career = d.career || [];
-  const clubs = career.filter(c => !c.national && !c.youth), nats = career.filter(c => c.national);
-  let html = '';
-  if (clubs.length || nats.length) html += `<div class="mp-sec"><div class="mp-sec-t">경력</div>${clubs.length ? `<div class="pp-sub">클럽</div>${clubs.map(row).join('')}` : ''}${nats.length ? `<div class="pp-sub">국가대표</div>${nats.map(row).join('')}` : ''}</div>`;
-  // 트로피: 1군 공식 대회만(친선 대회는 서버에서 뺌, 유스 대회는 여기서 뺌) — 대회별 우승·준우승 횟수
-  const tro = (d.trophies || []).filter(t => !t.youth && (t.place === 'winner' || t.place === 'runner_up'));
-  if (tro.length) {
-    const g = {};
-    tro.forEach(t => { const k = `${t.league}|${t.country || ''}`; const x = g[k] = g[k] || { w: [], r: [] }; (t.place === 'winner' ? x.w : x.r).push(t.season); });
-    const list = Object.entries(g).sort((a, b) => (b[1].w.length - a[1].w.length) || (b[1].r.length - a[1].r.length));
-    const wins = tro.filter(t => t.place === 'winner').length, runs = tro.length - wins;
-    html += `<div class="mp-sec"><div class="mp-sec-t">트로피 <span class="mp-sec-n">우승 ${wins} · 준우승 ${runs} · 친선·유스 대회 제외</span></div>${list.map(([k, x]) => { const [lg, ct] = k.split('|');
-      return `<div class="pp-tr">${x.w.length ? `<span class="pp-n">${x.w.length}</span>` : `<span class="pp-n ru">${x.r.length}</span>`}<div><b>${lg}</b><small>${x.w.length ? `우승 ${x.w.join(', ')}` : ''}${x.w.length && x.r.length ? ' · ' : ''}${x.r.length ? `준우승 ${x.r.join(', ')}` : ''}</small></div></div>`; }).join('')}</div>`;
+const seasonLabel = y => `${String(y % 100).padStart(2, '0')}/${String((y + 1) % 100).padStart(2, '0')}`;
+const LG_SHORT = { PL: '프리미어리그', PD: '라리가', BL1: '분데스리가', SA: '세리에 A', FL1: '리그앙', CL: '챔피언스리그' };
+
+// ── 선수 카드(2026-10-06 개편): 머리(사진·구단·세부 포지션·국기·평점) + 탭 [개요 | 시즌 기록 | 경력 | 트로피] ──
+// 예전엔 모든 걸 한 줄로 이어 붙여 세로로 2,300px+였음 → 탭으로 나눠 한 화면에 한 가지씩
+let pcCur = null;   // {team, pid, season, tab, mode, p, sq, prof, seasons}
+let pcSeq = 0;
+const mdPlayerIndex = {};
+async function openPlayerCard(team, pid, season, keepTab) {
+  const modal = document.getElementById('pc-modal'), body = document.getElementById('pc-body');
+  if (!modal || pid == null) return;
+  const seq = ++pcSeq;
+  const tab = keepTab && pcCur?.pid === pid ? pcCur.tab : 'overview';
+  if (!keepTab) body.innerHTML = '<div class="pc2-skel"><i class="c"></i><div><i style="width:60%"></i><i style="width:40%"></i></div></div><div class="mp-skel"><i style="width:100%;height:36px"></i><i style="width:100%;height:120px"></i></div>';
+  modal.classList.add('show');
+  if (!keepTab) { track('player_card', { team: shortName(team) }); fetchTeamInfo(team).catch(() => null); }
+  const [sq, seasons] = await Promise.all([fetchAfSquad(team, season), fetchPlayerSeasons(pid)]);
+  if (seq !== pcSeq) return;
+  let p = sq?.players?.find(x => x.id === pid);
+  if (!p && mdPlayerIndex[pid]) {   // 시즌 기록이 없는 선수(상대 팀·새로 온 선수 등): 라인업에 있던 정보로
+    const f = mdPlayerIndex[pid];
+    p = { id: pid, name: f.name, full_name: f.name, photo: f.photo, number: f.number, pos: { G: 'GK', D: 'DF', M: 'MF', F: 'FW' }[f.pos] || f.pos, apps: 0, minutes: 0, goals: 0, assists: 0, rating: null };
+    team = f.team || team;
   }
-  const inj = (d.sidelined || []).slice(0, 5);
-  if (inj.length) html += `<div class="mp-sec"><div class="mp-sec-t">부상·결장 이력 <span class="mp-sec-n">최근 ${inj.length}건</span></div>${inj.map(x => {
-    const days = x.start && x.end ? Math.max(1, Math.round((new Date(x.end) - new Date(x.start)) / 86400000)) : null;
-    return `<div class="pp-inj"><span>${injReason(x.type)}</span><small>${(x.start || '').replace(/-/g, '.')} ~ ${x.end ? x.end.slice(5).replace('-', '.') : '진행 중'}${days != null ? ` · ${days}일` : ''}</small></div>`; }).join('')}</div>`;
-  return html;
+  if (!p) { body.innerHTML = '<div class="ti-empty">이 선수의 기록이 아직 없어요.</div>'; return; }
+  pcCur = { team, pid, season: sq?.season || season || LG_CUR_YEAR, tab, mode: pcCur?.pid === pid ? pcCur.mode : 'total', p, sq, seasons, prof: pcCur?.pid === pid ? pcCur.prof : null };
+  pcRender();
+  if (!pcCur.prof) fetchPlayerProfile(pid).then(d => { if (seq !== pcSeq || !pcCur || pcCur.pid !== pid) return; pcCur.prof = d || {}; pcRender(true); });
 }
+function closePlayerCard(e) { const m = document.getElementById('pc-modal'); if (!e || e.target === m) { m.classList.remove('show'); pcSeq++; } }
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.getElementById('pc-modal')?.classList.contains('show')) { e.stopImmediatePropagation(); closePlayerCard(); }
+}, true);
+function pcTab(t) { if (!pcCur) return; pcCur.tab = t; pcRender(); document.querySelector('#pc-modal .modal')?.scrollTo({ top: 0 }); }
+function pcSetMode(m) { if (!pcCur) return; pcCur.mode = m; pcRender(); }
+function pcSetSeason(v) {
+  if (!pcCur || !v) return;
+  const [yr, team] = v.split('|');
+  track('player_season', { season: yr });
+  openPlayerCard(team, pcCur.pid, +yr, true);
+}
+function pcRender(soft) {
+  const c = pcCur, body = document.getElementById('pc-body');
+  if (!c || !body) return;
+  const keepScroll = soft ? document.querySelector('#pc-modal .modal')?.scrollTop : 0;
+  const tabs = [['overview', '개요'], ['stats', '시즌 기록'], ['career', '경력'], ['trophies', '트로피']];
+  body.innerHTML = `${pcHeroHtml(c)}
+    <div class="pc2-tabs" role="tablist">${tabs.map(([k, l]) => `<button type="button" role="tab" class="${c.tab === k ? 'on' : ''}" aria-selected="${c.tab === k}" onclick="pcTab('${k}')">${l}</button>`).join('')}</div>
+    <div class="pc2-pane">${c.tab === 'overview' ? pcOverviewHtml(c) : c.tab === 'stats' ? pcStatsHtml(c) : c.tab === 'career' ? pcCareerHtml(c) : pcTrophiesHtml(c)}</div>`;
+  if (soft && keepScroll) document.querySelector('#pc-modal .modal').scrollTop = keepScroll;
+}
+function pcHeroHtml(c) {
+  const p = c.p, bio = c.prof?.bio || {}, team = c.team;
+  const pair = getClubColorPair(teamInfoCache[team]?.clubColors) || ['#58a6ff', '#58a6ff'];
+  const dp = dposTop(p.dpos);
+  const posKo = dp ? DPOS_KO[dp] : POS_KO[p.pos] || '';
+  const nat = p.nationality || bio.nationality, flag = c.prof?.bio?.flag || flagOf(nat);
+  const name = afFullName(p) || bio.name || p.name;
+  const legal = [p.firstname || bio.firstname, p.lastname || bio.lastname].filter(Boolean).join(' ');
+  return `<div class="pc2-hero" style="--c1:${pair[0]};--c2:${pair[1]}">
+    <div class="pc2-ph"><img class="pc2-photo" src="${p.photo || bio.photo || `https://media.api-sports.io/football/players/${p.id}.png`}" alt="" onerror="this.style.visibility='hidden'">
+      ${logos[team] ? `<img class="pc2-crest" src="${logos[team]}" alt="" onerror="this.remove()">` : ''}</div>
+    <div class="pc2-id">
+      <b class="pc2-name">${name}</b>
+      ${legal && legal !== name ? `<small class="pc2-legal">${legal}</small>` : ''}
+      <span class="pc2-team"><button type="button" onclick="closePlayerCard();openTeamInfo('${escJs(team)}')">${shortName(team)}</button>${p.number != null ? `<span class="pc2-num">${p.number}</span>` : ''}</span>
+      <span class="pc2-tags">${posKo ? `<em class="pc2-pos ${p.pos || ''}">${posKo}</em>` : ''}${nat ? `<em class="pc2-nat">${flag ? `<img src="${flag}" alt="">` : ''}${natKo(nat)}</em>` : ''}${p.captain ? '<em class="pc2-cap">주장</em>' : ''}${p.injured ? '<em class="pc2-inj">부상</em>' : ''}</span>
+    </div>
+    ${p.rating ? `<div class="pc2-rt ${mdRatingClass(p.rating)}"><b>${p.rating.toFixed(2)}</b><small>${seasonLabel(c.season)} 평점</small></div>` : ''}
+  </div>`;
+}
+function pcSeasonSelect(c) {
+  const list = (c.seasons || []).filter(s => s[0] !== 'CL');
+  if (list.length < 2) return `<span class="pc2-sea-one">${seasonLabel(c.season)} ${LG_SHORT[c.sq?.league] || ''}</span>`;
+  return `<select class="pc2-sea" onchange="pcSetSeason(this.value)" aria-label="시즌">${list.map(([code, yr, team]) =>
+    `<option value="${yr}|${team.replace(/"/g, '&quot;')}"${yr === c.season && team === c.team ? ' selected' : ''}>${seasonLabel(yr)} ${LG_SHORT[code] || code} · ${shortName(team)}</option>`).join('')}</select>`;
+}
+function pcOverviewHtml(c) {
+  const p = c.p, bio = c.prof?.bio || {}, gk = p.pos === 'GK';
+  const age = p.age ?? bio.age, bd = (p.birth_date || bio.birth_date || '').replace(/-/g, '.');
+  const h = p.height || (bio.height ? parseInt(bio.height) : null), w = p.weight || (bio.weight ? parseInt(bio.weight) : null);
+  const nat = p.nationality || bio.nationality, flag = bio.flag || flagOf(nat);
+  const cell = (label, v, sub) => `<div class="pc2-cell"><small>${label}</small><b>${v ?? '-'}</b>${sub ? `<span>${sub}</span>` : ''}</div>`;
+  const tile = (v, label, cls = '') => `<div class="pc2-tile ${cls}"><b>${v ?? '-'}</b><small>${label}</small></div>`;
+  const cs = p.clean_sheets;
+  const tiles = gk ? tile(p.apps, '경기') + tile(p.conceded ?? '-', '실점') + tile(cs ?? '-', '클린시트') + tile(p.saves ?? '-', '선방')
+    : tile(p.apps, '경기') + tile(p.goals, '골', 'g') + tile(p.assists, '도움', 'a') + tile(p.minutes ? Math.round(p.minutes).toLocaleString() : 0, '출전(분)');
+  // 포지션 지도: 이번 시즌 선발 자리 횟수(dpos) — 22-23 시즌 전 기록엔 없음
+  const dp = p.dpos && typeof p.dpos === 'object' ? Object.entries(p.dpos).sort((a, b) => b[1] - a[1]) : [];
+  const tot = dp.reduce((s, [, v]) => s + v, 0);
+  const posHtml = dp.length ? `<div class="pc2-sec"><div class="pc2-sec-t">포지션 <span>${seasonLabel(c.season)} 리그 선발 ${tot}경기 기준</span></div>
+    <div class="pc2-pos-row"><div class="pc2-mini">${PITCH_SVG.h}${dp.map(([k, v], i) => { const [x, y] = DPOS_XY[k] || [50, 50];
+      return `<span class="pc2-dot${i ? '' : ' main'}" style="left:${x}%;top:${y}%;opacity:${i ? Math.max(0.45, v / dp[0][1]) : 1}">${k}</span>`; }).join('')}</div>
+      <div class="pc2-pos-list">${dp.slice(0, 4).map(([k, v], i) => `<div class="${i ? '' : 'main'}"><span>${DPOS_KO[k] || k}</span><b>${Math.round(v / tot * 100)}%</b></div>`).join('')}</div></div></div>` : '';
+  return `<div class="pc2-cells">${cell('나이', age != null ? `${age}세` : null, bd)}${cell('국적', nat ? `${flag ? `<img class="pc2-flag" src="${flag}" alt="">` : ''}${natKo(nat)}` : null)}${cell('키', h ? `${h}cm` : null)}${cell('몸무게', w ? `${w}kg` : null)}</div>
+    <div class="pc2-sec"><div class="pc2-sec-t">${pcSeasonSelect(c)}<button type="button" class="pc2-link" onclick="pcTab('stats')">자세히 ›</button></div>
+      <div class="pc2-tiles">${tiles}</div></div>
+    ${posHtml}
+    ${pcMatchesHtml(p, c)}`;
+}
+// 시즌 기록 표: [묶음, 라벨, 키] — 합계/90분당 전환, 순위 막대는 같은 리그·같은 포지션 선수 대비 90분당 백분위(p.pct)
+const PC_STATS = {
+  field: [['공격', '골', 'goals'], ['공격', '슈팅', 'shots'], ['공격', '유효 슈팅', 'shots_on'], ['공격', '드리블 성공', 'dribbles_won'], ['공격', '페널티킥 골', 'pen_scored'],
+    ['패스', '도움', 'assists'], ['패스', '키패스', 'key_passes'], ['패스', '패스', 'passes'],
+    ['수비', '태클', 'tackles'], ['수비', '가로채기', 'interceptions'], ['수비', '블록', 'blocks'], ['수비', '볼 경합 승리', 'duels_won'],
+    ['규율', '경고', 'yellow'], ['규율', '퇴장', 'red'], ['규율', '파울', 'fouls'], ['규율', '얻어낸 파울', 'fouled']],
+  gk: [['골키퍼', '실점', 'conceded'], ['골키퍼', '선방', 'saves'], ['골키퍼', '클린시트', 'clean_sheets'], ['골키퍼', '패스', 'passes'], ['규율', '경고', 'yellow'], ['규율', '퇴장', 'red']],
+};
 const pcTier = v => (v >= 67 ? 'hi' : v >= 34 ? 'mid' : 'lo');
-function playerCardHtml(p, team, sq) {
-  if (!pcCur || pcCur.p !== p) pcCur = { p, team, sq, mode: 'total' };
-  const mode = p.minutes >= 90 ? pcCur.mode : 'total';
-  const legal = [p.firstname, p.lastname].filter(Boolean).join(' ');   // 공식 전체 이름(예: Bukayo Ayoyinka Temidayo Saka)
-  const bd = p.birth_date ? p.birth_date.replace(/-/g, '.') : '';
-  const cell = (label, v, sub) => `<div class="pc-cell"><small>${label}</small><b>${v ?? '-'}</b>${sub ? `<span>${sub}</span>` : ''}</div>`;
-  const tile = (label, v) => `<div class="pc-tile"><b>${v ?? '-'}</b><small>${label}</small></div>`;
-  const gk = p.pos === 'GK';
+function pcStatsHtml(c) {
+  const p = c.p, gk = p.pos === 'GK';
+  const mode = p.minutes >= 90 ? c.mode : 'total';
   const posKo = POS_KO[p.pos] || '선수';
-  const val = k => { const v = p[k]; if (v == null) return null; return mode === 'p90' ? (v / p.minutes * 90).toFixed(2) : (k === 'passes' ? v.toLocaleString() : v); };
+  const val = k => { const v = p[k]; if (v == null) return null; return mode === 'p90' && k !== 'clean_sheets' ? (v / p.minutes * 90).toFixed(2) : (k === 'passes' ? v.toLocaleString() : v); };
   const groups = {};
   (gk ? PC_STATS.gk : PC_STATS.field).forEach(([g, label, k]) => { const v = val(k); if (v != null) (groups[g] = groups[g] || []).push([label, v, p.pct?.[k]]); });
   const hasPct = Object.values(groups).some(rows => rows.some(r => r[2] != null));
-  // 순위 막대가 하나라도 있으면 모든 줄을 같은 칸 배치로(막대 없는 줄은 빈 칸) — 숫자 열이 줄마다 어긋나지 않게
-  const statHtml = Object.entries(groups).map(([g, rows]) => `<div class="pc-grp"><div class="pc-grp-t">${g}</div>${rows.map(([label, v, pc]) => `<div class="pc-kv${hasPct ? ' has-bar' : ''}"><span>${label}</span><b>${v}</b>${pc != null ? `<i class="pc-bar" title="같은 리그 ${posKo} 중 상위 ${Math.max(1, 100 - pc)}% (90분당 기준)"><u class="${pcTier(pc)}" style="width:${Math.max(3, pc)}%"></u></i>` : hasPct ? '<i></i>' : ''}</div>`).join('')}</div>`).join('');
   const ratio = (a, b) => (a != null && b ? `${Math.round(a / b * 100)}%` : null);
   const extra = gk ? [['경기당 실점', p.apps && p.conceded != null ? (p.conceded / p.apps).toFixed(2) : null]]
-    : [['90분당 골+도움', p.minutes >= 90 ? (((p.goals || 0) + (p.assists || 0)) / p.minutes * 90).toFixed(2) : null], ['드리블 성공률', ratio(p.dribbles_won, p.dribbles)], ['볼 경합 승률', ratio(p.duels_won, p.duels)]];
-  const extraHtml = extra.filter(([, v]) => v != null).map(([k, v]) => `<span class="pc-chip">${k} <b>${v}</b></span>`).join('');
-  const season = sq.season ? `${String(sq.season).slice(2)}-${String(sq.season + 1).slice(2)} 시즌` : '이번 시즌';
-  return `<div class="pc-hero"><img class="pc-photo" src="${p.photo || ''}" alt="" onerror="this.style.visibility='hidden'">
-      <div class="pc-id"><b class="pc-name">${afFullName(p)}</b>${legal && legal !== afFullName(p) ? `<small class="pc-full">${legal}</small>` : ''}
-        <span class="pc-team"><img src="${logos[team] || ''}" alt="" onerror="this.style.display='none'">${shortName(team)}${p.number ? ` · ${p.number}번` : ''}</span>
-        <span class="pc-tags"><em class="pc-pos ${p.pos || ''}">${POS_KO[p.pos] || '-'}</em>${p.captain ? '<em class="pc-cap">주장</em>' : ''}${p.injured ? '<em class="pc-inj">부상 중</em>' : ''}</span></div>
-      ${p.rating ? `<div class="pc-rt"><span class="md-rt ${mdRatingClass(p.rating)}">${p.rating.toFixed(2)}</span><small>평균 평점</small></div>` : ''}</div>
-    <div class="pc-cells">${cell('나이', p.age != null ? `${p.age}세` : null, bd)}${cell('국적', natKo(p.nationality))}${cell('키', p.height ? `${p.height}cm` : null)}${cell('몸무게', p.weight ? `${p.weight}kg` : null)}</div>
-    <div class="mp-sec"><div class="mp-sec-t"><span>${season} 리그 기록</span>${p.minutes >= 90 ? `<span class="pc-mode"><button class="${mode === 'total' ? 'on' : ''}" onclick="pcSetMode('total')">합계</button><button class="${mode === 'p90' ? 'on' : ''}" onclick="pcSetMode('p90')">90분당</button></span>` : ''}</div>
-      <div class="pc-tiles">${tile('출전', p.apps ? `${p.apps}<i>(선발 ${p.starts})</i>` : 0)}${tile('출전 시간', p.minutes ? `${p.minutes.toLocaleString()}분` : '0분')}${gk ? tile('실점', p.conceded) + tile('선방', p.saves) : tile('골', p.goals) + tile('도움', p.assists)}</div>
-      ${extraHtml ? `<div class="pc-chips">${extraHtml}</div>` : ''}
-      ${statHtml}
-      ${hasPct ? `<div class="pc-legend"><span><i class="hi"></i>상위 1/3</span><span><i class="mid"></i>중간</span><span><i class="lo"></i>하위 1/3</span><em>같은 리그 ${posKo} 중 꾸준히 뛴 선수(450분 이상, 시즌 초엔 팀 최다 출전의 절반 이상) 대비 · 90분당 기준</em></div>` : ''}
-    </div>
-    ${pcMatchesHtml(p)}
-    <div id="pc-profile"></div>`;
+    : [['90분당 골+도움', p.minutes >= 90 ? (((p.goals || 0) + (p.assists || 0)) / p.minutes * 90).toFixed(2) : null], ['드리블 성공률', ratio(p.dribbles_won, p.dribbles)], ['볼 경합 승률', ratio(p.duels_won, p.duels)], ['패스 성공률', p.pass_acc != null ? `${p.pass_acc}%` : null]];
+  const chips = extra.filter(([, v]) => v != null).map(([k, v]) => `<div class="pc2-chip"><small>${k}</small><b>${v}</b></div>`).join('');
+  const grp = Object.entries(groups).map(([g, rows]) => `<div class="pc2-grp"><div class="pc2-grp-t">${g}</div>${rows.map(([label, v, pc]) =>
+    `<div class="pc2-kv"><span>${label}</span><b>${v}</b>${hasPct ? (pc != null ? `<i class="pc-bar" title="같은 리그 ${posKo} 중 상위 ${Math.max(1, 100 - pc)}% (90분당 기준)"><u class="${pcTier(pc)}" style="width:${Math.max(3, pc)}%"></u></i>` : '<i></i>') : ''}</div>`).join('')}</div>`).join('');
+  if (!p.minutes) return `<div class="pc2-sec"><div class="pc2-sec-t">${pcSeasonSelect(c)}</div><div class="ti-empty">이 시즌 리그 출전 기록이 없어요.</div></div>`;
+  return `<div class="pc2-sec"><div class="pc2-sec-t">${pcSeasonSelect(c)}${p.minutes >= 90 ? `<span class="pc-mode"><button class="${mode === 'total' ? 'on' : ''}" onclick="pcSetMode('total')">합계</button><button class="${mode === 'p90' ? 'on' : ''}" onclick="pcSetMode('p90')">90분당</button></span>` : ''}</div>
+      <div class="pc2-sum">${p.apps}경기 · 선발 ${p.starts ?? '-'} · ${Math.round(p.minutes).toLocaleString()}분${p.rating ? ` · 평점 ${p.rating.toFixed(2)}` : ''}</div>
+      ${chips ? `<div class="pc2-chips">${chips}</div>` : ''}
+      <div class="pc2-grps${hasPct ? ' bars' : ''}">${grp}</div>
+      ${hasPct ? `<div class="pc-legend"><span><i class="hi"></i>상위 1/3</span><span><i class="mid"></i>중간</span><span><i class="lo"></i>하위 1/3</span><em>막대 = 같은 리그 ${posKo} 중 꾸준히 뛴 선수 대비 90분당 순위</em></div>` : ''}
+    </div>`;
 }
-// 최근 경기(p.matches — 수집 때 경기 상세의 선수별 기록으로 만듦): 날짜·상대·결과·출전 시간·골·도움·카드·평점
-function pcMatchesHtml(p) {
-  const ms = (p.matches || []).slice(0, 10);
+// 최근 경기(이번 시즌만 — 지난 시즌은 경기별 기록을 저장하지 않음)
+function pcMatchesHtml(p, c) {
+  const ms = (p.matches || []).slice(0, 6);
   if (!ms.length) return '';
-  return `<div class="mp-sec"><div class="mp-sec-t">최근 경기 <span class="mp-sec-n">리그 · 최근 ${ms.length}경기</span></div>
-    <div class="pcm-head"><span>날짜</span><span>상대</span><span>결과</span><span>출전</span><span>골</span><span>도움</span><span>평점</span></div>
+  return `<div class="pc2-sec"><div class="pc2-sec-t">최근 경기 <span>리그</span></div>
     ${ms.map(m => { const res = m.gf > m.ga ? 'w' : m.gf < m.ga ? 'l' : 'd';
-      return `<div class="pcm-row"><span class="dt">${m.date.slice(5).replace('-', '.')}</span>
-        <span class="opp"><img src="${logos[m.opp] || m.opp_logo || ''}" alt="" onerror="this.style.visibility='hidden'"><em>${m.home ? '' : '@'}${shortName(m.opp)}</em></span>
-        <span class="res ${res}"><b>${{ w: '승', d: '무', l: '패' }[res]}</b>${m.gf}-${m.ga}</span><span>${m.minutes ?? 0}'</span>
-        <span>${m.goals || '-'}</span><span>${m.assists || '-'}${m.red ? '<i class="md-card r"></i>' : m.yellow ? '<i class="md-card y"></i>' : ''}</span>${mdRating(m.rating) || '<span class="md-rt">-</span>'}</div>`; }).join('')}</div>`;
+      return `<div class="pc2-m"><span class="dt">${m.date.slice(5).replace('-', '.')}</span>
+        <span class="opp"><img src="${logos[m.opp] || ''}" alt="" onerror="this.style.visibility='hidden'"><em>${m.home ? '' : '@ '}${shortName(m.opp)}</em></span>
+        <span class="res ${res}">${m.gf}-${m.ga}</span>
+        <span class="st">${m.goals ? `<i class="g">${m.goals}골</i>` : ''}${m.assists ? `<i class="a">${m.assists}도움</i>` : ''}${m.red ? '<i class="md-card r"></i>' : m.yellow ? '<i class="md-card y"></i>' : ''}<small>${m.minutes ?? 0}'</small></span>
+        ${mdRating(m.rating) || '<span class="md-rt">-</span>'}</div>`; }).join('')}</div>`;
+}
+const pcMonth = s => { const [y, m] = s.split('-'); return `${y}년 ${+m}월`; };
+function pcCareerHtml(c) {
+  const d = c.prof;
+  if (!d) return '<div class="mp-skel"><i style="width:100%;height:48px"></i><i style="width:100%;height:48px"></i><i style="width:100%;height:48px"></i></div>';
+  const career = d.career || [];
+  if (!career.length) return '<div class="ti-empty">경력 정보가 없어요.</div>';
+  const span = x => {
+    const from = x.from_date ? pcMonth(x.from_date) : `${x.from}/${String((x.from + 1) % 100).padStart(2, '0')}`;
+    const to = !x.to ? '현재' : x.to_date ? pcMonth(x.to_date) : `${x.to}/${String((x.to + 1) % 100).padStart(2, '0')}`;
+    return from === to ? from : `${from} – ${to}`;
+  };
+  const row = x => `<div class="pc2-car${x.to ? '' : ' now'}">${x.flag ? `<img class="flag" src="${x.flag}" alt="">` : `<img src="${logos[x.team] || x.logo || ''}" alt="" onerror="this.style.visibility='hidden'">`}
+    <div><b>${x.national && x.team === (d.bio?.nationality) ? natKo(x.team) : x.team}</b><small>${span(x)}</small></div>
+    <span class="n">${x.apps ?? '-'}</span><span class="n g">${x.goals ?? '-'}</span></div>`;
+  const sec = (title, list) => list.length ? `<div class="pc2-sec"><div class="pc2-car-h"><span>${title}</span><span class="n">경기</span><span class="n">골</span></div>${list.map(row).join('')}</div>` : '';
+  const clubs = career.filter(x => !x.national && !x.youth), youth = career.filter(x => !x.national && x.youth), nats = career.filter(x => x.national);
+  const inj = (d.sidelined || []).slice(0, 6);
+  return sec('1군 경력', clubs) + sec('국가대표', nats) + sec('유소년 경력', youth) +
+    (inj.length ? `<div class="pc2-sec"><div class="pc2-sec-t">부상·결장 이력 <span>최근 ${inj.length}건</span></div>${inj.map(x => {
+      const days = x.start && x.end ? Math.max(1, Math.round((new Date(x.end) - new Date(x.start)) / 86400000)) : null;
+      return `<div class="pc2-inj"><span>${injReason(x.type)}</span><small>${(x.start || '').replace(/-/g, '.')} ~ ${x.end ? x.end.slice(5).replace('-', '.') : '진행 중'}${days != null ? ` · ${days}일` : ''}</small></div>`; }).join('')}</div>` : '') +
+    '<div class="pc2-note">경기 수·골은 모든 대회 합산(2010-11 시즌부터) · API-Football</div>';
+}
+function pcTrophiesHtml(c) {
+  const d = c.prof;
+  if (!d) return '<div class="mp-skel"><i style="width:100%;height:48px"></i><i style="width:100%;height:120px"></i></div>';
+  const gs = d.trophy_groups || [];
+  if (!gs.length) return '<div class="ti-empty">우승 기록이 없어요.</div>';
+  const total = gs.reduce((s, g) => s + g.wins, 0);
+  const ss = s => String(s || '').replace(/^(\d{4})\/(\d{4})$/, (_, a, b) => `${a.slice(2)}/${b.slice(2)}`);
+  return `<div class="pc2-tro-sum"><b>${total}</b><span>우승 · 친선·유스 대회 제외</span></div>` + gs.map(g => `<div class="pc2-tro">
+    <div class="pc2-tro-h">${g.national ? (g.logo ? `<img class="flag" src="${g.logo}" alt="">` : '') : `<img src="${logos[g.team] || g.logo || ''}" alt="" onerror="this.style.visibility='hidden'">`}
+      <div><b>${g.national ? natKo(g.team) : g.team}</b><small>${g.national ? '국가대표' : natKo(g.country) || ''}</small></div>${g.wins ? `<span class="pc2-tro-n">${g.wins}</span>` : ''}</div>
+    ${g.items.map(it => `<div class="pc2-tro-i${it.wins.length ? '' : ' ru'}">
+      <span class="cnt">${it.wins.length || it.runner.length}</span>${compIconHtml(it.comp_id)}
+      <div><b>${compName(it.comp_id, it.name, it.country)}</b><small>${it.wins.length ? it.wins.map(ss).join(' · ') : ''}${it.wins.length && it.runner.length ? '  ' : ''}${it.runner.length ? `<em>준우승 ${it.runner.map(ss).join(' · ')}</em>` : ''}</small></div></div>`).join('')}
+  </div>`).join('');
 }
 
-// ── 구단 베스트 11(2026-09-30): 시즌 평균 평점으로 포메이션 채우기(출전 시간이 팀 최다의 25% 이상인 선수만) ──
-const BX_FORMS = [[4, 3, 3], [4, 4, 2], [3, 5, 2], [3, 4, 3], [4, 5, 1], [5, 3, 2]];
-function bestEleven(sq) {
-  const ps = (sq?.players || []).filter(p => p.rating && p.minutes > 0);
-  const maxMin = Math.max(0, ...ps.map(p => p.minutes));
-  const pool = { GK: [], DF: [], MF: [], FW: [] };
-  ps.filter(p => p.minutes >= maxMin * 0.25).forEach(p => pool[p.pos] && pool[p.pos].push(p));
-  Object.values(pool).forEach(l => l.sort((a, b) => b.rating - a.rating));
-  if (!pool.GK.length) return null;
-  let best = null;
-  BX_FORMS.forEach(([d, m, f]) => {
-    if (pool.DF.length < d || pool.MF.length < m || pool.FW.length < f) return;
-    const pick = [pool.DF.slice(0, d), pool.MF.slice(0, m), pool.FW.slice(0, f)];
-    const avg = (pool.GK[0].rating + pick.flat().reduce((s, p) => s + p.rating, 0)) / 11;
-    if (!best || avg > best.avg + 0.005) best = { form: `${d}-${m}-${f}`, gk: pool.GK[0], lines: pick, avg };
-  });
-  return best;
-}
-function bestElevenHtml(sq, team) {
-  const bx = bestEleven(sq);
+// ── 구단 베스트 11: 서버가 시즌 평균 평점으로 고른 11명(출전 시간이 팀 최다의 25% 이상, 자리에 맞는 선수) ──
+function bestElevenHtml(sq, team, o = {}) {
+  const bx = sq?.best11;
   if (!bx) return '';
-  const pair = getClubColorPair(teamInfoCache[team]?.clubColors) || ['#1f6feb', '#ffffff'];
-  const kb = pair[0], kn = pair[0].toLowerCase() === pair[1].toLowerCase() ? '#fff' : pair[1];
-  const rows = [[bx.gk], ...bx.lines];   // 아래(골키퍼) → 위(공격수)
-  // 등번호: 시즌 기록에 없으면(지난 시즌 조회 등) 팀 정보 스쿼드의 현재 등번호 — 스쿼드 사진 주소에 선수 ID가 들어 있어서 ID로 맞춤
-  const numById = {};
-  (teamInfoCache[team]?.squad || []).forEach(s => { const m = /players\/(\d+)\.png/.exec(s.photo || ''); if (m && s.shirtNumber != null) numById[m[1]] = s.shirtNumber; });
-  const num = p => p.number ?? numById[p.id];
-  const ys = [88, 66, 42, 18];
-  const dots = rows.map((line, r) => line.map((p, i) => `<div class="md-pl" style="left:${(i + 0.5) / line.length * 100}%;top:${ys[r]}%;--kb:${r ? kb : '#2f3740'};--kn:${r ? kn : '#ecf1fa'}" onclick="openPlayerCard('${escJs(team)}', ${p.id})" title="${p.name} · 평점 ${p.rating.toFixed(2)}">
-      <span class="md-shirt${p.photo ? ' ph' : ''}">${p.photo ? `<img src="${p.photo}" alt="" onerror="this.remove()">` : num(p) ?? ''}${mdRating(p.rating)}</span>${mdNameHtml(p.name, p.photo ? num(p) : null)}</div>`).join('')).join('');
-  const season = sq.season ? `${String(sq.season).slice(2)}-${String(sq.season + 1).slice(2)}` : '';
-  return `<div class="tp-sec"><div class="tp-t">시즌 베스트 11 <span>${season} 평균 평점 기준 · ${bx.form} · 평균 ${bx.avg.toFixed(2)}</span></div>
-    <div class="md-pitch bx-pitch"><div class="md-lines"><i class="box b"></i><i class="six b"></i><i class="circle top"></i></div>${dots}</div>
-    <div class="bx-note">출전 시간이 팀 최다의 25% 이상인 선수 중 포지션별 평점 상위 · 선수를 누르면 선수 카드</div></div>`;
+  const seasons = (sq.seasons || []).length > 1 && !o.noSeason ? `<select class="bx-sea" onchange="${o.onSeason || 'tiBestSeason'}(this.value)" aria-label="시즌">${sq.seasons.map(y => `<option value="${y}"${y === sq.season ? ' selected' : ''}>${seasonLabel(y)}</option>`).join('')}</select>` : `<span class="bx-sea-one">${seasonLabel(sq.season)}</span>`;
+  return `<div class="bx-card"><div class="bx-head"><b>시즌 베스트 11</b>${seasons}<span class="bx-meta">${bx.formation} · 평균 ${bx.avg.toFixed(2)}</span></div>
+    ${xiPitchHtml(bx, { orient: o.orient || 'v', team, season: sq.season, dec2: true, num: true })}
+    <div class="bx-note">출전 시간이 팀 최다의 25% 이상인 선수 중 자리별 평균 평점 순${sq.season < 2022 ? ' · 21-22 시즌까지는 세부 포지션 없이 수비·미드·공격만 구분' : ''}</div></div>`;
 }
+
 function squadListHtml(sq, team) {
   const ps = (sq?.players || []).filter(p => p.minutes >= 90).sort((a, b) => (b.rating || 0) - (a.rating || 0) || b.minutes - a.minutes);
   if (!ps.length) return '';
-  const row = p => `<div class="sq-row" onclick="openPlayerCard('${escJs(team)}', ${p.id})"><img src="${p.photo || ''}" alt="" onerror="this.style.visibility='hidden'">
+  const row = p => `<div class="sq-row" onclick="openPlayerCard('${escJs(team)}', ${p.id}, ${sq.season || 'null'})"><img src="${p.photo || ''}" alt="" onerror="this.style.visibility='hidden'">
       <div class="sq-info"><b>${afFullName(p)}</b><small>${POS_KO[p.pos] || ''}${p.age ? ` · ${p.age}세` : ''}</small></div>
       <span class="sq-n">${p.apps}</span><span class="sq-n">${p.pos === 'GK' ? '-' : p.goals}</span><span class="sq-n">${p.pos === 'GK' ? '-' : p.assists}</span>${mdRating(p.rating) || '<span class="md-rt">-</span>'}</div>`;
   return `<div class="tp-sec"><div class="tp-t">선수별 시즌 기록 <span>평균 평점 순 · 90분 이상 출전</span></div>
@@ -5094,9 +5457,12 @@ async function switchTiTab(tab) {
       if (tiState.team !== team || tiState.tab !== 'overview') return;
       renderTiOverview(team, code, info);
     } else if (tab === 'squad') {
-      const info = await fetchTeamInfo(team);
+      const [info, afSq] = await Promise.all([fetchTeamInfo(team), fetchAfSquad(team), flagsReady]);
       const squad = info.squad || [];
       if (!squad.length) { panel.innerHTML = '<div class="ti-empty">스쿼드 정보가 없어요.</div>'; return; }
+      // 선수 사진 주소 속 API-Football 선수 ID로 이번 시즌 기록(세부 포지션)과 선수 카드를 연결
+      const afById = Object.fromEntries((afSq?.players || []).map(p => [p.id, p]));
+      const pidOf = p => { const m = /players\/(\d+)\.png/.exec(p.photo || ''); return m ? +m[1] : null; };
       const groups = {};
       squad.forEach(p => { (groups[p.position] = groups[p.position] || []).push(p); });
       const hasNum = squad.some(p => p.shirtNumber);   // 번호가 있는 팀이면 번호 없는 선수도 빈 칸을 둬서 이름 줄을 맞춤
@@ -5105,13 +5471,14 @@ async function switchTiTab(tab) {
         const players = groups[pos];
         if (!players || !players.length) return;
         html += `<div class="ti-section-title">${POSITION_LABEL[pos]} (${players.length})</div>`;
-        html += players.map(p => `<div class="ti-player-row">
+        html += players.map(p => { const pid = pidOf(p), ap = pid && afById[pid], dp = ap && dposTop(ap.dpos), nat = p.nationality || ap?.nationality, fl = flagOf(nat);
+          return `<div class="ti-player-row${pid ? ' link' : ''}"${pid ? ` onclick="openPlayerCard('${escJs(team)}', ${pid})"` : ''}>
           <div style="display:flex;align-items:center;gap:8px;min-width:0">
             ${p.photo ? `<img alt="" src="${p.photo}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;background:#18233a" onerror="this.style.display='none'">` : ''}
             <span class="ti-player-name" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${hasNum ? `<i class="pl-num">${p.shirtNumber || ''}</i>` : ''}${p.name}</span>
           </div>
-          <span class="ti-player-nation">${p.nationality || ''}</span>
-        </div>`).join('');
+          <span class="ti-player-nation">${dp ? `<em class="ti-dpos">${DPOS_KO[dp]}</em>` : ''}${fl ? `<img src="${fl}" alt="">` : ''}${natKo(nat) || ''}</span>
+        </div>`; }).join('');
       });
       panel.innerHTML = html || '<div class="ti-empty">스쿼드 정보가 없어요.</div>';
     } else if (tab === 'standings') {
@@ -5193,9 +5560,11 @@ async function switchTiTab(tab) {
               <div class="tp-num"><b>${p.goals}</b><small>골</small></div><div class="tp-num a"><b>${p.assists}</b><small>도움</small></div>
             </div>`; }).join('')}</div>`;
       };
-      let html = afSq ? bestElevenHtml(afSq, team) + squadListHtml(afSq, team) : '';
+      let html = afSq ? `<div id="tp-af">${bestElevenHtml(afSq, team, { onSeason: 'tpBestSeason', orient: window.innerWidth > 700 ? 'h' : 'v' }) + squadListHtml(afSq, team)}</div>` : '';
       const codes = Object.keys(d.comps);
-      if (codes.length) codes.forEach(c => { html += compHtml(c, d.comps[c], c !== 'CL'); });
+      // API-Football 기록(베스트 11·선수별 시즌 기록)이 있으면 football-data 득점 순위 칸은 겹쳐서 뺌
+      if (afSq) {}
+      else if (codes.length) codes.forEach(c => { html += compHtml(c, d.comps[c], c !== 'CL'); });
       else html += `<div class="tp-sec"><div class="tp-t">이번 시즌 공격 포인트</div><div class="ti-empty" style="padding:14px 0">이번 시즌 선수별 골·도움은 매일 새벽 자동 업데이트 때 받아와요.<br>곧 여기에 표시돼요.</div></div>`;
       const sq = d.squad || {};
       if (sq.size) {
@@ -5263,6 +5632,7 @@ function renderTiOverview(team, code, info) {
   panel.innerHTML = `
     ${about}
     <div class="ti-season" id="ti-season"></div>
+    <div class="ti-bx" id="ti-bx"></div>
     ${(w.honours || w.records) ? `<div class="tr-wrap">${tiTrophiesHtml(w, code)}${tiRecordsHtml(w)}</div>` : ''}
     ${tiRivalsHtml(info.rivals)}
     <div class="ti-facts2">${facts.map(f => `<div class="ti-fact2">
@@ -5319,18 +5689,47 @@ async function fillTiSeason(team, code) {
     </div>`;
   });
 
-  // 최근 시즌 최종 순위 한 줄(팀 통계 탭과 같은 데이터·캐시) — 위키 소개가 짧은 팀도 구단 흐름이 보이게
+  // 시즌별 리그 순위 막대(팀 통계 탭과 같은 데이터·캐시) — 오래된 시즌 → 이번 시즌, 우리 데이터에 없는 시즌(2부 등)은 빈 칸
   safe('history', async () => {
     let stats = teamStatsCache[team];
     if (!stats) { const r = await fetch(`${API}/team/stats/${encodeURIComponent(team)}`); if (r.ok) stats = teamStatsCache[team] = await r.json(); }
-    const past = (stats?.seasons || []).filter(x => x.stats.played >= 30);
-    if (!past.length) return '';
+    const all = stats?.seasons || [];
+    if (all.length < 2) return '';
+    const yOf = x => 2000 + parseInt(String(x.season).slice(0, 2), 10);
+    const by = Object.fromEntries(all.map(x => [yOf(x), x]));
+    const ys = Object.keys(by).map(Number), y0 = Math.min(...ys), y1 = Math.max(...ys);
+    const cols = [];
+    for (let y = y0; y <= y1; y++) {
+      const x = by[y];
+      if (!x) { cols.push(`<div class="rh-col none" title="${seasonLabel(y)} · 5대 리그 밖"><b>–</b><i></i><small>${String(y % 100).padStart(2, '0')}</small></div>`); continue; }
+      const n = x.teams || 20, r = x.stats.rank, done = x.stats.played >= (n - 1) * 2 - 1;
+      const z = getZoneClass(x.league, r - 1, n), col = LO_ZONE_C[z] || 'rgba(142,154,179,0.4)';
+      const champ = r === 1 && done;
+      cols.push(`<div class="rh-col${champ ? ' champ' : ''}" title="${seasonLabel(y)} ${(TODAY_LEAGUE_INFO[x.league] || {}).name || ''} ${r}위${done ? '' : ' (진행 중)'}"><b>${r}</b><i style="height:${Math.max(8, (n - r + 1) / n * 58)}px;${champ ? '' : `background:${col}`};${done ? '' : 'opacity:.55'}"></i><small>${String(y % 100).padStart(2, '0')}</small></div>`);
+    }
+    const titles = all.filter(x => x.stats.rank === 1 && x.stats.played >= (x.teams - 1) * 2 - 1).length;
     return `<div class="ti-history" onclick="switchTiTab('teamstats')">
-      <span class="ti-fact-label">최근 시즌 최종 순위</span>
-      ${past.map(x => `<span class="ti-history-item"><small>${x.season}</small><b class="${tsZone(getZoneClass(x.league, x.stats.rank - 1, x.teams))}">${x.stats.rank}위</b><small>${(TODAY_LEAGUE_INFO[x.league] || {}).name || ''}</small></span>`).join('')}
+      <div class="rh-head"><span class="ti-fact-label">시즌별 리그 순위</span><small>${seasonLabel(y0)} – ${seasonLabel(y1)}${titles ? ` · 우승 ${titles}회` : ''} · 누르면 팀 통계</small></div>
+      <div class="rh-scroll"><div class="rh-cols">${cols.join('')}</div></div>
     </div>`;
-  });
+  }).then(() => { const sc = box.querySelector('.rh-scroll'); if (sc) sc.scrollLeft = sc.scrollWidth; });
+  fillTiBestXI(team);
 }
+// 개요: 시즌 베스트 11(API-Football 경기별 평점 — 15-16 시즌부터, 서버가 자리별로 골라 줌)
+async function fillTiBestXI(team, season) {
+  const box = document.getElementById('ti-bx');
+  if (!box) return;
+  const sq = await fetchAfSquad(team, season);
+  if (tiState.team !== team || document.getElementById('ti-bx') !== box) return;
+  box.innerHTML = sq?.best11 ? bestElevenHtml(sq, team, { orient: xiOrient(box.parentNode), onSeason: 'tiBestSeason' }) : '';
+}
+// 플레이어 통계 탭: 시즌을 바꾸면 베스트 11·선수별 기록을 그 시즌으로
+async function tpBestSeason(y) {
+  const team = tiState.team, sq = await fetchAfSquad(team, +y), el = document.getElementById('tp-af');
+  if (!el || tiState.team !== team || !sq) return;
+  el.innerHTML = bestElevenHtml(sq, team, { onSeason: 'tpBestSeason', orient: window.innerWidth > 700 ? 'h' : 'v' }) + squadListHtml(sq, team);
+}
+function tiBestSeason(y) { track('team_bestxi_season', { season: y }); fillTiBestXI(tiState.team, +y); }
 
 // ── 팀 정보 · 팀 통계 탭 (2026-09-29 개편) ──
 // 실제 리그 경기 기록으로 시즌별 지표 + 같은 리그 안 순위(“리그 N위”)·리그 평균 표시(서버 /team/stats).
@@ -5457,6 +5856,9 @@ const TROPHY_NAME = {
   usc: { _: 'UEFA 슈퍼컵' }, world: { _: '클럽 월드컵' },
 };
 const TROPHY_NOTE = { ucl: '유러피언컵 포함', uel: 'UEFA컵 포함', world: '인터컨티넨털컵 포함' };
+// 우승 기록 칸 아이콘 = 대회 로고(COMP_INFO의 API-Football 대회 ID)
+const TROPHY_COMP = { league: { PL: 39, PD: 140, BL1: 78, SA: 135, FL1: 61 }, cup: { PL: 45, PD: 143, BL1: 81, SA: 137, FL1: 66 }, lcup: { PL: 48, FL1: 65 },
+  super: { PL: 528, PD: 556, BL1: 529, SA: 547, FL1: 526 }, ucl: { _: 2 }, uel: { _: 3 }, uecl: { _: 848 }, usc: { _: 531 }, world: { _: 15 }, cwc: {} };
 const TROPHY_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>';
 function feeKo(fee) {
   if (!fee) return '이적료 비공개';
@@ -5473,7 +5875,8 @@ function tiTrophiesHtml(w, code) {
   const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const tiles = TROPHY_ORDER.filter(k => h[k]).map(k => {
     const nm = TROPHY_NAME[k][code] || TROPHY_NAME[k]._;
-    return `<div class="tr-tile ${k === 'league' || k === 'ucl' ? 'gold' : ''}"><b>${h[k]}</b><span>${nm}</span>${TROPHY_NOTE[k] ? `<small>${TROPHY_NOTE[k]}</small>` : ''}</div>`;
+    const cid = TROPHY_COMP[k]?.[code] ?? TROPHY_COMP[k]?._;
+    return `<div class="tr-tile ${k === 'league' || k === 'ucl' ? 'gold' : ''}">${compIconHtml(cid)}<b>${h[k]}</b><span>${nm}</span>${TROPHY_NOTE[k] ? `<small>${TROPHY_NOTE[k]}</small>` : ''}</div>`;
   });
   const major = TROPHY_ORDER.reduce((a, k) => a + (h[k] || 0), 0);
   const body = tiles.length
@@ -6050,7 +6453,7 @@ function renderChampionResults(data) {
 // 아직 그 리그의 이번 시즌 데이터가 없으면(첫 수집 전) EPL은 예전 API-Football 24-25 기록으로 대체, 다른 리그는 안내
 let currentPlayersLeague = 'PL', playersSeq = 0;
 const PL_LEAGUE_NAME = { PL: 'EPL', PD: '라리가', BL1: '분데스리가', SA: '세리에A', FL1: '리그앙', CL: '챔피언스리그' };
-async function loadPlayers(league, btn) {
+async function loadPlayersLegacy(league, btn) {
   league = league || currentPlayersLeague;
   currentPlayersLeague = league;
   const seq = ++playersSeq;
@@ -6096,6 +6499,125 @@ async function loadPlayers(league, btn) {
     if (seq !== playersSeq) return;
     gl.innerHTML = '<div class="ti-empty">불러오지 못했어요. 잠시 후 다시 시도해주세요.</div>'; al.innerHTML = '';
   }
+}
+
+// ── 선수 탭(2026-10-06 개편): 분야별 TOP 3 카드(득점·도움·공격 포인트·평점·출전 시간 …) → 카드를 누르면 전체 순위 ──
+// 데이터 = /league/players(API-Football 경기별 기록 합산 — 이번 시즌은 매일 새벽, 지난 시즌 15-16~). 없으면 예전 화면(football-data 득점·도움)
+const leaguePlayersCache = {};
+function fetchLeaguePlayers(code, season) {
+  const k = `${code}@${season}`;
+  if (!(k in leaguePlayersCache)) leaguePlayersCache[k] = fetch(`${API}/league/players/${code}${season === 'current' ? '' : `?season=${season}`}`)
+    .then(r => (r.ok && r.status !== 204 ? r.json() : null)).catch(() => { delete leaguePlayersCache[k]; return null; });
+  return leaguePlayersCache[k];
+}
+// q: 'reg' = 평점처럼 꾸준히 뛴 선수만(출전 시간이 리그 최다의 40% 이상), gk = 골키퍼만
+const PLS_STATS = [   // card: false = 카드엔 안 나오고 전체 순위의 기록 고르기에만
+  { k: 'goals', t: '득점', g: '주요 통계' }, { k: 'assists', t: '도움', g: '주요 통계' },
+  { k: 'ga', t: '공격 포인트', sub: '득점 + 도움', g: '주요 통계', f: p => (p.goals || 0) + (p.assists || 0) },
+  { k: 'rating', t: '평점', g: '주요 통계', q: 'reg', dec: 2 }, { k: 'minutes', t: '출전 시간', g: '주요 통계', unit: '분' },
+  { k: 'pen_scored', t: '페널티킥 골', g: '주요 통계' },
+  { k: 'shots_on', t: '유효 슈팅', g: '공격' }, { k: 'key_passes', t: '키패스', g: '공격' }, { k: 'dribbles_won', t: '드리블 성공', g: '공격' },
+  { k: 'tackles', t: '태클', g: '수비' }, { k: 'interceptions', t: '가로채기', g: '수비' }, { k: 'duels_won', t: '볼 경합 승리', g: '수비' },
+  { k: 'blocks', t: '블록', g: '수비', card: false },
+  { k: 'clean_sheets', t: '클린시트', g: '골키퍼 · 규율', gk: true }, { k: 'saves', t: '선방', g: '골키퍼 · 규율', gk: true },
+  { k: 'yellow', t: '경고', g: '골키퍼 · 규율' }, { k: 'red', t: '퇴장', g: '골키퍼 · 규율', card: false },
+];
+const PLS_BY = Object.fromEntries(PLS_STATS.map(s => [s.k, s]));
+let plsState = { code: null, season: null, data: null, stat: null, shown: 50, seq: 0 };
+function plsRanked(d, st) {
+  const val = p => (st.f ? st.f(p) : p[st.k]);
+  const minMin = st.q === 'reg' ? Math.round((d.max_minutes || 0) * 0.4) : 0;
+  const list = d.players.filter(p => (val(p) || 0) > 0 && (!st.gk || p.pos === 'GK') && (p.minutes || 0) >= minMin)
+    .map(p => ({ p, v: val(p) })).sort((a, b) => (b.v - a.v) || ((a.p.minutes || 0) - (b.p.minutes || 0)));
+  let rank = 0, prev = null;
+  list.forEach((x, i) => { if (x.v !== prev) { rank = i + 1; prev = x.v; } x.rank = rank; });
+  return { list, minMin };
+}
+const plsVal = (st, v) => (st.dec ? v.toFixed(st.dec) : v.toLocaleString());
+const plsPhoto = p => p.photo || `https://media.api-sports.io/football/players/${p.id}.png`;
+async function loadPlayers(code) {
+  code = code || lgState.code;
+  const season = lgState.season, seq = ++plsState.seq;
+  const root = document.getElementById('pls-root'), legacy = document.getElementById('pls-legacy');
+  const title = document.getElementById('players-title'), sub = document.getElementById('players-sub');
+  root.hidden = false; legacy.style.display = 'none';
+  title.textContent = '선수 통계'; sub.textContent = '';
+  root.innerHTML = `<div class="pls-grid">${Array(6).fill(`<div class="pls-card">${skeletonRows(3)}</div>`).join('')}</div>`;
+  const d = await fetchLeaguePlayers(code, season);
+  if (seq !== plsState.seq) return;
+  if (!d) { root.hidden = true; legacy.style.display = 'flex'; return loadPlayersLegacy(code); }
+  await logosReady;
+  plsState = { ...plsState, code, season, data: d, stat: plsState.code === code && plsState.season === season ? plsState.stat : null, shown: 50 };
+  const yr = d.season;
+  title.textContent = `${LG_SHORT[code]} ${seasonLabel(yr)} 선수 통계`;
+  sub.textContent = `${d.matches ? `${d.matches}경기 기준 · ` : ''}${code === 'CL' ? '본선 경기만(예선 제외)' : '리그 경기만'} · API-Football 경기별 기록 합산${season === 'current' ? ' · 매일 새벽 갱신' : ''}`;
+  plsState.stat ? plsRenderList() : plsRenderCards();
+}
+function plsRenderCards() {
+  const { data: d } = plsState, root = document.getElementById('pls-root');
+  const groups = [...new Set(PLS_STATS.map(s => s.g))];
+  root.innerHTML = groups.map(g => {
+    const cards = PLS_STATS.filter(s => s.g === g && s.card !== false).map(st => {
+      const { list } = plsRanked(d, st);
+      if (!list.length) return '';
+      return `<div class="pls-card"><button type="button" class="pls-card-h" onclick="plsOpen('${st.k}')"><b>${st.t}</b>${st.sub ? `<small>${st.sub}</small>` : ''}<span aria-hidden="true">›</span></button>
+        ${list.slice(0, 3).map((x, i) => `<div class="pls-row" onclick="openPlayerCard('${escJs(x.p.team)}', ${x.p.id}, ${d.season})">
+          <img class="pls-ph" src="${plsPhoto(x.p)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+          <span class="pls-nm"><b>${x.p.full_name || x.p.name}</b><small><img src="${logos[x.p.team] || ''}" alt="" onerror="this.style.display='none'">${shortName(x.p.team)}</small></span>
+          <span class="pls-v${i === 0 ? ' top' : ''}${st.k === 'rating' ? ' ' + mdRatingClass(x.v) : ''}">${plsVal(st, x.v)}</span></div>`).join('')}</div>`;
+    }).join('');
+    return cards ? `<div class="pls-gt">${g}</div><div class="pls-grid">${cards}</div>` : '';
+  }).join('') + `<div class="pls-note">평점은 출전 시간이 리그 최다의 40% 이상인 선수만 · 같은 기록이면 출전 시간이 적은 선수가 위 · 선수를 누르면 선수 카드</div>`;
+}
+function plsOpen(k) {
+  plsState.stat = k; plsState.shown = 50;
+  track('players_stat', { league: plsState.code, stat: k });
+  plsRenderList();
+  const head = document.querySelector('.lg-head'), navH = (document.querySelector('nav')?.offsetHeight || 60) + 8;
+  if (head) { const y = head.getBoundingClientRect().top + scrollY - navH; if (scrollY > y) window.scrollTo({ top: y }); }
+}
+function plsBack() { plsState.stat = null; plsRenderCards(); }
+function plsMore() { plsState.shown += 100; plsRenderList(); }
+function plsRenderList() {
+  const { data: d, stat, shown } = plsState, st = PLS_BY[stat], root = document.getElementById('pls-root');
+  const { list, minMin } = plsRanked(d, st);
+  const row = x => `<div class="pls-lrow" onclick="openPlayerCard('${escJs(x.p.team)}', ${x.p.id}, ${d.season})">
+      <span class="pls-rk">${x.rank}</span><img class="pls-ph" src="${plsPhoto(x.p)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+      <span class="pls-nm"><b>${x.p.full_name || x.p.name}</b><small><img src="${logos[x.p.team] || ''}" alt="" onerror="this.style.display='none'">${shortName(x.p.team)}${x.p.teams ? ' 외' : ''}</small></span>
+      <span class="pls-c">${x.p.apps}</span><span class="pls-c">${Math.round(x.p.minutes || 0).toLocaleString()}</span>
+      <span class="pls-v${x.rank === 1 ? ' top' : ''}${stat === 'rating' ? ' ' + mdRatingClass(x.v) : ''}">${plsVal(st, x.v)}</span></div>`;
+  root.innerHTML = `<div class="pls-lhead"><button type="button" class="pls-back" onclick="plsBack()"><span aria-hidden="true">‹</span> 전체 통계</button>
+      <div class="pls-ltitle"><b>${st.t}</b><small>${list.length}명${minMin ? ` · 출전 ${minMin.toLocaleString()}분 이상` : ''}${st.gk ? ' · 골키퍼' : ''}</small></div>
+      <select class="pls-sel" onchange="plsOpen(this.value)" aria-label="기록 고르기">${PLS_STATS.map(s => `<option value="${s.k}"${s.k === stat ? ' selected' : ''}>${s.t}</option>`).join('')}</select></div>
+    <div class="pls-lcols"><span>#</span><span></span><span>선수</span><span class="pls-c">경기</span><span class="pls-c">출전(분)</span><span class="pls-v">${st.t}</span></div>
+    ${list.slice(0, shown).map(row).join('') || '<div class="ti-empty">기록이 있는 선수가 없어요.</div>'}
+    ${list.length > shown ? `<button type="button" class="sq-more" onclick="plsMore()">더 보기 (${list.length - shown}명 남음)</button>` : ''}`;
+}
+
+// ── 리그 개요: 이번 라운드의 팀(이번 시즌 — 라운드별 평점 베스트 11) / 시즌 베스트 11(지난 시즌) ──
+let loXiSeq = 0;
+async function loadLoXI(code, season, round) {
+  const card = document.getElementById('lo-xi'), el = card?.querySelector('.lo-body');
+  if (!el) return;
+  const seq = ++loXiSeq;
+  const q = [season !== 'current' ? `season=${season}` : '', round ? `round=${round}` : ''].filter(Boolean).join('&');
+  const d = await fetch(`${API}/league/bestxi/${code}${q ? '?' + q : ''}`).then(r => (r.ok && r.status !== 204 ? r.json() : null)).catch(() => null);
+  if (seq !== loXiSeq || lgState.code !== code || lgState.season !== season || !document.getElementById('lo-xi')) return;
+  if (!d?.xi) { card.remove(); return; }
+  await logosReady;
+  const h = card.querySelector('.lo-card-h b');
+  const rounds = d.rounds || [];
+  if (d.mode === 'round' || (season === 'current' && rounds.length)) {
+    const i = rounds.indexOf(d.round);
+    const cur = d.mode === 'season' ? 'season' : d.round;
+    const label = code === 'CL' ? '차전' : '라운드';
+    h.innerHTML = `<span class="lo-xi-t">${d.mode === 'season' ? '시즌 베스트 11' : '이번 라운드의 팀'}</span>
+      <span class="lo-xi-nav"><button type="button" aria-label="이전 라운드" ${d.mode === 'season' || i <= 0 ? 'disabled' : ''} onclick="loadLoXI('${code}','${season}',${rounds[i - 1]})">‹</button>
+      <select onchange="loadLoXI('${code}','${season}',this.value)" aria-label="라운드">${rounds.map(r => `<option value="${r}"${r === cur ? ' selected' : ''}>${r}${label}</option>`).join('')}<option value="season"${cur === 'season' ? ' selected' : ''}>시즌 전체</option></select>
+      <button type="button" aria-label="다음 라운드" ${d.mode === 'season' || i >= rounds.length - 1 ? 'disabled' : ''} onclick="loadLoXI('${code}','${season}',${rounds[i + 1]})">›</button></span>`;
+  } else h.textContent = '시즌 베스트 11';
+  el.innerHTML = xiPitchHtml(d.xi, { orient: xiOrient(el), compact: el.clientWidth < 600, teamLogo: true, season: d.season, dec2: d.mode === 'season' }) +
+    `<div class="bx-note">${d.xi.formation} · 평균 평점 ${d.xi.avg.toFixed(2)} · ${d.mode === 'round' ? `${d.round}${code === 'CL' ? '차전' : '라운드'} ${d.matches}경기에서 45분 이상 뛴 선수 중 자리별 평점 순` : `출전 시간이 리그 최다의 40% 이상인 선수 중 자리별 평균 평점 순${d.season < 2022 ? ' · 21-22 시즌까지는 세부 포지션 없이 줄만 구분' : ''}`}</div>`;
 }
 
 // 선수 한 줄(1위는 큰 카드). 사진이 없으면 등번호 배지(없으면 실루엣)
@@ -8610,7 +9132,7 @@ async function cbLoadBack(i) {
   const w = info?.wiki || {};
   const fact = (label, v) => (v ? `<div class="cb-fact"><small>${label}</small><b>${v}</b></div>` : '');
   const cap = w.capacity ? ` · ${Number(w.capacity).toLocaleString()}석` : '';
-  let xi = sq ? bestElevenHtml(sq, team) : '';
+  let xi = sq ? bestElevenHtml(sq, team, { noSeason: true }) : '';
   if (!xi) {
     const lg = tp?.comps?.[cb.league]?.players || [];
     xi = `<div class="tp-sec"><div class="tp-t">이번 시즌 공격 포인트 <span>베스트 11은 선수 평점 데이터 연결 후 제공돼요</span></div>${lg.length

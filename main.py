@@ -23,7 +23,7 @@ app = FastAPI(title="FotData API", version="1.0.0")
 # 서버 깨우기 핑("/")·CORS 사전 요청(OPTIONS)도 제외. 사용자 IP를 못 찾으면 제한하지 않음(전원이 한 칸에 묶이는 사고 방지).
 # 이 미들웨어를 CORS보다 먼저 등록해야 CORS가 바깥에서 감싸서 429 응답에도 CORS 헤더가 붙음(안 붙으면 브라우저엔 CORS 오류로 보임).
 import time as _time
-from collections import deque as _deque
+from collections import deque as _deque, Counter
 from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.responses import JSONResponse
 
@@ -73,6 +73,10 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         return response
 
 app.add_middleware(RateLimitMiddleware)
+
+# 응답 압축(2026-10-06) — 선수 목록(리그 전체 500명+)·시즌 기록처럼 큰 JSON이 늘어서. 1KB 미만은 그대로
+from starlette.middleware.gzip import GZipMiddleware
+app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 # CORS 설정 (나중에 웹/앱에서 호출 가능하게) — 요청 제한보다 나중에 등록 = 바깥에서 감쌈
 app.add_middleware(
@@ -1536,6 +1540,11 @@ def _with_live(m, live):
         return m
     return {**m, **{k: x for k, x in v.items() if k != "utc"}, "live": True}
 
+@app.get("/meta/countries")
+def get_meta_countries():
+    """나라 이름(API-Football·football-data 표기) → 국기 이미지 주소 — 선수 카드·스쿼드의 국기(af_countries.json, 한 번 받아 둔 것)"""
+    return _load_json("af_countries.json") or {}
+
 @app.get("/teams/ko")
 def get_teams_ko():
     """구단 둘러보기 검색용: 팀 이름 → 한국어 구단명(위키백과 name_ko) — "맨체스터"·"바이에른"처럼 한글로도 찾게 (2026-09-30)"""
@@ -1586,7 +1595,8 @@ def _rank_movement(code):
 # 새벽 수집(update_data.af_sync): af_fixtures.json(경기 목록·API-Football ID) · match_details/(끝난 경기 상세, gzip) ·
 # match_previews.json(결장·부상자) · af_players.json(선수 프로필). 시즌 기록은 경기 상세 합산(af_transform.af_season_players).
 # Render 환경변수 API_FOOTBALL_KEY가 있으면 새벽 수집 전이라도 요청 때 바로 받음: 막 끝난 경기 상세, 킥오프 약 1시간 전 확정 라인업, 선수 경력·트로피·부상 이력
-from af_transform import af_match_detail, af_season_players, add_percentiles, af_player_profile, md_read
+from af_transform import (af_match_detail, af_season_players, add_percentiles, af_player_profile, md_read, af_league_agg, pick_xi, round_xi,
+                          xi_line, plain_can, GRID_FROM, DPOS_LINE)
 AF_KEY = os.environ.get("API_FOOTBALL_KEY", "")
 AF_URL = "https://v3.football.api-sports.io"
 MD_DIR = os.path.join(MODEL_DIR, "match_details")
@@ -1652,48 +1662,358 @@ def get_match_detail(home_team: str, away_team: str, date: str):
         return Response(status_code=204)
     return {k: v for k, v in d.items() if k != "pstats"}   # 선수별 합산용 기록은 화면에 안 씀(크기만 큼)
 
+# ── 선수 시즌 기록(이번 시즌 = match_details 합산, 지난 시즌 = af_seasons/ — 2026-10-06) ──
+PS_DIR = os.path.join(MODEL_DIR, "af_seasons")
+
+@lru_cache(maxsize=12)
+def _ps_file(code, yr):
+    p = os.path.join(PS_DIR, f"{code}_{yr}.json.gz")
+    return md_read(p) if os.path.exists(p) else None
+
+@lru_cache(maxsize=1)
+def _ps_index():
+    p = os.path.join(PS_DIR, "index.json")
+    return json.load(open(p, encoding="utf-8")) if os.path.exists(p) else {"players": {}, "teams": {}}
+
+def _af_round_of(e):
+    """af_fixtures 경기의 라운드(리그 = 숫자, 챔스 리그 스테이지 = 숫자) — 수집 때 넣은 값, 없으면 우리 일정의 matchday"""
+    if e.get("round") is not None:
+        return e["round"]
+    for m in (_load_json("schedule.json") or {}).get(e["league"], []):
+        if m["home_team"] == e["home_team"] and m["away_team"] == e["away_team"] and m["date"][:10] == e["date"][:10]:
+            return m.get("matchday")
+    return None
+
 @lru_cache(maxsize=8)
-def _af_league_squads(code):
-    """리그 전체 선수 시즌 기록(경기 상세 합산) + 90분당 백분위(같은 리그·같은 포지션) → {팀: 선수 목록}"""
-    prof = _load_json("af_players.json") or {}
-    _, by_team = _af_index()
-    out, pool = {}, []
-    for team, v in prof.items():
-        if v.get("league") != code:
-            continue
-        dets = []
-        for e in by_team.get(team, []):
-            if e["league"] == code and e.get("has_detail"):
-                d = _md_file(e["file"])
-                if d:
-                    dets.append(d)
-        ps = af_season_players(dets, team, v.get("players") or {})
-        out[team] = ps
-        pool += ps
-    # 90분당 순위 기준: 450분(5경기) — 시즌 초엔 팀 최다 출전의 절반으로 낮춤(5라운드면 450분을 다 채운 선수가 거의 없음)
-    add_percentiles(pool, min_minutes=min(450, 0.5 * max([p["minutes"] or 0 for p in pool] or [0])))
+def _cur_details(code):
+    """이번 시즌 이 대회의 끝난 경기 상세(날짜순, 라운드 포함)"""
+    out = []
+    for e in sorted((_load_json("af_fixtures.json") or {}).get("fixtures", []), key=lambda e: e["date"]):
+        if e["league"] == code and e.get("has_detail"):
+            d = _md_file(e["file"])
+            if d:
+                out.append({**d, "round": _af_round_of(e)})
     return out
 
+@lru_cache(maxsize=16)
+def _league_rows(code, yr):
+    """(팀, 선수)별 시즌 기록 목록 — 이번 시즌은 경기 상세 합산 + 프로필, 지난 시즌은 af_seasons 파일. 없으면 None"""
+    if yr == CURRENT_SEASON_YEAR:
+        dets = _cur_details(code)
+        if not dets:
+            return None
+        rows = list(af_league_agg(dets, keep_matches=True).values())
+        prof = _load_json("af_players.json") or {}
+        pmap = {}
+        for t, v in prof.items():
+            for pid, pr in (v.get("players") or {}).items():
+                pmap[(t, int(pid))] = pr
+        keep = ("name", "full_name", "firstname", "lastname", "age", "birth_date", "birth_place", "nationality", "height", "weight", "photo", "injured")
+        for r in rows:
+            pr = pmap.get((r["team"], r["id"]))
+            if pr:
+                r.update({k: pr.get(k) for k in keep if pr.get(k) is not None})
+                if pr.get("pos"):
+                    r["pos_profile"] = pr["pos"]
+            r["full_name"] = r.get("full_name") or r.get("name")
+        # 90분당 순위 기준: 450분(5경기) — 시즌 초엔 최다 출전의 절반으로 낮춤(5라운드면 450분을 다 채운 선수가 거의 없음)
+        add_percentiles(rows, min_minutes=min(450, 0.5 * max([r["minutes"] or 0 for r in rows] or [0])))
+        return rows
+    d = _ps_file(code, yr)
+    if not d:
+        return None
+    rows = d["players"]
+    for r in rows:
+        r.setdefault("full_name", r.get("name"))
+        r.setdefault("photo", f"https://media.api-sports.io/football/players/{r['id']}.png")
+    return rows
+
+@lru_cache(maxsize=1)
+def _dpos_hint():
+    """선수 ID → 22-23 시즌 이후 리그 선발 세부 포지션 횟수(지난 시즌 파일 + 이번 시즌)"""
+    from collections import Counter as _C
+    out = {}
+    for code in ("PL", "PD", "BL1", "SA", "FL1"):
+        for yr in range(GRID_FROM, CURRENT_SEASON_YEAR + 1):
+            for r in (_league_rows(code, yr) or []):
+                if r.get("dpos"):
+                    out.setdefault(r["id"], _C()).update(r["dpos"])
+    return out
+
+def _xi_player(r, key="rating"):
+    dp = r.get("dpos") or {}
+    top = max(dp, key=dp.get) if dp else None
+    tot = sum(dp.values())
+    can = {k for k, v in dp.items() if v >= 0.25 * tot}   # 선발의 25% 이상 선 자리는 다 후보(측면 공격수가 양쪽 다 서는 경우 등)
+    if not can:   # 21-22 이전 시즌: 같은 선수의 22-23 이후 세부 포지션을 빌려 씀(같은 줄일 때만 — 포지션을 바꾼 선수 방지), 없으면 기록으로 추정
+        h = _dpos_hint().get(r["id"])
+        if h:
+            ht = sum(h.values())
+            hc = {k for k, v in h.items() if v >= 0.25 * ht}
+            if hc and all(DPOS_LINE.get(k) == r.get("pos") for k in hc):
+                can, top = hc, max(h, key=h.get)
+        if not can:
+            can = plain_can(r)
+    return {"id": r["id"], "name": r.get("name"), "full_name": r.get("full_name"), "photo": r.get("photo"), "team": r["team"],
+            "rating": r.get(key), "line": xi_line(r), "can": can, "dpos": top,
+            "goals": r.get("goals") or 0, "assists": r.get("assists") or 0, "num": r.get("number"), "apps": r.get("apps")}
+
+def _xi_out(xi):
+    if not xi:
+        return None
+    return {"formation": xi["formation"], "avg": xi["avg"], "lines": [[{k: p.get(k) for k in ("id", "name", "full_name", "photo", "team", "rating", "dpos", "slot", "goals", "assists", "num", "apps", "line")} for p in l] for l in xi["lines"]]}
+
+def _season_xi(rows, share=0.4):
+    """시즌 베스트 11: 출전 시간이 (그 묶음) 최다의 share 이상인 선수 중 평점 순"""
+    mx = max([r["minutes"] or 0 for r in rows] or [0])
+    return pick_xi([_xi_player(r) for r in rows if r.get("rating") and (r["minutes"] or 0) >= mx * share])
+
+def _af_league_squads(code):
+    """(예전 이름 유지) 이번 시즌 리그 선수 기록 → {팀: 선수 목록}. 이번 시즌 리그 경기를 안 뛴 선수도 선수 카드가 열리게 프로필만으로 추가"""
+    rows = _league_rows(code, CURRENT_SEASON_YEAR) or []
+    out = {}
+    for r in rows:
+        out.setdefault(r["team"], []).append(r)
+    for t, v in (_load_json("af_players.json") or {}).items():
+        if v.get("league") != code:
+            continue
+        have = {r["id"] for r in out.get(t, [])}
+        for pid, pr in (v.get("players") or {}).items():
+            if int(pid) not in have:
+                out.setdefault(t, []).append({**pr, "id": int(pid), "team": t, "apps": 0, "starts": 0, "minutes": 0, "goals": 0, "assists": 0,
+                                              "yellow": 0, "red": 0, "rating": None, "matches": [], "dpos": {}})
+    for t, l in out.items():   # 포지션: 시즌 프로필(Attacker 등)을 우선 — 경기 기록의 G/D/M/F는 라인업 줄 기준이라 4-2-3-1 측면 공격수가 미드필더로 잡힘
+        for r in l:
+            if r.get("pos_profile"):
+                r["pos"] = r["pos_profile"]
+    return out
+
+def _team_league_in(team, yr):
+    """그 시즌 이 팀의 자국 리그 코드(지난 시즌 = 선수 기록 색인, 이번 시즌 = af_players.json)"""
+    if yr == CURRENT_SEASON_YEAR:
+        return ((_load_json("af_players.json") or {}).get(team) or {}).get("league")
+    codes = ((_ps_index().get("teams") or {}).get(team) or {}).get(str(yr)) or []
+    return next((c for c in codes if c != "CL"), codes[0] if codes else None)
+
 @app.get("/team/squad/{team_name}")
-def get_team_squad(team_name: str):
-    """선수 카드·구단 베스트 11·주요 선수 — 프로필(af_players.json) + 이번 시즌 리그 기록(경기 상세 합산). 없으면 204"""
+def get_team_squad(team_name: str, season: int = None):
+    """선수 카드·구단 베스트 11·주요 선수 — 이번 시즌: 프로필(af_players.json) + 리그 경기 상세 합산, 지난 시즌(15-16~): af_seasons. 없으면 204
+    응답의 best11 = 시즌 평균 평점 베스트 11(출전 시간이 팀 최다의 25% 이상), seasons = 선수 기록이 있는 시즌 목록"""
     team = TEAM_NAME_MAP.get(team_name, team_name)
-    v = (_load_json("af_players.json") or {}).get(team)
-    if not v:
+    yr = season or CURRENT_SEASON_YEAR
+    code = _team_league_in(team, yr)
+    if not code:
         return Response(status_code=204)
-    return {"team": team, "league": v.get("league"), "season": v.get("season"), "updated": v.get("updated"),
-            "players": _af_league_squads(v.get("league")).get(team, [])}
+    if yr == CURRENT_SEASON_YEAR:
+        players = _af_league_squads(code).get(team, [])
+    else:
+        players = [r for r in (_league_rows(code, yr) or []) if r["team"] == team]
+    if not players:
+        return Response(status_code=204)
+    seasons = sorted({int(y) for y, cs in (((_ps_index().get("teams") or {}).get(team)) or {}).items() if any(c != "CL" for c in cs)}
+                     | ({CURRENT_SEASON_YEAR} if _team_league_in(team, CURRENT_SEASON_YEAR) else set()), reverse=True)
+    v = (_load_json("af_players.json") or {}).get(team) or {}
+    return {"team": team, "league": code, "season": yr, "updated": v.get("updated"), "players": players, "seasons": seasons,
+            "best11": _xi_out(_season_xi([r for r in players if r.get("minutes")], share=0.25))}
+
+_LP_KEYS = ("id", "team", "full_name", "name", "photo", "pos", "apps", "starts", "minutes", "goals", "assists", "rating", "rated", "shots", "shots_on",
+            "key_passes", "dribbles_won", "tackles", "interceptions", "blocks", "duels_won", "clean_sheets", "saves", "yellow", "red", "pen_scored", "number", "nationality")
+
+@lru_cache(maxsize=16)
+def _league_players_compact(code, yr):
+    rows = _league_rows(code, yr)
+    if not rows:
+        return None
+    by = {}
+    for r in rows:   # 시즌 중 같은 리그 안에서 팀을 옮긴 선수는 하나로(팀 = 더 오래 뛴 팀)
+        cur = by.get(r["id"])
+        x = {k: r.get(k) for k in _LP_KEYS}
+        dp = r.get("dpos") or {}
+        x["dpos"] = max(dp, key=dp.get) if dp else None
+        if yr == CURRENT_SEASON_YEAR and r.get("pos_profile"):
+            x["pos"] = r["pos_profile"]
+        if not cur:
+            by[r["id"]] = x
+            continue
+        main = cur if (cur["minutes"] or 0) >= (x["minutes"] or 0) else x
+        merged = dict(main)
+        for k in ("apps", "starts", "minutes", "goals", "assists", "shots", "shots_on", "key_passes", "dribbles_won", "tackles", "interceptions",
+                  "blocks", "duels_won", "clean_sheets", "saves", "yellow", "red", "pen_scored", "rated"):
+            merged[k] = (cur.get(k) or 0) + (x.get(k) or 0)
+        n1, n2 = cur.get("rated") or 0, x.get("rated") or 0
+        merged["rating"] = round(((cur.get("rating") or 0) * n1 + (x.get("rating") or 0) * n2) / (n1 + n2), 2) if n1 + n2 else None
+        merged["teams"] = sorted({cur["team"], x["team"]})
+        by[r["id"]] = merged
+    return list(by.values())
+
+@app.get("/league/players/{league_code}")
+def get_league_players(league_code: str, season: int = None):
+    """선수 탭: 리그 전체 선수 시즌 기록(골·도움·평점·출전 시간 등 — 순위 카드·전체 목록용). 이번 시즌 = 경기 상세 합산, 지난 시즌 15-16~"""
+    code, yr = league_code.upper(), season or CURRENT_SEASON_YEAR
+    ps = _league_players_compact(code, yr)
+    if not ps:
+        return Response(status_code=204)
+    mx = max([p["minutes"] or 0 for p in ps] or [0])
+    n = len(_cur_details(code)) if yr == CURRENT_SEASON_YEAR else ((_ps_file(code, yr) or {}).get("matches"))
+    return {"league": code, "season": yr, "matches": n, "max_minutes": mx, "players": ps}
+
+@app.get("/league/bestxi/{league_code}")
+def get_league_bestxi(league_code: str, season: int = None, round: str = None):
+    """리그 베스트 11 — 이번 시즌: 라운드별 '이번 라운드의 팀'(그 라운드 45분 이상 뛴 선수 평점 순) + 시즌 베스트,
+    지난 시즌: 시즌 베스트(출전 시간이 리그 최다의 40% 이상). round = 숫자 | season"""
+    code, yr = league_code.upper(), season or CURRENT_SEASON_YEAR
+    if yr == CURRENT_SEASON_YEAR:
+        dets = _cur_details(code)
+        if not dets:
+            return Response(status_code=204)
+        rounds = sorted({d["round"] for d in dets if isinstance(d.get("round"), int)})
+        if round == "season":
+            rows = _league_rows(code, yr) or []
+            return {"league": code, "season": yr, "mode": "season", "rounds": rounds, "xi": _xi_out(_season_xi(rows))}
+        r = int(round) if round and round.isdigit() else None
+        if r is None:   # 기본 = 가장 최근에 (거의) 다 끝난 라운드
+            cnt = Counter(d["round"] for d in dets if isinstance(d.get("round"), int))
+            full = max(cnt.values()) if cnt else 0
+            done = [x for x in rounds if cnt[x] >= full * 0.8]
+            r = max(done) if done else (rounds[-1] if rounds else None)
+        if r is None:
+            return Response(status_code=204)
+        xi = _round_xi_cached(code, r)
+        return {"league": code, "season": yr, "mode": "round", "round": r, "rounds": rounds, "matches": sum(1 for d in dets if d.get("round") == r), "xi": xi}
+    rows = _league_rows(code, yr)
+    if not rows:
+        return Response(status_code=204)
+    return {"league": code, "season": yr, "mode": "season", "rounds": [], "xi": _xi_out(_season_xi(rows))}
+
+@lru_cache(maxsize=128)
+def _round_xi_cached(code, r):
+    return _xi_out(round_xi([d for d in _cur_details(code) if d.get("round") == r]))
+
+@app.get("/player/seasons/{player_id}")
+def get_player_seasons(player_id: int):
+    """선수 카드 시즌 고르기: 우리 데이터(5대 리그·챔스, 15-16~)에 이 선수 기록이 있는 [리그, 시즌, 팀] — 이번 시즌 포함"""
+    out = [list(x) for x in (_ps_index().get("players") or {}).get(str(player_id), [])]
+    for code in ("PL", "PD", "BL1", "SA", "FL1", "CL"):
+        for r in _league_rows(code, CURRENT_SEASON_YEAR) or []:
+            if r["id"] == player_id:
+                out.append([code, CURRENT_SEASON_YEAR, r["team"]])
+    out.sort(key=lambda x: (-x[1], x[0] == "CL"))
+    return {"id": player_id, "seasons": out}
+
+# 선수 카드 경력·트로피(2026-10-06 개편): 풋몹처럼 구단별 기간(이적 날짜)·경기 수·골 + 트로피를 구단별로 묶고 대회 로고
+# 요청 때 API-Football: 경력 시즌 목록 1 + 이적 1 + 트로피 1 + 부상 1 + 시즌별 기록(/players?id=&season=) 시즌 수만큼(2010~, 최근 16시즌까지) — 하루 캐시
+AF_NATIONAL_COMPS = {1, 4, 5, 6, 7, 9, 10, 480, 29, 30, 31, 32, 33, 34, 960, 21, 22}   # 국가대표 대회(월드컵·유로·네이션스리그·코파·아프리카·아시안컵·올림픽·예선·친선)
+AF_YOUTH_TEAM_RE = re.compile(r"\bU\d{2}\b|\bYouth\b|\bReserves?\b|\bII$|\sB$|\bJong\b|Primavera|Academy", re.I)
+
+def _af_comp_id(name, country):
+    lg = _load_json("af_leagues.json") or {}
+    for c in (country, "World", "Europe"):
+        v = lg.get(f"{name}|{c}")
+        if v:
+            return v[0]
+    return None
+
+def _af_season_stats(pid, yr):
+    ttl = 86400 if yr >= CURRENT_SEASON_YEAR - 1 else 86400 * 30
+    r = _af_live_get("/players", ttl, id=pid, season=yr)
+    return (r or [None])[0]
 
 @app.get("/player/profile/{player_id}")
 def get_player_profile(player_id: int):
-    """선수 카드 경력·트로피·부상 이력 — 요청 때 API-Football 3번(경력·트로피·부상, 하루 캐시). 키가 없거나 못 받으면 204"""
+    """선수 카드 경력·트로피·부상 이력 + 기본 정보(나이·국적·키 — 지난 시즌 선수처럼 우리 프로필 파일에 없는 선수용). 키가 없거나 못 받으면 204"""
+    from concurrent.futures import ThreadPoolExecutor
     teams = _af_live_get("/players/teams", 86400, player=player_id)
     if teams is None:
         return Response(status_code=204)
-    trophies = _af_live_get("/trophies", 86400, player=player_id) or []
-    sidelined = _af_live_get("/sidelined", 86400, player=player_id) or []
-    nat = next((p.get("nationality") for v in (_load_json("af_players.json") or {}).values() for pid, p in (v.get("players") or {}).items() if pid == str(player_id)), None)
-    return af_player_profile(teams, trophies, sidelined, nationality=nat, current_season=CURRENT_SEASON_YEAR)
+    years = sorted({y for t in teams for y in (t.get("seasons") or []) if y >= 2010}, reverse=True)[:16]
+    with ThreadPoolExecutor(6) as ex:
+        fut_tr = ex.submit(_af_live_get, "/trophies", 86400, player=player_id)
+        fut_sd = ex.submit(_af_live_get, "/sidelined", 86400, player=player_id)
+        fut_tf = ex.submit(_af_live_get, "/transfers", 86400, player=player_id)
+        stats = dict(zip(years, ex.map(lambda y: _af_season_stats(player_id, y), years)))
+        trophies, sidelined, transfers = fut_tr.result() or [], fut_sd.result() or [], fut_tf.result() or []
+    latest = next((stats[y] for y in years if stats.get(y)), None)
+    pl = (latest or {}).get("player") or {}
+    nat = pl.get("nationality")
+    flags = _load_json("af_countries.json") or {}
+    bio = {"name": pl.get("name"), "firstname": pl.get("firstname"), "lastname": pl.get("lastname"), "age": pl.get("age"),
+           "birth_date": (pl.get("birth") or {}).get("date"), "birth_place": (pl.get("birth") or {}).get("place"),
+           "birth_country": (pl.get("birth") or {}).get("country"), "nationality": nat, "flag": flags.get(nat),
+           "height": pl.get("height"), "weight": pl.get("weight"), "photo": pl.get("photo")} if pl else None
+    # 구단별 경기 수·골(모든 대회 합산) + 시즌별 소속(트로피를 구단에 붙이는 데 씀)
+    agg, by_season = {}, {}
+    for y, d in stats.items():
+        for st in (d or {}).get("statistics") or []:
+            tm, lg, g = st.get("team") or {}, st.get("league") or {}, st.get("games") or {}
+            if not tm.get("id"):
+                continue
+            a = agg.setdefault(tm["id"], {"apps": 0, "goals": 0, "assists": 0})
+            a["apps"] += g.get("appearences") or 0
+            a["goals"] += (st.get("goals") or {}).get("total") or 0
+            a["assists"] += (st.get("goals") or {}).get("assists") or 0
+            by_season.setdefault(y, []).append({"team_id": tm["id"], "team": tm.get("name"), "logo": tm.get("logo"), "league_id": lg.get("id"),
+                                                "country": lg.get("country"), "apps": g.get("appearences") or 0})
+    def is_nat(name):
+        return bool(nat) and (name == nat or name.startswith(nat + " "))
+    # 이적 날짜 → 구단별 들어온/나간 날(풋몹 "2022년 7월 - 지금")
+    ins, outs = {}, {}
+    for tr in (transfers[0].get("transfers") if transfers else []) or []:
+        dt, tt = tr.get("date"), tr.get("teams") or {}
+        if not dt:
+            continue
+        i, o = (tt.get("in") or {}).get("id"), (tt.get("out") or {}).get("id")
+        if i: ins.setdefault(i, []).append(dt)
+        if o: outs.setdefault(o, []).append(dt)
+    base = af_player_profile(teams, [], sidelined, nationality=nat, current_season=CURRENT_SEASON_YEAR)
+    for c in base["career"]:
+        tid = c.get("team_id")
+        a = agg.get(tid) or {}
+        c.update({"apps": a.get("apps"), "goals": a.get("goals"), "assists": a.get("assists"),
+                  "youth": c["youth"] or bool(AF_YOUTH_TEAM_RE.search(c["team"] or "")), "national": is_nat(c["team"] or "")})
+        if ins.get(tid):
+            c["from_date"] = min(ins[tid])[:7]
+        if outs.get(tid) and c.get("to"):
+            c["to_date"] = max(outs[tid])[:7]
+        if c["national"]:
+            c["flag"] = flags.get(nat) if c["team"] == nat else None
+    # 트로피 → 구단별 묶음
+    groups, seen = {}, set()
+    tro = af_player_profile([], trophies, [], nationality=nat)["trophies"]
+    for t in tro:
+        if t["youth"] or t["place"] not in ("winner", "runner_up"):
+            continue
+        cid = _af_comp_id(t["league"], t.get("country"))
+        yr = int(str(t.get("season") or "0")[:4] or 0)
+        cands = by_season.get(yr, []) or by_season.get(yr - 1, [])
+        if cid in AF_NATIONAL_COMPS or (t.get("country") == "World" and cid not in (15, 2, 3, 848, 531, 1168) and not any(c["league_id"] == cid for c in cands)):
+            nt = next((c for c in cands if is_nat(c["team"] or "") and c["team"] == nat), None)
+            key = ("nat", nat)
+            info = {"team": nat or "국가대표", "logo": flags.get(nat), "national": True, "country": nat}
+            if nt:
+                info["team_id"] = nt["team_id"]
+        else:
+            clubs = [c for c in cands if not is_nat(c["team"] or "")]
+            hit = [c for c in clubs if c["league_id"] == cid] or [c for c in clubs if c.get("country") == t.get("country")] or clubs
+            hit.sort(key=lambda c: -c["apps"])
+            c = hit[0] if hit else None
+            key = ("club", c["team_id"] if c else t.get("country"))
+            info = {"team": c["team"] if c else (t.get("country") or "-"), "team_id": c["team_id"] if c else None, "logo": c["logo"] if c else None,
+                    "national": False, "country": t.get("country")}
+        g = groups.setdefault(key, {**info, "items": {}})
+        it = g["items"].setdefault(t["league"], {"name": t["league"], "comp_id": cid, "country": t.get("country"), "wins": [], "runner": []})
+        dk = (key, t["league"], t["place"], t.get("season"))
+        if dk in seen:
+            continue
+        seen.add(dk)
+        (it["wins"] if t["place"] == "winner" else it["runner"]).append(t.get("season") or "")
+    tgroups = []
+    for g in groups.values():
+        items = sorted(g.pop("items").values(), key=lambda x: (-len(x["wins"]), -len(x["runner"])))
+        g["items"], g["wins"] = items, sum(len(x["wins"]) for x in items)
+        tgroups.append(g)
+    tgroups.sort(key=lambda g: (g["national"], -g["wins"]))
+    return {**base, "bio": bio, "trophy_groups": tgroups,
+            "trophies": [t for t in tro if not t["youth"]]}   # 예전 화면 호환(평평한 목록)
 
 @app.get("/match/preview")
 def get_match_preview(home_team: str, away_team: str, date: str = None):
@@ -1776,7 +2096,7 @@ def _league_seasons(code):
     for y in yrs:
         cur = y == CURRENT_SEASON_YEAR
         out.append({"year": y, "label": f"{y}/{(y + 1) % 100:02d}", "current": cur,
-                    "players": bool(cur and sc and sc.get("scorers")),
+                    "players": bool(cur and ((sc and sc.get("scorers")) or _cur_details(code))) or os.path.exists(os.path.join(PS_DIR, f"{code}_{y}.json.gz")),
                     "simulation": cur and code in SIM_LEAGUES,
                     "group_stage": code == "CL" and y <= 2023})
     return out

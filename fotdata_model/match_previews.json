@@ -1,4 +1,18 @@
 {
+ "1. FC Union Berlin|SV 07 Elversberg|2026-10-10": {
+  "fixture_id": 1575182,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
+ "1. FSV Mainz 05|Bayer 04 Leverkusen|2026-10-10": {
+  "fixture_id": 1575181,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
  "Arsenal FC|Leeds United FC|2026-10-10": {
   "fixture_id": 1557417,
   "injuries": {
@@ -8,6 +22,20 @@
  },
  "Borussia Dortmund|SV Werder Bremen|2026-10-09": {
   "fixture_id": 1575176,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
+ "FC Augsburg|FC Bayern München|2026-10-10": {
+  "fixture_id": 1575180,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
+ "Genoa CFC|ACF Fiorentina|2026-10-10": {
+  "fixture_id": 1550140,
   "injuries": {
    "away": [],
    "home": []
@@ -29,6 +57,20 @@
  },
  "Rayo Vallecano de Madrid|Athletic Club|2026-10-10": {
   "fixture_id": 1570410,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
+ "SC Paderborn 07|VfB Stuttgart|2026-10-10": {
+  "fixture_id": 1575184,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
+ "TSG 1899 Hoffenheim|Hamburger SV|2026-10-10": {
+  "fixture_id": 1575178,
   "injuries": {
    "away": [],
    "home": []
