@@ -3,6 +3,101 @@
     "PL": [
       {
         "player": {
+          "id": 1165,
+          "name": "Matheus Cunha",
+          "firstname": "Matheus Santos",
+          "lastname": "Carneiro da Cunha",
+          "age": 26,
+          "birth": {
+            "date": "1999-05-27",
+            "place": "João Pessoa",
+            "country": "Brazil"
+          },
+          "nationality": "Brazil",
+          "height": "183",
+          "weight": "76",
+          "injured": false,
+          "photo": "https://media.api-sports.io/football/players/1165.png"
+        },
+        "statistics": [
+          {
+            "team": {
+              "id": 33,
+              "name": "Manchester United",
+              "logo": "https://media.api-sports.io/football/teams/33.png"
+            },
+            "league": {
+              "id": 39,
+              "name": "Premier League",
+              "country": "England",
+              "logo": "https://media.api-sports.io/football/leagues/39.png",
+              "flag": "https://media.api-sports.io/flags/gb-eng.svg",
+              "season": 2024
+            },
+            "games": {
+              "appearences": 66,
+              "lineups": 61,
+              "minutes": 5203,
+              "number": null,
+              "position": "Attacker",
+              "rating": "7.630303",
+              "captain": false
+            },
+            "substitutes": {
+              "in": 5,
+              "out": 10,
+              "bench": 4
+            },
+            "shots": {
+              "total": 160,
+              "on": 88
+            },
+            "goals": {
+              "total": 30,
+              "conceded": 0,
+              "assists": 12,
+              "saves": null
+            },
+            "passes": {
+              "total": 1898,
+              "key": 116,
+              "accuracy": null
+            },
+            "tackles": {
+              "total": 76,
+              "blocks": 2,
+              "interceptions": 34
+            },
+            "duels": {
+              "total": 788,
+              "won": 366
+            },
+            "dribbles": {
+              "attempts": 244,
+              "success": 122,
+              "past": null
+            },
+            "fouls": {
+              "drawn": 142,
+              "committed": 84
+            },
+            "cards": {
+              "yellow": 8,
+              "yellowred": 0,
+              "red": 0
+            },
+            "penalty": {
+              "won": null,
+              "commited": null,
+              "scored": 0,
+              "missed": 0,
+              "saved": null
+            }
+          }
+        ]
+      },
+      {
+        "player": {
           "id": 306,
           "name": "Mohamed Salah",
           "firstname": "Mohamed",
@@ -478,6 +573,101 @@
       },
       {
         "player": {
+          "id": 10329,
+          "name": "João Pedro",
+          "firstname": "João Pedro",
+          "lastname": "Junqueira de Jesus",
+          "age": 24,
+          "birth": {
+            "date": "2001-09-26",
+            "place": "Ribeirão Preto",
+            "country": "Brazil"
+          },
+          "nationality": "Brazil",
+          "height": "182",
+          "weight": "70",
+          "injured": false,
+          "photo": "https://media.api-sports.io/football/players/10329.png"
+        },
+        "statistics": [
+          {
+            "team": {
+              "id": 49,
+              "name": "Chelsea",
+              "logo": "https://media.api-sports.io/football/teams/49.png"
+            },
+            "league": {
+              "id": 39,
+              "name": "Premier League",
+              "country": "England",
+              "logo": "https://media.api-sports.io/football/leagues/39.png",
+              "flag": "https://media.api-sports.io/flags/gb-eng.svg",
+              "season": 2024
+            },
+            "games": {
+              "appearences": 54,
+              "lineups": 47,
+              "minutes": 3908,
+              "number": null,
+              "position": "Attacker",
+              "rating": "7.170370",
+              "captain": false
+            },
+            "substitutes": {
+              "in": 7,
+              "out": 10,
+              "bench": 4
+            },
+            "shots": {
+              "total": 66,
+              "on": 40
+            },
+            "goals": {
+              "total": 20,
+              "conceded": 0,
+              "assists": 12,
+              "saves": null
+            },
+            "passes": {
+              "total": 1252,
+              "key": 60,
+              "accuracy": null
+            },
+            "tackles": {
+              "total": 32,
+              "blocks": null,
+              "interceptions": 18
+            },
+            "duels": {
+              "total": 586,
+              "won": 264
+            },
+            "dribbles": {
+              "attempts": 152,
+              "success": 58,
+              "past": null
+            },
+            "fouls": {
+              "drawn": 92,
+              "committed": 52
+            },
+            "cards": {
+              "yellow": 8,
+              "yellowred": 0,
+              "red": 2
+            },
+            "penalty": {
+              "won": null,
+              "commited": null,
+              "scored": 10,
+              "missed": 0,
+              "saved": null
+            }
+          }
+        ]
+      },
+      {
+        "player": {
           "id": 20649,
           "name": "Y. Wissa",
           "firstname": "Yoane",
@@ -668,175 +858,6 @@
       },
       {
         "player": {
-          "id": 1165,
-          "name": "Matheus Cunha",
-          "firstname": "Matheus Santos",
-          "lastname": "Carneiro da Cunha",
-          "age": 26,
-          "birth": {
-            "date": "1999-05-27",
-            "place": "João Pessoa",
-            "country": "Brazil"
-          },
-          "nationality": "Brazil",
-          "height": "183",
-          "weight": "76",
-          "injured": false,
-          "photo": "https://media.api-sports.io/football/players/1165.png"
-        },
-        "statistics": [
-          {
-            "team": {
-              "id": 33,
-              "name": "Manchester United",
-              "logo": "https://media.api-sports.io/football/teams/33.png"
-            },
-            "league": {
-              "id": 39,
-              "name": "Premier League",
-              "country": "England",
-              "logo": "https://media.api-sports.io/football/leagues/39.png",
-              "flag": "https://media.api-sports.io/flags/gb-eng.svg",
-              "season": 2024
-            },
-            "games": {
-              "appearences": 33,
-              "lineups": 32,
-              "minutes": 2600,
-              "number": null,
-              "position": "Attacker",
-              "rating": "7.630303",
-              "captain": false
-            },
-            "substitutes": {
-              "in": 1,
-              "out": null,
-              "bench": null
-            },
-            "shots": {
-              "total": 80,
-              "on": 44
-            },
-            "goals": {
-              "total": 15,
-              "conceded": 0,
-              "assists": 6,
-              "saves": null
-            },
-            "passes": {
-              "total": 949,
-              "key": 58,
-              "accuracy": null
-            },
-            "tackles": {
-              "total": 38,
-              "blocks": 1,
-              "interceptions": 17
-            },
-            "duels": {
-              "total": 394,
-              "won": 183
-            },
-            "dribbles": {
-              "attempts": 122,
-              "success": 61,
-              "past": null
-            },
-            "fouls": {
-              "drawn": 71,
-              "committed": 42
-            },
-            "cards": {
-              "yellow": 4,
-              "yellowred": null,
-              "red": 0
-            },
-            "penalty": {
-              "won": null,
-              "commited": null,
-              "scored": 0,
-              "missed": 0,
-              "saved": null
-            }
-          },
-          {
-            "team": {
-              "id": 39,
-              "name": "Wolves",
-              "logo": "https://media.api-sports.io/football/teams/39.png"
-            },
-            "league": {
-              "id": 39,
-              "name": "Premier League",
-              "country": "England",
-              "logo": "https://media.api-sports.io/football/leagues/39.png",
-              "flag": "https://media.api-sports.io/flags/gb-eng.svg",
-              "season": 2024
-            },
-            "games": {
-              "appearences": 33,
-              "lineups": 29,
-              "minutes": 2603,
-              "number": null,
-              "position": "Attacker",
-              "rating": "7.630303",
-              "captain": false
-            },
-            "substitutes": {
-              "in": 4,
-              "out": 10,
-              "bench": 4
-            },
-            "shots": {
-              "total": 80,
-              "on": 44
-            },
-            "goals": {
-              "total": 15,
-              "conceded": 0,
-              "assists": 6,
-              "saves": null
-            },
-            "passes": {
-              "total": 949,
-              "key": 58,
-              "accuracy": null
-            },
-            "tackles": {
-              "total": 38,
-              "blocks": 1,
-              "interceptions": 17
-            },
-            "duels": {
-              "total": 394,
-              "won": 183
-            },
-            "dribbles": {
-              "attempts": 122,
-              "success": 61,
-              "past": null
-            },
-            "fouls": {
-              "drawn": 71,
-              "committed": 42
-            },
-            "cards": {
-              "yellow": 4,
-              "yellowred": 0,
-              "red": 0
-            },
-            "penalty": {
-              "won": null,
-              "commited": null,
-              "scored": 0,
-              "missed": 0,
-              "saved": null
-            }
-          }
-        ]
-      },
-      {
-        "player": {
           "id": 152982,
           "name": "C. Palmer",
           "firstname": "Cole Jermaine",
@@ -925,6 +946,101 @@
               "commited": null,
               "scored": 4,
               "missed": 1,
+              "saved": null
+            }
+          }
+        ]
+      },
+      {
+        "player": {
+          "id": 284797,
+          "name": "D. Ouattara",
+          "firstname": "Dango Aboubacar Faissal",
+          "lastname": "Ouattara",
+          "age": 23,
+          "birth": {
+            "date": "2002-02-11",
+            "place": "Ouagadougou",
+            "country": "Burkina Faso"
+          },
+          "nationality": "Burkina Faso",
+          "height": "177",
+          "weight": "71",
+          "injured": false,
+          "photo": "https://media.api-sports.io/football/players/284797.png"
+        },
+        "statistics": [
+          {
+            "team": {
+              "id": 55,
+              "name": "Brentford",
+              "logo": "https://media.api-sports.io/football/teams/55.png"
+            },
+            "league": {
+              "id": 39,
+              "name": "Premier League",
+              "country": "England",
+              "logo": "https://media.api-sports.io/football/leagues/39.png",
+              "flag": "https://media.api-sports.io/flags/gb-eng.svg",
+              "season": 2024
+            },
+            "games": {
+              "appearences": 64,
+              "lineups": 49,
+              "minutes": 4021,
+              "number": null,
+              "position": "Attacker",
+              "rating": "7.071875",
+              "captain": false
+            },
+            "substitutes": {
+              "in": 15,
+              "out": 14,
+              "bench": 11
+            },
+            "shots": {
+              "total": 96,
+              "on": 40
+            },
+            "goals": {
+              "total": 14,
+              "conceded": 0,
+              "assists": 8,
+              "saves": null
+            },
+            "passes": {
+              "total": 990,
+              "key": 70,
+              "accuracy": null
+            },
+            "tackles": {
+              "total": 70,
+              "blocks": 20,
+              "interceptions": 22
+            },
+            "duels": {
+              "total": 612,
+              "won": 276
+            },
+            "dribbles": {
+              "attempts": 146,
+              "success": 78,
+              "past": null
+            },
+            "fouls": {
+              "drawn": 38,
+              "committed": 32
+            },
+            "cards": {
+              "yellow": 6,
+              "yellowred": 0,
+              "red": 0
+            },
+            "penalty": {
+              "won": null,
+              "commited": null,
+              "scored": 0,
+              "missed": 0,
               "saved": null
             }
           }
@@ -1126,7 +1242,7 @@
           "name": "L. Díaz",
           "firstname": "Luis Fernando",
           "lastname": "Díaz Marulanda",
-          "age": 28,
+          "age": 29,
           "birth": {
             "date": "1997-01-13",
             "place": "Barrancas",
@@ -1155,17 +1271,17 @@
             },
             "games": {
               "appearences": 36,
-              "lineups": 28,
-              "minutes": 2413,
+              "lineups": 34,
+              "minutes": 2410,
               "number": null,
-              "position": "Attacker",
+              "position": "Forward",
               "rating": "7.269444",
               "captain": false
             },
             "substitutes": {
-              "in": 8,
-              "out": 21,
-              "bench": 10
+              "in": 2,
+              "out": null,
+              "bench": null
             },
             "shots": {
               "total": 49,
@@ -1202,7 +1318,7 @@
             },
             "cards": {
               "yellow": 2,
-              "yellowred": 0,
+              "yellowred": null,
               "red": 0
             },
             "penalty": {
@@ -1312,6 +1428,196 @@
       },
       {
         "player": {
+          "id": 153430,
+          "name": "A. Elanga",
+          "firstname": "Anthony David",
+          "lastname": "Junior Elanga",
+          "age": 23,
+          "birth": {
+            "date": "2002-04-27",
+            "place": "Malmö",
+            "country": "Sweden"
+          },
+          "nationality": "Sweden",
+          "height": "178",
+          "weight": "70",
+          "injured": false,
+          "photo": "https://media.api-sports.io/football/players/153430.png"
+        },
+        "statistics": [
+          {
+            "team": {
+              "id": 34,
+              "name": "Newcastle",
+              "logo": "https://media.api-sports.io/football/teams/34.png"
+            },
+            "league": {
+              "id": 39,
+              "name": "Premier League",
+              "country": "England",
+              "logo": "https://media.api-sports.io/football/leagues/39.png",
+              "flag": "https://media.api-sports.io/flags/gb-eng.svg",
+              "season": 2024
+            },
+            "games": {
+              "appearences": 76,
+              "lineups": 65,
+              "minutes": 5019,
+              "number": null,
+              "position": "Attacker",
+              "rating": "7.018421",
+              "captain": false
+            },
+            "substitutes": {
+              "in": 11,
+              "out": 19,
+              "bench": 7
+            },
+            "shots": {
+              "total": 74,
+              "on": 48
+            },
+            "goals": {
+              "total": 12,
+              "conceded": 0,
+              "assists": 22,
+              "saves": null
+            },
+            "passes": {
+              "total": 1262,
+              "key": 100,
+              "accuracy": null
+            },
+            "tackles": {
+              "total": 40,
+              "blocks": 2,
+              "interceptions": 12
+            },
+            "duels": {
+              "total": 512,
+              "won": 232
+            },
+            "dribbles": {
+              "attempts": 128,
+              "success": 50,
+              "past": null
+            },
+            "fouls": {
+              "drawn": 94,
+              "committed": 18
+            },
+            "cards": {
+              "yellow": 2,
+              "yellowred": 0,
+              "red": 0
+            },
+            "penalty": {
+              "won": null,
+              "commited": null,
+              "scored": 0,
+              "missed": 0,
+              "saved": null
+            }
+          }
+        ]
+      },
+      {
+        "player": {
+          "id": 284324,
+          "name": "A. Garnacho",
+          "firstname": "Alejandro",
+          "lastname": "Garnacho Ferreyra",
+          "age": 21,
+          "birth": {
+            "date": "2004-07-01",
+            "place": "Madrid",
+            "country": "Spain"
+          },
+          "nationality": "Argentina",
+          "height": "180",
+          "weight": "73",
+          "injured": false,
+          "photo": "https://media.api-sports.io/football/players/284324.png"
+        },
+        "statistics": [
+          {
+            "team": {
+              "id": 49,
+              "name": "Chelsea",
+              "logo": "https://media.api-sports.io/football/teams/49.png"
+            },
+            "league": {
+              "id": 39,
+              "name": "Premier League",
+              "country": "England",
+              "logo": "https://media.api-sports.io/football/leagues/39.png",
+              "flag": "https://media.api-sports.io/flags/gb-eng.svg",
+              "season": 2024
+            },
+            "games": {
+              "appearences": 72,
+              "lineups": 52,
+              "minutes": 4391,
+              "number": null,
+              "position": "Attacker",
+              "rating": "6.797222",
+              "captain": false
+            },
+            "substitutes": {
+              "in": 20,
+              "out": 9,
+              "bench": 13
+            },
+            "shots": {
+              "total": 110,
+              "on": 60
+            },
+            "goals": {
+              "total": 12,
+              "conceded": 0,
+              "assists": 4,
+              "saves": null
+            },
+            "passes": {
+              "total": 1500,
+              "key": 74,
+              "accuracy": null
+            },
+            "tackles": {
+              "total": 60,
+              "blocks": null,
+              "interceptions": 26
+            },
+            "duels": {
+              "total": 530,
+              "won": 204
+            },
+            "dribbles": {
+              "attempts": 162,
+              "success": 52,
+              "past": null
+            },
+            "fouls": {
+              "drawn": 86,
+              "committed": 24
+            },
+            "cards": {
+              "yellow": 6,
+              "yellowred": 0,
+              "red": 0
+            },
+            "penalty": {
+              "won": null,
+              "commited": null,
+              "scored": 0,
+              "missed": 0,
+              "saved": null
+            }
+          }
+        ]
+      },
+      {
+        "player": {
           "id": 161948,
           "name": "L. Delap",
           "firstname": "Liam Rory",
@@ -1411,7 +1717,7 @@
           "name": "R. Jiménez",
           "firstname": "Raúl Alonso",
           "lastname": "Jiménez Rodríguez",
-          "age": 34,
+          "age": 35,
           "birth": {
             "date": "1991-05-05",
             "place": "Tepeji del Río Ocampo",
@@ -1443,7 +1749,7 @@
               "lineups": 34,
               "minutes": 2505,
               "number": null,
-              "position": "Attacker",
+              "position": "Forward",
               "rating": "7.013157",
               "captain": false
             },
@@ -1589,291 +1895,6 @@
               "won": null,
               "commited": null,
               "scored": 6,
-              "missed": 0,
-              "saved": null
-            }
-          }
-        ]
-      },
-      {
-        "player": {
-          "id": 19281,
-          "name": "A. Semenyo",
-          "firstname": "Antoine Serlom",
-          "lastname": "Semenyo",
-          "age": 25,
-          "birth": {
-            "date": "2000-01-07",
-            "place": "London",
-            "country": "England"
-          },
-          "nationality": "Ghana",
-          "height": "185",
-          "weight": "79",
-          "injured": false,
-          "photo": "https://media.api-sports.io/football/players/19281.png"
-        },
-        "statistics": [
-          {
-            "team": {
-              "id": 35,
-              "name": "Bournemouth",
-              "logo": "https://media.api-sports.io/football/teams/35.png"
-            },
-            "league": {
-              "id": 39,
-              "name": "Premier League",
-              "country": "England",
-              "logo": "https://media.api-sports.io/football/leagues/39.png",
-              "flag": "https://media.api-sports.io/flags/gb-eng.svg",
-              "season": 2024
-            },
-            "games": {
-              "appearences": 37,
-              "lineups": 37,
-              "minutes": 3209,
-              "number": null,
-              "position": "Attacker",
-              "rating": "7.210810",
-              "captain": false
-            },
-            "substitutes": {
-              "in": 0,
-              "out": null,
-              "bench": null
-            },
-            "shots": {
-              "total": 81,
-              "on": 41
-            },
-            "goals": {
-              "total": 11,
-              "conceded": 0,
-              "assists": 5,
-              "saves": null
-            },
-            "passes": {
-              "total": 997,
-              "key": 46,
-              "accuracy": null
-            },
-            "tackles": {
-              "total": 55,
-              "blocks": 9,
-              "interceptions": 11
-            },
-            "duels": {
-              "total": 536,
-              "won": 227
-            },
-            "dribbles": {
-              "attempts": 126,
-              "success": 69,
-              "past": null
-            },
-            "fouls": {
-              "drawn": 37,
-              "committed": 73
-            },
-            "cards": {
-              "yellow": 9,
-              "yellowred": null,
-              "red": 0
-            },
-            "penalty": {
-              "won": null,
-              "commited": null,
-              "scored": 0,
-              "missed": 0,
-              "saved": null
-            }
-          }
-        ]
-      },
-      {
-        "player": {
-          "id": 129711,
-          "name": "B. Johnson",
-          "firstname": "Brennan Price",
-          "lastname": "Johnson",
-          "age": 24,
-          "birth": {
-            "date": "2001-05-23",
-            "place": "Nottingham",
-            "country": "England"
-          },
-          "nationality": "Wales",
-          "height": "186",
-          "weight": "73",
-          "injured": false,
-          "photo": "https://media.api-sports.io/football/players/129711.png"
-        },
-        "statistics": [
-          {
-            "team": {
-              "id": 47,
-              "name": "Tottenham",
-              "logo": "https://media.api-sports.io/football/teams/47.png"
-            },
-            "league": {
-              "id": 39,
-              "name": "Premier League",
-              "country": "England",
-              "logo": "https://media.api-sports.io/football/leagues/39.png",
-              "flag": "https://media.api-sports.io/flags/gb-eng.svg",
-              "season": 2024
-            },
-            "games": {
-              "appearences": 33,
-              "lineups": 24,
-              "minutes": 2178,
-              "number": null,
-              "position": "Attacker",
-              "rating": "7.072727",
-              "captain": false
-            },
-            "substitutes": {
-              "in": 9,
-              "out": 10,
-              "bench": 11
-            },
-            "shots": {
-              "total": 43,
-              "on": 20
-            },
-            "goals": {
-              "total": 11,
-              "conceded": 0,
-              "assists": 3,
-              "saves": null
-            },
-            "passes": {
-              "total": 570,
-              "key": 19,
-              "accuracy": null
-            },
-            "tackles": {
-              "total": 39,
-              "blocks": 3,
-              "interceptions": 4
-            },
-            "duels": {
-              "total": 193,
-              "won": 91
-            },
-            "dribbles": {
-              "attempts": 41,
-              "success": 19,
-              "past": null
-            },
-            "fouls": {
-              "drawn": 26,
-              "committed": 27
-            },
-            "cards": {
-              "yellow": 5,
-              "yellowred": 0,
-              "red": 0
-            },
-            "penalty": {
-              "won": null,
-              "commited": null,
-              "scored": 0,
-              "missed": 0,
-              "saved": null
-            }
-          }
-        ]
-      },
-      {
-        "player": {
-          "id": 178077,
-          "name": "K. Schade",
-          "firstname": "Kevin",
-          "lastname": "Schade",
-          "age": 24,
-          "birth": {
-            "date": "2001-11-27",
-            "place": "Potsdam",
-            "country": "Germany"
-          },
-          "nationality": "Germany",
-          "height": "183",
-          "weight": "74",
-          "injured": false,
-          "photo": "https://media.api-sports.io/football/players/178077.png"
-        },
-        "statistics": [
-          {
-            "team": {
-              "id": 55,
-              "name": "Brentford",
-              "logo": "https://media.api-sports.io/football/teams/55.png"
-            },
-            "league": {
-              "id": 39,
-              "name": "Premier League",
-              "country": "England",
-              "logo": "https://media.api-sports.io/football/leagues/39.png",
-              "flag": "https://media.api-sports.io/flags/gb-eng.svg",
-              "season": 2024
-            },
-            "games": {
-              "appearences": 38,
-              "lineups": 26,
-              "minutes": 2300,
-              "number": null,
-              "position": "Midfielder",
-              "rating": "7.013157",
-              "captain": false
-            },
-            "substitutes": {
-              "in": 12,
-              "out": 20,
-              "bench": 12
-            },
-            "shots": {
-              "total": 43,
-              "on": 27
-            },
-            "goals": {
-              "total": 11,
-              "conceded": 0,
-              "assists": 2,
-              "saves": null
-            },
-            "passes": {
-              "total": 448,
-              "key": 23,
-              "accuracy": null
-            },
-            "tackles": {
-              "total": 39,
-              "blocks": 4,
-              "interceptions": 5
-            },
-            "duels": {
-              "total": 396,
-              "won": 196
-            },
-            "dribbles": {
-              "attempts": 82,
-              "success": 30,
-              "past": null
-            },
-            "fouls": {
-              "drawn": 38,
-              "committed": 21
-            },
-            "cards": {
-              "yellow": 3,
-              "yellowred": 0,
-              "red": 0
-            },
-            "penalty": {
-              "won": null,
-              "commited": null,
-              "scored": 0,
               "missed": 0,
               "saved": null
             }
@@ -2372,8 +2393,8 @@
               "season": 2024
             },
             "games": {
-              "appearences": 37,
-              "lineups": 36,
+              "appearences": 36,
+              "lineups": 35,
               "minutes": 3024,
               "number": null,
               "position": "Midfielder",

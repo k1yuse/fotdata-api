@@ -13,8 +13,22 @@
    "home": []
   }
  },
+ "AS Monaco FC|Toulouse FC|2026-10-10": {
+  "fixture_id": 1552778,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
  "Arsenal FC|Leeds United FC|2026-10-10": {
   "fixture_id": 1557417,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
+ "Aston Villa FC|Brentford FC|2026-10-10": {
+  "fixture_id": 1557418,
   "injuries": {
    "away": [],
    "home": []
@@ -27,8 +41,43 @@
    "home": []
   }
  },
+ "Chelsea FC|AFC Bournemouth|2026-10-10": {
+  "fixture_id": 1557419,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
+ "Deportivo Alavés|Club Atlético de Madrid|2026-10-10": {
+  "fixture_id": 1570403,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
  "FC Augsburg|FC Bayern München|2026-10-10": {
   "fixture_id": 1575180,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
+ "FC Barcelona|Getafe CF|2026-10-10": {
+  "fixture_id": 1570404,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
+ "FC Internazionale Milano|Parma Calcio 1913|2026-10-10": {
+  "fixture_id": 1550141,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
+ "FC Lorient|Paris FC|2026-10-10": {
+  "fixture_id": 1552777,
   "injuries": {
    "away": [],
    "home": []
@@ -41,8 +90,43 @@
    "home": []
   }
  },
+ "Ipswich Town FC|Fulham FC|2026-10-10": {
+  "fixture_id": 1557423,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
+ "Lille OSC|Le Havre AC|2026-10-10": {
+  "fixture_id": 1552776,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
+ "Manchester United FC|Tottenham Hotspur FC|2026-10-10": {
+  "fixture_id": 1557425,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
  "Málaga CF|RCD Espanyol de Barcelona|2026-10-09": {
   "fixture_id": 1570408,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
+ "Paris Saint-Germain FC|Le Mans FC|2026-10-10": {
+  "fixture_id": 1552780,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
+ "RB Leipzig|Eintracht Frankfurt|2026-10-10": {
+  "fixture_id": 1575177,
   "injuries": {
    "away": [],
    "home": []
@@ -62,8 +146,36 @@
    "home": []
   }
  },
+ "Real Madrid CF|Villarreal CF|2026-10-10": {
+  "fixture_id": 1570411,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
  "SC Paderborn 07|VfB Stuttgart|2026-10-10": {
   "fixture_id": 1575184,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
+ "SSC Napoli|Frosinone Calcio|2026-10-10": {
+  "fixture_id": 1550144,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
+ "Stade Brestois 29|Angers SCO|2026-10-10": {
+  "fixture_id": 1552774,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
+ "Sunderland AFC|Brighton & Hove Albion FC|2026-10-10": {
+  "fixture_id": 1557426,
   "injuries": {
    "away": [],
    "home": []
