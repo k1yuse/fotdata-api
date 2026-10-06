@@ -33,6 +33,7 @@ jobs:
     - name: 데이터 업데이트 스크립트 실행
       env:
         FOOTBALL_API_KEY: ${{ secrets.FOOTBALL_API_KEY }}
+        API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}   # API-Football Pro(경기 상세·부상자·선수) — 없으면 그 단계만 건너뜀
       run: python update_data.py
 
     # 업데이트 스크립트는 실패한 단계가 있어도 나머지 결과를 저장한 뒤 종료 코드 1로 끝남(update_data.py main) —

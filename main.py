@@ -1088,6 +1088,7 @@ def _warm_team_stats():
 def _start_warmup():
     import threading
     threading.Thread(target=_warm_team_stats, daemon=True).start()
+    threading.Thread(target=_warm_af, daemon=True).start()   # 선수 시즌 기록(경기 상세 합산) 미리 계산
 
 @app.get("/team/stats/{team_name}")
 def get_team_stats(team_name: str):
@@ -1524,26 +1525,6 @@ def _with_live(m, live):
         return m
     return {**m, **{k: x for k, x in v.items() if k != "utc"}, "live": True}
 
-@app.get("/match/detail")
-def get_match_detail(home_team: str, away_team: str, date: str):
-    """경기 결과 창 [요약 | 라인업 | 통계] 탭 — 득점·카드·교체, 라인업(포메이션·평점), 팀 통계(xG 포함), 경기 최우수 선수.
-    update_data.af_match_detail이 만든 fotdata_model/match_details.json {"홈|원정|YYYY-MM-DD": ...}에서 꺼냄.
-    수집은 API-Football Pro 결제 후에 붙일 예정이라 지금은 파일이 없어서 404 → 화면은 예전처럼(탭 없이) 보여줌 (2026-09-30)"""
-    d = (_load_json("match_details.json") or {}).get(f"{home_team}|{away_team}|{date[:10]}")
-    if not d:
-        return Response(status_code=204)   # 경기 상세 데이터 없음 — 결제 후 수집 전이라 정상 상태(404면 브라우저 콘솔에 빨간 오류로 찍혀서 빈 응답으로, 2026-10-05)
-    return d
-
-@app.get("/team/squad/{team_name}")
-def get_team_squad(team_name: str):
-    """선수 카드·구단 베스트 11·주요 선수 — 선수 프로필(나이·키·몸무게·국적·사진) + 리그 시즌 기록(출전·골·도움·평점 등).
-    update_data.af_player_row로 만든 fotdata_model/af_squads.json. 결제 후 수집 전엔 404 (2026-09-30)"""
-    team = TEAM_NAME_MAP.get(team_name, team_name)
-    d = (_load_json("af_squads.json") or {}).get(team)
-    if not d:
-        return Response(status_code=204)   # 선수 기록 데이터 없음 — 결제 후 수집 전이라 정상 상태(404면 브라우저 콘솔에 빨간 오류로 찍혀서 빈 응답으로, 2026-10-05)
-    return d
-
 @app.get("/teams/ko")
 def get_teams_ko():
     """구단 둘러보기 검색용: 팀 이름 → 한국어 구단명(위키백과 name_ko) — "맨체스터"·"바이에른"처럼 한글로도 찾게 (2026-09-30)"""
@@ -1590,44 +1571,163 @@ def _rank_movement(code):
     now, prev = ranks(ms), ranks([m for m in ms if (m.get("matchday") or 0) < last])
     return {"matchday": last, "delta": {t: prev[t] - r for t, r in now.items() if t in prev}}
 
+# ── API-Football(Pro, 2026-10-06 결제) — 경기 상세·팀 소식·선수 카드 ──
+# 새벽 수집(update_data.af_sync): af_fixtures.json(경기 목록·API-Football ID) · match_details/(끝난 경기 상세, gzip) ·
+# match_previews.json(결장·부상자) · af_players.json(선수 프로필). 시즌 기록은 경기 상세 합산(af_transform.af_season_players).
+# Render 환경변수 API_FOOTBALL_KEY가 있으면 새벽 수집 전이라도 요청 때 바로 받음: 막 끝난 경기 상세, 킥오프 약 1시간 전 확정 라인업, 선수 경력·트로피·부상 이력
+from af_transform import af_match_detail, af_season_players, add_percentiles, af_player_profile, md_read
+AF_KEY = os.environ.get("API_FOOTBALL_KEY", "")
+AF_URL = "https://v3.football.api-sports.io"
+MD_DIR = os.path.join(MODEL_DIR, "match_details")
+_af_mem = {}   # 요청 때 받은 것(키 → (받은 시각, 값)) — 프로세스가 살아 있는 동안만
+
+def _af_live_get(path, ttl, **params):
+    """API-Football을 요청 때 바로(키가 있을 때만). 같은 요청은 ttl초 동안 다시 안 부름(실패도 1분 기억 — 한도 보호)"""
+    if not AF_KEY:
+        return None
+    k = path + json.dumps(params, sort_keys=True)
+    hit = _af_mem.get(k)
+    if hit and _time.time() - hit[0] < (ttl if hit[1] is not None else 60):
+        return hit[1]
+    try:
+        d = requests.get(AF_URL + path, headers={"x-apisports-key": AF_KEY}, params=params, timeout=12).json()
+        val = None if d.get("errors") else d.get("response")
+    except Exception:
+        val = None
+    _af_mem[k] = (_time.time(), val)
+    return val
+
+@lru_cache(maxsize=1)
+def _af_index():
+    """af_fixtures.json → {"홈|원정|YYYY-MM-DD": 경기} + 팀별 경기 목록(날짜순)"""
+    by_key, by_team = {}, {}
+    for e in (_load_json("af_fixtures.json") or {}).get("fixtures", []):
+        by_key[f"{e['home_team']}|{e['away_team']}|{e['date'][:10]}"] = e
+        for t in (e["home_team"], e["away_team"]):
+            by_team.setdefault(t, []).append(e)
+    for l in by_team.values():
+        l.sort(key=lambda e: e["date"])
+    return by_key, by_team
+
+@lru_cache(maxsize=4096)
+def _md_file(name):
+    p = os.path.join(MD_DIR, name)
+    return md_read(p) if os.path.exists(p) else None
+
+def _md_of(e):
+    """경기 상세: 저장된 파일 → 없으면(새벽 수집 전에 막 끝난 경기) 요청 때 받기"""
+    d = _md_file(e["file"])
+    if d:
+        return d
+    ko = pd.Timestamp(e["kickoff"])
+    if pd.Timestamp.now(tz="UTC") < ko + pd.Timedelta(minutes=110):
+        return None   # 아직 안 끝났을 시각
+    r = _af_live_get("/fixtures", 3600, id=e["id"])
+    if not r:
+        return None
+    fx = r[0]
+    if (fx.get("fixture") or {}).get("status", {}).get("short") not in ("FT", "AET", "PEN", "AWD", "WO"):
+        return None
+    det = af_match_detail(fx)
+    return {**det, **{k: e[k] for k in ("league", "home_team", "away_team", "date")}, "home_goals": fx["goals"]["home"], "away_goals": fx["goals"]["away"]}
+
+@app.get("/match/detail")
+def get_match_detail(home_team: str, away_team: str, date: str):
+    """경기 결과 창 [요약 | 라인업 | 통계] — 득점·카드·교체, 라인업(포메이션·평점), 팀 통계(xG 포함), 경기 최우수 선수.
+    없으면 204(빈 응답 — 화면은 예전처럼 탭 없이)"""
+    e = _af_index()[0].get(f"{home_team}|{away_team}|{date[:10]}")
+    d = _md_of(e) if e else None
+    if not d:
+        return Response(status_code=204)
+    return {k: v for k, v in d.items() if k != "pstats"}   # 선수별 합산용 기록은 화면에 안 씀(크기만 큼)
+
+@lru_cache(maxsize=8)
+def _af_league_squads(code):
+    """리그 전체 선수 시즌 기록(경기 상세 합산) + 90분당 백분위(같은 리그·같은 포지션) → {팀: 선수 목록}"""
+    prof = _load_json("af_players.json") or {}
+    _, by_team = _af_index()
+    out, pool = {}, []
+    for team, v in prof.items():
+        if v.get("league") != code:
+            continue
+        dets = []
+        for e in by_team.get(team, []):
+            if e["league"] == code and e.get("has_detail"):
+                d = _md_file(e["file"])
+                if d:
+                    dets.append(d)
+        ps = af_season_players(dets, team, v.get("players") or {})
+        out[team] = ps
+        pool += ps
+    # 90분당 순위 기준: 450분(5경기) — 시즌 초엔 팀 최다 출전의 절반으로 낮춤(5라운드면 450분을 다 채운 선수가 거의 없음)
+    add_percentiles(pool, min_minutes=min(450, 0.5 * max([p["minutes"] or 0 for p in pool] or [0])))
+    return out
+
+@app.get("/team/squad/{team_name}")
+def get_team_squad(team_name: str):
+    """선수 카드·구단 베스트 11·주요 선수 — 프로필(af_players.json) + 이번 시즌 리그 기록(경기 상세 합산). 없으면 204"""
+    team = TEAM_NAME_MAP.get(team_name, team_name)
+    v = (_load_json("af_players.json") or {}).get(team)
+    if not v:
+        return Response(status_code=204)
+    return {"team": team, "league": v.get("league"), "season": v.get("season"), "updated": v.get("updated"),
+            "players": _af_league_squads(v.get("league")).get(team, [])}
+
 @app.get("/player/profile/{player_id}")
 def get_player_profile(player_id: int):
-    """선수 카드 경력·트로피·부상 이력 — update_data.af_player_profile로 만든 fotdata_model/af_profiles.json {API-Football 선수 ID: ...}.
-    결제 후 수집 전엔 404 (2026-09-30)"""
-    d = (_load_json("af_profiles.json") or {}).get(str(player_id))
-    if not d:
-        return Response(status_code=204)   # 선수 경력 데이터 없음 — 결제 후 수집 전이라 정상 상태(404면 브라우저 콘솔에 빨간 오류로 찍혀서 빈 응답으로, 2026-10-05)
-    return d
+    """선수 카드 경력·트로피·부상 이력 — 요청 때 API-Football 3번(경력·트로피·부상, 하루 캐시). 키가 없거나 못 받으면 204"""
+    teams = _af_live_get("/players/teams", 86400, player=player_id)
+    if teams is None:
+        return Response(status_code=204)
+    trophies = _af_live_get("/trophies", 86400, player=player_id) or []
+    sidelined = _af_live_get("/sidelined", 86400, player=player_id) or []
+    nat = next((p.get("nationality") for v in (_load_json("af_players.json") or {}).values() for pid, p in (v.get("players") or {}).items() if pid == str(player_id)), None)
+    return af_player_profile(teams, trophies, sidelined, nationality=nat, current_season=CURRENT_SEASON_YEAR)
 
 @app.get("/match/preview")
 def get_match_preview(home_team: str, away_team: str, date: str = None):
-    """경기 미리보기·예측 결과의 '팀 소식': 라인업(발표 전이면 각 팀 지난 경기 선발 = 예상 라인업) + 결장·부상자.
-    fotdata_model/match_previews.json(킥오프 전 수집) + match_details.json(지난 경기 선발). 둘 다 없으면 404 (2026-09-30)"""
+    """경기 미리보기·예측 결과의 '팀 소식': 라인업(킥오프 약 1시간 전 확정 — 요청 때 받음, 그 전엔 각 팀 지난 경기 선발 = 예상 라인업)
+    + 결장·부상자(match_previews.json). 없으면 204"""
+    by_key, by_team = _af_index()
     if not date:   # 날짜가 없으면(예측 탭에서 두 팀만 고른 경우) 다가오는 같은 대진 날짜로
         now = pd.Timestamp.now(tz="UTC")
-        nxt = sorted(m["date"] for ms in (_load_json("schedule.json") or {}).values() for m in ms
-                     if m["home_team"] == home_team and m["away_team"] == away_team and pd.Timestamp(m["date"]) > now - pd.Timedelta(hours=3))
+        nxt = sorted(e["date"] for e in by_team.get(home_team, []) if e["away_team"] == away_team and pd.Timestamp(e["date"]) > now - pd.Timedelta(hours=3))
         date = nxt[0] if nxt else ""
-    pv = dict((_load_json("match_previews.json") or {}).get(f"{home_team}|{away_team}|{date[:10]}") or {})
-    lineups = pv.get("lineups") or {}
-    if not (lineups.get("home") and lineups.get("away")):
-        # 라인업 발표 전(보통 킥오프 약 1시간 전): 각 팀의 가장 최근 경기 선발을 예상 라인업으로(평점·교체 표시는 뺌)
-        det = _load_json("match_details.json") or {}
+    key = f"{home_team}|{away_team}|{date[:10]}"
+    pv = dict((_load_json("match_previews.json") or {}).get(key) or {})
+    e = by_key.get(key)
+    if e:
+        now, ko = pd.Timestamp.now(tz="UTC"), pd.Timestamp(e["kickoff"])
+        if ko - pd.Timedelta(minutes=90) <= now <= ko + pd.Timedelta(hours=3):   # 확정 라인업은 보통 킥오프 약 1시간 전
+            lu = _af_live_get("/fixtures/lineups", 180, fixture=e["id"])
+            if lu and len(lu) == 2:
+                pv["lineups"] = af_match_detail({"teams": {"home": {"id": e["home_id"]}}, "lineups": lu})["lineups"]
+    if not (pv.get("lineups") or {}).get("home"):
         def last_xi(team):
-            keys = sorted((k for k in det if team in k.split("|")[:2]), key=lambda k: k.split("|")[2], reverse=True)
-            for k in keys:
-                side = "home" if k.split("|")[0] == team else "away"
-                lu = (det[k].get("lineups") or {}).get(side)
+            """이 팀의 가장 최근 경기 선발(평점·교체 표시는 뺌) — 예상 라인업"""
+            for x in reversed(by_team.get(team, [])):
+                if not x.get("has_detail") or x["date"][:10] >= date[:10]:
+                    continue
+                d = _md_file(x["file"])
+                lu = ((d or {}).get("lineups") or {}).get("home" if x["home_team"] == team else "away")
                 if lu and lu.get("start"):
-                    return {**lu, "subs": [], "start": [{kk: v for kk, v in p.items() if kk in ("id", "name", "number", "pos", "grid", "photo")} for p in lu["start"]],
-                            "from": k.split("|")[2]}
+                    return {**lu, "subs": [], "from": x["date"][:10],
+                            "start": [{k: v for k, v in p.items() if k in ("id", "name", "number", "pos", "grid", "photo")} for p in lu["start"]]}
             return None
         pred = {"home": last_xi(home_team), "away": last_xi(away_team)}
         if pred["home"] or pred["away"]:
             pv["predicted"] = pred
     if not pv.get("lineups") and not pv.get("predicted") and not pv.get("injuries"):
-        return Response(status_code=204)   # 팀 소식 데이터 없음 — 결제 후 수집 전이라 정상 상태(404면 브라우저 콘솔에 빨간 오류로 찍혀서 빈 응답으로, 2026-10-05)
+        return Response(status_code=204)
     return {**pv, "date": date}
+
+def _warm_af():
+    """서버 시작 때 리그별 선수 시즌 기록을 미리 합산(첫 요청이 느리지 않게)"""
+    try:
+        for c in ("PL", "PD", "BL1", "SA", "FL1"):
+            _af_league_squads(c)
+    except Exception as e:
+        print("⚠️ 선수 기록 미리 계산 실패:", e)
 
 @app.get("/matches/live")
 def get_matches_live():

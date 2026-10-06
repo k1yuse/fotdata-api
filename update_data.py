@@ -1095,6 +1095,174 @@ def fetch_league_history():
     with open(path, "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, indent=1, sort_keys=True)
 
+# ── API-Football Pro 수집(2026-10-06 결제) — 경기 상세·부상자·선수 프로필 ──
+# 이번 시즌 5대 리그 + 챔스. 매일 새벽 실행(키가 있을 때만), 따로: python update_data.py --af-sync
+#   af_team_map.json   API-Football 팀 ID → 우리 팀 이름(같은 날 경기를 이름 비슷함·킥오프 시각으로 맞춰 투표 — "Wolves"↔"Wolverhampton Wanderers FC")
+#   af_fixtures.json   이번 시즌 경기 목록(API-Football 경기 ID·상태·우리 이름·우리 일정 날짜) — 서버가 요청 때 라인업·상세를 바로 받을 때도 씀
+#   match_details/     끝난 경기 상세 한 경기 한 파일(이벤트·라인업·평점·팀 통계·선수별 기록 — 한 번 받으면 안 바뀌어서 파일만 늘어남)
+#   match_previews.json 앞으로 4일 경기의 결장·부상자
+#   af_players.json    팀별 선수 프로필(나이·키·몸무게·국적·사진·부상 여부) — 6일마다 갱신
+# 시즌 기록(골·도움·평점·90분당 순위)은 서버가 match_details를 합산해서 만듦(af_transform.af_season_players)
+AF_COMPS = {"PL": 39, "PD": 140, "BL1": 78, "SA": 135, "FL1": 61, "CL": 2}
+AF_DONE = {"FT", "AET", "PEN", "AWD", "WO"}
+MD_DIR = f"{MODEL_DIR}/match_details"
+AF_PROFILE_DAYS = 6
+
+def _af(path, **params):
+    """API-Football 호출 — 분당 300회 한도라 0.25초 간격, 429·한도 오류면 쉬었다 최대 3번"""
+    for attempt in range(3):
+        try:
+            r = requests.get(API_FOOTBALL_URL + path, headers=API_FOOTBALL_HEADERS, params=params, timeout=40)
+            d = r.json()
+        except Exception as e:
+            print(f"    ⚠️ {path} {params}: {e}"); time.sleep(5 * (attempt + 1)); continue
+        if r.status_code == 429 or (d.get("errors") and re.search(r"rate|limit|requests", str(d["errors"]), re.I)):
+            time.sleep(15 * (attempt + 1)); continue
+        time.sleep(0.25)
+        if d.get("errors"):
+            print(f"    ⚠️ {path} {params}: {d['errors']}")
+        return d
+    return {}
+
+def _af_tokens(n):
+    return [t for t in _norm_club(n).split() if t]
+
+def _af_name_sim(a, b):
+    """이름 비슷함(0~1): 단어가 같거나 앞 4글자가 같으면(“wolves”↔“wolverhampton”) 맞는 단어로"""
+    ta, tb = _af_tokens(a), _af_tokens(b)
+    if not ta or not tb:
+        return 0
+    hit = sum(1 for x in ta if any(x == y or (len(x) >= 4 and len(y) >= 4 and x[:4] == y[:4]) for y in tb))
+    return hit / max(len(ta), len(tb))
+
+def af_sync(season=None):
+    import json
+    from collections import Counter, defaultdict
+    if not API_FOOTBALL_KEY:
+        print("  ⚠️ API_FOOTBALL_KEY가 없어 API-Football 수집 건너뜀"); return
+    season = season or max(MATCH_SEASONS)
+    rd = lambda n, d: json.load(open(f"{MODEL_DIR}/{n}", encoding="utf-8")) if os.path.exists(f"{MODEL_DIR}/{n}") else d
+    def wr(n, obj, indent=None):
+        with open(f"{MODEL_DIR}/{n}", "w", encoding="utf-8") as f:
+            json.dump(obj, f, ensure_ascii=False, indent=indent, sort_keys=True, separators=None if indent else (",", ":"))
+    sched = rd("schedule.json", {})
+    teammap = rd("af_team_map.json", {})
+    print(f"\n[API-Football 수집] {season}-{(season + 1) % 100:02d} 시즌")
+    # 1) 대회별 경기 목록
+    fx_all = {}
+    for code, lid in AF_COMPS.items():
+        fx_all[code] = _af("/fixtures", league=lid, season=season).get("response") or []
+        print(f"  {code}: {len(fx_all[code])}경기")
+    # 2) 팀 이름 맞추기 — 같은 날 우리 일정에서 홈·원정 이름이 가장 비슷한 경기(킥오프 시각이 같으면 가산)
+    votes = defaultdict(Counter)
+    for code, fxs in fx_all.items():
+        by_day = defaultdict(list)
+        for m in sched.get(code, []):
+            by_day[m["date"][:10]].append(m)
+        for f in fxs:
+            ko = pd.Timestamp(f["fixture"]["date"]).tz_convert("UTC")
+            h, a = f["teams"]["home"], f["teams"]["away"]
+            best, bs = None, 0
+            for m in by_day.get(ko.strftime("%Y-%m-%d"), []):
+                sc = _af_name_sim(h["name"], m["home_team"]) + _af_name_sim(a["name"], m["away_team"])
+                if abs((pd.Timestamp(m["date"]) - ko).total_seconds()) < 600:
+                    sc += 0.6
+                if sc > bs:
+                    best, bs = m, sc
+            if best and bs >= 1.2:
+                votes[h["id"]][best["home_team"]] += 1
+                votes[a["id"]][best["away_team"]] += 1
+    changed = []
+    for tid, c in votes.items():
+        name, n = c.most_common(1)[0]
+        if n >= 2 and teammap.get(str(tid)) != name:
+            changed.append((teammap.get(str(tid)), name)); teammap[str(tid)] = name
+    clash = [n for n, k in Counter(teammap.values()).items() if k > 1]
+    print(f"  팀 매칭: {len(teammap)}팀{' · 새로/바뀜 ' + str(len(changed)) if changed else ''}{' · ⚠️ 한 이름에 ID 여러 개: ' + ', '.join(clash) if clash else ''}")
+    wr("af_team_map.json", teammap, indent=1)
+    # 3) 경기 목록(우리 이름·우리 일정 날짜)
+    os.makedirs(MD_DIR, exist_ok=True)
+    ours_by_pair = defaultdict(list)
+    for code, ms in sched.items():
+        for m in ms:
+            ours_by_pair[(code, m["home_team"], m["away_team"])].append(m)
+    index, unmapped = [], set()
+    for code, fxs in fx_all.items():
+        for f in fxs:
+            h, a = teammap.get(str(f["teams"]["home"]["id"])), teammap.get(str(f["teams"]["away"]["id"]))
+            if not h or not a:
+                unmapped.update(x["name"] for x, ok in ((f["teams"]["home"], h), (f["teams"]["away"], a)) if not ok); continue
+            ko = pd.Timestamp(f["fixture"]["date"]).tz_convert("UTC")
+            cands = ours_by_pair.get((code, h, a), [])
+            om = min(cands, key=lambda m: abs((pd.Timestamp(m["date"]) - ko).total_seconds())) if cands else None
+            date = om["date"] if om and abs((pd.Timestamp(om["date"]) - ko).days) <= 3 else ko.strftime("%Y-%m-%dT%H:%M:%SZ")
+            e = {"id": f["fixture"]["id"], "league": code, "home_team": h, "away_team": a, "date": date, "kickoff": ko.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                 "status": f["fixture"]["status"]["short"], "home_id": f["teams"]["home"]["id"], "away_id": f["teams"]["away"]["id"],
+                 "home_goals": f["goals"]["home"], "away_goals": f["goals"]["away"], "file": md_file(h, a, date)}
+            index.append(e)
+    if unmapped:
+        print(f"  ⚠️ 우리 이름을 못 찾은 팀(그 경기는 건너뜀): {', '.join(sorted(unmapped))}")
+    # 4) 끝난 경기 상세 — 아직 파일이 없는 것만, 한 번에 20경기씩
+    need = [e for e in index if e["status"] in AF_DONE and not os.path.exists(f"{MD_DIR}/{e['file']}")]
+    by_id = {e["id"]: e for e in need}
+    got = 0
+    for i in range(0, len(need), 20):
+        ids = [e["id"] for e in need[i:i + 20]]
+        for fx in _af("/fixtures", ids="-".join(map(str, ids))).get("response") or []:
+            e = by_id.get(fx["fixture"]["id"])
+            if not e:
+                continue
+            det = af_match_detail(fx)
+            if not det["lineups"] and not det["events"]:
+                continue   # 아직 상세가 안 올라온 경기 — 다음 실행 때
+            det.update({k: e[k] for k in ("league", "home_team", "away_team", "date", "home_goals", "away_goals")})
+            md_write(f"{MD_DIR}/{e['file']}", det)
+            got += 1
+    for e in index:
+        e["has_detail"] = os.path.exists(f"{MD_DIR}/{e['file']}")
+    print(f"  경기 상세: 새로 {got}경기 · 전체 {sum(e['has_detail'] for e in index)}경기")
+    wr("af_fixtures.json", {"season": season, "updated": pd.Timestamp.now(tz='UTC').strftime('%Y-%m-%dT%H:%M:%SZ'), "fixtures": index})
+    # 5) 앞으로 4일 경기 결장·부상자(대회별 한 번씩)
+    now = pd.Timestamp.now(tz="UTC")
+    soon = [e for e in index if e["status"] in ("NS", "TBD") and now <= pd.Timestamp(e["kickoff"]) <= now + pd.Timedelta(days=4)]
+    previews = {}
+    for code in sorted({e["league"] for e in soon}):
+        inj = _af("/injuries", league=AF_COMPS[code], season=season).get("response") or []
+        by_fx = defaultdict(list)
+        for x in inj:
+            by_fx[(x.get("fixture") or {}).get("id")].append(x)
+        for e in (e for e in soon if e["league"] == code):
+            rows = by_fx.get(e["id"], [])
+            previews[f"{e['home_team']}|{e['away_team']}|{e['date'][:10]}"] = {"fixture_id": e["id"],
+                "injuries": {"home": af_injury_rows(rows, e["home_id"]), "away": af_injury_rows(rows, e["away_id"])}}
+    wr("match_previews.json", previews, indent=1)
+    print(f"  결장·부상자: {len(previews)}경기")
+    # 6) 선수 프로필(5대 리그 팀, 6일 넘은 팀만)
+    players = rd("af_players.json", {})
+    league_team = {}
+    for e in index:
+        if e["league"] != "CL":
+            league_team[e["home_team"]] = (e["league"], e["home_id"]); league_team[e["away_team"]] = (e["league"], e["away_id"])
+    today = now.strftime("%Y-%m-%d")
+    stale = [t for t in league_team if (pd.Timestamp(today) - pd.Timestamp((players.get(t) or {}).get("updated", "2000-01-01"))).days >= AF_PROFILE_DAYS]
+    for t in stale:
+        code, tid = league_team[t]
+        rows, page, pages = {}, 1, 1
+        while page <= pages and page <= 6:
+            d = _af("/players", team=tid, season=season, page=page)
+            pages = (d.get("paging") or {}).get("total") or 1
+            for p in d.get("response") or []:
+                r = af_profile_row(p)
+                if r["id"]:
+                    rows[str(r["id"])] = r
+            page += 1
+        if rows:
+            players[t] = {"af_id": tid, "league": code, "season": season, "updated": today, "players": rows}
+    for t in [t for t in players if t not in league_team]:   # 강등 등으로 빠진 팀
+        players.pop(t)
+    wr("af_players.json", players)
+    print(f"  선수 프로필: {len(stale)}팀 갱신 · 전체 {len(players)}팀 {sum(len(v['players']) for v in players.values())}명")
+
 def _wiki_sections(title):
     return _wiki_get("https://en.wikipedia.org/w/api.php", {"action": "parse", "page": title, "prop": "sections",
                                                             "format": "json", "redirects": 1}).get("parse", {}).get("sections")
@@ -1277,193 +1445,8 @@ def fetch_team_wiki(force=False):
         json.dump(wiki, f, ensure_ascii=False, indent=1, sort_keys=True)
     print(f"  ✅ team_wiki.json 저장 ({len(wiki)}팀)")
 
-# ── 경기 상세(API-Football /fixtures?id=) → 화면용 형태 (2026-09-30) ──
-# 경기 결과 창의 [요약 | 라인업 | 통계] 탭이 쓰는 형태. 수집(어느 경기를 언제 받을지)은 API-Football Pro 결제 후에 붙이고,
-# 결과는 fotdata_model/match_details.json {"홈|원정|YYYY-MM-DD": 이 함수 결과}에 저장 → main.py /match/detail이 내려줌.
-# /fixtures?id= 한 번이면 이벤트·라인업·팀 통계·선수별 스탯(평점)이 같이 옴(무료 키로 24-25 경기에서 형태 확인함).
-AF_STAT_KEYS = [   # (API-Football 이름, 키, 화면 라벨, 단위, 좋은 쪽)
-    ("Ball Possession", "possession", "점유율", "%", None),
-    ("expected_goals", "xg", "기대 득점(xG)", "", "high"),
-    ("Total Shots", "shots", "슈팅", "", "high"),
-    ("Shots on Goal", "shots_on", "유효 슈팅", "", "high"),
-    ("Shots insidebox", "shots_box", "박스 안 슈팅", "", "high"),
-    ("Corner Kicks", "corners", "코너킥", "", "high"),
-    ("Total passes", "passes", "패스", "", None),
-    ("Passes %", "pass_acc", "패스 성공률", "%", "high"),
-    ("Goalkeeper Saves", "saves", "선방", "", None),
-    ("Fouls", "fouls", "파울", "", "low"),
-    ("Offsides", "offsides", "오프사이드", "", "low"),
-    ("Yellow Cards", "yellow", "경고", "", "low"),
-    ("Red Cards", "red", "퇴장", "", "low"),
-]
-
-def af_match_detail(fx):
-    """API-Football 경기 하나(/fixtures?id= 응답의 response[0]) → 화면용 dict(점수·팀 이름은 우리 일정에 이미 있어서 안 넣음)"""
-    hid = fx["teams"]["home"]["id"]
-    side = lambda tid: "home" if tid == hid else "away"
-    num = lambda v: None if v in (None, "") else float(str(v).rstrip("%"))
-    pinfo = {}   # 선수 ID → 평점·출전 시간·사진
-    for tp in fx.get("players") or []:
-        for p in tp.get("players") or []:
-            g = ((p.get("statistics") or [{}])[0] or {}).get("games") or {}
-            pinfo[p["player"]["id"]] = {"rating": round(float(g["rating"]), 1) if g.get("rating") else None,
-                                        "minutes": g.get("minutes"), "photo": p["player"].get("photo")}
-    starters = {x["player"]["id"] for l in fx.get("lineups") or [] for x in l.get("startXI") or []}
-    events, tally = [], {}
-    def mark(pid, k, minute=None):
-        """선수별 표시: 골·도움·카드는 횟수, 교체(off/on)는 그 분"""
-        if not pid:
-            return
-        t = tally.setdefault(pid, {})
-        t[k] = minute if k in ("off", "on") else t.get(k, 0) + 1
-    for e in fx.get("events") or []:
-        t, d = e.get("type"), e.get("detail") or ""
-        kind = {"Goal": {"Own Goal": "own_goal", "Penalty": "pen_goal", "Missed Penalty": "missed_pen"}.get(d, "goal"),
-                "Card": "red" if "Red" in d else "second_yellow" if "Second" in d else "yellow",
-                "subst": "sub", "Var": "var"}.get(t, (t or "").lower())
-        p, a = e.get("player") or {}, e.get("assist") or {}
-        if kind == "sub" and p.get("id") not in starters and a.get("id") in starters:
-            p, a = a, p   # 교체는 player = 나간 선수, assist = 들어온 선수가 원칙인데 반대로 오는 경우가 있어 선발 명단으로 바로잡음
-        tm = e.get("time") or {}
-        events.append({"min": tm.get("elapsed"), "extra": tm.get("extra"), "side": side(e["team"]["id"]), "type": kind,
-                       "player": p.get("name"), "player_id": p.get("id"), "other": a.get("name"), "other_id": a.get("id"),
-                       "detail": d, "comment": e.get("comments")})
-        m = tm.get("elapsed")
-        if kind in ("goal", "pen_goal"):
-            mark(p.get("id"), "goals"); mark(a.get("id"), "assists")
-        elif kind == "own_goal":
-            mark(p.get("id"), "own_goals")
-        elif kind in ("yellow", "second_yellow", "red"):
-            mark(p.get("id"), kind)
-        elif kind == "sub":
-            mark(p.get("id"), "off", m); mark(a.get("id"), "on", m)
-    def player(x):
-        pl = x["player"]
-        info = pinfo.get(pl["id"], {})
-        return {"id": pl["id"], "name": pl.get("name"), "number": pl.get("number"), "pos": pl.get("pos"), "grid": pl.get("grid"),
-                "rating": info.get("rating"), "minutes": info.get("minutes"), "photo": info.get("photo"), **tally.get(pl["id"], {})}
-    lineups = {}
-    for l in fx.get("lineups") or []:
-        lineups[side(l["team"]["id"])] = {
-            "formation": l.get("formation"), "coach": (l.get("coach") or {}).get("name"),
-            "colors": (l.get("team") or {}).get("colors"),
-            "start": [player(x) for x in l.get("startXI") or []],
-            "subs": [player(x) for x in l.get("substitutes") or []]}
-    stats, raw = [], {side(s["team"]["id"]): {x["type"]: x["value"] for x in s.get("statistics") or []} for s in fx.get("statistics") or []}
-    for src, key, label, unit, better in AF_STAT_KEYS:
-        hv, av = num(raw.get("home", {}).get(src)), num(raw.get("away", {}).get(src))
-        if hv is None and av is None:
-            continue
-        stats.append({"key": key, "label": label, "unit": unit, "better": better, "home": hv or 0, "away": av or 0})
-    rated = [(p["rating"], s, p) for s, l in lineups.items() for p in l["start"] + l["subs"] if p.get("rating")]
-    best = max(rated, key=lambda r: r[0]) if rated else None
-    st = (fx.get("fixture") or {}).get("status") or {}
-    return {"source": "api-football", "fixture_id": (fx.get("fixture") or {}).get("id"),
-            "status": {"short": st.get("short"), "elapsed": st.get("elapsed"), "extra": st.get("extra")},
-            "referee": (fx.get("fixture") or {}).get("referee"), "venue": ((fx.get("fixture") or {}).get("venue") or {}).get("name"),
-            "events": events, "lineups": lineups, "stats": stats,
-            "potm": {"id": best[2]["id"], "name": best[2]["name"], "side": best[1], "rating": best[0], "photo": best[2].get("photo")} if best else None}
-
-# ── 선수 시즌 기록·부상자 → 화면용 형태 (2026-09-30, 결제 후 수집에서 사용) ──
-# af_squads.json {"우리 팀 이름": {"season", "league", "updated", "players": [af_player_row…]}} → /team/squad (선수 카드·베스트 11·주요 선수)
-# match_previews.json {"홈|원정|YYYY-MM-DD": {"lineups", "injuries": {"home": [...], "away": [...]}}} → /match/preview
-AF_POS = {"Goalkeeper": "GK", "Defender": "DF", "Midfielder": "MF", "Attacker": "FW"}
-
-def af_player_row(p, league_id=None):
-    """/players 응답 한 명 → 프로필 + 그 리그 시즌 기록(여러 대회 기록이 오면 league_id 것)"""
-    pl = p.get("player") or {}
-    sts = p.get("statistics") or [{}]
-    s = next((x for x in sts if league_id and (x.get("league") or {}).get("id") == league_id), sts[0]) or {}
-    g, gl, sh, ps = s.get("games") or {}, s.get("goals") or {}, s.get("shots") or {}, s.get("passes") or {}
-    tk, du, dr, fo, cd, pn = (s.get(k) or {} for k in ("tackles", "duels", "dribbles", "fouls", "cards", "penalty"))
-    cm = lambda v: int(re.sub(r"\D", "", str(v))) if v and re.search(r"\d", str(v)) else None   # "182 cm"·"182" → 182
-    # 목록·선수 카드용 전체 이름: "B. Saka" + firstname "Bukayo Ayoyinka Temidayo" → "Bukayo Saka"(이니셜이 맞는 단어). 줄인 이름이 아니면 그대로
-    full, m = pl.get("name"), re.match(r"^(\w)\.\s+(.+)$", pl.get("name") or "")
-    if m and pl.get("firstname"):
-        toks = pl["firstname"].split()
-        full = f"{next((t for t in toks if t[:1].upper() == m.group(1).upper()), toks[0])} {m.group(2)}"
-    return {
-        "id": pl.get("id"), "name": pl.get("name"), "full_name": full, "firstname": pl.get("firstname"), "lastname": pl.get("lastname"),
-        "age": pl.get("age"), "birth_date": (pl.get("birth") or {}).get("date"), "birth_place": (pl.get("birth") or {}).get("place"),
-        "nationality": pl.get("nationality"), "height": cm(pl.get("height")), "weight": cm(pl.get("weight")),
-        "photo": pl.get("photo"), "injured": bool(pl.get("injured")),
-        "pos": AF_POS.get(g.get("position")), "number": g.get("number"), "captain": bool(g.get("captain")),
-        "apps": g.get("appearences") or 0, "starts": g.get("lineups") or 0, "minutes": g.get("minutes") or 0,
-        "rating": round(float(g["rating"]), 2) if g.get("rating") else None,
-        "goals": gl.get("total") or 0, "assists": gl.get("assists") or 0, "conceded": gl.get("conceded"), "saves": gl.get("saves"),
-        "shots": sh.get("total"), "shots_on": sh.get("on"), "passes": ps.get("total"), "key_passes": ps.get("key"), "pass_acc": ps.get("accuracy"),
-        "tackles": tk.get("total"), "interceptions": tk.get("interceptions"), "blocks": tk.get("blocks"),
-        "duels": du.get("total"), "duels_won": du.get("won"), "dribbles": dr.get("attempts"), "dribbles_won": dr.get("success"),
-        "fouls": fo.get("committed"), "fouled": fo.get("drawn"), "yellow": cd.get("yellow") or 0, "red": cd.get("red") or 0,
-        "pen_scored": pn.get("scored"), "pen_missed": pn.get("missed"),
-    }
-
-AF_PCT_STATS = ["goals", "assists", "shots", "shots_on", "key_passes", "passes", "dribbles_won", "tackles", "interceptions", "blocks", "duels_won", "saves", "conceded"]
-
-def add_percentiles(players, min_minutes=450):
-    """선수 카드 순위 막대: 같은 리그·같은 포지션(GK/DF/MF/FW)에서 min_minutes 이상 뛴 선수 중 90분당 수치 백분위(0~100) → p["pct"].
-    실점은 적을수록 좋아서 뒤집음. 표본이 5명 미만인 포지션은 계산 안 함(순위가 의미 없음)"""
-    from collections import defaultdict
-    groups = defaultdict(list)
-    for p in players:
-        if (p.get("minutes") or 0) >= min_minutes and p.get("pos"):
-            groups[p["pos"]].append(p)
-    for ps in groups.values():
-        if len(ps) < 5:
-            continue
-        for k in AF_PCT_STATS:
-            if all(p.get(k) is None for p in ps):
-                continue
-            per90 = [((p.get(k) or 0) / p["minutes"] * 90) for p in ps]
-            for p, v in zip(ps, per90):
-                below, eq = sum(x < v for x in per90), sum(x == v for x in per90)
-                pc = round((below + 0.5 * eq) / len(per90) * 100)
-                p.setdefault("pct", {})[k] = 100 - pc if k == "conceded" else pc
-    return players
-
-# 선수 카드 경력·트로피·부상 이력(/players/teams·/trophies·/sidelined, 선수당 요청 3번) → af_profiles.json {선수 ID: ...} → /player/profile
-# 사카 샘플로 형태 확인(2026-09-30): 경력은 날짜 없이 "뛴 시즌 목록"만, 유스 팀(U18 등) 섞임 / 트로피엔 친선 대회(Emirates Cup 5회·Florida Cup·
-# MLS All-Star)와 유스 대회(FA Youth Cup 등)가 섞여 있어 그대로 세면 부풀려짐 → 친선은 빼고 유스는 표시만
-AF_FRIENDLY_CUPS = {"Emirates Cup", "Florida Cup", "MLS All-Star", "Trofeo Joan Gamper", "Club Friendlies", "Audi Cup", "Premier League Summer Series",
-                    "International Champions Cup", "Trofeo Santiago Bernabéu", "Uhrencup", "Trofeo Teresa Herrera", "Franz Beckenbauer Supercup",
-                    "Trofeo Luigi Berlusconi", "Trofeo Colombino", "Trofeo Carranza", "Friendlies", "Friendlies Clubs"}
-AF_YOUTH_RE = re.compile(r"\bU\d{2}\b|\bYouth\b|Premier League 2|Primavera|Juvenil|Junior|Reserve", re.I)
-
-def af_player_profile(teams, trophies, sidelined, nationality=None, current_season=None):
-    cur = current_season or max(MATCH_SEASONS)
-    career = []
-    for x in teams or []:
-        ss, tm = x.get("seasons") or [], x.get("team") or {}
-        if not ss:
-            continue
-        name = tm.get("name") or ""
-        career.append({"team": name, "team_id": tm.get("id"), "logo": tm.get("logo"), "from": min(ss), "to": None if max(ss) >= cur else max(ss),
-                       "seasons": len(ss), "youth": bool(re.search(r"\bU\d{2}\b", name)),
-                       "national": bool(nationality) and (name == nationality or name.startswith(nationality + " "))})
-    career.sort(key=lambda c: (c["to"] is not None, -(c["to"] or 9999), -c["from"]))   # 지금 팀 → 최근에 떠난 팀 순
-    tro = []
-    for t in trophies or []:
-        if t.get("league") in AF_FRIENDLY_CUPS:
-            continue
-        pl = {"Winner": "winner", "2nd Place": "runner_up"}.get(t.get("place"), t.get("place"))
-        tro.append({"league": t.get("league"), "country": t.get("country"), "season": t.get("season"), "place": pl, "youth": bool(AF_YOUTH_RE.search(t.get("league") or ""))})
-    # 같은 트로피가 시즌 없이 한 번 더 오는 경우가 있음(사카: FA Cup 우승 "2019/2020" + 시즌 없는 FA Cup 우승) → 시즌 있는 기록이 있으면 시즌 없는 쪽은 버림
-    dated = {(t["league"], t["place"]) for t in tro if t["season"]}
-    tro = [t for t in tro if t["season"] or (t["league"], t["place"]) not in dated]
-    sd = [{"type": x.get("type"), "start": x.get("start"), "end": x.get("end")}
-          for x in sorted(sidelined or [], key=lambda x: x.get("start") or "", reverse=True)[:10]]
-    return {"career": career, "trophies": tro, "sidelined": sd}
-
-def af_injury_rows(resp, team_id):
-    """/injuries 응답 → 그 팀 결장자 [{id, name, photo, status: out(결장)|doubtful(출전 불투명), reason}]"""
-    out = []
-    for x in resp or []:
-        if (x.get("team") or {}).get("id") != team_id:
-            continue
-        pl = x.get("player") or {}
-        out.append({"id": pl.get("id"), "name": pl.get("name"), "photo": pl.get("photo"),
-                    "status": "doubtful" if pl.get("type") == "Questionable" else "out", "reason": pl.get("reason")})
-    return out
+# 경기 상세·선수 기록·부상자·선수 경력 변환은 af_transform.py(서버 main.py와 같이 씀 — 2026-10-06 분리)
+from af_transform import *   # noqa: F401,F403
 
 def _fetch_af_transfers(af_id, limit=30):
     """API-Football /transfers → 최근 이적 기록(이 팀이 관련된 것만). 선수 사진·양쪽 구단 로고·방향(in/out)까지 저장
@@ -2156,6 +2139,9 @@ def main():
     except Exception as e:
         print(f"  ⚠️ 역대 우승 목록 갱신 실패(기존 유지): {e}")
 
+    # API-Football Pro(2026-10-06): 끝난 경기 상세·결장·부상자·선수 프로필 — 키가 있을 때만(af_sync 안에서 확인)
+    step("API-Football 경기 상세·부상자·선수", af_sync)
+
     # 스쿼드 사진/등번호 + 이적 기록 (API-Football, 현재는 PL만 — 요청 한도 때문에 리그별로 점진 확대 예정)
     step("스쿼드·이적(API-Football)", fetch_squad_transfers, 'PL')
 
@@ -2314,6 +2300,8 @@ if __name__ == "__main__":
         fetch_ucl_tournament()
         fetch_team_wiki()
         fetch_season_zones()
+    elif "--af-sync" in sys.argv:
+        af_sync()
     elif "--league-history" in sys.argv:
         fetch_league_history()
     elif "--scorers-only" in sys.argv:

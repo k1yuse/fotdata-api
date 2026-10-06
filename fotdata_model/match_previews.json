@@ -1,0 +1,37 @@
+{
+ "Arsenal FC|Leeds United FC|2026-10-10": {
+  "fixture_id": 1557417,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
+ "Borussia Dortmund|SV Werder Bremen|2026-10-09": {
+  "fixture_id": 1575176,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
+ "Málaga CF|RCD Espanyol de Barcelona|2026-10-09": {
+  "fixture_id": 1570408,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
+ "Racing Club de Lens|Olympique Lyonnais|2026-10-09": {
+  "fixture_id": 1552775,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
+ "Rayo Vallecano de Madrid|Athletic Club|2026-10-10": {
+  "fixture_id": 1570410,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ }
+}
