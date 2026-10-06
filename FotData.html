@@ -4505,8 +4505,10 @@ function fetchAfSquad(team) {
 }
 function fetchMatchPreview(home, away, date) {
   const k = `${home}|${away}|${date ? date.slice(0, 10) : ''}`;
-  if (!(k in matchPreviewCache)) matchPreviewCache[k] = fetch(`${API}/match/preview?home_team=${encodeURIComponent(home)}&away_team=${encodeURIComponent(away)}${date ? `&date=${date.slice(0, 10)}` : ''}`)
-    .then(r => (r.ok && r.status !== 204 ? r.json() : null)).catch(() => { delete matchPreviewCache[k]; return null; });
+  // 3분 지나면 다시 받음 — 킥오프 약 1시간 전 확정 라인업이 발표되면 창을 다시 열 때 예상 → 확정으로 바뀌게(예전엔 페이지를 새로 열 때까지 그대로)
+  if (matchPreviewCache[k] && Date.now() - (matchPreviewCache[k]._t || 0) > 180000) delete matchPreviewCache[k];
+  if (!(k in matchPreviewCache)) matchPreviewCache[k] = Object.assign(fetch(`${API}/match/preview?home_team=${encodeURIComponent(home)}&away_team=${encodeURIComponent(away)}${date ? `&date=${date.slice(0, 10)}` : ''}`)
+    .then(r => (r.ok && r.status !== 204 ? r.json() : null)).catch(() => { delete matchPreviewCache[k]; return null; }), { _t: Date.now() });
   return matchPreviewCache[k];
 }
 const POS_KO = { GK: '골키퍼', DF: '수비수', MF: '미드필더', FW: '공격수' };
