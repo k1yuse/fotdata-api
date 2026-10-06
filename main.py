@@ -154,6 +154,8 @@ def get_logos_with_mapping():
         for html_name, api_name in TEAM_NAME_MAP.items():
             if api_name in logos:
                 logos[html_name] = logos[api_name]
+        for t, u in (_load_json("history_logos.json") or {}).items():   # 과거 시즌에만 나오는 옛 팀(위건 등, API-Football 로고 — 5.33)
+            logos.setdefault(t, u)
         return logos
     except Exception as e:
         print(f"로고 로드 오류: {e}")
@@ -564,6 +566,13 @@ df_matches_all = pd.read_csv(os.path.join(MODEL_DIR, "all_matches.csv"))
 df_matches_all['date'] = pd.to_datetime(df_matches_all['date'])
 
 print(f"✅ 전체 경기 데이터 로드: {len(df_matches_all)}경기")
+# 과거 시즌(2010-11~22-23, API-Football — update_data.fetch_history_seasons): 순위표·일정·팀 통계·시즌 고르기에만 씀.
+# 예측 모델 입력·맞대결·최근 폼은 all_matches.csv(df_matches_all) 그대로 — 둘을 섞지 않음(5.33)
+_hp = os.path.join(MODEL_DIR, "history_matches.csv")
+df_history = pd.read_csv(_hp) if os.path.exists(_hp) else pd.DataFrame(columns=list(df_matches_all.columns) + ["stage", "kickoff"])
+df_history['date'] = pd.to_datetime(df_history['date'])
+df_seasons = pd.concat([df_history, df_matches_all], ignore_index=True)
+print(f"✅ 과거 시즌 경기: {len(df_history)}경기")
 
 # ── 리그 코드 매핑 ──
 LEAGUE_MAP = {
@@ -588,10 +597,10 @@ def _standings_view(league_code, season, view):
     공식 순서·구역·감점은 전체 순위표에만 해당해서 여기선 안 씀(승점 → 득실차 → 득점 순)"""
     base = _standings(league_code, season)   # 리그·시즌 검증과 이름은 전체 순위표와 공유
     yr = _season_year(season)
-    f = (df_matches_all['league'] == league_code) & (df_matches_all['date'] >= pd.Timestamp(f'{yr}-08-01')) & (df_matches_all['date'] < pd.Timestamp(f'{yr + 1}-08-01'))
+    f = (df_seasons['league'] == league_code) & (df_seasons['season'] == yr)   # 시즌 값으로(날짜로 자르면 19-20 세리에A처럼 8월에 끝난 시즌이 다음 시즌에 섞임)
     if league_code == 'CL':
-        f = f & (df_matches_all['date'] < pd.Timestamp(f'{yr + 1}-02-01'))
-    df = df_matches_all[f].sort_values('date')
+        f = f & (df_seasons['date'] < pd.Timestamp(f'{yr + 1}-02-01'))
+    df = df_seasons[f].sort_values('date')
     logos = team_logos_cache
     teams = [r["team"] for r in base["standings"]]
     rows = []
@@ -629,12 +638,12 @@ def _standings(league_code: str, season: str):
     end = pd.Timestamp(f'{yr + 1}-08-01')
     league_name = f"{league_name} ({yr}-{(yr + 1) % 100:02d})"
 
-    filters = (df_matches_all['league'] == league_code.upper()) & (df_matches_all['date'] >= cutoff) & (df_matches_all['date'] < end)
+    filters = (df_seasons['league'] == league_code.upper()) & (df_seasons['season'] == yr)   # 시즌 값으로(위와 같은 이유)
     if league_code.upper() == 'CL':
         if yr <= 2023:   # 23-24까지는 조별리그(4팀×8조)라 한 줄 순위표가 없음
             raise HTTPException(status_code=404, detail="조별리그 시즌")
-        filters = filters & (df_matches_all['date'] < pd.Timestamp(f'{yr + 1}-02-01'))   # 리그 스테이지만
-    league_df = df_matches_all[filters].copy()
+        filters = filters & (df_seasons['date'] < pd.Timestamp(f'{yr + 1}-02-01'))   # 리그 스테이지만
+    league_df = df_seasons[filters].copy()
 
 
     if league_df.empty:
@@ -672,7 +681,8 @@ def _standings(league_code: str, season: str):
     merged['gd']     = merged['gf'] - merged['ga']
     # 끝난 시즌: 공식 기록(영문 위키백과 시즌 표 — update_data.py fetch_season_zones)의 승점 감점·최종 순위·유럽 대항전/강등 구역
     # (23-24 에버턴 −8·노팅엄 −4, 라리가·세리에A는 동률이면 맞대결 우선이라 득실차 정렬과 순서가 다를 수 있음)
-    official = ((_load_json("season_zones.json") or {}).get(league_code.upper()) or {}).get(str(yr))
+    official = ((_load_json("season_zones.json") or {}).get(league_code.upper()) or {}).get(str(yr)) \
+        or ((_load_json("history_standings.json") or {}).get(league_code.upper()) or {}).get(str(yr))
     zones = {}
     if official:
         for t, pts in official.get("adjust", {}).items():
@@ -743,6 +753,7 @@ def get_ucl_tournament(season: str = "current"):
     if data is None:
         raise HTTPException(status_code=404, detail="UCL 토너먼트 데이터 없음")
     seasons = data["seasons"] if "seasons" in data else {"2025": data}
+    seasons = {**((_load_json("history_ucl.json") or {}).get("seasons") or {}), **seasons}   # 11-12~22-23(API-Football, 5.33)
     yr = str(_season_year(season))
     stages = seasons.get(yr)
     if stages is None:
@@ -754,7 +765,7 @@ def get_ucl_groups(season: str = "2023"):
     """23-24까지의 챔스 조별리그 순위표(조마다 4팀) — update_data.py가 ucl_tournament.json에 GROUPS로 저장한 경기로 계산.
     순위는 UEFA 규정대로 승점 → 맞대결 승점·득실·득점 → 전체 득실·득점. 1·2위 16강, 3위 유로파리그"""
     data = _load_json("ucl_tournament.json") or {}
-    seasons = data.get("seasons", {})
+    seasons = {**((_load_json("history_ucl.json") or {}).get("seasons") or {}), **data.get("seasons", {})}
     yr = str(_season_year(season))
     groups = (seasons.get(yr) or {}).get("GROUPS")
     if not groups:
@@ -970,7 +981,7 @@ def get_match_insights(home_team: str, away_team: str):
 # ── 팀 통계 API (팀 정보 모달 "팀 통계" 탭, 2026-09-29) ──
 # 예전 탭은 예측 모델용 블렌딩 값(승률·공격력·수비력·prestige)만 보여줘서 실제 기록과 달랐음 → 실제 리그 경기 기록으로
 # 시즌별(23-24~26-27) 지표 + 같은 리그 안 순위·리그 평균, 홈/원정, 상대 수준별, 라운드별 순위 변동, AI 파워 레이팅
-STAT_SEASONS = {2023: "23-24", 2024: "24-25", 2025: "25-26", 2026: "26-27"}
+STAT_SEASONS = {int(y): f"{int(y) % 100:02d}-{(int(y) + 1) % 100:02d}" for y in sorted(df_seasons.loc[df_seasons['league'] != 'CL', 'season'].dropna().unique())}   # 2010-11~(과거 시즌 포함)
 # (키, 높을수록 좋은가) — 리그 안 순위 계산용
 STAT_KEYS = [("ppg", True), ("gf_pg", True), ("ga_pg", False), ("cs_pct", True), ("fts_pct", False),
              ("btts_pct", None), ("over25_pct", None), ("home_ppg", True), ("away_ppg", True), ("win_pct", True)]
@@ -994,7 +1005,7 @@ def _table(long_df):
 
 @lru_cache(maxsize=64)
 def _league_season_stats(league, season):
-    df = df_matches_all[(df_matches_all['league'] == league) & (df_matches_all['season'] == season)]
+    df = df_seasons[(df_seasons['league'] == league) & (df_seasons['season'] == season)]
     df = df.dropna(subset=['home_goals', 'away_goals'])
     if df.empty:
         return None
@@ -1104,8 +1115,8 @@ def _team_stats(team):
     seasons = []
     for yr, label in STAT_SEASONS.items():
         # 그 시즌에 뛴 리그(승강한 팀은 시즌마다 다를 수 있음 — 5대 리그 안에서만)
-        played = df_matches_all[(df_matches_all['season'] == yr) & (df_matches_all['league'] != 'CL') &
-                                ((df_matches_all['home_team'] == team) | (df_matches_all['away_team'] == team))]
+        played = df_seasons[(df_seasons['season'] == yr) & (df_seasons['league'] != 'CL') &
+                            ((df_seasons['home_team'] == team) | (df_seasons['away_team'] == team))]
         if played.empty:
             continue
         lg = played['league'].mode().iloc[0]
@@ -1757,7 +1768,7 @@ def get_matches_window():
 def _league_seasons(code):
     if code not in LEAGUE_MAP:
         raise HTTPException(status_code=404, detail="리그를 찾을 수 없습니다")
-    yrs = sorted({int(y) for y in df_matches_all.loc[df_matches_all['league'] == code, 'season'].dropna()}, reverse=True)
+    yrs = sorted({int(y) for y in df_seasons.loc[df_seasons['league'] == code, 'season'].dropna()}, reverse=True)
     if CURRENT_SEASON_YEAR not in yrs:
         yrs.insert(0, CURRENT_SEASON_YEAR)
     sc = (_load_json("scorers.json") or {}).get(code)
@@ -1777,7 +1788,7 @@ def get_league_seasons(league_code: str):
 @lru_cache(maxsize=32)
 def _past_schedule(code, yr):
     """끝난 시즌 일정 = all_matches.csv(시각은 없음 — 날짜만). 챔스 토너먼트는 ucl_tournament.json의 1·2차전으로 라운드·시각·승부차기를 찾음"""
-    df = df_matches_all[(df_matches_all['league'] == code) & (df_matches_all['season'] == yr)].sort_values(['date', 'home_team'])
+    df = df_seasons[(df_seasons['league'] == code) & (df_seasons['season'] == yr)].sort_values(['date', 'home_team'])
     if df.empty:
         raise HTTPException(status_code=404, detail="해당 시즌 데이터 없음")
     legs = {}
@@ -1792,10 +1803,16 @@ def _past_schedule(code, yr):
     out = []
     for _, r in df.iterrows():
         d = r['date'].strftime('%Y-%m-%d')
-        m = {"date": f"{d}T00:00:00Z", "date_only": True, "matchday": int(r['matchday']) if pd.notna(r['matchday']) and r['matchday'] > 0 else None,
+        ko = r.get('kickoff') if 'kickoff' in r else None
+        m = {"date": ko if isinstance(ko, str) and ko else f"{d}T00:00:00Z", "date_only": not (isinstance(ko, str) and ko),
+             "matchday": int(r['matchday']) if pd.notna(r['matchday']) and r['matchday'] > 0 else None,
              "stage": "REGULAR_SEASON", "home_team": r['home_team'], "away_team": r['away_team'],
              "home_goals": int(r['home_goals']), "away_goals": int(r['away_goals']), "status": "FINISHED"}
-        if code == "CL":
+        if isinstance(r.get('stage'), str) and r['stage']:   # 과거 시즌(API-Football)은 라운드가 기록에 있음
+            m["stage"] = r['stage']
+            if code == "CL" and r['stage'] != "GROUP_STAGE":
+                m["matchday"] = None
+        elif code == "CL":
             hit = legs.get((r['home_team'], r['away_team'], d))
             if hit:
                 m["stage"], m["date"], m["date_only"] = hit[0], hit[1] or m["date"], not hit[1]

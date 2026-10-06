@@ -99,6 +99,7 @@ fotdata-api/
     ├── season_zones.json          # 지난 시즌 공식 최종 순위·유럽 대항전/강등 구역·승점 감점(위키백과 시즌 표, 5.14)
     ├── league_history.json        # 리그별 역대 우승·준우승 2000-01~(위키백과 우승 목록, 5.31)
     ├── af_team_map.json · af_fixtures.json · af_players.json · match_previews.json · match_details/*.json.gz   # API-Football Pro 수집(5.32)
+    ├── history_matches.csv · history_standings.json · history_ucl.json · history_logos.json   # 과거 시즌 2010-11~22-23(5.33, 모델 학습엔 안 씀)
     └── rivals.json                # 구단별 라이벌(수동 관리, 5.14)
 ```
 
@@ -451,6 +452,13 @@ cp landing.html index.html
 - **서버**: `/match/detail`(파일 → 없으면 킥오프 110분 뒤부터 요청 때 받기), `/match/preview`(결장자 + 킥오프 90분 전~3시간 뒤엔 확정 라인업을 요청 때 받기(3분 캐시), 그 전엔 각 팀 지난 경기 선발 = 예상 라인업), `/team/squad`(프로필 + 합산 기록), `/player/profile/{id}`(경력·트로피·부상 이력 요청 때 3번, 하루 캐시). **요청 때 받는 것들은 Render 환경변수 `API_FOOTBALL_KEY`가 있어야 켜짐**(없으면 저장된 데이터만 — 확정 라인업·선수 경력은 안 나옴). 새벽 수집은 GitHub Secrets `API_FOOTBALL_KEY` 필요(`update_data.yml` env에 연결함).
 - 화면은 결제 전에 만들어 둔 것(5.18·5.19) 그대로 — 결과 창 [요약 | 라인업 | 통계], 미리보기·예측 결과 "팀 소식", 선수 카드(합계/90분당·순위 막대·최근 경기·경력·트로피·부상), 팀 정보 플레이어 통계 탭 베스트 11. 결장자가 비면 "발표된 결장자 없음"(경기 며칠 전엔 아직 발표 전이라).
 - 확인(로컬, 실제 데이터): 아스널–코번트리 결과 창 3탭(최우수 선수 외데고르 8.5, xG 1.88–0.20), 아스널–리즈 미리보기 예상 라인업(4-2-3-1 vs 3-5-2), 사카 선수 카드(평균 7.56·키 178·최근 경기), 홀란 경력·트로피 22개, 아스널 베스트 11(4-4-2 평균 7.15) — 1280·390px.
+
+### 5.33 과거 시즌 구단 기록 2010-11~22-23 (2026-10-06, API-Football Pro)
+- **수집 `update_data.fetch_history_seasons()`**(끝난 시즌이라 한 번만 — `python update_data.py --history-seasons [연도…]`, 약 200회): ① 23-24~25-26 경기로 팀 이름 맞추기를 넓힘(강등 팀 등 +50 → 161팀) ② 대회 6개 × 13시즌 경기(`history_matches.csv` 25,131경기 — 리그는 "Regular Season" 라운드만(분데스 16위·리그앙 18위 승강 PO, 세리에 동률 결정전이 섞이면 가짜 감점이 생겼음), 챔스는 조별리그·16강~결승만(예선 제외) — 시각 `kickoff`·`stage` 포함) ③ 공식 순위표 `history_standings.json`(최종 순위·구역 = 순위표 description("Champions League"/"Qualifiers"/"Europa"/"Conference"/"Relegation"·"(Relegation)"=PO)·감점 = 공식 승점 − 경기로 센 승점: 세리에 11-12 아탈란타 −6, 12-13 시에나 −6, 14-15 파르마 −7, 22-23 유벤투스 −10, 리그앙 16-17 바스티아 −1 등) ④ 옛 챔스 `history_ucl.json`(ucl_tournament.json과 같은 모양 — 토너먼트 대진(진출 팀 = 다음 라운드에 나온 팀, 원정 다득점 시절도 맞음, 결승은 점수→승부차기) + 조별리그 GROUPS(조 편성은 순위표 "Uefa Champions League: Group A" 형식)) ⑤ 우리 목록 밖 옛 팀 로고 `history_logos.json`(94팀 — 위건·블랙번 등은 API-Football 이름·로고 그대로).
+- 같은 팀 이름 고정: 우리 목록 밖 팀은 **팀 ID 기준 처음 본 이름**으로(경기 목록 "Bastia"와 순위표 표기가 달라 감점 +34로 잘못 계산됐음).
+- **서버**: `df_seasons` = history + all_matches — 순위표(보기 전환 포함)·지난 시즌 일정·리그 시즌 통계·팀 통계·시즌 목록에만. **예측 모델·맞대결·최근 폼은 `df_matches_all` 그대로(섞지 않음)**. 순위표는 날짜 대신 **시즌 값으로** 자름(19-20 세리에A가 8월 2일에 끝나 다음 시즌에 섞였음). 끝난 시즌 공식 순서·구역·감점: season_zones.json(23-24~, 위키) → 없으면 history_standings.json. `/ucl/tournament`·`/ucl/groups`는 history_ucl.json을 밑에 깔고 ucl_tournament.json이 덮음. 팀 통계 `STAT_SEASONS`도 데이터에서(17시즌). 로고 맵에 옛 팀 로고 덧붙임.
+- **화면**: 시즌 고르기 17개(2010/11~), 시즌 탭 2010-11 이후 카드 누르면 그 시즌 기록, 챔스 23-24 이전 = 조별리그(`uclGroupEra()` — 예전엔 `=== '2023'`만), 팀 통계 탭 시즌은 최근 4개 버튼 + "이전 시즌" 고르기(버튼 17개면 두 줄로 깨졌음).
+- 확인: EPL 15-16 레스터 81점(강등 뉴캐슬·노리치·빌라), 세리에 19-20 유벤투스 83점, 리그앙 19-20(코로나 조기 종료) 27~28경기, 챔스 16-17 조별리그(A조 아스널 14·PSG 12), 18-19 대진(리버풀 우승), 리버풀 팀 통계 14-15(6위 62점).
 
 ### 5.20 데이터 소스 구조(결제 시) — football-data + API-Football
 - **2026-10-06 Pro 결제 완료**(사용자 개인 계정, 키는 그대로 `~/.fotdata_keys`, 하루 7,500회, 만료 2026-11-06 — 매달 갱신). 실제 호출로 확인한 것: 26-27 5대 리그·챔스 전부 경기·이벤트·라인업(킥오프 약 1시간 전)·팀 경기 통계(xG 포함)·선수별 경기 기록·순위·선수·득점/도움 순위·부상자(EPL 529건)·스쿼드(등번호·사진)·이적·트로피·부상 이력·팀 시즌 통계(폼·포메이션)·실시간(`/fixtures?live=all`)·맞대결(2010~) 열림. 컵대회(FA컵 26-27 283경기 등)도 열림. 감독은 `/coachs`(철자 주의 — `/coaches`는 없는 주소, 결과가 이력 목록이라 현재 감독을 골라야 함). 배당(`/odds`)·API-Football 자체 예측(`/predictions`)도 오지만 배당은 쓰지 않기로(약관 도박 비권유).

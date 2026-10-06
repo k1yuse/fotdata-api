@@ -1,0 +1,5526 @@
+{
+ "BL1": {
+  "2010": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "1. FC Köln": {
+     "pos": 10,
+     "zone": null
+    },
+    "1. FSV Mainz 05": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Bayer 04 Leverkusen": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Borussia Dortmund": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Borussia Mönchengladbach": {
+     "pos": 16,
+     "zone": "rel-po"
+    },
+    "Eintracht Frankfurt": {
+     "pos": 17,
+     "zone": "rel"
+    },
+    "FC Bayern München": {
+     "pos": 3,
+     "zone": "cl-q"
+    },
+    "FC Kaiserslautern": {
+     "pos": 7,
+     "zone": null
+    },
+    "FC Nurnberg": {
+     "pos": 6,
+     "zone": null
+    },
+    "FC Schalke 04": {
+     "pos": 14,
+     "zone": null
+    },
+    "FC St. Pauli 1910": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Hamburger SV": {
+     "pos": 8,
+     "zone": null
+    },
+    "Hannover 96": {
+     "pos": 4,
+     "zone": "el"
+    },
+    "SC Freiburg": {
+     "pos": 9,
+     "zone": null
+    },
+    "SV Werder Bremen": {
+     "pos": 13,
+     "zone": null
+    },
+    "TSG 1899 Hoffenheim": {
+     "pos": 11,
+     "zone": null
+    },
+    "VfB Stuttgart": {
+     "pos": 12,
+     "zone": null
+    },
+    "VfL Wolfsburg": {
+     "pos": 15,
+     "zone": null
+    }
+   }
+  },
+  "2011": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "1. FC Köln": {
+     "pos": 17,
+     "zone": "rel"
+    },
+    "1. FSV Mainz 05": {
+     "pos": 13,
+     "zone": null
+    },
+    "Bayer 04 Leverkusen": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Borussia Dortmund": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Borussia Mönchengladbach": {
+     "pos": 4,
+     "zone": "cl-q"
+    },
+    "FC Augsburg": {
+     "pos": 14,
+     "zone": null
+    },
+    "FC Bayern München": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "FC Kaiserslautern": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "FC Nurnberg": {
+     "pos": 10,
+     "zone": null
+    },
+    "FC Schalke 04": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Hamburger SV": {
+     "pos": 15,
+     "zone": null
+    },
+    "Hannover 96": {
+     "pos": 7,
+     "zone": null
+    },
+    "Hertha Berlin": {
+     "pos": 16,
+     "zone": "rel-po"
+    },
+    "SC Freiburg": {
+     "pos": 12,
+     "zone": null
+    },
+    "SV Werder Bremen": {
+     "pos": 9,
+     "zone": null
+    },
+    "TSG 1899 Hoffenheim": {
+     "pos": 11,
+     "zone": null
+    },
+    "VfB Stuttgart": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "VfL Wolfsburg": {
+     "pos": 8,
+     "zone": null
+    }
+   }
+  },
+  "2012": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "1. FSV Mainz 05": {
+     "pos": 13,
+     "zone": null
+    },
+    "Bayer 04 Leverkusen": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Borussia Dortmund": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Borussia Mönchengladbach": {
+     "pos": 8,
+     "zone": null
+    },
+    "Eintracht Frankfurt": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "FC Augsburg": {
+     "pos": 15,
+     "zone": null
+    },
+    "FC Bayern München": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "FC Nurnberg": {
+     "pos": 10,
+     "zone": null
+    },
+    "FC Schalke 04": {
+     "pos": 4,
+     "zone": "cl-q"
+    },
+    "Fortuna Dusseldorf": {
+     "pos": 17,
+     "zone": "rel"
+    },
+    "Hamburger SV": {
+     "pos": 7,
+     "zone": null
+    },
+    "Hannover 96": {
+     "pos": 9,
+     "zone": null
+    },
+    "SC Freiburg": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "SV Werder Bremen": {
+     "pos": 14,
+     "zone": null
+    },
+    "SpVgg Greuther Furth": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "TSG 1899 Hoffenheim": {
+     "pos": 16,
+     "zone": "rel-po"
+    },
+    "VfB Stuttgart": {
+     "pos": 12,
+     "zone": null
+    },
+    "VfL Wolfsburg": {
+     "pos": 11,
+     "zone": null
+    }
+   }
+  },
+  "2013": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "1. FSV Mainz 05": {
+     "pos": 7,
+     "zone": null
+    },
+    "Bayer 04 Leverkusen": {
+     "pos": 4,
+     "zone": "cl-q"
+    },
+    "Borussia Dortmund": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Borussia Mönchengladbach": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Eintracht Braunschweig": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Eintracht Frankfurt": {
+     "pos": 13,
+     "zone": null
+    },
+    "FC Augsburg": {
+     "pos": 8,
+     "zone": null
+    },
+    "FC Bayern München": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "FC Nurnberg": {
+     "pos": 17,
+     "zone": "rel"
+    },
+    "FC Schalke 04": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Hamburger SV": {
+     "pos": 16,
+     "zone": "rel-po"
+    },
+    "Hannover 96": {
+     "pos": 10,
+     "zone": null
+    },
+    "Hertha Berlin": {
+     "pos": 11,
+     "zone": null
+    },
+    "SC Freiburg": {
+     "pos": 14,
+     "zone": null
+    },
+    "SV Werder Bremen": {
+     "pos": 12,
+     "zone": null
+    },
+    "TSG 1899 Hoffenheim": {
+     "pos": 9,
+     "zone": null
+    },
+    "VfB Stuttgart": {
+     "pos": 15,
+     "zone": null
+    },
+    "VfL Wolfsburg": {
+     "pos": 5,
+     "zone": "el"
+    }
+   }
+  },
+  "2014": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "1. FC Köln": {
+     "pos": 12,
+     "zone": null
+    },
+    "1. FSV Mainz 05": {
+     "pos": 11,
+     "zone": null
+    },
+    "Bayer 04 Leverkusen": {
+     "pos": 4,
+     "zone": "cl-q"
+    },
+    "Borussia Dortmund": {
+     "pos": 7,
+     "zone": null
+    },
+    "Borussia Mönchengladbach": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Eintracht Frankfurt": {
+     "pos": 9,
+     "zone": null
+    },
+    "FC Augsburg": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "FC Bayern München": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "FC Schalke 04": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Hamburger SV": {
+     "pos": 16,
+     "zone": "rel-po"
+    },
+    "Hannover 96": {
+     "pos": 13,
+     "zone": null
+    },
+    "Hertha Berlin": {
+     "pos": 15,
+     "zone": null
+    },
+    "SC Freiburg": {
+     "pos": 17,
+     "zone": "rel"
+    },
+    "SC Paderborn 07": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "SV Werder Bremen": {
+     "pos": 10,
+     "zone": null
+    },
+    "TSG 1899 Hoffenheim": {
+     "pos": 8,
+     "zone": null
+    },
+    "VfB Stuttgart": {
+     "pos": 14,
+     "zone": null
+    },
+    "VfL Wolfsburg": {
+     "pos": 2,
+     "zone": "cl"
+    }
+   }
+  },
+  "2015": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "1. FC Köln": {
+     "pos": 9,
+     "zone": null
+    },
+    "1. FSV Mainz 05": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Bayer 04 Leverkusen": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Borussia Dortmund": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Borussia Mönchengladbach": {
+     "pos": 4,
+     "zone": "cl-q"
+    },
+    "Eintracht Frankfurt": {
+     "pos": 16,
+     "zone": "rel-po"
+    },
+    "FC Augsburg": {
+     "pos": 12,
+     "zone": null
+    },
+    "FC Bayern München": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "FC Ingolstadt 04": {
+     "pos": 11,
+     "zone": null
+    },
+    "FC Schalke 04": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Hamburger SV": {
+     "pos": 10,
+     "zone": null
+    },
+    "Hannover 96": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Hertha Berlin": {
+     "pos": 7,
+     "zone": null
+    },
+    "SV Darmstadt 98": {
+     "pos": 14,
+     "zone": null
+    },
+    "SV Werder Bremen": {
+     "pos": 13,
+     "zone": null
+    },
+    "TSG 1899 Hoffenheim": {
+     "pos": 15,
+     "zone": null
+    },
+    "VfB Stuttgart": {
+     "pos": 17,
+     "zone": "rel"
+    },
+    "VfL Wolfsburg": {
+     "pos": 8,
+     "zone": null
+    }
+   }
+  },
+  "2016": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "1. FC Köln": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "1. FSV Mainz 05": {
+     "pos": 15,
+     "zone": null
+    },
+    "Bayer 04 Leverkusen": {
+     "pos": 12,
+     "zone": null
+    },
+    "Borussia Dortmund": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Borussia Mönchengladbach": {
+     "pos": 9,
+     "zone": null
+    },
+    "Eintracht Frankfurt": {
+     "pos": 11,
+     "zone": null
+    },
+    "FC Augsburg": {
+     "pos": 13,
+     "zone": null
+    },
+    "FC Bayern München": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "FC Ingolstadt 04": {
+     "pos": 17,
+     "zone": "rel"
+    },
+    "FC Schalke 04": {
+     "pos": 10,
+     "zone": null
+    },
+    "Hamburger SV": {
+     "pos": 14,
+     "zone": null
+    },
+    "Hertha Berlin": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "RB Leipzig": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "SC Freiburg": {
+     "pos": 7,
+     "zone": null
+    },
+    "SV Darmstadt 98": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "SV Werder Bremen": {
+     "pos": 8,
+     "zone": null
+    },
+    "TSG 1899 Hoffenheim": {
+     "pos": 4,
+     "zone": "cl-q"
+    },
+    "VfL Wolfsburg": {
+     "pos": 16,
+     "zone": "rel-po"
+    }
+   }
+  },
+  "2017": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "1. FC Köln": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "1. FSV Mainz 05": {
+     "pos": 14,
+     "zone": "rel-po"
+    },
+    "Bayer 04 Leverkusen": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Borussia Dortmund": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "Borussia Mönchengladbach": {
+     "pos": 9,
+     "zone": null
+    },
+    "Eintracht Frankfurt": {
+     "pos": 8,
+     "zone": "cl"
+    },
+    "FC Augsburg": {
+     "pos": 12,
+     "zone": null
+    },
+    "FC Bayern München": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "FC Schalke 04": {
+     "pos": 2,
+     "zone": "el"
+    },
+    "Hamburger SV": {
+     "pos": 17,
+     "zone": "rel"
+    },
+    "Hannover 96": {
+     "pos": 13,
+     "zone": null
+    },
+    "Hertha Berlin": {
+     "pos": 10,
+     "zone": null
+    },
+    "RB Leipzig": {
+     "pos": 6,
+     "zone": "cl"
+    },
+    "SC Freiburg": {
+     "pos": 15,
+     "zone": null
+    },
+    "SV Werder Bremen": {
+     "pos": 11,
+     "zone": null
+    },
+    "TSG 1899 Hoffenheim": {
+     "pos": 3,
+     "zone": null
+    },
+    "VfB Stuttgart": {
+     "pos": 7,
+     "zone": null
+    },
+    "VfL Wolfsburg": {
+     "pos": 16,
+     "zone": null
+    }
+   }
+  },
+  "2018": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "1. FSV Mainz 05": {
+     "pos": 12,
+     "zone": null
+    },
+    "Bayer 04 Leverkusen": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "Borussia Dortmund": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Borussia Mönchengladbach": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Eintracht Frankfurt": {
+     "pos": 7,
+     "zone": "el"
+    },
+    "FC Augsburg": {
+     "pos": 15,
+     "zone": null
+    },
+    "FC Bayern München": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "FC Nurnberg": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "FC Schalke 04": {
+     "pos": 14,
+     "zone": null
+    },
+    "Fortuna Dusseldorf": {
+     "pos": 10,
+     "zone": null
+    },
+    "Hannover 96": {
+     "pos": 17,
+     "zone": "rel"
+    },
+    "Hertha Berlin": {
+     "pos": 11,
+     "zone": null
+    },
+    "RB Leipzig": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "SC Freiburg": {
+     "pos": 13,
+     "zone": null
+    },
+    "SV Werder Bremen": {
+     "pos": 8,
+     "zone": null
+    },
+    "TSG 1899 Hoffenheim": {
+     "pos": 9,
+     "zone": null
+    },
+    "VfB Stuttgart": {
+     "pos": 16,
+     "zone": "rel-po"
+    },
+    "VfL Wolfsburg": {
+     "pos": 6,
+     "zone": "el"
+    }
+   }
+  },
+  "2019": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "1. FC Köln": {
+     "pos": 14,
+     "zone": null
+    },
+    "1. FC Union Berlin": {
+     "pos": 11,
+     "zone": null
+    },
+    "1. FSV Mainz 05": {
+     "pos": 13,
+     "zone": null
+    },
+    "Bayer 04 Leverkusen": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Borussia Dortmund": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Borussia Mönchengladbach": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "Eintracht Frankfurt": {
+     "pos": 9,
+     "zone": null
+    },
+    "FC Augsburg": {
+     "pos": 15,
+     "zone": null
+    },
+    "FC Bayern München": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "FC Schalke 04": {
+     "pos": 12,
+     "zone": null
+    },
+    "Fortuna Dusseldorf": {
+     "pos": 17,
+     "zone": "rel"
+    },
+    "Hertha Berlin": {
+     "pos": 10,
+     "zone": null
+    },
+    "RB Leipzig": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "SC Freiburg": {
+     "pos": 8,
+     "zone": null
+    },
+    "SC Paderborn 07": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "SV Werder Bremen": {
+     "pos": 16,
+     "zone": "rel-po"
+    },
+    "TSG 1899 Hoffenheim": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "VfL Wolfsburg": {
+     "pos": 7,
+     "zone": "el"
+    }
+   }
+  },
+  "2020": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "1. FC Köln": {
+     "pos": 16,
+     "zone": "rel-po"
+    },
+    "1. FC Union Berlin": {
+     "pos": 7,
+     "zone": "ecl"
+    },
+    "1. FSV Mainz 05": {
+     "pos": 12,
+     "zone": null
+    },
+    "Arminia Bielefeld": {
+     "pos": 15,
+     "zone": null
+    },
+    "Bayer 04 Leverkusen": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Borussia Dortmund": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Borussia Mönchengladbach": {
+     "pos": 8,
+     "zone": null
+    },
+    "Eintracht Frankfurt": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "FC Augsburg": {
+     "pos": 13,
+     "zone": null
+    },
+    "FC Bayern München": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "FC Schalke 04": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Hertha Berlin": {
+     "pos": 14,
+     "zone": null
+    },
+    "RB Leipzig": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "SC Freiburg": {
+     "pos": 10,
+     "zone": null
+    },
+    "SV Werder Bremen": {
+     "pos": 17,
+     "zone": "rel"
+    },
+    "TSG 1899 Hoffenheim": {
+     "pos": 11,
+     "zone": null
+    },
+    "VfB Stuttgart": {
+     "pos": 9,
+     "zone": null
+    },
+    "VfL Wolfsburg": {
+     "pos": 4,
+     "zone": "cl"
+    }
+   }
+  },
+  "2021": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "1. FC Köln": {
+     "pos": 7,
+     "zone": "ecl"
+    },
+    "1. FC Union Berlin": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "1. FSV Mainz 05": {
+     "pos": 8,
+     "zone": null
+    },
+    "Arminia Bielefeld": {
+     "pos": 17,
+     "zone": "rel"
+    },
+    "Bayer 04 Leverkusen": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Borussia Dortmund": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Borussia Mönchengladbach": {
+     "pos": 10,
+     "zone": null
+    },
+    "Eintracht Frankfurt": {
+     "pos": 11,
+     "zone": "cl"
+    },
+    "FC Augsburg": {
+     "pos": 14,
+     "zone": null
+    },
+    "FC Bayern München": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Hertha Berlin": {
+     "pos": 16,
+     "zone": "rel-po"
+    },
+    "RB Leipzig": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "SC Freiburg": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "SpVgg Greuther Furth": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "TSG 1899 Hoffenheim": {
+     "pos": 9,
+     "zone": null
+    },
+    "VfB Stuttgart": {
+     "pos": 15,
+     "zone": null
+    },
+    "VfL Bochum 1848": {
+     "pos": 13,
+     "zone": null
+    },
+    "VfL Wolfsburg": {
+     "pos": 12,
+     "zone": null
+    }
+   }
+  },
+  "2022": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "1. FC Köln": {
+     "pos": 11,
+     "zone": null
+    },
+    "1. FC Union Berlin": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "1. FSV Mainz 05": {
+     "pos": 9,
+     "zone": null
+    },
+    "Bayer 04 Leverkusen": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Borussia Dortmund": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Borussia Mönchengladbach": {
+     "pos": 10,
+     "zone": null
+    },
+    "Eintracht Frankfurt": {
+     "pos": 7,
+     "zone": "ecl"
+    },
+    "FC Augsburg": {
+     "pos": 15,
+     "zone": null
+    },
+    "FC Bayern München": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "FC Schalke 04": {
+     "pos": 17,
+     "zone": "rel"
+    },
+    "Hertha Berlin": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "RB Leipzig": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "SC Freiburg": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "SV Werder Bremen": {
+     "pos": 13,
+     "zone": null
+    },
+    "TSG 1899 Hoffenheim": {
+     "pos": 12,
+     "zone": null
+    },
+    "VfB Stuttgart": {
+     "pos": 16,
+     "zone": "rel-po"
+    },
+    "VfL Bochum 1848": {
+     "pos": 14,
+     "zone": null
+    },
+    "VfL Wolfsburg": {
+     "pos": 8,
+     "zone": null
+    }
+   }
+  }
+ },
+ "FL1": {
+  "2010": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "AJ Auxerre": {
+     "pos": 9,
+     "zone": null
+    },
+    "AS Monaco FC": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "AS Saint-Étienne": {
+     "pos": 10,
+     "zone": null
+    },
+    "Arles": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Bordeaux": {
+     "pos": 7,
+     "zone": null
+    },
+    "Caen": {
+     "pos": 15,
+     "zone": null
+    },
+    "FC Lorient": {
+     "pos": 11,
+     "zone": null
+    },
+    "Lille OSC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Montpellier HSC": {
+     "pos": 14,
+     "zone": null
+    },
+    "Nancy": {
+     "pos": 13,
+     "zone": null
+    },
+    "OGC Nice": {
+     "pos": 17,
+     "zone": null
+    },
+    "Olympique Lyonnais": {
+     "pos": 3,
+     "zone": "cl-q"
+    },
+    "Olympique de Marseille": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Paris Saint-Germain FC": {
+     "pos": 4,
+     "zone": "el"
+    },
+    "Racing Club de Lens": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Sochaux": {
+     "pos": 5,
+     "zone": null
+    },
+    "Stade Brestois 29": {
+     "pos": 16,
+     "zone": null
+    },
+    "Stade Rennais FC 1901": {
+     "pos": 6,
+     "zone": null
+    },
+    "Toulouse FC": {
+     "pos": 8,
+     "zone": null
+    },
+    "Valenciennes": {
+     "pos": 12,
+     "zone": null
+    }
+   }
+  },
+  "2011": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "AJ Auxerre": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "AS Saint-Étienne": {
+     "pos": 7,
+     "zone": null
+    },
+    "Ajaccio": {
+     "pos": 16,
+     "zone": null
+    },
+    "Bordeaux": {
+     "pos": 5,
+     "zone": null
+    },
+    "Caen": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Dijon": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Evian TG": {
+     "pos": 9,
+     "zone": null
+    },
+    "FC Lorient": {
+     "pos": 17,
+     "zone": null
+    },
+    "Lille OSC": {
+     "pos": 3,
+     "zone": "cl-q"
+    },
+    "Montpellier HSC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Nancy": {
+     "pos": 11,
+     "zone": null
+    },
+    "OGC Nice": {
+     "pos": 13,
+     "zone": null
+    },
+    "Olympique Lyonnais": {
+     "pos": 4,
+     "zone": "el"
+    },
+    "Olympique de Marseille": {
+     "pos": 10,
+     "zone": null
+    },
+    "Paris Saint-Germain FC": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Sochaux": {
+     "pos": 14,
+     "zone": null
+    },
+    "Stade Brestois 29": {
+     "pos": 15,
+     "zone": null
+    },
+    "Stade Rennais FC 1901": {
+     "pos": 6,
+     "zone": null
+    },
+    "Toulouse FC": {
+     "pos": 8,
+     "zone": null
+    },
+    "Valenciennes": {
+     "pos": 12,
+     "zone": null
+    }
+   }
+  },
+  "2012": {
+   "adjust": {
+    "Ajaccio": -2
+   },
+   "source": "API-Football",
+   "teams": {
+    "AS Saint-Étienne": {
+     "pos": 5,
+     "zone": null
+    },
+    "Ajaccio": {
+     "pos": 17,
+     "zone": null
+    },
+    "Bastia": {
+     "pos": 12,
+     "zone": null
+    },
+    "Bordeaux": {
+     "pos": 7,
+     "zone": null
+    },
+    "ES Troyes AC": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Evian TG": {
+     "pos": 16,
+     "zone": null
+    },
+    "FC Lorient": {
+     "pos": 8,
+     "zone": null
+    },
+    "Lille OSC": {
+     "pos": 6,
+     "zone": null
+    },
+    "Montpellier HSC": {
+     "pos": 9,
+     "zone": null
+    },
+    "Nancy": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "OGC Nice": {
+     "pos": 4,
+     "zone": "el"
+    },
+    "Olympique Lyonnais": {
+     "pos": 3,
+     "zone": "cl-q"
+    },
+    "Olympique de Marseille": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Paris Saint-Germain FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Sochaux": {
+     "pos": 15,
+     "zone": null
+    },
+    "Stade Brestois 29": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Stade Rennais FC 1901": {
+     "pos": 13,
+     "zone": null
+    },
+    "Stade de Reims": {
+     "pos": 14,
+     "zone": null
+    },
+    "Toulouse FC": {
+     "pos": 10,
+     "zone": null
+    },
+    "Valenciennes": {
+     "pos": 11,
+     "zone": null
+    }
+   }
+  },
+  "2013": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "AS Monaco FC": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "AS Saint-Étienne": {
+     "pos": 4,
+     "zone": "el"
+    },
+    "Ajaccio": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Bastia": {
+     "pos": 10,
+     "zone": null
+    },
+    "Bordeaux": {
+     "pos": 7,
+     "zone": null
+    },
+    "Evian TG": {
+     "pos": 14,
+     "zone": null
+    },
+    "FC Lorient": {
+     "pos": 8,
+     "zone": null
+    },
+    "FC Nantes": {
+     "pos": 13,
+     "zone": null
+    },
+    "Guingamp": {
+     "pos": 16,
+     "zone": null
+    },
+    "Lille OSC": {
+     "pos": 3,
+     "zone": "cl-q"
+    },
+    "Montpellier HSC": {
+     "pos": 15,
+     "zone": null
+    },
+    "OGC Nice": {
+     "pos": 17,
+     "zone": null
+    },
+    "Olympique Lyonnais": {
+     "pos": 5,
+     "zone": null
+    },
+    "Olympique de Marseille": {
+     "pos": 6,
+     "zone": null
+    },
+    "Paris Saint-Germain FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Sochaux": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Stade Rennais FC 1901": {
+     "pos": 12,
+     "zone": null
+    },
+    "Stade de Reims": {
+     "pos": 11,
+     "zone": null
+    },
+    "Toulouse FC": {
+     "pos": 9,
+     "zone": null
+    },
+    "Valenciennes": {
+     "pos": 19,
+     "zone": "rel"
+    }
+   }
+  },
+  "2014": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "AS Monaco FC": {
+     "pos": 3,
+     "zone": "cl-q"
+    },
+    "AS Saint-Étienne": {
+     "pos": 5,
+     "zone": null
+    },
+    "Bastia": {
+     "pos": 12,
+     "zone": null
+    },
+    "Bordeaux": {
+     "pos": 6,
+     "zone": null
+    },
+    "Caen": {
+     "pos": 13,
+     "zone": null
+    },
+    "Evian TG": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "FC Lorient": {
+     "pos": 16,
+     "zone": null
+    },
+    "FC Metz": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "FC Nantes": {
+     "pos": 14,
+     "zone": null
+    },
+    "Guingamp": {
+     "pos": 10,
+     "zone": null
+    },
+    "Lille OSC": {
+     "pos": 8,
+     "zone": null
+    },
+    "Montpellier HSC": {
+     "pos": 7,
+     "zone": null
+    },
+    "OGC Nice": {
+     "pos": 11,
+     "zone": null
+    },
+    "Olympique Lyonnais": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Olympique de Marseille": {
+     "pos": 4,
+     "zone": "el"
+    },
+    "Paris Saint-Germain FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Racing Club de Lens": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Stade Rennais FC 1901": {
+     "pos": 9,
+     "zone": null
+    },
+    "Stade de Reims": {
+     "pos": 15,
+     "zone": null
+    },
+    "Toulouse FC": {
+     "pos": 17,
+     "zone": null
+    }
+   }
+  },
+  "2015": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "AS Monaco FC": {
+     "pos": 3,
+     "zone": "cl-q"
+    },
+    "AS Saint-Étienne": {
+     "pos": 6,
+     "zone": null
+    },
+    "Angers SCO": {
+     "pos": 9,
+     "zone": null
+    },
+    "Bastia": {
+     "pos": 10,
+     "zone": null
+    },
+    "Bordeaux": {
+     "pos": 11,
+     "zone": null
+    },
+    "Caen": {
+     "pos": 7,
+     "zone": null
+    },
+    "ES Troyes AC": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "FC Lorient": {
+     "pos": 15,
+     "zone": null
+    },
+    "FC Nantes": {
+     "pos": 14,
+     "zone": null
+    },
+    "Gazelec FC Ajaccio": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Guingamp": {
+     "pos": 16,
+     "zone": null
+    },
+    "Lille OSC": {
+     "pos": 5,
+     "zone": null
+    },
+    "Montpellier HSC": {
+     "pos": 12,
+     "zone": null
+    },
+    "OGC Nice": {
+     "pos": 4,
+     "zone": "el"
+    },
+    "Olympique Lyonnais": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Olympique de Marseille": {
+     "pos": 13,
+     "zone": null
+    },
+    "Paris Saint-Germain FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Stade Rennais FC 1901": {
+     "pos": 8,
+     "zone": null
+    },
+    "Stade de Reims": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Toulouse FC": {
+     "pos": 17,
+     "zone": null
+    }
+   }
+  },
+  "2016": {
+   "adjust": {
+    "Bastia": -1,
+    "Olympique Lyonnais": 2
+   },
+   "source": "API-Football",
+   "teams": {
+    "AS Monaco FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "AS Saint-Étienne": {
+     "pos": 9,
+     "zone": null
+    },
+    "Angers SCO": {
+     "pos": 11,
+     "zone": null
+    },
+    "Bastia": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Bordeaux": {
+     "pos": 6,
+     "zone": null
+    },
+    "Caen": {
+     "pos": 17,
+     "zone": null
+    },
+    "Dijon": {
+     "pos": 16,
+     "zone": null
+    },
+    "FC Lorient": {
+     "pos": 18,
+     "zone": "rel-po"
+    },
+    "FC Metz": {
+     "pos": 14,
+     "zone": null
+    },
+    "FC Nantes": {
+     "pos": 7,
+     "zone": null
+    },
+    "Guingamp": {
+     "pos": 10,
+     "zone": null
+    },
+    "Lille OSC": {
+     "pos": 12,
+     "zone": null
+    },
+    "Montpellier HSC": {
+     "pos": 15,
+     "zone": null
+    },
+    "Nancy": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "OGC Nice": {
+     "pos": 3,
+     "zone": "cl-q"
+    },
+    "Olympique Lyonnais": {
+     "pos": 4,
+     "zone": "el"
+    },
+    "Olympique de Marseille": {
+     "pos": 5,
+     "zone": null
+    },
+    "Paris Saint-Germain FC": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Stade Rennais FC 1901": {
+     "pos": 8,
+     "zone": null
+    },
+    "Toulouse FC": {
+     "pos": 13,
+     "zone": null
+    }
+   }
+  },
+  "2017": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "AS Monaco FC": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "AS Saint-Étienne": {
+     "pos": 7,
+     "zone": null
+    },
+    "Amiens": {
+     "pos": 13,
+     "zone": null
+    },
+    "Angers SCO": {
+     "pos": 14,
+     "zone": "rel-po"
+    },
+    "Bordeaux": {
+     "pos": 6,
+     "zone": null
+    },
+    "Caen": {
+     "pos": 16,
+     "zone": null
+    },
+    "Dijon": {
+     "pos": 11,
+     "zone": null
+    },
+    "ES Troyes AC": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "FC Metz": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "FC Nantes": {
+     "pos": 9,
+     "zone": null
+    },
+    "Guingamp": {
+     "pos": 12,
+     "zone": null
+    },
+    "Lille OSC": {
+     "pos": 17,
+     "zone": null
+    },
+    "Montpellier HSC": {
+     "pos": 10,
+     "zone": null
+    },
+    "OGC Nice": {
+     "pos": 8,
+     "zone": null
+    },
+    "Olympique Lyonnais": {
+     "pos": 3,
+     "zone": "el"
+    },
+    "Olympique de Marseille": {
+     "pos": 4,
+     "zone": "cl-q"
+    },
+    "Paris Saint-Germain FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "RC Strasbourg Alsace": {
+     "pos": 15,
+     "zone": null
+    },
+    "Stade Rennais FC 1901": {
+     "pos": 5,
+     "zone": null
+    },
+    "Toulouse FC": {
+     "pos": 18,
+     "zone": null
+    }
+   }
+  },
+  "2018": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "AS Monaco FC": {
+     "pos": 17,
+     "zone": null
+    },
+    "AS Saint-Étienne": {
+     "pos": 4,
+     "zone": "el"
+    },
+    "Amiens": {
+     "pos": 15,
+     "zone": null
+    },
+    "Angers SCO": {
+     "pos": 13,
+     "zone": null
+    },
+    "Bordeaux": {
+     "pos": 14,
+     "zone": null
+    },
+    "Caen": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Dijon": {
+     "pos": 18,
+     "zone": "rel-po"
+    },
+    "FC Nantes": {
+     "pos": 12,
+     "zone": null
+    },
+    "Guingamp": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Lille OSC": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Montpellier HSC": {
+     "pos": 6,
+     "zone": null
+    },
+    "Nimes": {
+     "pos": 9,
+     "zone": null
+    },
+    "OGC Nice": {
+     "pos": 7,
+     "zone": null
+    },
+    "Olympique Lyonnais": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Olympique de Marseille": {
+     "pos": 5,
+     "zone": null
+    },
+    "Paris Saint-Germain FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "RC Strasbourg Alsace": {
+     "pos": 11,
+     "zone": "el"
+    },
+    "Stade Rennais FC 1901": {
+     "pos": 10,
+     "zone": "el"
+    },
+    "Stade de Reims": {
+     "pos": 8,
+     "zone": null
+    },
+    "Toulouse FC": {
+     "pos": 16,
+     "zone": null
+    }
+   }
+  },
+  "2019": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "AS Monaco FC": {
+     "pos": 9,
+     "zone": null
+    },
+    "AS Saint-Étienne": {
+     "pos": 17,
+     "zone": null
+    },
+    "Amiens": {
+     "pos": 19,
+     "zone": null
+    },
+    "Angers SCO": {
+     "pos": 10,
+     "zone": null
+    },
+    "Bordeaux": {
+     "pos": 12,
+     "zone": null
+    },
+    "Dijon": {
+     "pos": 16,
+     "zone": null
+    },
+    "FC Metz": {
+     "pos": 15,
+     "zone": null
+    },
+    "FC Nantes": {
+     "pos": 13,
+     "zone": null
+    },
+    "Lille OSC": {
+     "pos": 4,
+     "zone": null
+    },
+    "Montpellier HSC": {
+     "pos": 8,
+     "zone": null
+    },
+    "Nimes": {
+     "pos": 18,
+     "zone": null
+    },
+    "OGC Nice": {
+     "pos": 6,
+     "zone": null
+    },
+    "Olympique Lyonnais": {
+     "pos": 7,
+     "zone": null
+    },
+    "Olympique de Marseille": {
+     "pos": 2,
+     "zone": null
+    },
+    "Paris Saint-Germain FC": {
+     "pos": 1,
+     "zone": null
+    },
+    "RC Strasbourg Alsace": {
+     "pos": 11,
+     "zone": null
+    },
+    "Stade Brestois 29": {
+     "pos": 14,
+     "zone": null
+    },
+    "Stade Rennais FC 1901": {
+     "pos": 3,
+     "zone": null
+    },
+    "Stade de Reims": {
+     "pos": 5,
+     "zone": null
+    },
+    "Toulouse FC": {
+     "pos": 20,
+     "zone": null
+    }
+   }
+  },
+  "2020": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "AS Monaco FC": {
+     "pos": 3,
+     "zone": "cl-q"
+    },
+    "AS Saint-Étienne": {
+     "pos": 11,
+     "zone": null
+    },
+    "Angers SCO": {
+     "pos": 13,
+     "zone": null
+    },
+    "Bordeaux": {
+     "pos": 12,
+     "zone": null
+    },
+    "Dijon": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "FC Lorient": {
+     "pos": 16,
+     "zone": null
+    },
+    "FC Metz": {
+     "pos": 10,
+     "zone": null
+    },
+    "FC Nantes": {
+     "pos": 18,
+     "zone": "rel-po"
+    },
+    "Lille OSC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Montpellier HSC": {
+     "pos": 8,
+     "zone": null
+    },
+    "Nimes": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "OGC Nice": {
+     "pos": 9,
+     "zone": null
+    },
+    "Olympique Lyonnais": {
+     "pos": 4,
+     "zone": "el"
+    },
+    "Olympique de Marseille": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Paris Saint-Germain FC": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "RC Strasbourg Alsace": {
+     "pos": 15,
+     "zone": null
+    },
+    "Racing Club de Lens": {
+     "pos": 7,
+     "zone": null
+    },
+    "Stade Brestois 29": {
+     "pos": 17,
+     "zone": null
+    },
+    "Stade Rennais FC 1901": {
+     "pos": 6,
+     "zone": "ecl"
+    },
+    "Stade de Reims": {
+     "pos": 14,
+     "zone": null
+    }
+   }
+  },
+  "2021": {
+   "adjust": {
+    "OGC Nice": -1,
+    "Olympique Lyonnais": -1
+   },
+   "source": "API-Football",
+   "teams": {
+    "AS Monaco FC": {
+     "pos": 3,
+     "zone": "cl-q"
+    },
+    "AS Saint-Étienne": {
+     "pos": 18,
+     "zone": "rel-po"
+    },
+    "Angers SCO": {
+     "pos": 14,
+     "zone": null
+    },
+    "Bordeaux": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Clermont Foot 63": {
+     "pos": 17,
+     "zone": null
+    },
+    "ES Troyes AC": {
+     "pos": 15,
+     "zone": null
+    },
+    "FC Lorient": {
+     "pos": 16,
+     "zone": null
+    },
+    "FC Metz": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "FC Nantes": {
+     "pos": 9,
+     "zone": "el"
+    },
+    "Lille OSC": {
+     "pos": 10,
+     "zone": null
+    },
+    "Montpellier HSC": {
+     "pos": 13,
+     "zone": null
+    },
+    "OGC Nice": {
+     "pos": 5,
+     "zone": "ecl"
+    },
+    "Olympique Lyonnais": {
+     "pos": 8,
+     "zone": null
+    },
+    "Olympique de Marseille": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Paris Saint-Germain FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "RC Strasbourg Alsace": {
+     "pos": 6,
+     "zone": null
+    },
+    "Racing Club de Lens": {
+     "pos": 7,
+     "zone": null
+    },
+    "Stade Brestois 29": {
+     "pos": 11,
+     "zone": null
+    },
+    "Stade Rennais FC 1901": {
+     "pos": 4,
+     "zone": "el"
+    },
+    "Stade de Reims": {
+     "pos": 12,
+     "zone": null
+    }
+   }
+  },
+  "2022": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "AJ Auxerre": {
+     "pos": 17,
+     "zone": "rel"
+    },
+    "AS Monaco FC": {
+     "pos": 6,
+     "zone": null
+    },
+    "Ajaccio": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Angers SCO": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Clermont Foot 63": {
+     "pos": 8,
+     "zone": null
+    },
+    "ES Troyes AC": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "FC Lorient": {
+     "pos": 10,
+     "zone": null
+    },
+    "FC Nantes": {
+     "pos": 16,
+     "zone": null
+    },
+    "Lille OSC": {
+     "pos": 5,
+     "zone": "ecl"
+    },
+    "Montpellier HSC": {
+     "pos": 12,
+     "zone": null
+    },
+    "OGC Nice": {
+     "pos": 9,
+     "zone": null
+    },
+    "Olympique Lyonnais": {
+     "pos": 7,
+     "zone": null
+    },
+    "Olympique de Marseille": {
+     "pos": 3,
+     "zone": "cl-q"
+    },
+    "Paris Saint-Germain FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "RC Strasbourg Alsace": {
+     "pos": 15,
+     "zone": null
+    },
+    "Racing Club de Lens": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Stade Brestois 29": {
+     "pos": 14,
+     "zone": null
+    },
+    "Stade Rennais FC 1901": {
+     "pos": 4,
+     "zone": "el"
+    },
+    "Stade de Reims": {
+     "pos": 11,
+     "zone": null
+    },
+    "Toulouse FC": {
+     "pos": 13,
+     "zone": "el"
+    }
+   }
+  }
+ },
+ "PD": {
+  "2010": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "Athletic Club": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "CA Osasuna": {
+     "pos": 9,
+     "zone": null
+    },
+    "Club Atlético de Madrid": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "FC Barcelona": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Getafe CF": {
+     "pos": 16,
+     "zone": null
+    },
+    "Hércules": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Levante UD": {
+     "pos": 14,
+     "zone": null
+    },
+    "Málaga CF": {
+     "pos": 11,
+     "zone": null
+    },
+    "RC Deportivo La Coruña": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "RCD Espanyol de Barcelona": {
+     "pos": 8,
+     "zone": null
+    },
+    "RCD Mallorca": {
+     "pos": 17,
+     "zone": null
+    },
+    "Real Madrid CF": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Real Racing Club de Santander": {
+     "pos": 12,
+     "zone": null
+    },
+    "Real Sociedad de Fútbol": {
+     "pos": 15,
+     "zone": null
+    },
+    "Sevilla FC": {
+     "pos": 7,
+     "zone": null
+    },
+    "Sporting Gijon": {
+     "pos": 10,
+     "zone": null
+    },
+    "UD Almería": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Valencia CF": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Villarreal CF": {
+     "pos": 4,
+     "zone": "cl-q"
+    },
+    "Zaragoza": {
+     "pos": 13,
+     "zone": null
+    }
+   }
+  },
+  "2011": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "Athletic Club": {
+     "pos": 10,
+     "zone": null
+    },
+    "CA Osasuna": {
+     "pos": 7,
+     "zone": null
+    },
+    "Club Atlético de Madrid": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "FC Barcelona": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Getafe CF": {
+     "pos": 11,
+     "zone": null
+    },
+    "Granada CF": {
+     "pos": 17,
+     "zone": null
+    },
+    "Levante UD": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Málaga CF": {
+     "pos": 4,
+     "zone": "cl-q"
+    },
+    "RCD Espanyol de Barcelona": {
+     "pos": 14,
+     "zone": null
+    },
+    "RCD Mallorca": {
+     "pos": 8,
+     "zone": null
+    },
+    "Rayo Vallecano de Madrid": {
+     "pos": 15,
+     "zone": null
+    },
+    "Real Betis Balompié": {
+     "pos": 13,
+     "zone": null
+    },
+    "Real Madrid CF": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Real Racing Club de Santander": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Real Sociedad de Fútbol": {
+     "pos": 12,
+     "zone": null
+    },
+    "Sevilla FC": {
+     "pos": 9,
+     "zone": null
+    },
+    "Sporting Gijon": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Valencia CF": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Villarreal CF": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Zaragoza": {
+     "pos": 16,
+     "zone": null
+    }
+   }
+  },
+  "2012": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "Athletic Club": {
+     "pos": 12,
+     "zone": null
+    },
+    "CA Osasuna": {
+     "pos": 16,
+     "zone": null
+    },
+    "Club Atlético de Madrid": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "FC Barcelona": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Getafe CF": {
+     "pos": 10,
+     "zone": null
+    },
+    "Granada CF": {
+     "pos": 15,
+     "zone": null
+    },
+    "Levante UD": {
+     "pos": 11,
+     "zone": null
+    },
+    "Málaga CF": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "RC Celta de Vigo": {
+     "pos": 17,
+     "zone": null
+    },
+    "RC Deportivo La Coruña": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "RCD Espanyol de Barcelona": {
+     "pos": 13,
+     "zone": null
+    },
+    "RCD Mallorca": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Rayo Vallecano de Madrid": {
+     "pos": 8,
+     "zone": null
+    },
+    "Real Betis Balompié": {
+     "pos": 7,
+     "zone": null
+    },
+    "Real Madrid CF": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Real Sociedad de Fútbol": {
+     "pos": 4,
+     "zone": "cl-q"
+    },
+    "Real Valladolid CF": {
+     "pos": 14,
+     "zone": null
+    },
+    "Sevilla FC": {
+     "pos": 9,
+     "zone": null
+    },
+    "Valencia CF": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Zaragoza": {
+     "pos": 20,
+     "zone": "rel"
+    }
+   }
+  },
+  "2013": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "Athletic Club": {
+     "pos": 4,
+     "zone": "cl-q"
+    },
+    "CA Osasuna": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Club Atlético de Madrid": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Elche CF": {
+     "pos": 16,
+     "zone": null
+    },
+    "FC Barcelona": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Getafe CF": {
+     "pos": 13,
+     "zone": null
+    },
+    "Granada CF": {
+     "pos": 15,
+     "zone": null
+    },
+    "Levante UD": {
+     "pos": 10,
+     "zone": null
+    },
+    "Málaga CF": {
+     "pos": 11,
+     "zone": null
+    },
+    "RC Celta de Vigo": {
+     "pos": 9,
+     "zone": null
+    },
+    "RCD Espanyol de Barcelona": {
+     "pos": 14,
+     "zone": null
+    },
+    "Rayo Vallecano de Madrid": {
+     "pos": 12,
+     "zone": null
+    },
+    "Real Betis Balompié": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Real Madrid CF": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Real Sociedad de Fútbol": {
+     "pos": 7,
+     "zone": null
+    },
+    "Real Valladolid CF": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Sevilla FC": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "UD Almería": {
+     "pos": 17,
+     "zone": null
+    },
+    "Valencia CF": {
+     "pos": 8,
+     "zone": null
+    },
+    "Villarreal CF": {
+     "pos": 6,
+     "zone": "el"
+    }
+   }
+  },
+  "2014": {
+   "adjust": {
+    "UD Almería": -3
+   },
+   "source": "API-Football",
+   "teams": {
+    "Athletic Club": {
+     "pos": 7,
+     "zone": null
+    },
+    "Club Atlético de Madrid": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Cordoba": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Eibar": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Elche CF": {
+     "pos": 13,
+     "zone": null
+    },
+    "FC Barcelona": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Getafe CF": {
+     "pos": 15,
+     "zone": null
+    },
+    "Granada CF": {
+     "pos": 17,
+     "zone": null
+    },
+    "Levante UD": {
+     "pos": 14,
+     "zone": null
+    },
+    "Málaga CF": {
+     "pos": 9,
+     "zone": null
+    },
+    "RC Celta de Vigo": {
+     "pos": 8,
+     "zone": null
+    },
+    "RC Deportivo La Coruña": {
+     "pos": 16,
+     "zone": null
+    },
+    "RCD Espanyol de Barcelona": {
+     "pos": 10,
+     "zone": null
+    },
+    "Rayo Vallecano de Madrid": {
+     "pos": 11,
+     "zone": null
+    },
+    "Real Madrid CF": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Real Sociedad de Fútbol": {
+     "pos": 12,
+     "zone": null
+    },
+    "Sevilla FC": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "UD Almería": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Valencia CF": {
+     "pos": 4,
+     "zone": "cl-q"
+    },
+    "Villarreal CF": {
+     "pos": 6,
+     "zone": "el"
+    }
+   }
+  },
+  "2015": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "Athletic Club": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Club Atlético de Madrid": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Eibar": {
+     "pos": 13,
+     "zone": null
+    },
+    "FC Barcelona": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Getafe CF": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Granada CF": {
+     "pos": 16,
+     "zone": null
+    },
+    "Levante UD": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Málaga CF": {
+     "pos": 8,
+     "zone": null
+    },
+    "RC Celta de Vigo": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "RC Deportivo La Coruña": {
+     "pos": 15,
+     "zone": null
+    },
+    "RCD Espanyol de Barcelona": {
+     "pos": 14,
+     "zone": null
+    },
+    "Rayo Vallecano de Madrid": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Real Betis Balompié": {
+     "pos": 10,
+     "zone": null
+    },
+    "Real Madrid CF": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Real Sociedad de Fútbol": {
+     "pos": 9,
+     "zone": null
+    },
+    "Sevilla FC": {
+     "pos": 7,
+     "zone": null
+    },
+    "Sporting Gijon": {
+     "pos": 17,
+     "zone": null
+    },
+    "UD Las Palmas": {
+     "pos": 11,
+     "zone": null
+    },
+    "Valencia CF": {
+     "pos": 12,
+     "zone": null
+    },
+    "Villarreal CF": {
+     "pos": 4,
+     "zone": "cl-q"
+    }
+   }
+  },
+  "2016": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "Athletic Club": {
+     "pos": 7,
+     "zone": null
+    },
+    "CA Osasuna": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "CD Leganés": {
+     "pos": 17,
+     "zone": null
+    },
+    "Club Atlético de Madrid": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Deportivo Alavés": {
+     "pos": 9,
+     "zone": null
+    },
+    "Eibar": {
+     "pos": 10,
+     "zone": null
+    },
+    "FC Barcelona": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Granada CF": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Málaga CF": {
+     "pos": 11,
+     "zone": null
+    },
+    "RC Celta de Vigo": {
+     "pos": 13,
+     "zone": null
+    },
+    "RC Deportivo La Coruña": {
+     "pos": 16,
+     "zone": null
+    },
+    "RCD Espanyol de Barcelona": {
+     "pos": 8,
+     "zone": null
+    },
+    "Real Betis Balompié": {
+     "pos": 15,
+     "zone": null
+    },
+    "Real Madrid CF": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Real Sociedad de Fútbol": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Sevilla FC": {
+     "pos": 4,
+     "zone": "cl-q"
+    },
+    "Sporting Gijon": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "UD Las Palmas": {
+     "pos": 14,
+     "zone": null
+    },
+    "Valencia CF": {
+     "pos": 12,
+     "zone": null
+    },
+    "Villarreal CF": {
+     "pos": 5,
+     "zone": "el"
+    }
+   }
+  },
+  "2017": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "Athletic Club": {
+     "pos": 16,
+     "zone": null
+    },
+    "CD Leganés": {
+     "pos": 17,
+     "zone": null
+    },
+    "Club Atlético de Madrid": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Deportivo Alavés": {
+     "pos": 14,
+     "zone": null
+    },
+    "Eibar": {
+     "pos": 9,
+     "zone": null
+    },
+    "FC Barcelona": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Getafe CF": {
+     "pos": 8,
+     "zone": null
+    },
+    "Girona FC": {
+     "pos": 10,
+     "zone": null
+    },
+    "Levante UD": {
+     "pos": 15,
+     "zone": null
+    },
+    "Málaga CF": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "RC Celta de Vigo": {
+     "pos": 13,
+     "zone": null
+    },
+    "RC Deportivo La Coruña": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "RCD Espanyol de Barcelona": {
+     "pos": 11,
+     "zone": null
+    },
+    "Real Betis Balompié": {
+     "pos": 6,
+     "zone": null
+    },
+    "Real Madrid CF": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Real Sociedad de Fútbol": {
+     "pos": 12,
+     "zone": null
+    },
+    "Sevilla FC": {
+     "pos": 7,
+     "zone": "el"
+    },
+    "UD Las Palmas": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Valencia CF": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "Villarreal CF": {
+     "pos": 5,
+     "zone": "el"
+    }
+   }
+  },
+  "2018": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "Athletic Club": {
+     "pos": 8,
+     "zone": null
+    },
+    "CD Leganés": {
+     "pos": 13,
+     "zone": null
+    },
+    "Club Atlético de Madrid": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Deportivo Alavés": {
+     "pos": 11,
+     "zone": null
+    },
+    "Eibar": {
+     "pos": 12,
+     "zone": null
+    },
+    "FC Barcelona": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Getafe CF": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Girona FC": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Huesca": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Levante UD": {
+     "pos": 15,
+     "zone": null
+    },
+    "RC Celta de Vigo": {
+     "pos": 17,
+     "zone": null
+    },
+    "RCD Espanyol de Barcelona": {
+     "pos": 7,
+     "zone": "el"
+    },
+    "Rayo Vallecano de Madrid": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Real Betis Balompié": {
+     "pos": 10,
+     "zone": null
+    },
+    "Real Madrid CF": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Real Sociedad de Fútbol": {
+     "pos": 9,
+     "zone": null
+    },
+    "Real Valladolid CF": {
+     "pos": 16,
+     "zone": null
+    },
+    "Sevilla FC": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Valencia CF": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "Villarreal CF": {
+     "pos": 14,
+     "zone": null
+    }
+   }
+  },
+  "2019": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "Athletic Club": {
+     "pos": 11,
+     "zone": null
+    },
+    "CA Osasuna": {
+     "pos": 10,
+     "zone": null
+    },
+    "CD Leganés": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Club Atlético de Madrid": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Deportivo Alavés": {
+     "pos": 16,
+     "zone": null
+    },
+    "Eibar": {
+     "pos": 14,
+     "zone": null
+    },
+    "FC Barcelona": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Getafe CF": {
+     "pos": 8,
+     "zone": null
+    },
+    "Granada CF": {
+     "pos": 7,
+     "zone": "el"
+    },
+    "Levante UD": {
+     "pos": 12,
+     "zone": null
+    },
+    "RC Celta de Vigo": {
+     "pos": 17,
+     "zone": null
+    },
+    "RCD Espanyol de Barcelona": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "RCD Mallorca": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Real Betis Balompié": {
+     "pos": 15,
+     "zone": null
+    },
+    "Real Madrid CF": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Real Sociedad de Fútbol": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Real Valladolid CF": {
+     "pos": 13,
+     "zone": null
+    },
+    "Sevilla FC": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "Valencia CF": {
+     "pos": 9,
+     "zone": null
+    },
+    "Villarreal CF": {
+     "pos": 5,
+     "zone": "el"
+    }
+   }
+  },
+  "2020": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "Athletic Club": {
+     "pos": 10,
+     "zone": null
+    },
+    "CA Osasuna": {
+     "pos": 11,
+     "zone": null
+    },
+    "Club Atlético de Madrid": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Cádiz CF": {
+     "pos": 12,
+     "zone": null
+    },
+    "Deportivo Alavés": {
+     "pos": 16,
+     "zone": null
+    },
+    "Eibar": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Elche CF": {
+     "pos": 17,
+     "zone": null
+    },
+    "FC Barcelona": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Getafe CF": {
+     "pos": 15,
+     "zone": null
+    },
+    "Granada CF": {
+     "pos": 9,
+     "zone": null
+    },
+    "Huesca": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Levante UD": {
+     "pos": 14,
+     "zone": null
+    },
+    "RC Celta de Vigo": {
+     "pos": 8,
+     "zone": null
+    },
+    "Real Betis Balompié": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Real Madrid CF": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Real Sociedad de Fútbol": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Real Valladolid CF": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Sevilla FC": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "Valencia CF": {
+     "pos": 13,
+     "zone": null
+    },
+    "Villarreal CF": {
+     "pos": 7,
+     "zone": "ecl"
+    }
+   }
+  },
+  "2021": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "Athletic Club": {
+     "pos": 8,
+     "zone": null
+    },
+    "CA Osasuna": {
+     "pos": 10,
+     "zone": null
+    },
+    "Club Atlético de Madrid": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Cádiz CF": {
+     "pos": 17,
+     "zone": null
+    },
+    "Deportivo Alavés": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Elche CF": {
+     "pos": 13,
+     "zone": null
+    },
+    "FC Barcelona": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Getafe CF": {
+     "pos": 15,
+     "zone": null
+    },
+    "Granada CF": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Levante UD": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "RC Celta de Vigo": {
+     "pos": 11,
+     "zone": null
+    },
+    "RCD Espanyol de Barcelona": {
+     "pos": 14,
+     "zone": null
+    },
+    "RCD Mallorca": {
+     "pos": 16,
+     "zone": null
+    },
+    "Rayo Vallecano de Madrid": {
+     "pos": 12,
+     "zone": null
+    },
+    "Real Betis Balompié": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Real Madrid CF": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Real Sociedad de Fútbol": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Sevilla FC": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "Valencia CF": {
+     "pos": 9,
+     "zone": null
+    },
+    "Villarreal CF": {
+     "pos": 7,
+     "zone": "ecl"
+    }
+   }
+  },
+  "2022": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "Athletic Club": {
+     "pos": 8,
+     "zone": null
+    },
+    "CA Osasuna": {
+     "pos": 7,
+     "zone": "ecl"
+    },
+    "Club Atlético de Madrid": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Cádiz CF": {
+     "pos": 14,
+     "zone": null
+    },
+    "Elche CF": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "FC Barcelona": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Getafe CF": {
+     "pos": 15,
+     "zone": null
+    },
+    "Girona FC": {
+     "pos": 10,
+     "zone": null
+    },
+    "RC Celta de Vigo": {
+     "pos": 13,
+     "zone": null
+    },
+    "RCD Espanyol de Barcelona": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "RCD Mallorca": {
+     "pos": 9,
+     "zone": null
+    },
+    "Rayo Vallecano de Madrid": {
+     "pos": 11,
+     "zone": null
+    },
+    "Real Betis Balompié": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Real Madrid CF": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Real Sociedad de Fútbol": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "Real Valladolid CF": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Sevilla FC": {
+     "pos": 12,
+     "zone": "cl"
+    },
+    "UD Almería": {
+     "pos": 17,
+     "zone": null
+    },
+    "Valencia CF": {
+     "pos": 16,
+     "zone": null
+    },
+    "Villarreal CF": {
+     "pos": 5,
+     "zone": "el"
+    }
+   }
+  }
+ },
+ "PL": {
+  "2010": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "Arsenal FC": {
+     "pos": 4,
+     "zone": "cl-q"
+    },
+    "Aston Villa FC": {
+     "pos": 9,
+     "zone": null
+    },
+    "Birmingham": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Blackburn": {
+     "pos": 15,
+     "zone": null
+    },
+    "Blackpool": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Bolton": {
+     "pos": 14,
+     "zone": null
+    },
+    "Chelsea FC": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Everton FC": {
+     "pos": 7,
+     "zone": null
+    },
+    "Fulham FC": {
+     "pos": 8,
+     "zone": null
+    },
+    "Liverpool FC": {
+     "pos": 6,
+     "zone": null
+    },
+    "Manchester City FC": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Manchester United FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Newcastle United FC": {
+     "pos": 12,
+     "zone": null
+    },
+    "Stoke City": {
+     "pos": 13,
+     "zone": null
+    },
+    "Sunderland AFC": {
+     "pos": 10,
+     "zone": null
+    },
+    "Tottenham Hotspur FC": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "West Brom": {
+     "pos": 11,
+     "zone": null
+    },
+    "West Ham United FC": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Wigan": {
+     "pos": 16,
+     "zone": null
+    },
+    "Wolverhampton Wanderers FC": {
+     "pos": 17,
+     "zone": null
+    }
+   }
+  },
+  "2011": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "Arsenal FC": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Aston Villa FC": {
+     "pos": 16,
+     "zone": null
+    },
+    "Blackburn": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Bolton": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Chelsea FC": {
+     "pos": 6,
+     "zone": null
+    },
+    "Everton FC": {
+     "pos": 7,
+     "zone": null
+    },
+    "Fulham FC": {
+     "pos": 9,
+     "zone": null
+    },
+    "Liverpool FC": {
+     "pos": 8,
+     "zone": null
+    },
+    "Manchester City FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Manchester United FC": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Newcastle United FC": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Norwich": {
+     "pos": 12,
+     "zone": null
+    },
+    "QPR": {
+     "pos": 17,
+     "zone": null
+    },
+    "Stoke City": {
+     "pos": 14,
+     "zone": null
+    },
+    "Sunderland AFC": {
+     "pos": 13,
+     "zone": null
+    },
+    "Swansea": {
+     "pos": 11,
+     "zone": null
+    },
+    "Tottenham Hotspur FC": {
+     "pos": 4,
+     "zone": "cl-q"
+    },
+    "West Brom": {
+     "pos": 10,
+     "zone": null
+    },
+    "Wigan": {
+     "pos": 15,
+     "zone": null
+    },
+    "Wolverhampton Wanderers FC": {
+     "pos": 20,
+     "zone": "rel"
+    }
+   }
+  },
+  "2012": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "Arsenal FC": {
+     "pos": 4,
+     "zone": "cl-q"
+    },
+    "Aston Villa FC": {
+     "pos": 15,
+     "zone": null
+    },
+    "Chelsea FC": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Everton FC": {
+     "pos": 6,
+     "zone": null
+    },
+    "Fulham FC": {
+     "pos": 12,
+     "zone": null
+    },
+    "Liverpool FC": {
+     "pos": 7,
+     "zone": null
+    },
+    "Manchester City FC": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Manchester United FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Newcastle United FC": {
+     "pos": 16,
+     "zone": null
+    },
+    "Norwich": {
+     "pos": 11,
+     "zone": null
+    },
+    "QPR": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Reading": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Southampton FC": {
+     "pos": 14,
+     "zone": null
+    },
+    "Stoke City": {
+     "pos": 13,
+     "zone": null
+    },
+    "Sunderland AFC": {
+     "pos": 17,
+     "zone": null
+    },
+    "Swansea": {
+     "pos": 9,
+     "zone": null
+    },
+    "Tottenham Hotspur FC": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "West Brom": {
+     "pos": 8,
+     "zone": null
+    },
+    "West Ham United FC": {
+     "pos": 10,
+     "zone": null
+    },
+    "Wigan": {
+     "pos": 18,
+     "zone": "rel"
+    }
+   }
+  },
+  "2013": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "Arsenal FC": {
+     "pos": 4,
+     "zone": "cl-q"
+    },
+    "Aston Villa FC": {
+     "pos": 15,
+     "zone": null
+    },
+    "Cardiff": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Chelsea FC": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Crystal Palace FC": {
+     "pos": 11,
+     "zone": null
+    },
+    "Everton FC": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Fulham FC": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Hull City AFC": {
+     "pos": 16,
+     "zone": null
+    },
+    "Liverpool FC": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Manchester City FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Manchester United FC": {
+     "pos": 7,
+     "zone": null
+    },
+    "Newcastle United FC": {
+     "pos": 10,
+     "zone": null
+    },
+    "Norwich": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Southampton FC": {
+     "pos": 8,
+     "zone": null
+    },
+    "Stoke City": {
+     "pos": 9,
+     "zone": null
+    },
+    "Sunderland AFC": {
+     "pos": 14,
+     "zone": null
+    },
+    "Swansea": {
+     "pos": 12,
+     "zone": null
+    },
+    "Tottenham Hotspur FC": {
+     "pos": 6,
+     "zone": null
+    },
+    "West Brom": {
+     "pos": 17,
+     "zone": null
+    },
+    "West Ham United FC": {
+     "pos": 13,
+     "zone": null
+    }
+   }
+  },
+  "2014": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "Arsenal FC": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Aston Villa FC": {
+     "pos": 17,
+     "zone": null
+    },
+    "Burnley FC": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Chelsea FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Crystal Palace FC": {
+     "pos": 10,
+     "zone": null
+    },
+    "Everton FC": {
+     "pos": 11,
+     "zone": null
+    },
+    "Hull City AFC": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Leicester City FC": {
+     "pos": 14,
+     "zone": null
+    },
+    "Liverpool FC": {
+     "pos": 6,
+     "zone": null
+    },
+    "Manchester City FC": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Manchester United FC": {
+     "pos": 4,
+     "zone": "cl-q"
+    },
+    "Newcastle United FC": {
+     "pos": 15,
+     "zone": null
+    },
+    "QPR": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Southampton FC": {
+     "pos": 7,
+     "zone": null
+    },
+    "Stoke City": {
+     "pos": 9,
+     "zone": null
+    },
+    "Sunderland AFC": {
+     "pos": 16,
+     "zone": null
+    },
+    "Swansea": {
+     "pos": 8,
+     "zone": null
+    },
+    "Tottenham Hotspur FC": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "West Brom": {
+     "pos": 13,
+     "zone": null
+    },
+    "West Ham United FC": {
+     "pos": 12,
+     "zone": null
+    }
+   }
+  },
+  "2015": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "AFC Bournemouth": {
+     "pos": 16,
+     "zone": null
+    },
+    "Arsenal FC": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Aston Villa FC": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Chelsea FC": {
+     "pos": 10,
+     "zone": null
+    },
+    "Crystal Palace FC": {
+     "pos": 15,
+     "zone": null
+    },
+    "Everton FC": {
+     "pos": 11,
+     "zone": null
+    },
+    "Leicester City FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Liverpool FC": {
+     "pos": 8,
+     "zone": null
+    },
+    "Manchester City FC": {
+     "pos": 4,
+     "zone": "cl-q"
+    },
+    "Manchester United FC": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Newcastle United FC": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Norwich": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Southampton FC": {
+     "pos": 6,
+     "zone": null
+    },
+    "Stoke City": {
+     "pos": 9,
+     "zone": null
+    },
+    "Sunderland AFC": {
+     "pos": 17,
+     "zone": null
+    },
+    "Swansea": {
+     "pos": 12,
+     "zone": null
+    },
+    "Tottenham Hotspur FC": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Watford": {
+     "pos": 13,
+     "zone": null
+    },
+    "West Brom": {
+     "pos": 14,
+     "zone": null
+    },
+    "West Ham United FC": {
+     "pos": 7,
+     "zone": null
+    }
+   }
+  },
+  "2016": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "AFC Bournemouth": {
+     "pos": 9,
+     "zone": null
+    },
+    "Arsenal FC": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Burnley FC": {
+     "pos": 16,
+     "zone": null
+    },
+    "Chelsea FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Crystal Palace FC": {
+     "pos": 14,
+     "zone": null
+    },
+    "Everton FC": {
+     "pos": 7,
+     "zone": null
+    },
+    "Hull City AFC": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Leicester City FC": {
+     "pos": 12,
+     "zone": null
+    },
+    "Liverpool FC": {
+     "pos": 4,
+     "zone": "cl-q"
+    },
+    "Manchester City FC": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Manchester United FC": {
+     "pos": 6,
+     "zone": null
+    },
+    "Middlesbrough": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Southampton FC": {
+     "pos": 8,
+     "zone": null
+    },
+    "Stoke City": {
+     "pos": 13,
+     "zone": null
+    },
+    "Sunderland AFC": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Swansea": {
+     "pos": 15,
+     "zone": null
+    },
+    "Tottenham Hotspur FC": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Watford": {
+     "pos": 17,
+     "zone": null
+    },
+    "West Brom": {
+     "pos": 10,
+     "zone": null
+    },
+    "West Ham United FC": {
+     "pos": 11,
+     "zone": null
+    }
+   }
+  },
+  "2017": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "AFC Bournemouth": {
+     "pos": 12,
+     "zone": null
+    },
+    "Arsenal FC": {
+     "pos": 6,
+     "zone": null
+    },
+    "Brighton & Hove Albion FC": {
+     "pos": 15,
+     "zone": null
+    },
+    "Burnley FC": {
+     "pos": 7,
+     "zone": null
+    },
+    "Chelsea FC": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Crystal Palace FC": {
+     "pos": 11,
+     "zone": null
+    },
+    "Everton FC": {
+     "pos": 8,
+     "zone": null
+    },
+    "Huddersfield": {
+     "pos": 16,
+     "zone": null
+    },
+    "Leicester City FC": {
+     "pos": 9,
+     "zone": null
+    },
+    "Liverpool FC": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "Manchester City FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Manchester United FC": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Newcastle United FC": {
+     "pos": 10,
+     "zone": null
+    },
+    "Southampton FC": {
+     "pos": 17,
+     "zone": null
+    },
+    "Stoke City": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Swansea": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Tottenham Hotspur FC": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Watford": {
+     "pos": 14,
+     "zone": null
+    },
+    "West Brom": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "West Ham United FC": {
+     "pos": 13,
+     "zone": null
+    }
+   }
+  },
+  "2018": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "AFC Bournemouth": {
+     "pos": 14,
+     "zone": null
+    },
+    "Arsenal FC": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Brighton & Hove Albion FC": {
+     "pos": 17,
+     "zone": null
+    },
+    "Burnley FC": {
+     "pos": 15,
+     "zone": null
+    },
+    "Cardiff": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Chelsea FC": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Crystal Palace FC": {
+     "pos": 12,
+     "zone": null
+    },
+    "Everton FC": {
+     "pos": 8,
+     "zone": null
+    },
+    "Fulham FC": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Huddersfield": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Leicester City FC": {
+     "pos": 9,
+     "zone": null
+    },
+    "Liverpool FC": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Manchester City FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Manchester United FC": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Newcastle United FC": {
+     "pos": 13,
+     "zone": null
+    },
+    "Southampton FC": {
+     "pos": 16,
+     "zone": null
+    },
+    "Tottenham Hotspur FC": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "Watford": {
+     "pos": 11,
+     "zone": null
+    },
+    "West Ham United FC": {
+     "pos": 10,
+     "zone": null
+    },
+    "Wolverhampton Wanderers FC": {
+     "pos": 7,
+     "zone": null
+    }
+   }
+  },
+  "2019": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "AFC Bournemouth": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Arsenal FC": {
+     "pos": 8,
+     "zone": null
+    },
+    "Aston Villa FC": {
+     "pos": 17,
+     "zone": null
+    },
+    "Brighton & Hove Albion FC": {
+     "pos": 15,
+     "zone": null
+    },
+    "Burnley FC": {
+     "pos": 10,
+     "zone": null
+    },
+    "Chelsea FC": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "Crystal Palace FC": {
+     "pos": 14,
+     "zone": null
+    },
+    "Everton FC": {
+     "pos": 12,
+     "zone": null
+    },
+    "Leicester City FC": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Liverpool FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Manchester City FC": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Manchester United FC": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Newcastle United FC": {
+     "pos": 13,
+     "zone": null
+    },
+    "Norwich": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Sheffield United FC": {
+     "pos": 9,
+     "zone": null
+    },
+    "Southampton FC": {
+     "pos": 11,
+     "zone": null
+    },
+    "Tottenham Hotspur FC": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Watford": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "West Ham United FC": {
+     "pos": 16,
+     "zone": null
+    },
+    "Wolverhampton Wanderers FC": {
+     "pos": 7,
+     "zone": null
+    }
+   }
+  },
+  "2020": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "Arsenal FC": {
+     "pos": 8,
+     "zone": null
+    },
+    "Aston Villa FC": {
+     "pos": 11,
+     "zone": null
+    },
+    "Brighton & Hove Albion FC": {
+     "pos": 16,
+     "zone": null
+    },
+    "Burnley FC": {
+     "pos": 17,
+     "zone": null
+    },
+    "Chelsea FC": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "Crystal Palace FC": {
+     "pos": 14,
+     "zone": null
+    },
+    "Everton FC": {
+     "pos": 10,
+     "zone": null
+    },
+    "Fulham FC": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Leeds United FC": {
+     "pos": 9,
+     "zone": null
+    },
+    "Leicester City FC": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Liverpool FC": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Manchester City FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Manchester United FC": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Newcastle United FC": {
+     "pos": 12,
+     "zone": null
+    },
+    "Sheffield United FC": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Southampton FC": {
+     "pos": 15,
+     "zone": null
+    },
+    "Tottenham Hotspur FC": {
+     "pos": 7,
+     "zone": "ecl"
+    },
+    "West Brom": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "West Ham United FC": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Wolverhampton Wanderers FC": {
+     "pos": 13,
+     "zone": null
+    }
+   }
+  },
+  "2021": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "Arsenal FC": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Aston Villa FC": {
+     "pos": 14,
+     "zone": null
+    },
+    "Brentford FC": {
+     "pos": 13,
+     "zone": null
+    },
+    "Brighton & Hove Albion FC": {
+     "pos": 9,
+     "zone": null
+    },
+    "Burnley FC": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Chelsea FC": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Crystal Palace FC": {
+     "pos": 12,
+     "zone": null
+    },
+    "Everton FC": {
+     "pos": 16,
+     "zone": null
+    },
+    "Leeds United FC": {
+     "pos": 17,
+     "zone": null
+    },
+    "Leicester City FC": {
+     "pos": 8,
+     "zone": null
+    },
+    "Liverpool FC": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Manchester City FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Manchester United FC": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Newcastle United FC": {
+     "pos": 11,
+     "zone": null
+    },
+    "Norwich": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Southampton FC": {
+     "pos": 15,
+     "zone": null
+    },
+    "Tottenham Hotspur FC": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "Watford": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "West Ham United FC": {
+     "pos": 7,
+     "zone": "ecl"
+    },
+    "Wolverhampton Wanderers FC": {
+     "pos": 10,
+     "zone": null
+    }
+   }
+  },
+  "2022": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "AFC Bournemouth": {
+     "pos": 15,
+     "zone": null
+    },
+    "Arsenal FC": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Aston Villa FC": {
+     "pos": 7,
+     "zone": "ecl"
+    },
+    "Brentford FC": {
+     "pos": 9,
+     "zone": null
+    },
+    "Brighton & Hove Albion FC": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Chelsea FC": {
+     "pos": 12,
+     "zone": null
+    },
+    "Crystal Palace FC": {
+     "pos": 11,
+     "zone": null
+    },
+    "Everton FC": {
+     "pos": 17,
+     "zone": null
+    },
+    "Fulham FC": {
+     "pos": 10,
+     "zone": null
+    },
+    "Leeds United FC": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Leicester City FC": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Liverpool FC": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Manchester City FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Manchester United FC": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Newcastle United FC": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "Nottingham Forest FC": {
+     "pos": 16,
+     "zone": null
+    },
+    "Southampton FC": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Tottenham Hotspur FC": {
+     "pos": 8,
+     "zone": null
+    },
+    "West Ham United FC": {
+     "pos": 14,
+     "zone": null
+    },
+    "Wolverhampton Wanderers FC": {
+     "pos": 13,
+     "zone": null
+    }
+   }
+  }
+ },
+ "SA": {
+  "2010": {
+   "adjust": {
+    "Bologna FC 1909": -3
+   },
+   "source": "API-Football",
+   "teams": {
+    "AC Milan": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "ACF Fiorentina": {
+     "pos": 9,
+     "zone": null
+    },
+    "AS Roma": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Bari": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Bologna FC 1909": {
+     "pos": 16,
+     "zone": null
+    },
+    "Brescia": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Cagliari Calcio": {
+     "pos": 14,
+     "zone": null
+    },
+    "Catania": {
+     "pos": 13,
+     "zone": null
+    },
+    "Cesena": {
+     "pos": 15,
+     "zone": null
+    },
+    "Chievo": {
+     "pos": 11,
+     "zone": null
+    },
+    "FC Internazionale Milano": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Genoa CFC": {
+     "pos": 10,
+     "zone": null
+    },
+    "Juventus FC": {
+     "pos": 7,
+     "zone": null
+    },
+    "Palermo": {
+     "pos": 8,
+     "zone": null
+    },
+    "Parma Calcio 1913": {
+     "pos": 12,
+     "zone": null
+    },
+    "SS Lazio": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "SSC Napoli": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Sampdoria": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "US Lecce": {
+     "pos": 17,
+     "zone": null
+    },
+    "Udinese Calcio": {
+     "pos": 4,
+     "zone": "cl-q"
+    }
+   }
+  },
+  "2011": {
+   "adjust": {
+    "Atalanta BC": -6
+   },
+   "source": "API-Football",
+   "teams": {
+    "AC Milan": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "ACF Fiorentina": {
+     "pos": 13,
+     "zone": null
+    },
+    "AS Roma": {
+     "pos": 7,
+     "zone": null
+    },
+    "Atalanta BC": {
+     "pos": 12,
+     "zone": null
+    },
+    "Bologna FC 1909": {
+     "pos": 9,
+     "zone": null
+    },
+    "Cagliari Calcio": {
+     "pos": 15,
+     "zone": null
+    },
+    "Catania": {
+     "pos": 11,
+     "zone": null
+    },
+    "Cesena": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Chievo": {
+     "pos": 10,
+     "zone": null
+    },
+    "FC Internazionale Milano": {
+     "pos": 6,
+     "zone": null
+    },
+    "Genoa CFC": {
+     "pos": 17,
+     "zone": null
+    },
+    "Juventus FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Novara": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Palermo": {
+     "pos": 16,
+     "zone": null
+    },
+    "Parma Calcio 1913": {
+     "pos": 8,
+     "zone": null
+    },
+    "Robur Siena": {
+     "pos": 14,
+     "zone": null
+    },
+    "SS Lazio": {
+     "pos": 4,
+     "zone": "el"
+    },
+    "SSC Napoli": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "US Lecce": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Udinese Calcio": {
+     "pos": 3,
+     "zone": "cl-q"
+    }
+   }
+  },
+  "2012": {
+   "adjust": {
+    "Atalanta BC": -2,
+    "Robur Siena": -6,
+    "Sampdoria": -1,
+    "Torino FC": -1
+   },
+   "source": "API-Football",
+   "teams": {
+    "AC Milan": {
+     "pos": 3,
+     "zone": "cl-q"
+    },
+    "ACF Fiorentina": {
+     "pos": 4,
+     "zone": "el"
+    },
+    "AS Roma": {
+     "pos": 6,
+     "zone": null
+    },
+    "Atalanta BC": {
+     "pos": 15,
+     "zone": null
+    },
+    "Bologna FC 1909": {
+     "pos": 13,
+     "zone": null
+    },
+    "Cagliari Calcio": {
+     "pos": 11,
+     "zone": null
+    },
+    "Catania": {
+     "pos": 8,
+     "zone": null
+    },
+    "Chievo": {
+     "pos": 12,
+     "zone": null
+    },
+    "FC Internazionale Milano": {
+     "pos": 9,
+     "zone": null
+    },
+    "Genoa CFC": {
+     "pos": 17,
+     "zone": null
+    },
+    "Juventus FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Palermo": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Parma Calcio 1913": {
+     "pos": 10,
+     "zone": null
+    },
+    "Pescara": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Robur Siena": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "SS Lazio": {
+     "pos": 7,
+     "zone": null
+    },
+    "SSC Napoli": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Sampdoria": {
+     "pos": 14,
+     "zone": null
+    },
+    "Torino FC": {
+     "pos": 16,
+     "zone": null
+    },
+    "Udinese Calcio": {
+     "pos": 5,
+     "zone": "el"
+    }
+   }
+  },
+  "2013": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "AC Milan": {
+     "pos": 8,
+     "zone": null
+    },
+    "ACF Fiorentina": {
+     "pos": 4,
+     "zone": "el"
+    },
+    "AS Roma": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Atalanta BC": {
+     "pos": 11,
+     "zone": null
+    },
+    "Bologna FC 1909": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Cagliari Calcio": {
+     "pos": 15,
+     "zone": null
+    },
+    "Catania": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Chievo": {
+     "pos": 16,
+     "zone": null
+    },
+    "FC Internazionale Milano": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Genoa CFC": {
+     "pos": 13,
+     "zone": null
+    },
+    "Hellas Verona FC": {
+     "pos": 10,
+     "zone": null
+    },
+    "Juventus FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Livorno": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Parma Calcio 1913": {
+     "pos": 6,
+     "zone": null
+    },
+    "SS Lazio": {
+     "pos": 9,
+     "zone": null
+    },
+    "SSC Napoli": {
+     "pos": 3,
+     "zone": "cl-q"
+    },
+    "Sampdoria": {
+     "pos": 12,
+     "zone": null
+    },
+    "Torino FC": {
+     "pos": 7,
+     "zone": null
+    },
+    "US Sassuolo Calcio": {
+     "pos": 17,
+     "zone": null
+    },
+    "Udinese Calcio": {
+     "pos": 14,
+     "zone": null
+    }
+   }
+  },
+  "2014": {
+   "adjust": {
+    "Parma Calcio 1913": -7
+   },
+   "source": "API-Football",
+   "teams": {
+    "AC Milan": {
+     "pos": 10,
+     "zone": null
+    },
+    "ACF Fiorentina": {
+     "pos": 4,
+     "zone": "el"
+    },
+    "AS Roma": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Atalanta BC": {
+     "pos": 17,
+     "zone": null
+    },
+    "Cagliari Calcio": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Cesena": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Chievo": {
+     "pos": 14,
+     "zone": null
+    },
+    "Empoli FC": {
+     "pos": 15,
+     "zone": null
+    },
+    "FC Internazionale Milano": {
+     "pos": 8,
+     "zone": null
+    },
+    "Genoa CFC": {
+     "pos": 6,
+     "zone": null
+    },
+    "Hellas Verona FC": {
+     "pos": 13,
+     "zone": null
+    },
+    "Juventus FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Palermo": {
+     "pos": 11,
+     "zone": null
+    },
+    "Parma Calcio 1913": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "SS Lazio": {
+     "pos": 3,
+     "zone": "cl-q"
+    },
+    "SSC Napoli": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Sampdoria": {
+     "pos": 7,
+     "zone": null
+    },
+    "Torino FC": {
+     "pos": 9,
+     "zone": null
+    },
+    "US Sassuolo Calcio": {
+     "pos": 12,
+     "zone": null
+    },
+    "Udinese Calcio": {
+     "pos": 16,
+     "zone": null
+    }
+   }
+  },
+  "2015": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "AC Milan": {
+     "pos": 7,
+     "zone": null
+    },
+    "ACF Fiorentina": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "AS Roma": {
+     "pos": 3,
+     "zone": "cl-q"
+    },
+    "Atalanta BC": {
+     "pos": 13,
+     "zone": null
+    },
+    "Bologna FC 1909": {
+     "pos": 14,
+     "zone": null
+    },
+    "Carpi": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Chievo": {
+     "pos": 9,
+     "zone": null
+    },
+    "Empoli FC": {
+     "pos": 11,
+     "zone": null
+    },
+    "FC Internazionale Milano": {
+     "pos": 4,
+     "zone": "el"
+    },
+    "Frosinone Calcio": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Genoa CFC": {
+     "pos": 10,
+     "zone": null
+    },
+    "Hellas Verona FC": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Juventus FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Palermo": {
+     "pos": 16,
+     "zone": null
+    },
+    "SS Lazio": {
+     "pos": 8,
+     "zone": null
+    },
+    "SSC Napoli": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Sampdoria": {
+     "pos": 15,
+     "zone": null
+    },
+    "Torino FC": {
+     "pos": 12,
+     "zone": null
+    },
+    "US Sassuolo Calcio": {
+     "pos": 6,
+     "zone": null
+    },
+    "Udinese Calcio": {
+     "pos": 17,
+     "zone": null
+    }
+   }
+  },
+  "2016": {
+   "adjust": {
+    "Pescara": -3,
+    "US Sassuolo Calcio": 3
+   },
+   "source": "API-Football",
+   "teams": {
+    "AC Milan": {
+     "pos": 6,
+     "zone": null
+    },
+    "ACF Fiorentina": {
+     "pos": 8,
+     "zone": null
+    },
+    "AS Roma": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Atalanta BC": {
+     "pos": 4,
+     "zone": "el"
+    },
+    "Bologna FC 1909": {
+     "pos": 15,
+     "zone": null
+    },
+    "Cagliari Calcio": {
+     "pos": 12,
+     "zone": null
+    },
+    "Chievo": {
+     "pos": 14,
+     "zone": null
+    },
+    "Crotone": {
+     "pos": 17,
+     "zone": null
+    },
+    "Empoli FC": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "FC Internazionale Milano": {
+     "pos": 7,
+     "zone": null
+    },
+    "Genoa CFC": {
+     "pos": 16,
+     "zone": null
+    },
+    "Juventus FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Palermo": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Pescara": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "SS Lazio": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "SSC Napoli": {
+     "pos": 3,
+     "zone": "cl-q"
+    },
+    "Sampdoria": {
+     "pos": 11,
+     "zone": null
+    },
+    "Torino FC": {
+     "pos": 9,
+     "zone": null
+    },
+    "US Sassuolo Calcio": {
+     "pos": 10,
+     "zone": null
+    },
+    "Udinese Calcio": {
+     "pos": 13,
+     "zone": null
+    }
+   }
+  },
+  "2017": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "AC Milan": {
+     "pos": 6,
+     "zone": null
+    },
+    "ACF Fiorentina": {
+     "pos": 8,
+     "zone": null
+    },
+    "AS Roma": {
+     "pos": 3,
+     "zone": null
+    },
+    "Atalanta BC": {
+     "pos": 7,
+     "zone": null
+    },
+    "Benevento": {
+     "pos": 20,
+     "zone": null
+    },
+    "Bologna FC 1909": {
+     "pos": 15,
+     "zone": null
+    },
+    "Cagliari Calcio": {
+     "pos": 16,
+     "zone": null
+    },
+    "Chievo": {
+     "pos": 13,
+     "zone": null
+    },
+    "Crotone": {
+     "pos": 18,
+     "zone": null
+    },
+    "FC Internazionale Milano": {
+     "pos": 4,
+     "zone": null
+    },
+    "Genoa CFC": {
+     "pos": 12,
+     "zone": null
+    },
+    "Hellas Verona FC": {
+     "pos": 19,
+     "zone": null
+    },
+    "Juventus FC": {
+     "pos": 1,
+     "zone": null
+    },
+    "SS Lazio": {
+     "pos": 5,
+     "zone": null
+    },
+    "SSC Napoli": {
+     "pos": 2,
+     "zone": null
+    },
+    "Sampdoria": {
+     "pos": 10,
+     "zone": null
+    },
+    "Spal": {
+     "pos": 17,
+     "zone": null
+    },
+    "Torino FC": {
+     "pos": 9,
+     "zone": null
+    },
+    "US Sassuolo Calcio": {
+     "pos": 11,
+     "zone": null
+    },
+    "Udinese Calcio": {
+     "pos": 14,
+     "zone": null
+    }
+   }
+  },
+  "2018": {
+   "adjust": {
+    "Chievo": -3
+   },
+   "source": "API-Football",
+   "teams": {
+    "AC Milan": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "ACF Fiorentina": {
+     "pos": 16,
+     "zone": null
+    },
+    "AS Roma": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Atalanta BC": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Bologna FC 1909": {
+     "pos": 10,
+     "zone": null
+    },
+    "Cagliari Calcio": {
+     "pos": 15,
+     "zone": null
+    },
+    "Chievo": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Empoli FC": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "FC Internazionale Milano": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "Frosinone Calcio": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Genoa CFC": {
+     "pos": 17,
+     "zone": null
+    },
+    "Juventus FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Parma Calcio 1913": {
+     "pos": 14,
+     "zone": null
+    },
+    "SS Lazio": {
+     "pos": 8,
+     "zone": "el"
+    },
+    "SSC Napoli": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Sampdoria": {
+     "pos": 9,
+     "zone": null
+    },
+    "Spal": {
+     "pos": 13,
+     "zone": null
+    },
+    "Torino FC": {
+     "pos": 7,
+     "zone": null
+    },
+    "US Sassuolo Calcio": {
+     "pos": 11,
+     "zone": null
+    },
+    "Udinese Calcio": {
+     "pos": 12,
+     "zone": null
+    }
+   }
+  },
+  "2019": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "AC Milan": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "ACF Fiorentina": {
+     "pos": 10,
+     "zone": null
+    },
+    "AS Roma": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Atalanta BC": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Bologna FC 1909": {
+     "pos": 12,
+     "zone": null
+    },
+    "Brescia": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Cagliari Calcio": {
+     "pos": 14,
+     "zone": null
+    },
+    "FC Internazionale Milano": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Genoa CFC": {
+     "pos": 17,
+     "zone": null
+    },
+    "Hellas Verona FC": {
+     "pos": 9,
+     "zone": null
+    },
+    "Juventus FC": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Parma Calcio 1913": {
+     "pos": 11,
+     "zone": null
+    },
+    "SS Lazio": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "SSC Napoli": {
+     "pos": 7,
+     "zone": null
+    },
+    "Sampdoria": {
+     "pos": 15,
+     "zone": null
+    },
+    "Spal": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Torino FC": {
+     "pos": 16,
+     "zone": null
+    },
+    "US Lecce": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "US Sassuolo Calcio": {
+     "pos": 8,
+     "zone": null
+    },
+    "Udinese Calcio": {
+     "pos": 13,
+     "zone": null
+    }
+   }
+  },
+  "2020": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "AC Milan": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "ACF Fiorentina": {
+     "pos": 13,
+     "zone": null
+    },
+    "AS Roma": {
+     "pos": 7,
+     "zone": "ecl"
+    },
+    "Atalanta BC": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Benevento": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Bologna FC 1909": {
+     "pos": 12,
+     "zone": null
+    },
+    "Cagliari Calcio": {
+     "pos": 16,
+     "zone": null
+    },
+    "Crotone": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "FC Internazionale Milano": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Genoa CFC": {
+     "pos": 11,
+     "zone": null
+    },
+    "Hellas Verona FC": {
+     "pos": 10,
+     "zone": null
+    },
+    "Juventus FC": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "Parma Calcio 1913": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "SS Lazio": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "SSC Napoli": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Sampdoria": {
+     "pos": 9,
+     "zone": null
+    },
+    "Spezia": {
+     "pos": 15,
+     "zone": null
+    },
+    "Torino FC": {
+     "pos": 17,
+     "zone": null
+    },
+    "US Sassuolo Calcio": {
+     "pos": 8,
+     "zone": null
+    },
+    "Udinese Calcio": {
+     "pos": 14,
+     "zone": null
+    }
+   }
+  },
+  "2021": {
+   "adjust": {},
+   "source": "API-Football",
+   "teams": {
+    "AC Milan": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "ACF Fiorentina": {
+     "pos": 7,
+     "zone": "ecl"
+    },
+    "AS Roma": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Atalanta BC": {
+     "pos": 8,
+     "zone": null
+    },
+    "Bologna FC 1909": {
+     "pos": 13,
+     "zone": null
+    },
+    "Cagliari Calcio": {
+     "pos": 18,
+     "zone": "rel"
+    },
+    "Empoli FC": {
+     "pos": 14,
+     "zone": null
+    },
+    "FC Internazionale Milano": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "Genoa CFC": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "Hellas Verona FC": {
+     "pos": 9,
+     "zone": null
+    },
+    "Juventus FC": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "SS Lazio": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "SSC Napoli": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Sampdoria": {
+     "pos": 15,
+     "zone": null
+    },
+    "Spezia": {
+     "pos": 16,
+     "zone": null
+    },
+    "Torino FC": {
+     "pos": 10,
+     "zone": null
+    },
+    "US Salernitana 1919": {
+     "pos": 17,
+     "zone": null
+    },
+    "US Sassuolo Calcio": {
+     "pos": 11,
+     "zone": null
+    },
+    "Udinese Calcio": {
+     "pos": 12,
+     "zone": null
+    },
+    "Venezia FC": {
+     "pos": 20,
+     "zone": "rel"
+    }
+   }
+  },
+  "2022": {
+   "adjust": {
+    "Juventus FC": -10
+   },
+   "source": "API-Football",
+   "teams": {
+    "AC Milan": {
+     "pos": 4,
+     "zone": "cl"
+    },
+    "AC Monza": {
+     "pos": 11,
+     "zone": null
+    },
+    "ACF Fiorentina": {
+     "pos": 8,
+     "zone": null
+    },
+    "AS Roma": {
+     "pos": 6,
+     "zone": "el"
+    },
+    "Atalanta BC": {
+     "pos": 5,
+     "zone": "el"
+    },
+    "Bologna FC 1909": {
+     "pos": 9,
+     "zone": null
+    },
+    "Empoli FC": {
+     "pos": 14,
+     "zone": null
+    },
+    "FC Internazionale Milano": {
+     "pos": 3,
+     "zone": "cl"
+    },
+    "Hellas Verona FC": {
+     "pos": 18,
+     "zone": null
+    },
+    "Juventus FC": {
+     "pos": 7,
+     "zone": "ecl"
+    },
+    "SS Lazio": {
+     "pos": 2,
+     "zone": "cl"
+    },
+    "SSC Napoli": {
+     "pos": 1,
+     "zone": "cl"
+    },
+    "Sampdoria": {
+     "pos": 20,
+     "zone": "rel"
+    },
+    "Spezia": {
+     "pos": 17,
+     "zone": null
+    },
+    "Torino FC": {
+     "pos": 10,
+     "zone": null
+    },
+    "US Cremonese": {
+     "pos": 19,
+     "zone": "rel"
+    },
+    "US Lecce": {
+     "pos": 16,
+     "zone": null
+    },
+    "US Salernitana 1919": {
+     "pos": 15,
+     "zone": null
+    },
+    "US Sassuolo Calcio": {
+     "pos": 13,
+     "zone": null
+    },
+    "Udinese Calcio": {
+     "pos": 12,
+     "zone": null
+    }
+   }
+  }
+ }
+}

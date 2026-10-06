@@ -1263,6 +1263,196 @@ def af_sync(season=None):
     wr("af_players.json", players)
     print(f"  선수 프로필: {len(stale)}팀 갱신 · 전체 {len(players)}팀 {sum(len(v['players']) for v in players.values())}명")
 
+# ── 과거 시즌 구단 기록(2026-10-06, API-Football Pro) — 2010-11 ~ 2022-23 ──
+# 순위표·일정·팀 통계·시즌 고르기에만 씀(예측 모델 학습 데이터 all_matches.csv와는 따로 — 섞지 않음). 끝난 시즌이라 한 번만:
+#   python update_data.py --history-seasons   (대회 6개 × 13시즌 경기 목록 + 공식 순위표, 약 170회)
+#   history_matches.csv   경기(우리 이름 — 지금 우리 목록에 없는 옛 팀(위건 등)은 API-Football 이름 그대로)
+#   history_standings.json 공식 순위표: 최종 순위·유럽대항전/강등 구역(순위표 description)·승점 감점(공식 승점 − 경기로 센 승점), 챔스는 조 편성
+#   history_logos.json    우리 로고 목록에 없는 옛 팀 로고(API-Football)
+HISTORY_SEASONS = list(range(2010, 2023))
+AF_ROUND_STAGE = {"Group Stage": "GROUP_STAGE", "8th Finals": "LAST_16", "Round of 16": "LAST_16", "Quarter-finals": "QUARTER_FINALS",
+                  "Semi-finals": "SEMI_FINALS", "Final": "FINAL"}
+
+def _af_desc_zone(desc):
+    d = (desc or "").lower()
+    if not d:
+        return None
+    if "relegation" in d:
+        return "rel-po" if ("play" in d or "(relegation)" in d) else "rel"
+    if "champions league" in d:
+        return "cl-q" if ("qualif" in d or "play-off" in d) else "cl"
+    if "europa league" in d:
+        return "el"
+    if "conference" in d:
+        return "ecl"
+    return None
+
+def _af_ucl_season(fxs, groups, nm):
+    """옛 챔스 한 시즌(API-Football 경기) → ucl_tournament.json과 같은 모양: 토너먼트 라운드별 대진(두 경기 합산·승부차기·진출 팀) + GROUPS(조별 경기).
+    진출 팀은 다음 라운드에 나온 팀(원정 다득점 규칙 시절도 그대로 맞음), 결승은 점수 → 승부차기"""
+    order = ["LAST_16", "QUARTER_FINALS", "SEMI_FINALS", "FINAL"]
+    stages, ties, team_group = {s: [] for s in ["PLAYOFFS"] + order}, {}, {t: g for g, ts in groups.items() for t in ts}
+    gm = {}
+    for f in sorted(fxs, key=lambda f: f["fixture"]["date"]):
+        if f["fixture"]["status"]["short"] not in AF_DONE or f["goals"]["home"] is None:
+            continue
+        base = (f["league"].get("round") or "").split(" - ")[0].strip()
+        if not (base.startswith("Group") or AF_ROUND_STAGE.get(base) in order):
+            continue   # 예선(이름 매기기 전에 거름 — 예선 팀이 옛 팀 목록에 섞이지 않게)
+        h, a = nm(f["teams"]["home"]), nm(f["teams"]["away"])
+        hg, ag = int(f["goals"]["home"]), int(f["goals"]["away"])
+        date = pd.Timestamp(f["fixture"]["date"]).tz_convert("UTC").strftime("%Y-%m-%dT%H:%M:%SZ")
+        if base.startswith("Group"):
+            g = team_group.get(h)
+            if g:
+                gm.setdefault(g, []).append({"home_team": h, "away_team": a, "home_goals": hg, "away_goals": ag, "date": date, "status": "FINISHED"})
+            continue
+        st = AF_ROUND_STAGE.get(base)
+        if st not in order:
+            continue
+        pen = (f.get("score") or {}).get("penalty") or {}
+        key = (st,) + tuple(sorted([h, a]))
+        v = ties.setdefault(key, {"stage": st, "team1": h, "team2": a, "team1_goals": 0, "team2_goals": 0, "legs": [], "pens": None,
+                                  "team1_logo": "", "team2_logo": "", "status": "FINISHED"})
+        leg = {"home_team": h, "away_team": a, "home_goals": hg, "away_goals": ag, "date": date}
+        if v["team1"] == h:
+            v["team1_goals"] += hg; v["team2_goals"] += ag
+        else:
+            v["team1_goals"] += ag; v["team2_goals"] += hg
+        if pen.get("home") is not None:
+            leg["penalties"] = [pen["home"], pen["away"]]
+            v["pens"] = [pen["home"], pen["away"]] if v["team1"] == h else [pen["away"], pen["home"]]
+        v["legs"].append(leg)
+    in_stage = {s: {t for k, v in ties.items() if v["stage"] == s for t in (v["team1"], v["team2"])} for s in order}
+    for v in ties.values():
+        i = order.index(v["stage"])
+        nxt = in_stage[order[i + 1]] if i + 1 < len(order) else set()
+        if v["team1"] in nxt or v["team2"] in nxt:
+            v["winner"] = v["team1"] if v["team1"] in nxt else v["team2"]
+        elif v["team1_goals"] != v["team2_goals"]:
+            v["winner"] = v["team1"] if v["team1_goals"] > v["team2_goals"] else v["team2"]
+        elif v["pens"]:
+            v["winner"] = v["team1"] if v["pens"][0] > v["pens"][1] else v["team2"]
+        else:
+            v["winner"] = None
+        stages[v.pop("stage")].append(v)
+    out = reconstruct_bracket_order(stages)
+    out["GROUPS"] = {g: ms for g, ms in sorted(gm.items())}
+    return out
+
+def fetch_history_seasons(seasons=None):
+    import json
+    from collections import Counter, defaultdict
+    if not API_FOOTBALL_KEY:
+        print("  ⚠️ API_FOOTBALL_KEY가 없어 건너뜀"); return
+    seasons = seasons or HISTORY_SEASONS
+    teammap = json.load(open(f"{MODEL_DIR}/af_team_map.json", encoding="utf-8")) if os.path.exists(f"{MODEL_DIR}/af_team_map.json") else {}
+    df = pd.read_csv(f"{MODEL_DIR}/all_matches.csv")
+    print(f"\n[과거 시즌 구단 기록] {seasons[0]}-{seasons[-1]}")
+    # 1) 23-24~25-26 시즌으로 팀 이름 맞추기를 넓힘(강등된 팀 등 — 같은 날·같은 점수·이름 비슷함으로 투표)
+    votes = defaultdict(Counter)
+    for yr in [y for y in MATCH_SEASONS if y < max(MATCH_SEASONS)]:
+        for code, lid in AF_COMPS.items():
+            ours = df[(df.league == code) & (df.season == yr)]
+            by_day = defaultdict(list)
+            for r in ours.itertuples():
+                by_day[str(r.date)[:10]].append(r)
+            for f in _af("/fixtures", league=lid, season=yr).get("response") or []:
+                if f["goals"]["home"] is None:
+                    continue
+                day = pd.Timestamp(f["fixture"]["date"]).tz_convert("UTC").strftime("%Y-%m-%d")
+                h, a = f["teams"]["home"], f["teams"]["away"]
+                best, bs = None, 0
+                for r in by_day.get(day, []):
+                    sc = _af_name_sim(h["name"], r.home_team) + _af_name_sim(a["name"], r.away_team)
+                    if int(r.home_goals) == f["goals"]["home"] and int(r.away_goals) == f["goals"]["away"]:
+                        sc += 0.6
+                    if sc > bs:
+                        best, bs = r, sc
+                if best is not None and bs >= 1.2:
+                    votes[h["id"]][best.home_team] += 1; votes[a["id"]][best.away_team] += 1
+    added = 0
+    for tid, c in votes.items():
+        name, n = c.most_common(1)[0]
+        if n >= 2 and str(tid) not in teammap:
+            teammap[str(tid)] = name; added += 1
+    with open(f"{MODEL_DIR}/af_team_map.json", "w", encoding="utf-8") as f:
+        json.dump(teammap, f, ensure_ascii=False, indent=1, sort_keys=True)
+    print(f"  팀 매칭 넓힘: +{added}팀 (전체 {len(teammap)})")
+    # 2) 과거 시즌 경기 + 공식 순위표
+    rows, stand, hlogos, ucl_hist = [], {}, {}, {}
+    used_names = defaultdict(set)   # 우리 이름 → API-Football ID들(한 이름에 여러 팀이 붙으면 경고)
+    idname = {}   # 우리 목록 밖 옛 팀: 처음 본 이름으로 고정(경기 목록 "Bastia" ↔ 순위표 다른 표기처럼 같은 팀이 응답마다 달랐음)
+    def nm(t):
+        n = teammap.get(str(t["id"]))
+        if not n:
+            n = idname.setdefault(t["id"], t["name"])
+            hlogos[n] = hlogos.get(n) or t.get("logo")
+        used_names[n].add(t["id"])
+        return n
+    for yr in seasons:
+        for code, lid in AF_COMPS.items():
+            fxs = _af("/fixtures", league=lid, season=yr).get("response") or []
+            if not fxs:
+                continue
+            n0 = len(rows)
+            for f in fxs:
+                st = f["fixture"]["status"]["short"]
+                if st not in AF_DONE or f["goals"]["home"] is None:
+                    continue
+                rnd = (f["league"].get("round") or "")
+                base = rnd.split(" - ")[0].strip()
+                if code == "CL":
+                    stage = "GROUP_STAGE" if base.startswith("Group") else AF_ROUND_STAGE.get(base)   # 시즌마다 "Group Stage - 1"·"Group A - 1"
+                    if not stage:
+                        continue   # 예선·본선 전 플레이오프는 뺌
+                else:
+                    if not base.startswith("Regular Season"):
+                        continue   # 승강 플레이오프(분데스 16위·리그앙 18위·세리에 동률 결정전)는 리그 순위에 안 들어감
+                    stage = "REGULAR_SEASON"
+                md = re.search(r" - (\d+)$", rnd)
+                hg, ag = int(f["goals"]["home"]), int(f["goals"]["away"])
+                rows.append({"date": pd.Timestamp(f["fixture"]["date"]).tz_convert("UTC").strftime("%Y-%m-%d"), "league": code,
+                             "home_team": nm(f["teams"]["home"]), "away_team": nm(f["teams"]["away"]), "home_goals": hg, "away_goals": ag,
+                             "matchday": int(md.group(1)) if md else None, "result": "H" if hg > ag else "A" if hg < ag else "D",
+                             "season": yr, "stage": stage, "kickoff": pd.Timestamp(f["fixture"]["date"]).tz_convert("UTC").strftime("%Y-%m-%dT%H:%M:%SZ")})
+            sres = _af("/standings", league=lid, season=yr).get("response") or []
+            tables = (sres[0]["league"]["standings"] if sres else [])
+            if code == "CL":
+                groups = {}
+                for t in tables:
+                    m = re.search(r"Group ([A-H])\s*$", (t[0].get("group") or "") if t else "")   # "Group A" / "Uefa Champions League: Group A"
+                    g = m.group(1) if m else ""
+                    if g:
+                        groups[g] = [nm(r["team"]) for r in t]
+                ucl_hist[str(yr)] = _af_ucl_season(fxs, groups, nm)
+            elif tables:
+                sub = [r for r in rows[n0:]]
+                pts = Counter()
+                for r in sub:
+                    pts[r["home_team"]] += 3 if r["result"] == "H" else 1 if r["result"] == "D" else 0
+                    pts[r["away_team"]] += 3 if r["result"] == "A" else 1 if r["result"] == "D" else 0
+                teams, adjust = {}, {}
+                for r in tables[0]:
+                    t = nm(r["team"])
+                    teams[t] = {"pos": r["rank"], "zone": _af_desc_zone(r.get("description"))}
+                    if r["points"] != pts.get(t, 0):
+                        adjust[t] = r["points"] - pts.get(t, 0)
+                stand.setdefault(code, {})[str(yr)] = {"teams": teams, "adjust": adjust, "source": "API-Football"}
+            print(f"  {code} {yr}-{(yr + 1) % 100:02d}: {len(rows) - n0}경기{' · 감점/조정 ' + str(stand.get(code, {}).get(str(yr), {}).get('adjust')) if stand.get(code, {}).get(str(yr), {}).get('adjust') else ''}")
+    clash = {n: ids for n, ids in used_names.items() if len(ids) > 1}
+    if clash:
+        print(f"  ⚠️ 한 이름에 여러 팀: {clash}")
+    out = pd.DataFrame(rows).sort_values(["date", "league", "home_team"])
+    out.to_csv(f"{MODEL_DIR}/history_matches.csv", index=False)
+    with open(f"{MODEL_DIR}/history_standings.json", "w", encoding="utf-8") as f:
+        json.dump(stand, f, ensure_ascii=False, indent=1, sort_keys=True)
+    with open(f"{MODEL_DIR}/history_ucl.json", "w", encoding="utf-8") as f:
+        json.dump({"seasons": ucl_hist}, f, ensure_ascii=False, indent=1, sort_keys=True)
+    with open(f"{MODEL_DIR}/history_logos.json", "w", encoding="utf-8") as f:
+        json.dump({k: v for k, v in hlogos.items() if v}, f, ensure_ascii=False, indent=1, sort_keys=True)
+    print(f"  ✅ {len(out)}경기 · 옛 팀(우리 목록 밖) {len(hlogos)}팀")
+
 def _wiki_sections(title):
     return _wiki_get("https://en.wikipedia.org/w/api.php", {"action": "parse", "page": title, "prop": "sections",
                                                             "format": "json", "redirects": 1}).get("parse", {}).get("sections")
@@ -2300,6 +2490,8 @@ if __name__ == "__main__":
         fetch_ucl_tournament()
         fetch_team_wiki()
         fetch_season_zones()
+    elif "--history-seasons" in sys.argv:
+        fetch_history_seasons([int(a) for a in sys.argv[2:] if a.isdigit()] or None)
     elif "--af-sync" in sys.argv:
         af_sync()
     elif "--league-history" in sys.argv:

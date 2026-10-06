@@ -572,6 +572,7 @@
     .grp-card { border: 0.5px solid var(--border); border-radius: 14px; background: rgba(10,16,32,0.4); overflow: hidden; }
     .grp-title { font-size: 14px; font-weight: 800; color: var(--text); padding: 11px 14px; border-bottom: 0.5px solid var(--surface-2); }
     .grp-table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+    .grp-table td { white-space: nowrap; }   /* 득실 "21-9"가 두 줄로 접혔음 */
     .grp-table th { font-size: 11px; font-weight: 500; color: var(--faint); padding: 8px 4px; text-align: center; }
     .grp-table th.grp-team-h { text-align: left; } .grp-table th.grp-form-h { text-align: left; padding-left: 8px; }
     .grp-table td { padding: 8px 4px; text-align: center; color: var(--text-2); border-top: 0.5px solid var(--surface-2); }
@@ -800,6 +801,10 @@
     .ts-segs { display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px; background: rgba(10,16,32,0.5); border: 0.5px solid var(--border); margin-bottom: 12px; }
     .ts-seg { padding: 6px 12px; border: none; border-radius: 6px; background: transparent; color: var(--muted); font-size: 12px; font-weight: 600; font-family: inherit; cursor: pointer; font-variant-numeric: tabular-nums; }
     .ts-seg.active { background: var(--blue-strong); color: #fff; }
+    .ts-segs { max-width: 100%; flex-wrap: nowrap; } .ts-seg { white-space: nowrap; flex-shrink: 0; }
+    .ts-seg-sel { appearance: none; -webkit-appearance: none; padding-right: 22px; background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238e9ab3' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M7 10l5 5 5-5'/%3E%3C/svg%3E") no-repeat right 6px center / 11px; }
+    .ts-seg-sel.active { background-color: var(--blue-strong); }
+    .ts-seg-sel option { color: var(--text); background: var(--surface); }
     .ts-note { font-size: 12px; color: var(--amber); background: rgba(210,153,34,0.08); border: 0.5px solid rgba(210,153,34,0.3); border-radius: 10px; padding: 7px 10px; margin-bottom: 10px; }
     .ts-kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
     .ts-kpis.three { grid-template-columns: repeat(3, 1fr); }
@@ -3366,13 +3371,15 @@ async function loadMyTeamsPage() {
 // ── 챔피언스리그: 리그 스테이지 / 토너먼트 (시즌별) ──
 let uclView = 'standings';
 const tournamentCache = {};
+// 23-24 시즌까지 챔스는 조별리그(4팀×8조) — 11-12~22-23 과거 시즌(API-Football)도 같은 방식
+const uclGroupEra = () => currentStandingsSeason !== 'current' && +currentStandingsSeason <= 2023;
 function loadCL() {
   document.querySelectorAll('#league-tabs .league-tab').forEach(t => t.classList.remove('active'));
   document.querySelector('[data-league="CL"]').classList.add('active');
   document.getElementById('ucl-subtabs').style.display = 'flex';
   document.getElementById('st-view-seg').style.display = 'none';   // 홈/원정/최근 5경기 보기는 리그 순위표에서만
   // 23-24까지는 조별리그(4팀×8조) — 첫 버튼이 "조별리그"가 되고 조별 순위표를 보여줌
-  const groupEra = currentStandingsSeason === '2023';
+  const groupEra = uclGroupEra();
   const stBtn = document.querySelector('#ucl-subtabs [data-view="standings"]');
   stBtn.lastChild.textContent = groupEra ? '조별리그' : '리그 스테이지';
   showUCLTab(uclView);
@@ -3384,7 +3391,7 @@ function showUCLTab(tab) {
   document.getElementById('standings-content').style.display = isT ? 'none' : 'block';
   document.getElementById('ucl-tournament-content').style.display = isT ? 'block' : 'none';
   if (isT) { document.getElementById('st-summary').innerHTML = ''; loadTournament(); }
-  else if (currentStandingsSeason === '2023') loadUclGroups();
+  else if (uclGroupEra()) loadUclGroups();
   else loadStandings('CL');
 }
 // ── 챔스 조별리그(23-24) — 조마다 4팀 표, 1·2위 16강(초록)·3위 유로파리그(노랑), 기록은 최근 경기부터 ──
@@ -5359,7 +5366,9 @@ function renderTiStats() {
   const S = seasons[idx], st = S.stats, rk = S.ranks, avg = S.league_avg, n = S.teams;
   const zone = tsZone(getZoneClass(S.league, st.rank - 1, n));
   const f1 = v => v == null ? '-' : v.toFixed(2);
-  const seg = seasons.map((x, i) => `<button class="ts-seg${i === idx ? ' active' : ''}" onclick="selectTiStatsSeason(${i})">${x.season}</button>`).join('');
+  // 최근 4시즌은 버튼, 그 전(과거 시즌 — 2010-11까지)은 "이전 시즌" 고르기(버튼 17개가 한 줄에 안 들어가 두 줄로 깨졌음)
+  const seg = seasons.slice(0, 4).map((x, i) => `<button class="ts-seg${i === idx ? ' active' : ''}" onclick="selectTiStatsSeason(${i})">${x.season}</button>`).join('') +
+    (seasons.length > 4 ? `<select class="ts-seg ts-seg-sel${idx >= 4 ? ' active' : ''}" onchange="selectTiStatsSeason(+this.value)" aria-label="이전 시즌"><option value="" disabled${idx < 4 ? ' selected' : ''}>이전 시즌</option>${seasons.slice(4).map((x, j) => `<option value="${j + 4}"${idx === j + 4 ? ' selected' : ''}>${x.season}</option>`).join('')}</select>` : '');
   const P = data.power;
   const powerHtml = P ? `<div class="ts-section-title">AI 파워 레이팅<button type="button" class="ii" data-tip="elo" aria-label="파워 레이팅 설명">i</button> <span>예측 모델이 쓰는 최근 전력 · 오늘 기준</span></div>
     <div class="ts-kpis three">
@@ -5781,7 +5790,7 @@ function refreshCurrentTab() {
     } else {
       const activeLeagueTab = document.querySelector('#league-tabs .league-tab.active');
       const lg = activeLeagueTab ? activeLeagueTab.dataset.league : 'PL';
-      job = lg === 'CL' ? (uclView === 'standings' && currentStandingsSeason === '2023' ? loadUclGroups() : loadStandings('CL')) : loadStandings(lg);
+      job = lg === 'CL' ? (uclView === 'standings' && uclGroupEra() ? loadUclGroups() : loadStandings('CL')) : loadStandings(lg);
     }
   } else if (page === 'schedule') {
     delete scheduleData[schedKeyOf(lgState.code, lgState.season)];
