@@ -354,6 +354,25 @@
   "name_ko": "아스널 FC",
   "nickname": "The Gunners",
   "qid": "Q9617",
+  "records": {
+   "paid": {
+    "club": "West Ham United",
+    "club_ko": "웨스트햄 유나이티드 FC",
+    "fee": "£100m",
+    "player": "Declan Rice",
+    "player_ko": "데클런 라이스",
+    "year": "2023"
+   },
+   "received": {
+    "club": "Al Hilal",
+    "club_ko": "알힐랄 SFC",
+    "fee": "£60m",
+    "player": "Gabriel Martinelli",
+    "player_ko": "가브리엘 마르티넬리",
+    "year": "2026"
+   }
+  },
+  "records_url": "https://en.wikipedia.org/wiki/List_of_Arsenal_F.C._records_and_statistics",
   "stadium": "에미레이트 스타디움",
   "title": "아스널 FC",
   "url": "https://ko.wikipedia.org/wiki/%EC%95%84%EC%8A%A4%EB%84%90_FC"
@@ -380,6 +399,25 @@
   "name_ko": "아스톤 빌라 FC",
   "nickname": "The Villa",
   "qid": "Q18711",
+  "records": {
+   "paid": {
+    "club": "Freiburg",
+    "club_ko": "SC 프라이부르크",
+    "fee": "£52m",
+    "player": "Johan Manzambi",
+    "player_ko": "조안 망장비",
+    "year": "2026"
+   },
+   "received": {
+    "club": "Chelsea",
+    "club_ko": "첼시 FC",
+    "fee": "£117m",
+    "player": "Morgan Rogers",
+    "player_ko": "모건 로저스",
+    "year": "2026"
+   }
+  },
+  "records_url": "https://en.wikipedia.org/wiki/List_of_Aston_Villa_F.C._records_and_statistics",
   "stadium": "빌라 파크",
   "title": "애스턴 빌라 FC",
   "url": "https://ko.wikipedia.org/wiki/%EC%95%A0%EC%8A%A4%ED%84%B4_%EB%B9%8C%EB%9D%BC_FC"
@@ -658,6 +696,25 @@
   "name_ko": "번리 FC",
   "nickname": "The Clarets",
   "qid": "Q19458",
+  "records": {
+   "paid": {
+    "club": "Chelsea",
+    "club_ko": "첼시 FC",
+    "fee": "£23m",
+    "player": "Lesley Ugochukwu",
+    "player_ko": "레슬리 우고추쿠",
+    "year": "2025"
+   },
+   "received": {
+    "club": "Manchester City",
+    "club_ko": "맨체스터 시티 FC",
+    "fee": "£31m",
+    "player": "James Trafford",
+    "player_ko": "제임스 트래퍼드",
+    "year": "2025"
+   }
+  },
+  "records_url": "https://en.wikipedia.org/wiki/List_of_Burnley_F.C._records_and_statistics",
   "stadium": "터프 무어",
   "title": "번리 FC",
   "url": "https://ko.wikipedia.org/wiki/%EB%B2%88%EB%A6%AC_FC"
@@ -2067,23 +2124,6 @@
   "name_ko": "루턴 타운 FC",
   "nickname": "The Ηatters",
   "qid": "Q18520",
-  "records": {
-   "paid": {
-    "club": "Carlton Morris",
-    "fee": "£1.8m",
-    "player": "Barnsley F.C.",
-    "player_ko": "반즐리 FC",
-    "year": "2022"
-   },
-   "received": {
-    "club": "James Justin",
-    "fee": "£8m",
-    "player": "Leicester City",
-    "player_ko": "레스터 시티 FC",
-    "year": "2019"
-   }
-  },
-  "records_url": "https://en.wikipedia.org/wiki/List_of_Luton_Town_F.C._records_and_statistics",
   "stadium": "Kenilworth Road",
   "title": "루턴 타운 FC",
   "url": "https://ko.wikipedia.org/wiki/%EB%A3%A8%ED%84%B4_%ED%83%80%EC%9A%B4_FC"

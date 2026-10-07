@@ -735,6 +735,7 @@
     .ti-about-foot a { color: var(--faint); text-decoration: none; margin-left: auto; }
     .ti-about-foot a:hover { color: var(--text-2); }
     .ti-season { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; margin-bottom: 12px; }
+    @media (min-width: 481px) { .ti-season { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     .ti-season:empty { display: none; }
     .ti-season-card { border: 0.5px solid var(--border); border-radius: 14px; padding: 12px 14px; cursor: pointer; transition: border-color .15s, transform .15s; background: rgba(10,16,32,0.4); }
     .ti-season-card:hover { border-color: var(--blue); }
@@ -804,12 +805,27 @@
     .rv-derby { font-size: 11px; font-weight: 700; color: var(--red); }
     .rv-main b { font-size: 14px; color: var(--text); }
     .rv-rec { font-size: 11px; color: var(--muted); } .rv-rec b { font-size: 11px; } .rv-rec b.w { color: var(--green); } .rv-rec b.l { color: var(--red); }
-    .mgr-card { display: flex; align-items: center; gap: 14px; border: 0.5px solid var(--surface-2); border-radius: var(--r-md); padding: 12px 14px; background: rgba(10,16,32,0.4); margin-bottom: 8px; }
+    .ti-top { margin-bottom: 12px; } .ti-top .ti-about { margin-bottom: 0; }
+    .ti-top > .mgr-panel { margin-bottom: 12px; } .ti-top.two > .mgr-panel { margin-bottom: 0; }
+    .ti-top.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 12px; align-items: stretch; }
+    .ti-top.two .ti-about { display: flex; flex-direction: column; } .ti-top.two .ti-about-text { -webkit-line-clamp: 7; } .ti-top.two .ti-about-foot { margin-top: auto; padding-top: 8px; }
+    @media (max-width: 720px) { .ti-top.two { grid-template-columns: minmax(0, 1fr); } .ti-top.two .ti-about-text { -webkit-line-clamp: 4; } }
+    .mgr-panel { border: 0.5px solid var(--border); border-radius: 14px; padding: 14px 16px; background: rgba(10,16,32,0.4); display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+    .mgr-head { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .mgr-en { font-size: 12px; color: var(--muted); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .mgr-list { display: flex; flex-direction: column; gap: 6px; }
+    .mgr-li { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: 13px; } .mgr-li > span { color: var(--muted); flex-shrink: 0; }
+    .mgr-li b { font-weight: 600; color: var(--text); text-align: right; } .mgr-li b small { font-size: 11px; font-weight: 500; color: var(--muted); }
+    .mgr-rec { margin-top: auto; padding-top: 10px; border-top: 0.5px solid rgba(142,154,179,0.18); }
+    .mgr-rec-t { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--muted); } .mgr-rec-t b { color: var(--text); font-weight: 600; }
+    .mgr-bar { display: flex; height: 6px; border-radius: 3px; overflow: hidden; margin: 8px 0 6px; background: var(--surface-2); gap: 2px; }
+    .mgr-bar i.w { background: var(--green); } .mgr-bar i.d { background: var(--disabled); } .mgr-bar i.l { background: var(--red); }
+    .mgr-rec-n { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); } .mgr-rec-n .w { color: var(--green); } .mgr-rec-n .l { color: var(--red); }
     .mgr-ph { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: var(--surface-2); }
     .mgr-ph.none { display: flex; align-items: center; justify-content: center; color: var(--muted); } .mgr-ph.none svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.6; }
     .mgr-ph.sm { width: 28px; height: 28px; } .mgr-ph.sm.none svg { width: 15px; height: 15px; }
     .mgr-body { min-width: 0; }
-    .mgr-name { font-size: 16px; font-weight: 700; color: var(--text); margin-top: 2px; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+    .mgr-name { font-size: 16px; font-weight: 700; color: var(--text); display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; word-break: keep-all; }
     .mgr-name small { font-size: 12px; font-weight: 500; color: var(--muted); }
     .mgr-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 8px; font-size: 12px; color: var(--text-2); margin-top: 4px; }
     .mgr-nat { display: inline-flex; align-items: center; gap: 5px; } .mgr-nat img { width: 16px; height: 11px; object-fit: cover; border-radius: 2px; }
@@ -5315,6 +5331,7 @@ async function openMatchPredictModal(home, away) {
     return;
   }
   body.innerHTML = `<div class="mp-skel"><i style="width:46%"></i><i style="width:100%;height:10px"></i><i style="width:80%"></i><i style="width:100%;height:42px"></i></div>`;
+  fetchMatchPreview(home, away, null); fetchAfSquad(home); fetchAfSquad(away);   // 팀 소식은 예측과 동시에 받기 시작
   try {
     const res = await fetchWithRetry(`${API}/predict`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ home_team: home, away_team: away }) });
     const data = await res.json();
@@ -5473,6 +5490,7 @@ async function openTeamInfo(teamName) {
   updateFavBtnState();
   const header = modal.querySelector('.ti-header');
   header.classList.remove('tinted');
+  prefetchTeam(teamName);
   fetchTeamInfo(teamName).then(info => {
     if (tiState.team !== teamName) return;
     const pair = getClubColorPair(info.clubColors) || ['#58a6ff', '#58a6ff'];   // 색 정보가 없으면 브랜드 파랑
@@ -5536,16 +5554,45 @@ function toggleFavoriteTeam() {
   if (lgPanelOn('schedule')) syncSchedFavToggle();
 }
 
-async function fetchTeamInfo(teamName) {
-  let info = teamInfoCache[teamName];
-  if (!info) {
-    const res = await fetch(`${API}/team/info/${encodeURIComponent(teamName)}`);
-    if (!res.ok) throw new Error('not found');
-    info = await res.json();
-    teamInfoCache[teamName] = info;
-  }
-  return info;
+// 같은 팀을 동시에 여러 곳에서 불러도 요청은 한 번(예전엔 헤더 색·개요가 따로 불러 /team/info가 두 번 나갔음)
+const teamInfoP = {};
+function fetchTeamInfo(teamName) {
+  if (teamInfoCache[teamName]) return Promise.resolve(teamInfoCache[teamName]);
+  if (!teamInfoP[teamName]) teamInfoP[teamName] = fetch(`${API}/team/info/${encodeURIComponent(teamName)}`)
+    .then(r => { if (!r.ok) throw new Error('not found'); return r.json(); })
+    .then(info => (teamInfoCache[teamName] = info))
+    .finally(() => { delete teamInfoP[teamName]; });
+  return teamInfoP[teamName];
 }
+// 팀 통계(시즌별 순위 막대·팀 통계 탭 공용) — 404면 null(5대 리그 밖 팀)
+const teamStatsP = {};
+function fetchTeamStats(team) {
+  if (team in teamStatsCache) return Promise.resolve(teamStatsCache[team]);
+  if (!teamStatsP[team]) teamStatsP[team] = fetch(`${API}/team/stats/${encodeURIComponent(team)}`)
+    .then(r => { if (r.status === 404) return null; if (!r.ok) throw new Error('team stats fetch failed'); return r.json(); })
+    .then(d => (teamStatsCache[team] = d))
+    .finally(() => { delete teamStatsP[team]; });
+  return teamStatsP[team];
+}
+// 팀 정보 창이 쓰는 것들을 한꺼번에 미리(창을 열 때·팀 이름에 마우스를 올렸을 때) — 개요가 /team/info를 기다린 뒤 차례로 부르지 않게
+function prefetchTeam(team) {
+  if (!team) return;
+  fetchTeamInfo(team).catch(() => null);
+  fetchTeamStats(team).catch(() => null);
+  fetchAfSquad(team);
+}
+(function () {   // 팀 이름(openTeamInfo를 부르는 요소)에 마우스를 0.12초 올리거나 손가락을 대면 미리 받기
+  const RX = /openTeamInfo\('((?:\\.|[^'\\])*)'/;
+  const nameOf = el => { const m = RX.exec(el.getAttribute('onclick') || ''); return m ? m[1].replace(/\\'/g, "'") : null; };
+  let timer = null;
+  document.addEventListener('mouseover', e => {
+    const el = e.target.closest && e.target.closest('[onclick*="openTeamInfo("]'); if (!el) return;
+    clearTimeout(timer); const t = nameOf(el); timer = setTimeout(() => { if (el.matches(':hover')) prefetchTeam(t); }, 120);
+  }, { passive: true });
+  document.addEventListener('touchstart', e => {
+    const el = e.target.closest && e.target.closest('[onclick*="openTeamInfo("]'); if (el) prefetchTeam(nameOf(el));
+  }, { passive: true });
+})();
 
 async function switchTiTab(tab) {
   tiState.tab = tab;
@@ -5635,14 +5682,8 @@ async function switchTiTab(tab) {
         if (tiState.team === team && tiState.tab === 'fixtures' && tiFixturesState.team === team) renderTiFixturesContent();
       });
     } else if (tab === 'teamstats') {
-      let stats = teamStatsCache[team];
-      if (!stats) {
-        const res = await fetch(`${API}/team/stats/${encodeURIComponent(team)}`);
-        if (res.status === 404) { panel.innerHTML = '<div class="ti-empty">5대 리그 밖 팀이라 리그 통계가 없어요.</div>'; return; }
-        if (!res.ok) throw new Error('team stats fetch failed');
-        stats = await res.json();
-        teamStatsCache[team] = stats;
-      }
+      const stats = await fetchTeamStats(team);
+      if (!stats) { panel.innerHTML = '<div class="ti-empty">5대 리그 밖 팀이라 리그 통계가 없어요.</div>'; return; }
       if (tiState.team !== team || tiState.tab !== 'teamstats') return;
       tiStatsState = { data: stats, idx: 0 };
       renderTiStats();
@@ -5723,6 +5764,25 @@ function mgrMeta(m) {
   const fl = flagOf(m.nationality);
   return [m.nationality ? `<span class="mgr-nat">${fl ? `<img src="${fl}" alt="">` : ''}${natKo(m.nationality)}</span>` : '', m.age ? `${m.age}세` : '', mgrSince(m.start)].filter(Boolean).join('<i class="mgr-dot"></i>');
 }
+// 팀 개요 맨 위 감독 칸 — 사진·이름 / 국적·나이·부임 / 부임 후 리그·챔스 기록(승무패 막대)
+function mgrPanelHtml(m, esc) {
+  const fl = flagOf(m.nationality), r = m.record, b = m.birth_date ? new Date(m.birth_date) : null;
+  const row = (k, v) => v ? `<div class="mgr-li"><span>${k}</span><b>${v}</b></div>` : '';
+  const pct = r && r.played ? Math.round(r.wins / r.played * 100) : null;
+  return `<div class="mgr-panel">
+    <div class="ti-fact-label">감독</div>
+    <div class="mgr-head">${mgrPhoto(m, 'mgr-ph')}<div class="mgr-body">
+      <div class="mgr-name">${esc(m.name_ko || m.full_name || m.name)}</div>${m.name_ko ? `<div class="mgr-en" lang="en">${esc(m.full_name || m.name)}</div>` : ''}</div></div>
+    <div class="mgr-list">
+      ${row('국적', m.nationality ? `<span class="mgr-nat">${fl ? `<img src="${fl}" alt="">` : ''}${natKo(m.nationality)}</span>` : '')}
+      ${row('나이', m.age ? `${m.age}세${b && !isNaN(b) ? ` <small>${b.getFullYear()}.${b.getMonth() + 1}.${b.getDate()}</small>` : ''}` : '')}
+      ${row('부임', mgrSince(m.start).replace(' 부임 · ', ' · '))}
+    </div>
+    ${r && r.played ? `<div class="mgr-rec"><div class="mgr-rec-t"><span>부임 후 리그·챔스</span><b>${r.played}경기 · 승률 ${pct}%</b></div>
+      <div class="mgr-bar"><i class="w" style="width:${r.wins / r.played * 100}%"></i><i class="d" style="width:${r.draws / r.played * 100}%"></i><i class="l" style="width:${r.losses / r.played * 100}%"></i></div>
+      <div class="mgr-rec-n"><span class="w">${r.wins}승</span><span>${r.draws}무</span><span class="l">${r.losses}패</span></div></div>` : ''}
+  </div>`;
+}
 function mgrPhoto(m, cls) {
   return m.photo ? `<img class="${cls}" src="${m.photo}" alt="" onerror="this.style.visibility='hidden'">` : `<span class="${cls} none">${tiIcon('coach')}</span>`;
 }
@@ -5735,11 +5795,13 @@ function renderTiOverview(team, code, info) {
   const years = info.founded ? new Date().getFullYear() - info.founded : null;
   const swatches = (info.clubColors || '').split('/').map(c => c.trim()).filter(Boolean)
     .map(c => `<span class="ti-swatch" style="background:${CLUB_COLOR_MAP[c.toLowerCase()] || '#475470'}" title="${esc(c)}"></span>`).join('');
+  // 감독 칸은 사진·부임일 같은 정보가 있을 때만 맨 위에 크게(이름뿐이면 아래 정보 칸에 한 줄로 — 빈 상자처럼 보였음)
+  const mgRich = info.manager && (info.manager.photo || info.manager.start || info.manager.record) ? info.manager : null;
   const facts = [
     { k: 'city', label: '연고지', value: w.city },
     { k: 'founded', label: '창단', value: info.founded ? `${info.founded}년` : '', sub: years ? `${years}년째` : '' },
     { k: 'stadium', label: '홈구장', value: w.stadium || info.venue, sub: w.capacity ? `${w.capacity.toLocaleString('ko-KR')}석` : '' },
-    { k: 'coach', label: '감독', value: info.manager ? '' : info.coach || w.coach },
+    { k: 'coach', label: '감독', value: mgRich ? '' : (info.manager && (info.manager.name_ko || info.manager.full_name || info.manager.name)) || info.coach || w.coach },
     { k: 'nickname', label: '별칭', value: w.nickname },
     { k: 'colors', label: '구단 색', value: info.clubColors ? `<span class="ti-swatches">${swatches}</span>${esc(info.clubColors)}` : '', raw: true },
   ].filter(f => f.value);
@@ -5750,15 +5812,13 @@ function renderTiOverview(team, code, info) {
         <a href="${esc(w.url)}" target="_blank" rel="noopener">출처: ${w.lang === 'en' ? '영문 ' : ''}위키백과 ↗</a>
       </div>
     </div>` : '';
+  const mg = mgRich;
   panel.innerHTML = `
-    ${about}
+    ${mg || about ? `<div class="ti-top${mg && about ? ' two' : ''}">${mg ? mgrPanelHtml(mg, esc) : ''}${about}</div>` : ''}
     <div class="ti-season" id="ti-season"></div>
     <div class="ti-bx" id="ti-bx"></div>
     ${(w.honours || w.records) ? `<div class="tr-wrap">${tiTrophiesHtml(w, code)}${tiRecordsHtml(w)}</div>` : ''}
     ${tiRivalsHtml(info.rivals)}
-    ${info.manager ? `<div class="mgr-card">${mgrPhoto(info.manager, 'mgr-ph')}<div class="mgr-body"><div class="ti-fact-label">감독</div>
-      <div class="mgr-name">${esc(info.manager.name_ko || info.manager.full_name || info.manager.name)}${info.manager.name_ko ? `<small lang="en">${esc(info.manager.full_name || info.manager.name)}</small>` : ''}</div>
-      <div class="mgr-meta">${mgrMeta(info.manager)}</div></div></div>` : ''}
     <div class="ti-facts2">${facts.map(f => `<div class="ti-fact2">
       <span class="ti-fact2-icon">${tiIcon(f.k)}</span>
       <div class="ti-fact2-body"><div class="ti-fact-label">${f.label}</div><div class="ti-fact-value">${f.raw ? f.value : esc(f.value)}${f.sub ? ` <span class="ti-fact2-sub">${f.sub}</span>` : ''}</div></div>
@@ -5809,14 +5869,13 @@ async function fillTiSeason(team, code) {
     return `<div class="ti-season-card" onclick="closeTeamInfoModal();openMatchPredictModal('${escJs(next.home_team)}','${escJs(next.away_team)}')">
       <div class="ti-fact-label">다음 경기 · ${li.name || ''}</div>
       <div class="ti-season-next"><span class="ti-ha ${home ? 'home' : 'away'}">${home ? '홈' : '원정'}</span><img src="${logos[opp] || ''}" alt="" onerror="this.style.display='none'"><span>vs ${shortTeamName(opp)}</span></div>
-      <div class="ti-season-sub">${d.getMonth() + 1}.${d.getDate()} (${wd}) ${d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false })} · 예측 보기 ›</div>
+      <div class="ti-season-sub">${d.getMonth() + 1}.${d.getDate()} (${wd}) ${koClock(d)} ${koRel(next.date)} · 예측 보기 ›</div>
     </div>`;
   });
 
   // 시즌별 리그 순위 막대(팀 통계 탭과 같은 데이터·캐시) — 오래된 시즌 → 이번 시즌, 우리 데이터에 없는 시즌(2부 등)은 빈 칸
   safe('history', async () => {
-    let stats = teamStatsCache[team];
-    if (!stats) { const r = await fetch(`${API}/team/stats/${encodeURIComponent(team)}`); if (r.ok) stats = teamStatsCache[team] = await r.json(); }
+    const stats = await fetchTeamStats(team).catch(() => null);
     const all = stats?.seasons || [];
     if (all.length < 2) return '';
     const yOf = x => 2000 + parseInt(String(x.season).slice(0, 2), 10);

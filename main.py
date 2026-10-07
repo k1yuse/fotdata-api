@@ -2318,6 +2318,14 @@ def _manager_of(team):
             out["age"] = today.year - bd.year - ((today.month, today.day) < (bd.month, bd.day))
         except ValueError:
             pass
+    st = c.get("start")
+    if st:   # 부임 후 기록(우리 데이터의 리그·챔스 경기 — 부임일이 월 단위라 그 달 초 경기가 섞일 수 있음)
+        h = df_seasons[((df_seasons.home_team == team) | (df_seasons.away_team == team)) & (df_seasons.date >= pd.Timestamp(st, tz=df_seasons.date.dt.tz))].dropna(subset=["home_goals"]) \
+            .drop_duplicates(subset=["date", "home_team", "away_team"])
+        if len(h):
+            gf, ga = _team_goals(h, team)
+            out["record"] = {"played": len(h), "wins": int((gf > ga).sum()), "draws": int((gf == ga).sum()), "losses": int((gf < ga).sum()),
+                             "since": str(h.date.min())[:10]}
     return out
 
 @app.get("/team/info/{team_name}")

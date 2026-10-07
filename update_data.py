@@ -524,46 +524,6 @@ def _normalize_team_name(name):
 
 LEAGUE_COUNTRY = {"PL": "England", "PD": "Spain", "BL1": "Germany", "SA": "Italy", "FL1": "France"}
 
-def _search_af_team_id_query(query, country):
-    res = requests.get(f"{API_FOOTBALL_URL}/teams", headers=API_FOOTBALL_HEADERS, params={"search": query})
-    candidates = res.json().get("response", [])
-    for c in candidates:
-        t = c.get("team", {})
-        name = (t.get("name") or "")
-        # 유스/리저브팀 제외: " U18" 하나가 빠져 있어서 Newcastle이 U18팀 ID로
-        # 잘못 매칭된 전례가 있었음(스쿼드가 전부 유스 선수로 채워짐) — 나이대 표기를
-        # 정규식으로 통째로 잡아서 앞으로 U15~U23 등 어떤 연령대가 와도 걸러지게 함.
-        if t.get("country") == country and not re.search(r"\bU1[5-9]\b|\bU2[0-3]\b", name.upper()) \
-                and not any(x in name.upper() for x in (" II", " B", " W", " RES.")):
-            return t.get("id")
-    return None
-
-def _search_af_team_id(team_name, country):
-    """이름으로 API-Football 팀ID 검색 (시즌 제한 없는 엔드포인트).
-    같은 이름의 유스/리저브팀·해외 동명팀을 걸러내기 위해 국가로 필터링.
-    football-data.org의 공식 풀네임(예: "Brighton & Hove Albion FC",
-    "AFC Bournemouth")과 API-Football의 짧은 통칭("Brighton", "Bournemouth")이
-    달라서 전체 이름으로 검색이 실패하면 원래 이름의 첫 단어로 한 번 더 시도한다."""
-    query = _normalize_team_name(team_name)
-    af_id = _search_af_team_id_query(query, country)
-    if af_id:
-        return af_id
-    first_word = team_name.split()[0].lower()
-    if first_word != query:
-        return _search_af_team_id_query(first_word, country)
-    return None
-
-def _af_get(url, params):
-    """레이트리밋(errors 응답) 대비 1회 재시도가 포함된 API-Football 호출."""
-    res = requests.get(url, headers=API_FOOTBALL_HEADERS, params=params)
-    data = res.json()
-    if data.get("errors"):
-        print(f"    ⚠️ API 응답 오류({data['errors']}), 20초 후 재시도")
-        time.sleep(20)
-        res = requests.get(url, headers=API_FOOTBALL_HEADERS, params=params)
-        data = res.json()
-    return data
-
 def _clean_squad(squad_raw, team_name, team_info):
     """API-Football의 /players/squads는 무료 플랜에서도 1군 외에 유스/후보 선수까지
     구분 없이 섞어서 반환하는데, 이 유스/후보 선수들이 1군과 등번호가 겹치는 경우가
@@ -1300,10 +1260,10 @@ def af_sync(season=None):
 # 서버가 선수 카드를 열 때마다 API-Football을 15~20번 불러 처음 여는 선수가 5~7초 걸렸음(라이브 측정) → 새벽에 5대 리그 선수의
 # 경력 시즌 목록·트로피·부상 이력·이적·시즌별 기록(/players?id=&season=)을 받아 fotdata_model/af_profiles/<ID>.json.gz로 저장.
 # 지난 시즌 기록은 한 번 받으면 다시 안 받고, 이번 시즌·트로피·부상·이적만 AF_PROFILE_REFRESH_DAYS마다. 하루 요청 한도를 나눠 쓰므로
-# 그날 남은 요청(/status) 안에서만(AF_PROFILE_BUDGET, 다른 수집용으로 1,000회는 남김) — 처음엔 며칠에 걸쳐 전원 채움(출전 시간 많은 선수부터)
+# 그날 남은 요청(/status) 안에서만(서버 몫 600회는 남김) — 처음엔 며칠에 걸쳐 전원 채움(출전 시간 많은 선수부터)
 AF_PROFILE_DIR = f"{MODEL_DIR}/af_profiles"
 AF_PROFILE_REFRESH_DAYS = 14
-AF_PROFILE_BUDGET = 3000
+AF_PROFILE_BUDGET = None   # None = 그날 남은 요청 − 600 (af_profiles_sync)
 
 def _af_remaining():
     try:
@@ -1486,7 +1446,9 @@ def af_profiles_sync(budget=None):
     if not API_FOOTBALL_KEY:
         print("  ⚠️ API_FOOTBALL_KEY가 없어 건너뜀"); return
     left = _af_remaining()
-    budget = min(budget or AF_PROFILE_BUDGET, max(0, left - 1000))
+    # 새벽 실행: 그날(UTC) 남은 요청에서 600회만 남기고 전부 — 아직 못 받은 선수가 많으면(처음 며칠) 하루 400명 안팎씩 채움.
+    # 남긴 600회는 서버가 요청 때 쓰는 몫(확정 라인업·경력 미수집 선수) — 한도는 00:00 UTC(KST 09:00)에 초기화
+    budget = min(budget, max(0, left - 600)) if budget else max(0, left - 600)
     print(f"\n[선수 경력·트로피] 오늘 남은 요청 {left} · 이번에 쓸 수 있는 {budget}")
     if budget <= 0:
         return
@@ -1864,6 +1826,65 @@ def _wiki_section_text(title, index):
     return _wiki_get("https://en.wikipedia.org/w/api.php", {"action": "parse", "page": title, "prop": "wikitext", "section": index,
                                                             "format": "json", "redirects": 1})["parse"]["wikitext"]["*"]
 
+# 기록 문서에 표 대신 글로만 적힌 팀(아스널: Declan Rice … club record £100m)·굵은 글씨 제목(Fees Paid) 아래 표(애스턴 빌라)용.
+# 선수·구단 링크는 위키데이터로 사람(Q5)·축구 클럽인지 확인 — 표 칸이 밀려 'Winger'가 구단으로 잡히는 일(아약스)을 막음.
+# 구단 본문 문서의 글까지 읽으면 오래된 기록·다른 팀 기록이 섞여서(PSV·레스터) 기록 문서(List of … records and statistics)만 씀.
+_REC_CLUB_P31 = {'Q476028', 'Q847017', 'Q12973014', 'Q103229495', 'Q1194951', 'Q17270000'}
+def _wiki_classify(titles):
+    titles = [t for t in titles if t]
+    if not titles: return {}
+    out = {}
+    for i in range(0, len(titles), 40):
+        q = _wiki_get("https://en.wikipedia.org/w/api.php", {"action": "query", "titles": "|".join(titles[i:i+40]), "prop": "pageprops",
+                         "ppprop": "wikibase_item", "redirects": 1, "format": "json"})["query"]
+        alias = {}
+        for r in q.get("normalized", []) + q.get("redirects", []): alias[r["from"]] = r["to"]
+        qid = {pg["title"]: pg.get("pageprops", {}).get("wikibase_item") for pg in q.get("pages", {}).values()}
+        ents = _wd_entities([v for v in qid.values() if v], "claims")
+        for t in titles[i:i+40]:
+            tt = t
+            while tt in alias: tt = alias[tt]
+            e = ents.get(qid.get(tt) or "", {})
+            p31 = {(c.get("mainsnak", {}).get("datavalue", {}).get("value") or {}).get("id") for c in e.get("claims", {}).get("P31", [])}
+            out[t] = "human" if "Q5" in p31 else "club" if p31 & _REC_CLUB_P31 else None
+    return out
+
+_REC_PAID = re.compile(r"(record|highest|most expensive|biggest|largest)\b[^.]{0,90}?\b(signing|purchase|paid|outlay|acquisition|transfer fee|spent|signed|bought)|\b(paid|spent)\b[^.]{0,60}\brecord", re.I)
+_REC_RECV = re.compile(r"(record|highest|biggest|largest|most expensive)\b[^.]{0,90}?\b(received|sale|sold|departure|fee received)|\b(sold|sale|received)\b[^.]{0,60}\brecord", re.I)
+_REC_OLD = re.compile(r"at the time|then[- ]club|previous|former record|until|broke the|was broken|surpass|world|British|Premier League history|Italian football|Spanish football|German football|French football", re.I)
+
+def _parse_record_prose(text, prefer_eur=False):
+    t = re.sub(r"<ref[^>]*/>|<ref[^>]*>.*?</ref>", "", text, flags=re.S)
+    t = re.sub(r"\[\[(?:File|Image):[^|\]]*\|(?:[^|\]]*\|)*", "", t)
+    t = re.sub(r"\{\{(?:efn|refn|cite)[^{}]*\}\}", " ", t, flags=re.I)
+    sents = re.split(r"(?<=[.!?])\s+(?=[A-Z\[\'])|\n", t)
+    cands = {}
+    for s in sents:
+        for kind, rx in (("paid", _REC_PAID), ("received", _REC_RECV)):
+            if kind in cands or not rx.search(s) or _REC_OLD.search(s): continue
+            if kind == "paid" and _REC_RECV.search(s) and not _REC_PAID.search(s): continue
+            links = [(a.strip(), (b or a).strip()) for a, b in re.findall(r"\[\[([^\]|]+)(?:\|([^\]]+))?\]\]", s) if not re.match(r"(File|Image|Category|:?[a-z]{2}:)", a)]
+            fees = _hon_fees(s)
+            if not fees or len(links) < 2: continue
+            cands.setdefault(kind, (s, links, fees))
+    if not cands: return {}
+    cls = _wiki_classify(sorted({a for v in cands.values() for a, _ in v[1]}))
+    out = {}
+    for kind, (s, links, fees) in cands.items():
+        pl = next((l for l in links if cls.get(l[0]) == "human"), None)
+        cl = next((l for l in links if cls.get(l[0]) == "club"), None)
+        if not pl or not cl: continue
+        eur = [f for f in fees if f[0] == "€"]
+        cur, v = eur[0] if (prefer_eur and eur) else fees[0]
+        yrs = re.findall(r"(?<!\d)((?:19|20)\d\d)(?!\d)", re.sub(r"\[\[[^\]]*\|", "", s))
+        out[kind] = {"player_title": pl[0], "player": pl[1], "club_title": cl[0], "club": cl[1], "fee": f"{cur}{v:g}m", "year": yrs[-1] if yrs else None}
+    return out
+
+def _record_bold_split(text):
+    # '''Fees Paid''' 같은 굵은 제목도 소제목으로
+    return re.sub(r"^'''([^'\n]{3,40})'''\s*$", r"==== \1 ====", text, flags=re.M)
+
+
 def _wiki_honours_records(en_title, prefer_eur=False):
     out = {}
     secs = _wiki_sections(en_title) or []
@@ -1877,9 +1898,15 @@ def _wiki_honours_records(en_title, prefer_eur=False):
         rsecs = _wiki_sections(rt)
         if not rsecs:
             continue
-        tr = [x for x in rsecs if re.search(r"transfer", x["line"], re.I)]
+        tr = [x for x in rsecs if re.search(r"transfer|fee", x["line"], re.I)]
         text = "".join(_wiki_section_text(rt, x["index"]) + "\n" for x in tr[:3])
-        recs = _parse_record_transfers(text, prefer_eur) if text else {}
+        recs = _parse_record_transfers(_record_bold_split(text), prefer_eur) if text else {}
+        if text and len(recs) < 2:
+            for k, v in _parse_record_prose(text, prefer_eur).items():
+                recs.setdefault(k, v)
+        if recs:   # 선수 = 사람, 구단 = 축구 클럽인지 확인
+            cls = _wiki_classify(sorted({r[k] for r in recs.values() for k in ("player_title", "club_title")}))
+            recs = {k: r for k, r in recs.items() if cls.get(r["club_title"]) == "club" and cls.get(r["player_title"]) != "club"}
         if recs:
             # 선수·구단 한국어 이름(한국어 위키백과 문서 제목, 없으면 영어 그대로)
             titles = sorted({r[k] for r in recs.values() for k in ("player_title", "club_title")})
@@ -2044,7 +2071,7 @@ from af_transform import *   # noqa: F401,F403
 def _fetch_af_transfers(af_id, limit=30):
     """API-Football /transfers → 최근 이적 기록(이 팀이 관련된 것만). 선수 사진·양쪽 구단 로고·방향(in/out)까지 저장
     — 예전엔 이름·날짜·유형만 저장해서 화면에 글자만 나왔음(2026-09-29 확장). 사진은 선수 ID로 만드는 고정 주소."""
-    raw = _af_get(f"{API_FOOTBALL_URL}/transfers", {"team": af_id}).get("response", [])
+    raw = _af("/transfers", team=af_id).get("response") or []
     flat = []
     for item in raw:
         player = item.get("player") or {}
@@ -2065,121 +2092,57 @@ def _fetch_af_transfers(af_id, limit=30):
                 "dir": "in" if tin.get("id") == af_id else "out",
             })
     flat.sort(key=lambda x: x["date"] or "", reverse=True)
-    return flat[:limit]
+    # API-Football이 같은 이적을 날짜만 하루이틀 다르게 두세 번 주는 경우가 많음(고레츠카 8.26·8.27) → 같은 선수·같은 경로는 60일 안이면 하나만
+    out, seen = [], {}
+    for x in flat:
+        k = (x["player_id"] or x["player"], x["from"], x["to"])
+        d = pd.Timestamp(x["date"]) if x["date"] else None
+        if k in seen and d is not None and seen[k] is not None and abs((seen[k] - d).days) <= 60:
+            continue
+        seen[k] = d
+        out.append(x)
+    return out[:limit]
 
-def refresh_transfers():
-    """이적 기록만 다시 받기(스쿼드는 그대로): python update_data.py --transfers-only
-    team_extra.json에 있는 팀 전부 — 팀 ID를 저장해 둔 팀은 호출 1번, 아니면 검색 포함 2번(무료 한도 100회/일, 분당 10회)."""
+# ── 스쿼드(사진·등번호)·이적 기록 — 5대 리그 전 팀(2026-10-07) ──
+# 예전 fetch_squad_transfers는 무료 플랜 시절 것이라 EPL만, 그리고 한 번 받은 팀은 다시 안 받아서 9월 뒤 이적이 안 들어왔음.
+# 팀 ID는 af_players.json(af_sync가 만든 매칭)에 있으니 검색 없이 팀당 2회(/players/squads·/transfers), 7일마다.
+# 그날 남은 요청에서 300회는 남김(서버가 요청 때 쓰는 몫). 데이터가 없는 팀부터.
+AF_SQUAD_DAYS = 7
+
+def fetch_squads_transfers_all(force=False, limit=None):
     import json
     if not API_FOOTBALL_KEY:
-        print("  ⚠️ API_FOOTBALL_KEY가 없어 건너뜀")
         return
-    extra_path = f"{MODEL_DIR}/team_extra.json"
-    with open(extra_path, 'r', encoding='utf-8') as f:
-        extra = json.load(f)
-    with open(f"{MODEL_DIR}/schedule.json", 'r', encoding='utf-8') as f:
-        schedule = json.load(f)
-    league_of = {t: code for code, ms in schedule.items() if code != 'CL' for m in ms for t in (m['home_team'], m['away_team'])}
-    print(f"\n[이적 기록 갱신] {len(extra)}팀")
-    for team_name, entry in extra.items():
-        af_id = entry.get("af_id")
-        if not af_id:
-            country = LEAGUE_COUNTRY.get(league_of.get(team_name))
-            af_id = _search_af_team_id(team_name, country) if country else None
-            time.sleep(7)
-            if not af_id:
-                print(f"  ⚠️ 매칭 실패: {team_name}")
-                continue
-            entry["af_id"] = af_id
+    teams = json.load(open(f"{MODEL_DIR}/af_players.json", encoding="utf-8"))
+    path = f"{MODEL_DIR}/team_extra.json"
+    extra = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {}
+    team_info = json.load(open(f"{MODEL_DIR}/team_info.json", encoding="utf-8")) if os.path.exists(f"{MODEL_DIR}/team_info.json") else {}
+    today = pd.Timestamp.now(tz="UTC").strftime("%Y-%m-%d")
+    age = lambda t: (pd.Timestamp(today) - pd.Timestamp((extra.get(t) or {}).get("updated") or "2000-01-01")).days
+    todo = sorted([t for t in teams if force or age(t) >= AF_SQUAD_DAYS], key=lambda t: (bool((extra.get(t) or {}).get("transfers")), -age(t)))
+    left = _af_remaining()
+    budget = (max(0, left - 100) if limit else max(0, left - 300)) // 2   # 손으로 팀 수를 주면 100회만 남김
+    todo = todo[:min(budget, limit or 999)]
+    print(f"\n[스쿼드·이적] {len(todo)}팀 갱신(대기 {sum(1 for t in teams if age(t) >= AF_SQUAD_DAYS) - len(todo)}팀)")
+    for t in todo:
+        af_id = teams[t]["af_id"]
+        entry = dict(extra.get(t) or {})
         try:
-            transfers = _fetch_af_transfers(af_id)
+            raw = ((_af("/players/squads", team=af_id).get("response") or [{}])[0] or {}).get("players") or []
+            squad = [{"name": p.get("name"), "position": SQUAD_POSITION_MAP.get(p.get("position"), p.get("position")),
+                      "shirtNumber": p.get("number"), "photo": p.get("photo")} for p in raw]
+            if squad:
+                entry["squad"] = _clean_squad(squad, t, team_info)
+            tf = _fetch_af_transfers(af_id)
+            if tf:   # 빈 응답(한도 등)이면 기존 기록 유지
+                entry["transfers"] = tf
         except Exception as e:
-            print(f"  ❌ {team_name} 예외: {e}")
-            continue
-        if transfers:   # 한도 초과 등으로 빈 응답이면 기존 기록 유지
-            entry["transfers"] = transfers
-            with open(extra_path, 'w', encoding='utf-8') as f:
-                json.dump(extra, f, ensure_ascii=False, indent=2)
-        print(f"  {'✅' if transfers else '⚠️ 빈 응답(기존 유지)'} {team_name} ({len(transfers)}건)")
-        time.sleep(7)
-
-def fetch_squad_transfers(league_code):
-    """API-Football 무료 플랜으로 스쿼드(사진/등번호)+이적 기록 수집.
-    시즌 제한이 있는 통계 엔드포인트와 달리, 스쿼드/이적 엔드포인트는
-    무료 플랜에서도 시즌 제약 없이 현재 데이터를 준다 — 요청 한도(100회/일)만
-    문제라 리그 단위로 나눠서 점진적으로 채운다.
-    팀ID는 /teams?league=&season=으로 한 번에 못 가져온다 — 이 조합은
-    시즌 제한에 걸려 무료 플랜에서 빈 배열만 옴. 대신 팀 이름 검색
-    (/teams?search=, 시즌 무관)으로 팀별로 하나씩 찾는다.
-    이미 처리된 팀은 건너뛰어서(팀당 3회 호출·10회/분 한도라 20팀 전체를
-    한 번에 다 못 돌 수도 있음) 재실행 시 이어서 채울 수 있게 한다."""
-    import json
-    print(f"\n[{league_code} 스쿼드+이적] 수집 중...")
-
-    if not API_FOOTBALL_KEY:
-        print("  ⚠️ API_FOOTBALL_KEY가 없어 건너뜀")
-        return
-
-    country = LEAGUE_COUNTRY.get(league_code)
-    if not country:
-        print(f"  ❌ {league_code}: 국가 매핑 없음")
-        return
-
-    schedule_path = f"{MODEL_DIR}/schedule.json"
-    with open(schedule_path, 'r', encoding='utf-8') as f:
-        schedule = json.load(f)
-    our_teams = sorted({m['home_team'] for m in schedule.get(league_code, [])} |
-                        {m['away_team'] for m in schedule.get(league_code, [])})
-
-    extra_path = f"{MODEL_DIR}/team_extra.json"
-    extra = {}
-    if os.path.exists(extra_path):
-        with open(extra_path, 'r', encoding='utf-8') as f:
-            extra = json.load(f)
-
-    team_info_path = f"{MODEL_DIR}/team_info.json"
-    team_info = {}
-    if os.path.exists(team_info_path):
-        with open(team_info_path, 'r', encoding='utf-8') as f:
-            team_info = json.load(f)
-
-    for team_name in our_teams:
-        if extra.get(team_name, {}).get("squad"):
-            continue  # 이미 처리됨 — 재실행 시 스킵
-
-        af_id = _search_af_team_id(team_name, country)
-        time.sleep(7)
-        if not af_id:
-            print(f"  ⚠️ 매칭 실패: {team_name}")
-            continue
-
-        entry = extra.get(team_name, {})
-        try:
-            squad_raw = (_af_get(f"{API_FOOTBALL_URL}/players/squads", {"team": af_id}).get("response") or [{}])[0].get("players", [])
-            squad_clean = [
-                {
-                    "name": p.get("name"),
-                    "position": SQUAD_POSITION_MAP.get(p.get("position"), p.get("position")),
-                    "shirtNumber": p.get("number"),
-                    "photo": p.get("photo"),
-                }
-                for p in squad_raw
-            ]
-            entry["squad"] = _clean_squad(squad_clean, team_name, team_info)
-            time.sleep(7)
-
-            entry["af_id"] = af_id
-            entry["transfers"] = _fetch_af_transfers(af_id)
-
-            extra[team_name] = entry
-            with open(extra_path, 'w', encoding='utf-8') as f:
-                json.dump(extra, f, ensure_ascii=False, indent=2)
-            print(f"  ✅ {team_name} (스쿼드 {len(entry['squad'])}명, 이적 {len(entry['transfers'])}건)")
-            time.sleep(7)
-        except Exception as e:
-            print(f"  ❌ {team_name} 예외: {e}")
-
-    print(f"  ✅ team_extra.json 저장 완료 ({sum(1 for t in our_teams if extra.get(t, {}).get('squad'))}/{len(our_teams)}팀)")
+            print(f"  ⚠️ {t}: {e}"); continue
+        entry["af_id"], entry["updated"] = af_id, today
+        extra[t] = entry
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(extra, f, ensure_ascii=False, indent=2)
+    print(f"  ✅ 스쿼드 있는 팀 {sum(1 for v in extra.values() if v.get('squad'))} · 이적 있는 팀 {sum(1 for v in extra.values() if v.get('transfers'))}")
 
 def reconstruct_bracket_order(stages):
     """하드코딩 없이 실제 대진(팀 실명)으로 이전 라운드의 좌우 배치를 역추적한다.
@@ -2736,10 +2699,9 @@ def main():
     step("API-Football 경기 상세·부상자·선수", af_sync)
     step("대회 우승 팀(트로피 보강)", fetch_comp_winners)
     step("감독(API-Football·위키데이터)", fetch_coaches)
+    step("스쿼드·이적(API-Football)", fetch_squads_transfers_all)
     step("선수 경력·트로피 미리 받기", af_profiles_sync)
 
-    # 스쿼드 사진/등번호 + 이적 기록 (API-Football, 현재는 PL만 — 요청 한도 때문에 리그별로 점진 확대 예정)
-    step("스쿼드·이적(API-Football)", fetch_squad_transfers, 'PL')
 
     # (순위 예측은 main.py /predict/champion이 요청 때 현재 승점·남은 일정·모델 확률로 계산 — 2026-09-28부터
     #  예전 simulate_season/champion_predictions.json은 화면에 안 쓰여서 제거)
@@ -2904,7 +2866,7 @@ if __name__ == "__main__":
         build_player_season_index()
     elif "--af-profiles" in sys.argv:
         fetch_comp_winners()
-        af_profiles_sync(int(next((a for a in sys.argv[2:] if a.isdigit()), AF_PROFILE_BUDGET)))
+        af_profiles_sync(next((int(a) for a in sys.argv[2:] if a.isdigit()), AF_PROFILE_BUDGET))
     elif "--coaches" in sys.argv:
         fetch_coaches(force="--force" in sys.argv)
     elif "--af-sync" in sys.argv:
@@ -2917,7 +2879,7 @@ if __name__ == "__main__":
         fetch_extra_leagues()
     elif "--ucl-only" in sys.argv:
         fetch_ucl_tournament()
-    elif "--transfers-only" in sys.argv:
-        refresh_transfers()
+    elif "--transfers-only" in sys.argv:   # 스쿼드·이적 [--force] [팀 수]
+        fetch_squads_transfers_all(force="--force" in sys.argv, limit=next((int(a) for a in sys.argv[2:] if a.isdigit()), None))
     else:
         main()
