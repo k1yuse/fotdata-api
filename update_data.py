@@ -1346,6 +1346,125 @@ def fetch_comp_winners():
         json.dump(cw, f, ensure_ascii=False, indent=1, sort_keys=True)
     print(f"  대회 우승 팀: 새로 {got}개")
 
+# ── 감독(2026-10-07) ──
+# 지금 감독 = 그 팀 가장 최근 경기 라인업의 감독(가장 확실). 사진·국적·생년월일·부임일은 /coachs?team= 의 그 팀 경력에서 —
+# 원본에 오래된 항목이 남아 있어(아스널에 벵거가 종료일 없이 남아 있음) 라인업 이름과 맞는 사람을 고르고, 없으면 종료일 없는 것 중 최근 부임.
+# 생년월일·국적이 비어 있는 감독(아르테타·과르디올라 등)은 위키데이터(구단 P286 현재 감독)로 채움. 7일마다 + 라인업 감독이 바뀌면 바로.
+AF_COACH_DAYS = 7
+
+def _person_key(n):
+    import unicodedata
+    n = unicodedata.normalize("NFKD", (n or "").replace("ß", "ss")).encode("ascii", "ignore").decode().lower()
+    return [t for t in re.split(r"[^a-z]+", n) if t]
+
+def _same_person(a, b):
+    """'Mikel Arteta' ↔ 'M. Arteta' ↔ 'Arteta' — 성(마지막 단어)이 같고, 둘 다 이름이 있으면 첫 글자도 같음"""
+    ta, tb = _person_key(a), _person_key(b)
+    if not ta or not tb:
+        return False
+    if ta[-1] != tb[-1]:   # 라인업 이름이 "성 이름"으로 뒤집혀 오는 팀이 있음("Enrique Luis", "Piero Gasperini Gian") → 단어 두 개 이상 겹치면 같은 사람
+        return len(set(ta) & set(tb)) >= 2
+    return len(ta) == 1 or len(tb) == 1 or ta[0][0] == tb[0][0]
+
+def _lineup_coaches():
+    """팀 → (날짜, 라인업 감독 이름) — 가장 최근 경기"""
+    import json
+    fx = json.load(open(f"{MODEL_DIR}/af_fixtures.json", encoding="utf-8")).get("fixtures", [])
+    out = {}
+    for f in sorted([f for f in fx if f.get("has_detail") and f.get("file")], key=lambda f: f["date"], reverse=True):
+        need = [sd for sd in ("home", "away") if f[f"{sd}_team"] not in out]
+        if not need:
+            continue
+        try:
+            d = md_read(f"{MD_DIR}/{f['file']}")
+        except Exception:
+            continue
+        for sd in need:
+            c = ((d.get("lineups") or {}).get(sd) or {}).get("coach")
+            if c:
+                out[f[f"{sd}_team"]] = (f["date"][:10], c)
+    return out
+
+def _wd_coach(qid):
+    """위키데이터: 구단의 현재 감독 → {name_en, name_ko, birth, country}(국적은 영어 이름 — API-Football 나라 이름과 같은 표기)"""
+    club = _wd_entities([qid], "claims").get(qid) or {}
+    c = _wd_current(club.get("claims", {}), "P286")
+    if not c:
+        return None
+    since = None   # 부임일 = 그 감독 항목의 시작일(P580)
+    for cl0 in club.get("claims", {}).get("P286", []):
+        if (cl0.get("mainsnak", {}).get("datavalue", {}).get("value") or {}).get("id") == c["id"] and "P582" not in cl0.get("qualifiers", {}):
+            t = ((cl0.get("qualifiers", {}).get("P580") or [{}])[0].get("datavalue", {}).get("value") or {}).get("time", "")
+            since = since or (t[1:11].replace("-00", "-01") if t else None)
+    ent = _wd_entities([c["id"]], "claims|labels").get(c["id"]) or {}
+    cl, lb = ent.get("claims", {}), ent.get("labels", {})
+    val = lambda p: ((cl.get(p) or [{}])[0].get("mainsnak", {}).get("datavalue", {}) or {}).get("value")
+    birth = (val("P569") or {}).get("time", "")[1:11] or None
+    nat = val("P1532") or val("P27")   # 대표팀 국적(P1532) 우선 — 이중국적이면 P27 첫 값이 엉뚱할 수 있음
+    country = None
+    if nat and nat.get("id"):
+        country = ((_wd_entities([nat["id"]], "labels").get(nat["id"]) or {}).get("labels", {}).get("en") or {}).get("value")
+    return {"name_en": (lb.get("en") or {}).get("value"), "name_ko": (lb.get("ko") or {}).get("value"),
+            "birth": birth, "country": country, "start": since}
+
+def fetch_coaches(force=False):
+    import json
+    if not API_FOOTBALL_KEY:
+        return
+    path = f"{MODEL_DIR}/af_coaches.json"
+    old = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {}
+    teams = json.load(open(f"{MODEL_DIR}/af_players.json", encoding="utf-8"))
+    wiki = json.load(open(f"{MODEL_DIR}/team_wiki.json", encoding="utf-8")) if os.path.exists(f"{MODEL_DIR}/team_wiki.json") else {}
+    lineup = _lineup_coaches()
+    today = pd.Timestamp.now().strftime("%Y-%m-%d")
+    out, done = {}, 0
+    for team, info in teams.items():
+        prev, lc = old.get(team), (lineup.get(team) or (None, None))[1]
+        fresh = prev and (pd.Timestamp(today) - pd.Timestamp(prev.get("updated", "2000-01-01"))).days < AF_COACH_DAYS
+        if not force and fresh and (not lc or _same_person(lc, prev.get("name") or "")):
+            out[team] = prev; continue
+        tid = info["af_id"]
+        cands = []
+        for c in (_af("/coachs", team=tid).get("response") or []):
+            for car in c.get("career") or []:
+                if (car.get("team") or {}).get("id") == tid:
+                    cands.append((c, car))
+        pick = None
+        if lc:
+            m = [x for x in cands if _same_person(lc, x[0].get("name") or "") or _same_person(lc, f"{x[0].get('firstname') or ''} {x[0].get('lastname') or ''}")]
+            pick = max(m, key=lambda x: x[1].get("start") or "", default=None)
+        if not pick:
+            pick = max([x for x in cands if not x[1].get("end")], key=lambda x: x[1].get("start") or "", default=None)
+            if pick and lc:   # 라인업 감독이 목록에 없음(신임·대행) → 이름만
+                pick = None
+        c, car = pick if pick else ({}, {})
+        flip = lc and c.get("name") and _person_key(lc)[-1:] != _person_key(c["name"])[-1:]   # 뒤집힌 라인업 이름이면 감독 목록 이름으로
+        full = " ".join(x for x in (c.get("firstname"), c.get("lastname")) if x) or (c.get("name") if flip else None)
+        row = {"id": c.get("id"), "name": c["name"] if flip else (lc or c.get("name")), "full_name": full or lc or c.get("name"),
+               "photo": c.get("photo"), "nationality": c.get("nationality"),
+               "birth_date": (c.get("birth") or {}).get("date"), "start": car.get("start"), "updated": today}
+        qid = (wiki.get(team) or {}).get("qid")
+        if qid:
+            try:
+                wd = _wd_coach(qid)
+            except Exception as e:
+                wd = None; print(f"    ⚠️ 위키데이터 감독 {team}: {e}")
+            if wd and (_same_person(row["name"] or "", wd.get("name_en") or "") or _same_person(row["full_name"] or "", wd.get("name_en") or "")):
+                ko = wd.get("name_ko")   # 한국어 라벨이 본명 전체("루이스 엔리케 마르티네스 가르시아")면 안 씀
+                row["name_ko"] = ko if ko and len(ko.split()) <= 3 else None
+                row["birth_date"] = row["birth_date"] or wd.get("birth")
+                row["nationality"] = row["nationality"] or wd.get("country")
+                row["start"] = row["start"] or wd.get("start")
+                if wd.get("name_en"):   # 위키데이터 영어 이름 = 흔히 부르는 이름("José Mourinho" — API-Football은 본명 전체)
+                    row["full_name"] = wd["name_en"]
+        if row["name"]:
+            out[team] = row; done += 1
+        elif prev:
+            out[team] = prev
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(out, f, ensure_ascii=False, indent=1, sort_keys=True)
+    print(f"  감독: {done}팀 갱신 · 전체 {len(out)}팀 · 사진 {sum(1 for v in out.values() if v.get('photo'))} · 생년월일 {sum(1 for v in out.values() if v.get('birth_date'))}")
+
 def _af_profile_minutes():
     """이번 시즌 리그 출전 시간(경기 상세 합산) — 출전 많은 선수부터 받으려고"""
     import glob
@@ -2616,6 +2735,7 @@ def main():
     # API-Football Pro(2026-10-06): 끝난 경기 상세·결장·부상자·선수 프로필 — 키가 있을 때만(af_sync 안에서 확인)
     step("API-Football 경기 상세·부상자·선수", af_sync)
     step("대회 우승 팀(트로피 보강)", fetch_comp_winners)
+    step("감독(API-Football·위키데이터)", fetch_coaches)
     step("선수 경력·트로피 미리 받기", af_profiles_sync)
 
     # 스쿼드 사진/등번호 + 이적 기록 (API-Football, 현재는 PL만 — 요청 한도 때문에 리그별로 점진 확대 예정)
@@ -2785,6 +2905,8 @@ if __name__ == "__main__":
     elif "--af-profiles" in sys.argv:
         fetch_comp_winners()
         af_profiles_sync(int(next((a for a in sys.argv[2:] if a.isdigit()), AF_PROFILE_BUDGET)))
+    elif "--coaches" in sys.argv:
+        fetch_coaches(force="--force" in sys.argv)
     elif "--af-sync" in sys.argv:
         af_sync()
     elif "--league-history" in sys.argv:

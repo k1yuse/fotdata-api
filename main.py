@@ -564,7 +564,7 @@ def get_logos():
 
 # ── 전체 경기 데이터 로드 (H2H, 폼, 순위 계산용) ──
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 
 df_matches_all = pd.read_csv(os.path.join(MODEL_DIR, "all_matches.csv"))
 df_matches_all['date'] = pd.to_datetime(df_matches_all['date'])
@@ -1848,6 +1848,7 @@ def get_team_squad(team_name: str, season: int = None):
                      | ({CURRENT_SEASON_YEAR} if _team_league_in(team, CURRENT_SEASON_YEAR) else set()), reverse=True)
     v = (_load_json("af_players.json") or {}).get(team) or {}
     return {"team": team, "league": code, "season": yr, "updated": v.get("updated"), "players": players, "seasons": seasons,
+            "manager": _manager_of(team) if yr == CURRENT_SEASON_YEAR else None,
             "best11": _xi_out(_season_xi([r for r in players if r.get("minutes")], share=0.25))}
 
 _LP_KEYS = ("id", "team", "full_name", "name", "photo", "pos", "apps", "starts", "minutes", "goals", "assists", "rating", "rated", "shots", "shots_on",
@@ -2304,6 +2305,21 @@ def _squad_full_names(af_squad, fd_squad):
     used = {n: picks.count(n) for n in picks if n}
     return [{**p, "name": n, "short_name": p.get("name")} if n and used[n] == 1 else p for p, n in zip(af_squad, picks)]
 
+def _manager_of(team):
+    """지금 감독(af_coaches.json — update_data.fetch_coaches: 최근 경기 라인업 감독 + API-Football 사진·부임일 + 위키데이터 생년월일·국적)"""
+    c = (_load_json("af_coaches.json") or {}).get(team)
+    if not c or not c.get("name"):
+        return None
+    out = {k: v for k, v in c.items() if k != "updated"}
+    b = c.get("birth_date")
+    if b:
+        try:
+            bd, today = datetime.strptime(b[:10], "%Y-%m-%d").date(), datetime.now(timezone.utc).date()
+            out["age"] = today.year - bd.year - ((today.month, today.day) < (bd.month, bd.day))
+        except ValueError:
+            pass
+    return out
+
 @app.get("/team/info/{team_name}")
 def get_team_info(team_name: str):
     """팀 상세 정보 (홈구장, 창단연도, 구단색, 스쿼드) — update_data.py의 fetch_team_info()가 생성한 캐시"""
@@ -2328,6 +2344,9 @@ def get_team_info(team_name: str):
     wiki = (_load_json("team_wiki.json") or {}).get(team_name)
     if wiki:
         info = {**info, "wiki": wiki}
+    mgr = _manager_of(team_name)
+    if mgr:
+        info = {**info, "manager": mgr}
     # 주요 라이벌(수동 관리 rivals.json) + 우리 데이터에 있는 맞대결 전적(2010-11 이후 리그·챔스 — 2026-10-07 예전엔 최근 4시즌)
     rivals = (_load_json("rivals.json") or {}).get(team_name)
     if rivals:
