@@ -509,3 +509,34 @@ def round_xi(details, min_minutes=45):
                            "can": {d} if d else set(), "dpos": d, "goals": x.get("g") or 0, "assists": x.get("a") or 0,
                            "num": x.get("num")})
     return pick_xi(ps)
+
+
+# ── 선수 경력 저장용 축약(2026-10-07) — 새벽 수집(update_data.af_profiles_sync)이 fotdata_model/af_profiles/<선수 ID>.json.gz로 저장,
+# 서버 /player/profile은 이 파일을 먼저 씀(예전엔 선수를 열 때마다 API-Football을 15~20번 불러 처음 여는 선수가 5~7초 걸렸음)
+def af_compact_player_season(r0):
+    """/players?id=&season= 응답 한 줄 → 경력·트로피 계산에 쓰는 것만(선수 기본 정보 + 대회별 소속·출전·골·도움)"""
+    if not r0:
+        return None
+    pl = r0.get("player") or {}
+    sts = []
+    for st in r0.get("statistics") or []:
+        tm, lg, g, gl = st.get("team") or {}, st.get("league") or {}, st.get("games") or {}, st.get("goals") or {}
+        sts.append({"team": {"id": tm.get("id"), "name": tm.get("name"), "logo": tm.get("logo")},
+                    "league": {"id": lg.get("id"), "country": lg.get("country"), "name": lg.get("name")},
+                    "games": {"appearences": g.get("appearences")}, "goals": {"total": gl.get("total"), "assists": gl.get("assists")}})
+    return {"player": {k: pl.get(k) for k in ("name", "firstname", "lastname", "age", "birth", "nationality", "height", "weight", "photo")},
+            "statistics": sts}
+
+def af_compact_transfers(resp):
+    """/transfers?player= 응답 → [{date, type, teams: {in: {id, name}, out: {id, name}}}]"""
+    out = []
+    for tr in ((resp or [{}])[0] or {}).get("transfers") or []:
+        tt = tr.get("teams") or {}
+        out.append({"date": tr.get("date"), "type": tr.get("type"),
+                    "teams": {s: {"id": (tt.get(s) or {}).get("id"), "name": (tt.get(s) or {}).get("name")} for s in ("in", "out")}})
+    return out
+
+# 트로피 보강용 대회(우승 = 결승 승자, 리그 = 최종 1위) — API-Football /trophies엔 25-26 시즌 우승이 아직 없었음(2026-10-07 확인)
+AF_CUP_COMPS = [45, 48, 528, 143, 556, 81, 529, 137, 547, 66, 526, 2, 3, 848, 531]
+AF_LEAGUE_COMPS = [39, 140, 78, 135, 61]
+AF_CALENDAR_COMPS = {528, 556, 529, 547, 526, 531, 15, 1168}   # 시즌 표기가 "2025"인 단판 대회(슈퍼컵류)

@@ -1108,9 +1108,17 @@ AF_DONE = {"FT", "AET", "PEN", "AWD", "WO"}
 MD_DIR = f"{MODEL_DIR}/match_details"
 AF_PROFILE_DAYS = 6
 
+import threading as _thr
+_AF_LOCK, _AF_LAST = _thr.Lock(), [0.0]
+
 def _af(path, **params):
-    """API-Football 호출 — 분당 300회 한도라 0.25초 간격, 429·한도 오류면 쉬었다 최대 3번"""
+    """API-Football 호출 — 분당 300회 한도라 전체(여러 스레드 합쳐) 0.21초 간격, 429·한도 오류면 쉬었다 최대 3번"""
     for attempt in range(3):
+        with _AF_LOCK:
+            wait = _AF_LAST[0] + 0.21 - time.time()
+            if wait > 0:
+                time.sleep(wait)
+            _AF_LAST[0] = time.time()
         try:
             r = requests.get(API_FOOTBALL_URL + path, headers=API_FOOTBALL_HEADERS, params=params, timeout=40)
             d = r.json()
@@ -1118,7 +1126,7 @@ def _af(path, **params):
             print(f"    ⚠️ {path} {params}: {e}"); time.sleep(5 * (attempt + 1)); continue
         if r.status_code == 429 or (d.get("errors") and re.search(r"rate|limit|requests", str(d["errors"]), re.I)):
             time.sleep(15 * (attempt + 1)); continue
-        time.sleep(0.25)
+        pass   # 간격은 위 전체 제한(0.21초)이 맞춤
         if d.get("errors"):
             print(f"    ⚠️ {path} {params}: {d['errors']}")
         return d
@@ -1238,6 +1246,30 @@ def af_sync(season=None):
                 "injuries": {"home": af_injury_rows(rows, e["home_id"]), "away": af_injury_rows(rows, e["away_id"])}}
     wr("match_previews.json", previews, indent=1)
     print(f"  결장·부상자: {len(previews)}경기")
+    # 팀별 "가장 최근 경기" 결장자(경기별 명단은 킥오프 1~2일 전에야 올라와서 그 전엔 이걸로 지금 빠져 있는 선수를 보여줌) — 대회마다 1번
+    ti = {}
+    for code, lid in AF_COMPS.items():
+        rows = _af("/injuries", league=lid, season=season).get("response") or []
+        last = {}
+        for x in rows:
+            nm = teammap.get(str((x.get("team") or {}).get("id")))
+            dt = ((x.get("fixture") or {}).get("date") or "")[:10]
+            if nm and dt and dt <= now.strftime("%Y-%m-%d") and dt >= last.get(nm, ""):
+                last[nm] = dt
+        for x in rows:
+            nm = teammap.get(str((x.get("team") or {}).get("id")))
+            dt = ((x.get("fixture") or {}).get("date") or "")[:10]
+            if not nm or dt != last.get(nm) or (ti.get(nm) and ti[nm]["date"] > dt):
+                continue
+            ent = ti.setdefault(nm, {"date": dt, "players": []})
+            if ent["date"] != dt:
+                ti[nm] = ent = {"date": dt, "players": []}
+            pl = x.get("player") or {}
+            if pl.get("id") and all(p["id"] != pl["id"] for p in ent["players"]):
+                ent["players"].append({"id": pl["id"], "name": pl.get("name"), "photo": pl.get("photo"),
+                                       "status": "doubtful" if pl.get("type") == "Questionable" else "out", "reason": pl.get("reason")})
+    wr("team_injuries.json", ti, indent=1)
+    print(f"  팀별 최근 경기 결장자: {len(ti)}팀 · {sum(len(v['players']) for v in ti.values())}명")
     # 6) 선수 프로필(5대 리그 팀, 6일 넘은 팀만)
     players = rd("af_players.json", {})
     league_team = {}
@@ -1263,6 +1295,137 @@ def af_sync(season=None):
         players.pop(t)
     wr("af_players.json", players)
     print(f"  선수 프로필: {len(stale)}팀 갱신 · 전체 {len(players)}팀 {sum(len(v['players']) for v in players.values())}명")
+
+# ── 선수 경력·트로피 미리 받기(2026-10-07) ──
+# 서버가 선수 카드를 열 때마다 API-Football을 15~20번 불러 처음 여는 선수가 5~7초 걸렸음(라이브 측정) → 새벽에 5대 리그 선수의
+# 경력 시즌 목록·트로피·부상 이력·이적·시즌별 기록(/players?id=&season=)을 받아 fotdata_model/af_profiles/<ID>.json.gz로 저장.
+# 지난 시즌 기록은 한 번 받으면 다시 안 받고, 이번 시즌·트로피·부상·이적만 AF_PROFILE_REFRESH_DAYS마다. 하루 요청 한도를 나눠 쓰므로
+# 그날 남은 요청(/status) 안에서만(AF_PROFILE_BUDGET, 다른 수집용으로 1,000회는 남김) — 처음엔 며칠에 걸쳐 전원 채움(출전 시간 많은 선수부터)
+AF_PROFILE_DIR = f"{MODEL_DIR}/af_profiles"
+AF_PROFILE_REFRESH_DAYS = 14
+AF_PROFILE_BUDGET = 3000
+
+def _af_remaining():
+    try:
+        d = requests.get(API_FOOTBALL_URL + "/status", headers=API_FOOTBALL_HEADERS, timeout=20).json()["response"]["requests"]
+        return d["limit_day"] - d["current"]
+    except Exception:
+        return 0
+
+def fetch_comp_winners():
+    """컵대회 결승 승자·준우승, 5대 리그 최종 1·2위(API-Football 팀 ID) → comp_winners.json {대회 ID: {시즌: {w, r}}}.
+    이미 받은 시즌은 다시 안 받음(결승 전이면 다음 날 다시)"""
+    import json
+    if not API_FOOTBALL_KEY:
+        return
+    path = f"{MODEL_DIR}/comp_winners.json"
+    cw = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {}
+    cur = max(MATCH_SEASONS)
+    got = 0
+    for cid in AF_CUP_COMPS + AF_LEAGUE_COMPS:
+        for yr in (cur - 2, cur - 1, cur):
+            if str(yr) in cw.get(str(cid), {}):
+                continue
+            if cid in AF_LEAGUE_COMPS:
+                if yr >= cur:
+                    continue   # 진행 중인 시즌 리그는 우승이 아직 없음
+                st = ((_af("/standings", league=cid, season=yr).get("response") or [{}])[0].get("league") or {}).get("standings") or []
+                t = st[0] if st else []
+                if len(t) >= 2:
+                    cw.setdefault(str(cid), {})[str(yr)] = {"w": t[0]["team"]["id"], "r": t[1]["team"]["id"]}; got += 1
+                continue
+            for f in _af("/fixtures", league=cid, season=yr, round="Final").get("response") or []:
+                if f["fixture"]["status"]["short"] not in AF_DONE:
+                    continue
+                h, a = f["teams"]["home"], f["teams"]["away"]
+                if h.get("winner") is None and a.get("winner") is None:
+                    continue
+                w, r = (h, a) if h.get("winner") else (a, h)
+                cw.setdefault(str(cid), {})[str(yr)] = {"w": w["id"], "r": r["id"]}; got += 1
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(cw, f, ensure_ascii=False, indent=1, sort_keys=True)
+    print(f"  대회 우승 팀: 새로 {got}개")
+
+def _af_profile_minutes():
+    """이번 시즌 리그 출전 시간(경기 상세 합산) — 출전 많은 선수부터 받으려고"""
+    import glob
+    from collections import Counter
+    mins = Counter()
+    for p in glob.glob(f"{MD_DIR}/*.json.gz"):
+        try:
+            d = md_read(p)
+        except Exception:
+            continue
+        for sd in ("home", "away"):
+            for x in (d.get("pstats") or {}).get(sd) or []:
+                mins[x["id"]] += x.get("min") or 0
+    return mins
+
+def af_profiles_sync(budget=None):
+    import json
+    from concurrent.futures import ThreadPoolExecutor
+    if not API_FOOTBALL_KEY:
+        print("  ⚠️ API_FOOTBALL_KEY가 없어 건너뜀"); return
+    left = _af_remaining()
+    budget = min(budget or AF_PROFILE_BUDGET, max(0, left - 1000))
+    print(f"\n[선수 경력·트로피] 오늘 남은 요청 {left} · 이번에 쓸 수 있는 {budget}")
+    if budget <= 0:
+        return
+    os.makedirs(AF_PROFILE_DIR, exist_ok=True)
+    cur = max(MATCH_SEASONS)
+    players = json.load(open(f"{MODEL_DIR}/af_players.json", encoding="utf-8"))
+    ids = {int(pid) for v in players.values() for pid in (v.get("players") or {})}
+    mins = _af_profile_minutes()
+    today = pd.Timestamp.now(tz="UTC").strftime("%Y-%m-%d")
+    def load(pid):
+        p = f"{AF_PROFILE_DIR}/{pid}.json.gz"
+        return md_read(p) if os.path.exists(p) else None
+    todo = []
+    for pid in ids:
+        c = load(pid)
+        age = (pd.Timestamp(today) - pd.Timestamp(c["updated"])).days if c else 9999
+        if age >= AF_PROFILE_REFRESH_DAYS:
+            todo.append((c is not None, -mins.get(pid, 0), -age, pid))
+    todo.sort()   # 아직 없는 선수 → 출전 시간 많은 순 / 그다음 오래된 순
+    used, done = [0], [0]
+    def one(pid):
+        old = load(pid) or {}
+        teams = (_af("/players/teams", player=pid).get("response"))
+        if teams is None:
+            return 1
+        for t in teams:   # 시즌이 가끔 문자열("2023")로 옴
+            t["seasons"] = [int(y) for y in (t.get("seasons") or []) if str(y).isdigit()]
+        years = sorted({y for t in teams for y in t["seasons"] if y >= 2010}, reverse=True)[:16]
+        stats = {int(k): v for k, v in (old.get("stats") or {}).items()}
+        need = [y for y in years if y >= cur - 1 or y not in stats]   # 지난 시즌은 한 번만, 이번·지난 시즌은 다시
+        for y in need:
+            stats[y] = af_compact_player_season(((_af("/players", id=pid, season=y).get("response")) or [None])[0])
+        rec = {"id": pid, "updated": today,
+               "teams": [{"team": {k: (t.get("team") or {}).get(k) for k in ("id", "name", "logo")}, "seasons": t.get("seasons")} for t in teams],
+               "trophies": _af("/trophies", player=pid).get("response") or [],
+               "sidelined": [{k: x.get(k) for k in ("type", "start", "end")} for x in (_af("/sidelined", player=pid).get("response") or [])],
+               "transfers": af_compact_transfers(_af("/transfers", player=pid).get("response")),
+               "stats": {str(y): v for y, v in stats.items() if y in years}}
+        md_write(f"{AF_PROFILE_DIR}/{pid}.json.gz", rec)
+        return 5 + len(need)
+    est = lambda new: 18 if not new else 7   # 처음 받는 선수 ~18회, 갱신 ~7회
+    batch = []
+    for has, _, _, pid in todo:
+        cost = est(not has)
+        if used[0] + cost > budget:
+            break
+        used[0] += cost
+        batch.append(pid)
+    def safe(pid):
+        try:
+            return one(pid)
+        except Exception as e:
+            print(f"    ⚠️ 선수 {pid}: {type(e).__name__}: {e}")
+            return None
+    with ThreadPoolExecutor(8) as ex:   # 요청 하나가 0.5~1초라 4개로는 초당 2.4회뿐이었음(한도는 전체 0.21초 간격이 지킴)
+        for n in ex.map(safe, batch):
+            done[0] += n is not None
+    print(f"  ✅ {done[0]}명 저장(대기 {len(todo) - len(batch)}명) · 전체 {len(os.listdir(AF_PROFILE_DIR))}명")
 
 # ── 과거 시즌 구단 기록(2026-10-06, API-Football Pro) — 2010-11 ~ 2022-23 ──
 # 순위표·일정·팀 통계·시즌 고르기에만 씀(예측 모델 학습 데이터 all_matches.csv와는 따로 — 섞지 않음). 끝난 시즌이라 한 번만:
@@ -2452,6 +2615,8 @@ def main():
 
     # API-Football Pro(2026-10-06): 끝난 경기 상세·결장·부상자·선수 프로필 — 키가 있을 때만(af_sync 안에서 확인)
     step("API-Football 경기 상세·부상자·선수", af_sync)
+    step("대회 우승 팀(트로피 보강)", fetch_comp_winners)
+    step("선수 경력·트로피 미리 받기", af_profiles_sync)
 
     # 스쿼드 사진/등번호 + 이적 기록 (API-Football, 현재는 PL만 — 요청 한도 때문에 리그별로 점진 확대 예정)
     step("스쿼드·이적(API-Football)", fetch_squad_transfers, 'PL')
@@ -2617,6 +2782,9 @@ if __name__ == "__main__":
         fetch_history_players([int(a) for a in sys.argv[2:] if a.isdigit()] or None, force="--force" in sys.argv)
     elif "--player-index" in sys.argv:
         build_player_season_index()
+    elif "--af-profiles" in sys.argv:
+        fetch_comp_winners()
+        af_profiles_sync(int(next((a for a in sys.argv[2:] if a.isdigit()), AF_PROFILE_BUDGET)))
     elif "--af-sync" in sys.argv:
         af_sync()
     elif "--league-history" in sys.argv:

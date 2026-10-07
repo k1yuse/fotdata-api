@@ -810,18 +810,21 @@ def get_ucl_groups(season: str = "2023"):
 # ── H2H API ──
 @app.get("/h2h")
 def get_h2h(home_team: str, away_team: str, limit: int = 10):
-    df_h2h = df_matches_all[
-        ((df_matches_all['home_team']==home_team) & (df_matches_all['away_team']==away_team)) |
-        ((df_matches_all['home_team']==away_team) & (df_matches_all['away_team']==home_team))
-    ].sort_values('date', ascending=False).head(limit)
+    """역대 맞대결(2026-10-07 — 예전엔 최근 4시즌만): 과거 시즌 경기(2010-11~, 리그·챔스 본선)까지 합친 df_seasons에서.
+    승무패 요약·total은 전체, matches는 최근 limit경기(0이면 전부). 예측 모델 입력(H2H 피처)은 그대로 4시즌 데이터"""
+    df_all = df_seasons[
+        ((df_seasons['home_team']==home_team) & (df_seasons['away_team']==away_team)) |
+        ((df_seasons['home_team']==away_team) & (df_seasons['away_team']==home_team))
+    ].dropna(subset=['home_goals', 'away_goals']).drop_duplicates(subset=['date', 'home_team', 'away_team']).sort_values('date', ascending=False)
 
-    if df_h2h.empty:
-        return {"home_team": home_team, "away_team": away_team, "matches": [], "summary": {"home_wins":0,"draws":0,"away_wins":0}}
+    if df_all.empty:
+        return {"home_team": home_team, "away_team": away_team, "matches": [], "total": 0, "summary": {"home_wins":0,"draws":0,"away_wins":0}}
 
     home_wins = away_wins = draws = 0
     matches = []
+    show = len(df_all) if not limit else limit
 
-    for _, row in df_h2h.iterrows():
+    for i, (_, row) in enumerate(df_all.iterrows()):
         is_home = row['home_team'] == home_team
         result = row['result']
 
@@ -835,6 +838,8 @@ def get_h2h(home_team: str, away_team: str, limit: int = 10):
             away_wins += 1
             outcome = 'L'
 
+        if i >= show:
+            continue
         matches.append({
             "date":       str(row['date'].date()),
             "home_team":  row['home_team'],
@@ -847,6 +852,8 @@ def get_h2h(home_team: str, away_team: str, limit: int = 10):
     return {
         "home_team": home_team,
         "away_team": away_team,
+        "total": len(df_all),
+        "since": str(df_all['date'].min().date()),
         "summary": {
             "home_wins": home_wins,
             "draws":     draws,
@@ -1612,13 +1619,13 @@ def _rank_movement(code):
 # match_previews.json(결장·부상자) · af_players.json(선수 프로필). 시즌 기록은 경기 상세 합산(af_transform.af_season_players).
 # Render 환경변수 API_FOOTBALL_KEY가 있으면 새벽 수집 전이라도 요청 때 바로 받음: 막 끝난 경기 상세, 킥오프 약 1시간 전 확정 라인업, 선수 경력·트로피·부상 이력
 from af_transform import (af_match_detail, af_season_players, add_percentiles, af_player_profile, md_read, af_league_agg, pick_xi, round_xi,
-                          xi_line, plain_can, GRID_FROM, DPOS_LINE)
+                          xi_line, plain_can, GRID_FROM, DPOS_LINE, af_compact_player_season, af_compact_transfers, AF_CALENDAR_COMPS)
 AF_KEY = os.environ.get("API_FOOTBALL_KEY", "")
 AF_URL = "https://v3.football.api-sports.io"
 MD_DIR = os.path.join(MODEL_DIR, "match_details")
 _af_mem = {}   # 요청 때 받은 것(키 → (받은 시각, 값)) — 프로세스가 살아 있는 동안만
 import threading as _threading
-_AF_SEM = _threading.BoundedSemaphore(10)   # 서버 전체 동시 요청 10개까지(분당 300회 한도 — 여러 사람이 선수 카드를 한꺼번에 열어도 한도 오류가 안 나게)
+_AF_SEM = _threading.BoundedSemaphore(16)   # 서버 전체 동시 요청 10개까지(분당 300회 한도 — 여러 사람이 선수 카드를 한꺼번에 열어도 한도 오류가 안 나게)
 
 def _af_live_get(path, ttl, **params):
     """API-Football을 요청 때 바로(키가 있을 때만). 같은 요청은 ttl초 동안 다시 안 부름(실패도 1분 기억 — 한도 보호)"""
@@ -1945,22 +1952,70 @@ def _af_season_stats(pid, yr):
     r = _af_live_get("/players", ttl, id=pid, season=yr)
     return (r or [None])[0]
 
+def _af_profile_file(pid):
+    p = os.path.join(MODEL_DIR, "af_profiles", f"{pid}.json.gz")
+    return md_read(p) if os.path.exists(p) else None
+
+def _profile_sources(pid):
+    """(경력 시즌 목록, 트로피, 부상, 이적, {시즌: 대회별 기록}) — 새벽에 받아 둔 파일(af_profiles/) 먼저, 없으면 요청 때 API-Football
+    (한 번에 동시 요청 — 요청 하나가 0.4~1초라 Render에서 처음 여는 선수는 수 초 걸림)"""
+    f = _af_profile_file(pid)
+    if f:
+        return f["teams"], f["trophies"], f["sidelined"], f["transfers"], {int(k): v for k, v in f["stats"].items()}
+    from concurrent.futures import ThreadPoolExecutor
+    with ThreadPoolExecutor(20) as ex:
+        fut_tm = ex.submit(_af_live_get, "/players/teams", 86400, player=pid)
+        fut_tr = ex.submit(_af_live_get, "/trophies", 86400, player=pid)
+        fut_sd = ex.submit(_af_live_get, "/sidelined", 86400, player=pid)
+        fut_tf = ex.submit(_af_live_get, "/transfers", 86400, player=pid)
+        teams = fut_tm.result()
+        if teams is None:
+            return None
+        teams = [{**t, "seasons": [int(y) for y in (t.get("seasons") or []) if str(y).isdigit()]} for t in teams]   # 시즌이 가끔 문자열로 옴
+        years = sorted({y for t in teams for y in t["seasons"] if y >= 2010}, reverse=True)[:16]
+        stats = dict(zip(years, ex.map(lambda y: af_compact_player_season(_af_season_stats(pid, y)), years)))
+        return teams, fut_tr.result() or [], fut_sd.result() or [], af_compact_transfers(fut_tf.result()), stats
+
+@lru_cache(maxsize=1)
+def _comp_names():
+    """API-Football 대회 ID → (이름, 나라) — af_leagues.json 거꾸로"""
+    return {v[0]: tuple(k.split("|", 1)) for k, v in (_load_json("af_leagues.json") or {}).items()}
+
+def _missing_trophies(trophies, by_season):
+    """API-Football 트로피 목록에 아직 없는 우승·준우승(25-26 시즌 등)을 결승·최종 순위 결과(comp_winners.json)로 채움 —
+    그 시즌 그 팀 소속으로 한 경기라도 뛴 선수만"""
+    cw = _load_json("comp_winners.json") or {}
+    have = set()
+    for t in trophies or []:
+        cid = _af_comp_id(t.get("league"), t.get("country"))
+        if cid and str(t.get("season") or "")[:4].isdigit():
+            have.add((cid, int(str(t["season"])[:4])))
+    out = []
+    for cid, seasons in cw.items():
+        cid = int(cid)
+        name, country = _comp_names().get(cid, (None, None))
+        if not name:
+            continue
+        for yr, wr in seasons.items():
+            yr = int(yr)
+            if (cid, yr) in have:
+                continue
+            mine = {c["team_id"] for c in by_season.get(yr, []) if c.get("apps")}
+            place = "Winner" if wr.get("w") in mine else "2nd Place" if wr.get("r") in mine else None
+            if not place:
+                continue
+            season = str(yr) if cid in AF_CALENDAR_COMPS else f"{yr}/{yr + 1}"
+            out.append({"league": name, "country": country, "season": season, "place": {"Winner": "winner", "2nd Place": "runner_up"}[place], "youth": False})
+    return out
+
 @app.get("/player/profile/{player_id}")
 def get_player_profile(player_id: int):
     """선수 카드 경력·트로피·부상 이력 + 기본 정보(나이·국적·키 — 지난 시즌 선수처럼 우리 프로필 파일에 없는 선수용). 키가 없거나 못 받으면 204"""
-    from concurrent.futures import ThreadPoolExecutor
-    # 한 번에 동시 요청(예전엔 6개씩 나눠 받아 선수당 6~7초 — 요청 하나가 0.4~1초라 다 같이 보내면 2초 안팎)
-    with ThreadPoolExecutor(20) as ex:
-        fut_tm = ex.submit(_af_live_get, "/players/teams", 86400, player=player_id)
-        fut_tr = ex.submit(_af_live_get, "/trophies", 86400, player=player_id)
-        fut_sd = ex.submit(_af_live_get, "/sidelined", 86400, player=player_id)
-        fut_tf = ex.submit(_af_live_get, "/transfers", 86400, player=player_id)
-        teams = fut_tm.result()
-        if teams is None:
-            return Response(status_code=204)
-        years = sorted({y for t in teams for y in (t.get("seasons") or []) if y >= 2010}, reverse=True)[:16]
-        stats = dict(zip(years, ex.map(lambda y: _af_season_stats(player_id, y), years)))
-        trophies, sidelined, transfers = fut_tr.result() or [], fut_sd.result() or [], fut_tf.result() or []
+    src = _profile_sources(player_id)
+    if src is None:
+        return Response(status_code=204)
+    teams, trophies, sidelined, tlist, stats = src
+    years = sorted(stats, reverse=True)
     latest = next((stats[y] for y in years if stats.get(y)), None)
     pl = (latest or {}).get("player") or {}
     nat = pl.get("nationality")
@@ -1986,7 +2041,7 @@ def get_player_profile(player_id: int):
         return bool(nat) and (name == nat or name.startswith(nat + " "))
     # 이적 날짜 → 구단별 들어온/나간 날(풋몹 "2022년 7월 - 지금")
     ins, outs = {}, {}
-    for tr in (transfers[0].get("transfers") if transfers else []) or []:
+    for tr in tlist or []:
         dt, tt = tr.get("date"), tr.get("teams") or {}
         if not dt:
             continue
@@ -2007,7 +2062,7 @@ def get_player_profile(player_id: int):
             c["flag"] = flags.get(nat) if c["team"] == nat else None
     # 트로피 → 구단별 묶음
     groups, seen = {}, set()
-    tro = af_player_profile([], trophies, [], nationality=nat)["trophies"]
+    tro = af_player_profile([], trophies, [], nationality=nat)["trophies"] + _missing_trophies(trophies, by_season)
     for t in tro:
         if t["youth"] or t["place"] not in ("winner", "runner_up"):
             continue
@@ -2080,9 +2135,20 @@ def get_match_preview(home_team: str, away_team: str, date: str = None):
         pred = {"home": last_xi(home_team), "away": last_xi(away_team)}
         if pred["home"] or pred["away"]:
             pv["predicted"] = pred
+    # 경기별 결장자 명단은 킥오프 1~2일 전에야 올라와서 그 전엔 비어 있었음(2026-10-07) → 비어 있는 팀은 그 팀 "가장 최근 경기"의
+    # 결장자(team_injuries.json — 새벽 수집, /injuries 리그·시즌 전체에서 팀별 마지막 경기)로 대신하고 그 경기 날짜를 붙임
+    ti = _load_json("team_injuries.json") or {}
+    inj = {k: list(v) for k, v in (pv.get("injuries") or {}).items()}
+    for sd, team in (("home", home_team), ("away", away_team)):
+        if not inj.get(sd) and (ti.get(team) or {}).get("players"):
+            inj[sd] = [{**x, "last": ti[team]["date"]} for x in ti[team]["players"]]
+    if inj.get("home") or inj.get("away") or pv.get("injuries"):
+        pv["injuries"] = {"home": inj.get("home", []), "away": inj.get("away", [])}
     if not pv.get("lineups") and not pv.get("predicted") and not pv.get("injuries"):
         return Response(status_code=204)
     return {**pv, "date": date}
+
+
 
 def _warm_af():
     """서버 시작 때 리그별 선수 시즌 기록을 미리 합산(첫 요청이 느리지 않게)"""
@@ -2262,15 +2328,15 @@ def get_team_info(team_name: str):
     wiki = (_load_json("team_wiki.json") or {}).get(team_name)
     if wiki:
         info = {**info, "wiki": wiki}
-    # 주요 라이벌(수동 관리 rivals.json) + 우리 데이터에 있는 맞대결 전적(최근 4시즌 전 대회)
+    # 주요 라이벌(수동 관리 rivals.json) + 우리 데이터에 있는 맞대결 전적(2010-11 이후 리그·챔스 — 2026-10-07 예전엔 최근 4시즌)
     rivals = (_load_json("rivals.json") or {}).get(team_name)
     if rivals:
         logos = team_logos_cache
         out = []
         for r in rivals:
             opp = r["opponent"]
-            h = df_matches_all[((df_matches_all.home_team == team_name) & (df_matches_all.away_team == opp)) |
-                               ((df_matches_all.home_team == opp) & (df_matches_all.away_team == team_name))]
+            h = df_seasons[((df_seasons.home_team == team_name) & (df_seasons.away_team == opp)) |
+                           ((df_seasons.home_team == opp) & (df_seasons.away_team == team_name))].dropna(subset=['home_goals']).drop_duplicates(subset=['date', 'home_team', 'away_team'])
             gf, ga = _team_goals(h, team_name) if len(h) else (pd.Series(dtype=float), pd.Series(dtype=float))
             out.append({**r, "logo": logos.get(opp, ""), "played": len(h),
                         "wins": int((gf > ga).sum()), "draws": int((gf == ga).sum()), "losses": int((gf < ga).sum())})
