@@ -1,643 +1,189 @@
 # FotData — 프로젝트 가이드 (CLAUDE.md)
 
-이 문서는 Claude Code가 이 저장소에서 작업할 때 항상 참고해야 하는 컨텍스트다.
+Claude Code가 이 저장소에서 작업할 때 참고하는 **현재 상태** 문서다. 지난 시행착오·변경 이력은 git log에 있으니 여기엔 "지금 어떻게 돼 있고, 무엇을 조심해야 하는지"만 둔다. 새 기능을 넣으면 해당 절을 **고쳐 쓰고**(덧붙이지 말고), 다시 밟으면 안 되는 함정만 짧게 남길 것.
 
-## 1. 프로젝트 개요
+## 1. 개요
 
-**FotData**는 유승(GitHub: k1yuse)이 개발 중인 AI 기반 축구 경기 예측·분석 플랫폼이다. 상업적 출시를 목표로 한다.
-
-- **장기 비전**: 유소년 축구 선수가 경기 영상을 업로드하면 AI가 선수/공을 트래킹해 히트맵, 패스/슈팅 통계, 선수 평점, 포지션 추천을 제공하는 앱
-- **대상 리그**: EPL, La Liga, Bundesliga, Serie A, Ligue 1 (+ UCL 챔피언스리그)
-- **현재 단계 (Stage 1)**: 데이터 수집 + ML 경기 예측 + 순위표/토너먼트/선수 스탯 웹 서비스 — 완료 및 운영 중
-- **다음 단계 (Stage 2)**: YOLOv8 + ByteTrack 기반 컴퓨터 비전 (영상에서 선수/공 인식)
-- **최종 단계 (Stage 3)**: 영상 업로드 → 분석 → 유소년 선수 리포트 서비스화
-
-**대화 스타일**: 한국어 반말로 간결하게 소통. 새 세션에서도 이 톤을 유지할 것.
-
-## 2. 라이브 서비스 & 저장소
+- **FotData**: 유승(GitHub k1yuse)이 만드는 AI 축구 경기 예측·분석 웹 서비스(상업 출시 목표). 5대 리그(EPL·라리가·분데스·세리에A·리그앙) + 챔피언스리그.
+- 지금(Stage 1): 경기 예측 모델 + 리그(순위·일정·순위 예측·선수·역대 기록) + 팀·선수 정보. 다음: Stage 2 컴퓨터 비전(YOLOv8 + ByteTrack), Stage 3 유소년 영상 분석 리포트.
+- **대화는 한국어 반말로 간결하게.** 사용자가 직접 할 일은 단계별 방법 + 복사용 명령어로.
 
 | 항목 | 값 |
 |---|---|
-| 백엔드 API | https://fotdata-api.onrender.com (FastAPI, Render 무료 플랜) |
-| 프론트엔드 | **https://www.fotdata-official.com** (랜딩) · 앱 **/app** (Vercel, 2026-10-03 도메인 이전 — 옛 https://fotdata-api.vercel.app은 새 주소로 영구 이동, 5.25) |
-| GitHub | https://github.com/k1yuse/fotdata-api |
-| 로컬 경로 | `~/fotdata-api` (맥북 프로 M5) |
-| conda 환경 | `fotdata` (Python 3.10) |
+| 프론트 | https://www.fotdata-official.com (랜딩) · 앱 `/app` (Vercel) — 옛 fotdata-api.vercel.app은 새 주소로 308(`/cal/` 제외) |
+| 백엔드 | https://fotdata-api.onrender.com (FastAPI, Render 무료 — Shell 없음, cron-job.org가 10분마다 깨움) |
+| 저장소 | https://github.com/k1yuse/fotdata-api · 로컬 `~/fotdata-api` (맥북 M5) |
+| 파이썬 | conda `fotdata` (3.10) — `python3` 말고 `/opt/miniconda3/envs/fotdata/bin/python` |
+| 운영 메일 | fotdata.official@gmail.com (도메인·Umami·문의·정책 페이지 연락처) |
+| 도메인 | fotdata-official.com — Cloudflare Registrar(자동 갱신, 만료 2027-10-03), DNS는 Vercel CNAME **Proxy 끔** |
 
-**보안 사고 이력 (2026-09-19에 발견·조치 완료)**: 아래 두 건이 발견되어 즉시 조치했다. 앞으로 비슷한 실수를 반복하지 않기 위해 기록해둔다.
-1. `git remote -v`의 origin URL에 GitHub Personal Access Token이 평문으로 박혀 있었음(`https://k1yuse:ghp_...@github.com/...`) — 로컬 `.git/config`에만 있던 것이라 레포 자체가 노출된 건 아니었지만, 토큰을 폐기하고 새로 발급받아 remote URL을 교체했다.
-2. **(더 심각) `FotData_01.ipynb`에 football-data.org API 키가 하드코딩된 채 GitHub에 커밋되어 있었고, 레포가 public이라 실제로 전 세계에 노출된 상태였음.** 키를 재발급(무효화)하고, 노트북 코드는 `os.environ["FOOTBALL_API_KEY"]`로 환경변수에서 읽도록 수정했다. 같은 키가 들어있던 `.ipynb_checkpoints/FotData_01-checkpoint.ipynb`도 삭제하고, `.gitignore`를 추가해 체크포인트/`__pycache__`/`.env`가 다시 커밋되지 않게 했다.
+## 2. 보안 규칙 (과거 키 노출 사고 3번 — 반복 금지)
 
-3. **(2026-10-03 재발)** `git remote -v`에 토큰(`ghp_…`, GitHub 토큰 이름 "fotdata-api")이 다시 평문으로 들어가 있었음 — 원격 주소를 `https://github.com/k1yuse/fotdata-api.git`으로 바꾸고, 토큰은 확인 출력에 찍혀 대화 기록에 남아서 폐기 대상. 대신 **GitHub CLI(`gh`, brew 설치, `gh auth login` + `gh auth setup-git`)로 push 인증**(토큰은 맥 키체인에 보관, scopes: repo·workflow·gist·read:org). 덤으로 `gh run view <id> --log-failed`로 Actions 실패 로그를 직접 읽을 수 있음(예전엔 로그인한 브라우저에서 사용자가 복사해 줘야 했음).
+- API 키·토큰은 코드·노트북에 절대 하드코딩하지 말고 `os.environ.get(...)`으로만. 키 파일은 `~/.fotdata_keys`(저장소 밖, 권한 600) — `source ~/.fotdata_keys`.
+- 사용자에게 키를 채팅에 붙여넣게 하지 말 것.
+- `git remote -v`에 자격증명이 보이면 즉시 `https://github.com/k1yuse/fotdata-api.git`으로 정리. push 인증은 `gh`(gh auth git-credential, 키체인).
+- 커밋 금지: `_test_app.html`, `promo/`, `.claude/launch.json`, API 원본 샘플 데이터, `.env`.
+- Actions 실패 로그: `gh run list --workflow update_data.yml` → `gh run view <id> --log-failed`.
 
-**앞으로 지킬 규칙**:
-- API 키/토큰은 절대 코드나 노트북에 하드코딩하지 말고 `os.environ.get(...)`으로만 읽을 것
-- 새 노트북 셀을 추가할 때도 이 규칙 유지 — 노트북은 실수로 키를 박아넣기 가장 쉬운 곳
-- `git remote -v` 결과에 자격증명이 보이면 즉시 정리 (credential helper로 이전 — 지금은 `gh auth git-credential`)
-- Actions 실패 원인은 `gh run list --workflow update_data.yml` → `gh run view <id> --log-failed`로 직접 확인
+## 3. 기술 스택 · 데이터 소스
 
-## 3. 기술 스택
-
-- **백엔드**: FastAPI, `joblib`로 모델 로드, CORS 전체 허용(`allow_origins=["*"]`)
-  - **응답 캐시(2026-09-29)**: 서빙 데이터(fotdata_model/*)는 하루 한 번 재배포 때만 바뀌므로 프로세스 메모리에 캐시 — JSON 파일은 `_load_json(name)`(lru_cache, 파싱 결과 공유 → 호출부는 절대 수정하지 말고 필요하면 복사본에 합칠 것, `/team/info`가 `{**info}`로 하는 식), 순위표 `_standings`·순위 예측 `_champion`·경기 분석 `_team_insight`도 lru_cache. 재배포하면 프로세스가 새로 떠서 캐시가 자동으로 비워짐. 로컬 측정: 반복 호출 `/standings` 15.8→1.4ms, `/match/insights` 35→1.3ms, `/predict/champion` 21.8→3.7ms. (시간 기준으로 결과가 바뀌는 `/bigmatch`·`/matches/window`는 파일만 캐시하고 계산은 매번)
-- **ML**: scikit-learn (Logistic Regression — 실제 서빙용), RandomForest·XGBoost(학습·정확도 비교용, 서빙엔 LR만 사용), StandardScaler
-- **프론트엔드**: Vanilla JS + HTML/CSS (프레임워크 없음), "밤하늘 남색" 다크 테마(#0a1020 배경, #58a6ff 포인트 — 2026-10-05, 5.28), 글꼴 Pretendard + 숫자 Barlow Condensed
-- **자동화**: GitHub Actions (`update_data.py`, 매일 UTC 18:00 = KST 03:00 실행)
-- **데이터 소스**:
-  - football-data.org (`FOOTBALL_API_KEY`) — 경기 결과/순위. **2026-09-23 실측 재확인: 무료 플랜은 "최근 3시즌"이 아니라 4시즌(현재 기준 2023~2026 시즌)까지 접근 가능**(2022 이하는 403). "최근 N시즌" 슬라이딩 윈도우로 보이며, 아직 `calculate_blended_stats`(5.1)는 3시즌만 씀 — 4시즌으로 확장 가능하나 블렌딩 가중치 재설계가 필요해 미착수(12번 참고). 스쿼드 리스트엔 선수 이름/포지션/국적/생년월일은 나오지만, 등번호·감독 이름은 이 API 자체에 필드가 있어도 항상 null, 선수 사진은 필드 자체가 없음(플랜 문제가 아니라 API 구조적 한계 — 유료로 올려도 안 나옴).
-  - API-Football (`API_FOOTBALL_KEY`) — 선수 스탯(득점왕/도움왕)·스쿼드 사진/등번호·이적기록. 무료 플랜은 **모든 엔드포인트 호출 가능하지만 최신 시즌이 막혀 2024 시즌 고정**(스쿼드/이적 엔드포인트는 예외적으로 시즌 제한 없이 현재 스쿼드가 나옴 — 그래서 team_extra.json은 이미 26-27 현재 스쿼드 기준). 요청 한도는 100회/일(분당 10회). Pro($19/월)는 요청 한도가 7,500회/일로 늘고 최신 시즌 제한이 풀림 — 라인업(`/fixtures/lineups`)도 같은 시즌 제한 패턴이라 유료 시 열릴 가능성이 높음(2026-09-23 기준 미검증, rate limit 초과로 실제 호출 테스트 실패).
-- **로컬 개발환경**: Miniconda(arm64), Jupyter Notebook(`FotData_01.ipynb`), VS Code
+- **백엔드** `main.py`(FastAPI): CORS 전체 허용, GZip, IP별 요청 제한(`RateLimitMiddleware` — 1분 240회, `POST /predict` 90회, CORS보다 먼저 등록), 서빙 데이터는 하루 한 번 재배포 때만 바뀌므로 `_load_json`(lru_cache — **반환값 수정 금지, 합칠 땐 복사본**)·계산 결과 lru_cache + 서버 시작 때 미리 계산(warm). 시간 기준으로 바뀌는 `/bigmatch`·`/matches/window`·라이브 점수는 매번 계산.
+- **ML**: scikit-learn LogisticRegression(C=0.1)만 서빙. RF·XGBoost는 비교용. 버전은 `requirements.txt` 하나로 학습(Actions)·서빙(Render) 일치.
+- **프론트**: Vanilla JS 단일 파일 `FotData.html`(프레임워크 없음). 글꼴 Pretendard Variable + 숫자 Barlow Condensed(`--font-num`, 확률·스코어·큰 숫자만).
+- **데이터 소스**
+  - **football-data.org**(`FOOTBALL_API_KEY`, 무료): 경기 결과·순위·일정·스쿼드 명단·득점 순위(scorers) — 예측 모델·팀 이름의 기준. 4시즌(23-24~26-27)까지 열림. 분당 10회 → 모든 호출은 `fd_get`(429·연결 오류 재시도). 약관상 화면에 **"Football data provided by the Football-Data.org API"** 문구 필수(푸터, 문구 변경 금지). 광고·유료화 전에 상업 이용 문의 필요(daniel@football-data.org).
+  - **API-Football Pro**(`API_FOOTBALL_KEY`, $19/월, 하루 7,500회, 00:00 UTC 리셋, 매달 갱신 — 다음 2026-11-06): 경기 상세(이벤트·라인업·평점·xG)·부상자·선수 프로필·경력·트로피·감독·과거 시즌(2010-11~, 선수 경기 기록은 2015-16~). 배당·`/predictions`는 안 씀(도박 비권유). 요청은 `update_data._af`(전체 0.21초 간격·재시도).
+    - ⚠️ `/players?team=&season=`·`/players/topscorers`의 시즌 기록은 **지금 소속팀으로 다른 팀 기록을 합쳐 줌**(팔머가 "맨시티 22골") → 시즌 기록은 반드시 경기 상세(`/fixtures?id=` 선수별 기록) 합산으로. `/players`는 프로필(나이·키·사진)만.
+    - 감독은 `/coachs`(철자 주의). 원본에 오래된 항목이 남아 있음(아스널에 벵거가 종료일 없이).
+  - **위키백과/위키데이터**(키 불필요): 구단 소개·별칭·연고지·수용 인원·우승 기록·이적료 기록·지난 시즌 공식 순위 구역·역대 우승·감독 생년월일/국적 보완. CC BY-SA → **출처 링크 필수**. 나무위키는 비영리 라이선스라 사용 불가.
+- **방문 통계**: Umami Cloud(쿠키 없음) — `analytics.js`의 `UMAMI_ID`, 배포 주소에서만 전송. 앱 이벤트는 `track()`.
 
 ## 4. 파일 구조
 
 ```
-fotdata-api/
-├── main.py                 # FastAPI 백엔드 (946줄) — 전체 API 엔드포인트
-├── update_data.py          # 데이터 수집 + 피처 생성 + 모델 학습 + 파생 산출물 생성
-├── af_transform.py         # API-Football 응답 → 화면용 변환(update_data·main 공용, 5.32)
-├── FotData.html            # 메인 웹앱 (탭: 경기 예측/리그(개요·순위·경기·순위 예측·선수 — 5.30)/내 팀/승부차기(폰은 더보기 안), 모달: 팀정보(개요·순위·경기·스쿼드·플레이어통계(준비중)·팀통계·이적)/경기예측 미리보기/트랙레코드/전역 팀검색(Ctrl·⌘K)/토너먼트 대진, 위젯: 빅매치·오늘의(다음) 경기·내 팀(즐겨찾기, localStorage)·PWA 설치 배너·Ko-fi 후원)
-├── landing.html             # 랜딩 페이지 원본 (1,035줄 — 인트로 애니메이션(세션당 1회), 히어로+실시간 스탯(/accuracy·/teams), 리그별 1위 스트립, 예측 목업, EPL 순위 미리보기, 기능 소개)
-├── landing-story.js         # 랜딩 스크롤 3D 연출(Three.js, 12.2) — landing.html/index.html이 `<script type="module">`로 불러옴
-├── ball-geometry.js         # 축구공(깎은 정이십면체) 기하·와이어 셰이더 공유 모듈 — landing-story.js와 bg-ball.js가 같이 import (두 곳 공 모양 일치)
-├── bg-ball.js               # 메인 유리 테마 배경의 천천히 도는 3D 공(5.10)
-├── bg-ball.svg / generate_bg_ball.py   # 유리 테마 배경 공 정지 이미지(3D 로딩 전·모션 최소화용)와 그 생성 스크립트(`primitives()`로 투영 결과를 다른 스크립트에 제공)
-├── og-image.png / generate_og_image.py # 링크 공유 썸네일(2400×1260) — 새 축구공 로고 + 와이어프레임 공, 문구 바꾸면 스크립트 재실행 + meta의 `?v=` 올리기(카톡·페북 캐시)
-├── index.html               # 루트(`/`)에서 서빙되는 파일 — landing.html의 사본 (아래 5.1 참고)
-├── share_card.py            # 경기별 링크 공유 썸네일(1200×630 JPEG) 렌더러 — main.py `/og/match`가 씀(5.16)
-├── fonts/                   # 썸네일용 한글 폰트(Pretendard 1.3.9 OFL을 한글 2,350자+라틴으로 추리고 이름을 FotData Card Sans로 바꾼 것, OFL.txt·README.txt)
-├── vercel.json              # Vercel 리라이트: `/m/*`·`/og/m/*` → Render 공유 페이지·썸네일(5.16), `/cal/*` → 캘린더 구독(5.24), logos/hd 캐시 헤더
-├── README.md                # 레포 소개(5.24)
-├── privacy.html / terms.html / legal.css   # 개인정보처리방침·이용약관(5.24, 문의 fotdata.official@gmail.com)
-├── 404.html                 # 없는 주소 안내 페이지(5.26)
-├── generate_logos_hd.py · logos/hd/   # 고화질 구단 로고(5.22)
-├── generate_comp_logos.py · logos/comp/   # 컵대회·국가대표 대회 아이콘(API-Football 대회 ID, 5.34)
-├── generate_league_logos.py · logos/league/   # 리그 심볼 아이콘(글자 뺀 것, 5.31)
-├── generate_promo.py        # 홍보 이미지(인스타 피드·스토리, 유튜브·네이버 카페 가로 배너) → promo/(커밋 안 함). 빅매치 포스터는 서버 실시간 예측 — 매주 다시 실행. 구단 엠블럼은 안 넣음(홍보물 상표 위험)
-├── analytics.js             # 방문 통계(Umami) 로더 — FotData.html·landing.html 공용, 사이트 ID는 여기 한 곳(5.16)
-├── FotData_01.ipynb        # 초기 개발용 주피터 노트북 — 지금은 update_data.py가 대체, 참고용
-├── manifest.json            # PWA 매니페스트
-├── icon-192.png / icon-512.png   # PWA/파비콘 아이콘 — 진한 남색(#0d1117) 배경 + 파란(#58a6ff) 축구공(2026-09-23 축구공 로고로 전면 교체)
-├── generate_icons.py         # 위 두 PNG를 생성하는 Pillow 스크립트 (2026-09-23 추가, 재사용 목적으로 보존) — 사이트 전역 축구공 SVG와 동일 좌표를 그대로 래스터화
-├── requirements.txt          # 백엔드(Render) 의존성
-├── .github/workflows/update_data.yml   # 매일 자동 업데이트 GitHub Action
-└── fotdata_model/            # 모델/데이터 산출물 (전부 update_data.py가 생성·갱신)
-    ├── all_matches.csv          # 23-24~26-27(4시즌) 5대리그+UCL 전 경기 원본 (H2H, 폼, ELO, 학습의 기반) — `collect_matches()`가 매일 4시즌 전부 재수집 후 병합
-    ├── team_stats.csv           # 3시즌 블렌딩 + prestige 반영된 "현재 팀 전력" — 예측 가능 팀 목록(/teams)·결과 화면 공격력/수비력·스코어 예측 페이스·순위 예측·검색 정렬용 (2026-09-27부터 승/무/패 모델 입력엔 안 씀)
-    ├── team_state.json          # 팀별 "오늘 시점" 모델 입력값(누적 ELO·최근 5경기 승점·최근 10경기 득실·최근 38경기 공격/수비/승률 + 최근 20경기 ELO 추이 `elo_history`) — /predict 입력 + 경기 분석 파워 레이팅 그래프 (2026-09-27 추가, 5.3·5.9 참고)
-    ├── logistic_regression.pkl   # 실제 /predict 서빙 모델
-    ├── random_forest.pkl / xgboost.pkl / label_encoder.pkl   # 비교용, 서빙에는 미사용
-    ├── scaler.pkl                 # LR 입력 스케일러
-    ├── team_logos.json / league_logos.json
-    ├── team_logos_hd.json         # 고화질 최신 엠블럼 주소(logos/hd, generate_logos_hd.py — 5.22)
-    ├── af_seasons/                # 지난 시즌(15-16~25-26) 리그·챔스 선수 시즌 기록 합산 + index.json (5.34)
-    ├── af_leagues.json / af_countries.json   # API-Football 대회 이름 → ID, 나라 → 국기 (5.34)
-    ├── accuracy.json             # 모델 정확도 (3개 모델 비교 + best, 시간순 검증 — 5.3 참고)
-    ├── ucl_tournament.json       # UCL 브래킷 데이터 (PO→R16→QF→SF→Final)
-    ├── players.json               # 득점왕/도움왕 (현재 EPL만)
-    ├── schedule.json              # 5대리그+UCL 26-27 시즌 전체 일정 (완료+예정) — 일정 탭 전용
-    ├── team_info.json             # 팀 상세정보(홈구장/창단연도/구단색/감독/스쿼드) — 팀 클릭 정보 패널용
-    ├── team_extra.json            # API-Football 스쿼드 사진/등번호 + 이적 기록(선수 사진·양쪽 구단 로고·영입/방출 — 5.12) (EPL 20팀 + 라리가 일부, 2026-09-20 추가)
-    ├── prediction_log.json        # AI 예측 트랙레코드 로그 (2026-09-21 추가, 5.6 참고)
-    ├── team_wiki.json             # 구단 소개(위키백과)·별칭·홈구장 수용 인원·연고지·감독(위키데이터) — 팀 정보 개요 탭 (2026-09-29, 5.12)
-    ├── season_zones.json          # 지난 시즌 공식 최종 순위·유럽 대항전/강등 구역·승점 감점(위키백과 시즌 표, 5.14)
-    ├── league_history.json        # 리그별 역대 우승·준우승 2000-01~(위키백과 우승 목록, 5.31)
-    ├── af_team_map.json · af_fixtures.json · af_players.json · match_previews.json · match_details/*.json.gz   # API-Football Pro 수집(5.32)
-    ├── history_matches.csv · history_standings.json · history_ucl.json · history_logos.json   # 과거 시즌 2010-11~22-23(5.33, 모델 학습엔 안 씀)
-    └── rivals.json                # 구단별 라이벌(수동 관리, 5.14)
+main.py               FastAPI 백엔드 — 전체 API
+update_data.py        매일 수집 + 피처 + 모델 학습 + 파생 데이터 (CLI 옵션은 6절)
+af_transform.py       API-Football 응답 → 화면용 변환(update_data·main 공용): 경기 상세, 세부 포지션, 베스트 11(pick_xi), 시즌 합산
+FotData.html          앱 (/app) — 9,500줄 단일 파일
+landing.html          랜딩 원본 → index.html은 사본 (4.1)
+landing-story.js · ball-geometry.js · bg-ball.js · bg-ball.svg   랜딩 3D 연출·배경 공(Three.js, 공 모양 공유)
+share_card.py · fonts/   경기별 공유 썸네일(1200×630) — 폰트는 Pretendard 서브셋 "FotData Card Sans"(OFL)
+vercel.json           /app 리라이트, /m/*·/og/m/*·/cal/* → Render, 옛 주소 리다이렉트, 보안 헤더, 캐시
+privacy.html · terms.html · legal.css · 404.html · README.md · sitemap.xml · robots.txt · manifest.json · sw.js
+logos/hd/(160px)·logos/hd/l/(400px)   구단 엠블럼 고화질(generate_logos_hd.py — 위키 인포박스, EXCLUDE 7팀은 원래 로고)
+logos/league/         리그 심볼 아이콘(generate_league_logos.py) — 사이트 전체 리그 로고
+logos/comp/           컵대회·국가대표 대회 아이콘(generate_comp_logos.py, API-Football 대회 ID)
+generate_*.py         아이콘·og-image(문구 바꾸면 재실행 + meta `?v=` 올리기)·홍보 이미지(promo/, 커밋 안 함)
+fotdata_model/        전부 update_data.py가 생성 (아래)
 ```
 
-### 4.1 `index.html` = `landing.html`의 사본 — 반드시 동기화
+**fotdata_model/** 주요 파일
+- 모델: `all_matches.csv`(23-24~ 4시즌, 학습·맞대결 기준) · `team_state.json`(팀별 오늘 시점 모델 입력) · `team_stats.csv`(블렌딩 전력 — 순위 예측·검색 정렬·결과 화면 표시용) · `logistic_regression.pkl`·`scaler.pkl` · `accuracy.json` · `prediction_log.json`(트랙레코드)
+- 일정·순위: `schedule.json` · `ucl_tournament.json` · `season_zones.json`(지난 시즌 공식 순위·구역·감점) · `league_history.json`(역대 우승)
+- 과거 시즌(2010-11~22-23, 순위표·일정·팀 통계·역대 맞대결용 — **모델 학습엔 안 씀**): `history_matches.csv` · `history_standings.json` · `history_ucl.json` · `history_logos.json`
+- 팀: `team_info.json` · `team_wiki.json` · `team_extra.json`(EPL 스쿼드 사진·이적) · `rivals.json`(수동 관리) · `team_logos*.json`
+- API-Football: `af_team_map.json`(af 팀 ID → 우리 이름) · `af_fixtures.json` · `match_details/*.json.gz`(끝난 경기 상세, 한 경기 한 파일) · `match_previews.json` · `team_injuries.json`(팀별 지난 경기 결장자) · `af_players.json`(선수 프로필) · `af_profiles/<ID>.json.gz`(선수 경력·트로피·부상·시즌 기록) · `af_seasons/`(15-16~25-26 선수 시즌 합산 + index.json) · `comp_winners.json`(컵 결승·리그 1·2위 — 트로피 보강) · `af_coaches.json`(감독) · `af_leagues.json`·`af_countries.json`
+- `scorers.json`(football-data 득점 순위 — API-Football 기록이 없을 때 대체)
 
-Vercel 루트(`/`)는 `index.html`을 서빙한다. `landing.html`을 수정하면 **반드시**:
-```bash
-cp landing.html index.html
-```
-을 실행한 뒤 커밋해야 실제 배포에 반영된다. 잊으면 "분명 고쳤는데 안 바뀐다"는 증상이 재발한다(과거에 실제로 이 문제로 여러 번 헤맸음).
+### 4.1 `index.html` = `landing.html` 사본
+Vercel 루트는 `index.html`. landing.html을 고치면 **반드시 `cp landing.html index.html`** 후 커밋.
 
-## 5. 예측 모델 핵심 로직
+## 5. 예측 모델
 
-### 5.1 3시즌 블렌딩 (`calculate_blended_stats`, update_data.py)
-26-27 시즌 진행도에 따라 24-25/25-26/26-27 3개 시즌의 승률·공격력·수비력을 가중 평균한다.
+### 5.1 경기 예측 (`/predict`)
+- 피처 18개는 학습·서빙이 같은 정의: `build_point_in_time_features()`가 전 경기를 시간순으로 훑으며 "그 경기 직전까지"만으로 계산(누수 없음), 마지막 상태를 `team_state.json`으로 저장 → `/predict`가 그대로 사용(`_team_snapshot` 공유).
+  - 누적 ELO(K=20, 홈 +70, 챔스 포함, 승격팀은 리그 하위 4팀 평균에서 시작) · 폼(최근 5경기 승점) · 최근 10경기 득실 · 최근 38경기 공격/수비/승률 · H2H(최근 10번 맞대결 홈팀 승률).
+- 정확도 = **시간순 검증**(과거 80% 학습 → 최근 20% 채점, 약 51%, 전부 홈승 기준선 약 44%) → `accuracy.json`, 서빙 모델은 전체로 재학습. 화면 문구 "학습에 안 쓴 최근 N경기로 검증".
+- 5대 리그 밖 팀(UCL 기록 8경기 이상, `UCL_ONLY_MIN_MATCHES`)도 예측하되 리그 평균 쪽으로 30% 당기고(`UCL_ONLY_SHRINK`) "참고용" 안내(`limited: true`).
+- 스코어 예측: 포아송(블렌딩 공격/수비로 페이스, 홈/원정 배분은 LR 승률차).
+- `team_stats.csv` 블렌딩(23-24~26-27 가중 평균 + prestige)은 **예측 모델 입력이 아님** — 순위 예측 보조·결과 화면 공격/수비 표시·검색 정렬용.
 
-| 26-27 경기 수 | 24-25 | 25-26 | 26-27 |
-|---|---|---|---|
-| 0~9경기 | 40% | 40% | 20% |
-| 10~17경기 | 30% | 30% | 30% |
-| 18경기 이상 | 30% | 30% | 40% |
+### 5.2 순위 예측 (`/predict/champion/{리그}` + 브라우저 시뮬레이션)
+- 서버: 현재 순위표 + 남은 경기 + 경기별 H/D/A(`_predict_hda` — `/predict`와 같은 모델), 시뮬레이션용만 리그 평균 쪽으로 10% 당김(`SEASON_SIM_SHRINK`), σ=0.15(`SEASON_SIM_SIGMA`).
+- 브라우저 `simulateSeason()`: 팀별 δ~N(0,σ)로 확률 기울여 결과 추첨 → 승점 → 득실 순. 기본 1,000회(사용자 결정). 우승·UCL권·강등·예상 승점(+가운데 80% 범위)·순위 분포. 표 정렬은 화면에 보이는 숫자 기준.
+- 백테스트로 정한 값(λ=0.1, σ=0.15)이니 바꿀 땐 다시 백테스트.
 
-### 5.2 Prestige(체급) 보정
-- 24-25 + 25-26 두 시즌만으로(26-27 제외, 초반 변동성 배제) 계산: `(팀 승률 − 전체 평균 승률) × 500`
-- 승격팀 등 과거 데이터 없는 팀은 prestige = 0
-- UCL 경기는 계산에서 제외(리그 팀 수를 왜곡시키므로)
+### 5.3 트랙레코드 (`prediction_log.json`)
+- 매일 향후 10일 경기를 **라이브 `/predict`를 호출해** 미리 기록(모델 재구현 금지 — 사용자가 본 예측과 같게), 끝나면 결과·적중 채움. 이미 기록된 경기는 다시 안 찍음. 결과 확정분은 최근 500건.
+- 경기 전에 기록된 예측이 있는 경기만 "AI 적중/빗나감" 표시(사후 예측으로 부풀리지 않음).
 
-### 5.3 경기 예측 (`/predict`, main.py) — 2026-09-27 학습/서빙 일치로 전면 변경
-- **피처 18개는 학습과 서빙이 같은 정의**: `update_data.py`의 `build_point_in_time_features()`가 전 경기를 시간순으로 훑으며 "그 경기 직전까지의 기록"만으로 피처를 만들고(미래 정보 누수 없음), 마지막 상태를 `team_state.json`으로 저장 → `/predict`는 그 값을 그대로 넣음. 팀별 값 계산은 `_team_snapshot()` 하나로 공유.
-  - ELO: 누적 ELO(K=20, 홈 +70, CL 포함 전 경기). 데이터 첫 60일 안에 등장한 팀은 1500, 이후 처음 등장하는 팀(승격팀 등)은 같은 리그 현재 하위 4팀 평균에서 시작(1500 시작보다 log loss 소폭 개선).
-  - 폼 = 최근 5경기 승점 합, avg_scored/conceded = 최근 10경기 평균, attack/defense/win_rate = 최근 38경기 평균, H2H = 최근 10번 맞대결 홈팀 승률(main.py가 all_matches.csv로 직접 계산, 정의 동일).
-- **예전 방식과 폐기 이유**: 서빙에서 블렌딩 승률로 ELO를 재구성(`1500+(wr−0.33)×1000`+prestige+전력차 감쇠 홈어드밴티지)하고 폼을 `win_rate×15`로 대신했는데, 모델이 배운 입력과 의미가 달라 강팀 홈경기를 과소평가(예측 39% → 실제 54%)하고 무승부를 과대평가(평균 30.5% vs 실제 24%)했음. 학습 쪽 공격력/수비력/승률도 전체 기간 합산(미래 포함)이었음. 시간순 검증 비교: 정확도 48.9→50.8%(26.01~), 44.7→51.8%(25.08~), 33.2→52.2%(25.01~), log loss 전 구간 개선, 확률 보정(예측 확률 ≈ 실제 비율)도 거의 일치하게 됨. prestige·감쇠 홈어드밴티지는 비현실적 확률을 막으려던 보정이라 더 이상 필요 없어서 /predict에서 뺌(블렌딩·prestige 자체는 순위 예측·검색 정렬용으로 유지).
-- **정확도 표시 = 시간순 검증**: `train_models()`가 과거 80%로 학습 → 가장 최근 20%(약 850경기)로 채점한 값을 `accuracy.json`에 저장(`evaluation: "time_split"`, `test_matches`, `log_loss`, `baseline_home_win` 포함), 서빙 모델은 그 뒤 전체 기간으로 재학습. 예전 54.7%는 무작위 분할(미래로 과거를 맞힘)이라 부풀려진 값이었고 실제 수준은 약 51~52%(전부 홈승으로 찍는 기준선 약 44%). 프론트 문구: "AI 모델 정확도 N% · 학습에 안 쓴 최근 N경기로 검증".
-- 검토했다가 안 넣은 것: 경기 수 적은 팀(승격팀 초반) 스탯을 평균 쪽으로 당기는 shrinkage — log loss가 오히려 나빠져서 제외. 극단 확률(예: 바르사 홈 vs 승격팀 94%)이 나올 수 있으나 전체 보정은 맞음.
-- 최종적으로 LogisticRegression(C=0.1)으로 H/D/A 확률 산출. 스코어 예측(포아송)은 블렌딩 공격/수비로 "경기 페이스"를 잡고 홈/원정 배분만 LR 승률차에 맞춤(변경 없음).
+## 6. 데이터 파이프라인 (`update_data.py`)
 
-### 5.4 순위 예측 (순위 예측 탭) — 2026-09-28 전면 교체
-- **서버** `/predict/champion/{PL|PD|BL1|SA|FL1}`: 현재 순위표(`get_standings`, 승점·득실차·경기 수) + `schedule.json`의 남은 경기 전부 + 각 경기의 H/D/A 확률을 **실제 경기 예측 모델**(`_predict_hda` — `/predict`와 같은 `_feature_row`/LR/`team_state`)로 한 번에 계산해 내려줌(리그당 ~0.02초). `sigma`(시즌 중 전력 변동, 로짓 단위) = `SEASON_SIM_SIGMA` 0.15. 순위 시뮬레이션용 확률만 리그 평균 결과 비율(0.44/0.25/0.31) 쪽으로 `SEASON_SIM_SHRINK` 10% 당김 — 경기 하나 예측(경기예측 탭)은 그대로.
-- **브라우저** `runSimulation()`: 현재 승점에서 출발 → 시뮬레이션마다 팀별 δ~N(0,σ)를 뽑아 각 경기 홈/원정 승 확률을 `exp(δ홈−δ원정)`로 기울인 뒤 결과 추첨 → 승점 → 현재 득실차 → 무작위 순으로 최종 순위. 탭 진입 시엔 **현재 순위표 순서 + 빈 확률 칸**(`renderChampionPending`)만 보여주고 버튼이 은은하게 깜빡여 실행을 유도, "시뮬레이션 시작"을 누르면 행이 현재 순위 → 예상 순위 자리로 이동(FLIP 애니메이션)하며 확률 칸이 위에서부터 채워짐. 슬라이더로 최대 10,000회(약 0.15초). 표시: "–" = 시뮬레이션에서 정확히 0번, "<1%" = 0번 초과 1% 미만(범례에 명시). 우승%·UCL권%(`LEAGUE_ZONES[리그].cl` — PL·PD 5, BL1·SA·FL1 4)·강등%(`.rel` — 20팀 리그 3, 분데스·리그앙 2, 16위 PO 제외)·예상 최종 승점. 표 정렬은 **화면에 보이는 숫자 기준**(예상 승점 반올림값 → 우승% → UCL권% → 강등% 낮은 순) — 처음엔 평균 순위로 정렬했더니 예상 승점이 둘 다 82로 같은데 우승 47%인 맨시티가 45%인 아스널 아래에 오는 식으로 모순돼 보였음(평균 순위와 1위 비율은 다른 지표라 박빙일 때 엇갈릴 수 있음).
-- **교체 이유/검증**: 예전엔 0점부터 전체 시즌을 블렌딩 승률×리그계수(650~1400)+prestige 공식(무승부 25% 고정)으로 돌려서 현재 승점을 무시했고 경기 예측 모델과 따로 놀았음. 24-25·25-26 시즌 5개 리그를 5/10/19/28라운드 시점 데이터만으로 백테스트(그 시점까지로 모델 재학습) → 우승 확률 Brier 0.537→0.333, TOP4 0.086→0.059, 강등 0.096→0.044, 평균 순위 오차 3.02→1.88위(5라운드 시점에서도 3.26→2.60위). σ는 0~0.5 중 0.1~0.2가 최적이라 0.15. (구 방식 쪽은 23-24 이전 데이터가 없어 블렌딩 입력을 근사한 재현이라 참고치)
-- **독주 팀 과대평가 보정(2026-09-28)**: 시즌 초 폼이 남은 시즌 전체에 그대로 곱해져 상위 팀 최종 승점이 과대평가됐음(예: 바르사 7전 전승 → 남은 31경기 평균 승리확률 79% → 예상 98점). 같은 백테스트를 확장해 평균 쪽 당김 λ(0~0.3)·온도 보정(1.1~1.5)×σ(0.1/0.15/0.2)를 비교 → **λ=0.1, σ=0.15**: 예측 상위 2팀 승점 편향 +1.59→−0.08점, 최종 승점 오차 5.30→5.25, 우승 Brier 0.333→0.327, 나머지 지표 동일. (λ=0.15는 우승 Brier 최고지만 상위 팀을 −0.9점 과소평가해서 제외.) 적용 후 바르사 ~94점.
-- 예상 승점 아래엔 **가능 범위**(시뮬레이션 최종 승점의 가운데 80%, 예: 86~103)를 표시 — 평균은 1,000번을 돌려도 거의 안 바뀌어서(큰 수의 법칙) 불확실성을 따로 보여줌. 기본 시뮬레이션 횟수는 1,000회로 유지하기로 함(사용자 결정 2026-09-28 — 1,000회는 우승 확률이 실행마다 ±3%p 흔들려 박빙 팀 순서가 바뀔 수 있음을 설명한 뒤 결정).
-- 예전 서버 `simulate_season`/`champion_predictions.json`(화면에 안 쓰이던 것)은 삭제.
-- 한계: 경기 확률은 오늘 시점 전력으로 한 번 계산해서 시즌 내내 고정(시뮬레이션 안에서 결과에 따라 전력이 갱신되진 않음 — σ가 이 불확실성을 대신함), 동률은 실제 규정(맞대결 등) 대신 현재 득실차로 가름.
+- 매일 UTC 18:00(KST 03:00) GitHub Actions(`update_data.yml`, Secrets: `FOOTBALL_API_KEY`·`API_FOOTBALL_KEY`)가 실행 → `fotdata_model/` 자동 커밋("자동 데이터 업데이트 YYYY-MM-DD") → Render·Vercel 재배포.
+- `main()`은 단계별 `step()` — 하나가 실패해도 나머지는 돌고 저장, 실패가 있으면 종료 코드 1 + 커밋은 진행.
+- 순서: 경기 수집·학습 → UCL 토너먼트 → 일정 → 트랙레코드 기록 → 득점 순위 → 로고 → 팀 정보 → 위키(매일, 저장된 `en_title` 문서 그대로 — 다시 검색 안 함) → 시즌 구역 → 역대 우승 → API-Football(`af_sync`: 팀 매칭·경기 목록·끝난 경기 상세·결장자·선수 프로필) → 대회 우승 팀 → 감독 → 선수 경력·트로피(`af_profiles_sync`, 그날 남은 요청 −1,000 안에서 최대 3,000회, 출전 많은 선수부터, 14일마다 갱신) → EPL 스쿼드·이적.
+- 따로 돌리기: `--matches-only` · `--ucl-only` · `--wiki-only [팀] [--force]` · `--zones-only` · `--league-history` · `--scorers-only` · `--transfers-only` · `--extra-leagues` · `--history`(지난 시즌 팀 로고·정보) · `--af-sync` · `--af-profiles [예산]` · `--coaches [--force]` · `--history-seasons [연도…]`·`--history-players [연도…] [--force]`·`--player-index`(끝난 시즌 — 한 번만).
+- 저장 순서 고정(날짜→리그→홈팀) — 순서가 흔들리면 매일 파일 전체가 바뀐 것처럼 커밋되고 ELO 반영 순서도 달라짐.
+- 경기 수집은 상태 필터 없이 받아 FINISHED+AWARDED만(몰수 경기 누락 방지), 승부차기 골은 빼고(`_match_goals`) 일정엔 `penalties` 따로.
+- **감독**(`fetch_coaches`): 지금 감독 = 그 팀 가장 최근 경기 라인업의 감독 → `/coachs?team=`에서 같은 사람(라인업 이름이 "Enrique Luis"처럼 뒤집혀 오기도 함 — `_same_person`)의 그 팀 경력(사진·부임일) → 생년월일·국적·흔히 부르는 영어 이름·한국어 이름은 위키데이터(구단 P286). 7일마다 + 라인업 감독이 바뀌면 바로.
+- 위키 전 팀 재수집(`--wiki-only --force`) 뒤엔 "팀 이름 단어가 문서 제목에 없는 팀"을 눈으로 확인(오매칭 전례 — `WIKI_TITLE_OVERRIDE`·`WIKI_CITY_OVERRIDE`로 고정).
 
-### 5.5 팀 상세정보 (`fetch_team_info`, update_data.py · 2026-09-19 추가)
-- football-data.org의 팀 리소스(`/teams/{id}`)를 이용, 무료 플랜(기존 `FOOTBALL_API_KEY`)으로 홈구장(venue)/창단연도/구단색/스쿼드를 가져올 수 있음이 확인됨
-- **감독(coach)과 등번호(shirtNumber)는 이 무료 플랜에서 항상 null** — API 자체가 제공을 안 함(신뢰성 문제가 아니라 무료 티어 제약)
-- **선수 사진은 이 API에 필드 자체가 없음.** API-Football(별도 키)에는 있지만 그쪽은 EPL·2024 시즌 고정이라 현재 스쿼드와 안 맞음 — 사진 기능은 보류
-- 스쿼드는 시즌 중 이적으로 계속 바뀌므로, 로고와 달리 "누락분만" 채우는 게 아니라 매번 전체 팀을 다시 fetch함 (일일 자동 업데이트에 포함됨, `FOOTBALL_API_KEY`만 있으면 되므로 GitHub Actions에서도 정상 동작)
+## 7. 서버 (main.py)
 
-### 5.6 AI 예측 트랙레코드 (`update_prediction_log`, update_data.py · 2026-09-21 추가)
-- 예측 신뢰도를 보여주기 위해, 매일 그 시점에 예정된 경기들(향후 10일 내)에 대해 **모델 로직을 재구현하지 않고 그 순간 실제 서빙 중인 라이브 `/predict`를 그대로 호출**해서 `fotdata_model/prediction_log.json`에 미리 스냅샷 기록해둠 — main.py와 별도로 예측 로직을 두 군데서 관리하면 언젠가 어긋나서 "기록된 예측"이 실제로 사용자가 봤던 예측과 달라지는 문제를 원천 차단하기 위한 설계
-- `update_data.py` 실행 순서상 모델 재학습 이후 & git push 이전에 실행되므로, 그날 아직 배포 안 된 새 모델이 아니라 "그 시점까지 실제로 서빙 중이던" 모델의 예측이 기록됨 (의도된 동작)
-- 경기가 끝나면(schedule.json의 status가 FINISHED) 같은 로그 항목에 실제 결과·적중 여부(`actual`/`actual_score`/`correct`)를 채워넣음
-- 결과가 확정된 항목은 최근 500건만 유지, 미확정(예정) 항목은 개수 제한 없이 계속 보관
-- 프론트: `/predict` 결과 하단 "AI 모델 정확도 ... · 트랙레코드 보기" 문구 클릭 → 모달로 전체/최근 적중률 + 최근 20경기 예측-결과 비교 표시 (`/predict/track-record`)
-- **첫 배포 직후에는 기록이 비어 있는 게 정상** — GitHub Actions가 매일 돌 때마다 그날 예정 경기들의 예측이 쌓이고, 그 경기들이 끝나야 적중 여부가 채워지므로 실제 트랙레코드가 유의미해지기까지 며칠~1주 정도 걸림
+- 끝난 시즌 순위표 = 공식 순서·구역·감점(`season_zones.json` → 없으면 `history_standings.json`), 시즌은 날짜가 아니라 시즌 값으로 자름. `df_seasons`(과거+현재)는 순위표·일정·팀 통계·역대 맞대결·라이벌용, **`df_matches_all`(4시즌)만 모델·최근 폼용 — 섞지 말 것**.
+- 경기 당일 점수: Render가 football-data를 직접 받아 일정 위에 덮음(`_live_overlay`, 서버 전체 1분 1회, Render 환경변수 `FOOTBALL_API_KEY` 필요). 무료 플랜은 몇 분 늦어서 "LIVE" 대신 "진행 중 N분".
+- API-Football 요청 때 받기(Render 환경변수 `API_FOOTBALL_KEY` 필요): 끝난 경기 상세(파일 없으면 킥오프 110분 뒤부터), 확정 라인업(킥오프 90분 전~), 프로필 미수집 선수 경력. 동시 16개(`_AF_SEM`) + 재시도.
+- 선수 시즌 기록: 이번 시즌 = `match_details` 합산(`_af_league_squads`, 시작 때 계산), 지난 시즌 = `af_seasons`. 세부 포지션은 22-23 시즌부터만 믿을 수 있음(`GRID_FROM`).
+- 공유: `/share/match/{slug}`(og 태그, 사람은 앱으로) · `/og/match/{slug}.jpg`(share_card, 카드 캐시) — slug 규칙은 JS `teamSlug`와 서버 `_team_slug`가 같아야 함, 짧은 이름은 FotData.html `SHORT_NAMES` 표 하나만 관리(서버가 읽음).
+- 데이터 없는 응답은 404 대신 **204**(콘솔 오류 방지).
 
-### 5.7 승부차기 미니게임 (FotData.html, `#page-shootout` · 2026-09-21 추가)
-- 내 팀 선택 → 골키퍼 1명 + 키커 1~5번 순서를 직접 선택 → 상대팀 선택(AI 랜덤 또는 직접 선택) → 코인토스로 선축 결정 → 실제 IFAB 승부차기 규칙(5명 교대, 조기 승부 확정 시 중단, 동점이면 서든데스)으로 진행
-- **선수 개별 능력치 데이터가 없음** (API-Football 무료 플랜은 EPL 득점왕/도움왕 TOP10 외엔 스탯 제공 안 함) — 그래서 상대(AI) 키커 순서는 정직하게 **포지션 우선순위(공격수→미드필더→수비수)** 로만 정하고, 혹시 그 선수가 EPL 득점왕 TOP10에 있으면 같은 포지션 내에서 골 수로 한 번 더 정렬하는 정도로 타협함 (5.5/5.6과 같은 맥락: 없는 데이터를 있는 것처럼 꾸미지 않음)
-- 선수 아바타: `team_extra.json`에 사진이 있는 팀(EPL 일부)은 실제 사진, 없으면 회색 실루엣 아이콘 + 등번호로 폴백. `<img onerror="...">`에 HTML을 통째로 문자열로 박아 넣으면 따옴표 충돌로 태그가 깨지는 버그가 있었음 → `onerror="kickerAvatarError(this)"`처럼 함수 호출 + `data-num` 속성으로 값만 전달하는 방식으로 수정(실제 버그였고 재발 방지 차 기록)
-- 슛/막기 조작은 6분할 존(좌/중/우 × 상/하) 클릭 방식, 슈터와 골키퍼가 각각 고른 존이 다르면 골, 같으면 선방 — 키커 존은 사용자가 고르고 상대 골키퍼(또는 상대 슈터) 존은 매번 무작위
+주요 엔드포인트(전체는 main.py에서 `@app.` 검색):
 
-### 5.8 브랜드/UI 공통 패턴 (2026-09-23 대규모 정리)
+| 용도 | 경로 |
+|---|---|
+| 예측 | `POST /predict` · `/predict/schedule/{리그}` · `/predict/champion/{리그}` · `/predict/track-record` · `/match/insights` · `/h2h?limit=0`(역대 전부) · `/form/{팀}` |
+| 리그 | `/standings/{리그}?season=&view=` · `/standings/{리그}/movement` · `/schedule/{리그}?season=` · `/ucl/tournament` · `/ucl/groups` · `/league/seasons/{리그}` · `/league/history/{리그}` · `/league/players/{리그}?season=` · `/league/bestxi/{리그}?season=&round=` |
+| 팀·선수 | `/team/info/{팀}`(wiki·rivals·manager) · `/team/squad/{팀}?season=`(best11·manager) · `/team/stats/{팀}` · `/team/players/{팀}` · `/player/profile/{id}` · `/player/seasons/{id}` · `/players/leaders/{리그}` |
+| 경기 | `/matches/window` · `/matches/live` · `/match/detail` · `/match/preview` · `/bigmatch` |
+| 기타 | `/teams` · `/teams/meta` · `/teams/ko` · `/logos` · `/meta/countries` · `/proxy/logo` · `/calendar/{slug}.ics` · `/calendar/my.ics?t=` · `/accuracy` |
 
-**로고 통일**: 기존 "막대그래프" 로고가 페이지마다 막대 두께(3px/4px)·모서리가 조금씩 달라 보이는 일관성 문제가 있었음 → 사이트 전역에서 이미 쓰던 축구공 SVG(오각형+선 5개, `viewBox 0 0 24 24`, `stroke-width:1.4`)로 전면 교체(nav/footer/로딩스피너/PWA 아이콘 전부). 오각형 바깥으로 뻗는 5개 선의 끝점은 원(반지름 9) 안에 `stroke-linecap:round`(반경 0.7)까지 포함해서 들어가야 하므로, 각 끝점은 원점 기준 반지름 **8.2**(72°씩 5방향)로 계산해야 큰 크기(PWA 아이콘 512px)에서도 선이 원 밖으로 삐져나오지 않음 — 작은 크기(15~42px)에서는 이 오차가 안 보여서 놓치기 쉬움.
-- 로딩 애니메이션: 배경 칩 없이 공만 노출, `@keyframes logoBallSpin`으로 1.6초 중 앞 40%(~0.64초)에 360° 회전 후 나머지는 정지 — "빠르게 한 바퀴 돌고 잠깐 쉬기" 반복.
-- `icon-192.png`/`icon-512.png`는 `generate_icons.py`(Pillow)로 위 SVG 좌표를 그대로 래스터화해서 생성 — 모양을 또 바꿀 일이 있으면 이 스크립트의 `BG`/`BALL`/`LINES` 상수만 고치고 재실행.
+리그 코드: `PL` `PD` `BL1` `SA` `FL1` `CL`
 
-**애니메이션(펼침/접힘) 구현 기법**: `display:none↔block` 토글에 열림/닫힘 애니메이션을 넣을 때, `transition:none`으로 끄고 시작 transform을 강제로 찍은 뒤 `void el.offsetHeight`로 리플로우, 그다음 `transition:''`(복원)+`open` 클래스 추가하는 순서를 반드시 지켜야 함. 처음엔 `void el.offsetWidth` 강제 리플로우만으로 될 거라 생각했는데, 두 클래스(앵커 클래스+open 클래스)를 같은 동기 틱에 붙이면 브라우저가 중간 상태를 건너뛰고 예전 위치를 트랜지션 시작값으로 써버리는 문제가 있었음 — `transition:none`+강제 리플로우+재활성화 조합만 안정적으로 동작함을 후원 패널(kofi-panel)에서 확인 후 팀 선택 팝업에도 동일 기법 적용. 후원 패널은 데스크톱에서 헤더 버튼 클릭 시 그 버튼 바로 아래(버튼 오른쪽 끝에 맞춰 정렬, `right = innerWidth − 버튼.right`)에, 모바일에서는 기존 하단 플로팅 위치에 각각 다르게 앵커링됨(`positionKofiPanel()`이 어느 트리거가 보이는지로 분기).
+## 8. 프론트엔드 (FotData.html)
 
-**footer 하단 고정**: 콘텐츠가 짧은 탭(승부차기 등)에서 footer가 화면 중간에 뜨는 문제 → `body{display:flex;flex-direction:column}` + `body>.container{flex:1 0 auto}` + `footer{flex-shrink:0}`로 해결. **주의**: `.container`가 `margin:0 auto`로 최대폭 중앙정렬을 하고 있었는데, flex item이 되면서 가로축(cross-axis) auto margin이 flex의 기본 stretch를 무효화해 컨텐츠 크기로 쪼그라드는 회귀가 발생했음(전 탭이 작은 박스로 보임) → `.container`에 `width:100%`를 명시해서 해결. flex 부모 밑에서 자식에게 `margin:auto` 중앙정렬을 쓸 때는 항상 이 상호작용을 의심할 것.
+### 8.1 구조
+- 페이지: 경기 예측(홈) · 리그(`#league/PL/standings/2024` — 탭: 개요·순위·경기·순위 예측·선수·시즌, 지난 시즌은 순위 예측 없음) · 내 팀(즐겨찾기 최대 5팀, localStorage) · 승부차기 · 더보기(폰). 폰은 하단 탭바 `홈·리그·내 팀·더보기`.
+- 리그 패널 로더(loadStandings 등)는 예전 페이지를 옮긴 것 — 패널 안 숨겨진 리그 칩은 로더가 "늦은 응답 버리기"에 쓰므로 **지우지 말 것**. 새 리그 UI 요소는 `data-lg` 속성(`[data-league]`와 겹치면 안 됨).
+- 창(모달): 팀 정보(개요·순위·경기·스쿼드·플레이어 통계·팀 통계·이적) · 경기 미리보기/결과(넓은 화면 2열) · 선수 카드 · 트랙레코드 · 대진 · 구단 둘러보기(⌘K) · 캘린더. **새 창을 만들면 `OVERLAYS`(뒤로가기)와 `SCROLL_LOCK`(뒤 스크롤 잠금)에 한 줄씩 추가.**
+- 예측 결과: 두 독립 세로 열(`.predict-col`) — 왼쪽 예측 결과·다른 경기·결장·부상·홈팀 최근 경기 / 오른쪽 맞대결·경기 분석·라인업·주요 선수·원정팀 최근 경기. `fitMoreCard()`가 짧은 열에 "다른 경기" 카드를 넣거나 간격을 넓혀 두 열 끝을 맞춤(부가 정보가 올 때마다 다시). 폰은 `display: contents` + `order`.
+- 리그 개요: 넓은 화면 두 열 끝 맞춤 `fitLoCols()`(차이 220px 이하일 때만 `.fit`).
+- 공유 링크 `/m/{홈}-vs-{원정}`, 앱 주소창은 `/app?match=`.
 
-**팀 선택 팝업(경기예측 탭) 최종 설계**: 이 UI 하나로 이번 세션에 가장 많은 시행착오가 있었음 — 기록해서 재작업 방지.
-- 트리거 버튼(`.select-trigger`)은 `max-width:480px; margin:0 auto`로 전역 팀 검색창(`.team-search-box`)과 동일 폭·중앙정렬. 팝업(`.team-popup`)도 480px + `left:50%;transform:translateX(-50%)`로 트리거와 같은 축에 정렬. 단 모바일(`≤768px`)은 팀박스 자체가 좁아서 중앙정렬하면 화면 밖으로 넘치므로 `left:0;transform:none;width:320px`로 되돌림.
-- 팝업이 열리면 아래 콘텐츠(예측 버튼/footer) 위로 **겹쳐서 덮는 방식**(z-index 200, 표준 드롭다운/자동완성과 동일 동작)으로 확정 — "페이지를 밀어서 안 겹치게" 하는 방식은 두 번 시도했으나 전부 폐기: (a) `team-selector`에 동적 margin을 주는 방식은 "다음 경기" 위젯 같은 비동기 콘텐츠 타이밍과 계산이 어긋나 오히려 더 크게 깨짐, (b) 예측 버튼 z-index를 팝업보다 올리는 방식은 버튼이 가로로 넓어서 팝업의 검색창 부분을 통째로 가려버림.
-- 대신 `.predict-selector-card` 자체에 **고정 `margin-bottom:315px`**을 상시 부여(팝업 최대 높이 실측값 301px + 여유)해서 페이지 자체를 항상 그만큼 길게 만들어두고, 팝업이 열려도 footer를 절대 못 넘게 함. 예측하기를 누르면(`showResult()`) 결과 카드 자체가 충분한 높이를 제공하므로 이 315px 여백을 16px로 즉시 되돌림(안 그러면 결과 카드 사이에 빈 공간이 생김) — **이 마진 축소는 `scrollIntoView` 호출보다 반드시 먼저 실행**해야 함(순서가 바뀌면 스크롤 목표 위치가 계산된 직후 레이아웃이 줄어들어 스크롤 자체가 무산됨 — 실제로 이 버그로 예측 결과 스크롤이 한동안 전혀 작동 안 하고 있었음).
-- 홈팀/원정팀 팝업은 서로 독립적으로 열고 닫힘(하나 열면 다른 쪽이 자동으로 안 닫힘) — 양쪽 다 열어두고 각각 선택 가능.
-- 팝업을 열면 `popup.scrollIntoView({block:'end'})`로 팝업 전체가 화면에 들어오도록 자동 스크롤.
-- **가로 위치는 JS가 결정**(`placeTeamPopup`, 2026-09-28): 버튼 기준 가운데가 기본, 화면 끝을 넘으면 12px 안쪽으로 밀고, 화면보다 넓으면 화면 가운데. CSS만으로 가운데 고정(translateX(-50%))했을 땐 769~1000px 폭에서 팝업(480px)이 화면 밖으로 잘렸음(모바일 `left:0`도 원정팀 쪽이 넘칠 수 있었음). 열려 있는 동안 창 크기가 바뀌면 다시 맞춤. 375/526/800/1000/1440px에서 두 팝업 모두 화면 안 확인.
+### 8.2 디자인 규칙
+- 색은 `:root` 토큰(`--bg #0a1020` 밤하늘 남색, `--surface`, `--blue #58a6ff` …), 둥글기 `--r-*`, 그림자 `--shadow-*`, 글자 `--fs-*`. 템플릿 문자열·캔버스·SVG 속성만 hex 그대로.
+- **홈 파랑 `#58a6ff` / 원정 주황 `#f0883e`**, 무 회색. 결과 색은 그 화면 주인공 기준.
+- **마우스 반응 규칙**: ① 팀·선수 이름(로고·사진 포함)은 어디서든 누르면 팀 정보/선수 카드, 올리면 **이름만 파랗게** ② 줄 전체가 한 곳으로 가는 목록(경기 줄·선수 줄·순위표 줄)은 **배경만**, 그 줄 안 팀 이름은 따로 안 누름 ③ 큰 카드는 **파란 테두리만**(들림·그림자 없음) ④ 버튼·탭은 글자 밝아짐/빛 ⑤ 누를 수 없는 건 반응 없음·기본 커서.
+- 경고는 화면 안 상자 대신 `showToast(msg, ms, 'warn')`. 용어 도움말은 `TIPS` + `<button class="ii" data-tip="키">`.
+- 시각은 `koClock()`("오후 8:30", 앞자리 0 없음), 남은 시간 `koRel()`. 짧은 팀 이름 `teamNameHtml()`(≤768px 짧은 이름).
+- 이름: 경기장 위 = "M. Salah"(`mdInitialName`), 목록·카드 = 전체 이름(`afFullName`). 등번호는 이름 앞 회색.
+- 3D 로고·구단 로고엔 원본에 없는 효과(테두리·광택)를 더하지 않음. 홍보물엔 구단 엠블럼 금지(상표).
+- 카드 높이를 바꾸면 첫 화면 자리 잡기 `.slot-wait` min-height도 같이(빅매치 331/폰 175, 트랙레코드 67, 내 팀 53).
 
-**빅매치 선정 규칙** (서버 `/bigmatch`, 2026-09-28 변경 — 경기예측 탭 배너와 랜딩 3D 연출이 같은 엔드포인트를 써서 항상 같은 경기): 두 팀 모두 `BIG_CLUBS`(main.py, 리그별 인기·시청률 상위 18개 구단 하드코딩)에 속한 경기 중 **가장 가까운 경기**(30일 이내), 킥오프가 같으면 prestige 합이 큰 쪽. 킥오프 시각이 지나면 카운트다운이 0에서 `loadBigMatch()`를 다시 불러 다음 빅매치로 넘어감. 응답에 양 팀 로고 URL 포함. 거쳐온 시행착오: (1) 21일 내 prestige 최고 매치 → 먼 미래의 PSG전이 임박한 리버풀-맨시티를 밀어냄, (2) prestige≥50 통과 경기 중 가장 가까운 것 → Lens-Lyon 같은 경기가 뽑힘(prestige는 최근 2시즌 승률만 봐서 인기·관심도를 반영 못 함), (3) 7→14→21일 구간 확장 → 날짜가 지나면서 선택이 앞뒤로 튐, (4) 2026-09-27 규칙(BIG_CLUBS + prestige 합 ≥80 + 가장 이른 경기일 +3일 안 최강) → 맨유(5.9)+토트넘(−60)이 80 미만이라 빠지고 하루 뒤 리버풀–맨시티가 떴는데, 사용자 판단은 "인기 구단끼리면 가까운 경기부터"(2026-09-28) → prestige 기준 제거. 인기 구단 리스트 자체가 관심도 필터 역할을 함.
+### 8.3 함정 (다시 밟지 말 것)
+- `data-w`는 경기 분석 막대 애니메이션이 씀 — 다른 용도로 `data-*` 이름 겹치지 않게.
+- SVG에 글자가 있는 차트는 viewBox 확대 금지 — 컨테이너 실제 폭으로 1:1로 그림.
+- `backdrop-filter` 카드 안 절대 위치 팝업은 아래 카드에 가려질 수 있음 → 부모 카드에 z-index.
+- flex 부모 밑 `margin: auto` 중앙 정렬 요소는 `width: 100%` 필요.
+- 로고 `<img>`가 빈 src로 먼저 그려지면 onerror로 숨은 채 굳음 → `logosReady`를 기다렸다 그림.
+- `onerror="..."`에 HTML 문자열을 넣지 말 것(따옴표 충돌) — 함수 호출로.
+- 좁은 그리드 열은 `minmax(0, 1fr)`(긴 팀 이름 가로 넘침).
+- 같은 인라인 스크립트 블록 `const` 이름 충돌 → 스크립트 전체가 멈춤. 푸시 전 인라인 스크립트 전부 `node --check`.
 
-**테스트 시 주의**: 브라우저 자동화 탭이 백그라운드(비활성) 상태면 `requestAnimationFrame`과 `scrollIntoView` 스무스 애니메이션이 실제로 실행되지 않거나 씹힘 — 스크롤/애니메이션 관련 버그를 재현·검증할 땐 반드시 해당 탭을 `tabs_select`로 앞으로 가져온 뒤 테스트할 것(이걸 놓쳐서 정상 동작하는 코드를 "안 된다"고 오판한 전례 있음).
+## 9. 배포 · 환경
 
-### 5.9 예측 결과 화면 — 맞대결 카드 아래 경기 분석 (2026-09-27 추가)
-- 맞대결 카드("최근 4시즌 맞대 기록") 목록은 그대로 두고, 그 아래(`#match-insights`)에 `/match/insights` 한 번 호출로 4개 섹션을 그림(`renderMatchInsights`). 부가 정보라 호출이 실패해도 예측 결과는 정상 표시.
-  - A 현재 리그 순위: 팀별 타일(로고·순위/전체·존 칩·승점/득실/승무패) + 같은 리그면 순위 트랙(순위표의 `LEAGUE_ZONES`/`getZoneClass` 존 색 재사용, 홈 로고는 위·원정 로고는 아래). 리그가 다르면(UCL) 트랙 생략.
-  - B 홈 성적 vs 원정 성적: 홈팀의 최근 홈 리그 10경기 vs 원정팀의 최근 원정 리그 10경기(이번 시즌만 보면 홈 경기가 2~3개뿐이라 시즌을 넘어서 봄). 승무패 막대 + 경기당 득점/실점 비교.
-  - C 경기 성향: 전 대회 최근 10경기 — 경기당 총 골, 3골 이상, 양 팀 득점, 무실점. 두 팀 모두 3골+/2.2골 이하일 때만 한 줄 요약.
-  - D 파워 레이팅 추이: 모델이 실제로 쓰는 누적 ELO의 최근 20경기 라인 차트. x축은 날짜가 아니라 "경기 순서"(날짜로 그리면 여름 휴식기가 긴 평평한 선이 됨), 선이 그려지는 애니메이션(`prefers-reduced-motion`이면 정지). **차트는 컨테이너 실제 폭(px)으로 1:1로 그림**(`drawPowerChart`, 창 크기 바뀌면 재그림) — 처음엔 고정 viewBox(360)를 `width:100%`로 늘렸더니 넓은 화면(카드 480px+)에서 축 글자까지 1.3~1.8배로 커져서 제목보다 크게 보였음. 개발 테스트 화면(카드 ~410px)에선 티가 안 나서 놓쳤던 문제 — SVG 텍스트가 있는 차트는 viewBox 확대를 쓰지 말 것. 또 그린 폭을 `data-w`로 기록했다가, 막대 애니메이션이 `[data-w]` 요소 폭을 %로 채우는 코드와 이름이 겹쳐 차트 영역이 646%(4,000px+)로 늘어나 경기예측 탭 전체에 가로 스크롤이 생긴 버그가 있었음(2026-09-27 수정, `data-drawn-w`로 분리) — `data-*` 이름은 같은 컨테이너의 다른 셀렉터와 겹치지 않게.
-- 디자인 규칙: 홈 파랑 `#58a6ff` / 원정 주황 `#f0883e`(레이더 차트와 동일), 비교는 "가운데 라벨 + 좌우로 뻗는 막대"(`miCompareRow`), 좋고 나쁨이 있는 지표(득점·실점·무실점)는 불리한 쪽을 흐리게.
-- 레이아웃: 결과 영역을 두 개의 독립 세로 열(`.predict-col`: 왼쪽 예측 결과+홈팀 최근 경기 / 오른쪽 맞대결·분석+원정팀 최근 경기)로 바꿈 — 맞대결 줄 수(0~10)에 따라 양쪽 높이가 매번 달라서, 한 격자 행으로 묶으면 짧은 쪽 카드가 늘어나며 속이 빈 박스가 생겼음. 모바일은 `display:contents` + `order`로 기존 순서(결과→맞대결→홈팀 최근→원정팀 최근) 유지.
-- **양쪽 열 끝 맞춤**(`fitMoreCard`, 데스크톱만): 맞대결 줄 수에 따라 두 열 높이 차이가 경기마다 10~400px+로 달라서 고정 콘텐츠로는 못 맞춤 → (1) 왼쪽이 충분히 짧으면 예측 결과 카드 아래에 "다른 경기도 예측해보기" 카드(두 팀의 다음 경기 → 같은 리그+UCL 14일 내 경기, 클릭 시 경기 미리보기 모달)를 차이만큼의 높이로 넣고 들어가는 줄 수만 표시, (2) 차이가 작으면 짧은 쪽 카드(예측 결과/맞대결)를 `.spread`(flex space-between)로 섹션 간격을 고르게 넓힘 — flex로 바꾸면 margin collapse가 풀려 자연 높이가 커지므로 바꾼 뒤 다시 재서 minHeight 결정, 그래도 넘치면 padding-bottom으로. 결과: 양쪽 "최근 경기" 카드가 위·아래 모두 0px 오차로 정렬(1000px·1440px, 7개 대진 실측). 차트가 늦게 그려지면서 높이가 바뀌므로 `drawPowerChart` 끝과 리사이즈 때도 다시 맞춤. 모바일은 한 줄 배치라 카드 숨김.
-- **점진 표시(2026-09-29)**: `predict()`가 /predict·/h2h·/form×2·/match/insights를 동시에 요청하되 **/predict만 기다렸다가** 결과(확률·스코어·레이더)를 먼저 보여주고, 나머지는 `fillResultExtras()`가 도착하는 대로 채움(그 전엔 스켈레톤). 예전엔 5개가 다 끝나야 화면이 떠서 서버가 깨어나는 중이면 가장 느린 요청만큼 기다렸음. 부가 요청은 실패해도 해당 칸에만 "불러오지 못했어요". 레이더의 상대전적 축은 맞대결이 오면 다시 그림(`lastPrediction.h2h`도 그때 채움 → 공유 카드 반영). 다른 경기를 새로 예측하면 `predictSeq`가 바뀌어 이전 응답은 버림. 칸이 채워질 때마다 `fitMoreCard`를 다시 돌려 양쪽 열 끝을 맞춤(1280px, 4개 대진 0px 오차 확인). 서버 깨우는 중 문구(`onRetry`)는 /predict 요청에만 연결 — 부가 요청의 재시도가 결과 표시 후 버튼 글자를 바꾸지 않게.
-- 라벨용 팀명은 `shortTeamName()`(FC/AC/CF 같은 클럽 형태 표기만 제거) — 예전 `split(' ')[0]`은 "FC Bayern München"→"FC", "Manchester City"→"Manchester"처럼 깨졌음(승률 막대·공격/수비 라벨·맞대결 요약 라벨).
-
-### 5.10 유리(glass) 테마 — 메인 페이지 (2026-09-28 전 탭 기본 적용. 비교용으로 `FotData.html?theme=default`면 예전 테마, 같은 탭 세션 동안 유지)
-- 랜딩 3D 연출의 "하나로 이어진 어두운 공간" 컨셉을 앱에 **약하게** 적용(랜딩은 보여주는 페이지, 메인은 표·확률을 읽는 도구라 가독성 우선). `<head>` 맨 앞 인라인 스크립트가 그리기 전에 `html.theme-glass`를 붙여 깜빡임 없음.
-- 배경: `body::before` 은은한 빛번짐 + 오른쪽에 와이어프레임 축구공. 공은 `bg-ball.js`가 **천천히 도는 3D**(Three.js 지연 로딩, 공 영역 크기 캔버스만, 점 1,800개(모바일 1,200), 30fps 제한, 해상도 최대 1.5배, 탭 숨기면 정지, 투명도 0.26/모바일 0.2)로 그리고, 준비 전·모션 최소화·WebGL 미지원이면 같은 자리의 정지 SVG(`bg-ball.svg`, `body::after`)가 보임 — 준비되면 `html.bg3d-on`으로 교차 전환. 공 모양은 `ball-geometry.js`를 랜딩과 공유.
-- 상단 메뉴·하단 푸터: 반투명(0.7) + 흐림(푸터는 태그에 인라인 배경색이 박혀 있어 `!important`로 덮음).
-- 카드·내 팀 위젯: 반투명(0.74) + `backdrop-filter: blur(16px)`, 메뉴·모달·팀 선택 팝업도 유리. 카드 안 어두운 칸(`today-card`, `mi-rank-tile`, `stat-box` 등)은 반투명으로(유리 위 검은 구멍 방지). **모바일(≤768px)은 카드 흐림을 끄고 불투명도 0.88**로 대신(카드가 많은 순위표·일정 탭 스크롤 부담 방지, 메뉴·모달만 흐림).
-- 주의: `backdrop-filter`는 쌓임 맥락을 만들어서 카드 안 절대 위치 팝업이 아래 카드에 가려질 수 있음 → `.predict-selector-card`에 `z-index:5`(팀 선택 팝업이 위에 뜨는 것 확인함). 새로 카드 안에 드롭다운을 만들면 같은 문제를 의심할 것.
-- 전 탭(경기예측·순위예측·순위표·일정·선수·승부차기) 화면 확인 후 기본 적용.
-- **디자인 연출 7종(2026-09-28)**: ① 예측 중 배경 공 반응 — `window.fotBg.burst()`(빨라지고 점이 바깥으로 흩어지며 밝아짐, 캔버스 불투명도↑) → 결과가 나오면 `settle()`(최소 0.8초 유지 후 다시 모임), 움직이는 동안만 60fps. ② 예측 결과 머리 뒤 원근 경기장 선(`renderResultPitch`, 홈 파랑·원정 주황·가운데 하늘색, `pathLength=1` 대시 애니메이션으로 결과마다 그려짐). 좌표는 `pitchPerspectiveSegments()` 하나로 공유 이미지와 같이 씀. ③ 유리 카드 빛 반사 — 마우스 있는 기기만, 카드별 `--mx/--my`(화면 갱신당 1번 계산). ④ 공유 이미지 카드 리디자인 — 진한 남색 + 빛번짐 + 와이어프레임 공(bg-ball.svg) + 구역별 유리 패널 + 팀 구역 뒤 경기장 선. ⑤ 빅매치 카운트다운은 칸을 한 번만 만들고 바뀐 숫자만 넘어가는 애니메이션(매초 innerHTML을 통째로 갈면 애니메이션이 안 됨) + 배너 위로 7초마다 조명 빛 스침. ⑥ 탭 전환 때 `fotBg.turn()`으로 배경 공이 ~100° 회전. ⑦ 랜딩 3D 연출 기본 공개 + 링크 공유 썸네일 교체.
-
-### 5.11 모바일 하단 탭바·팀 정보 헤더·로딩·접근성 (2026-09-29)
-- **모바일 하단 탭바**(≤768px, `.tabbar`): 위 네브바에 6개 탭을 넣으면 글자가 11px까지 줄고 가로 스크롤이 생겼음 → 아이콘+라벨 탭을 화면 아래 고정(유리 배경, 안전 영역 포함 높이 `--tabbar-h`), 위에는 로고·워드마크·검색만. 네브바는 유리 테마에서 `backdrop-filter`가 있어 fixed 자식의 기준이 네브바가 되므로 탭바는 별도 `<nav>`로 둠. 토스트·후원 버튼/패널·PWA 설치 배너는 `--tabbar-h`만큼 위로. 활성 표시는 `setActiveTab(page)`가 `data-page`로 위 탭·아래 탭 양쪽을 맞춤(`aria-current` 포함) — `showPage`가 예전엔 `event.target`에 active를 붙였는데 아이콘 안쪽을 누르면 svg에 붙는 문제가 생겨서 교체. 탭을 바꾸면 새 탭은 맨 위부터(아래 탭바는 스크롤을 내린 채 누르게 되므로), 지금 탭을 다시 누르면 부드럽게 맨 위로(재로딩 안 함).
-- **팀 정보 모달 헤더**: 구단 색 두 개(`getClubColorPair`, clubColors "Red / White" 앞·뒤)로 왼쪽 위·오른쪽 아래 빛 + 위 2px 색 줄 + 오른쪽 와이어프레임 공(bg-ball.svg). 팀 정보가 오면 `.tinted`로 은은하게 켜짐, 색 정보 없으면 브랜드 파랑. 로고 52px + 구단 색 그림자.
-- **로딩**: 서버 깨우는 화면(`wakingUpHtml`)을 제목 + 콜드스타트(~50초)에 맞춘 진행 막대로 — 재시도마다 다시 그려지므로 처음 깨우기 시작한 시각을 기억해 음수 `animation-delay`로 이어서 참(90초 넘게 뜸하면 새로 시작). 유리 테마 스켈레톤은 반투명 바탕 + 파란 빛이 스쳐 가게.
-- **접근성**: `onclick`만 달린 div/span(탭·경기 카드·팀 이름 등, 새로 그려지는 것 포함 — MutationObserver)에 자동으로 `tabindex=0`+`role=button`(표의 행은 role 없이), Enter/Space로 클릭. 모달 바깥 배경은 제외. Esc는 가장 위에 뜬 것 하나만 닫음(팀 검색 → 팀 정보 → 경기 미리보기 → 트랙레코드 → 대진 → 후원 패널 → 팀 선택 팝업). `:focus-visible` 파란 테두리(키보드일 때만). 흐린 글자 `#6e7681`(카드 위 대비 3.8:1, AA 미달) → `#7d8590`(4.6:1) 17곳.
-
-### 5.12 팀 정보 모달 개편 — 개요·경기·팀 통계·이적 (2026-09-29)
-- **개요**: ① 구단 소개 = 위키백과 첫 문단(한국어 문서 우선, 없으면 영문 — **CC BY-SA라 "출처: 위키백과" 링크 필수**), 4줄 넘으면 "더 보기". ② 이번 시즌 리그 순위 카드(순위표 탭으로) + 다음 경기 카드(경기 미리보기 모달) + 최근 시즌 최종 순위 한 줄(팀 통계 탭으로). ③ 아이콘 정보 칸: 연고지·창단(N년째)·홈구장(수용 인원)·감독·별칭·구단 색(색 동그라미). 헤더 부제는 한국어 구단명 · 창단연도.
-  - 데이터: `update_data.py`의 `fetch_team_wiki()` → `fotdata_model/team_wiki.json`(`/team/info` 응답의 `wiki`). 키 불필요(위키미디어 API), 매일 실행 때 7일 넘은 팀만 갱신(`WIKI_REFRESH_DAYS`, 감독 교체 반영). 전 팀 강제 갱신 `python update_data.py --wiki-only --force`(96팀 ~5분), 특정 팀만 `--wiki-only "팀 이름"`. 매칭: 팀 이름으로 영문 위키백과 검색 → 위키데이터 "축구 클럽"(Q476028)인 첫 문서, 2군·유스·여자팀 제목 제외(`_WIKI_SKIP_TITLE` — "F.C."의 C를 2군으로 오인한 전례가 있어 끝의 " B"/" C"만), 그래도 틀리는 팀은 `WIKI_TITLE_OVERRIDE`(맨유 → FC United of Manchester, 뉴캐슬 → 호주 Newcastle Jets, 도르트문트·슈투트가르트·레알 소시에다드 → 2군 문서가 잡혔었음). 홈구장은 위키데이터 "현재" 홈구장(종료일 없는 값) 이름·수용 인원을 우선 — football-data 경기장 이름이 오히려 옛 이름·옛 경기장인 경우가 많았음(에버턴 Goodison Park, 칼리아리 Sardegna Arena, 코번트리 엉뚱한 경기장 등. 브렌트퍼드는 양쪽 다 옛 Griffin Park). 연고지는 본부 소재지 → 구단 소재지 → 경기장 소재지 순으로, 행정구역(P131)을 따라 올라가며 "도시"로 분류된 첫 항목(`_wd_city` — 그냥 쓰면 훈련장 건물·구(區)가 나왔음: 바르셀로나 → La Maternitat i Sant Ramon, 아스널 → 이즐링턴구), 그래도 팬들이 아는 연고지와 다른 팀은 `WIKI_CITY_OVERRIDE`(칼리아리·노팅엄·리옹·맨체스터 두 팀·릴·라치오·애스턴 빌라). 동시 요청 2개 + 429면 Retry-After만큼 쉬고 재시도(4개로 했더니 429). 감독은 football-data 값이 있으면 그걸 우선.
-  - 한국어 위키 소개가 한 줄이거나 오래된 팀이 있음(예: 리버풀 1문장, 파리 FC "25-26 시즌부터 경쟁할 예정") — 위키 원문이라 그대로 두고, 최근 시즌 순위 줄로 보완.
-- **경기**: 리그 + UCL 경기를 같이(UCL 태그), **다음 경기가 있는 달로 열림**(예전엔 달력상 이번 달 → 9월 경기가 끝나도 9월에 머묾, 일정 탭 `renderScheduleMonths`와 같은 규칙), 다음 경기 줄 강조.
-- **팀 통계**(서버 `/team/stats/{team}`): 예전엔 예측 모델용 블렌딩 값만 보여줘서 실제 기록과 달랐음 → 실제 리그 경기(컵·UCL 제외)로 시즌 선택(23-24~26-27, 그 시즌 뛴 5대 리그 기준), 요약 4칸(순위·승점/경기당·득실·승률+승무패 막대), 공격/수비/경기 성향 지표(막대 = 고정 눈금, 흰 눈금선 = 리그 평균, 평균보다 좋으면 파랑·나쁘면 주황, "리그 N위" 칩 — 상위 25% 파랑·하위 25% 빨강), 홈/원정, 상대 수준별(그 시즌 순위표 상·하위 절반 상대 경기당 승점), 순위 변동 차트(경기마다 그 시점 순위표 순위, 컨테이너 폭 1:1 SVG), 시즌별 기록 표(누르면 그 시즌), AI 파워 레이팅(team_state의 ELO·최근 38경기 공격/수비 지수 + 이번 시즌 같은 리그 팀 중 순위). 10경기 미만이면 변동 안내. 서버 계산은 리그·시즌 단위 lru_cache(첫 호출 팀당 ~0.3초). 순위 색은 `tsZone()`(`tz-*`) — 순위표 행용 `zone-*` 클래스엔 왼쪽 테두리가 있어서 숫자에 쓰면 파란 막대가 생겼음.
-- **이적**: 선수 사진(테두리 = 영입 초록/방출 빨강) + 이름 + [영입/방출] + 원래 구단 로고·이름 → 새 구단 로고·이름(이 팀 쪽 굵게) + 유형 칩(이적/임대(보라)/임대 복귀/FA(노랑)) + 날짜, 전체/영입/방출 필터. 유형 한글화: Transfer·"-" → 이적, Loan → 임대, Return from loan → 임대 복귀, Free agent → FA.
-  - 수집(`_fetch_af_transfers`)이 선수 ID로 만든 사진 주소·양쪽 구단 로고·방향(`dir`)까지 저장하도록 확장, 팀 ID(`af_id`)도 저장. **2026-09-29 이전에 받은 기록엔 이 필드가 없어서** 화면에서 보완: 방향 = 목록에 가장 많이 나오는 구단명이 이 팀, 사진 = 현재 스쿼드의 같은 이름(영입 선수만 나옴), 로고 = 우리 로고 목록 이름 매칭(5대 리그 밖 구단은 머리글자 배지). 전부 채우려면 로컬에서 `API_FOOTBALL_KEY`로 `python update_data.py --transfers-only`(30팀, 첫 실행은 검색 포함 ~60회 호출 — 무료 한도 100회/일 안).
-
-### 5.13 순위표·UCL 토너먼트 리디자인 + 팀 정보 보강 (2026-09-29)
-- **순위표**: 시즌 4개(26-27/25-26/24-25/23-24, 서버 `/standings?season=current|previous|연도`, `_season_year`, 시즌 컷오프는 연도로 계산 — `CURRENT_SEASON_YEAR`만 시즌 전환 때 바꾸면 됨). 리그 칩 + 시즌 세그먼트 + (챔스면) 리그 스테이지/토너먼트 세그먼트. 표 위 요약 4칸: 끝난 시즌은 우승·최다 득점·최소 실점·강등(하위 `LEAGUE_ZONES.rel`팀), 진행 중이면 선두·최다 득점·최소 실점·라운드. 순위 칸은 존 색 알약 + 왼쪽 존 색 막대, 승점 알약, 우승 팀은 금색 줄 + 트로피 아이콘 — 예전 "(우승)" 글자는 사용자 요청으로 제거. 지난 시즌 구역은 처음엔 26-27 표준 배정으로 표시했다가 5.14에서 그 시즌 공식 결과로 바꿈. 챔스 23-24는 5.14에서 조별리그 화면 추가(처음엔 버튼 잠금이었음).
-- **UCL 토너먼트**: `update_data.py fetch_ucl_tournament()`가 **시즌 4개**를 받아 `ucl_tournament.json {"seasons": {"2023": ..., "2026": ...}}`로 저장(예전엔 2025 하드코딩이라 26-27이 시작돼도 지난 시즌 대진이 나왔음), `/ucl/tournament?season=`. 옛 형식(한 시즌만 있는 파일)은 2025로 취급 — 다음 자동 업데이트(또는 로컬 `python update_data.py --ucl-only`) 전까지 24-25·23-24는 "다음 자동 업데이트 후 표시". 대진표는 실제 배치: 각 라운드 앞 절반=왼쪽, 뒤 절반=오른쪽(`reconstruct_bracket_order`), 플레이오프가 바깥 줄(16강 짝과 1:1), 가운데 결승 + 우승 배지. 연결선은 카드 실제 위치를 재서 SVG(`drawKoLines`, 리사이즈 때 재계산). 모바일(≤768px)은 라운드 세그먼트 + 카드 목록. **색 규칙(사용자 요청)**: 파란 점수·굵은 이름 = 다음 라운드 진출 팀, 흐림 = 탈락, 진행 중·미정은 파란색 없음, 승부차기 승자는 PK 표시 + 하단 "승부차기 4-3", 결승 우승은 금색. 경기별(1·2차전) 점수는 파란색을 안 씀(진출 팀과 헷갈려서). 짧은 구단명은 `SHORT_NAMES` 표(예전 "마지막 단어"는 브레스트 → "29", 레알·아틀레티코 → 둘 다 "Madrid").
-- **승부차기 골 버그(2026-09-29 발견)**: football-data `score.fullTime`은 승부차기 골까지 더해져 옴 → 아스널–포르투(1-0, PK 4-2)가 5-2로, 리버풀–PSG(1-0, PK 1-4)가 1-5 원정승으로 all_matches.csv에 기록돼 ELO·맞대결·학습에 섞여 있었음(UCL 토너먼트 승부차기 경기만 해당). `_match_goals()`로 `duration == PENALTY_SHOOTOUT`이면 승부차기 골을 빼고, 일정·토너먼트엔 `penalties`를 따로 저장. 매일 4시즌을 다시 받으므로 다음 자동 업데이트부터 자동 정정.
-- **팀 정보 개요 보강**: 소개 글은 위키백과 요약(첫 문단) 대신 **머리말 전체**(리버풀 44자 → 1,399자). **우승 기록**: 영문 위키백과 Honours 절 파서(`_parse_honours` — 표/목록 두 형식, 유스·2군·여자팀·지역·친선 대회 소제목 제외, "(level 2)"는 2부로, 시즌 링크는 보이는 글자만 세서 이중 계산 방지, `{{lang}}`·`<sup>` 속 숫자 처리) → 리그·자국 컵·리그컵·슈퍼컵·UCL·UEL·UECL·컵위너스컵·UEFA 슈퍼컵·클럽 월드컵 횟수(+2부 우승). 96팀 전부 원문과 대조해 규칙을 다듬음(스투트가르트 37회·쾰른 13회 같은 오류를 잡음). 우승 횟수가 줄어들게 읽히면 이전 값 유지. **구단 최고 이적료**: "List of … records and statistics"의 paid/received 표(순위 칸이 있으면 1위, 없으면 최고액 — 바르셀로나 표가 날짜순이었음; 1위 이적료 비공개면 "이적료 비공개"), 선수·구단 한국어 이름은 한국어 위키 문서 제목, 금액은 "1억 2,500만 파운드"로. 22팀만 있음(나머지 팀은 위키에 표가 없음). 출처 링크 표시.
-- 팀 정보 버그 수정: 다음 경기 카드의 "@"(원정 표기) → 홈/원정 칩, 다음 경기를 누르면 팀 정보 창을 닫고 미리보기를 엶(같은 층이라 뒤에 숨어 있었음), 개요의 순위·다음 경기·최근 시즌 칸이 차례로 기다리던 것을 동시에 요청해 도착하는 대로 채움(스켈레톤), `/team/stats` 순위 변동을 리그·시즌 단위 한 번 계산 + 서버 시작 때 미리 계산(첫 호출 0.3초 → 10ms 미만).
-
-### 5.14 지난 시즌 공식 기록·챔스 조별리그·라이벌 (2026-09-29~30)
-- **지난 시즌 공식 순위 구역**(`update_data.py fetch_season_zones()` → `fotdata_model/season_zones.json`, 키 불필요·매일 실행): 영문 위키백과 시즌 문서(`2023–24 Premier League` 등, 라리가·분데스·세리에·리그앙은 `Template:2023–24 La Liga table` 틀)의 Sports table에서 팀별 최종 순위·결과 코드(`result{n}`→`text_{코드}`: CL/예선/EL/ECL/강등 PO/강등)·승점 감점(`adjust_points_{약자}`)을 읽음. 약자에 Ö 같은 문자가 있어(MÖN·KÖL) 정규식은 `[^\s=|]+`. 팀 매칭은 team_wiki의 `en_title` → 이름 정규화 순. 서버 `_standings`는 끝난 시즌이면 **공식 순위 순서 + 감점 반영 + 행마다 `zone`/`deduction`**(`official: true`, `source`) — 동률 규정(라리가·세리에A 맞대결 우선)도 공식 순서로 해결. 프론트는 `row.zone`으로 색(컵 우승 팀 진출 포함: 23-24 맨유 8위 → 유로파, 24-25 토트넘 17위 → 챔스, 팰리스 컵 우승 자리 → 컨퍼런스), 범례엔 실제 있는 구역만 + 출처 링크. 15개 리그·시즌 모두 승·무·패·득·실을 공식 표와 대조해 일치 확인.
-- **몰수·판정승 경기 누락 버그(발견·수정)**: 경기 수집이 `status=FINISHED`만 받아서 AWARDED 경기(24-25 우니온–보훔 등 3경기)가 빠져 공식 순위와 1경기씩 달랐음 → 상태 필터 없이 받아 FINISHED+AWARDED만 남김, 판정 경기는 `score.winner` 기준(점수가 없거나 경기장 점수면 승 2-0·무 0-0, `_match_goals`).
-- **승점 감점 누락 버그(발견·수정)**: 23-24 에버턴 −8·노팅엄 −4, 리그앙 몽펠리에 −1이 순위표에 반영 안 돼 있었음 → 위 공식 데이터로 반영, 승점 옆에 빨간 −8 표시(승점은 칸 가운데, 감점은 흐름 밖에 붙임).
-- **지난 시즌 팀 로고·팀 정보**(`fetch_history_teams()`, `python update_data.py --history`로 한 번 + 매일 실행 때 로고 없는 팀이 있으면 자동): `/competitions/{리그}/teams?season=` 24회 호출로 강등팀·지난 챔스 팀 28개 로고·65개 팀 정보. **버그(수정)**: `fetch_team_info()`가 매일 현재 팀만으로 team_info.json을 새로 써서 이런 팀 정보가 지워지는 구조였음 → 기존 항목 유지하고 현재 팀만 갱신.
-- **챔스 조별리그(23-24)**: `_ucl_bracket`이 `GROUP_STAGE` 경기를 조별로 `GROUPS`에 저장, 서버 `/ucl/groups?season=2023`이 조별 순위(승점 → 맞대결 승점·득실·득점 → 전체 득실·득점, UEFA 규정)·기록(1~6차전) 계산. 프론트는 23-24면 첫 버튼이 "조별리그", FotMob 형식 8개 조 카드(1·2위 초록=16강, 3위 노랑=유로파 PO). 실제 결과와 일치(D조 소시에다드·인테르 12점 동률 → 맞대결, F조 PSG·밀란 8점 → PSG).
-- **대진표·순위표 UI**: 챔스 리그 스테이지 1위엔 트로피·금색 줄 없음(우승이 아니라서). 결승은 트로피·우승 배지를 카드 위로 띄우고 결승 카드만 흐름에 둬서 4강 카드와 같은 높이(실측 0px 차). 대진 팝업 로고가 안 보이던 버그 — 페이지 로드 때 빈 src로 `onerror`가 한 번 불려 `display:none`으로 굳었음 → 열 때마다 다시 보이게, 1·2차전 줄에도 로고. 순위표 요약 칸: 마우스 올리면 팀명 파랗게, 최다 득점/최소 실점 칸을 누르면 표가 득점/실점 순(왼쪽 숫자 = 그 순위, 괄호 = 리그 순위, 그 열 강조·머리글은 불투명 — 반투명이면 스크롤 때 아래 숫자가 비쳤음), 다시 누르면 원래대로. 우승 줄 금색은 칸마다 같은 단색(그라데이션을 칸마다 주면 칸마다 끊겨 보였음), 강조 열도 우승 줄에선 금색 유지.
-- **라이벌**(`fotdata_model/rivals.json`, 수동 관리): 86팀 1~2팀. 위키데이터 라이벌전 항목은 46팀뿐이고 레비어 더비·맨체스터 더비·데어 클라시커·르 클라시크 같은 게 빠져 있어서 수동으로 채움. 확실한 라이벌이 없는 팀(라이프치히·몬차·앙제 등)은 비움. `/team/info`에 최근 4시즌 맞대결 전적과 함께 붙어 옴.
-- **우승 기록 파서 확장**: 챔스에 나오는 5대 리그 밖 구단(네덜란드·포르투갈·튀르키예·그리스·스코틀랜드·벨기에 등)의 리그·컵 이름 인식, 대회 줄에 "대회: 21"처럼 횟수만 있는 형식(스포르팅)·": Winners (19):" 형식(페네르바흐체), 우승 표 머리글이 있는 표만 읽기(브뤼헤 시즌별 순위 표 숫자를 1,645회로 셌었음), 지역 리그(이스탄불 리그 등) 제외, 종합 스포츠 클럽은 축구 문서로(`WIKI_TITLE_OVERRIDE`: 갈라타사라이·페네르바흐체·올림피아코스). `--wiki-only --force`면 "우승 횟수 감소 방지"를 건너뜀(파서를 고친 뒤 잘못 크게 읽힌 값을 바로잡으려고).
-- **위키 문서 오매칭 전수 점검(2026-09-30)**: 검색 결과가 실행마다 달라져서 전 팀 재수집 때 셰필드 유나이티드 → Sheffield F.C.(다른 클럽), 셀타 → 2군 Celta Fortuna, 카이라트 → 카라바흐, AEK → 파나티나이코스가 잡혔음 → `WIKI_TITLE_OVERRIDE`에 고정. **전 팀 재수집 후엔 반드시 "팀 이름 단어가 문서 제목에 없는 팀" 목록을 뽑아 눈으로 확인할 것**(Bayern Munich·Inter Milan·Red Star Belgrade처럼 표기만 다른 건 정상). 연고지도 한글이 아니거나 옆 동네로 나온 6팀(생테티엔 → L'Étrat 등)은 `WIKI_CITY_OVERRIDE`. 조별리그 기록 배지는 FotMob의 마지막 경기 밑줄 없이 전부 같은 모양(사용자 요청).
-
-### 5.15 일정 탭 예측·순위 예측·미리보기 리디자인 (2026-09-29)
-- **일정 탭 AI 예측**(서버 `/predict/schedule/{리그}`, lru_cache): 남은 경기 전부를 `_predict_hda`로 한 번에(= `/predict`와 같은 숫자, UCL 밖 팀 shrink 포함 — 전 리그 0건 불일치 확인). 표시: 한 줄 전체 긴 막대는 목록이 읽기 어려워서 **가운데 칸(시간) 아래 짧은 막대(72px) + 무 N%, 각 팀 승리 확률은 팀 이름 안쪽(가운데 칸 옆)**, 가장 높은 값만 진하게(홈 파랑/원정 주황). 좁은 폰(≤480px)은 확률을 이름 아래 줄로(옆에 두면 "New..."처럼 잘림).
-- **끝난 경기**: 스코어 + 이긴 팀 굵게/진 팀 흐리게. 트랙레코드(`prediction_log.json`)에 **경기 전에 기록된 예측이 있는 경기만** "AI 적중/AI 빗나감" 칩 + 그때 확률(`/predict/schedule` 응답의 `results`). 결과를 보고 지금 모델로 다시 계산한 사후 예측은 적중률을 부풀릴 수 있어서 안 보여줌 → 기록 시작(9/22) 이후 첫 경기인 10/10 경기부터 칩이 생김.
-- **모바일 리그 칩**(≤768px): 순위표·일정·순위 예측·선수 탭 칩을 한 줄 가로 스크롤(`initScrollFade`, 누르면 가운데로). 좁은 폰(≤480px) 순위표는 min-width 해제 + 팀명 92px로 한 화면.
-- **순위 예측 탭**: 순위표와 같은 디자인 — 제목, 리그 칩, 시뮬레이션 횟수 세그먼트(1,000/3,000/5,000/10,000, `setSimCount` → 숨은 `#sim-slider`), 시작 버튼(▶ + span, 돌린 뒤 "다시 돌리기"), 요약 4칸(시작 전: 현재 선두·남은 경기·UCL 자리·강등 / 결과: 우승 1순위·UCL권 경계(마지막 자리 vs 바로 아래)·강등 위험 1순위·시뮬레이션 횟수), 행은 존 색 순위 알약 + 왼쪽 존 색 막대(`--zc`). 선수 탭도 `.champ-league-btn`을 써서 예전엔 리그를 바꾸면 선수 탭 활성 표시까지 지워졌음 → `#champion-league-tabs` 안만.
-- **UCL 토너먼트**: 대진표·결승·모바일 목록·우승 배지·대진 팝업에서 팀 이름/로고에 올리면 파랗게, 누르면 팀 정보(카드 나머지 부분은 기존대로 1·2차전 팝업 — `event.stopPropagation()`). 팝업에서 누르면 팝업을 닫고 팀 정보.
-- **경기 미리보기 모달**(`openMatchPredictModal`): 결과 화면 컨셉으로 — 대회·킥오프(이미 받아둔 `/matches/window`·일정에서 찾음, 없으면 생략), 원근 경기장 선(`pitchPerspectiveSegments` 공유) 위 두 팀(홈 파랑/원정 주황 링, 누르면 팀 정보) + 가운데 예상 스코어·기대 득점, 예측 칩, 한 줄 확률 막대 + 홈승/무/원정승, 가능성 높은 스코어 4개(1위는 예측 쪽 색), 예측 근거 3개(▲ 이 예측 쪽 / ▼ 반대, 영향 비중), "전체 분석 보기" 파란 버튼(예전 초록). 다른 경기를 연달아 열면 `mpSeq`로 늦게 온 응답은 버림.
-- **랜딩 3D**: 스크롤 진행도에 관성(`pS`, 시정수 ~0.14초, 0.2 넘게 건너뛰면 바로 맞춤) — 1:1이면 휠 한 칸마다 장면이 뚝뚝 끊겼음. 전환 중간 모션(셰이더, 양 끝에서 0이라 도착 위치는 그대로): 공→구름 바깥으로 터짐, 구름→경기장 소용돌이치며 내려앉음, 막대/구름→공 반대로 감기며 모임. 모바일 상단 메뉴에서 링크가 빠지면 `1fr auto 1fr` 격자의 가운데 칸으로 "시작하기" 버튼이 밀려 로고 글자와 겹쳤음 → 모바일은 `1fr auto`.
-
-- **2차 정리(2026-09-29 사용자 요청)**:
-  - 일정 한 줄을 `schedRowHtml(m, league, opts)` 하나로 — 일정 탭과 구단 정보 "경기" 탭이 같이 씀(구단 정보에도 예측 막대). 진 팀은 로고·이름 통째로 흐리게(opacity .4 — 글자색만 바꿨을 땐 티가 안 났음), 이긴 팀 굵게.
-  - **끝난 경기를 누르면 경기 결과 창**(`openMatchResultModal`, 미리보기 창 재사용): 최종 스코어, 경기 전에 기록된 AI 예측과 적중 여부(없으면 "10월 10일 경기부터 기록" 안내), 최근 맞대결 5경기(로고, 이번 경기 강조). 득점자·라인업은 무료 데이터에 없음.
-  - **예측 막대 지연 제거**: 예전엔 일정이 온 뒤에야 `/predict/schedule`을 요청(직렬) → 동시에 요청하고 예측이 700ms 안에 오면 한 번에 그림, 요청은 리그별로 공유(`schedulePredsP`). 서버는 시작할 때 6개 리그 일정 예측을 미리 계산(`_warm_team_stats`).
-  - **다음 경기 위젯 로고가 가끔 빈 칸**: `/matches/window`가 `/logos`보다 먼저 오면 빈 src로 그려져 `onerror`로 숨겨진 채 굳었음(빅매치는 그 사이 /predict를 기다려서 우연히 멀쩡) → `logosReady` 약속을 기다렸다 그림(다음 경기·내 팀·빅매치·일정·구단 정보 경기 탭).
-  - 구버전 화면 교체: 챔스 대진 창(미리보기 창 모양 — 진출 팀 파란 링, 결승 우승 금색, 1·2차전 목록), 구단 정보 순위 탭(구역 색 알약·왼쪽 막대·승점 알약·다른 팀 누르면 그 팀 정보), 예측 결과 색(무 노랑→회색, 원정 빨강→주황 — 공유 이미지·미리보기와 통일), 맞대결·최근 경기 목록 한 줄(`matchRowHtml` — 날짜|홈|스코어|원정|승무패, 스코어 색 대신 진 팀 흐리게), "경기 예측하기" 버튼 초록→파랑, 다음 경기 카드·빅매치 팀 이름 잘림(짧은 이름/두 줄).
-  - 점검: 모바일 전 탭·팀 정보 6개 탭·미리보기에서 JS 에러 0, 가로 넘침 0. 데스크톱 1280px 예측 결과 4개 대진 양쪽 열 끝 0px. 로컬에서만 뜨는 "script fetch" 콘솔 에러는 서비스워커가 127.0.0.1에서 등록 실패하는 것(라이브는 정상 등록, 네트워크 우선이라 옛 화면 캐시 문제 없음).
-
-- **3차(2026-09-29)**:
-  - **AI 트랙레코드**(이름은 사용자 요청으로 "AI 예측 성적표" → 전문 용어 톤): 경기 예측 탭 한 줄 카드 `#tr-strip`(`loadTrackStrip` — 첫 검증 전엔 "첫 검증 날짜 · 킥오프 전 예측 N건 사전 기록 완료", 이후엔 적중률·최근 7일·기준선·최근 10경기 점) + 창 리디자인(누적·최근 7일·고확신(확률 60%+) 적중률, 기준선(같은 경기 전부 홈승) 대비, 누적 추이, 리그별, 최근 검증 결과 → 누르면 경기 결과 창, 검증 대기 목록, 첫 검증 전엔 "사전 기록 → 수정 불가 → 자동 채점" 설명). 서버 `/predict/track-record`에 `baseline_home_pct`·`last7`(가장 최근 채점 경기 기준 7일)·`confident`·`by_league`·`last10`·`upcoming`(검증 대기 수·첫 날짜·가까운 6경기) 추가. 가짜 결과 45건으로 화면 확인함(첫 실제 결과는 10/10).
-  - **다음 경기 카드에 AI 예측**(`renderTodayCards`): 팀 옆 승리 확률 + 짧은 막대 + 무, 끝난 경기는 진 팀 흐림·적중 칩·결과 창. 예측은 일정 탭과 같은 `/predict/schedule`(700ms 안에 오면 한 번에 그림).
-  - **승부차기 탭 리디자인**(로직 그대로): 머리말 + 단계 표시(좁은 폰은 지금 단계만 글자), 골키퍼·키커 2열 카드 + 화면 아래 붙는 "다음" 바(모바일에선 이 화면만 후원 버튼 숨김 — 겹쳤음), 골대 뒤 빛·마름모 그물·원근 페널티 박스, 골키퍼 팔 벌린 모양(공격 땐 상대 GK 주황, 수비 땐 내 GK 파랑), 결과 색은 내 입장 기준(내 골·내 선방 초록 / 상대 골·내 실축 빨강 — 예전엔 GOAL은 항상 초록), 공·골키퍼 이동은 실제 칸 위치를 재서 계산(골대 크기가 폭마다 달라서 고정 % 좌표면 어긋남), 결과 화면 "같은 팀으로 다시"(`replayShootout`)·"처음부터", 문구 "~하시오" → "~해요".
-  - 구단 정보 경기 탭: "UCL" 글자 태그 대신 리그·챔스 모두 대회 로고(사용자 요청). 남색·검정 문장(유벤투스·칼리아리 등)이 어두운 배경에 묻혀서 목록 로고에 옅은 테두리 빛.
-
-- **4차(2026-09-29)**:
-  - **선수 탭 이번 시즌**: `update_data.fetch_scorers()` → `fotdata_model/scorers.json`(football-data `/competitions/{PL|PD|BL1|SA|FL1|CL}/scorers?limit=100`, 매일, `--scorers-only`) → 서버 `/players/leaders/{리그}`(득점 순 20명·도움 순 20명, 사진은 team_extra 스쿼드에서 성+이름 첫 글자로 매칭, lru_cache). 도움 순위는 득점 상위 100명 안에서 다시 정렬한 것이라 "골 없이 도움만 쌓은 선수는 빠질 수 있음" 안내. 무료 플랜에서 되는지는 첫 자동 업데이트에서 확인(403이면 기존 유지 + 로그에 표시) — 데이터 전엔 EPL은 예전 API-Football 24-25 기록으로 대체, 다른 리그는 "준비 중" 안내. 예전 `/players/topscorers/PL`은 승부차기 상대 키커 순서에 계속 씀.
-  - **예측 공유 링크**: `FotData.html?match=bayern-munchen-vs-paris-saint-germain`(`teamSlug` — 악센트·FC 같은 클럽 표기 제거, 161팀 겹침 0 확인). 결과가 뜨면 `history.replaceState`로 주소창이 공유 링크, 다른 탭으로 가면 지움, 들어오면 로고·팀 목록 준비 후 `goToFullPrediction`. 결과 카드에 "링크 공유"(모바일은 시스템 공유, 그 외 문구+주소 복사) + "이미지 저장". 링크 미리보기 썸네일은 사이트 공통 이미지(경기별 썸네일은 서버 렌더가 필요해 미착수).
-  - **버그**: 팀 이름이 긴 경기(바이에른–PSG 등)에서 모바일 예측 결과 칸이 화면보다 46px 넓어짐(라이브에도 있던 것) — `.predict-grid` 열을 `minmax(0,1fr)`로.
-  - **UCL 밖 팀 2단계 준비**: `fetch_extra_leagues()` → `extra_matches.csv`(에레디비시 DED·프리메이라리가 PPL 4시즌, 매일, `--extra-leagues`). **아직 모델엔 안 씀** — 리그 수준 보정(리그별 ELO 시작점 오프셋 + 자국 리그 득실 스케일)을 UCL 경기 백테스트(현재 방식 log loss 1.024 대비)로 검증한 뒤 켤 것. 튀르키예·벨기에 등은 무료 플랜 밖이라 계속 UCL 기록만.
-  - **랜딩 인트로 새로 만듦**(골대 인트로 교체, 같은 날 v2로 다시): v1(점 → 평면 로고 2.6초)은 "빠르고 단순", 시작부터 로고 자리에 파란 점(길이 0 대시 + 둥근 선끝이 점으로 찍힘), 바큇살 시작점이 미리 찍혀 "중간이 채워진" 느낌 → v2(약 3.9초, 2D 캔버스): 흐린 원근 경기장(가운데 원·하프라인)이 그려지고 데이터 점(데스크톱 1,000·모바일 650)이 반짝이며 나타남 → 소용돌이치며 **돌아가는 3D 와이어프레임 공**(ball-geometry.js를 동적 import — 히어로 공과 같은 모양, 실패 시 구 위 무작위 점)의 모서리로 모이고 그동안 "N 경기 데이터" 카운터가 오름(값은 지난 방문 때 `/accuracy`로 저장한 `localStorage.fd_total`, 없으면 6,027) → 1.9초부터 모서리 선이 이어짐(앞면 밝게·뒷면 흐리게) + 윤곽 원·빛 → "FotData" 글자가 흐림에서 한 글자씩(2.25초~) + "AI FOOTBALL" → (v2.1, 사용자 피드백 "카운터·이름이 너무 빨리 사라짐, 히어로 공과 다름") 카운터는 끝까지 남고 그 아래 이름이 2.8초~ 나와 머묾, 점의 22%는 히어로 공처럼 오각형 면 안을 채움(`pointInPenta`) → 4.3초 공이 다가오며 3.2배로 커지고 사라짐(`.out`, 이때 히어로 3D 공이 켜짐 — `landing-story.js introGone`이 `.out`도 인트로 끝으로 봄) → 4.8초 창 닫힘. 세션당 1회·모션 최소화면 생략·클릭/키/"건너뛰기". 인트로 동안 히어로 문구 등장 애니메이션을 멈춰 뒀다가(`html.intro-on`) 인트로가 빠질 때 차례로 올라오게(예전엔 인트로 뒤에서 미리 끝나 있었음). 글자 퇴장은 감싼 `.intro-words`를 흐리게(글자 자체엔 등장 애니메이션 fill 값이 남아 opacity 전환이 안 먹음).
-  - **인트로 면 점 밀도**: 면 점은 히어로와 같은 개수(데스크톱 1,300·모바일 570, 작고 은은하게)를 모서리 점(800/520)과 따로 둠.
-  - **랜딩 모션 3종(2026-09-29)** — 전부 `prefers-reduced-motion`이면 최종 모습으로 바로:
-    - 히어로 숫자 카운트업: 값(`/accuracy`·`/teams`)이 오고 + 인트로가 빠진 뒤(`intro-exit` 이벤트, `window.__introDone`) + 숫자 칸 fadeUp이 거의 끝난 0.65초 뒤, 칸 순서대로 130ms 간격 easeOutExpo 1.7초, 끝나면 한 번 빛남(`.glint`). 자릿수 폭 고정(tabular-nums + 최종 글자 수만큼 min-width). 칸은 처음부터 0으로(예전 "--"/"6"이 보였다가 0으로 돌아가며 튀었음). 공통 `countUp()`.
-    - 예측 목업: 카드가 55% 보이면 `.mock-on` — 로고·팀명이 양옆에서 들어오고, 막대가 위에서부터 170ms 간격으로 차며 %가 같이 오르고, 배지가 톡 뜨고, 이긴 쪽 막대에 빛이 훑고 지나감. 색은 사이트 규칙(홈 파랑·무 회색·원정 주황 — 예전 노랑·빨강).
-    - 지원하는 리그: 칩이 흐림·아래에서 85ms 간격으로 떠오르고 로고가 살짝 튀어오름, 다 나오면 빛줄기가 한 번 스침(`.pills-on`).
-  - **로고 "AI FOOTBALL" 정렬(2026-09-29)**: 예전엔 자간 7px로 "FotData"보다 넓게 삐져나와 중심이 어긋났음 → 한 글자씩 span으로 나눠 `justify-content: space-between` + `width:0; min-width:100%`(묶음 폭을 늘리지 않고 FotData 폭만큼만 퍼짐) — 랜딩 상단(27px : 9px)·인트로(38px : 12.5px) 둘 다 이름 폭에 1~3px 차로 맞음. 인트로는 글자가 하나씩 나타남.
-  - **랜딩 모션 2차(2026-09-29)**: 예측 목업이 "티가 안 났던" 원인 = 섹션(.preview .reveal)이 아직 흐릿하게 떠오르는 중(투명도 ~0.86)에 막대가 차기 시작 + 막대 6px → 섹션이 다 뜬 뒤 카드 70% 보일 때 시작, 배지 "AI 분석 중…" → 막대(10px) 차오름·% 카운트 → "홈팀 승리 예측"으로 바뀌며 톡 + 진 쪽 줄 흐리게 + 이긴 막대 빛, 화면 밖으로 나갔다 오면 다시 재생. 리그별 1위 카드(인트로 끝 +0.9초, 90ms 간격, 로고 톡), 순위표 미리보기(1위부터 줄 슬라이드·승점 카운트·폼 점 왼쪽부터), 기능 카드 아이콘 선 그리기(**`[pathLength]` 속성 선택자는 SVG에서 "보이는 상태" 규칙이 안 잡혀 선이 숨은 채 남았음 → `.draw` 클래스로**), 마지막 버튼 7초마다 빛 스침(`.cta-shine`).
-  - **랜딩 3D 공 "툭" 튐**: 히어로 기울기 0.18 → 스토리 0.12가 한 프레임에 바뀌었음 → `tilt`가 목표를 부드럽게 따라가게.
-  - 테스트 팁: 인트로는 2.6초라 캡처 도구가 느려서 못 잡음 → 사본에서 `?t=초`로 시간을 멈추고(캔버스 t 고정 + `document.getAnimations()` currentTime/pause) 확인했음. `sessionStorage.introPlayed`를 지워야 다시 재생됨.
-
-- **메인 앱 5차(2026-09-29)**:
-  - **즐겨찾기 최대 5팀**(`favoriteTeams` 배열 — 예전 `favoriteTeam` 한 팀은 자동 이전, `getFavoriteTeams`/`setFavoriteTeams`/`isFavoriteTeam`, 6번째는 토스트로 막음). 상단 위젯은 **5칸 격자의 작은 카드**(팀이 1개여도 1/5 — 예전 1팀 카드가 한 줄을 꽉 채웠음; 구단 색 왼쪽 줄·★, 둘째 줄 앞 D-day 배지 — 오른쪽 배지였을 땐 1000px에서 이름이 "Liver…"로 잘림, 5팀 미만이면 "+ 팀 추가"). 팀마다 다음 경기는 `favUpcomingMatches`(창 → 모자라면 그 리그 일정). 구단 색은 팀 정보가 오는 대로 칠함(기다리지 않음).
-  - **다음 경기 카드 [전체 | ★ 내 팀]**(즐겨찾기가 있을 때만, 선택은 `todayView` 기억): 내 팀 보기는 팀마다 최대 3경기·전체 10경기·카드에 날짜. **일정 탭 "★ 내 팀만"**(지금 리그·달에서 즐겨찾기 팀 경기만).
-  - **예측 결과 공개 연출**(`showResult` + `revealTimers`): 배지 "AI 분석 중…" → 막대가 홈·무·원정 0.18초 간격으로 차고 % 카운트(원래 카운트업은 있었고 막대가 동시에 찼음) → 0.9초 예상 스코어 숫자 롤링 → 1.5초 배지 공개(톡)·이긴 줄 또렷·나머지 흐리게·빛 훑기 + **한 줄 요약**(`predictionSummary` — 예측 근거에서 이 예측 쪽 요인 상위 2개 + 반대쪽 요인(8% 이상)으로 문장, 확률 60%+ "뚜렷하게"/45% 미만 "근소하게", 조사는 받침으로 은/는). 새 예측을 누르면 이전 타이머 취소, 모션 최소화면 바로 최종.
-  - **지표 칸**(`renderStatBoxes`, 2×2 — 홈 위 줄·원정 아래 줄): "1.848"만 있던 칸 → 경기당 득점/실점(카운트) + 리그 N위 칩(상위 25% 파랑·하위 25% 빨강) + 리그 평균 눈금 막대(평균보다 나쁘면 흐리게). 서버 `/predict`의 `home_stats`/`away_stats`에 `league_size`·`attack_rank`·`defense_rank`·`league_avg_*`(`_team_league_map` 전 팀 한 번에 + `_league_display_ranks` 캐시·서버 시작 때 미리 계산, 응답 3ms 그대로). 막대 폭 속성은 `data-fill`(`data-w`는 경기 분석 칸 코드와 겹친 전례).
-  - **양쪽 열 끝 맞춤 확장**: 오른쪽 열이 짧은 경기(5대 리그 밖 팀 — 경기 분석 칸이 비어 라이브에서도 PSV–바이에른 247px 어긋나 있었음)는 "다른 경기도 예측해보기" 카드를 오른쪽 열(맞대결 아래)로 옮겨 채움 — 5개 대진 0~1px.
-  - **팀 정보 플레이어 통계 탭**(예전 "준비 중" 한 줄): 서버 `/team/players/{team}`(scorers.json에서 이 팀 선수 — 리그·챔스 따로, 이번 시즌 팀 리그 득점 대비 비중, team_info 스쿼드 포지션·국적 상위 5) → 공격 포인트 목록(사진·골·도움·경기·PK·팀 득점 비중 막대) + 스쿼드 구성(포지션 막대·국적 칩). 득점 데이터 전엔 안내 + 스쿼드 구성만. (생년월일은 데이터에 없어서 평균 나이는 안 함)
-  - **순위 예측 순위 분포**: 시뮬레이션이 팀별 최종 순위 횟수(`rankCount`)를 세서 `rank_dist`로 — 결과 줄을 누르면 아래로 1~20위 확률 막대(구역 색)·가장 유력한 순위·UCL권/강등권 확률, 한 번에 하나만.
-  - **순위표 보기 전환**(리그만, 챔스 숨김): 전체 / 홈 / 원정 / 최근 5경기 — 서버 `/standings/{리그}?season=&view=home|away|form`(`_standings_view` 캐시, 첫 호출 ~24ms). 전체가 아닌 보기엔 구역 색·우승 표시·요약 칸 없음 + 안내 문구.
-  - 점검: 데스크톱 1000·1280px, 모바일 375px 전 탭·팀 정보 7개 탭·결과·순위 분포에서 JS 에러 0·가로 넘침 0.
-
-### 5.16 경기별 공유 썸네일 · 방문 통계 (2026-09-30)
-- **공유 링크 = `https://fotdata-api.vercel.app/m/{홈slug}-vs-{원정slug}`**(예측 결과 "링크 공유" 버튼, `sharePageUrl`). 카톡·페북·X 미리보기 봇은 JS를 안 돌려서 예전 `FotData.html?match=`는 공통 썸네일만 떴음. `vercel.json`이 `/m/:slug` → Render `/share/match/:slug`(그 경기 og 태그 — 제목 "Liverpool vs Man City — AI 예측: Man City 승 41%", 설명에 확률·예상 스코어·대회·킥오프(한국 시간), 사람은 JS `location.replace`로 `FotData.html?match=`로 이동), `/og/m/:file` → Render `/og/match/:file`(1200×630 JPEG ~110KB, `share_card.py`)로 넘겨줌. 주소창은 계속 `FotData.html?match=`(새로고침이 Render를 안 거치게).
-  - og:url은 반드시 `/m/…` 자기 자신(FotData.html로 두면 페북이 그쪽 공통 태그를 다시 긁음). 메타 refresh는 봇이 따라갈 수 있어서 안 씀. 썸네일 주소엔 `?v=모델 학습 시각`(매일 새 예측 → 메신저가 새 이미지를 받게).
-  - slug는 서버 `_team_slug`가 JS `teamSlug`와 같은 규칙(ASCII `\b`까지) — 앱 팀 이름 106개로 JS·파이썬 결과 전부 일치·전부 풀림 확인. 짧은 이름은 서버가 FotData.html의 `SHORT_NAMES` 표를 그대로 읽음(`_short_names`, 표 하나만 관리). 풀 수 없거나 예측할 수 없는 경기는 사이트 공통 og 태그 / 이미지는 og-image.png로 302.
-  - 속도: 링크 미리보기 봇은 몇 초만 기다림. 처음엔 2배 전체 캔버스에 그려 줄였더니 Render 무료 CPU(로컬보다 20~40배 느림)에서 카드 한 장 1~4초 → 고정 요소(빛번짐·공·경기장·로고·워드마크)와 팀 색 링은 2배로 그려 줄인 조각을 한 번만 만들어 재사용, 경기마다 바뀌는 건 1배 캔버스에 바로(칩·막대만 작은 2배 조각) → 로컬 57→17.5ms, 모양 동일. 구단 로고 161개는 서버 시작 때 미리 받아 둠(`warm_crests`, 압축 바이트 캐시), 카드는 대진 기준 `_share_jpg(home, away)` 캐시(표기가 다른 slug도 한 장), 앞으로 10일 안의 실제 경기 카드는 서버 시작 때 미리 그림(`_warm_share_cards`). Render가 자고 있으면 첫 봇은 놓칠 수 있음(cron-job.org 핑으로 대부분 깨어 있음).
-  - 폰트: 맥 기본 폰트는 재배포 불가라 Pretendard(OFL)를 한글 2,350자(KS X 1001)+라틴·기호로 추려 넣음(두 굵기 745KB). **OFL상 수정본은 원래 이름을 못 써서 글꼴 이름을 "FotData Card Sans"로 바꿈.** 여기 없는 글자(드문 한자·이모지)는 □로 나옴.
-  - 서비스워커는 `/m/`·`/og/`를 캐시하지 않음.
-- **방문 통계(Umami Cloud, 쿠키 없음·개인정보 없음)**: 2026-10-03 연결 — `analytics.js`의 `UMAMI_ID`(공개값, fotdata.official@gmail.com 계정의 웹사이트 FotData). 무료 Hobby: 사이트 1개·월 10만 이벤트(페이지 조회 1 + 이벤트 속성 하나당 1)·보관 6개월. 배포 주소가 아니면(로컬) 아무것도 안 보냄. 개인정보처리방침·이용약관 페이지엔 안 넣음. 내 방문 빼기: 그 브라우저 콘솔에서 `localStorage.setItem('umami.disabled', 1)`. 앱: 탭 전환 = 가상 주소 `/app/{탭}` 조회, 이벤트 `predict`(대진)·`share_link`(native/copy)·`share_image`·`shared_open`(공유 링크로 들어온 방문)·`favorite_add`·`team_info`·`simulation`(리그·횟수)·`match_preview`·`track_record`·`shootout_start`. 랜딩: `data-umami-event` 속성으로 `landing_cta`(where: nav/hero/hero_standings/story/bottom)·`landing_nav`. 앱의 `track()`은 analytics.js가 늦게 로드돼도 `window.fdQ`에 쌓았다가 보냄.
-
-### 5.17 경기 당일 결과 · 첫 방문 안내 · 위키 매일 갱신 (2026-09-30)
-- **경기 당일 결과**: schedule.json은 새벽 업데이트 때만 바뀌어서 경기가 끝나도 다음 날 아침까지 결과가 없었음 → Render가 football-data `/v4/matches?competitions=…&dateFrom~dateTo`를 직접 받아 오늘 경기 점수·상태를 일정 위에 덮음(`_live_overlay`, `/matches/window`·`/schedule/{code}`에 적용 — 캐시된 원본은 복사본으로만). **Render 환경변수 `FOOTBALL_API_KEY`가 있어야 켜짐**(2026-09-30 등록, 없으면 아무것도 안 함).
-  - 호출 조건: 지금 −30시간~+2분에 킥오프했는데 일정상 안 끝난 경기가 있을 때만. 서버 전체에서 1분에 최대 1번(모든 사용자가 같은 캐시), 오늘 경기가 전부 끝났으면 15분에 한 번 — 단 다음 킥오프 시각이 지나면 바로 다시 확인(`_next_kickoff`). 실패하면 직전 값 유지.
-  - 새벽 자동 업데이트와 같은 키의 분당 10회 한도를 나눠 쓰므로 update_data의 football-data 호출은 전부 `fd_get`(429면 `X-RequestCounter-Reset`만큼 쉬고 최대 3번 재시도 — 예전엔 429면 그 리그를 조용히 건너뜀).
-  - 무료 플랜은 "Scores delayed"(몇 분 늦음, 실시간은 €12/월) → 화면 표기는 "LIVE"가 아니라 빨간 점 + "진행 중 67분"·추가시간 "45+2분"·"90+3분"(분이 없으면 "진행 중")·"하프타임"·"연장전"·"승부차기". 진행 중 경기는 승리 확률 대신 스코어.
-  - 화면(`applyLive`): 진행 중이거나 막 킥오프한 경기가 있으면 1분마다 `/matches/live`(가벼움)로 점수만 갱신 → 다음 경기 카드는 깜빡임 없이 다시 그림(`loadTodayMatches({quiet:true})`), 일정 탭은 그 달 다시 그림. 탭이 숨겨지면 쉬고 다시 보이면 이어감.
-  - 끝나면 `/predict/schedule`이 경기 전에 기록된 예측(prediction_log)으로 바로 "AI 적중/빗나감"을 붙임(새벽 채점 전이라도). 순위표·트랙레코드 누적은 그대로 새벽 업데이트 때.
-  - 함께 고친 기존 버그: 다음 경기 카드에서 끝난 경기를 누르면 그 리그 일정을 아직 안 받았을 때 결과 창이 안 떴음 → 가까운 경기 목록(`windowMatchesList`)에서도 찾음.
-- **첫 방문 안내**(`maybeOnboard`): 처음 온 브라우저에 "응원하는 팀을 골라주세요(최대 5팀)" 창 — 리그 칩, 강팀 순 로고 격자(고를 때 격자를 다시 그리지 않아 스크롤 유지), 고른 팀 칩, "나중에 할게요". 고르면 즐겨찾기 + 다음 경기 카드를 "내 팀" 보기로. 로그인 없이 localStorage `fdOnboarded`만 남김. 즐겨찾기가 이미 있는 사람·공유 링크(`?match=`)·탭 주소(`#…`)로 들어온 방문엔 안 띄움(표시도 안 남겨 다음 방문 때). 다른 창이 떠 있으면 이번엔 생략. 통계 이벤트 `onboard_open/done/skip`.
-- **위키 매일 갱신**: `WIKI_REFRESH_DAYS` 7 → 1(감독 교체 등이 위키에 반영돼도 우리가 최대 7일 늦게 받았음). 갱신 때는 **다시 검색하지 않고 저장된 `en_title` 문서를 그대로 씀**(`_wiki_one(known_title=)`) — 매일 검색하면 실행마다 바뀌는 검색 결과로 오매칭 위험도 매일 생김. 문서를 다시 찾게 하려면 team_wiki.json에서 그 팀 항목을 지우고 실행.
-- 나무위키는 CC BY-NC-SA(비영리)라 상업 서비스에 못 씀(확인함). 해외 매체 RSS(BBC 등)는 "변경 금지·상업 이용은 허가 필요"라 번역 게재 불가 — 뉴스는 나중에 다시 검토.
-
-### 5.18 경기 상세 화면 준비 — 결과 창 [요약 | 라인업 | 통계] (2026-09-30, API-Football Pro 결제 전 UI 선작업)
-- **데이터 형태 확인(무료 키, 요청 6회)**: EPL 기준 경기·순위·이벤트·라인업 2010-11~, 팀 경기 통계·선수별 경기 스탯/평점 2014-15~, 부상자 2020-21~ (`/leagues?id=39` coverage). `/fixtures?id=` 한 번에 이벤트(분·추가시간·도움·카드 사유)·라인업(포메이션·`grid` "줄:칸"·감독·유니폼 색)·팀 통계(xG 포함)·선수별 평점이 옴. `/players`는 나이·생년월일·키·몸무게·사진·시즌 평균 평점. 무료 키로도 `/fixtures?live=all`은 열리지만 하루 100회라 실시간 운영은 Pro 필요.
-- **약관(api-sports.io/terms, 2025-05-21판)**: 앱·웹사이트에 쓰는 건 허용, 데이터를 그대로 되파는 것만 금지(예측 API 판매는 원본 데이터를 안 넘기는지 확인 필요 — 애매하면 이메일 문의). 단 "게시 라이선스는 주지 않음 — 리그 등 권리자 허가는 이용자 책임, 권리자 항의 시 환불 없이 정지 가능", 로고·사진은 식별 목적. 대시보드 결제는 선불·환불 불가(RapidAPI는 월 단위 해지 가능).
-- **변환**: `update_data.af_match_detail(fx)` → `{events, lineups{home,away: formation, coach, colors, start[], subs[]}, stats[], potm, status, referee, venue}`(한 경기 ~11KB). 교체 이벤트는 player=나간 선수·assist=들어온 선수가 원칙인데 반대로 오는 경우가 있어 선발 명단으로 바로잡음. 선수별 골·도움·카드·교체 분을 이벤트에서 집계.
-- **서버** `/match/detail?home_team=&away_team=&date=` → `fotdata_model/match_details.json`(키 `홈|원정|YYYY-MM-DD`). **수집은 결제 후에 붙일 것** — 지금은 파일이 없어 404 → 결과 창은 예전 그대로(탭 숨김).
-- **화면**(`renderMatchDetail`): 요약 = 경기 최우수 선수(평점 기준) + 타임라인(홈은 가운데 왼쪽·원정은 오른쪽, 골엔 그때 스코어, 하프타임/경기 종료 구분선, 교체는 들어온 선수 초록·나간 선수 흐리게, 카드 사유·VAR 한국어) + 주심·경기장. 자책골은 제공처에 따라 팀 표기가 달라서 최종 스코어와 맞는 해석을 고름(`mdOwnGoalFor`). 라인업 = 세로 경기장(위 원정·아래 홈 — 원정은 좌우 반전, 칸 1 = 그 팀 왼쪽), 구단 유니폼 색 동그라미 + 등번호 + 평점 배지(8+ 파랑·7+ 초록·6+ 노랑·미만 주황) + 골·카드·교체 분, 아래 교체 선수·벤치 수·감독. 이름은 성만(`mdShortName`, van Dijk처럼 전치사 포함). 통계 = 점유율 한 줄 막대 + 좌우 막대(좋은 쪽만 진하게, xG 강조), 탭을 열 때 차오름. 좁은 폰(≤480px)은 경기장을 세로로 늘리고 선수 표시를 줄여 평점·이름 겹침 0.
-- 샘플(24-25 리버풀 1-1 팰리스)로 데스크톱·모바일 확인. 샘플 데이터는 레포에 안 올림(약관·재배포 이슈).
-- 다음(결제 후): 끝난 경기 상세 수집(경기 끝나고 한 번, 경기당 요청 1회) → 경기 미리보기의 확정 라인업·부상자 → 선수 카드(키·나이·시즌 스탯·평점) → 구단 베스트 11(시즌 평균 평점으로 포메이션 채우기).
-
-### 5.19 팀 소식·선수 카드·구단 베스트 11 (2026-09-30, 결제 전 UI 선작업)
-- **팀 소식**(`teamNewsHtml`/`loadTeamNews` — 경기 미리보기 창 `#mp-news` + 예측 결과 맞대결 카드 아래 `#team-news`): 라인업(확정이면 "확정", 발표 전이면 서버가 각 팀 **지난 경기 선발**로 만든 "예상 라인업") + 결장·부상(결장/출전 불투명, 사유 한국어 `INJ_KO`) + 주요 선수(출전 시간 팀 최다의 25% 이상 중 평점 상위 3명, 결장이면 표시). 데이터 없으면 아무것도 안 그림. 5대 리그 밖·강등팀처럼 예측이 안 되는 대진은 미리보기 창 자체가 "예측 불가"라 팀 소식도 없음.
-- **선수 카드**(`openPlayerCard(team, id)`, `#pc-modal` z-index 1100 — 다른 창 위): 사진·전체 이름·포지션·주장/부상·나이(생년월일)·국적(`NAT_KO`)·키·몸무게·출생지 + 시즌 리그 기록(출전/선발·시간·골·도움 또는 실점·선방, 슈팅·90분당 공격 포인트·드리블·패스·키패스·태클·가로채기·경합·카드·파울) + 평균 평점. 라인업·주요 선수·베스트 11·선수 목록·결장자에서 누르면 열림.
-- **구단 베스트 11**(팀 정보 → 플레이어 통계 맨 위, `bestEleven`): 출전 시간 팀 최다의 25% 이상 선수를 포지션별 평점 순으로, 4-3-3/4-4-2/3-5-2/3-4-3/4-5-1/5-3-2 중 평균 평점이 가장 높은 포메이션. 선수는 얼굴 사진 동그라미(지난 시즌 기록엔 등번호가 없음). 아래 "선수별 시즌 기록"(평점 순 12명 + 전체 보기).
-- 서버: `/team/squad/{team}`(af_squads.json), `/match/preview`(match_previews.json + match_details.json의 지난 경기 선발). 변환: `update_data.af_player_row`·`af_injury_rows`. 지금은 파일이 없어서 404 → 화면 변화 없음.
-- **⚠️ API-Football `/players?team=&season=`의 함정(확인함)**: 지금 소속 선수 기준으로 다른 팀에서 뛴 기록까지 그 팀 것으로 붙여 줌 — 24-25 아스널 조회에 본머스 임대였던 케파(32경기 평점 7.15)가 들어와서 그대로 쓰면 베스트 11 골키퍼가 라야(7.05) 대신 케파가 됨. → **결제 후 시즌 기록은 경기 상세(`/fixtures?id=`의 선수별 스탯, 결과 창용으로 어차피 받음)를 합산해서 만들고, `/players`는 프로필(나이·키·사진)만 쓸 것.**
-- 평점 배지 색은 보이는 반올림 값 기준(`mdRatingClass`) — 6.97이 "7.0"인데 노랑이던 것 수정. 이름 줄임에 Mac/Mc 포함(Mac Allister).
-- 확인: 무료 키 샘플(24-25 아스널 58명·사우샘프턴–아스널·부상 241건)로 데스크톱·모바일, JS 에러·가로 넘침 0. 푸시 전 인라인 스크립트 전체를 `node --check`로 문법 검사(같은 블록 `const sq` 이름 충돌로 스크립트 전체가 멈춘 걸 이 검사로 잡음).
-
-- **이름 표기 규칙(2026-09-30 사용자 결정)**: 경기장 위(라인업·예상 라인업·결과 창 라인업·베스트 11)는 "M. Salah"(이니셜+성, `mdInitialName` — 좁은 폰 ≤480px은 성만), 목록·기록·선수 카드·결장자는 전체 이름 "Bukayo Saka"(`afFullName` — API-Football "B. Saka"의 이니셜에 맞는 단어를 firstname에서 골라 붙임, 서버 `af_player_row`의 `full_name`과 같은 규칙). 등번호는 이름 앞 **회색**(`.md-pn i`, 스쿼드 탭 `.pl-num` — 예전 `#7` 표기 제거). 경기 전 라인업(확정·예상)·베스트 11은 동그라미에 선수 사진(테두리 = 유니폼 색), 결과 창 라인업은 유니폼 색 + 등번호 그대로. 베스트 11 등번호는 시즌 기록에 없으면 팀 정보 스쿼드 사진 주소 속 선수 ID로 현재 등번호를 찾음.
-- **스쿼드 탭 이름 통일(서버 `_squad_full_names`)**: API-Football 스쿼드(30팀, 사진·등번호)가 "I. Meslier"처럼 줄인 이름이라 football-data 명단 팀들과 표기가 달랐음 → football-data 1군 명단의 전체 이름으로 바꿈. 줄인 이름(이니셜 일치 필수)·한 단어 이름만, 이미 전체 이름이면 그대로(football-data 쪽이 더 짧은 "Sannadi" 같은 경우 방지), 같은 이름이 두 명에게 붙으면 둘 다 원래대로. 740명 중 480명 변경, 오매칭·중복 0(처음 규칙에선 유스 "Z. Christie" → 1군 "Ryan Christie", "Vitor Nunes" → "Matheus Nunes" 같은 오매칭 12건이 있어서 엄격하게 바꿈).
-- 라인업 선수를 누르면 선수 카드, 시즌 기록이 없는 선수는 라인업 정보(사진·등번호·포지션·그 경기 평점)로 간단한 카드(`mdPlayerIndex`).
-
-- **선수 카드 보강(2026-09-30, 풋몹 참고)**: 시즌 기록 [합계 | 90분당] 전환(`pcSetMode`), **순위 막대** = 같은 리그·같은 포지션에서 450분 이상 뛴 선수 대비 90분당 백분위(`update_data.add_percentiles` → `p.pct`, 상위 1/3 초록·중간 노랑·하위 1/3 빨강, 표본 5명 미만 포지션은 계산 안 함) — 막대가 있으면 모든 줄을 같은 칸 배치로(숫자 열 정렬), 90분당 골+도움·드리블 성공률·경합 승률 칩, **최근 경기**(`p.matches` — 수집 때 경기 상세의 선수별 기록으로: 날짜·상대·결과·출전·골·도움·카드·평점), **경력·트로피·부상 이력**(`/player/profile/{id}` → `playerProfileHtml`, 클럽/국가대표 구분·트로피 대회별 우승 횟수·최근 부상 5건) — 서버 주소·수집은 결제 후(형태 확인용 `probe_af3`: `/players/teams`·`/trophies`·`/transfers?player`·`/sidelined`).
-- **경력·트로피·부상 이력 형태(사카 샘플로 확인, 2026-09-30)**: `/players/teams`는 날짜 없이 "뛴 시즌 목록"만(유스 팀 섞임) → "2018/19 – 현재 · 9시즌", 1군 클럽·국가대표(연령별 포함)만 표시. `/trophies`엔 친선 대회(Emirates Cup 5회·Florida Cup·MLS All-Star)·유스 대회가 섞이고, **같은 트로피가 시즌 없이 한 번 더** 옴 → 친선 제외(`AF_FRIENDLY_CUPS`), 유스 표시, 시즌 있는 기록이 있으면 시즌 없는 중복 버림(안 하면 사카 FA컵 우승이 2회로 셈). 우승(금색)·준우승(회색) 나눠 대회별 횟수. `/sidelined` 최근 10건(부상 종류 한국어 `INJ_KO`). `/transfers?player`는 이적 없는 선수면 빈 목록 — 경력은 시즌 목록으로 만듦. 변환 `update_data.af_player_profile`, 서버 `/player/profile/{id}`(af_profiles.json, 결제 후 수집 전엔 204 빈 응답(2026-10-05까지 404 — 콘솔 오류로 찍혀서 변경)).
-- **API-Football로 안 되는 것(풋몹에 있지만)**: 이적 시장 가치(Transfermarkt 데이터 — 긁어오기는 약관 위반), 계약 만료일, 주발, 선수별 xG·xGOT·xA, 히트맵, 슈팅 맵(Opta급 이벤트 좌표 데이터). 세부 포지션(LW 등)은 라인업 `grid` 위치로 대략 추정만 가능.
-- **선수 탭 이번 시즌 득점·도움은 football-data**(`fetch_scorers`, 2026-09-29 첫 자동 수집 성공 — 무료 플랜도 26-27 가능). "24-25만 가능"은 API-Football 무료 플랜 제한이었음(예전 EPL 득점왕 데이터).
-
-### 5.21 구단 둘러보기 — 상단 검색(⌘K)·첫 방문 안내 대체 (2026-09-30, 사용자 아이디어)
-- 전체 화면(`#club-browser`, z-index 950 — 팀 정보·선수 카드 창(1000+)이 그 위에 뜸). 리그 칩(5대 리그) → **현재 순위 1위부터** 카드 한 장씩(커버플로: 옆 카드는 뒤로 물러나며 기울고 흐리게, `layoutCb`가 카드마다 transform 계산 — CSS `abs()`는 브라우저 지원이 불안해서 JS로). 넘기기: ‹ › 버튼·←→ 키(검색창 입력 중엔 아님)·가로 휠(누적 60px)·스와이프(45px), 아래 1~20위 로고 줄을 누르면 그 순위로.
-- **3D 로고**: 같은 로고 PNG를 1.35px 간격으로 16장 뒤로 쌓고 뒤쪽일수록 어둡게(`cbLogoLayers`) → 사각형 여백 없이 로고 윤곽 그대로 두께가 생김. 가운데 카드만 층을 쌓음(무거워서), 좌우로 천천히 흔들려 두께가 보임(`cbSway`, 모션 최소화면 고정 각도). 주의: 조상에 opacity<1·filter·overflow:hidden이 있으면 3D가 평평해짐 — 가운데 카드는 opacity 1.
-- **뒤집기**: 가운데 로고를 누르면 `rotateY(180deg)`로 뒷면 — 한국어 구단명(위키)·감독·연고지·홈구장(수용 인원)·창단 + **베스트 11**(`bestElevenHtml`, API-Football 선수 기록 — 결제 전엔 "이번 시즌 공격 포인트"(football-data 득점 순위)로 대체) + "팀 정보 전체 보기"·"★ 내 팀". 앞면 층 이미지마다 `backface-visibility: hidden`이라 뒤집으면 로고가 사라지고 뒷면만 보임.
-- **검색**: 영어 이름·짧은 이름·**한국어 구단명**(서버 `/teams/ko` — team_wiki name_ko, "바이에른"·"맨체스터") → 결과를 누르거나 Enter면 그 리그로 가서 **1위부터 찾은 구단까지 한 칸씩 넘겨 가며 도착**(`cbSweepTo`, 칸 간격은 거리에 맞춰 70~200ms, 총 1.5초 안팎, 도착하면 로고가 톡). 같은 리그면 1위로 돌아간 뒤 넘김.
-- **첫 방문 안내**(`openClubBrowser({mode:'pick'})`): 같은 화면에서 ★로 최대 5팀 → 아래 칩 + "선택 완료"(`finishOnboard` — 즐겨찾기 저장, 다음 경기 카드 "내 팀" 보기). 둘러보기 모드의 ★은 바로 즐겨찾기에 저장. 예전 첫 방문 창(`#onboard-modal`, 격자)은 삭제. 승부차기 팀 고르기는 예전 검색 목록 창 그대로(`openTeamSearch('shootout-…')`).
-- Esc: 뒷면이면 앞면으로, 아니면 닫기. 좁은 화면(≤600px)은 카드 280×400·검색창 한 줄 아래·‹ › 숨김(스와이프).
-- 확인: 1280px·390px, 뒤집기·검색 연출(토트넘 20위: 0→19 순서대로)·첫 방문 모드 ★/칩/완료, JS 문법 검사.
-
-- **2차(2026-09-30)**: 카드 뒤 빛 = 가운데 구단 색(`cbTint` — 서버 `/teams/meta`의 clubColors, 흰색·검정 같은 무채색은 건너뜀, 빛 두 장을 투명도로 교차 — 색 자체를 전환하면 매 프레임 큰 그라데이션을 다시 그려 끊김, `closest-side`로 원 테두리에서 잘리지 않게), 순위 변동 ▲▼(서버 `/standings/{리그}/movement` — 일정의 마지막 끝난 라운드 전까지 순위 vs 지금, 첫 라운드뿐이면 비교 안 함), 챔피언스리그 칩(리그 스테이지 36팀, 5대 리그 밖 구단 검색 → 챔스). 옆 카드 로고를 누르면 그 구단으로, 카드 밖 빈 곳을 누르면 가운데 기준 왼쪽 = 이전·오른쪽 = 다음 구단(뒤집힌 상태면 앞면으로만), 뒤집으면 로고 그림자 숨김(앞면 뒤쪽 깊이라 뒤집으면 뒷면 앞으로 튀어나왔음). 앞면에 넣었던 최근 5경기·다음 경기·⚔ 대결은 **사용자 요청으로 뺌**(카드가 더 깔끔).
-- **3D 로고 원칙(사용자 요청, 2026-09-30): 로고 자체에는 아무것도 더하지 않음 — 원본 그대로 + 두께·선명도만.** 한때 넣었던 엠보싱(글자 경계 음영)·광택 띠·밝은 테두리 층은 원본에 없던 윤곽선/색 변화로 보여서 전부 제거. 그때 원인: 엠보싱 앞면을 94% 크기로 그려 뒤 두께 층(원래 크기)이 둘레로 삐져나옴 + 옆면은 PNG·앞면은 SVG라 1% 어긋남.
-  - **원본 = 사이트 전체와 같은 football-data PNG만**(`cbSource`). football-data SVG는 쓰지 않음 — 확인해 보니 SVG가 있는 140팀 중 **95팀이 PNG와 디자인 자체가 다른 버전**(노팅엄·마르세유·인테르·라이프치히 등, 가운데로 오면 로고가 바뀌어 보였음)이고 74팀은 배경 사각형이 있거나 SVG가 없음(토트넘은 불투명도 4.9% 숨은 사각형). → 이후 사이트 로고 자체를 고화질 최신판으로 교체(5.22)해서 여기도 자동으로 선명해짐.
-  - **두께(`cbTones`·`cbDeepen`)**: 앞면과 **같은 그림**을 앞면 `<img>`(object-fit: contain)와 똑같이 맞춰 384px 캔버스에 그리고, 거의 투명한 픽셀(alpha<48)은 지운 뒤 4단계로 어둡게 → 16장을 1px 간격으로 뒤에 쌓음(두께 16px — 24px는 두꺼운 판처럼 보였음). 크기·위치가 같아 정면에선 완전히 가려지고 기울 때만 옆면으로 보임. 그림 저장은 `toBlob`(비동기), 도착 0.52초 뒤에 쌓고, 양옆 구단 것은 쉬는 시간에 미리(`requestIdleCallback`).
-- **프레임**: 원인이었던 층마다 CSS filter·넘기는 순간 층 생성·0.08초마다 한 칸 점프를 모두 없앰 → 미리 만든 그림, 도착 후 쌓기, 멀리 이동은 위치를 연속으로 흘리는 rAF(`cbSweepTo` — 매 프레임 보이는 카드만, CSS 전환 끔, 1→20위 약 1.2초, easeInOutCubic), 화면 밖 카드(거리 4.5 넘음) 계산 제외. 측정: 흔들림·1→20위·한 칸씩 모두 가장 느린 프레임 18.7ms 이하(25ms 넘는 프레임 0).
-
-### 5.22 구단 로고 고화질·최신판 (2026-09-30, 사용자 요청)
-- 사이트 로고가 football-data PNG(200px)라 크게 띄우면 흐리고, 일부는 옛 엠블럼이었음 → **영문 위키백과 구단 문서 인포박스의 현재 엠블럼**(대부분 SVG 원본)을 투명 WebP로 만든 세트(`generate_logos_hd.py` → `logos/hd/<slug>.webp` **160px**(사이트 대부분, 화면 최대 72px의 2배) + `logos/hd/l/<slug>.webp` **400px**(구단 둘러보기 가운데 카드·공유 이미지만 — 프론트 `logoLarge()`, share_card.py) + `fotdata_model/team_logos_hd.json`(160px 주소)). 처음엔 400px 하나만 써서 20~40px 칸에도 40KB씩 내려갔음(PageSpeed 740KB 지적 → 분리). 152팀, 키 불필요, 약 2~3분. 승격팀이 생기거나 엠블럼이 바뀌면 다시 실행 → 커밋.
-- 서버 `get_logos_with_mapping()`이 team_logos.json 위에 HD를 덮어쓴 **한 맵(`team_logos_cache`)을 모든 곳에서 씀**(/logos·순위표·보기 전환·조별리그·라이벌·빅매치·공유 썸네일). 예전엔 네 곳이 team_logos.json을 직접 읽었음. 프론트는 선수 탭 득점 순위·이적 기록도 우리 로고를 우선(이적은 이름 정확히 일치할 때만 — "… B" 2군이 1군 로고로 잡히지 않게).
-- 캔버스(공유 이미지·구단 둘러보기 두께): 같은 사이트 주소라 `proxiedLogo`가 프록시 없이 바로, 다른 주소(로컬)면 `/proxy/logo`(허용 호스트에 fotdata-api.vercel.app 추가 — 서버는 저장소의 logos/hd 파일을 바로 읽음). share_card.py도 디스크에서 읽음. Vercel은 `/logos/hd/*`에 7일 캐시(vercel.json headers).
-- 출처를 이걸로 정한 이유: football-data SVG는 140팀 중 95팀이 PNG와 다른 디자인·74팀 배경 문제(5.21), 위키미디어 공용(위키데이터 P154)은 자유 라이선스 로고뿐이라 59팀, 위키백과 pageimages API는 저작권 로고를 빼고 줌 → 인포박스 원문의 파일 이름을 직접 읽음.
-- **검수(사용자, 지금 로고 ↔ 새 로고 나란히)**: 이상하게 잡힌 7팀은 `EXCLUDE`로 지금 로고 유지 — 브라이턴(125주년 기념판), 아약스(색 빠진 판), 엘라스 베로나·루턴(단색), 사바(분홍), 베네치아("V" 로고), 메스(글자+십자가) + 토트넘(남색 단색 새 로고가 어두운 배경에 묻혀서 사용자 요청으로 예전 로고). 파포스는 위키 원본이 150px라 자동 제외. 다시 실행해서 새로 들어오는 팀이 생기면 눈으로 확인할 것.
-- 로컬 확인: `LOGO_HD_BASE=http://127.0.0.1:8765`로 서버를 띄우면 HD 주소를 로컬 정적 서버로 바꿔 줌(배포 전 확인용).
-
-### 5.23 모바일 정리 — 뒤로가기·화면 밀림·첫 로딩·접근성 (2026-09-30)
-- **뒤로가기**(FotData.html `OVERLAYS`·`navPush`·`navSync`): 예전엔 기록이 하나도 안 쌓여서 폰에서 창을 닫으려고 뒤로가기를 누르면 사이트를 나갔음.
-  - 탭 이동 = 기록 한 칸(주소 `#standings` 등, 경기 예측은 `#` 없음 — 새로고침해도 그 탭). `showPage(page, fromHistory)`.
-  - 창이 떠 있는 동안 기록에 "창" 칸(`{fdGuard:true}`) 하나를 얹음 → 뒤로가기 = 가장 위 창 하나 닫기(`OVERLAYS` 순서: 선수 카드 → 팀 검색 → 팀 정보 → 미리보기 → 트랙레코드 → 대진 → 구단 둘러보기(뒤집혀 있으면 앞면으로) → 후원 → 팀 선택 팝업). 창이 남아 있으면 칸을 다시 얹음.
-  - 버튼·배경·Esc로 닫아 창이 다 없어지면 그 칸을 `history.back()`으로 치움(`nav.pendingBack` — 그 사이 탭 이동은 `nav.deferred`로 미뤘다가). 창을 닫자마자 탭을 옮기면(팀 정보 → 순위표) 남은 창 칸을 새 탭으로 `replaceState`.
-  - 창 여닫는 함수는 안 건드리고 표시 클래스(show/open)를 MutationObserver로 지켜봄 — **새 창을 만들면 `OVERLAYS`에 한 줄 추가**. 같은 순간 닫고 여는 경우(미리보기 → 팀 정보)는 한 번에 모여 와서 칸 유지.
-  - `?match=` 공유 주소 `replaceState`는 기록 상태(`history.state`)를 유지하도록. `scrollRestoration = 'manual'`.
-  - 확인: 탭 이동·창 겹침(미리보기+팀 정보)·X로 닫은 뒤·미리보기 → 전체 분석·구단 카드 뒤집힘·팀 선택 팝업.
-- **화면 밀림(CLS)**: 빅매치·내 팀·트랙레코드 카드가 늦게 나타나며 팀 선택 카드를 300px 밀어냈음 → `.slot-wait`(실측 높이 min-height + 은은한 로딩 빛)로 첫 화면부터 자리를 잡고 도착하면 해제(실패·없음이면 숨김). 내 팀 칸은 즐겨찾기가 있을 때만 요소 바로 뒤 작은 인라인 스크립트가 켬. 다음 경기 로딩 높이 고정(113px). 실측: 모바일 375px 0.376 → 0, 1280px 0.294 → 0, 430·1000px 0.006 이하. **카드 높이를 바꾸면 이 min-height 값도 같이 맞출 것**(빅매치 331/모바일 298, 트랙레코드 67/≤400px 83, 내 팀 53).
-- **첫 로딩**: Inter 폰트 CSS를 비동기(preload→stylesheet, noscript 대체) + API·폰트 서버 preconnect(앱·랜딩) — 첫 화면 차단 0.75초 제거. 로고 두 크기 분리(5.22). 폰트 교체로 인한 작은 밀림(0.03 안팎)은 첫 방문에도 Inter를 보이려고 `display=swap` 유지(optional로 바꾸면 첫 방문은 기본 글꼴).
-- **접근성**: 장식용 로고 `alt=""` 54곳, 다음 경기 카드 팀 이름 터치 영역 24px(줄 간격 24px), 본문 `role="main"`.
-- **폰 화면 2차(2026-10-03)**: ① 빅매치 배너 폰(≤600px) 납작하게 298→175px(로고 40px, 경기장 숨김, 카운트다운 한 줄 "07일 11시간…", 짧은 이름) + 트랙레코드 설명 한 줄 → 팀 고르기 칸이 첫 화면 아래쪽에 보임+ **순서 변경(사용자 결정)**: 폰(≤600px)에서만 `#page-predict`를 flex column으로 — 내 팀(1) → 빅매치(2) → 팀 고르기·예측 버튼·예측 결과(3) → 다음 경기 `#today-card`(4) → 트랙레코드(5). 예측 버튼 853px → 538px(첫 화면 안, 즐겨찾기 2팀 기준). 팀 선택 팝업 자리 margin 315px는 폰에선 16px(아래 카드들이 대신 채움, 팝업이 페이지 끝을 안 넘는 것 확인). PC·태블릿은 원래 순서, `.slot-wait` 높이도 175로. ② 후원 하트 버튼: 아래로 스크롤하면 숨김(`.away`)·위로 올리거나 맨 위(120px 미만)면 다시, 패널 열려 있으면 유지. ③ 표 팀 이름 `teamNameHtml()` — 전체 이름(`.tn-full`)·짧은 이름(`.tn-short`)을 같이 그리고 ≤480px에서 짧은 이름(순위표·순위 예측·빅매치 배너). 결과 화면 가로 넘침(긴 팀 이름 — 지표 칸·팀 선택 칸 `minmax(0,1fr)`)도 같은 날 수정. 어두운 엠블럼(유벤투스·토트넘 등 14팀) 밝은 빛/배지 처리는 미리보기까지 했다가 **사용자 결정으로 안 함**.
-- **폰 화면 3차(2026-10-03 점검 후 12건)**: ① 순위 예측 표(≤480px) 숫자 칸 축소·"현재" 숨김·머리글 "승점" — 이름이 "Ar…"로 잘리고 아랫줄이 세 줄로 접혔음 ② 짧은 이름 확대: `SHORT_NAMES`에 12글자 넘던 30팀 추가(Palace·Coventry·Leeds·Alavés·Elversberg…, 서버 공유 썸네일도 같은 표), `teamNameHtml(t, full)`(전체 이름을 직접 줄 수 있게)을 일정 줄·순위표/순위 예측 요약 칸·경기 분석 팀 이름·팀 선택 칸에 적용, 최근 경기 줄(≤480px) 날짜·스코어 칸 축소, 파워 레이팅은 점수를 이름 아래 줄로 ③ 랜딩 후원 버튼: 히어로에선 숨김(예측 정확도 숫자를 가렸음)·아래로 내리면 숨김·위로/맨 아래면 표시 ④ "맞대 기록" → "맞대결 기록" ⑤ 선수 득점 순위 "N라운드 기준" = 수집일까지 끝난 경기의 최대 라운드(main.py `_done_matchday` — football-data `currentMatchday`는 다음 라운드라 하나 많았음) ⑥ 위키 "매주 갱신" → "매일" ⑦ 랜딩·메타 문구에서 "실시간 순위"·"역대 맞대결"·"전문가 수준" 제거(점수는 몇 분 늦고 맞대결은 4시즌뿐) ⑧ 맞대결 요약 숫자 색 홈 파랑·원정 주황(예전 초록/빨강) ⑨ 예측 근거 1% 미만 요인(상대전적 — 모델 계수가 0에 가까움)은 "0%" 빈 막대 대신 "이번 예측엔 영향이 거의 없어요" ⑩ "OO 최근 경기" 제목은 짧은 이름·대문자 변환 안 함(`.ct-keep`) ⑪ 팀 정보 탭 줄: 고른 탭을 가운데로 스크롤, 창을 열 때 맨 앞으로 ⑫ 이적 기록: 지금 스쿼드에 있는 선수는 사진 속 선수 ID로 전체 이름(떠난 선수는 줄인 이름 그대로).
-- **2차 점검(2026-10-03)**: ① 창(팀 정보·미리보기·결과·트랙레코드·선수 카드·캘린더·대진·검색)이 떠 있으면 뒤 페이지 스크롤 잠금 — `navSync`가 `SCROLL_LOCK` 목록으로 `html.modal-open`(overflow hidden) + 창 `overscroll-behavior: contain` (새 전체 화면 창을 만들면 이 목록에도 추가) ② 한국어 줄바꿈 `word-break: keep-all`(앱·랜딩·정책 페이지 body) — "트랙레/코드 보기", "전이에/요"처럼 단어 중간에서 끊겼음 ③ 스쿼드 등번호 없는 선수도 번호 칸을 비워 이름 정렬 ④ 짧은 이름 전환 기준 480 → 768px(태블릿 순위표에서 "Brighton & Hove Albion FC"가 잘렸음), 넓은 화면 이름은 `shortTeamName`(FC 등 꼬리표 제거) ⑤ 구단 둘러보기 안내: 터치 기기는 "옆으로 밀어서 넘기기"(키보드 안내 대신). 375·768·1000px 전 탭 가로 넘침·잘림 0(375px "Bournemouth" 한 곳만 몇 px).
-- **UI 디테일 4종(2026-10-04)**: ① 내 팀 강조 — 즐겨찾기 팀 줄을 순위표(옅은 파란 배경·파란 굵은 이름·★)·순위 예측(배경·이름)·일정(배경·그 팀 이름 파랑, 팀 정보 경기 탭 제외)에서, 즐겨찾기를 바꾸면 `setFavoriteTeams` → `refreshFavMarks()`가 보이는 표를 바로 다시 그림 ② 일정 탭: 아직 안 끝난 첫 경기 날짜에 "다음 경기"(오늘이면 "오늘") 표시, 탭을 열거나 리그를 바꾸면 그 날짜로 스크롤(`scrollToNextScheduled` — 그 달 첫 날짜면 맨 위 그대로) ③ 킥오프까지 남은 시간 `koRel(date, long)` + 1초 타이머 `koTick`: 24시간 안 "3시간 후"(3시간 미만은 "1시간 29분 후"), **1시간 안은 "킥오프 42:15" 초 단위 카운트다운(주황·깜빡이는 점)**, 킥오프 후 10분은 "곧 시작" + 진행 중 점수 갱신(`scheduleLiveTick`)을 깨움. 다음 경기 카드·일정 줄·경기 미리보기 머리(미리보기는 하루 넘으면 "6일 후"). 화면에 `.ko-rel`이 없으면 타이머 멈춤 ④ 순위표 순위 변동 ▲▼ — 이번 시즌 "전체" 보기에서 `/standings/{리그}/movement`를 순위표와 동시에 요청(1.5초 넘으면 생략), 폰(≤480px)은 화살표만·넓은 화면은 숫자까지.
-- **폰 순위표 최근 5경기·용어 도움말(2026-10-04)**: ① 폰(≤768px)은 "최근 5경기" 칸이 숨겨져 있어서 팀 이름 아래 작은 점 5개(승 초록·무 회색·패 빨강, `.st-mini-form` — 이름과 묶은 `.tc-nm`) ② 용어 도움말 ⓘ: `TIPS`(elo·xg·factors·mc·simcols·acc·baseline) + `<button class="ii" data-tip="키">` — 누르면 말풍선 `#tip-pop` 하나(버튼 아래, 공간 없으면 위, 화면 안으로), 다시 누르기·바깥·스크롤·Esc로 닫힘(Esc는 창보다 먼저). 위치: 예측 결과 예측 근거·예상 스코어, 경기 미리보기 예측 근거, 경기 분석 파워 레이팅 추이, 팀 통계 AI 파워 레이팅, 순위 예측 제목(몬테카를로)·결과 안내(표 읽는 법), 트랙레코드 기준선, 경기 예측 탭 정확도 줄. 새 용어는 `TIPS`에 한 줄 + 버튼만 붙이면 됨.
-- **PageSpeed 모바일(라이브)**: 성능 59 → 68~72(측정마다 흔들림 — 남은 건 Render API 응답 대기와 큰 인라인 스크립트), 접근성 87→100, 권장 100, 검색 92→100, CLS 0.461 → 0.03~0.07. 첫 방문은 구단 둘러보기(첫 방문 안내)가 떠서 PageSpeed의 LCP가 그 로고로 잡힘(API 대기 포함). 무키 PageSpeed API는 일일 한도가 0이라 pagespeed.web.dev 화면으로 측정.
-
-### 5.24 정식 출시 준비 — 출처 표기·캘린더 구독·README·정책 페이지 (2026-10-03)
-- **데이터 제공처 약관 확인**: football-data.org 이용약관(2018-06-01판) 7.1조 — 앱·사이트에 **"Football data provided by the Football-Data.org API"** 문구를 보이는 곳에 넣어야 함(이전엔 없었음) → 앱·랜딩 푸터에 그대로 넣음(문구 바꾸지 말 것). 약관 본문엔 상업 이용 금지 조항이 없지만, 운영자 블로그(2015)에 "무료 API는 비상업용만, 상업 이용이면 연락 달라"는 글이 있음 → **광고·유료화 전에 daniel@football-data.org에 상업 이용 문의 필요**(사용자 할 일). 약관 2.3조: API 키 하나는 앱 하나(도메인 하나)에만.
-- **푸터**(`.ft-right`/`.ft-credits`, 앱·랜딩 공통): 위 출처 문구 + API-Football·위키백과(CC BY-SA) + "구단 로고·명칭은 각 구단의 상표, 식별 목적" + "AI 예측은 참고 정보, 결과 보장 안 함". 모바일 앱은 왼쪽 정렬 + 아래 76px(떠 있는 후원 버튼에 안 가리게), 랜딩 모바일은 가운데.
-- **캘린더 구독**(킵 목록 "정식 출시 전" 항목): 서버 `/calendar/{slug}.ics`(한 팀) · `/calendar/my.ics?t=slug,slug`(최대 5팀) → Vercel `/cal/*` 리라이트. **파일 내려받기가 아니라 webcal 구독** — 킥오프 시각 확정·변경, 결과가 캘린더 앱의 다음 새로고침(REFRESH-INTERVAL 6시간) 때 반영. 일정마다 대회·라운드, 킥오프 미정 안내, AI 예측 확률(`_schedule_predictions`와 같은 숫자), 끝난 경기는 스코어 + 경기 전 기록 예측의 적중 여부, `/m/` 분석 링크. 지난 경기는 45일만. UID는 날짜+두 팀 slug(같은 경기 = 같은 일정이라 갱신 때 중복 안 생김). 한 줄 75바이트 접기는 바이트 단위(한글). 제목·캘린더 이름엔 이모지 없이 텍스트만("FotData · Liverpool 경기 일정", "Liverpool vs Man City") — 처음엔 ⚽를 붙였는데 사용자가 허접해 보인다고 해서 뺌. 일정 제목엔 그림을 넣을 수 없어서(캘린더 앱 공통) 브랜드 색(`COLOR`·`X-APPLE-CALENDAR-COLOR` #58A6FF — 애플 반영, 구글 무시) + 캘린더 아이콘(`IMAGE`, RFC 7986 — 지원 앱만)으로 대신. 이미 구독한 사람은 캘린더 이름·색이 구독할 때 값으로 남을 수 있음(일정은 새로고침 때 바뀜). 앱: 팀 정보 머리 📅(`openCalModal`) → [이 팀만 | ★ 내 팀 전체] + 아이폰·맥(webcal) / 구글 캘린더(`calendar.google.com/calendar/render?cid=webcal…`) / 주소 복사(삼성·아웃룩) / .ics 파일, 기기에 맞는 쪽에 "추천". 서비스워커는 `/cal/` 캐시 안 함. 뒤로가기 목록(`OVERLAYS`)·Esc 맨 위. 통계 이벤트 `calendar_open`·`calendar_add`(how).
-- **README.md**: 소개·기능·모델·구조·로컬 실행·데이터 출처.
-- **개인정보처리방침·이용약관**(`privacy.html`·`terms.html`·`legal.css`): 2026-10-03 공개 — 운영자 "FotData 운영팀", 문의·개인정보 보호책임자 연락처 **fotdata.official@gmail.com**(사용자가 만든 운영용 Gmail — 앞으로 서비스 가입·제휴·football-data 문의도 이 주소로). 앱·랜딩 푸터 `.ft-links`(개인정보처리방침은 굵게) + sitemap.xml. 시행일을 바꾸거나 외부 서비스가 늘면(예: AdSense — 광고 쿠키가 생기므로 '쿠키를 사용하지 않습니다' 문구와 외부 서비스 표를 반드시 고칠 것) 두 페이지를 같이 고칠 것. 내용: 회원가입·쿠키 없음, 기기 저장소 항목(즐겨찾기·첫 방문·보기 설정·테마·인트로·서비스워커 캐시), 호스팅 접속 기록, Umami(쿠키 없는 통계), 외부 서비스 표, Ko-fi는 창을 열 때만 / 약관: AI 예측 면책·도박 비권유, 데이터 출처와 권리(로고 상표·위키 CC BY-SA), 대량 수집·재판매 금지, 무료 서비스 변경·중단, 후원, 준거법 대한민국.
-
-### 5.25 도메인 이전 — fotdata-official.com (2026-10-03)
-- **도메인**: `fotdata-official.com`(Cloudflare Registrar, fotdata.official@gmail.com 계정, $10.46/년 자동 갱신 — 만료 2027-10-03). 이름은 사용자 결정(운영 메일·인스타 `fotdata.official`과 통일, 한국 사용자에게 .com이 익숙 — fotdata.com은 남이 2025-09 등록, .app은 "앱이 아닌데" 어색하다고 제외).
-- **연결**: Vercel 프로젝트 Settings → Domains에 `fotdata-official.com` 추가("Redirect apex domains to www" 권장 그대로 → **메인은 `www.fotdata-official.com`**, 맨 주소는 308로 www). Cloudflare DNS는 `@`·`www` 둘 다 CNAME `615cb5e7b3bd3f4c.vercel-dns-017.com`, **Proxy 끔(회색 구름, DNS only)** — 켜면 Vercel 인증서 발급이 꼬임. `@`의 ⓘ 표시는 CNAME flattening 안내(정상). 인증서 Let's Encrypt, Vercel 자동 갱신.
-- **코드**: 링크는 전부 `https://www.fotdata-official.com`(main.py `SITE_URL`, FotData.html `SITE_ORIGIN`·공유 링크·og/canonical/JSON-LD, 랜딩·정책 페이지, sitemap·robots, generate_logos_hd `SITE` → team_logos_hd.json 152개, README), 화면에 보이는 글자(공유 썸네일·캔버스 공유 이미지·og-image.png·홍보 이미지)는 짧은 `fotdata-official.com`. og-image 다시 만들고 `?v=3`. `analytics.js` LIVE는 `fotdata-official.com`(www 포함)일 때만. 서버 `SITE_HOSTS`(새 주소 둘 + 옛 vercel.app) — 로고 프록시 허용·디스크 직접 읽기.
-- **옛 주소**: `vercel.json` `redirects` — 호스트가 `fotdata-api.vercel.app`이면 새 주소 같은 경로로 영구 이동(쿼리 유지), **단 `/cal/`은 제외**(이미 구독한 캘린더가 옛 주소로 계속 받아감 — 캘린더 앱이 리다이렉트를 안 따라갈 수도 있어서). 옛 주소에서 쓰던 브라우저 저장소(즐겨찾기·첫 방문 표시)는 주소가 바뀌면 안 넘어옴(출시 전이라 영향 작음).
-- 사용자 할 일: Umami 웹사이트 설정의 도메인도 새 주소로(표시용), 검색엔진 등록은 새 도메인으로.
-- **앱 주소 `/app`(2026-10-03, 사용자 요청 — 주소창에 `FotData.html`이 보이던 것)**: 파일은 그대로 `FotData.html`, `vercel.json` rewrites `/app` → `/FotData.html`, redirects `/FotData.html` → `/app`(쿼리 `?match=` 유지)·`/app/` → `/app`(끝 `/`가 붙으면 상대 경로 파일(analytics.js·bg-ball.js 등)이 `/app/…`로 깨져서). 랜딩 메뉴·버튼(`/app#standings` 등), 정책 페이지 "돌아가기", 공유 페이지가 사람을 보내는 주소(main.py `app_url`), canonical·og:url·JSON-LD, sitemap, 매니페스트 `start_url`(홈 화면 앱이 바로 앱으로 열리게), 서비스워커 앱 셸(`/app`, 캐시 v2)까지 교체. 앱 안의 공유 주소·탭 주소는 `location.pathname`을 써서 자동으로 `/app`.
-
-### 5.26 보안 헤더·요청 제한·404·순위 예측 공유 이미지 (2026-10-04)
-- **보안 헤더**(`vercel.json` headers `/(.*)`): `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY` + CSP `frame-ancestors 'none'`(다른 사이트가 우리 페이지를 틀 안에 넣는 클릭재킹 차단), `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy`(카메라·마이크·위치·USB·topics 끔 — **payment는 끄지 않음**: Ko-fi 후원 창 안 결제가 막힐 수 있어서), CSP는 스크립트를 제한하지 않는 안전한 항목만(`base-uri 'self'; object-src 'none'; form-action 'self'; upgrade-insecure-requests`) — 인라인 스크립트·CDN·Umami·Ko-fi를 다 허용 목록에 넣는 전체 CSP는 깨질 위험이 커서 안 함. HTTPS 강제(HSTS)는 Vercel 기본.
-- **API 요청 제한**(main.py `RateLimitMiddleware`): IP마다 1분 슬라이딩 창 — 일반 240번, `POST /predict` 90번(매일 자동 업데이트의 트랙레코드 기록이 1초 간격으로 부르므로 60번/분 안). 초과 시 429 + `Retry-After` + 한국어 메시지(프론트 `fetchWithRetry`는 429를 재시도). IP는 `cf-connecting-ip` → `true-client-ip` → `x-real-ip` → `x-forwarded-for` 첫 값, **못 찾으면 제한 안 함**(전원이 한 칸에 묶이는 사고 방지). 제외: `/`(cron 깨우기)·OPTIONS·`/share/`·`/og/`·`/calendar/`(Vercel을 거쳐 와서 IP가 Vercel 것). **CORS보다 먼저 등록**해야 429에도 CORS 헤더가 붙음. 응답에 `X-RateLimit-Limit/Remaining`, `X-Content-Type-Options`. 로컬 TestClient로 241번째 429·다른 IP 영향 없음·제외 경로 확인.
-- **404 페이지**(`404.html`): 예전엔 Vercel 영어 "NOT_FOUND". 사이트 디자인 + 들어온 주소 표시(textContent) + 경기 예측/홈 버튼 + 순위표·일정·순위 예측·선수 바로가기, noindex, 통계(analytics.js — 깨진 링크 찾기용). 어느 깊이 주소에서든 열리므로 파일 경로는 전부 `/`로 시작.
-- **순위 예측 공유 이미지**(`shareSimCard('top5'|'table')`, 결과 표 위 "결과를 이미지로 공유" 줄): A 우승 확률 TOP 5(1080×1350, 1위 금색 카드·막대·예상 승점 범위) / B 최종 순위표(1080×1920 스토리 — 전 팀, 우승·UCL권·강등 확률 칸, 구역 막대, 18팀 리그는 줄 높이 자동). 방금 돌린 결과(`lastSimData`)를 그대로, 바닥에 "N.N 기준 · AI 시뮬레이션 · 참고용". 저장은 예측 결과 이미지와 같은 규칙(터치 기기 = 공유 시트, 그 외 = 다운로드), 통계 이벤트 `share_image`(kind sim_top5/sim_table). 시안 3종 중 사용자가 A·B 선택(C 우승 경쟁 2파전 시안은 보류).
-
-### 5.27 디자인 토큰 정리 (2026-10-05)
-- **점검(플러그인 없이 — 프론트엔드 디자인 플러그인은 계정엔 켜졌지만 세션 중간 추가라 미적용)**: 화면 6개 탭 전수 집계 — 글자 크기 20종(0.5px 차이·10px 이하 260곳+), 글자색 20종(같은 역할 빨강 3·초록 3·회색 4종), 둥글기 17종, 그림자 15종, 버튼·선택 상자 28곳이 Arial(브라우저 기본 글꼴).
-- **토큰**(FotData.html `<style>` 맨 앞 `:root`): 색 `--bg/--surface/--surface-2/--border/--text/--text-2/--muted/--faint/--disabled/--blue/--blue-text/--blue-strong/--away/--green(-strong)/--red(-strong)/--gold/--amber/--purple`, 둥글기 `--r-xs 4 · --r-sm 6 · --r-md 10 · --r-lg 14 · --r-xl 20 · --r-pill`, 그림자 `--shadow-sm/md/lg` + 파란 버튼 빛 `--glow-btn(-hover)`, 글자 `--fs-xs 11 … --fs-3xl 28`. CSS 안 hex는 var()로(1,030곳), **화면 템플릿 문자열·캔버스·SVG 속성은 var를 못 써서 hex 그대로(같은 값)**. 새 화면은 이 변수로 만들 것.
-- **값 정리**: 글자 9.5·10·10.5 → 11, 11.5 → 12, 12.5 → 13, 13.5 → 14, 17 → 18, 19 → 20(161곳). **예외로 작게 둔 것**: 경기장 라인업(`.md-*`)·차트 눈금(`.ts-ax`)·순위 변동 화살표(`.st-mv`)·좁은 폰 순위 예측 아랫줄(`.ct-sub`·`.ct-pts small`)·최근 경기 날짜(폰)·도형 안 글자(대진 PK·이적 머리글자·조별리그 칸)·360px 이하 탭바. 색 합침 #ff7b72→#f85149, #56d364→#3fb950, #ffa657→#f0883e, #6e7681→#7d8590, #e3b341→#f0c040. 둥글기 1~5→4, 7→6, 8·9·11→10, 12·16→14, 22→20. 그림자 중립 3단계·버튼 빛 2단계(색 빛번짐 효과는 그대로). `button, input, select, textarea { font-family: inherit }`(앱·랜딩).
-- 함께 고친 것: 떠 있는 후원 버튼은 어느 폭에서나 하트 동그라미(481~639px에서 알약이 예측 결과 팀 이름을 덮었음), 팀 선택 칸 리그 로고 EPL·챔스는 흰색 반전(보라 점처럼 보였음), 예측 결과 머리 팀 이름 짧은 이름, **팀 선택 테두리 = 홈 파랑·원정 주황**(구단 색이던 것 — 결과 화면과 색 의미 통일), 선수 탭 오른쪽 기록 줄 폰에서 두 줄 허용(이름 잘림), 내 팀 위젯은 D-day 배지가 날짜를 대신(오늘만 시각, 전체 일시는 title), 이적 이름 앞부분 중복("IfeanyiIfeanyi" — 제공처 오타) 정리, 랜딩 리그 칩 9→11px·스토리 막대 라벨 짧은 이름.
-- 확인: 375·768·1280px 전 탭 + 팀 정보 7개 탭·미리보기·트랙레코드 가로 넘침 0·JS 에러 0, 남은 잘림은 이적 기록의 긴 구단명(원래 말줄임)뿐. 정리 후 실측: 글자 크기 13종(예외 9.5~10.5 포함), 둥글기 6종, Arial 0.
-
-### 5.28 디자인 방향 "새벽의 전광판" — 야간 잔디 테마 (2026-10-05, 프론트엔드 디자인 플러그인 지침으로 점검 후 사용자 결정)
-- **⚠️ 최종 색(같은 날 결정 변경)**: 야간 잔디(초록빛 회색 바탕)를 하루 써 보니 **파란 브랜드(로고·홈 파랑·버튼)와 온도가 달라 부조화**(사용자 판단 — "우리 고유 테마를 푸른색으로 정했는데 초록이 들어오니 부조화"). 실제 앱에 색만 바꾼 4안(지금·A 밤하늘 남색·B 무채색 숯·C 야간 잔디+노랑 포인트)을 폰 화면으로 찍어 비교(`promo/palette/compare-*.jpg`, 크롬 DevTools 프로토콜로 375×812 캡처 — 헤드리스 `--screenshot`은 1초 타이머 때문에 안 끝나서 못 씀) → **A 밤하늘 남색 채택**: #0a1020(바탕)·#111a2e(카드)·#18233a(칸)·#26334d(테두리)·#ecf1fa(글자)·#c5cedf·#8e9ab3(흐린 글자)·#7c88a1·#475470. 예전 GitHub 색(#0d1117 등)과 **색상·밝기는 거의 같고 채도만 약 2배**(파란 로고와 한 몸으로 보이게). 즉 "GitHub 색과 다르게"보다 **브랜드 파랑과의 조화를 우선**한 결정 — 개성은 색이 아니라 전광판 숫자·경기장 선·파란 공 빛으로. 아래 "색" 줄의 야간 잔디 값은 지나간 단계(파일엔 A 값만 남음). 전광판 노랑은 쓰지 않음(나중에 진행 중 경기 표시에만 아껴 쓰는 안은 열어 둠). og-image `?v=6`(헤드라인 "축구를 데이터로 예측하다"로 되돌림).
-- **왜**: 플러그인 점검에서 "흔한 기본값" 신호가 여럿 — 색이 **GitHub 다크 테마와 똑같음**(#0d1117·#161b22·#30363d·#58a6ff·#8b949e), 같은 유리 카드 반복, 히어로가 큰 숫자 줄(가장 흔한 기본형), 헤드라인 한 줄만 파랗게, 대문자 라벨, 버튼 끝 →, Inter(한글 없음 → 기기마다 다른 한글 글꼴). 사용자는 한국 해외축구 팬이고 경기 대부분이 밤 9시~새벽 4시라 "야간 조명 아래 전광판"을 성격으로 잡음.
-- **색**: 바탕·카드·테두리·글자 회색만 초록빛 야간 경기장 톤으로 — #0d1117→#0e1512, #161b22→#16201b, #21262d→#1e2a24, #30363d→#2c3a33, #e6edf3→#eef2ea, #c9d1d9→#cbd3c8, #8b949e→#8f9c92, #7d8590→#7f8c82, #484f58→#4a564e(+ 같은 값의 rgba). **파랑 #58a6ff·주황 #f0883e·초록·빨강·금색은 그대로**(로고·아이콘·3D 공·공유 이미지와 연결 — 파랑도 새 바탕에서 AA 통과). 대비 실측: 본문 14.7·흐린 글자 4.8(카드 위) 등 전부 AA. 적용 파일: FotData.html·landing.html(=index.html)·legal.css·404·정책 페이지·manifest·share_card.py·generate_og_image.py·generate_promo.py(그림자 배경). 변환 스크립트는 hex·rgb 세 값 모두 바꿈.
-- **글꼴**: 본문·화면 **Pretendard Variable**(jsdelivr 동적 서브셋, OFL — 한글·영문 한 글꼴), 숫자 전용 **Barlow Condensed** 600/700(Google Fonts) — 확률·스코어·카운트다운·큰 지표만(`--font-num`, 앱 `.prob-value .sp-pct .tc-pct .st-pts .ct-cell .ct-pts .mp-score .h2h-num .sb-val b .bigmatch-unit .num …`, 랜딩 `.stat-num .story-counter .mock-bar-val …`). 둘 다 비동기 로드, 캔버스 공유 이미지도 Pretendard 우선. 대문자 변환(`text-transform: uppercase`) 15곳 제거.
-- **경기 시각 표기**: `koClock()` — "오전 01:30" → **"오전 1:30"·"오후 8:30"**(앞자리 0 없이, 다음 경기 카드·빅매치·일정). 랜딩 전광판은 "10월 11일 (일) 오전 1:30". 한때 "새벽·밤" 표기를 썼다가 **사용자 결정으로 오전·오후만**(2026-10-05).
-- **랜딩 첫 화면 = 헤드라인 + 넘어가는 전광판(안 1, 2026-10-05 같은 날 교체)**: 빅매치 하나만 크게 두니 "무슨 서비스인지" 설명이 사라진 느낌(사용자) → 맨 위 문구는 **원래 것 그대로**(배지 "AI 기반 축구 분석 플랫폼" + "축구를 데이터로 / 예측하다"(둘째 줄 파랑) + 설명 한 줄 — 같은 날 "킥오프 전에, AI가 먼저 계산합니다"로 바꿔 봤다가 사용자가 짜쳐 보인다고 되돌림), 그 아래 전광판이 **빅매치(`/bigmatch`) + 리그별 가장 가까운 예정 경기(`/matches/window`) 최대 6경기**를 4.5초마다 넘김(빅매치 먼저, 나머지 킥오프 순). 확률은 `/predict/schedule/{리그}`(앱 `/predict`와 같은 숫자, 리그별 병렬). 숫자는 이전 값에서 굴러가며 바뀌고(0.52초) 팀·날짜 줄은 잠깐 사라졌다 같이 바뀜, 막대 폭 전환, 아래 점 = 진행 막대. ‹ › · 점 · 좌우 밀기(40px), 마우스 올림·포커스·터치 중·탭 숨김이면 멈춤, 모션 최소화면 자동 넘김 없음. 버튼 "이 경기 예측 보기"(→ `/app?match=` 앱 teamSlug 규칙)가 지금 보이는 경기로 바뀜. 날짜 줄은 리그 로고 + 리그 이름(폰은 로고만 — 한 줄 유지) + "10월 11일 (일) 오전 1:30". 숫자 96px(폰 72px), 폰은 팀(윗줄 양끝)·숫자(아랫줄). 데이터가 안 오면 전광판만 숨음. 통계 이벤트 `landing_board`(prev/next/dot/swipe). 기존 숫자 줄(6,027경기 등)은 그 아래 유지. 메뉴 버튼 "앱 열기", 맨 아래 "경기 예측 시작하기". og-image 헤드라인은 아직 예전 문구("AI가 먼저 계산한 경기 결과", `?v=5`).
-- 함께: 폰 팀 선택 칸 안쪽 여백 축소("Man Unit…"), 지표 칸 순위 칩 폰에선 "12위"(팀 이름 공간).
-- **작은 아이콘 키움(같은 날, 사용자 요청)**: 화면에 16px 미만으로 그려지는 로고를 전부 찾아 키움 — 팀 선택 칸 리그 로고 12→18px(글자 12px, 한 줄 유지), 다음 경기 카드 리그 12→16, 미리보기 머리 14→18, 리그 칩(순위표·일정·순위 예측·선수) 16→20, 구단 정보 경기 탭 대회 로고 16→20, 선수 순위 팀 로고 14→16, "다른 경기" 카드 12→16, 랜딩 리그별 1위 카드 12→16. **EPL 로고(PL.png)는 원본 200×200 중 가운데 42% 높이만 그림(사자+글자 가로형)이라 정사각형 칸에선 5px 높이로 보였음** → 작은 자리에선 `img[src$="/PL.png"]`를 높이의 2.3배 폭 칸에 `object-fit: cover`로 꽉 채움(빅매치 배너의 .wide와 같은 방식, 좁은 폰 팀 선택 칸은 32×15). 작은 리그 로고엔 옅은 테두리 빛(drop-shadow — 남색 리그앙 등이 묻혀서, 흰색 반전 로고는 인라인 filter가 우선). 폰 최근 경기 날짜 칸 40→46px + nowrap(Pretendard가 조금 넓어 "26.09.1/9"로 쪼개졌던 것).
-- **안 한 것(제안했지만 보류)**: 앱 첫 화면 순서를 "오늘 밤 경기 전광판"으로 바꾸는 건 사용자가 정한 폰 순서(내 팀 → 빅매치 → 팀 고르기, 5.23)와 충돌해서 하지 않음. 가운뎃점(·) 나열은 데이터 구분에 실제로 쓰여서 대부분 유지.
-
-### 5.29 홈·원정 바꾸기 · 배경 공 흩어짐 수정 (2026-10-05)
-- **홈·원정 바꾸기**(`swapTeams`, 팀 선택 카드의 VS 자리 `#vs-swap`): VS 글자 + 화살표 동그라미 + "바꾸기". 누르면 화살표가 반 바퀴 돌고 두 로고가 서로의 자리로 건너간 뒤(0.42초, `.swap-move`) 실제로 바꿔 그림(`selectTeamFromPopup` 재사용 — 리그 배지·테두리 홈 파랑/원정 주황도 자리 따라). 한쪽만 골랐으면 그 팀이 반대편으로(`clearTeamSide`), 아무것도 안 골랐으면 버튼이 살짝 흔들리고 "먼저 팀을 골라주세요". **그 대진의 예측 결과가 떠 있으면 바뀐 대진으로 바로 다시 예측**(공유 주소도 바뀜). 모션 최소화면 즉시. 통계 이벤트 `swap_teams`(with_result).
-- **경고는 전부 토스트로**: 경기 예측 버튼 아래 빨간 상자(`#error-msg`)를 없애고 `showToast(msg, ms, 'warn')`로 — 빨간 느낌표 + 조금 더 오래(기본 3.2초, 예측 불가·서버 오류 4.2초), `role="alert"`. 문구도 상황별로("홈팀을 골라주세요"/"원정팀을…"/"같은 팀끼리는 예측할 수 없어요"/"서버에 연결하지 못했어요. 잠시 후 다시 눌러주세요"). 토스트 공통 개선: 같은 문구가 떠 있으면 새로 쌓지 않고 시간만 다시 세며 톡(`.bump`), 한 번에 최대 3개, 알림 영역을 양옆 16px까지(예전엔 `left:50%` 기준이라 화면 절반 폭에서 짧은 문구도 두 줄로 접혔음), 최대 폭 520px. 새 경고를 만들 땐 화면 안에 상자를 두지 말고 이 함수로.
-- **배경 공 흩어짐**(bg-ball.js): 예측 중 점이 흩어질 때 윤곽 원(30% 흐려짐)·모서리 선(15% 남음)이 남아 있었고 같은 순간 캔버스가 2배 또렷해져서(`bg3d-busy` 0.26→0.5) "공은 그대로인데 점만 튄" 것처럼 보였음(사용자 지적) → 원은 바깥으로 45%까지 퍼지며 흩어짐 30% 안에 완전히 사라지고(`ring.visible=false`), 선은 50% 안에 사라짐. 다시 모일 땐 같은 식이 거꾸로라 점이 거의 다 모인 뒤 원·선이 돌아옴.
-
-### 5.30 리그 페이지 구조 · 리그 개요 · 내 팀 · 더보기 (2026-10-05, 사용자 요청 — 풋몹 참고)
-- **왜**: 예전엔 기능별 탭(순위표·일정·순위 예측·선수)마다 리그 칩을 따로 골라야 했음(EPL만 보는 사람도 탭마다 다시 고름), 폰 하단 탭바 6개로 빽빽.
-- **구조**: 위 메뉴(PC) `경기 예측 · 리그 · 내 팀 · 승부차기`, 폰 하단 탭바 `홈 · 리그 · 내 팀 · 더보기`(승부차기는 더보기 안 — 승부차기 화면에선 더보기가 켜짐, `data-pages="more shootout"`). 리그 페이지 `#page-league` = PC(>1024px) 왼쪽 리그 목록(+ 내 팀 바로가기, sticky) / 그 이하 위 리그 칩 한 줄 + 리그 머리(로고·이름·나라·시즌) + 탭 [개요 · 순위 · 경기 · 순위 예측 · 선수](챔스는 순위 예측 없음, 순위 탭 이름 "순위·대진" — 안에서 리그 스테이지/토너먼트 전환).
-- **패널 = 예전 페이지 그대로 옮김**: `#page-standings/schedule/champion/players`는 이제 `.lg-panel`(class `page` 아님 — `curPage()`가 `.page.active`를 봄). 예전 로더(loadStandings·loadCL·loadSchedule·loadChampion·loadPlayers)를 그대로 부르고, 패널 안 예전 리그 칩 줄은 **숨겨 두기만**(로더가 그 칩의 active 값으로 "늦게 온 응답 버리기"·시즌 전환을 판단해서 지우면 안 됨). 새 리그 UI 요소는 `data-lg` 속성(`loadStandings`가 `[data-league=…]` 첫 요소를 찾아서 겹치면 안 됨). 패널마다 지금 그려진 리그를 `lgLoaded`에 기억 — 같은 리그로 돌아오면 다시 안 받음(순위 예측 결과·고른 시즌 유지). 일정 패널이 보이는지는 `lgPanelOn('schedule')`(예전 `page-schedule.active` 검사 3곳 교체 — 리그 페이지가 숨어도 패널은 active일 수 있음). 마지막 리그는 localStorage `fdLeague`.
-- **주소**: `#league/PL`(개요) · `#league/PL/standings` 등, `openLeague(code, tab, fromHistory)` · `goRoute`/`isRoute`/`curRoute`(뒤로가기 기록 `fdPage`에 경로 전체). **예전 주소 `#standings`·`#schedule`·`#champion`·`#players`는 마지막으로 본 리그의 그 탭으로 열고 주소를 새 것으로 바꿈**(랜딩·404·sitemap 링크는 그대로 둬도 됨), `showPage('standings')` 같은 예전 호출도 같은 처리. 첫 화면에 순위표(PL)를 미리 받던 것은 뺌(리그 페이지를 열 때 받음).
-- **리그 개요**(`loadLeagueOverview`, 새로 만듦): 시즌 숫자 4칸(라운드 N/38·34 — 챔스는 진행한 경기, 경기당 골, 홈 팀 승리 %, 무승부 % — 그 리그 일정의 끝난 경기로 계산) / 다음 라운드 전체 경기 + AI 예측(`schedRowHtml` 재사용, 챔스는 가까운 8경기) / 득점·도움 TOP 3(`/players/leaders`) / 순위(짧은 표 — 경기·득실·승점, 구역 색 막대, 내 팀 강조, 챔스는 상위 12팀 + 1~8 금색·9~24 주황) / 우승·강등 확률 TOP 3(`/predict/champion` + `simulateSeason` 2,000회 — 순위 예측 탭과 같은 계산, `runSimulation`에서 본체를 떼어 냄). PC 두 열(왼쪽 다음 경기·득점 / 오른쪽 순위·우승 강등 — 높이 균형), ≤900px 한 줄(다음 경기 → 순위 → 우승·강등 → 득점, `display: contents` + order). 각 카드 머리 오른쪽 "전체 …›"는 그 탭으로.
-- **내 팀**(`#page-myteams`, `loadMyTeamsPage`): 즐겨찾기 팀마다 로고·이름·리그(누르면 그 리그 순위) + 지금 순위·승점·경기 수 + 최근 5경기 + 다음 경기(대회·일시·남은 시간·홈/원정·상대, AI 승/무/패 % — 이 팀 입장, 막대 파랑=이 팀·주황=상대, 누르면 미리보기). 순위는 리그별 `/standings` 한 번(`lgStandings` 캐시). 없으면 "팀 고르기"(구단 둘러보기 pick 모드), 5팀 미만이면 "+ 팀 추가". 즐겨찾기가 바뀌면 `refreshFavMarks`가 내 팀 페이지·리그 옆 목록·개요를 다시 그림.
-- **더보기**(`#page-more`): 승부차기 · 구단 둘러보기 · AI 트랙레코드 · 후원하기 · FotData 소개 + 정책 링크.
-- 확인: 1280·820·390px — 개요(EPL·분데스·세리에·챔스)·순위·경기·순위 예측(시뮬레이션)·선수·내 팀·더보기, 가로 넘침 0·JS 오류 0, 뒤로/앞으로가기(탭·리그·내 팀·더보기·승부차기·팀 정보 창), 예전 주소 `#standings` → `#league/PL/standings`, 경기 예측 탭(공유 링크 예측 결과 포함) 그대로.
-
-### 5.31 리그 아이콘·시즌 고르기·일정 보기 3종·시즌(역대 우승) 탭 (2026-10-06, 사용자 요청 — 풋몹 참고)
-- **리그 아이콘**: 리그 머리의 네모 박스를 없애고 심볼만. `generate_league_logos.py` → `logos/league/{PL,PD,BL1,SA,FL1,CL}.png`(높이 128px, 글자 로고를 떼어 냄 — EPL은 사자만·흰색, 분데스는 빨간 사각형만(검정 "BUNDESLIGA" 글자가 어두운 바탕에 안 보였음), 챔스 별 공은 흰색, 나머지는 위쪽 심볼 덩어리만). 처음엔 리그 페이지(머리·옆 목록·칩)·내 팀만 → 같은 날 **사이트 전체 리그 로고를 이 아이콘으로 교체**(사용자 요청: 앱 리그 칩·팀 선택 팝업·빅매치 줄·다음 경기 카드·미리보기/결과 창 머리·구단 정보 경기 탭·트랙레코드·"다른 경기" 카드·구단 둘러보기, 랜딩 첫 화면 전광판·리그별 1위·순위 미리보기·지원 리그 칩). EPL·챔스 흰색 반전 필터와 가로 로고용 `.wide`·넓은 칸 CSS는 전부 뺌(아이콘이 거의 정사각형이라 기존 정사각형 칸 + `object-fit: contain` 그대로). 남은 `crests.football-data.org`는 구단 엠블럼뿐. **주의**: 예전 EPL 가로 로고용 CSS `img[src$="/PL.png"]`가 새 아이콘(`…/league/PL.png`)에도 걸려 늘어났음 → 선택자를 `[src$="org/PL.png"]`(football-data 주소만)로 좁힘.
-- **시즌 고르기**(리그 머리 오른쪽 `#lg-season`): 목록은 서버 `/league/seasons/{리그}`(경기 데이터가 있는 시즌 — 지금 23-24~26-27, `players`·`simulation` 플래그) → 고른 시즌이 모든 탭에 적용(`lgState.season`, 주소 `#league/PL/standings/2024`, 이번 시즌은 주소에 안 붙음). **탭은 시즌에 따라**: 지난 시즌 = 개요·순위·경기·시즌(순위 예측·선수 없음 — 사용자 결정: 선수 기록은 API-Football Pro로, 위키백과로 대신하지 않음). 다른 리그로 가면 이번 시즌부터. 순위표 패널의 예전 시즌 버튼 줄(`#season-tabs`)은 숨기고 값만 맞춤(`currentStandingsSeason`).
-- **지난 시즌 일정**: `/schedule/{리그}?season=연도` → `_past_schedule`(all_matches.csv — **날짜만, 시각 없음**: `date_only`, 화면은 시각 대신 연도 표시). 챔스 토너먼트는 ucl_tournament.json의 1·2차전으로 단계(PLAYOFFS~FINAL)·시각을 찾아 붙임, 리그 스테이지/조별리그는 2월 1일 전. 프론트 `getLeagueSchedule(code, season)` — `scheduleData['PL@2024']`. 결과 창은 모든 시즌 일정에서 경기를 찾음.
-- **지난 시즌 개요**: 시즌 숫자(시즌 종료 라운드·경기당 골·홈 승률·무승부율) + "시즌 결과"(우승·준우승 승점·승무패, 강등·승강 PO 칩 — 공식 구역 `row.zone`; 챔스는 결승 승자·패자) + 마지막 라운드 전 경기(챔스는 결승) + 최종 순위(공식 구역 색·감점). 순위 예측·득점 카드 없음.
-- **개요 순위표**: 경기·**승·무·패**·승점(득실 뺌 — 사용자 요청), 내 팀 줄에 ★(금색). 리그 페이지 옆 목록 내 팀에도 ★.
-- **일정 보기 3종**(경기 탭 위 세그먼트 `setSchedView`, 고른 보기는 localStorage `schedView`): 날짜별(달 — 예전 그대로) · 라운드별(리그 N라운드, 챔스 리그 스테이지/조별리그 N차전 → 플레이오프·16강·8강·4강·결승 — 키 `R6`/`L3`/단계 이름, **`LAST_16`도 L로 시작해서 숫자까지 확인**) · 팀별(팀 고르기 + 로고, **‹ ›는 이전·다음 팀**(풋몹은 아래 페이지 넘김 — 일부러 다르게), 위에 "치른 N경기 W승 D무 L패 · 남은 경기", 그 팀 줄 강조). 처음 고르는 값: 다음 경기가 있는 달·라운드(지난 시즌은 마지막), 팀별은 내 팀 → 첫 팀. ★ 내 팀만은 팀별 보기에서 숨김. 폰은 고르기 칸 최대 52vw(긴 팀 이름 때문에 ›가 다음 줄로 밀렸음).
-- **시즌 탭**(역대 우승·준우승): `update_data.fetch_league_history()` → `fotdata_model/league_history.json`(영문 위키백과 리그별 우승 목록 문서 6장 — "List of English/Spanish/German/Italian/French football champions", "List of European Cup and UEFA Champions League finals". 키 불필요, 매일 실행(시즌이 끝나면 새 줄 자동), `--league-history`로 따로). 표 모양이 문서마다 달라서 "시즌 링크가 있는 줄 → 다음 구단 칸 둘"로 읽음(인포박스 `| x = …` 줄 제외, 표 끝 `|}` 뒤 틀 제외, 나라 틀·점수 칸 건너뜀). 2000-01~25-26 리그별 26시즌, 박탈된 우승은 `stripped`(세리에A 04-05 유벤투스 — 취소선 + "우승 박탈"). 우리 팀 이름 매칭은 team_wiki `en_title` → `_norm_club`(못 찾으면 이름만, 로고 대신 머리글자 — 보르도). 서버 `/league/history/{리그}`(로고·`has_data`). 화면: 이번 시즌 카드(진행 중 · 선두·2위, 챔스 제외) + 시즌 카드(우승 금색·준우승), 23-24 이후는 누르면 그 시즌 순위로, 출처 링크(CC BY-SA).
-- **⚠️ API-Football 지난 시즌 선수 기록 문제(2026-10-06 원본 응답으로 확인)**: 무료 플랜(2022~24)의 `/players/topscorers?season=2023` EPL이 팔머 "Manchester City 34경기 22골 22도움"(실제 첼시 22골 11도움), 쿠냐 "Manchester United 64경기 24골"(실제 울버햄튼)처럼 **지금 소속팀으로 기록을 합쳐서** 줌(5.19의 `/players` 함정과 같은 문제). → Pro 결제 후에도 지난 시즌 선수 순위는 `/players/topscorers`를 그대로 쓰지 말고 경기 상세(`/fixtures?id=` 선수별 기록)를 시즌별로 합산할 것(5.19 방침). 결제 후 결정할 것: 그 합산으로 지난 시즌 선수 탭 열기 + 22-23 이전 시즌 경기·순위(팀 이름 매핑 — 5.20).
-- 확인: 1280·390px — 이번/지난 시즌 개요(EPL·분데스 23-24), 시즌 탭(세리에A·EPL), 일정 3종(EPL 이번 시즌·챔스 24-25 라운드), 시즌 전환·뒤로가기·챔스 23-24 조별리그, 경기 예측(공유 링크)·선수·내 팀 — JS 오류 0·가로 넘침 0.
-
-### 5.32 API-Football 데이터 연결 — 경기 상세·팀 소식·선수 카드 (2026-10-06, Pro 결제 직후)
-- **수집 `update_data.af_sync()`**(매일 새벽 단계 "API-Football 경기 상세·부상자·선수", 따로 `python update_data.py --af-sync`, 키 없으면 건너뜀). 대회 6개(5대 리그 + 챔스 `AF_COMPS`) 이번 시즌 경기 목록 → ① **팀 이름 맞추기** `af_team_map.json`(API-Football 팀 ID → 우리 이름: 같은 날 우리 일정에서 홈·원정 이름이 가장 비슷한 경기(단어 일치·앞 4글자 일치, 킥오프 시각 같으면 가산)로 투표, 2표 이상) — 첫 실행 111팀, 이름 겹침 0, 우리 일정 1,896경기 전부 연결(못 찾은 팀은 우리 일정에 없는 챔스 예선 팀뿐) ② `af_fixtures.json`(경기 ID·상태·킥오프·우리 이름·우리 일정 날짜·상세 파일 이름) ③ **끝난 경기 상세** `match_details/<날짜>_<홈>_<원정>.json.gz`(한 경기 한 파일, gzip 경기당 ~4KB — 시즌 1,900경기 ≈ 8.5MB, 한 번 받으면 안 바뀜, `/fixtures?ids=` 20경기씩) ④ 앞으로 4일 경기 결장·부상자 `match_previews.json`(대회별 `/injuries` 한 번) ⑤ 선수 프로필 `af_players.json`(팀별 `/players?team&season` — 나이·생일·키·몸무게·국적·사진·부상 여부, 6일마다). 첫 실행: 270경기 상세·96팀 2,696명, 요청 약 350회.
-- **변환은 `af_transform.py`**(update_data.py에서 분리 — 서버도 요청 때 받은 응답을 같은 형태로 바꿔야 해서 둘이 같이 씀): `af_match_detail`(+ 선수별 경기 기록 `pstats` — 패스 accuracy는 경기 기록에선 "정확한 패스 수", 시즌 기록에선 %), `af_season_players`(경기 상세 합산 → 선수 카드·베스트 11 형태 + 최근 10경기), `af_profile_row`, `md_file/md_write/md_read`.
-- **시즌 기록 = 경기 상세 합산**(서버 `_af_league_squads` — 리그 단위, 서버 시작 때 미리 계산): `/players`의 시즌 기록은 다른 팀 기록이 섞이고(5.19) 지난 시즌 팀이 틀려서(5.31) 안 씀. 포지션은 프로필(Attacker 등) 우선 — 경기 기록 포지션은 라인업 줄 기준이라 4-2-3-1 측면 공격수가 미드필더로 잡혔음. 90분당 순위 기준은 450분 또는 시즌 초엔 리그 최다 출전의 절반.
-- **서버**: `/match/detail`(파일 → 없으면 킥오프 110분 뒤부터 요청 때 받기), `/match/preview`(결장자 + 킥오프 90분 전~3시간 뒤엔 확정 라인업을 요청 때 받기(3분 캐시), 그 전엔 각 팀 지난 경기 선발 = 예상 라인업), `/team/squad`(프로필 + 합산 기록), `/player/profile/{id}`(경력·트로피·부상 이력 요청 때 3번, 하루 캐시). **요청 때 받는 것들은 Render 환경변수 `API_FOOTBALL_KEY`가 있어야 켜짐**(없으면 저장된 데이터만 — 확정 라인업·선수 경력은 안 나옴). 새벽 수집은 GitHub Secrets `API_FOOTBALL_KEY` 필요(`update_data.yml` env에 연결함).
-- 화면은 결제 전에 만들어 둔 것(5.18·5.19) 그대로 — 결과 창 [요약 | 라인업 | 통계], 미리보기·예측 결과 "팀 소식", 선수 카드(합계/90분당·순위 막대·최근 경기·경력·트로피·부상), 팀 정보 플레이어 통계 탭 베스트 11. 결장자가 비면 "발표된 결장자 없음"(경기 며칠 전엔 아직 발표 전이라).
-- 확인(로컬, 실제 데이터): 아스널–코번트리 결과 창 3탭(최우수 선수 외데고르 8.5, xG 1.88–0.20), 아스널–리즈 미리보기 예상 라인업(4-2-3-1 vs 3-5-2), 사카 선수 카드(평균 7.56·키 178·최근 경기), 홀란 경력·트로피 22개, 아스널 베스트 11(4-4-2 평균 7.15) — 1280·390px.
-
-### 5.33 과거 시즌 구단 기록 2010-11~22-23 (2026-10-06, API-Football Pro)
-- **수집 `update_data.fetch_history_seasons()`**(끝난 시즌이라 한 번만 — `python update_data.py --history-seasons [연도…]`, 약 200회): ① 23-24~25-26 경기로 팀 이름 맞추기를 넓힘(강등 팀 등 +50 → 161팀) ② 대회 6개 × 13시즌 경기(`history_matches.csv` 25,131경기 — 리그는 "Regular Season" 라운드만(분데스 16위·리그앙 18위 승강 PO, 세리에 동률 결정전이 섞이면 가짜 감점이 생겼음), 챔스는 조별리그·16강~결승만(예선 제외) — 시각 `kickoff`·`stage` 포함) ③ 공식 순위표 `history_standings.json`(최종 순위·구역 = 순위표 description("Champions League"/"Qualifiers"/"Europa"/"Conference"/"Relegation"·"(Relegation)"=PO)·감점 = 공식 승점 − 경기로 센 승점: 세리에 11-12 아탈란타 −6, 12-13 시에나 −6, 14-15 파르마 −7, 22-23 유벤투스 −10, 리그앙 16-17 바스티아 −1 등) ④ 옛 챔스 `history_ucl.json`(ucl_tournament.json과 같은 모양 — 토너먼트 대진(진출 팀 = 다음 라운드에 나온 팀, 원정 다득점 시절도 맞음, 결승은 점수→승부차기) + 조별리그 GROUPS(조 편성은 순위표 "Uefa Champions League: Group A" 형식)) ⑤ 우리 목록 밖 옛 팀 로고 `history_logos.json`(94팀 — 위건·블랙번 등은 API-Football 이름·로고 그대로).
-- 같은 팀 이름 고정: 우리 목록 밖 팀은 **팀 ID 기준 처음 본 이름**으로(경기 목록 "Bastia"와 순위표 표기가 달라 감점 +34로 잘못 계산됐음).
-- **서버**: `df_seasons` = history + all_matches — 순위표(보기 전환 포함)·지난 시즌 일정·리그 시즌 통계·팀 통계·시즌 목록에만. **예측 모델·맞대결·최근 폼은 `df_matches_all` 그대로(섞지 않음)**. 순위표는 날짜 대신 **시즌 값으로** 자름(19-20 세리에A가 8월 2일에 끝나 다음 시즌에 섞였음). 끝난 시즌 공식 순서·구역·감점: season_zones.json(23-24~, 위키) → 없으면 history_standings.json. `/ucl/tournament`·`/ucl/groups`는 history_ucl.json을 밑에 깔고 ucl_tournament.json이 덮음. 팀 통계 `STAT_SEASONS`도 데이터에서(17시즌). 로고 맵에 옛 팀 로고 덧붙임.
-- **화면**: 시즌 고르기 17개(2010/11~), 시즌 탭 2010-11 이후 카드 누르면 그 시즌 기록, 챔스 23-24 이전 = 조별리그(`uclGroupEra()` — 예전엔 `=== '2023'`만), 팀 통계 탭 시즌은 최근 4개 버튼 + "이전 시즌" 고르기(버튼 17개면 두 줄로 깨졌음).
-- 확인: EPL 15-16 레스터 81점(강등 뉴캐슬·노리치·빌라), 세리에 19-20 유벤투스 83점, 리그앙 19-20(코로나 조기 종료) 27~28경기, 챔스 16-17 조별리그(A조 아스널 14·PSG 12), 18-19 대진(리버풀 우승), 리버풀 팀 통계 14-15(6위 62점).
-
-### 5.34 선수 카드 v2 · 베스트 11 · 선수 통계 · 과거 시즌 선수 기록 (2026-10-06, 풋몹 참고 — 사용자 요청 6가지)
-- **과거 시즌 선수 기록**(`update_data.fetch_history_players()`, 끝난 시즌이라 한 번만 — `python update_data.py --history-players [연도…] [--force]`, 약 1,250회): 리그·챔스 × 15-16~25-26(EPL 14-15는 기록 3/380경기라 저장 안 함) 경기 목록 + `/fixtures?ids=` 20경기씩 → `af_transform.af_league_agg()`로 (팀, 선수)별 합산만 `fotdata_model/af_seasons/<리그>_<연도>.json.gz`(경기 원본은 안 남김, 전부 4.4MB) + 90분당 백분위 + `index.json`(선수 ID → [리그, 시즌, 팀], 팀 → 시즌별 리그). 팀 이름은 그 시즌 경기 파일과 같은 날·같은 점수로 투표(`_history_name_votes`). 이번 시즌은 지금처럼 match_details/에서 서버가 바로 합산(`_league_rows`). **시즌이 끝나 26-27이 지난 시즌이 되면** `--history-players 2026` 한 번 + `AF_PLAYER_SEASONS` 범위 늘리기.
-- **세부 포지션**(`af_transform.dpos_of` — 라인업 포메이션 + 칸 "줄:칸", 칸 1 = 그 팀 왼쪽): GK·CB·LB·RB·LWB·RWB·DM·CM·AM·LM·RM·LW·RW·ST. **22-23 시즌부터만 믿을 수 있음**(`GRID_FROM`) — 17-18~21-22도 칸이 오지만 좌우가 뒤집히고 줄이 뒤섞여 있었음(리버풀 알렉산더아널드 2:1, 엠레 찬이 공격수 줄), 15-16은 포메이션 없음. 그 전 시즌은 G/D/M/F + 같은 선수의 22-23 이후 포지션을 빌려 쓰고(`_dpos_hint`, 같은 줄일 때만), 없으면 기록으로 수비수를 풀백/센터백으로 가름(`plain_can` — 90분당 키패스+드리블 성공−블록 ≥ 0.6 = 풀백).
-- **베스트 11**(`af_transform.pick_xi` — 서버 하나에서만 고름): 포메이션(4-3-3·4-2-3-1·4-4-2·3-4-3·3-5-2·4-1-4-1)마다 자리(왼쪽→오른쪽)에 맞는 선수만(`SLOT_OK`, 풀백 자리에 센터백 X) 평점 순으로 채워 평균이 가장 높은 것. 구단 = 출전 시간 팀 최다의 25%+(`/team/squad`의 `best11`), 리그 시즌 = 40%+, 이번 라운드의 팀 = 그 라운드 45분+(`round_xi`). 화면 `xiPitchHtml`(세로/가로 — 칸 폭 400px 이상이면 가로, 600 미만은 compact), 선수 사진·평점(색)·골/도움 배지·이름, 누르면 선수 카드(그 시즌).
-- **선수 카드 v2**(`openPlayerCard(team, id, season)`): 머리(사진 + 구단 엠블럼, 이름, 구단·등번호, 세부 포지션 칩·국기, 시즌 평점) + 탭 [개요 | 시즌 기록 | 경력 | 트로피] — 예전 한 줄 이어 붙이기(세로 2,300px+)를 나눔. 개요 = 나이·국적(국기)·키·몸무게 + 시즌 고르기(그 선수가 뛴 리그·시즌, `/player/seasons/{id}`) + 경기·골·도움·출전 + 포지션 지도(가로 경기장 위 자리·비율) + 최근 경기(이번 시즌만). 경력 = 풋몹처럼 구단별 기간(이적 날짜 "2022년 7월 – 현재")·경기·골(모든 대회, 2010-11~) — 1군·국가대표·유소년. 트로피 = 구단(국가대표)별 묶음 + 대회 아이콘·한국어 이름·시즌, 준우승은 흐리게.
-  - 서버 `/player/profile/{id}` 개편: 경력 1 + 이적 1 + 트로피 1 + 부상 1 + 시즌별 `/players?id=&season=`(최근 16시즌) — 병렬 6, 하루 캐시(지난 시즌 30일). 트로피 → 구단: 그 시즌 그 선수의 기록 중 같은 대회 → 같은 나라 리그 → 출전 많은 구단, 국가대표 대회(`AF_NATIONAL_COMPS`)는 국가대표. 친선 대회에 J.League World Challenge·Atlantic Cup 추가.
-- **대회 아이콘·이름**(`COMP_INFO` — API-Football 대회 ID): 5대 리그·챔스 = logos/league, **컵대회 = `logos/comp/<ID>.png`(`generate_comp_logos.py`)** — FA컵·EFL컵·커뮤니티 실드·코파 델 레이·수페르코파·DFB-포칼·DFL-슈퍼컵·코파 이탈리아·수페르코파 이탈리아나·쿠프 드 프랑스·쿠프 드 라 리그·트로페 데 샹피옹·유로파·컨퍼런스·UEFA 슈퍼컵·인터콘티넨탈컵·유로·네이션스리그·코파 아메리카·아프리카 네이션스컵·아시안컵·올림픽(어두운 로고 4개는 흰색). 월드컵·클럽 월드컵은 API 로고가 "WORLD CUP" 글자 임시 이미지라 금색 트로피 아이콘. 나머지 대회는 API-Football 로고 주소 그대로, 이름은 "오스트리아 컵"처럼 나라 + 이름. **나중에 컵대회 탭을 만들 때 이 표를 그대로 씀.** 대회 목록 `fotdata_model/af_leagues.json`(이름|나라 → ID), 국기 `af_countries.json`(→ 서버 `/meta/countries`, 화면 `flagOf()`).
-- **팀 개요**: "최근 시즌 최종 순위" 글자 한 줄(17시즌이라 세 줄로 넘쳤음) → **시즌별 리그 순위 막대**(막대 높이 = 순위, 구역 색, 우승 금색, 5대 리그 밖 시즌은 빈 칸, 진행 중 시즌은 흐리게, 폰은 옆으로 넘김·최근 시즌이 보이게). 우승 기록 칸에 대회 아이콘(`TROPHY_COMP`). **시즌 베스트 11** 카드(시즌 고르기). 플레이어 통계 탭도 시즌 고르기(베스트 11 + 선수별 기록이 같이 바뀜), API-Football 기록이 있으면 football-data 득점 순위 칸은 뺌. 스쿼드 탭: 선수를 누르면 선수 카드, 세부 포지션·국기.
-- **리그 개요**: 이번 라운드의 팀(‹ 라운드 › + 시즌 전체, 챔스는 "N차전") / 지난 시즌은 시즌 베스트 11, 득점·도움 TOP 3도 지난 시즌까지(누르면 선수 카드). 라운드는 af_fixtures의 `round`(af_sync가 넣음, 없으면 일정 matchday).
-- **선수 탭**: 분야별 TOP 3 카드 — 주요 통계(득점·도움·공격 포인트·평점·출전 시간·PK 골)·공격(유효 슈팅·키패스·드리블)·수비(태클·가로채기·볼 경합)·골키퍼·규율(클린시트·선방·경고), 1위는 파란 알약(평점은 평점 색). 카드를 누르면 **전체 순위**(기록 0인 선수 제외, 같은 기록 같은 순위, 50명씩 더 보기, 기록 고르기에 블록·퇴장도) — 선수를 누르면 선수 카드. 평점은 출전 시간 리그 최다의 40% 이상만. 15-16 시즌부터(`lgTabsFor`), 데이터가 없으면 예전 football-data 득점·도움 화면(`loadPlayersLegacy`). 폰은 묶음마다 옆으로 넘기는 카드(세로 4,000px → 1,600px).
-- 서버: `/league/players/{리그}?season=`, `/league/bestxi/{리그}?season=&round=`, `/team/squad/{팀}?season=`(지난 시즌 + `best11`·`seasons`), `/player/seasons/{id}`, `/meta/countries`. **GZip 응답 압축 추가**(선수 목록 등 큰 JSON).
-
-### 5.20 데이터 소스 구조(결제 시) — football-data + API-Football
-- **2026-10-06 Pro 결제 완료**(사용자 개인 계정, 키는 그대로 `~/.fotdata_keys`, 하루 7,500회, 만료 2026-11-06 — 매달 갱신). 실제 호출로 확인한 것: 26-27 5대 리그·챔스 전부 경기·이벤트·라인업(킥오프 약 1시간 전)·팀 경기 통계(xG 포함)·선수별 경기 기록·순위·선수·득점/도움 순위·부상자(EPL 529건)·스쿼드(등번호·사진)·이적·트로피·부상 이력·팀 시즌 통계(폼·포메이션)·실시간(`/fixtures?live=all`)·맞대결(2010~) 열림. 컵대회(FA컵 26-27 283경기 등)도 열림. 감독은 `/coachs`(철자 주의 — `/coaches`는 없는 주소, 결과가 이력 목록이라 현재 감독을 골라야 함). 배당(`/odds`)·API-Football 자체 예측(`/predictions`)도 오지만 배당은 쓰지 않기로(약관 도박 비권유).
-- **과거 시즌 깊이(샘플 실측)**: 경기 결과·이벤트(골·도움·카드)는 2010-11부터, **선수별 경기 기록·평점은 2015-16부터**(커버리지 표엔 EPL 2014-15라고 나오지만 실제 2014-15 경기는 선수 기록 0명), 챔스는 본선만(예선 경기는 2019-20까지 선수 기록 없음). 2020-21부터는 교체 선수까지 기록(경기당 36~46명).
-- **API-Football 리그별 데이터 범위(2026-10-03 `/leagues?id=` 실측, 중간에 빠진 시즌 없음)**: 5대 리그 모두 2010-11~26-27(17시즌) — 경기 결과·순위·이벤트·라인업·선수·득점 순위는 2010-11부터, 팀 경기 통계는 EPL·라리가 2014-15/나머지 2015-16부터, 선수별 경기 스탯·평점은 EPL 2014-15/나머지 2015-16부터, 부상자는 2020-21부터. UCL은 2011-12부터(통계 2015-16, 부상 2020-21). 요금제는 기능 차이 없이 요청 수만 다름(Pro $19 7,500/일·Ultra $29·Mega $39). football-data 유료는 선수 사진·이적·선수 스탯이 어느 요금제에도 없어서 결제 대상 아님.
-- 경기 결과·순위·일정·예측 모델은 **football-data 그대로**(지금 4시즌, 학습·팀 이름 기준). API-Football은 **선수·라인업·경기 상세·부상**과 **23-24 이전 과거 시즌**(EPL 기준 2010-11~) 담당 — 지금 데이터를 다시 만들 필요는 없음.
-- 섞일 때 문제는 **팀 이름 표기**(football-data "Wolverhampton Wanderers FC" ↔ API-Football "Wolves"). team_extra.json에 이미 30팀 `af_id` 매핑이 있으니 5대 리그+UCL 전 팀으로 넓힌 매핑 표(우리 이름 → af 팀 ID)를 만들고, 리그·시즌마다 "우리 팀 전부가 정확히 한 ID에 대응"하는지 검사할 것.
-- 과거 시즌을 순위표에만 쓸지 모델 학습에도 쓸지는 별도 결정 — 학습에 넣으면 두 출처가 같은 리그·시즌에 겹치지 않게(23-24~ football-data, 그 전 API-Football).
-
-## 6. API 엔드포인트 (main.py)
-
-| Method | Path | 설명 |
-|---|---|---|
-| GET | `/` | 헬스체크 |
-| GET | `/teams` | 예측 가능 팀 목록 — `teams`(5대 리그) + `ucl_teams`(UCL 기록만으로 참고용 예측하는 5대 리그 밖 팀) |
-| POST | `/predict` | 경기 결과 예측 (body: home_team, away_team) |
-| GET | `/team/{team_name}` | 팀 스탯 |
-| GET | `/logos` | 팀 로고 URL 맵 |
-| GET | `/standings/{league_code}?season=current\|previous\|연도&view=all\|home\|away\|form` | 리그 순위표 (실시간 계산, 23-24~26-27 — 끝난 시즌은 공식 순서·구역·감점, 5.14 / view: 홈·원정·최근 5경기만의 순위표) |
-| GET | `/ucl/tournament?season=` | 시즌별 UCL 토너먼트 브래킷(5.13) |
-| GET | `/ucl/groups?season=2023` | 챔스 조별리그(23-24까지) 조별 순위·기록(5.14) |
-| GET | `/h2h?home_team=&away_team=&limit=` | 상대전적 |
-| GET | `/form/{team_name}?n=` | 최근 N경기 폼 |
-| GET | `/accuracy` | 모델 정확도 |
-| GET | `/players/topscorers/{league_code}`, `/players/topassists/{league_code}` | 득점왕/도움왕 (현재 PL만 데이터 있음) |
-| GET | `/predict/champion/{league_code}` | 순위 예측용 데이터: 현재 순위표 + 남은 경기 + 경기별 모델 H/D/A 확률 + σ (시뮬레이션은 브라우저, 5.4 참고) |
-| GET | `/schedule/{league_code}` | 리그 전체 시즌 일정 (완료+예정 전부) |
-| GET | `/team/info/{team_name}` | 팀 상세정보 (홈구장/창단연도/구단색/감독/스쿼드 + `wiki`: 구단 소개·별칭·수용 인원·연고지 — 5.12) |
-| GET | `/teams/prestige` | 팀별 prestige 맵 (전역 검색 기본 정렬용, 2026-09-20 추가) |
-| GET | `/proxy/logo?url=` | 팀 로고 이미지 프록시 (2026-09-21 추가) — crests.football-data.org/wikimedia는 CORS 헤더가 없어서 프론트 `<canvas>`(예측 결과 공유카드)에 바로 그리면 tainted되어 내보내기가 막힘; 허용된 두 호스트로만 제한해 우리 서버(CORS 전체 허용)를 거쳐 내려줌 |
-| GET | `/predict/track-record` | AI 예측 트랙레코드 요약 + 최근 20경기 (2026-09-21 추가, 5.6 참고) |
-| GET | `/team/players/{team_name}` | 팀 정보 플레이어 통계 탭: 이번 시즌 이 팀 선수 골·도움(리그·챔스)·팀 득점 비중 + 스쿼드 포지션·국적 (2026-09-29) |
-| GET | `/players/leaders/{league_code}` | 선수 탭: 이번 시즌 득점·도움 순위(scorers.json, 5대 리그+UCL — 데이터 없으면 404) (2026-09-29) |
-| GET | `/predict/schedule/{league_code}` | 일정 탭용: 남은 경기 전부의 H/D/A 확률(`/predict`와 같은 숫자) + `results`(끝난 경기 중 트랙레코드에 경기 전 예측이 있는 것, 적중 여부) (2026-09-29, 5.15) |
-| GET | `/team/stats/{team_name}` | 팀 통계 탭: 시즌별 실제 리그 기록·리그 내 순위·리그 평균·홈/원정·상대 수준별·순위 변동 + AI 파워 레이팅 (2026-09-29, 5.12 참고) |
-| GET | `/matches/window` | 지금 −30시간 ~ +21일 사이 5대 리그+UCL 경기(리그 코드 `league` 포함, 날짜순, 보통 100~150경기) — 홈 위젯(오늘/다음 경기·내 팀)·"다른 경기도 예측해보기" 공용. 예전엔 이 셋이 리그 전체 일정 6개(~1,300경기)를 받았음. 내 팀 경기가 21일 안에 없으면 프론트가 그 팀 리그 일정만 따로 받음. 서버에 이 엔드포인트가 없으면 전체 일정으로 대체(`fetchWindowMatches`) (2026-09-29) |
-| GET | `/share/match/{slug}` · `/og/match/{slug}.jpg` | 경기별 공유 페이지(og 태그 + 앱으로 이동)·썸네일 — Vercel `/m/`·`/og/m/`이 넘겨줌 (2026-09-30, 5.16) |
-| GET | `/match/detail?home_team=&away_team=&date=` | 경기 결과 창 상세(이벤트·라인업·평점·팀 통계) — match_details.json, 결제 후 수집 전엔 204 빈 응답(2026-10-05까지 404 — 콘솔 오류로 찍혀서 변경) (2026-09-30, 5.18) |
-| GET | `/teams/meta` · `/standings/{league_code}/movement` | 구단 둘러보기: 한국어 구단명+구단 색 / 지난 라운드 대비 순위 변동 (2026-09-30, 5.21) |
-| GET | `/teams/ko` | 구단 둘러보기 검색용 팀 이름 → 한국어 구단명(위키) (2026-09-30, 5.21) |
-| GET | `/player/profile/{player_id}` | 선수 카드 경력·트로피·부상 이력 — af_profiles.json, 결제 후 수집 전엔 204 빈 응답(2026-10-05까지 404 — 콘솔 오류로 찍혀서 변경) (2026-09-30) |
-| GET | `/team/squad/{team_name}` · `/match/preview?home_team=&away_team=&date=` | 선수 카드·베스트 11·주요 선수 / 팀 소식(라인업·결장자) — 결제 후 수집 전엔 204 빈 응답(2026-10-05까지 404 — 콘솔 오류로 찍혀서 변경) (2026-09-30, 5.19) |
-| GET | `/league/seasons/{league_code}` · `/league/history/{league_code}` | 리그 페이지: 데이터가 있는 시즌 목록(선수·시뮬레이션 여부) / 역대 우승·준우승 (2026-10-06, 5.31). `/schedule/{league_code}?season=연도`는 끝난 시즌 일정(all_matches.csv, 날짜만) |
-| GET | `/calendar/{slug}.ics` · `/calendar/my.ics?t=` | 구단 경기 일정 캘린더 구독(.ics, webcal) — Vercel `/cal/*`이 넘겨줌 (2026-10-03, 5.24) |
-| GET | `/matches/live` | 오늘 경기 최신 점수·상태만(진행 중일 때 화면이 1분마다 부름, `enabled` = Render에 키가 있는지) (2026-09-30, 5.17) |
-| GET | `/league/players/{league_code}?season=` · `/league/bestxi/{league_code}?season=&round=` | 선수 탭 분야별 순위·전체 목록 / 리그 베스트 11(이번 라운드의 팀·시즌) — API-Football 경기별 기록 합산, 15-16~ (2026-10-06, 5.34) |
-| GET | `/player/seasons/{player_id}` · `/meta/countries` | 선수 카드 시즌 고르기(리그·시즌·팀) / 나라 → 국기 (2026-10-06, 5.34) |
-| GET | `/bigmatch` | 다가오는 빅매치 1경기(BIG_CLUBS끼리 가장 가까운 경기, 로고 URL 포함) — 경기예측 탭 배너·랜딩 연출 공용 (2026-09-28, 5.8 참고) |
-| GET | `/match/insights?home_team=&away_team=` | 예측 결과 화면 경기 분석: 두 팀 현재 리그 순위·홈팀 홈/원정팀 원정 최근 10경기·경기 성향(전 대회 최근 10경기)·파워 레이팅(ELO) 추이 (2026-09-27 추가, 5.9 참고) |
-
-리그 코드: `PL`(EPL), `PD`(라리가), `BL1`(분데스리가), `SA`(세리에A), `FL1`(리그앙), `CL`(UCL)
-
-## 7. 배포 파이프라인
-
-1. **백엔드**: `git push` → Render가 `main` 브랜치 자동 재배포 (Render 무료 플랜은 Shell 접근 불가 — 로그 확인만 가능)
-2. **프론트엔드**: `git push` → Vercel 자동 재배포
-3. **일일 데이터 갱신**: GitHub Actions(`update_data.yml`, 매일 UTC 18:00)가 `update_data.py` 실행 → `fotdata_model/*` 변경분을 자동 커밋·푸시 (`자동 데이터 업데이트 YYYY-MM-DD`)
-   - ⚠️ 이 워크플로우에는 `FOOTBALL_API_KEY`만 GitHub Secrets로 주입됨. `API_FOOTBALL_KEY`는 설정돼 있지 않아서, GitHub Actions 실행에서는 `fetch_top_scorers()`가 조용히 스킵된다 — 선수 데이터는 현재 **로컬에서 수동 실행할 때만** 갱신 가능. 자동화하려면 `API_FOOTBALL_KEY`도 GitHub Secrets에 추가해야 함.
-   - 외부 데이터(football-data.org, API-Football)는 GitHub Actions/로컬에서 미리 fetch해 JSON/CSV 캐시로 만든 뒤 서빙하는 구조. (예전엔 "Render 무료 플랜은 아웃바운드 호출이 막혀 있다"고 적혀 있었으나 2026-09-27 확인 결과 틀림 — `/proxy/logo`가 Render에서 crests.football-data.org를 직접 받아와 200을 반환함. 캐시 구조를 유지하는 실제 이유는 API 키·요청 한도·콜드스타트 지연.)
-   - `API_FOOTBALL_KEY`를 GitHub Secrets에 넣지 않은 것은 의도적인 선택이다: API-Football 무료 플랜은 2024 시즌 데이터만 제공해서, 자동화해도 최신 시즌 선수 스탯은 어차피 못 가져온다. 유료 플랜(Pro, $19/월)으로 업그레이드하기 전까지는 선수 데이터는 로컬에서 수동으로만 `python update_data.py`를 돌려 갱신한다.
-   - `update_prediction_log()`(5.6)는 GitHub Actions 러너에서 **Render 배포 API로 직접 HTTP 요청**을 보낸다(로컬/러너 → Render는 인바운드라 문제 없음, Render 무료 플랜의 아웃바운드 제한과는 무관). 그 시점에 Render가 자고 있으면 첫 호출에서 콜드스타트(~50초)가 걸릴 수 있어 타임아웃을 60초로 넉넉히 잡아둠.
-
-## 8. 환경 세팅 (맥북 기준)
-
-```bash
-conda activate fotdata          # 반드시 활성화 확인 (프롬프트에 (fotdata) 표시)
-which python                     # .../envs/fotdata/bin/python 인지 확인
-cd ~/fotdata-api
-export FOOTBALL_API_KEY=...
-export API_FOOTBALL_KEY=...      # 선수 데이터 갱신 시에만 필요
-# 또는: source ~/.fotdata_keys   (홈 폴더의 키 파일, 저장소 밖·권한 600 — Claude 세션도 이걸로 키를 씀)
-python update_data.py
-```
-- `python3`는 시스템 파이썬을 가리킬 수 있으니 `python`(conda env 안)을 쓸 것
-- VS Code 터미널을 새로 열면 conda 환경이 풀려 있을 수 있으니 매번 `conda activate fotdata` 확인
-
-## 9. Git 작업 시 주의사항
-
-- **rebase 충돌**: GitHub Actions가 `fotdata_model/`을 자동 커밋하므로 로컬 작업과 자주 충돌한다.
+- `git push` → Render(백엔드)·Vercel(프론트) 자동 재배포. 강제 재배포: `git commit --allow-empty -m "trigger redeploy"`.
+- 로컬:
   ```bash
-  git pull --rebase
-  git checkout --theirs fotdata_model/all_matches.csv   # 데이터 파일은 최신(원격) 것을 채택
-  git checkout --ours  <직접 수정한 코드 파일>            # 코드는 로컬 것을 채택
-  git add fotdata_model/ <해당 파일>
-  git rebase --continue
-  git push
+  conda activate fotdata
+  cd ~/fotdata-api && source ~/.fotdata_keys
+  python update_data.py            # 또는 --옵션 (6절)
+  python -m uvicorn main:app --port 8000
   ```
-  **`--ours`/`--theirs`를 반대로 쓰면 최신 데이터가 스테일 데이터로 덮어써지는 회귀가 발생한 전례가 있음** — 실수했다면 `git fetch origin` + `git checkout origin/main`으로 복구.
-- 빈 커밋으로 Render 강제 재배포: `git commit --allow-empty -m "trigger redeploy"`
-- `landing.html` 수정 후에는 항상 `cp landing.html index.html` 후 커밋 (4.1 참고)
+- 로컬 화면 확인: 정적 서버(launch.json "static", 8765) + `_test_app.html`(= FotData.html의 API 주소를 `http://127.0.0.1:8000`으로 바꾼 사본, 커밋 금지). 브라우저 창이 숨김 상태면 rAF·ResizeObserver·스크롤 애니메이션이 안 돌아 오판하기 쉬움 → 헤드리스 크롬(CDP) 캡처나 탭을 앞으로. 랜딩은 `scroll-behavior: smooth`라 `scrollTo({behavior:'instant'})`.
+- scipy는 conda-forge 빌드(PyPI arm64 wheel이 최신 macOS에서 깨짐).
 
-## 10. 알려진 이슈 / 향후 정리 과제
+### Git 충돌 (Actions가 fotdata_model/을 자동 커밋)
+```bash
+git pull --rebase --autostash
+git checkout --theirs fotdata_model/<파일>   # 데이터는 원격(최신)
+git checkout --ours <내가 고친 코드>          # 코드는 로컬
+git add … && git rebase --continue && git push
+```
+`--ours`/`--theirs`를 반대로 쓰면 최신 데이터가 낡은 데이터로 덮임 — 실수하면 `git fetch origin && git checkout origin/main -- fotdata_model/`.
 
-- ~~UCL 토너먼트 PO/R16 매칭 순서 하드코딩~~ → 2026-09-19에 `update_data.py`의 `reconstruct_bracket_order()`로 리팩토링 완료. 상위 라운드(R16/QF/SF/Final)가 실제로 확정되면 그 대진의 팀 실명으로 하위 라운드 어느 매치에서 이겼는지 역추적해서 좌우 순서를 자동 복원함(팀 이름 완전일치 기반, substring 매칭 버그도 같이 제거됨). 아직 다음 라운드가 안 열린 최전선 라운드(예: R16 발표 전의 PO)만 API 응답 순서를 그대로 씀 — 이건 UEFA의 실제 추첨 슬롯 정보가 API에 없어서 발생하는 구조적 한계로, 다음 라운드가 열리는 순간 자동으로 소급 재정렬됨.
-- 모델 로드 시 구버전 scikit-learn으로 저장된 pkl과의 `multi_class` 속성 호환성 문제가 있었음 → `main.py`에 `if not hasattr(lr_model, 'multi_class')` 패치로 해결한 상태. sklearn 버전을 올릴 때 이 부분 재확인.
-- `FotData_01.ipynb`는 초기 개발 단계(Stage 0~1 초반)의 유물로, 현재는 `update_data.py`가 전체 파이프라인(수집→피처→학습→저장)을 대체함. 노트북은 과거 히스토리 참고용이며 실행 경로가 아님.
-- 시즌 종료 배너(`FotData.html`/`landing.html`에 HTML 주석으로 비활성화됨)는 27-28 시즌 전환 시점에 재활성화 예정.
-- ~~자동 업데이트 워크플로우 커밋/푸시 간헐적 실패~~ → 2026-09-19에 `.github/workflows/update_data.yml` 수정. 원인: GitHub Actions 러너가 큐에서 오래 대기하다 실행되면(수 시간 지연도 발생 가능) 그 사이 다른 커밋이 먼저 push될 수 있는데, 기존 `git pull --rebase origin main || true`는 `update_data.py`가 이미 워킹트리를 건드려놓은 상태라 원격이 움직였을 때 항상 실패하고 그 에러가 `|| true`에 조용히 삼켜져서, 결국 낡은 베이스 위에 커밋 → `push --force-with-lease` 거절로 이어짐. `git fetch` + `git reset`(mixed) + 재시도 루프로 교체해 해결. (`--soft`로 하면 인덱스가 안 갱신돼서 체크아웃 이후 원격에 새로 추가된 파일이 다음 커밋에서 삭제된 것처럼 처리되는 별도 버그가 있으니 반드시 기본/`--mixed` reset을 쓸 것.)
-- ~~로컬 conda `fotdata` 환경에서 `import sklearn`이 아예 실패함~~ → 2026-09-22에 해결. 원인은 PyPI의 scipy 1.15.3 macOS arm64 공식 wheel 자체의 `_propack` 확장(`.so`)이 최신 macOS(26A428 이상)의 더 엄격해진 Mach-O `__thread_bss` 섹션 검증을 통과하지 못하는 문제였음 — `pip install --force-reinstall --no-cache-dir scipy`로 캐시를 지우고 새로 받아도 동일 wheel이라 재발(캐시 손상이 원인이 아니었음). **conda-forge 빌드(scipy 1.15.2)로 교체하니 정상 동작** — `conda install -n fotdata -c conda-forge scipy --force-reinstall -y`. 이후 `numpy 2.2.6 / scipy 1.15.2 / scikit-learn 1.7.2 / xgboost 3.2.0` 조합으로 `import main`, `update_data.py` 모두 정상 기동 확인. pkl 모델이 sklearn 1.9.1로 저장돼 지금 버전(1.7.2)과 다르다는 `InconsistentVersionWarning`이 뜨지만 실제 로드·예측은 정상 동작(기존 10번 항목의 `multi_class` 호환 패치와 같은 종류의 무해한 경고).
-- ~~`team_extra.json` 스쿼드에 등번호 중복이 광범위하게 발생(거의 모든 팀에서 2~5쌍)~~ → 2026-09-23에 원인 파악 및 해결. 근본 원인은 두 가지: (1) API-Football의 `/players/squads`가 무료 플랜에서도 1군과 유스/후보 선수를 구분 없이 한 리스트로 반환하는데, 이 유스 선수들이 1군과 등번호가 겹침 → `_clean_squad()`를 추가해 `team_info.json`(football-data.org 쪽 공식 1군 명단, 등번호는 없지만 노이즈 없음)의 이름을 화이트리스트로 삼아 성(姓) 매칭이 안 되는 선수를 걸러내고, 그래도 남는 충돌은 번호를 비워서 오정보를 피함. (2) `_search_af_team_id_query()`의 유스팀 제외 필터에 " U18"이 빠져 있어서 Newcastle이 통째로 "Newcastle United U18"(유스팀) ID로 매칭되는 전례가 있었음(스쿼드 2명, 이적 기록도 전부 U18 이적) — 나이대 필터를 정규식(`U15~U23` 전체)으로 교체. 로컬에서 재실행해 EPL 20팀 전부(기존 16팀 → 20팀) 스쿼드 재수집 완료, 중복 0건 확인.
-- ~~일정 탭 첫 진입 시 무한 로딩(다른 리그 탭을 누르면 정상화)~~ → 2026-09-23 해결. 원인: 홈/예측 탭이 백그라운드로 5대리그+UCL 일정을 전부 미리 캐싱(`fetchAllSchedules`, 빅매치/오늘의경기 위젯용)해두는데, 이 캐싱이 사용자가 일정 탭을 열기 전에 먼저 끝나버리면 `showPage`의 "이미 캐시됐으면 로드 스킵" 가드가 걸려 실제 렌더링 함수(`loadSchedule`)가 아예 호출되지 않고 정적 placeholder에서 멈춰 있었음(다른 리그 탭 클릭은 무조건 `loadSchedule`을 호출하는 별도 경로라 정상 동작했던 것). 캐시 여부와 무관하게 페이지 진입 시 항상 `loadSchedule` 호출하도록 수정(내부에서 이미 캐시 체크 후 필요시에만 fetch하므로 중복 네트워크 요청 없음).
-- ~~검색 단축키 힌트(⌘K)가 일부 환경(주로 Windows)에서 중국어처럼 보이는 깨진 글자로 표시~~ → 2026-09-23 해결. `⌘`(U+2318) 기호가 Mac 외 환경 폰트에서 CJK 폴백 폰트로 렌더링되던 문제 — `navigator.platform`으로 Mac 여부 감지해서 Mac 아니면 "Ctrl K"로 표시.
-- ~~순위예측 "시뮬레이션 시작" 버튼이 "계산 중..."으로 바뀔 때 텍스트가 짧아져 버튼 폭이 줄고 옆 슬라이더 영역이 늘었다 줄었다 함~~ → 2026-09-23 해결. 버튼에 `min-width:148px`+텍스트 중앙정렬 고정.
-- ~~예측 결과 "OO 최근 경기" 제목이 팀명 첫 단어만(예: "Aston", "AFC") 잘려서 표시~~ → 2026-09-23 해결. `renderForm()`에서 `fd.team.split(' ')[0]` 대신 `fd.team` 전체를 쓰도록 수정.
+## 10. 시즌 전환 체크리스트 (매년)
 
-- ~~자동 업데이트가 연결 오류 한 번에 통째로 실패~~ → 2026-10-03 해결. 10/1 실행에서 라리가 일정 요청이 football-data 쪽 SSL 연결 끊김(`SSLEOFError: UNEXPECTED_EOF_WHILE_READING`)으로 실패 → `fd_get`이 429만 재시도하고 연결 오류는 그대로 던져서 스크립트가 멈췄고, 커밋 단계도 건너뛰어 그날 받은 경기·모델까지 저장 안 됨(A매치 휴식기라 화면 영향은 없었음). 수정: ① `fd_get`이 연결 오류·타임아웃도 10·20·30초 쉬고 재시도, ② `fetch_full_schedule`이 못 받은 리그는 기존 일정 유지(예전엔 그 리그가 schedule.json에서 통째로 빠졌음), ③ `main()`을 단계별로 실패를 따로 잡는 `step()`으로 — 하나가 실패해도 나머지는 돌고 저장, 끝에 실패가 있으면 종료 코드 1 + `::warning::` 표시, ④ 워크플로우 커밋 단계를 `if: ${{ !cancelled() }}`로(스크립트가 1로 끝나도 저장된 결과는 커밋, 실행 결과는 빨간색으로 남음), ⑤ Node 20 종료 경고로 `actions/checkout@v5`·`actions/setup-python@v6`. 가짜 연결 오류로 세 경우(재시도 후 성공·한 리그만 계속 실패·main 중간 단계 실패) 확인. **실패 로그는 GitHub 로그인해야 보임**(API로는 단계 이름·결과만).
+- [ ] 키 유효성(로컬 `~/.fotdata_keys`, GitHub Secrets, Render 환경변수)
+- [ ] `update_data.py` `MATCH_SEASONS` 한 시즌 밀기, `main.py` `CURRENT_SEASON_YEAR`
+- [ ] 끝난 26-27: `--history-players 2026` 한 번 + `AF_PLAYER_SEASONS` 범위 늘리기
+- [ ] `FotData.html` `LEAGUE_DATA` 승강팀, 승격팀 로고(`generate_logos_hd.py` 재실행 후 눈으로 확인)
+- [ ] 시즌 종료 배너(FotData.html·landing.html 주석) 재활성화 여부
 
-**2026-09-27 전체 코드 재검토에서 확인된 미해결 이슈** (전부 실제 호출/데이터로 검증함):
-- ~~UCL 경기 대부분 예측 불가~~ → 2026-09-28 부분 해결. `team_stats.csv`엔 5대 리그 팀만 있어서 5대 리그 밖 팀(스포르팅, 갈라타사라이 등)이 낀 UCL 경기는 `/predict`가 404였음(남은 UCL 126경기 중 84경기). → 이 팀들도 `team_state.json`엔 UCL 경기만으로 쌓인 ELO·폼·득실이 있으므로, **올 시즌 UCL 일정에 있고 UCL 경기 기록 8경기 이상**(`UCL_ONLY_MIN_MATCHES`)인 팀(현재 10팀: PSV·브뤼헤·스포르팅·페예노르트·갈라타사라이·샤흐타르·보되/글림트·포르투·슬라비아·슬로반)은 예측을 열어줌 → 예측 가능 42→93경기. 1경기뿐인 첫 출전 팀(페네르바흐체·LASK·AEK·사바·바이킹)은 "아직 UCL 경기 기록이 적어서(8경기 미만) 예측 데이터가 없어요" 유지. 이런 경기는 모델이 과신해서(24-25·25-26 UCL 110경기 백테스트: 모델 그대로 log loss 1.083 > "리그 평균 비율로만 찍기" 1.038) 확률을 리그 평균 쪽으로 30% 당김(`UCL_ONLY_SHRINK`, λ=0.3 → 1.024, 정확도 53.6% vs 홈승만 49.1%) — 개선 폭이 작아서 결과 화면·미리보기 모달에 "참고용 예측 · OO은(는) 5대 리그 밖 팀이라 UCL 경기 기록만으로 계산했어요" 안내(`/predict` 응답 `limited: true`). 표시용 공격/수비/승률도 UCL 경기 기준(team_state). 리그 순위·홈/원정 섹션은 데이터가 없어 자동으로 빠짐. `/teams`에 `ucl_teams` 추가(프론트 `predictableTeams`에 합침). 2단계(미착수): 무료 플랜으로 에레디비시(DED)·프리메이라리가(PPL)도 받을 수 있어 PSV·페예노르트·포르투·스포르팅은 자국 리그 데이터를 쓸 수 있지만, 약한 리그 성적이 그대로 ELO에 들어가면 과대평가되므로 리그 수준 보정 설계가 먼저 필요.
-- ~~scikit-learn 버전 불일치~~ → 2026-09-27 해결. GitHub Actions(`update_data.yml`)가 `pip install scikit-learn`을 버전 고정 없이 설치해서 모델이 **1.9.1로 저장**되는데 Render는 `requirements.txt`의 **1.7.2**로 로드하고 있었음(로드 시 InconsistentVersionWarning, `main.py`의 `multi_class` 패치도 이 불일치 때문). 워크플로우를 `pip install -r requirements.txt`로 바꿔 학습·서빙 버전을 일치시킴 — 수정 이후 첫 자동 업데이트부터 1.7.2로 저장됨. **앞으로 패키지 버전을 올릴 땐 requirements.txt 하나만 바꾸면 양쪽이 같이 바뀜.**
-- ~~화면의 "AI 모델 정확도"가 실제 서빙 모델 정확도가 아님~~ → 2026-09-27 해결. `accuracy.json`의 `best`(LR/RF/XGB 중 최고값, 당시 RF 54.9%)를 보여주던 것을 실제 예측에 쓰는 `logistic_regression` 값(54.7%)으로 변경(FotData.html `loadAccuracy`, landing.html 히어로 스탯).
-- ~~오프라인 정확도가 낙관적으로 나올 구조(학습 피처 누수 + 무작위 분할)~~ → 2026-09-27 해결(5.3). 전 피처를 경기 직전 시점 기준으로 바꾸고 시간순 검증 수치(약 51.6%)를 표시.
-- 참고: 트랙레코드(`prediction_log.json`)는 이미 기록된 경기는 다시 안 찍음(`if key in log: continue`) — 2026-09-27 이전에 기록된 104건(10/9~ 경기)은 예전 모델의 예측으로 남아 있음(실제 사용자가 봤던 예측이므로 의도적으로 유지).
-- ~~players.json 덮어쓰기 위험~~ → 2026-09-27 해결. `fetch_top_scorers()`가 API-Football의 요청 한도 초과 응답(200 + errors + 빈 `response`)도 그대로 저장해서 득점왕/도움왕이 빈 배열로 덮어써질 수 있었음 → 기존 파일을 먼저 읽고, 에러 없이 비어 있지 않은 응답을 받은 리그만 교체, 아무것도 못 받았으면 파일을 아예 안 씀. 가짜 응답으로 한도 초과(기존 19명 유지)·정상(교체) 두 경우 테스트함.
-- ~~경기 데이터 누락~~ → 2026-09-27 해결. `all_matches.csv`의 24-25 시즌이 리그별로 빠져 있었고(BL1 272/306, FL1 255/306, PD·SA 323/380), 23-24 시즌은 PL·PD·CL만 있었음. 원인: `main()`이 매일 받아오면서도 현재 시즌만 교체하고 과거는 "기존 CSV 유지"라 예전에 덜 받아진 상태가 굳음. 게다가 match_id 없는 초기 노트북 시절 행 237개가 "Bayern München"/"Inter Milan"/"RCD Espanyol"/"FC St. Pauli" 같은 옛 표기로 같은 경기를 중복 기록하고 있어서(전부 같은 날·같은 스코어 정식 경기 존재 확인), ELO·스탯에 존재하지 않는 "유령 팀"이 생기고 24-25 성적이 두 팀으로 쪼개져 있었음(뮌헨 블렌딩 승률 0.612 → 실제 0.774, 인테르 0.576 → 0.697). → `collect_matches()` 신설: `MATCH_SEASONS=[2023..2026]` 전부 매일 재수집해 기존과 합집합 병합(같은 경기는 새 데이터 우선, 수집 실패한 리그·시즌은 기존 유지), 정식 데이터가 있는 리그·시즌의 match_id 없는 예전 행은 제거. `python update_data.py --matches-only`로 경기 데이터만 갱신 가능. 저장 순서는 날짜→리그→홈팀으로 고정(날짜만으로 정렬하면 같은 날 경기 순서가 실행마다 바뀌어 매일 파일 전체가 바뀐 것처럼 커밋되고 같은 날 경기의 ELO 반영 순서도 달라졌음 — 2026-09-28 수정, 이 순서 변화만으로도 표시 정확도가 ±0.2%p 흔들릴 만큼 수치가 민감함). 결과 4,835 → 6,024경기, 전 리그·시즌 380/306 완비(BL1 24-25, FL1 24-25·25-26만 305 — 상태가 FINISHED가 아닌 몰수 경기 등으로 추정). 모델 성능은 같은 시험 경기 짝 비교에서 통계적으로 차이 없음(정확도 51.8→51.7%, log loss 차이 95% 구간이 0 포함) — 표시 정확도가 51.6→50.8%로 바뀐 건 데이터가 늘며 시험 구간(최근 20%)이 855→1,100경기로 넓어진 영향.
-- 참고(버그 아님): 2026-09-27 기준 트랙레코드는 예측 104건 기록·결과 확정 0건 — 마지막 종료 경기가 9/20이고 기록 시작(9/22) 이후 A매치 휴식기라 첫 대상 경기가 10/10임. 정상.
+## 11. 남은 일 · 보류
 
-## 11. 시즌 전환 체크리스트 (매년 반복 작업)
-
-새 시즌이 시작될 때마다 아래를 전부 수동 확인:
-- [ ] football-data.org / API-Football API 키 유효성 (로컬 + GitHub Secrets 양쪽)
-- [ ] `update_data.py`의 `MATCH_SEASONS`(현재 `[2023, 2024, 2025, 2026]`, 무료 플랜 접근 가능 4시즌) 갱신 — 한 시즌씩 밀 것. 가장 오래된 시즌은 API가 403을 줘도 병합 로직상 기존 데이터가 유지됨
-- [ ] `team_stats.csv` / `/standings` 엔드포인트의 시즌 컷오프 날짜 (여러 위치에 흩어져 있음, main.py와 update_data.py 둘 다 확인)
-- [ ] `FotData.html`의 `LEAGUE_DATA` 하드코딩 팀 리스트 — 승강팀 반영
-- [ ] 신규 승격팀 로고 (`update_team_logos()`가 자동 시도하지만 실패 시 수동 추가)
-- [ ] 시즌 종료 배너 재활성화 여부
-- [ ] FotData.html 맞대결 카드 제목 "최근 4시즌 맞대 기록" — all_matches.csv가 담는 시즌 수가 바뀌면 같이 수정(현재 23-24~26-27)
-
-## 12. 다음 계획 / 수익화 로드맵
-
-### 12.1 개선 백로그 (2026-09-27 코드 검증 후 확정)
-처음 추천에서 "순위표 최근 5경기 W/D/L 칸 추가"(이미 있음 — 순위표 `최근 5경기` 칸)와 "맞대결 밑에 최근 5경기 흐름"(예측 결과 아래 "OO 최근 경기" 카드와 중복)은 이미 구현된 걸 모르고 추천한 거라 제외. 예측 결과 화면에 현재 나오는 것: 승무패 확률, 예측 근거, 두 팀 공격력/수비력(블렌딩값), 레이더 차트(공격/수비/폼/체급/상대전적), 예상 스코어, 공유 버튼, 최근 3시즌 맞대 기록, 두 팀 최근 경기.
-1. **4시즌 블렌딩** — 아래 "football-data.org 4시즌 확장 검토" 참고. 단 2026-09-27부터 /predict는 블렌딩 대신 누적 ELO 등(team_state.json)을 쓰므로, 블렌딩 개선은 순위 예측·결과 화면 공격/수비 표시·검색 정렬에만 영향(예측 정확도와는 무관). 예측 모델에 4번째 시즌을 넣으려면 all_matches.csv에 2023 시즌을 더 넣는 쪽이 맞음(현재 이미 2023-08 경기부터 들어 있음).
-2. ~~**학습/서빙 ELO 불일치 해소**~~ → 2026-09-27 완료(5.3). 당시 기록: 학습 피처(`build_features`)는 경기마다 갱신되는 실제 ELO(`calculate_elo_ratings`, K=20, 홈 +70)와 실제 최근 폼/최근 평균 득실점을 쓰는데, 서빙(`/predict`, main.py)은 이 값들을 저장해두지 않아서 블렌딩 승률로 ELO를 재구성(`1500+(win_rate−0.33)×1000`+prestige+감쇠 홈어드밴티지)하고 폼도 `win_rate×15`로 대신함 — 모델이 배운 입력과 실제 예측 때 받는 입력의 의미/스케일이 다름. `update_data.py`에서 팀별 최종 ELO(`final_elo`, 이미 반환만 되고 버려지는 중)와 실제 최근 폼·평균 득실점을 파일로 저장하고 `/predict`가 그걸 쓰도록 바꾸는 게 정확도 개선 여지가 가장 큼. 단 현재 서빙 쪽 보정(prestige, 전력차 홈어드밴티지 감쇠 — 5.3)은 비현실적 확률을 막으려고 일부러 넣은 것이라, 바꾼 뒤 트랙레코드/정확도로 전후 비교 필수.
-3. **맞대결 밑 빈 공간** — 화면에 아직 없는 정보로 채움: 두 팀의 현재 리그 순위·승점 + 홈팀의 이번 시즌 "홈 경기" 성적 vs 원정팀의 "원정 경기" 성적(현재 공격력/수비력은 홈·원정 구분 없는 블렌딩값이라 겹치지 않음). 모든 리그 데이터로 가능.
-4. **트랙레코드 노출 강화** — 지금은 예측 버튼 아래 작은 링크(모달)뿐. 홈에 "지난주 AI 예측 적중 N/M" 같은 카드를 두면 신뢰도 효과가 가장 큼. (첫 결과는 10/10 경기부터라 카드는 그 이후에 의미 있음)
-5. **(2026-09-27 재검토로 추가) 운영 전 우선 수정** — ①sklearn 버전 고정 ②UCL 5대 리그 밖 팀 안내 ③표시 정확도를 LR 값으로 ④players.json 덮어쓰기 방지는 2026-09-27 완료(10번 참고). (UCL 밖 팀 예측 1단계·순위 예측 현재 승점+남은 일정 기준 모두 2026-09-28 완료 — 10번·5.4 참고. 남은 것: UCL 밖 팀 2단계(자국 리그 데이터 + 리그 수준 보정)) (학습 피처 누수·시간순 검증은 2026-09-27 완료) — 참고: team_state.json엔 이미 UCL에만 나오는 5대 리그 밖 팀들의 누적 ELO/스탯도 들어 있어서(UCL 경기만 기준, 표본 적음 — 165팀 중 현재 5대 리그 96팀 외 나머지는 이런 팀과 강등팀) /teams 목록만 넓히면 기술적으로 예측이 가능해짐. 다만 경기 수가 적어 정확도 검증이 선행돼야 함.
-- 참고: 팀 정보 모달에 "팀 통계" 탭이 이미 있지만 블렌딩값(승률/공격/수비/체급)만 보여줌 — 3번(홈·원정 분리 성적)과 겹치지 않음을 코드로 확인.
-
-### 12.2 랜딩페이지 스크롤 3D 연출 (2026-09-28 구현·**기본 공개** — 예전 랜딩과 비교하려면 `?story=0`)
-- 방향: 사실적 3D 대신 브랜드(진한 남색 + 파란 선 축구공)를 3D로 확장한 "와이어프레임 데이터 아트". 연출 속 팀은 구단 엠블럼 대신 이름 텍스트 + 중립 원형(홈 파랑/원정 주황) — 마케팅 연출의 상표 리스크 회피.
-- 구성(기존 랜딩 위에 얹음): 인트로(골대, 기존) → **히어로 뒤 3D 공**(투명도 0.3, 은은하게) → **스토리 구간**(히어로 바로 다음 `<section id="story">`, 높이 560vh, 안쪽 `.story-pin`이 sticky로 화면 고정) → 기존 섹션(배경색이 있어 캔버스를 가림, 이 구간에선 캔버스 투명 + 렌더 중지) → **마지막 CTA 뒤에서 점들이 다시 공으로 합쳐짐**.
-- 스토리 장면(스크롤 진행도 p): 공(0~0.10) → 흩어져 데이터 구름 + 실제 학습 경기 수 카운터(`/accuracy` total_matches) → 3D 경기장 라인 + 홈/원정 원형 + **다가오는 EPL 빅6 경기의 실제 `/predict` 확률** 막대 → 점들이 포물선 빛줄기로 날아가 **우승 확률 막대**(`/predict/champion/PL`로 순위 예측과 같은 방식 1,000회 시뮬레이션, 점 개수 = 우승 횟수 비례) + 막대 위 라벨(3D 좌표를 화면에 투영) → 다시 공 + "경기 예측하기".
-- 구현: `landing-story.js`(ES 모듈). Three.js r160(jsdelivr, `three.module.min.js` 670KB/gzip ~170KB)을 `requestIdleCallback`으로 **첫 화면 이후 지연 로딩**(첫 로딩·검색 점수 보호). GSAP은 안 씀 — 스크롤 진행도를 직접 계산(`getBoundingClientRect`) + CSS sticky가 더 가볍고 iOS 주소창 리사이즈 문제도 적음. 점마다 네 장면의 목표 위치/색(`p0~p3`, `c0~c3`)을 attribute로 넣고 셰이더가 (A→B, t)를 점별 시차(seed)로 보간 → 데스크톱 6,024점/모바일 2,600점. 캔버스는 `position:fixed; z-index:-1`(body 배경 위, 모든 콘텐츠 아래) — 배경색 있는 섹션이 자연스럽게 가림. 화면 밖·탭 숨김이면 렌더 루프 정지. 1280px에서 전 장면 스크롤 중 120fps 유지(맥 ProMotion) 확인.
-- 레이아웃: 데스크톱은 글 왼쪽 + 장면 오른쪽(`setViewOffset`로 20% 이동), 모바일(≤768px)은 글 위 + 장면 아래(20% 아래로) + 세로 화면일수록 카메라를 `1/aspect`배 뒤로(장면이 가로폭을 넘치지 않게). 히어로·CTA에선 장면을 가운데로.
-- 접근성·SEO: 모든 문구는 실제 HTML. `prefers-reduced-motion` 또는 WebGL 미지원이면 `.story.static`(화면 고정 없이 4단계 문구 + 확률 막대 + 우승 확률 목록만). API 실패 시 고정 예시값으로 연출은 계속.
-- 시행착오: (1) `onDataChange()`가 선언 전 변수(`labelsWrap`)를 참조해 TDZ 오류 → import 실패 → 정적 모드로 떨어짐(선언 순서 수정). (2) 창 크기가 바뀌어도 `applyShift`가 같은 이동값이면 투영 갱신을 건너뛰어 화면 비율이 안 바뀌고 공이 세로로 늘어남 → 리사이즈 때 강제 갱신. (3) 세로 화면에서 장면이 가로폭을 넘쳐 글과 겹침 → 카메라 거리 보정.
-- **2026-09-28 사용자 피드백 반영**: (1) 02 빅매치 카드에 구단 로고(경기장 원형과 같은 색 링의 밝은 배지 — 남색 엠블럼도 보이게), 빅매치는 서버 `/bigmatch`(경기예측 탭과 동일 경기). (2) 03 시뮬레이션 막대 위 라벨에 로고 + 확률 + 팀명, 시뮬레이션 리그는 빅매치가 열리는 리그(UCL이면 EPL), 문구는 "리그 우승 확률". "남은 N경기"는 `/predict/champion`의 remaining(서버가 매일 일정에서 계산)이라 자동으로 줄어듦 — HTML의 330은 API 실패 시 기본값. (3) **축구공 찌그러짐 수정**: 원인은 ① 막대→공 전환이 스토리 구간 맨 끝(p=1.0)에서야 끝나 점별 도착 시차 때문에 섹션이 끝날 때까지 울퉁불퉁했음(CTA도 페이지 끝에서야 완성) → p=0.95에서 완성 후 머묾, CTA는 화면 중간쯤 완성, ② 뒷면 선·점이 앞면과 같은 밝기로 비쳐 철망처럼 보임 → 셰이더에서 법선·시선 내적으로 뒷면을 흐리게(점은 `uBall` 비중만큼), ③ 구의 외곽선이 없음 → 카메라를 향하는 윤곽 원(로고의 바깥 원) + 테두리 빛번짐, 원근 보정 반지름 `R·d/√(d²−R²)`로 실제 외곽과 일치, ④ 12개 오각형 면을 점 22%로 채워 클래식 축구공 무늬로 읽히게. 선·윤곽은 점들이 거의 다 모였을 때(w0>0.55)부터 나타남. (4) **회색 띠 배경**: 스토리 다음 `.preview`·`.leagues` 섹션의 회색(#161b22) 배경이 고정 캔버스를 가로로 잘라 공이 칼같이 잘려 보였음 → 연출이 켜지면 `body.story-on`에서 두 섹션 배경을 투명하게(섹션 구분은 경계선), 스토리가 끝나면 다음 섹션 글과 겹치기 전에 공이 먼저 사라지게(스토리 하단이 화면 70% 지점부터 페이드). 빛번짐도 넓고 진하면 공 뒤에 회색 원판처럼 보여서 테두리 근처만 은은하게.
-- **마지막 CTA 화면(2026-09-28)**: 맨 아래까지 내리면 "지원하는 리그" 줄이 공 윗부분과 겹쳤음 → 연출이 켜지면 `fitCta()`가 CTA 섹션 높이를 "화면 − 상단 메뉴 − 푸터"로 늘려(글은 세로 가운데) 맨 아래에선 공 + "지금 바로 시작하세요"만 보이게, 공은 화면 가운데 고정이 아니라 **CTA 섹션 중심을 따라 이동**(`setViewOffset`의 세로 오프셋 `dy`)해서 글 뒤 정중앙에 자리 잡음. CTA에선 카메라를 데스크톱 1.22배/모바일 0.92배로(메뉴~푸터 사이에 들어오게).
-- 테스트 팁: 랜딩은 `html { scroll-behavior: smooth }`라 자동화에서 `scrollTo(y)`하면 부드럽게 이동하는 도중에 캡처됨 — `scrollTo({top, behavior:'instant'})`를 쓸 것.
-- 남은 일(2~4일차): 전환 속도감·타이밍 다듬기, 중간 전환(구름→경기장) 연출 보강, 실기기(iOS 사파리/안드로이드) 확인, Lighthouse 측정, 확인 후 `?story=1` 조건 제거(landing-story.js `ENABLED`)로 기본 공개.
-
-### 12.2.1 보류(킵) 목록 — 2026-09-29 사용자 결정
-- ~~**모바일 환경 개선**~~ → 2026-09-30 완료(5.23): 뒤로가기 지원, 화면 밀림(CLS) 제거, 첫 로딩(폰트 비차단·로고 크기 분리), 접근성 100.
-- ~~**정식 출시 전**: 캘린더에 추가(.ics)~~ → 2026-10-03 완료(5.24, 구독 방식).
-- **보류**: 내 예측 vs AI(예측 게임) — 메인 앱이 복잡해질 수 있어서.
-
-### 12.3 기타
-- **football-data.org 4시즌 확장 검토**: 2026-09-23 실측으로 무료 플랜이 4시즌(2023~2026)까지 열려있음을 확인(3시즌 아니었음, 3. 데이터 소스 참고). `calculate_blended_stats`(5.1)의 3시즌 가중치 테이블을 4시즌용으로 재설계하면 즉시(추가 비용 없이) 예측 모델에 반영 가능 — 아직 미착수, 착수 시 가중치 표(현재 0~9/10~17/18+경기 구간별 %) 전체 재검토 필요.
-- **API-Football 유료 전환 검토(2026-09-23 조사)**: Pro($19/월, 7,500요청/일)로 올리면 (1) 요청 한도가 100→7,500/일로 늘어 지금 100/일 한도에 막혀 중단된 라리가 등 나머지 4개 리그 스쿼드/이적 수집을 즉시 끝낼 수 있고(가장 확실한 효과), (2) 득점왕/도움왕이 2024시즌 고정에서 최신 시즌(26-27)으로 풀릴 가능성이 높고, (3) `/fixtures/lineups`(선발 라인업)·`/injuries`(부상자)도 같은 "최신 시즌 제한" 패턴이라 같이 풀릴 가능성이 높음(단 (2)(3)은 오늘 rate limit 초과로 실제 호출 검증은 못 함 — 결제 직후 바로 재검증 권장). 결제해도 자동으로 기능이 생기진 않고 프론트/백엔드에 데이터를 붙이는 작업은 별도로 필요. GitHub Actions에 `API_FOOTBALL_KEY`를 안 넣어둔 이유(7번 항목)도 "유료 전환 시" 재검토 대상.
-- **기능**: 선수 스탯 기능 확장(현재 EPL 무료 플랜 한정 → API-Football Pro 결제 시 전체 리그/시즌 확장 가능), README 작성
-- **Stage 2**: YOLOv8 + ByteTrack 컴퓨터 비전 파이프라인 (맥북 M5는 MPS 가속 지원, `device='mps'`)
-- **수익화 단기**: 도네이션 버튼(Ko-fi), Google AdSense
-- **수익화 중기**: Freemium 구독(Pro 티어), RapidAPI 예측 API 판매
-- **수익화 장기**: 유소년/아마추어팀 대상 SaaS 영상 분석, B2B 대시보드
-- ~~UptimeRobot으로 Render 무료 플랜 슬립 방지 설정 필요~~ → 2026-09-19에 `.github/workflows/keep_alive.yml`(10분 간격 핑)로 1차 조치했으나, 2026-09-20에 실제 실행 기록(`gh`/GitHub API로 직접 확인)을 보니 GitHub Actions의 `schedule` 크론이 best-effort라 10분 설정이 실제로는 2~5시간 간격으로만 실행되고 있었음 — 그 사이 Render가 슬립해버려 근본적 해결이 안 됐던 상태. **2026-09-20에 cron-job.org(외부 전용 크론 서비스, 10분 간격)로 교체**해 실제 해결. `keep_alive.yml`은 삭제하지 않고 보조 백업으로 유지(있어도 방해 안 됨, 어차피 못 미더우니 주력으로 의존하지 말 것).
-  - 참고: 과거에 "cron-job.org로 이미 설정함"이라고 기록된 커밋(`7fc7076`)이 있었는데 그때는 실제 diff에 아무 내용이 없어 허위 기록이었음 — 이번엔 실제로 cron-job.org 콘솔에서 job 생성 확인 후 기록. 앞으로 "설정했다"는 기록은 반드시 실제 diff/동작(로그, 응답시간 등) 확인 후에만 남길 것.
+- 광고(AdSense) 붙이면 개인정보처리방침의 "쿠키를 사용하지 않습니다"·외부 서비스 표 수정, football-data 상업 이용 문의 먼저.
+- UCL 밖 팀 2단계: 에레디비시·프리메이라리가(`extra_matches.csv` 수집 중) + 리그 수준 보정 — 백테스트 후 모델에 켜기.
+- 모델 개선 후보: 4시즌 블렌딩 가중치 재설계(순위 예측용), 과거 시즌(API-Football)을 학습에 넣을지 결정(넣으면 출처가 겹치지 않게).
+- 컵대회 탭(대회 아이콘·이름 `COMP_INFO` 그대로 사용).
+- 보류: 예측 게임(내 예측 vs AI) — 앱이 복잡해져서. 어두운 엠블럼 밝게 처리 — 안 하기로.
+- 수익화: Ko-fi(있음) → AdSense → Freemium/예측 API → 유소년 영상 분석 SaaS.
