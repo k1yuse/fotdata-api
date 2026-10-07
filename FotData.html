@@ -751,7 +751,7 @@
     .rh-cols { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(26px, 1fr); gap: 4px; min-width: max-content; width: 100%; height: 92px; align-items: end; }
     .rh-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 3px; min-width: 26px; }
     .rh-col b { font-family: var(--font-num); font-size: 14px; font-weight: 700; color: var(--text); line-height: 1; font-variant-numeric: tabular-nums; }
-    .rh-col i { display: block; width: 100%; max-width: 22px; border-radius: 4px 4px 2px 2px; background: rgba(142,154,179,0.35); }
+    .rh-col i { display: block; width: 100%; max-width: 10px; border-radius: 3px 3px 1px 1px; background: rgba(142,154,179,0.35); }
     .rh-col small { font-size: 10px; color: var(--faint); font-variant-numeric: tabular-nums; }
     .rh-col.champ b { color: var(--gold); } .rh-col.champ i { background: linear-gradient(180deg, #f6d66b, var(--gold)); box-shadow: 0 0 10px rgba(240,192,64,0.35); }
     .rh-col.none b { color: var(--disabled); } .rh-col.none i { background: none; border: 0.5px dashed rgba(142,154,179,0.3); height: 6px !important; }
@@ -2167,13 +2167,13 @@
     .pc2-club { display: inline-flex; align-items: center; gap: 6px; padding: 0; border: none; background: none; font: inherit; font-size: 14px; font-weight: 600; color: var(--text-2); cursor: pointer; line-height: 20px; }
     .pc2-club img { width: 20px; height: 20px; object-fit: contain; }
     .pc2-club:hover span { color: var(--blue-text); }
-    .pc2-meta { display: flex; flex-wrap: wrap; font-size: 13px; color: var(--muted); line-height: 18px; }
+    .pc2-meta { display: flex; flex-wrap: wrap; font-size: 14px; color: var(--muted); line-height: 18px; }
     .pc2-meta span + span::before { content: ''; display: inline-block; width: 1px; height: 10px; margin: 0 8px; background: var(--border); vertical-align: -1px; }
     .pc2-meta .inj { color: var(--red); }
     .pc2-rt { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
     .pc2-rt b { font-family: var(--font-num); font-size: 26px; font-weight: 700; line-height: 1; padding: 5px 8px 4px; border-radius: 6px; color: var(--bg); background: var(--muted); font-variant-numeric: tabular-nums; }
     .pc2-rt b.r8 { background: var(--blue); } .pc2-rt b.r7 { background: var(--green); } .pc2-rt b.r6 { background: var(--amber); } .pc2-rt b.r5 { background: var(--away); }
-    .pc2-rt small { font-size: 11px; color: var(--muted); white-space: nowrap; }
+    .pc2-rt small { font-size: 12px; color: var(--muted); white-space: nowrap; }
     .pc2-tabs { position: sticky; top: -1px; z-index: 3; display: flex; gap: 24px; margin: 0 -16px; padding: 0 16px; background: var(--surface); border-bottom: 1px solid var(--border); }
     html.theme-glass .pc2-tabs { background: rgba(17,26,46,0.96); }
     .pc2-tabs button { position: relative; border: none; background: none; color: var(--muted); font: inherit; font-size: 14px; font-weight: 600; padding: 12px 0 11px; cursor: pointer; }
@@ -2183,21 +2183,21 @@
     .pc2-pane { padding-top: 20px; min-height: 280px; }
     .pc2-pane > .pc2-sec:first-child, .pc2-pane > .pc2-tro-sum:first-child { margin-top: 0; }
     .pc2-sec { margin-top: 22px; }
-    .pc2-sec h4 { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 10px; font-size: 14px; font-weight: 700; color: var(--text); }
+    .pc2-sec h4 { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 10px; font-size: 16px; font-weight: 700; color: var(--text); }
     .pc2-sec h4 small { font-size: 12px; font-weight: 500; color: var(--muted); }
     .pc2-sea { position: relative; display: inline-flex; align-items: center; min-width: 0; }
-    .pc2-sea select { appearance: none; -webkit-appearance: none; font: inherit; font-size: 14px; font-weight: 700; color: var(--text); background: none; border: none; padding: 0 18px 0 0; cursor: pointer; max-width: 100%; text-overflow: ellipsis; }
+    .pc2-sea select { appearance: none; -webkit-appearance: none; font: inherit; font-size: 16px; font-weight: 700; color: var(--text); background: none; border: none; padding: 0 18px 0 0; cursor: pointer; max-width: 100%; text-overflow: ellipsis; }
     .pc2-sea:not(.one)::after { content: ''; position: absolute; right: 2px; top: 50%; width: 6px; height: 6px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: translateY(-70%) rotate(45deg); pointer-events: none; }
     .pc2-sea select option { background: var(--surface); }
-    .pc2-link { flex-shrink: 0; background: none; border: none; color: var(--blue-text); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; padding: 0; }
+    .pc2-link { flex-shrink: 0; background: none; border: none; color: var(--blue-text); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; padding: 0; }
     /* 정보 4칸 · 숫자 칸 — 같은 격자, 왼쪽 정렬, 칸 사이 가는 선 */
     .pc2-info, .pc2-figs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; }
     .pc2-info > div, .pc2-fig { min-width: 0; padding: 0 12px; border-left: 1px solid var(--border); }
     .pc2-info > div:first-child, .pc2-fig:first-child { padding-left: 0; border-left: none; }
     .pc2-info dt { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
-    .pc2-info dd { margin: 0; display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 20px; }
+    .pc2-info dd { margin: 0; display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 20px; }
     .pc2-info dd img { width: 20px; height: 14px; object-fit: cover; border-radius: 2px; flex-shrink: 0; }
-    .pc2-fig b { display: block; font-family: var(--font-num); font-size: 32px; font-weight: 700; line-height: 1; color: var(--text); font-variant-numeric: tabular-nums; }
+    .pc2-fig b { display: block; font-family: var(--font-num); font-size: 26px; font-weight: 700; line-height: 1; color: var(--text); font-variant-numeric: tabular-nums; }
     .pc2-fig.acc b { color: var(--blue-text); }
     .pc2-fig span { display: block; margin-top: 6px; font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .pc2-figs.sm { margin: 4px 0 14px; } .pc2-figs.sm .pc2-fig b { font-size: 22px; }
@@ -2207,12 +2207,12 @@
     .pc2-dot { position: absolute; transform: translate(-50%, -50%); min-width: 26px; height: 18px; padding: 0 4px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: var(--text-2); background: var(--border); }
     .pc2-dot.main { background: var(--blue); color: var(--bg); z-index: 1; }
     .pc2-pos-list { list-style: none; margin: 0; padding: 0; }
-    .pc2-pos-list li { display: flex; justify-content: space-between; gap: 8px; padding: 7px 0; font-size: 13px; color: var(--muted); border-top: 1px solid var(--border); }
+    .pc2-pos-list li { display: flex; justify-content: space-between; gap: 8px; padding: 7px 0; font-size: 14px; color: var(--muted); border-top: 1px solid var(--border); }
     .pc2-pos-list li:first-child { border-top: none; }
     .pc2-pos-list li.main { color: var(--text); font-weight: 600; }
     .pc2-pos-list b { font-weight: 600; font-variant-numeric: tabular-nums; }
     /* 표 공통: 줄 사이 가는 선, 숫자 열 오른쪽 정렬 */
-    .pc2-ms, .pc2-car, .pc2-inj { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .pc2-ms, .pc2-car, .pc2-inj { width: 100%; border-collapse: collapse; font-size: 14px; }
     .pc2-ms td, .pc2-car td, .pc2-inj td { padding: 9px 0; border-top: 1px solid var(--border); vertical-align: middle; color: var(--text-2); }
     .pc2-ms tr:first-child td, .pc2-inj tr:first-child td { border-top: none; }
     .pc2-ms .dt, .pc2-inj .dt { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -2226,14 +2226,14 @@
     .pc2-ms .ga .md-card { margin-left: 6px; vertical-align: -2px; }
     .pc2-ms .min { width: 36px; text-align: right; color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
     .pc2-ms .rt { width: 44px; text-align: right; }
-    .pc2-sum { margin: -2px 0 12px; font-size: 13px; color: var(--muted); }
+    .pc2-sum { margin: -2px 0 12px; font-size: 14px; color: var(--muted); }
     .pc2-seg { display: inline-flex; flex-shrink: 0; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
     .pc2-seg button { border: none; background: none; color: var(--muted); font: inherit; font-size: 12px; font-weight: 600; padding: 4px 10px; cursor: pointer; }
     .pc2-seg button.on { background: var(--surface-2); color: var(--text); }
     .pc2-grps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 28px; }
     .pc2-grp { min-width: 0; }
     .pc2-grp h5 { margin: 14px 0 2px; font-size: 12px; font-weight: 600; color: var(--muted); }
-    .pc2-kv { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 7px 0; font-size: 13px; border-top: 1px solid var(--border); }
+    .pc2-kv { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 7px 0; font-size: 14px; border-top: 1px solid var(--border); }
     .pc2-grp h5 + .pc2-kv { border-top: none; }
     .pc2-grps.bars .pc2-kv { grid-template-columns: minmax(0, 1fr) 44px 48px; }
     .pc2-kv span { color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -2244,7 +2244,7 @@
     .pc2-legend i.hi { background: var(--green); } .pc2-legend i.mid { background: var(--amber); } .pc2-legend i.lo { background: var(--red); }
     .pc2-legend span { flex-basis: 100%; color: var(--faint); }
     .pc2-car th { padding: 0 0 8px; font-size: 12px; font-weight: 600; color: var(--muted); text-align: right; width: 48px; }
-    .pc2-car th:first-child { text-align: left; width: auto; font-size: 14px; font-weight: 700; color: var(--text); }
+    .pc2-car th:first-child { text-align: left; width: auto; font-size: 16px; font-weight: 700; color: var(--text); }
     .pc2-car .lg { width: 36px; } .pc2-car .lg img { display: block; width: 26px; height: 26px; object-fit: contain; } .pc2-car .lg img.flag { width: 26px; height: 18px; object-fit: cover; border-radius: 2px; }
     .pc2-car .nm { max-width: 0; } .pc2-car .nm b, .pc2-car .nm span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .pc2-car .nm b { font-size: 14px; font-weight: 600; color: var(--text); } .pc2-car .nm span { font-size: 12px; color: var(--muted); margin-top: 2px; font-variant-numeric: tabular-nums; }
@@ -2253,16 +2253,16 @@
     .pc2-inj td:first-child { color: var(--text); } .pc2-inj .dt { text-align: right; padding-right: 12px; } .pc2-inj .n { width: 44px; color: var(--muted); font-weight: 500; }
     .pc2-note { margin: 16px 0 0; font-size: 12px; color: var(--faint); }
     .pc2-tro-sum { display: flex; align-items: baseline; gap: 4px; margin: 14px 0 4px; font-size: 14px; color: var(--text-2); }
-    .pc2-tro-sum b { font-family: var(--font-num); font-size: 32px; font-weight: 700; color: var(--text); line-height: 1; margin-right: 2px; }
+    .pc2-tro-sum b { font-family: var(--font-num); font-size: 26px; font-weight: 700; color: var(--text); line-height: 1; margin-right: 2px; }
     .pc2-tro-sum span { margin-left: auto; font-size: 12px; color: var(--muted); }
     .pc2-tro { margin-top: 20px; }
-    .pc2-tro h4 { display: flex; align-items: center; gap: 10px; margin: 0 0 4px; padding-bottom: 10px; border-bottom: 1px solid var(--border); font-size: 15px; font-weight: 700; color: var(--text); }
+    .pc2-tro h4 { display: flex; align-items: center; gap: 10px; margin: 0 0 4px; padding-bottom: 10px; border-bottom: 1px solid var(--border); font-size: 16px; font-weight: 700; color: var(--text); }
     .pc2-tro h4 img { width: 28px; height: 28px; object-fit: contain; } .pc2-tro h4 img.flag { width: 26px; height: 18px; object-fit: cover; border-radius: 2px; }
     .pc2-tro h4 span { display: flex; flex-direction: column; line-height: 1.25; } .pc2-tro h4 small { font-size: 12px; font-weight: 500; color: var(--muted); }
     .pc2-tro ul { list-style: none; margin: 0; padding: 0; }
     .pc2-tro li { display: grid; grid-template-columns: 24px 30px minmax(0, 1fr); align-items: center; gap: 12px; padding: 9px 0; border-top: 1px solid var(--border); }
     .pc2-tro li:first-child { border-top: none; }
-    .pc2-tro .cnt { font-family: var(--font-num); font-size: 20px; font-weight: 700; color: var(--gold); text-align: center; }
+    .pc2-tro .cnt { font-family: var(--font-num); font-size: 18px; font-weight: 700; color: var(--gold); text-align: center; }
     .pc2-tro li.ru .cnt { color: var(--muted); }
     .pc2-tro li > span { min-width: 0; display: flex; flex-direction: column; line-height: 1.35; }
     .pc2-tro em { font-style: normal; font-size: 14px; font-weight: 600; color: var(--text); }
@@ -2276,7 +2276,7 @@
       .modal.pc-modal { width: 100%; max-width: 100%; max-height: calc(100dvh - 24px); }
       .pc2-hero { grid-template-columns: 60px minmax(0, 1fr) auto; gap: 12px; }
       .pc2-photo { width: 60px; height: 60px; }
-      .pc2-name { font-size: 19px; }
+      .pc2-name { font-size: 20px; }
       .pc2-rt b { font-size: 22px; }
       .pc2-tabs { gap: 20px; } .pc2-tabs button { font-size: 13px; }
       .pc2-info { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 14px; }
@@ -2292,7 +2292,7 @@
     .xi-pitch { position: relative; width: 100%; border-radius: 14px; overflow: hidden;
       background: radial-gradient(60% 50% at 50% 50%, rgba(88,166,255,0.10), transparent 70%), linear-gradient(180deg, #121c33 0%, #0e172b 100%);
       border: 0.5px solid rgba(142,154,179,0.2); }
-    .xi-pitch.v { aspect-ratio: 68 / 100; } .xi-pitch.h { aspect-ratio: 105 / 58; } .xi-pitch.h.compact { aspect-ratio: 105 / 72; }
+    .xi-pitch.v { aspect-ratio: 68 / 100; } .xi-pitch.h { aspect-ratio: 105 / 74; } .xi-pitch.h.compact { aspect-ratio: 105 / 86; }   /* 한 줄에 4~5명이 세로로 서서 이름·골/도움 줄이 겹치지 않을 높이 */
     .xi-pitch.compact .xi-p { width: 70px; gap: 3px; transform: translate(-50%, -18px); } .xi-pitch.compact .xi-ph { width: 36px; height: 36px; }
     .xi-pitch.compact .xi-rt { font-size: 11px; right: -17px; top: -7px; } .xi-pitch.compact .xi-nm { max-width: 70px; font-size: 10px; }
     .xi-pitch.compact .xi-crest { width: 17px; height: 17px; left: -7px; }
@@ -4880,7 +4880,9 @@ function xiPitchHtml(xi, o = {}) {
   if (!xi || !xi.lines) return '';
   const orient = o.orient || 'v', n = xi.lines.length;
   const dots = xi.lines.map((line, r) => line.map((p, i) => {
-    const along = n === 1 ? 50 : 8 + (r / (n - 1)) * 80, across = (i + 0.5) / line.length * 100;
+    // 자리 = 사진 가운데. 사진 아래로 이름·골/도움 줄이 붙으므로 아래쪽 여백을 더 남김(가장자리 선수 글자가 잘렸음)
+    const along = n === 1 ? 50 : 12 + (r / (n - 1)) * 76;
+    const across = orient === 'v' ? (i + 0.5) / line.length * 100 : 6 + (i + 0.5) / line.length * 80;
     const pos = orient === 'v' ? `left:${across}%;top:${100 - along}%` : `left:${along}%;top:${across}%`;
     const nm = p.name || p.full_name || '';
     const st = [p.goals ? `${p.goals}골` : '', p.assists ? `${p.assists}도움` : ''].filter(Boolean).join(' ');
