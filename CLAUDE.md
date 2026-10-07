@@ -1,6 +1,6 @@
 # FotData — 프로젝트 가이드 (CLAUDE.md)
 
-Claude Code가 이 저장소에서 작업할 때 참고하는 **현재 상태** 문서다. 지난 시행착오·변경 이력은 git log에 있으니 여기엔 "지금 어떻게 돼 있고, 무엇을 조심해야 하는지"만 둔다. 새 기능을 넣으면 해당 절을 **고쳐 쓰고**(덧붙이지 말고), 다시 밟으면 안 되는 함정만 짧게 남길 것.
+Claude Code가 이 저장소에서 작업할 때 참고하는 **현재 상태** 문서다. 지난 시행착오·변경 이력은 git log에 있으니 여기엔 "지금 어떻게 돼 있고, 무엇을 조심해야 하는지"만 둔다. 새 기능을 넣으면 해당 절을 **고쳐 쓰고**(덧붙이지 말고), 다시 밟으면 안 되는 함정만 짧게 남길 것. **작업이 끝날 때마다 최신화하고 200~300줄로 유지**(넘으면 오래된 세부부터 뺌).
 
 ## 1. 개요
 
@@ -61,7 +61,7 @@ fotdata_model/        전부 update_data.py가 생성 (아래)
 - 모델: `all_matches.csv`(23-24~ 4시즌, 학습·맞대결 기준) · `team_state.json`(팀별 오늘 시점 모델 입력) · `team_stats.csv`(블렌딩 전력 — 순위 예측·검색 정렬·결과 화면 표시용) · `logistic_regression.pkl`·`scaler.pkl` · `accuracy.json` · `prediction_log.json`(트랙레코드)
 - 일정·순위: `schedule.json` · `ucl_tournament.json` · `season_zones.json`(지난 시즌 공식 순위·구역·감점) · `league_history.json`(역대 우승)
 - 과거 시즌(2010-11~22-23, 순위표·일정·팀 통계·역대 맞대결용 — **모델 학습엔 안 씀**): `history_matches.csv` · `history_standings.json` · `history_ucl.json` · `history_logos.json`
-- 팀: `team_info.json` · `team_wiki.json` · `team_extra.json`(EPL 스쿼드 사진·이적) · `rivals.json`(수동 관리) · `team_logos*.json`
+- 팀: `team_info.json` · `team_wiki.json` · `team_extra.json`(스쿼드 사진·등번호·이적, 5대 리그 전 팀) · `rivals.json`(수동 관리) · `team_logos*.json`
 - API-Football: `af_team_map.json`(af 팀 ID → 우리 이름) · `af_fixtures.json` · `match_details/*.json.gz`(끝난 경기 상세, 한 경기 한 파일) · `match_previews.json` · `team_injuries.json`(팀별 지난 경기 결장자) · `af_players.json`(선수 프로필) · `af_profiles/<ID>.json.gz`(선수 경력·트로피·부상·시즌 기록) · `af_seasons/`(15-16~25-26 선수 시즌 합산 + index.json) · `comp_winners.json`(컵 결승·리그 1·2위 — 트로피 보강) · `af_coaches.json`(감독) · `af_leagues.json`·`af_countries.json`
 - `scorers.json`(football-data 득점 순위 — API-Football 기록이 없을 때 대체)
 
@@ -91,11 +91,14 @@ Vercel 루트는 `index.html`. landing.html을 고치면 **반드시 `cp landing
 
 - 매일 UTC 18:00(KST 03:00) GitHub Actions(`update_data.yml`, Secrets: `FOOTBALL_API_KEY`·`API_FOOTBALL_KEY`)가 실행 → `fotdata_model/` 자동 커밋("자동 데이터 업데이트 YYYY-MM-DD") → Render·Vercel 재배포.
 - `main()`은 단계별 `step()` — 하나가 실패해도 나머지는 돌고 저장, 실패가 있으면 종료 코드 1 + 커밋은 진행.
-- 순서: 경기 수집·학습 → UCL 토너먼트 → 일정 → 트랙레코드 기록 → 득점 순위 → 로고 → 팀 정보 → 위키(매일, 저장된 `en_title` 문서 그대로 — 다시 검색 안 함) → 시즌 구역 → 역대 우승 → API-Football(`af_sync`: 팀 매칭·경기 목록·끝난 경기 상세·결장자·선수 프로필) → 대회 우승 팀 → 감독 → 선수 경력·트로피(`af_profiles_sync`, 그날 남은 요청 −1,000 안에서 최대 3,000회, 출전 많은 선수부터, 14일마다 갱신) → EPL 스쿼드·이적.
-- 따로 돌리기: `--matches-only` · `--ucl-only` · `--wiki-only [팀] [--force]` · `--zones-only` · `--league-history` · `--scorers-only` · `--transfers-only` · `--extra-leagues` · `--history`(지난 시즌 팀 로고·정보) · `--af-sync` · `--af-profiles [예산]` · `--coaches [--force]` · `--history-seasons [연도…]`·`--history-players [연도…] [--force]`·`--player-index`(끝난 시즌 — 한 번만).
+- 순서: 경기 수집·학습 → UCL 토너먼트 → 일정 → 트랙레코드 기록 → 득점 순위 → 로고 → 팀 정보 → 위키(매일, 저장된 `en_title` 문서 그대로 — 다시 검색 안 함) → 시즌 구역 → 역대 우승 → API-Football(`af_sync`: 팀 매칭·경기 목록·끝난 경기 상세·결장자·선수 프로필) → 대회 우승 팀 → 감독 → 스쿼드·이적(`fetch_squads_transfers_all`, 5대 리그 전 팀 7일마다, 팀당 2회, 데이터 없는 팀부터) → 선수 경력·트로피(`af_profiles_sync`, 그날 남은 요청 −600 전부, 아직 없는 선수 → 출전 많은 순, 14일마다 갱신).
+- API-Football 하루 한도는 00:00 UTC(KST 09:00)에 초기화 — 새벽 실행(UTC 18:00)은 **그날 낮에 쓴 몫과 같은 하루 한도**를 씀. 낮에 수동으로 많이 돌리면 그날 밤 수집이 줄어듦(`/status`로 남은 양 확인).
+- 선수 경력(`af_profiles/`)은 새 선수 한 명에 약 15회(시즌 수 + 4) — 2026-10-07 기준 2,615명 중 419명, 하루 약 400명씩 채워짐. 파일이 없는 선수는 서버가 요청 때 받아 경력·트로피 탭이 5~7초 걸림.
+- 따로 돌리기: `--matches-only` · `--ucl-only` · `--wiki-only [팀] [--force]` · `--zones-only` · `--league-history` · `--scorers-only` · `--transfers-only [팀 수] [--force]` · `--extra-leagues` · `--history`(지난 시즌 팀 로고·정보) · `--af-sync` · `--af-profiles [예산]` · `--coaches [--force]` · `--history-seasons [연도…]`·`--history-players [연도…] [--force]`·`--player-index`(끝난 시즌 — 한 번만).
 - 저장 순서 고정(날짜→리그→홈팀) — 순서가 흔들리면 매일 파일 전체가 바뀐 것처럼 커밋되고 ELO 반영 순서도 달라짐.
 - 경기 수집은 상태 필터 없이 받아 FINISHED+AWARDED만(몰수 경기 누락 방지), 승부차기 골은 빼고(`_match_goals`) 일정엔 `penalties` 따로.
 - **감독**(`fetch_coaches`): 지금 감독 = 그 팀 가장 최근 경기 라인업의 감독 → `/coachs?team=`에서 같은 사람(라인업 이름이 "Enrique Luis"처럼 뒤집혀 오기도 함 — `_same_person`)의 그 팀 경력(사진·부임일) → 생년월일·국적·흔히 부르는 영어 이름·한국어 이름은 위키데이터(구단 P286). 7일마다 + 라인업 감독이 바뀌면 바로.
+- **구단 최고 이적료**: 영문 위키 "List of … records and statistics" 문서만(표 — 소제목·굵은 글씨 제목 아래, 없으면 본문 글 "club record £100m"), 선수=사람·구단=축구 클럽을 위키데이터로 확인. 이 문서가 있는 팀만 나옴(약 30팀) — API-Football엔 이적료가 없고 구단 본문 글은 오래된·다른 팀 기록이 섞여서 안 씀.
 - 위키 전 팀 재수집(`--wiki-only --force`) 뒤엔 "팀 이름 단어가 문서 제목에 없는 팀"을 눈으로 확인(오매칭 전례 — `WIKI_TITLE_OVERRIDE`·`WIKI_CITY_OVERRIDE`로 고정).
 
 ## 7. 서버 (main.py)
@@ -125,6 +128,7 @@ Vercel 루트는 `index.html`. landing.html을 고치면 **반드시 `cp landing
 - 페이지: 경기 예측(홈) · 리그(`#league/PL/standings/2024` — 탭: 개요·순위·경기·순위 예측·선수·시즌, 지난 시즌은 순위 예측 없음) · 내 팀(즐겨찾기 최대 5팀, localStorage) · 승부차기 · 더보기(폰). 폰은 하단 탭바 `홈·리그·내 팀·더보기`.
 - 리그 패널 로더(loadStandings 등)는 예전 페이지를 옮긴 것 — 패널 안 숨겨진 리그 칩은 로더가 "늦은 응답 버리기"에 쓰므로 **지우지 말 것**. 새 리그 UI 요소는 `data-lg` 속성(`[data-league]`와 겹치면 안 됨).
 - 창(모달): 팀 정보(개요·순위·경기·스쿼드·플레이어 통계·팀 통계·이적) · 경기 미리보기/결과(넓은 화면 2열) · 선수 카드 · 트랙레코드 · 대진 · 구단 둘러보기(⌘K) · 캘린더. **새 창을 만들면 `OVERLAYS`(뒤로가기)와 `SCROLL_LOCK`(뒤 스크롤 잠금)에 한 줄씩 추가.**
+- 팀 정보 개요: 맨 위 감독(1/3 — 사진·국적·나이·부임·부임 후 리그·챔스 기록, 이름뿐이면 아래 정보 칸으로) + 구단 소개(2/3) → 이번 시즌 순위·다음 경기 → 시즌별 순위 막대 → 시즌 베스트 11 → 우승·이적료 기록 → 라이벌 → 정보 칸. 창을 열거나 팀 이름에 마우스를 올리면 `prefetchTeam()`이 팀 정보·팀 통계·스쿼드를 동시에 받음(요청은 promise 캐시로 한 번만 — `fetchTeamInfo`·`fetchTeamStats`·`fetchAfSquad`).
 - 예측 결과: 두 독립 세로 열(`.predict-col`) — 왼쪽 예측 결과·다른 경기·결장·부상·홈팀 최근 경기 / 오른쪽 맞대결·경기 분석·라인업·주요 선수·원정팀 최근 경기. `fitMoreCard()`가 짧은 열에 "다른 경기" 카드를 넣거나 간격을 넓혀 두 열 끝을 맞춤(부가 정보가 올 때마다 다시). 폰은 `display: contents` + `order`.
 - 리그 개요: 넓은 화면 두 열 끝 맞춤 `fitLoCols()`(차이 220px 이하일 때만 `.fit`).
 - 공유 링크 `/m/{홈}-vs-{원정}`, 앱 주소창은 `/app?match=`.
@@ -148,6 +152,12 @@ Vercel 루트는 `index.html`. landing.html을 고치면 **반드시 `cp landing
 - `onerror="..."`에 HTML 문자열을 넣지 말 것(따옴표 충돌) — 함수 호출로.
 - 좁은 그리드 열은 `minmax(0, 1fr)`(긴 팀 이름 가로 넘침).
 - 같은 인라인 스크립트 블록 `const` 이름 충돌 → 스크립트 전체가 멈춤. 푸시 전 인라인 스크립트 전부 `node --check`.
+
+### 8.4 속도 (2026-10-07 라이브 실측, 한국 → Render 미국 왕복 약 0.2초 포함)
+- 대부분의 API 0.2~0.6초, 팀 정보 개요 첫 표시 0.4초·전부 1초 안, 리그 개요 0.5초, 경기 미리보기 0.5초, 선수 카드 0.6초.
+- 느린 곳: 선수 경력·트로피 탭(새벽 수집 전 선수 5~7초 — 6절), Render가 잠들었다 깨는 첫 요청(~50초, cron-job.org 핑으로 대부분 방지), 재배포 직후 계산 캐시가 빈 동안.
+- 원칙: 한 화면이 쓰는 요청은 처음에 **동시에** 시작(앞 요청 결과를 기다렸다 다음을 부르지 말 것), 같은 요청은 promise 캐시로 한 번만, 누를 가능성이 큰 곳은 마우스 올림·손가락 댐에 미리 받기, 서버는 계산 결과 lru_cache + 시작 때 warm.
+- 측정: 헤드리스 크롬으로 화면 요소가 나타날 때까지 시간 + `performance.getEntriesByType('resource')`(요청 시작→끝)를 같이 봄.
 
 ## 9. 배포 · 환경
 
