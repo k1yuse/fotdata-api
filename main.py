@@ -1686,6 +1686,29 @@ def _md_of(e):
     det = af_match_detail(fx)
     return {**det, **{k: e[k] for k in ("league", "home_team", "away_team", "date")}, "home_goals": fx["goals"]["home"], "away_goals": fx["goals"]["away"]}
 
+# ── 주장 표시(2026-10-08): 끝난 경기·예상 라인업 = 그 경기에서 실제로 완장을 찬 선수(경기 기록 cap),
+# 확정 라인업(경기 전 — API에 주장 정보 없음)·구단 베스트 11 = 이번 시즌 완장을 가장 많이 찬 선수 → 없으면 두 번째(부주장) → 둘 다 없으면 표시 안 함
+def _mark_match_caps(d):
+    """경기 상세 d의 라인업 선수에 cap(그 경기 완장) — 원본 캐시는 안 건드리고 복사본"""
+    caps = {x["id"] for sd in ("home", "away") for x in ((d.get("pstats") or {}).get(sd) or []) if x.get("cap")}
+    if not caps or not d.get("lineups"):
+        return d
+    lus = {sd: {**lu, "start": [{**p, "cap": p.get("id") in caps} for p in lu.get("start") or []],
+                "subs": [{**p, "cap": p.get("id") in caps} for p in lu.get("subs") or []]} for sd, lu in d["lineups"].items() if lu}
+    return {**d, "lineups": lus}
+
+def _team_captain_order(team, rows=None):
+    """[주장, 부주장] 선수 ID — 이번 시즌(또는 rows) 완장 찬 경기 수 순(같으면 출전 시간)"""
+    if rows is None:
+        code = _team_league_in(team, CURRENT_SEASON_YEAR)
+        rows = _af_league_squads(code).get(team, []) if code else []
+    cs = sorted([r for r in rows if r.get("cap_n") or r.get("captain")], key=lambda r: (-(r.get("cap_n") or 0), -(r.get("minutes") or 0)))
+    return [r["id"] for r in cs[:2]]
+
+def _pick_cap(ids, order):
+    """라인업 선수 ID들 중 완장 주인 — 주장이 없으면 부주장, 둘 다 없으면 None"""
+    return next((c for c in order if c in ids), None)
+
 @app.get("/match/detail")
 def get_match_detail(home_team: str, away_team: str, date: str):
     """경기 결과 창 [요약 | 라인업 | 통계] — 득점·카드·교체, 라인업(포메이션·평점), 팀 통계(xG 포함), 경기 최우수 선수.
@@ -1694,7 +1717,7 @@ def get_match_detail(home_team: str, away_team: str, date: str):
     d = _md_of(e) if e else None
     if not d:
         return Response(status_code=204)
-    return {k: v for k, v in d.items() if k != "pstats"}   # 선수별 합산용 기록은 화면에 안 씀(크기만 큼)
+    return {k: v for k, v in _mark_match_caps(d).items() if k != "pstats"}   # 선수별 합산용 기록은 화면에 안 씀(크기만 큼)
 
 # ── 선수 시즌 기록(이번 시즌 = match_details 합산, 지난 시즌 = af_seasons/ — 2026-10-06) ──
 PS_DIR = os.path.join(MODEL_DIR, "af_seasons")
@@ -1797,6 +1820,15 @@ def _xi_out(xi):
         return None
     return {"formation": xi["formation"], "avg": xi["avg"], "lines": [[{k: p.get(k) for k in ("id", "name", "full_name", "photo", "team", "rating", "dpos", "slot", "goals", "assists", "num", "apps", "line")} for p in l] for l in xi["lines"]]}
 
+def _xi_caps(xi, order):
+    """구단 베스트 11에 주장(없으면 부주장) 표시"""
+    if xi:
+        cap = _pick_cap({p["id"] for l in xi["lines"] for p in l}, order)
+        for l in xi["lines"]:
+            for p in l:
+                p["cap"] = p["id"] == cap
+    return xi
+
 def _season_xi(rows, share=0.4):
     """시즌 베스트 11: 출전 시간이 (그 묶음) 최다의 share 이상인 선수 중 평점 순"""
     mx = max([r["minutes"] or 0 for r in rows] or [0])
@@ -1894,7 +1926,7 @@ def get_team_squad(team_name: str, season: int = None):
     v = (_load_json("af_players.json") or {}).get(team) or {}
     return {"team": team, "league": code, "season": yr, "updated": v.get("updated"), "players": players, "seasons": seasons,
             "manager": _manager_of(team) if yr == CURRENT_SEASON_YEAR else None,
-            "best11": _xi_out(_season_xi([r for r in players if r.get("minutes")], share=0.25))}
+            "best11": _xi_caps(_xi_out(_season_xi([r for r in players if r.get("minutes")], share=0.25)), _team_captain_order(team, players))}
 
 _LP_KEYS = ("id", "team", "full_name", "name", "photo", "pos", "apps", "starts", "minutes", "goals", "assists", "rating", "rated", "shots", "shots_on",
             "key_passes", "dribbles_won", "tackles", "interceptions", "blocks", "duels_won", "clean_sheets", "saves", "yellow", "red", "pen_scored", "number", "nationality")
@@ -2165,7 +2197,13 @@ def get_match_preview(home_team: str, away_team: str, date: str = None):
         if ko - pd.Timedelta(minutes=90) <= now <= ko + pd.Timedelta(hours=3):   # 확정 라인업은 보통 킥오프 약 1시간 전
             lu = _af_live_get("/fixtures/lineups", 180, fixture=e["id"])
             if lu and len(lu) == 2:
-                pv["lineups"] = af_match_detail({"teams": {"home": {"id": e["home_id"]}}, "lineups": lu})["lineups"]
+                lus = af_match_detail({"teams": {"home": {"id": e["home_id"]}}, "lineups": lu})["lineups"]
+                for sd, team in (("home", home_team), ("away", away_team)):
+                    if lus.get(sd):
+                        cap = _pick_cap({p["id"] for p in lus[sd]["start"]}, _team_captain_order(team))
+                        for p in lus[sd]["start"]:
+                            p["cap"] = p["id"] == cap
+                pv["lineups"] = lus
     if not (pv.get("lineups") or {}).get("home"):
         def last_xi(team):
             """이 팀의 가장 최근 경기 선발(평점·교체 표시는 뺌) — 예상 라인업"""
@@ -2173,10 +2211,12 @@ def get_match_preview(home_team: str, away_team: str, date: str = None):
                 if not x.get("has_detail") or x["date"][:10] >= date[:10]:
                     continue
                 d = _md_file(x["file"])
-                lu = ((d or {}).get("lineups") or {}).get("home" if x["home_team"] == team else "away")
+                sd = "home" if x["home_team"] == team else "away"
+                lu = ((d or {}).get("lineups") or {}).get(sd)
                 if lu and lu.get("start"):
+                    caps = {p["id"] for p in ((d.get("pstats") or {}).get(sd) or []) if p.get("cap")}
                     return {**lu, "subs": [], "from": x["date"][:10],
-                            "start": [{k: v for k, v in p.items() if k in ("id", "name", "number", "pos", "grid", "photo")} for p in lu["start"]]}
+                            "start": [{**{k: v for k, v in p.items() if k in ("id", "name", "number", "pos", "grid", "photo")}, "cap": p.get("id") in caps} for p in lu["start"]]}
             return None
         pred = {"home": last_xi(home_team), "away": last_xi(away_team)}
         if pred["home"] or pred["away"]:

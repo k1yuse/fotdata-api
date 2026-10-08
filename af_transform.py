@@ -458,7 +458,7 @@ def af_league_agg(details, keep_matches=False, use_grid=True):
                 if dp.get(x["id"]): a["_dpos"][dp[x["id"]]] += 1
                 if x.get("num") is not None and m["date"] >= a["_last"]:
                     a["number"] = x["num"]; a["_last"] = m["date"]
-                if x.get("cap"): a["captain"] = True
+                if x.get("cap"): a["captain"] = True; a["cap_n"] = a.get("cap_n", 0) + 1   # 주장 완장 경기 수(주장·부주장 가리기)
                 if x.get("pos") == "G" and (x.get("min") or 0) >= 60 and ga == 0:
                     a["clean_sheets"] += 1
                 for k, kk in _SUM_KEYS.items():
