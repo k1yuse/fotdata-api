@@ -1868,43 +1868,50 @@ def _norm_name(s):
 
 @lru_cache(maxsize=1)
 def _player_search_index():
-    mins = {}
+    stat = {}
     for code in ("PL", "PD", "BL1", "SA", "FL1"):
         for rows in (_af_league_squads(code) or {}).values():
             for r in rows:
-                mins[r["id"]] = mins.get(r["id"], 0) + (r.get("minutes") or 0)
+                cur = stat.get(r["id"])
+                if not cur or (r.get("minutes") or 0) > (cur.get("minutes") or 0):
+                    stat[r["id"]] = r
     out = []
     for team, v in (_load_json("af_players.json") or {}).items():
         for pid, p in (v.get("players") or {}).items():
             full = p.get("full_name") or p.get("name") or ""
             keys = " ".join(sorted({_norm_name(x) for x in (full, p.get("name"), p.get("firstname"), p.get("lastname")) if x}))
-            out.append({"id": int(pid), "team": team, "name": full, "photo": p.get("photo"), "pos": p.get("pos"),
-                        "nationality": p.get("nationality"), "age": p.get("age"), "_k": keys, "_m": mins.get(int(pid), 0)})
+            r = stat.get(int(pid)) or {}
+            out.append({"id": int(pid), "team": team, "league": v.get("league"), "name": full, "photo": p.get("photo"),
+                        "pos": r.get("pos_profile") or p.get("pos") or r.get("pos"), "nationality": p.get("nationality"), "age": p.get("age"),
+                        "apps": r.get("apps") or 0, "minutes": r.get("minutes") or 0, "goals": r.get("goals") or 0, "assists": r.get("assists") or 0,
+                        "rating": r.get("rating"), "_k": keys})
     return out
 
 @app.get("/players/search")
-def players_search(q: str, limit: int = 12):
+def players_search(q: str = "", league: str = None, pos: str = None, limit: int = 12, offset: int = 0):
+    """선수 검색(이번 시즌 5대 리그) — q가 있으면 이름(3글자 이하는 단어 첫머리만), 없으면 꾸준히 뛴 선수(270분 이상) 평점 순.
+    league(PL·PD·BL1·SA·FL1)·pos(GK·DF·MF·FW)로 거름"""
     qn = _norm_name(q).strip()
-    if len(qn.replace(" ", "")) < 2:
-        return {"players": []}
     toks = qn.split()
-    hits, seen = [], set()
-    for p in _player_search_index():
-        k, words = p["_k"], p["_k"].split()
-        # 짧은 검색어(3글자 이하)는 단어 첫머리만 — "son"에 이름 중간에 son이 든 선수가 잔뜩 걸렸음
-        ok = all(any(w.startswith(t) for w in words) if len(t) <= 3 else t in k for t in toks)
-        if ok:
-            score = 2 * any(w.startswith(toks[-1]) for w in words) + any(w.startswith(toks[0]) for w in words)
-            hits.append((score, p["_m"], p))
-    hits.sort(key=lambda x: (-x[0], -x[1]))
-    out = []
+    idx = [p for p in _player_search_index() if (not league or p["league"] == league) and (not pos or p["pos"] == pos)]
+    hits = []
+    if toks:
+        for p in idx:
+            words = p["_k"].split()
+            ok = all(any(w.startswith(t) for w in words) if len(t) <= 3 else t in p["_k"] for t in toks)
+            if ok:
+                score = 2 * any(w.startswith(toks[-1]) for w in words) + any(w.startswith(toks[0]) for w in words)
+                hits.append((-score, -(p["minutes"] or 0), p))
+    else:
+        hits = [(-(p["rating"] or 0), -(p["minutes"] or 0), p) for p in idx if (p["minutes"] or 0) >= 270 and p["rating"]]
+    hits.sort(key=lambda x: (x[0], x[1]))
+    out, seen = [], set()
     for _, _, p in hits:   # 시즌 중 팀을 옮긴 선수(임대 등)는 한 번만 — 출전 시간 많은 쪽
         if p["id"] in seen:
             continue
-        seen.add(p["id"]); out.append({k: v for k, v in p.items() if not k.startswith("_")})
-        if len(out) >= max(1, min(limit, 30)):
-            break
-    return {"players": out}
+        seen.add(p["id"]); out.append(p)
+    lim = max(1, min(limit, 60))
+    return {"total": len(out), "players": [{k: v for k, v in p.items() if not k.startswith("_")} for p in out[offset:offset + lim]]}
 
 @app.get("/team/squad/{team_name}")
 def get_team_squad(team_name: str, season: int = None):

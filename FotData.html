@@ -208,6 +208,7 @@
     .team-search-item:hover { background: var(--surface-2); }
     .team-search-item img { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
     .nav-logo { font-size: 18px; font-weight: 700; color: var(--text); padding: 14px 0; margin-right: 24px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; } .nav-logo[onclick] { cursor: pointer; } .nav-logo[onclick]:hover { opacity: .8; }
+    a.nav-tab { text-decoration: none; } a.nav-tab:hover { color: var(--text); }
     .nav-tab { padding: 16px 16px; font-size: 14px; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; white-space: nowrap; flex-shrink: 0; }
     .nav-wordmark { display: flex; flex-shrink: 0; }
     .player-col { flex: 1; min-width: 400px; }
@@ -1679,7 +1680,7 @@
     .tabbar { display: none; }
     @media (max-width: 768px) {
       :root { --tabbar-h: calc(58px + env(safe-area-inset-bottom)); }
-      .tabbar { display: grid; grid-template-columns: repeat(4, 1fr); position: fixed; left: 0; right: 0; bottom: 0; z-index: 300; height: var(--tabbar-h); padding-bottom: env(safe-area-inset-bottom); background: rgba(10,16,32,0.86); backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%); border-top: 0.5px solid rgba(142,154,179,0.18); }
+      .tabbar { display: grid; grid-template-columns: repeat(5, 1fr); position: fixed; left: 0; right: 0; bottom: 0; z-index: 300; height: var(--tabbar-h); padding-bottom: env(safe-area-inset-bottom); background: rgba(10,16,32,0.86); backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%); border-top: 0.5px solid rgba(142,154,179,0.18); }
       .tabbar-item { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-width: 0; padding: 0 2px; background: none; border: none; color: var(--muted); font-family: inherit; font-size: 12px; font-weight: 500; letter-spacing: -0.2px; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color .15s; }
       .tabbar-item svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s cubic-bezier(.3,1.5,.5,1); }
       .tabbar-item span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
@@ -1709,6 +1710,28 @@
     .champ-prob { font-size: 13px; font-weight: 700; color: var(--blue); width: 50px; text-align: right; }
     /* 순위 예측 결과 표: 예상 순위 · 팀(현재 승점) · 예상 승점 · 우승 · UCL권 · 강등 */
     /* 순위 예측 탭(2026-09-29 순위표와 같은 디자인으로) */
+    .ps-card { max-width: 860px; margin-left: auto; margin-right: auto; }
+    .ps-box { position: relative; max-width: 560px; margin: 0 auto 12px; }
+    .ps-box svg { position: absolute; left: 14px; top: 50%; width: 18px; height: 18px; transform: translateY(-50%); fill: none; stroke: var(--muted); stroke-width: 2; stroke-linecap: round; }
+    .ps-box input { width: 100%; box-sizing: border-box; padding: 12px 14px 12px 42px; border-radius: var(--r-lg); border: 0.5px solid var(--border); background: var(--surface-2); color: var(--text); font: inherit; font-size: 15px; outline: none; }
+    .ps-box input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(88,166,255,0.15); }
+    .ps-filters { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 14px; }
+    .ps-chips { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+    .ps-chip { display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; border-radius: var(--r-pill); border: 0.5px solid var(--border); background: transparent; color: var(--muted); font: inherit; font-size: 13px; cursor: pointer; }
+    .ps-chip img { width: 16px; height: 16px; object-fit: contain; }
+    .ps-chip:hover { color: var(--text); border-color: var(--blue); } .ps-chip.on { background: rgba(88,166,255,0.14); border-color: rgba(88,166,255,0.5); color: var(--blue-text); font-weight: 600; }
+    .ps-meta { font-size: 12px; color: var(--muted); margin: 0 4px 6px; }
+    .ps-row { display: grid; grid-template-columns: 40px minmax(0, 1fr) 44px 36px 40px 42px; align-items: center; gap: 8px; padding: 8px 6px; border-radius: var(--r-md); cursor: pointer; transition: background .15s; }
+    .ps-row + .ps-row { border-top: 0.5px solid rgba(142,154,179,0.1); }
+    .ps-row:hover { background: rgba(88,166,255,0.07); }
+    .ps-ph { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: var(--surface-2); }
+    .ps-info { min-width: 0; } .ps-info b { display: block; font-size: 14px; color: var(--text); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .ps-info small { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; }
+    .ps-info small img { width: 14px; height: 14px; object-fit: contain; } .ps-info small .ps-flag { width: 16px; height: 11px; object-fit: cover; border-radius: 2px; }
+    .ps-n { text-align: center; font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.1; } .ps-n i { display: block; font-style: normal; font-size: 11px; font-weight: 500; color: var(--faint); }
+    .ps-row .md-rt { justify-self: center; }
+    #page-search .sq-more { display: block; margin: 10px auto 0; }
+    @media (max-width: 480px) { .ps-row { grid-template-columns: 36px minmax(0, 1fr) 30px 30px 40px; gap: 6px; } .ps-row .ps-n:first-of-type { display: none; } .ps-ph { width: 36px; height: 36px; } }
     .champ-head { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; margin-bottom: 16px; }
     .champ-head b { font-size: 16px; color: var(--text); }
     .champ-head span { font-size: 12px; color: var(--muted); }
@@ -2734,7 +2757,7 @@
 <body>
 
 <nav class="nav">
-  <div class="nav-logo" style="display:flex;align-items:center;gap:11px;cursor:pointer" onclick="location.href = location.pathname" title="처음 화면으로">
+  <div class="nav-logo" style="display:flex;align-items:center;gap:11px;cursor:pointer" onclick="fdReloadTab()" title="지금 탭 새로고침">
     <svg class="logo-bars" id="nav-logo-bars" viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg>
     <div class="nav-wordmark">
       <span style="font-size:20px;font-weight:800;color:#ecf1fa;letter-spacing:-0.5px">Fot</span>
@@ -2745,7 +2768,9 @@
     <div data-page="predict" class="nav-tab active" aria-current="page" onclick="showPage('predict')">경기 예측</div>
     <div data-page="league" class="nav-tab" onclick="showPage('league')">리그</div>
     <div data-page="myteams" class="nav-tab" onclick="showPage('myteams')">내 팀</div>
+    <div data-page="search" class="nav-tab" onclick="showPage('search')">선수</div>
     <div data-page="shootout" class="nav-tab" onclick="showPage('shootout')">승부차기</div>
+    <a class="nav-tab nav-about" href="/" title="FotData 소개 페이지">소개</a>
   </div>
   <button class="nav-search-btn" onclick="openTeamSearch()" aria-label="팀 검색" title="팀 검색 (Ctrl/Cmd+K)">
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -2760,6 +2785,7 @@
   <button type="button" data-page="predict" class="tabbar-item active" aria-current="page" onclick="showPage('predict')"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7V3.8M16.09 10.67l3.71-1.2M14.53 15.48l2.29 3.15M9.47 15.48l-2.29 3.15M7.91 10.67l-3.71-1.2"/></svg><span>홈</span></button>
   <button type="button" data-page="league" class="tabbar-item" onclick="showPage('league')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4.5 6h.01M4.5 12h.01M4.5 18h.01" stroke-width="2.6"/></svg><span>리그</span></button>
   <button type="button" data-page="myteams" class="tabbar-item" onclick="showPage('myteams')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/></svg><span>내 팀</span></button>
+  <button type="button" data-page="search" class="tabbar-item" onclick="showPage('search')"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><span>선수</span></button>
   <button type="button" data-page="more" data-pages="more shootout" class="tabbar-item" onclick="showPage('more')"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5.5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="18.5" cy="12" r="1.3"/></svg><span>더보기</span></button>
 </nav>
 
@@ -2941,13 +2967,28 @@
   </div>
 </div>
 
+<!-- 선수 검색(2026-10-08) — 이번 시즌 5대 리그 선수: 이름 검색 · 리그/포지션 거르기 · 검색어가 없으면 평점 순 -->
+<div class="page" id="page-search">
+  <div class="card ps-card">
+    <div class="champ-head"><b>선수 검색</b><span>이번 시즌 5대 리그 선수 · 누르면 선수 카드</span></div>
+    <div class="ps-box"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="ps-input" type="search" placeholder="선수 이름 (예: Saka, Kim Min-Jae)" autocomplete="off" oninput="psInput()" aria-label="선수 이름 검색"></div>
+    <div class="ps-filters">
+      <div class="ps-chips" id="ps-leagues"></div>
+      <div class="ps-chips" id="ps-pos"></div>
+    </div>
+    <div class="ps-meta" id="ps-meta"></div>
+    <div id="ps-list"></div>
+  </div>
+</div>
+
 <!-- 더보기(폰 하단 탭바) — 승부차기·구단 둘러보기·트랙레코드·후원·정책 -->
 <div class="page" id="page-more">
   <div class="card more-card">
     <div class="champ-head"><b>더보기</b></div>
     <div class="more-list">
       <button type="button" class="more-item" onclick="showPage('shootout')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19V6h18v13"/><path d="M3 10.5h18M3 15h18M7.5 6v13M12 6v13M16.5 6v13" stroke-opacity=".45"/><path d="M1.5 19h21"/></svg><span><b>승부차기</b><small>골키퍼·키커를 정하고 실제 규칙으로 겨루는 미니게임</small></span><i>›</i></button>
-      <button type="button" class="more-item" onclick="openSearch()"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><span><b>구단·선수 검색</b><small>이름 일부로 찾기 — 선수를 누르면 선수 카드</small></span><i>›</i></button>
+      <button type="button" class="more-item" onclick="openSearch()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.6-3 8.3-7 10-4-1.7-7-5.4-7-10V6z"/></svg><span><b>구단·선수 빠른 검색</b><small>이름 일부로 구단·선수 한 번에 찾기</small></span><i>›</i></button>
       <button type="button" class="more-item" onclick="openClubBrowser()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.6-3 8.3-7 10-4-1.7-7-5.4-7-10V6z"/></svg><span><b>구단 둘러보기</b><small>리그 순위대로 구단 카드를 넘겨 보기 · 검색</small></span><i>›</i></button>
       <button type="button" class="more-item" onclick="openTrackRecordModal()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19h16M7 16V10M12 16V6M17 16v-4"/></svg><span><b>AI 트랙레코드</b><small>킥오프 전에 기록한 예측의 실제 적중률</small></span><i>›</i></button>
       <button type="button" class="more-item" onclick="toggleKofiPanel()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg><span><b>후원하기</b><small>서버비에 보태 주시면 큰 힘이 돼요</small></span><i>›</i></button>
@@ -6362,7 +6403,7 @@ document.addEventListener('click',e=>{['home','away'].forEach(side=>{if(!e.targe
 // 위 네브바 탭과 모바일 하단 탭바의 활성 표시를 같이 맞춤
 function setActiveTab(page) {
   document.querySelectorAll('.nav-tab, .tabbar-item').forEach(t => {
-    const on = (t.dataset.pages || t.dataset.page).split(' ').includes(page);
+    const on = (t.dataset.pages || t.dataset.page || '').split(' ').includes(page);   // 소개 링크처럼 화면이 없는 메뉴도 있음
     t.classList.toggle('active', on);
     if (on) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current');
   });
@@ -6385,6 +6426,7 @@ function showPage(page, fromHistory) {
   track('__view', page);
   if (!fromHistory) navPush(page);   // 탭 이동도 브라우저 기록에(뒤로가기 = 이전 탭) — 주소는 #탭, 경기 예측은 #없이
   if(page==='myteams'){loadMyTeamsPage();}
+  if(page==='search'){initPlayerSearch();}
   if(page==='shootout'){initShootout();}
 }
 
@@ -9399,6 +9441,52 @@ async function cbSearch(q) {
     .then(r => (r.ok ? r.json() : { players: [] })).then(d => paint(d.players || [])).catch(() => paint([])), 180);
 }
 let cbSearchSeq = 0, cbSearchTimer = null;
+// ── 선수 검색 탭 ──
+const PS_LEAGUES = [['', '전체'], ['PL', 'EPL'], ['PD', '라리가'], ['BL1', '분데스'], ['SA', '세리에 A'], ['FL1', '리그앙']];
+const PS_POS = [['', '전체'], ['GK', 'GK'], ['DF', 'DF'], ['MF', 'MF'], ['FW', 'FW']];
+const ps = { league: '', pos: '', q: '', offset: 0, seq: 0, timer: null, inited: false };
+function initPlayerSearch() {
+  if (!ps.inited) {
+    ps.inited = true;
+    const chip = (arr, key) => arr.map(([v, l]) => `<button type="button" class="ps-chip${ps[key] === v ? ' on' : ''}" data-v="${v}" onclick="psSet('${key}','${v}')">${v && key === 'league' ? `<img src="logos/league/${v}.png" alt="">` : ''}${l}</button>`).join('');
+    document.getElementById('ps-leagues').innerHTML = chip(PS_LEAGUES, 'league');
+    document.getElementById('ps-pos').innerHTML = chip(PS_POS, 'pos');
+    psLoad();
+  }
+  if (window.matchMedia('(hover: hover)').matches) setTimeout(() => document.getElementById('ps-input')?.focus({ preventScroll: true }), 60);
+}
+function psSet(key, v) {
+  ps[key] = v;
+  document.querySelectorAll(`#ps-${key === 'league' ? 'leagues' : 'pos'} .ps-chip`).forEach(b => b.classList.toggle('on', b.dataset.v === v));
+  psLoad();
+}
+function psInput() {
+  clearTimeout(ps.timer);
+  ps.timer = setTimeout(() => { ps.q = document.getElementById('ps-input').value.trim(); psLoad(); }, 200);
+}
+async function psLoad(more) {
+  const seq = ++ps.seq, list = document.getElementById('ps-list'), meta = document.getElementById('ps-meta');
+  if (!more) { ps.offset = 0; list.innerHTML = skeletonRows(8); }
+  const qs = new URLSearchParams({ q: ps.q, limit: 30, offset: ps.offset });
+  if (ps.league) qs.set('league', ps.league);
+  if (ps.pos) qs.set('pos', ps.pos);
+  try {
+    const d = await fetchWithRetry(`${API}/players/search?${qs}`).then(r => r.json());
+    if (seq !== ps.seq) return;
+    meta.textContent = ps.q ? `"${ps.q}" 검색 결과 ${d.total}명` : `이번 시즌 평점 순 · 270분 이상 출전 ${d.total}명`;
+    const rows = d.players.map(p => { const fl = flagOf(p.nationality);
+      return `<div class="ps-row" onclick="openPlayerCard('${escJs(p.team)}', ${p.id})"><img class="ps-ph" src="${p.photo || ''}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+        <div class="ps-info"><b>${p.name}</b><small><img src="${logos[p.team] || ''}" alt="" onerror="this.remove()">${shortName(p.team)}${p.pos ? ` · ${POS_KO[p.pos] || p.pos}` : ''}${p.age ? ` · ${p.age}세` : ''}${fl ? ` <img class="ps-flag" src="${fl}" alt="${natKo(p.nationality) || ''}">` : ''}</small></div>
+        <span class="ps-n">${p.apps || 0}<i>경기</i></span><span class="ps-n">${p.pos === 'GK' ? '-' : p.goals || 0}<i>골</i></span><span class="ps-n">${p.pos === 'GK' ? '-' : p.assists || 0}<i>도움</i></span>${mdRating(p.rating) || '<span class="md-rt">-</span>'}</div>`; }).join('');
+    document.getElementById('ps-more')?.remove();
+    if (more) list.insertAdjacentHTML('beforeend', rows); else list.innerHTML = rows || '<div class="ti-empty">찾는 선수가 없어요. 이번 시즌 5대 리그 선수만 있어요 — 영어 이름으로 검색해 보세요.</div>';
+    ps.offset += d.players.length;
+    if (ps.offset < d.total) list.insertAdjacentHTML('afterend', `<button type="button" class="sq-more" id="ps-more" onclick="psLoad(true)">${Math.min(30, d.total - ps.offset)}명 더 보기</button>`);
+    if (ps.q) track('player_search', { q: ps.q.slice(0, 20) });
+  } catch (e) {
+    if (seq === ps.seq) list.innerHTML = '<div class="ti-empty">불러오지 못했어요. 잠시 후 다시 시도해주세요.</div>';
+  }
+}
 // 더보기 "구단·선수 검색" — 구단 둘러보기를 열고 검색창에 바로 입력
 function openSearch() { openClubBrowser(); setTimeout(() => document.getElementById('cb-search-input')?.focus(), 350); }
 function cbOpenPlayer(el) {
@@ -9462,18 +9550,19 @@ document.addEventListener('keydown', e => {
   addEventListener('resize', () => { if (document.getElementById('club-browser').classList.contains('show')) layoutCb(true); });
 })();
 
-// ── 새로고침 = 첫 화면(2026-10-08, 사용자 요청): 주소에 남은 탭(#league/…)·경기(?match=)를 지우고 경기 예측 첫 화면으로.
-// 공유 링크·랜딩 링크로 처음 들어온 경우(새로고침이 아님)는 그대로 그 화면
+// ── 새로고침 = 지금 탭을 처음 상태로(2026-10-08, 사용자 요청): 탭(#league/PL/standings 등)은 그대로 두고 고른 경기(?match=)·열린 창·선택만 초기화.
+// 공유 링크로 처음 들어온 경우(새로고침이 아님)는 그 경기를 그대로 보여줌. 로고 클릭도 같은 동작(fdReloadTab)
 try {
-  if (performance.getEntriesByType('navigation')[0]?.type === 'reload' && (location.hash || /[?&]match=/.test(location.search)))
-    history.replaceState(null, '', location.pathname);
+  if (performance.getEntriesByType('navigation')[0]?.type === 'reload' && /[?&]match=/.test(location.search))
+    history.replaceState(history.state, '', location.pathname + location.hash);
 } catch (e) {}
+function fdReloadTab() { try { history.replaceState(history.state, '', location.pathname + location.hash); } catch (e) {} location.reload(); }
 // ── 뒤로가기(2026-09-30): 폰에서 창을 닫으려고 뒤로가기를 누르면 사이트를 나가버렸음(기록이 하나도 안 쌓였음) ──
 // · 탭 이동은 기록에 남김(주소 #standings 등 — 새로고침해도 그 탭) → 뒤로가기 = 이전 탭
 // · 창(선수 카드·팀 정보·미리보기·구단 둘러보기 등)이 떠 있는 동안 기록에 "창" 한 칸(fdGuard)을 얹어 둠 → 뒤로가기 = 가장 위 창 하나 닫기
 //   (구단 둘러보기가 뒤집혀 있으면 앞면으로). 버튼·배경·Esc로 닫아 창이 다 없어지면 그 칸을 history.back()으로 치움(안 치우면 다음 뒤로가기가 헛돎)
 // · 창 여닫는 함수는 그대로 두고 표시 클래스 변화를 지켜봄 — 새 창을 만들면 OVERLAYS에 한 줄만 추가
-const NAV_PAGES = ['predict', 'league', 'myteams', 'more', 'shootout'];
+const NAV_PAGES = ['predict', 'league', 'myteams', 'search', 'more', 'shootout'];
 // 주소(#…) → 화면. league/PL/standings, 예전 #standings 등도 받음
 function isRoute(r) { return !!r && (NAV_PAGES.includes(r) || LEGACY_LG_PAGES.includes(r) || /^league(\/|$)/.test(r)); }
 function goRoute(r, fromHistory) {
@@ -9525,8 +9614,9 @@ function navSync() {
 }
 (function () {
   try { history.scrollRestoration = 'manual'; } catch (e) {}
-  const h = location.hash.slice(1), entry = isRoute(h) ? h : 'predict';
-  try { history.replaceState({ fdPage: entry, fdDepth: 0, fdEntryHome: entry === 'predict' }, ''); } catch (e) {}
+  const h = location.hash.slice(1), entry = isRoute(h) ? h : 'predict', st0 = history.state;
+  // 새로고침이면 기록 칸 정보(몇 번째 칸인지)가 남아 있음 — 그대로 이어 씀(창 칸 표시는 지움)
+  try { history.replaceState(st0 && 'fdDepth' in st0 ? { ...st0, fdPage: entry, fdGuard: false } : { fdPage: entry, fdDepth: 0, fdEntryHome: entry === 'predict' }, ''); } catch (e) {}
   const mo = new MutationObserver(navSync);   // 같은 순간에 닫고 여는 경우(미리보기 → 팀 정보)는 한 번에 모여 와서 칸이 그대로 유지됨
   OVERLAYS.forEach(([id]) => { const el = document.getElementById(id); if (el) mo.observe(el, { attributes: true, attributeFilter: ['class'] }); });
   addEventListener('popstate', e => {
