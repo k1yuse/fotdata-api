@@ -92,7 +92,7 @@ Vercel 루트는 `index.html`. landing.html을 고치면 **반드시 `cp landing
 - 매일 UTC 18:00(KST 03:00) GitHub Actions(`update_data.yml`, Secrets: `FOOTBALL_API_KEY`·`API_FOOTBALL_KEY`)가 실행 → `fotdata_model/` 자동 커밋("자동 데이터 업데이트 YYYY-MM-DD") → Render·Vercel 재배포.
 - `main()`은 단계별 `step()` — 하나가 실패해도 나머지는 돌고 저장, 실패가 있으면 종료 코드 1 + 커밋은 진행.
 - 순서: 경기 수집·학습 → UCL 토너먼트 → 일정 → 트랙레코드 기록 → 득점 순위 → 로고 → 팀 정보 → 위키(매일, 저장된 `en_title` 문서 그대로 — 다시 검색 안 함) → 시즌 구역 → 역대 우승 → API-Football(`af_sync`: 팀 매칭·경기 목록·끝난 경기 상세·결장자·선수 프로필) → 대회 우승 팀 → 감독 → 스쿼드·이적(`fetch_squads_transfers_all`, 5대 리그 전 팀 7일마다, 팀당 2회, 데이터 없는 팀부터) → 선수 경력·트로피(`af_profiles_sync`, 그날 남은 요청 −600 전부, 아직 없는 선수 → 출전 많은 순, 14일마다 갱신).
-- API-Football 하루 한도는 00:00 UTC(KST 09:00)에 초기화 — 새벽 실행(UTC 18:00)은 **그날 낮에 쓴 몫과 같은 하루 한도**를 씀. 낮에 수동으로 많이 돌리면 그날 밤 수집이 줄어듦(`/status`로 남은 양 확인).
+- API-Football 하루 한도는 00:00 UTC(KST 09:00)에 초기화 — 새벽 실행(UTC 18:00)은 **그날 낮에 쓴 몫과 같은 하루 한도**를 씀. 낮에 수동으로 많이 돌리면 그날 밤 수집이 줄어듦(`/status`로 남은 양 확인). 한도 초과·오류 응답은 `_af_ok()`로 걸러서 **기존 파일을 절대 빈 값으로 덮어쓰지 않음**(2026-10-08 새벽, 한도 초과 응답을 "경기 0개"로 저장해 이번 시즌 선수 화면이 통째로 사라진 사고 — 새 API-Football 수집 코드도 같은 규칙으로).
 - 선수 경력(`af_profiles/`)은 새 선수 한 명에 약 15회(시즌 수 + 4) — 2026-10-07 기준 2,615명 중 419명, 하루 약 400명씩 채워짐. 파일이 없는 선수는 서버가 요청 때 받아 경력·트로피 탭이 5~7초 걸림.
 - 따로 돌리기: `--matches-only` · `--ucl-only` · `--wiki-only [팀] [--force]` · `--zones-only` · `--league-history` · `--scorers-only` · `--transfers-only [팀 수] [--force]` · `--extra-leagues` · `--history`(지난 시즌 팀 로고·정보) · `--af-sync` · `--af-profiles [예산]` · `--coaches [--force]` · `--history-seasons [연도…]`·`--history-players [연도…] [--force]`·`--player-index`(끝난 시즌 — 한 번만).
 - 저장 순서 고정(날짜→리그→홈팀) — 순서가 흔들리면 매일 파일 전체가 바뀐 것처럼 커밋되고 ELO 반영 순서도 달라짐.

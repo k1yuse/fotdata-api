@@ -1092,6 +1092,10 @@ def _af(path, **params):
         return d
     return {}
 
+def _af_ok(d):
+    """API-Football 응답이 정상인지(오류·한도 초과면 {} 또는 errors가 옴) — 빈 응답을 '데이터 0개'로 저장해 덮어쓰지 않으려고"""
+    return bool(d) and not d.get("errors") and isinstance(d.get("response"), list)
+
 def _af_tokens(n):
     return [t for t in _norm_club(n).split() if t]
 
@@ -1109,6 +1113,11 @@ def af_sync(season=None):
     if not API_FOOTBALL_KEY:
         print("  ⚠️ API_FOOTBALL_KEY가 없어 API-Football 수집 건너뜀"); return
     season = season or max(MATCH_SEASONS)
+    # 2026-10-08 사고: 낮에 수동 수집으로 그날 한도를 다 쓴 상태에서 새벽 실행이 돌아, 한도 초과 오류를 "경기 0개"로 받아
+    # af_fixtures·af_players·결장자·감독을 전부 빈 값으로 덮어씀(이번 시즌 선수 화면이 통째로 사라짐) → 한도가 모자라면 아예 안 건드림
+    left = _af_remaining()
+    if left < 150:
+        print(f"  ⚠️ API-Football 오늘 남은 요청 {left}회 — 수집 건너뜀(기존 데이터 유지)"); return
     rd = lambda n, d: json.load(open(f"{MODEL_DIR}/{n}", encoding="utf-8")) if os.path.exists(f"{MODEL_DIR}/{n}") else d
     def wr(n, obj, indent=None):
         with open(f"{MODEL_DIR}/{n}", "w", encoding="utf-8") as f:
@@ -1117,10 +1126,16 @@ def af_sync(season=None):
     teammap = rd("af_team_map.json", {})
     print(f"\n[API-Football 수집] {season}-{(season + 1) % 100:02d} 시즌")
     # 1) 대회별 경기 목록
-    fx_all = {}
+    fx_all, fx_failed = {}, []
     for code, lid in AF_COMPS.items():
-        fx_all[code] = _af("/fixtures", league=lid, season=season).get("response") or []
+        d = _af("/fixtures", league=lid, season=season)
+        if not _af_ok(d) or not d["response"]:
+            fx_failed.append(code); fx_all[code] = []
+            print(f"  ⚠️ {code}: 경기 목록을 못 받음 — 기존 목록 유지"); continue
+        fx_all[code] = d["response"]
         print(f"  {code}: {len(fx_all[code])}경기")
+    if len(fx_failed) == len(AF_COMPS):
+        print("  ⚠️ 경기 목록을 하나도 못 받아 API-Football 수집 중단(기존 데이터 유지)"); return
     # 2) 팀 이름 맞추기 — 같은 날 우리 일정에서 홈·원정 이름이 가장 비슷한 경기(킥오프 시각이 같으면 가산)
     votes = defaultdict(Counter)
     for code, fxs in fx_all.items():
@@ -1171,6 +1186,8 @@ def af_sync(season=None):
             index.append(e)
     if unmapped:
         print(f"  ⚠️ 우리 이름을 못 찾은 팀(그 경기는 건너뜀): {', '.join(sorted(unmapped))}")
+    if fx_failed:   # 못 받은 대회는 어제 목록 그대로
+        index += [e for e in rd("af_fixtures.json", {}).get("fixtures", []) if e.get("league") in fx_failed]
     # 4) 끝난 경기 상세 — 아직 파일이 없는 것만, 한 번에 20경기씩
     need = [e for e in index if e["status"] in AF_DONE and not os.path.exists(f"{MD_DIR}/{e['file']}")]
     by_id = {e["id"]: e for e in need}
@@ -1194,9 +1211,11 @@ def af_sync(season=None):
     # 5) 앞으로 4일 경기 결장·부상자(대회별 한 번씩)
     now = pd.Timestamp.now(tz="UTC")
     soon = [e for e in index if e["status"] in ("NS", "TBD") and now <= pd.Timestamp(e["kickoff"]) <= now + pd.Timedelta(days=4)]
-    previews = {}
+    previews, inj_ok = {}, True
     for code in sorted({e["league"] for e in soon}):
-        inj = _af("/injuries", league=AF_COMPS[code], season=season).get("response") or []
+        d = _af("/injuries", league=AF_COMPS[code], season=season)
+        inj_ok = inj_ok and _af_ok(d)
+        inj = (d.get("response") or []) if _af_ok(d) else []
         by_fx = defaultdict(list)
         for x in inj:
             by_fx[(x.get("fixture") or {}).get("id")].append(x)
@@ -1204,12 +1223,15 @@ def af_sync(season=None):
             rows = by_fx.get(e["id"], [])
             previews[f"{e['home_team']}|{e['away_team']}|{e['date'][:10]}"] = {"fixture_id": e["id"],
                 "injuries": {"home": af_injury_rows(rows, e["home_id"]), "away": af_injury_rows(rows, e["away_id"])}}
-    wr("match_previews.json", previews, indent=1)
-    print(f"  결장·부상자: {len(previews)}경기")
+    if inj_ok:
+        wr("match_previews.json", previews, indent=1)
+    print(f"  결장·부상자: {len(previews)}경기{'' if inj_ok else ' — ⚠️ 일부 못 받아 기존 파일 유지'}")
     # 팀별 "가장 최근 경기" 결장자(경기별 명단은 킥오프 1~2일 전에야 올라와서 그 전엔 이걸로 지금 빠져 있는 선수를 보여줌) — 대회마다 1번
-    ti = {}
+    ti, ti_ok = {}, True
     for code, lid in AF_COMPS.items():
-        rows = _af("/injuries", league=lid, season=season).get("response") or []
+        d = _af("/injuries", league=lid, season=season)
+        ti_ok = ti_ok and _af_ok(d)
+        rows = (d.get("response") or []) if _af_ok(d) else []
         last = {}
         for x in rows:
             nm = teammap.get(str((x.get("team") or {}).get("id")))
@@ -1228,7 +1250,8 @@ def af_sync(season=None):
             if pl.get("id") and all(p["id"] != pl["id"] for p in ent["players"]):
                 ent["players"].append({"id": pl["id"], "name": pl.get("name"), "photo": pl.get("photo"),
                                        "status": "doubtful" if pl.get("type") == "Questionable" else "out", "reason": pl.get("reason")})
-    wr("team_injuries.json", ti, indent=1)
+    if ti_ok:
+        wr("team_injuries.json", ti, indent=1)
     print(f"  팀별 최근 경기 결장자: {len(ti)}팀 · {sum(len(v['players']) for v in ti.values())}명")
     # 6) 선수 프로필(5대 리그 팀, 6일 넘은 팀만)
     players = rd("af_players.json", {})
@@ -1251,9 +1274,11 @@ def af_sync(season=None):
             page += 1
         if rows:
             players[t] = {"af_id": tid, "league": code, "season": season, "updated": today, "players": rows}
-    for t in [t for t in players if t not in league_team]:   # 강등 등으로 빠진 팀
-        players.pop(t)
-    wr("af_players.json", players)
+    if len(league_team) >= 90:   # 강등 등으로 빠진 팀 정리 — 경기 목록이 덜 왔을 땐(5대 리그 96팀) 지우지 않음
+        for t in [t for t in players if t not in league_team]:
+            players.pop(t)
+    if players:
+        wr("af_players.json", players)
     print(f"  선수 프로필: {len(stale)}팀 갱신 · 전체 {len(players)}팀 {sum(len(v['players']) for v in players.values())}명")
 
 # ── 선수 경력·트로피 미리 받기(2026-10-07) ──
@@ -1374,6 +1399,8 @@ def fetch_coaches(force=False):
     path = f"{MODEL_DIR}/af_coaches.json"
     old = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else {}
     teams = json.load(open(f"{MODEL_DIR}/af_players.json", encoding="utf-8"))
+    if len(teams) < 60 or _af_remaining() < 120:
+        print(f"  ⚠️ 감독: 팀 목록 {len(teams)}팀·남은 요청 부족 — 건너뜀(기존 유지)"); return
     wiki = json.load(open(f"{MODEL_DIR}/team_wiki.json", encoding="utf-8")) if os.path.exists(f"{MODEL_DIR}/team_wiki.json") else {}
     lineup = _lineup_coaches()
     today = pd.Timestamp.now().strftime("%Y-%m-%d")
@@ -1385,7 +1412,12 @@ def fetch_coaches(force=False):
             out[team] = prev; continue
         tid = info["af_id"]
         cands = []
-        for c in (_af("/coachs", team=tid).get("response") or []):
+        dc = _af("/coachs", team=tid)
+        if not _af_ok(dc):   # 한도 초과 등 — 이 팀은 어제 값 그대로
+            if prev:
+                out[team] = prev
+            continue
+        for c in dc["response"]:
             for car in c.get("career") or []:
                 if (car.get("team") or {}).get("id") == tid:
                     cands.append((c, car))
@@ -1421,6 +1453,8 @@ def fetch_coaches(force=False):
             out[team] = row; done += 1
         elif prev:
             out[team] = prev
+    for t, v in old.items():   # 이번에 못 다룬 팀도 지우지 않음
+        out.setdefault(t, v)
     with open(path, "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, indent=1, sort_keys=True)
     print(f"  감독: {done}팀 갱신 · 전체 {len(out)}팀 · 사진 {sum(1 for v in out.values() if v.get('photo'))} · 생년월일 {sum(1 for v in out.values() if v.get('birth_date'))}")
@@ -1471,21 +1505,30 @@ def af_profiles_sync(budget=None):
     used, done = [0], [0]
     def one(pid):
         old = load(pid) or {}
-        teams = (_af("/players/teams", player=pid).get("response"))
-        if teams is None:
-            return 1
+        dt = _af("/players/teams", player=pid)
+        if not _af_ok(dt):   # 한도 초과 등 — 이 선수는 다음에(기존 파일 그대로)
+            return None
+        teams = dt["response"]
         for t in teams:   # 시즌이 가끔 문자열("2023")로 옴
             t["seasons"] = [int(y) for y in (t.get("seasons") or []) if str(y).isdigit()]
         years = sorted({y for t in teams for y in t["seasons"] if y >= 2010}, reverse=True)[:16]
         stats = {int(k): v for k, v in (old.get("stats") or {}).items()}
         need = [y for y in years if y >= cur - 1 or y not in stats]   # 지난 시즌은 한 번만, 이번·지난 시즌은 다시
         for y in need:
-            stats[y] = af_compact_player_season(((_af("/players", id=pid, season=y).get("response")) or [None])[0])
+            ds = _af("/players", id=pid, season=y)
+            if not _af_ok(ds):
+                if y not in stats:
+                    return None   # 처음 받는 시즌을 못 받으면 저장 안 함(빈 기록으로 굳지 않게)
+                continue
+            stats[y] = af_compact_player_season((ds["response"] or [None])[0])
+        side = {k: _af(path, player=pid) for k, path in (("tr", "/trophies"), ("sd", "/sidelined"), ("tf", "/transfers"))}
+        if not all(_af_ok(v) for v in side.values()):
+            return None
         rec = {"id": pid, "updated": today,
                "teams": [{"team": {k: (t.get("team") or {}).get(k) for k in ("id", "name", "logo")}, "seasons": t.get("seasons")} for t in teams],
-               "trophies": _af("/trophies", player=pid).get("response") or [],
-               "sidelined": [{k: x.get(k) for k in ("type", "start", "end")} for x in (_af("/sidelined", player=pid).get("response") or [])],
-               "transfers": af_compact_transfers(_af("/transfers", player=pid).get("response")),
+               "trophies": side["tr"]["response"],
+               "sidelined": [{k: x.get(k) for k in ("type", "start", "end")} for x in side["sd"]["response"]],
+               "transfers": af_compact_transfers(side["tf"]["response"]),
                "stats": {str(y): v for y, v in stats.items() if y in years}}
         md_write(f"{AF_PROFILE_DIR}/{pid}.json.gz", rec)
         return 5 + len(need)
