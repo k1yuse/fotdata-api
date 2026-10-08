@@ -590,13 +590,14 @@
     .standings-pts { font-weight: 700; color: var(--blue); text-align: right; font-variant-numeric: tabular-nums; }
     .form-dots { display: flex; gap: 3px; }
     .form-dot { width: 8px; height: 8px; border-radius: 50%; }
-    .form-dot.W { background: var(--green); }
-    .form-dot.D { background: #6e7681; }
-    .form-dot.L { background: var(--red); }
+    .form-dot { flex-shrink: 0; }
+    .form-dot.W { background: #3fb950; }   /* 앱 순위표와 같은 색 — 예전 어두운 초록(#238636) 옆에서 빨강만 커 보였음 */
+    .form-dot.D { background: #7c88a1; }
+    .form-dot.L { background: #f85149; }
     @media (prefers-reduced-motion: no-preference) {
       #landing-standings-preview .standings-row:not(.mini-loader-row) { opacity: 0; transform: translateX(-14px); transition: opacity .5s ease, transform .6s cubic-bezier(.2,.8,.2,1); }
       #landing-standings-preview.rows-on .standings-row { opacity: 1; transform: none; transition-delay: calc(var(--i, 0) * 110ms); }
-      #landing-standings-preview .form-dot { transform: scale(0); transition: transform .35s cubic-bezier(.3,1.7,.5,1); }
+      #landing-standings-preview .form-dot { transform: scale(0); transition: transform .3s cubic-bezier(.3,1.25,.5,1); }
       #landing-standings-preview.rows-on .form-dot { transform: none; transition-delay: calc(var(--i, 0) * 110ms + .3s + var(--k, 0) * 70ms); }
     }
 

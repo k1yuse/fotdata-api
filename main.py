@@ -1829,6 +1829,51 @@ def _team_league_in(team, yr):
     codes = ((_ps_index().get("teams") or {}).get(team) or {}).get(str(yr)) or []
     return next((c for c in codes if c != "CL"), codes[0] if codes else None)
 
+# ── 선수 검색(2026-10-08): 이번 시즌 5대 리그 선수(af_players.json, 약 2,600명) — 이름 일부로(악센트·대소문자 무시), 이번 시즌 출전 시간 많은 선수부터 ──
+def _norm_name(s):
+    import unicodedata
+    return unicodedata.normalize("NFKD", (s or "").replace("ß", "ss").replace("ø", "o").replace("Ø", "o").replace("ł", "l")).encode("ascii", "ignore").decode().lower()
+
+@lru_cache(maxsize=1)
+def _player_search_index():
+    mins = {}
+    for code in ("PL", "PD", "BL1", "SA", "FL1"):
+        for rows in (_af_league_squads(code) or {}).values():
+            for r in rows:
+                mins[r["id"]] = mins.get(r["id"], 0) + (r.get("minutes") or 0)
+    out = []
+    for team, v in (_load_json("af_players.json") or {}).items():
+        for pid, p in (v.get("players") or {}).items():
+            full = p.get("full_name") or p.get("name") or ""
+            keys = " ".join(sorted({_norm_name(x) for x in (full, p.get("name"), p.get("firstname"), p.get("lastname")) if x}))
+            out.append({"id": int(pid), "team": team, "name": full, "photo": p.get("photo"), "pos": p.get("pos"),
+                        "nationality": p.get("nationality"), "age": p.get("age"), "_k": keys, "_m": mins.get(int(pid), 0)})
+    return out
+
+@app.get("/players/search")
+def players_search(q: str, limit: int = 12):
+    qn = _norm_name(q).strip()
+    if len(qn.replace(" ", "")) < 2:
+        return {"players": []}
+    toks = qn.split()
+    hits, seen = [], set()
+    for p in _player_search_index():
+        k, words = p["_k"], p["_k"].split()
+        # 짧은 검색어(3글자 이하)는 단어 첫머리만 — "son"에 이름 중간에 son이 든 선수가 잔뜩 걸렸음
+        ok = all(any(w.startswith(t) for w in words) if len(t) <= 3 else t in k for t in toks)
+        if ok:
+            score = 2 * any(w.startswith(toks[-1]) for w in words) + any(w.startswith(toks[0]) for w in words)
+            hits.append((score, p["_m"], p))
+    hits.sort(key=lambda x: (-x[0], -x[1]))
+    out = []
+    for _, _, p in hits:   # 시즌 중 팀을 옮긴 선수(임대 등)는 한 번만 — 출전 시간 많은 쪽
+        if p["id"] in seen:
+            continue
+        seen.add(p["id"]); out.append({k: v for k, v in p.items() if not k.startswith("_")})
+        if len(out) >= max(1, min(limit, 30)):
+            break
+    return {"players": out}
+
 @app.get("/team/squad/{team_name}")
 def get_team_squad(team_name: str, season: int = None):
     """선수 카드·구단 베스트 11·주요 선수 — 이번 시즌: 프로필(af_players.json) + 리그 경기 상세 합산, 지난 시즌(15-16~): af_seasons. 없으면 204

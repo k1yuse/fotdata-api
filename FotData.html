@@ -234,7 +234,7 @@
     @keyframes toastOut { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(8px) scale(0.95); } }
 
     .card { background: var(--surface); border: 0.5px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 16px; box-shadow: var(--shadow-md); }
-    .predict-selector-card { position: relative; z-index: 10; margin-bottom: 315px; }
+    .predict-selector-card { position: relative; z-index: 10; margin-bottom: 355px; }   /* 팀 선택 팝업 최대 높이 + ★ 내 팀 줄 */
     /* 폰(≤600px): 팀 고르기·예측 버튼을 빅매치 바로 아래로(2026-10-03, 사용자 결정) — 예전 순서(다음 경기·트랙레코드 다음)에선 예측 버튼이 첫 화면 밖이었음.
        예측 결과(#result-section)도 같은 순서(3)라 팀 고르기 바로 아래에 붙고, 다음 경기·트랙레코드는 그 뒤로. PC·태블릿은 원래 순서 */
     @media (max-width: 600px) {
@@ -265,6 +265,9 @@
       .standings-table th { position: sticky; top: var(--nav-height, 60px); background: var(--surface); z-index: 5; box-shadow: 0 1px 0 var(--border); }
     }
     .standings-table th.center { text-align: center; }
+    .cap-ic { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; background: var(--green); color: #fff; font-style: normal; font-size: 11px; font-weight: 800; line-height: 1; flex-shrink: 0; }   /* 주장 표시(초록 원 안 C) */
+    .st-sum-sub-team { display: inline-flex; align-items: center; gap: 5px; } .st-sum-sub-team img { width: 14px; height: 14px; object-fit: contain; }
+    @media (min-width: 769px) { .st-table th.n { width: 64px; } }   /* 숫자 칸 폭을 같게 — 글자 수(경기·득점 2글자, 승·무·패 1글자)에 따라 간격이 달랐음 */
     .standings-table td { padding: 10px 12px; border-bottom: 0.5px solid var(--surface-2); font-size: 13px; }
     .standings-table td.center { text-align: center; }
     .standings-table tr[onclick] { cursor: pointer; } .standings-table tr[onclick]:hover { background: var(--surface-2); }
@@ -1041,6 +1044,11 @@
     .popup-search-input:focus { outline: none; border-color: var(--blue); }
     .popup-close { color: var(--muted); cursor: pointer; font-size: 16px; padding: 4px 8px; }
     .popup-close:hover { color: var(--text); }
+    .popup-fav { display: flex; align-items: center; gap: 6px; padding: 10px 12px 0; overflow-x: auto; scrollbar-width: none; } .popup-fav::-webkit-scrollbar { display: none; }
+    .popup-fav-h { font-size: 12px; font-weight: 700; color: var(--gold); flex-shrink: 0; margin-right: 2px; }
+    .popup-fav-chip { display: inline-flex; align-items: center; gap: 5px; flex-shrink: 0; padding: 5px 10px 5px 7px; border-radius: var(--r-pill); border: 0.5px solid var(--border); background: var(--surface-2); color: var(--text-2); font-size: 12px; font-weight: 600; cursor: pointer; }
+    .popup-fav-chip img { width: 18px; height: 18px; object-fit: contain; }
+    .popup-fav-chip:hover { border-color: var(--blue); color: var(--text); } .popup-fav-chip.selected { border-color: var(--blue); color: var(--blue-text); background: rgba(88,166,255,0.12); }
     .popup-league-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 10px 12px; border-bottom: 0.5px solid var(--border); }
     .popup-league-btn { display: flex; align-items: center; justify-content: center; gap: 5px; padding: 7px 6px; background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 6px; color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer; transition: all .15s; }
     .popup-league-btn img { width: 14px; height: 14px; object-fit: contain; flex-shrink: 0; }
@@ -1791,6 +1799,10 @@
     .cb-res:hover, .cb-res.first { background: rgba(88,166,255,0.1); }
     .cb-res img { width: 22px; height: 22px; object-fit: contain; } .cb-res b { font-size: 13px; font-weight: 600; }
     .cb-res small { font-size: 12px; color: var(--muted); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .cb-res em { font-style: normal; font-size: 12px; color: var(--faint); }
+    .cb-res-h { font-size: 12px; font-weight: 700; color: var(--muted); padding: 8px 10px 4px; } .cb-res-h span { font-weight: 500; color: var(--faint); margin-left: 4px; }
+    .cb-res img.cb-pl-ph { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; background: var(--surface-2); }
+    .cb-res img.cb-pl-crest { width: 18px; height: 18px; margin-left: auto; }
+    .cb-res-pl small { flex: 0 1 auto; }
     .cb-res.none { font-size: 12px; color: var(--muted); cursor: default; padding: 10px; }
     .cb-close { flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%; border: 0.5px solid var(--border); background: rgba(17,26,46,0.85); color: var(--text-2); font-size: 15px; cursor: pointer; }
     .cb-close:hover { color: #fff; border-color: var(--disabled); }
@@ -2240,7 +2252,7 @@
     .pc2-club:hover span { color: var(--blue-text); }
     .pc2-meta { display: flex; flex-wrap: wrap; font-size: 14px; color: var(--muted); line-height: 18px; }
     .pc2-meta span + span::before { content: ''; display: inline-block; width: 1px; height: 10px; margin: 0 8px; background: var(--border); vertical-align: -1px; }
-    .pc2-meta .inj { color: var(--red); }
+    .pc2-meta .inj { color: var(--red); } .pc2-meta .cap-ic { margin-left: 8px; align-self: center; }
     .pc2-rt { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
     .pc2-rt b { font-family: var(--font-num); font-size: 26px; font-weight: 700; line-height: 1; padding: 5px 8px 4px; border-radius: 6px; color: var(--bg); background: var(--muted); font-variant-numeric: tabular-nums; }
     .pc2-rt b.r8 { background: var(--blue); } .pc2-rt b.r7 { background: var(--green); } .pc2-rt b.r6 { background: var(--amber); } .pc2-rt b.r5 { background: var(--away); }
@@ -2718,7 +2730,7 @@
 <body>
 
 <nav class="nav">
-  <div class="nav-logo" style="display:flex;align-items:center;gap:11px;cursor:pointer" onclick="refreshCurrentTab()" title="새로고침">
+  <div class="nav-logo" style="display:flex;align-items:center;gap:11px;cursor:pointer" onclick="location.href = location.pathname" title="처음 화면으로">
     <svg class="logo-bars" id="nav-logo-bars" viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg>
     <div class="nav-wordmark">
       <span style="font-size:20px;font-weight:800;color:#ecf1fa;letter-spacing:-0.5px">Fot</span>
@@ -2931,6 +2943,7 @@
     <div class="champ-head"><b>더보기</b></div>
     <div class="more-list">
       <button type="button" class="more-item" onclick="showPage('shootout')"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 19V6h18v13"/><path d="M3 10.5h18M3 15h18M7.5 6v13M12 6v13M16.5 6v13" stroke-opacity=".45"/><path d="M1.5 19h21"/></svg><span><b>승부차기</b><small>골키퍼·키커를 정하고 실제 규칙으로 겨루는 미니게임</small></span><i>›</i></button>
+      <button type="button" class="more-item" onclick="openSearch()"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><span><b>구단·선수 검색</b><small>이름 일부로 찾기 — 선수를 누르면 선수 카드</small></span><i>›</i></button>
       <button type="button" class="more-item" onclick="openClubBrowser()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.6-3 8.3-7 10-4-1.7-7-5.4-7-10V6z"/></svg><span><b>구단 둘러보기</b><small>리그 순위대로 구단 카드를 넘겨 보기 · 검색</small></span><i>›</i></button>
       <button type="button" class="more-item" onclick="openTrackRecordModal()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19h16M7 16V10M12 16V6M17 16v-4"/></svg><span><b>AI 트랙레코드</b><small>킥오프 전에 기록한 예측의 실제 적중률</small></span><i>›</i></button>
       <button type="button" class="more-item" onclick="toggleKofiPanel()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg><span><b>후원하기</b><small>서버비에 보태 주시면 큰 힘이 돼요</small></span><i>›</i></button>
@@ -2977,6 +2990,7 @@
                 <input class="popup-search-input" id="home-search" placeholder="팀 검색..." oninput="filterTeams('home', this.value)">
                 <span class="popup-close" onclick="closePopup('home')">✕</span>
               </div>
+              <div class="popup-fav" id="home-fav" hidden></div>
               <div class="popup-league-grid">
                 <div class="popup-league-btn active" onclick="selectLeagueTab('home','EPL',this)"><img alt="" src="logos/league/PL.png" onerror="this.style.display='none'"> EPL</div>
                 <div class="popup-league-btn" onclick="selectLeagueTab('home','LaLiga',this)"><img alt="" src="logos/league/PD.png" onerror="this.style.display='none'"> 라리가</div>
@@ -3011,6 +3025,7 @@
                 <input class="popup-search-input" id="away-search" placeholder="팀 검색..." oninput="filterTeams('away', this.value)">
                 <span class="popup-close" onclick="closePopup('away')">✕</span>
               </div>
+              <div class="popup-fav" id="away-fav" hidden></div>
               <div class="popup-league-grid">
                 <div class="popup-league-btn active" onclick="selectLeagueTab('away','EPL',this)"><img alt="" src="logos/league/PL.png" onerror="this.style.display='none'"> EPL</div>
                 <div class="popup-league-btn" onclick="selectLeagueTab('away','LaLiga',this)"><img alt="" src="logos/league/PD.png" onerror="this.style.display='none'"> 라리가</div>
@@ -3144,7 +3159,7 @@
     <div class="cb-head"><b id="cb-title">구단 둘러보기</b><span id="cb-sub"></span></div>
     <div class="cb-search">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-      <input id="cb-search-input" type="text" placeholder="구단 검색 (예: Arsenal, 바이에른)" autocomplete="off" oninput="cbSearch(this.value)" onkeydown="cbSearchKey(event)">
+      <input id="cb-search-input" type="text" placeholder="구단·선수 검색 (예: 바이에른, Saka)" autocomplete="off" oninput="cbSearch(this.value)" onkeydown="cbSearchKey(event)">
       <div class="cb-results" id="cb-results"></div>
     </div>
     <button class="cb-close" onclick="closeClubBrowser()" aria-label="닫기">✕</button>
@@ -4464,7 +4479,7 @@ function openTeamFromTModal(k) {
 }
 function closeTModal(e) { if(!e||e.target===document.getElementById('t-modal')) document.getElementById('t-modal').classList.remove('show'); }
 
-const POSITION_LABEL = { Goalkeeper: '골키퍼', Defence: '수비수', Midfield: '미드필더', Offence: '공격수' };
+const POSITION_LABEL = { Goalkeeper: 'GK', Defence: 'DF', Midfield: 'MF', Offence: 'FW' };   // 스쿼드 탭 묶음 제목 — 포지션은 영어 약자로(2026-10-08)
 const TI_LEAGUE_CODE_MAP = { EPL: 'PL', LaLiga: 'PD', Bundesliga: 'BL1', SerieA: 'SA', Ligue1: 'FL1', UCL: 'CL' };
 let teamInfoCache = {};
 let teamStatsCache = {};
@@ -4860,7 +4875,8 @@ function fetchMatchPreview(home, away, date) {
     .then(r => (r.ok && r.status !== 204 ? r.json() : null)).catch(() => { delete matchPreviewCache[k]; return null; }), { _t: Date.now() });
   return matchPreviewCache[k];
 }
-const POS_KO = { GK: '골키퍼', DF: '수비수', MF: '미드필더', FW: '공격수' };
+// 포지션은 영어 약자로(2026-10-08 사용자 결정) — 이름은 예전 그대로(POS_KO·DPOS_KO), 값만 약자
+const POS_KO = { GK: 'GK', DF: 'DF', MF: 'MF', FW: 'FW' };
 const INJ_KO = { 'Knee Injury': '무릎 부상', 'Hamstring Injury': '햄스트링 부상', 'Ankle Injury': '발목 부상', 'Muscle Injury': '근육 부상', 'Calf Injury': '종아리 부상',
   'Thigh Injury': '허벅지 부상', 'Groin Injury': '사타구니 부상', 'Back Injury': '허리 부상', 'Foot Injury': '발 부상', 'Hip Injury': '고관절 부상', 'Shoulder Injury': '어깨 부상',
   'Head Injury': '머리 부상', 'Concussion': '뇌진탕', 'Achilles Tendon Injury': '아킬레스건 부상', 'Illness': '질병', 'Suspended': '출전 정지', 'Red Card': '퇴장 징계',
@@ -4969,8 +4985,7 @@ const COMP_GENERIC = { 'Cup': '컵', 'Super Cup': '슈퍼컵', 'League Cup': '�
 const compName = (id, name, country) => COMP_INFO[id]?.ko || (country && !['World', 'Europe'].includes(country) && (COMP_GENERIC[name] || name.length < 14) ? `${natKo(country)} ${COMP_GENERIC[name] || name}` : name || '');
 
 // ── 세부 포지션(서버가 라인업 포메이션·칸으로 추정, 22-23 시즌부터) ──
-const DPOS_KO = { GK: '골키퍼', CB: '센터백', LB: '왼쪽 풀백', RB: '오른쪽 풀백', LWB: '왼쪽 윙백', RWB: '오른쪽 윙백', DM: '수비형 미드필더', CM: '중앙 미드필더',
-  AM: '공격형 미드필더', LM: '왼쪽 미드필더', RM: '오른쪽 미드필더', LW: '왼쪽 윙어', RW: '오른쪽 윙어', ST: '스트라이커' };
+const DPOS_KO = { GK: 'GK', CB: 'CB', LB: 'LB', RB: 'RB', LWB: 'LWB', RWB: 'RWB', DM: 'CDM', CM: 'CM', AM: 'CAM', LM: 'LM', RM: 'RM', LW: 'LW', RW: 'RW', ST: 'ST' };
 // 가로 경기장(오른쪽으로 공격) 위 자리 — x: 자기 골문 0 → 상대 골문 100, y: 위 = 그 팀 왼쪽
 const DPOS_XY = { GK: [7, 50], CB: [23, 50], LB: [27, 15], RB: [27, 85], LWB: [42, 12], RWB: [42, 88], DM: [39, 50], CM: [53, 50], AM: [67, 50],
   LM: [58, 14], RM: [58, 86], LW: [77, 17], RW: [77, 83], ST: [87, 50] };
@@ -5094,7 +5109,7 @@ function pcHeroHtml(c) {
     <div class="pc2-id">
       <h3 class="pc2-name"${legal && legal !== name ? ` title="${legal.replace(/"/g, '&quot;')}"` : ''}>${name}</h3>
       <button type="button" class="pc2-club" onclick="closePlayerCard();openTeamInfo('${escJs(team)}')">${logos[team] ? `<img src="${logos[team]}" alt="" onerror="this.remove()">` : ''}<span>${shortName(team)}</span></button>
-      <div class="pc2-meta">${[posKo, p.number != null ? `${p.number}번` : '', p.captain ? '주장' : ''].filter(Boolean).map(x => `<span>${x}</span>`).join('')}${p.injured ? '<span class="inj">부상</span>' : ''}</div>
+      <div class="pc2-meta">${[posKo, p.number != null ? `${p.number}번` : ''].filter(Boolean).map(x => `<span>${x}</span>`).join('')}${p.captain ? '<i class="cap-ic" title="주장" aria-label="주장">C</i>' : ''}${p.injured ? '<span class="inj">부상</span>' : ''}</div>
     </div>
     ${p.rating ? `<div class="pc2-rt"><b class="${mdRatingClass(p.rating)}">${p.rating.toFixed(2)}</b><small>${seasonLabel(c.season)} 평점</small></div>` : ''}
   </div>`;
@@ -5124,7 +5139,7 @@ function pcOverviewHtml(c) {
   const tot = dp.reduce((s, [, v]) => s + v, 0);
   const posHtml = dp.length ? `<section class="pc2-sec"><h4>포지션<small>리그 선발 ${tot}경기</small></h4>
     <div class="pc2-pos-row"><div class="pc2-mini">${PITCH_SVG.h}${dp.map(([k], i) => { const [x, y] = DPOS_XY[k] || [50, 50];
-      return `<span class="pc2-dot${i ? '' : ' main'}" style="left:${x}%;top:${y}%">${k}</span>`; }).join('')}</div>
+      return `<span class="pc2-dot${i ? '' : ' main'}" style="left:${x}%;top:${y}%">${DPOS_KO[k] || k}</span>`; }).join('')}</div>
       <ul class="pc2-pos-list">${dp.slice(0, 4).map(([k, v], i) => `<li class="${i ? '' : 'main'}"><span>${DPOS_KO[k] || k}</span><b>${Math.round(v / tot * 100)}%</b></li>`).join('')}</ul></div></section>` : '';
   return `${info}
     <section class="pc2-sec"><h4>${pcSeasonSelect(c)}<button type="button" class="pc2-link" onclick="pcTab('stats')">시즌 기록 전체</button></h4>${pcFigs(figs)}</section>
@@ -5318,7 +5333,7 @@ async function openMatchPredictModal(home, away) {
   const body = document.getElementById('match-predict-body');
   const homeShort = shortTeamName(home), awayShort = shortTeamName(away);
   mpSetHeader(home, away, '경기 미리보기');
-  modal.querySelector('.mp-modal').classList.remove('wide');
+  modal.querySelector('.mp-modal').classList.toggle('wide', innerWidth > 980 && !unpredictableTeamsIn(home, away).length);   // 처음부터 넓은 창(예전엔 작은 창으로 뜨다가 팀 소식이 오면 넓어졌음)
   const meta = document.getElementById('mp-meta');
   findUpcomingFixture(home, away).then(fx => {
     if (!fx || seq !== mpSeq) return;
@@ -5360,12 +5375,12 @@ async function openMatchPredictModal(home, away) {
       ${sp && sp.top_scores ? `<div class="mp-sec"><div class="mp-sec-t">가능성 높은 스코어</div><div class="mp-scores">${sp.top_scores.slice(0, 4).map((x, i) => `<span class="${i ? '' : 'first ' + side}"><b>${x.score.replace('-', ' : ')}</b>${Math.round(x.prob)}%</span>`).join('')}</div></div>` : ''}
       ${expl.length ? `<div class="mp-sec"><div class="mp-sec-t">예측 근거<button type="button" class="ii" data-tip="factors" aria-label="예측 근거 설명">i</button> <span class="mp-sec-n">▲ 이 예측 쪽으로 · ▼ 반대로 · % 영향 비중</span></div><div class="mp-why">${expl.map(e => `<span class="${e.direction === 'support' ? 'up' : 'down'}">${e.direction === 'support' ? '▲' : '▼'} ${e.label}<small>${Math.round(e.influence_pct)}%</small></span>`).join('')}</div></div>` : ''}
       <button class="mp-cta" onclick="goToFullPrediction('${escJs(home)}','${escJs(away)}')">전체 분석 보기<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
-      </div><aside class="mp-aside" id="mp-side"></aside></div>
+      </div><aside class="mp-aside" id="mp-side">${modal.querySelector('.mp-modal').classList.contains('wide') ? skeletonRows(6) : ''}</aside></div>
       <div id="mp-news" class="mp-lineup"></div>
     `;
     // 팀 소식 — 라인업은 왼쪽, 결장·부상·주요 선수는 오른쪽(있을 때만 창을 넓힘, 2026-10-07)
     loadTeamNews(document.getElementById('mp-news'), home, away, null, () => seq === mpSeq, document.getElementById('mp-side'))
-      .then(hasSide => { if (hasSide && seq === mpSeq) modal.querySelector('.mp-modal').classList.add('wide'); });
+      .then(hasSide => { if (seq === mpSeq) modal.querySelector('.mp-modal').classList.toggle('wide', !!hasSide); });
   } catch (e) {
     if (seq !== mpSeq) return;
     body.innerHTML = `<div class="ti-empty">${e.status === 404 ? unpredictableMessage(null) : '예측을 불러올 수 없어요.'}</div>`;
@@ -5715,7 +5730,7 @@ async function switchTiTab(tab) {
       else html += `<div class="tp-sec"><div class="tp-t">이번 시즌 공격 포인트</div><div class="ti-empty" style="padding:14px 0">이번 시즌 선수별 골·도움은 매일 새벽 자동 업데이트 때 받아와요.<br>곧 여기에 표시돼요.</div></div>`;
       const sq = d.squad || {};
       if (sq.size) {
-        const PC = { Goalkeeper: ['골키퍼', '#f0c040'], Defence: ['수비수', '#3fb950'], Midfield: ['미드필더', '#58a6ff'], Offence: ['공격수', '#f0883e'] };
+        const PC = { Goalkeeper: ['GK', '#f0c040'], Defence: ['DF', '#3fb950'], Midfield: ['MF', '#58a6ff'], Offence: ['FW', '#f0883e'] };
         const order = Object.keys(PC).filter(k => sq.positions[k]);
         html += `<div class="tp-sec"><div class="tp-t">스쿼드 구성 <span>${sq.size}명</span></div>
           <div class="tp-pos">${order.map(k => `<i style="flex:${sq.positions[k]};background:${PC[k][1]}" title="${PC[k][0]} ${sq.positions[k]}명"></i>`).join('')}</div>
@@ -6187,6 +6202,7 @@ function togglePopup(side) {
   document.getElementById(`${side}-trigger`).classList.toggle('active');
   if (wasOpen) { closePopup(side); return; }
   renderTeamGrid(side,currentLeagueTab[side]);
+  renderPopupFav(side);
   openTeamPopup(side, popup);
   document.getElementById(`${side}-search`).focus({ preventScroll: true });
 }
@@ -6228,6 +6244,13 @@ function closePopup(side){
   teamPopupCloseTimers[side] = setTimeout(() => { popup.style.display = 'none'; teamPopupCloseTimers[side] = null; }, 340);
 }
 function selectLeagueTab(side,leagueKey,el){currentLeagueTab[side]=leagueKey;el.closest('.popup-league-grid').querySelectorAll('.popup-league-btn').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.getElementById(`${side}-search`).value='';renderTeamGrid(side,leagueKey);}
+// 팀 선택 팝업 맨 위 "★ 내 팀" — 즐겨찾기 팀을 한 번에 고름(예측할 수 있는 팀만)
+function renderPopupFav(side) {
+  const box = document.getElementById(`${side}-fav`); if (!box) return;
+  const favs = getFavoriteTeams().filter(t => !predictableTeams || predictableTeams.has(t));
+  box.hidden = !favs.length;
+  box.innerHTML = favs.length ? `<span class="popup-fav-h">★ 내 팀</span>${favs.map(t => `<button type="button" class="popup-fav-chip${selectedTeams[side] === t ? ' selected' : ''}" onclick="selectTeamFromPopup('${side}','${escJs(t)}')"><img src="${logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'">${shortName(t)}</button>`).join('')}` : '';
+}
 function filterTeams(side,val){renderTeamGrid(side,currentLeagueTab[side],val);}
 // ── 홈·원정 바꾸기(2026-10-05) ──
 // 두 팀 자리를 바꿈: 로고가 서로의 자리로 건너가는 연출(0.42초) 뒤 실제로 바꿔 그림. 한쪽만 골랐으면 그 팀이 반대편으로 옮겨감.
@@ -6347,47 +6370,6 @@ function showPage(page, fromHistory) {
   if(page==='shootout'){initShootout();}
 }
 
-// 로고 클릭 = 지금 보고 있는 탭을 그 자리에서 새로고침(전체 페이지 리로드는 아님 —
-// 리로드하면 해시 라우팅이 없는 이상 항상 '경기 예측' 탭으로 돌아가버리기 때문)
-function refreshCurrentTab() {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  const bars = document.getElementById('nav-logo-bars');
-  if (bars) bars.classList.add('animate');
-  const stopBars = () => { if (bars) bars.classList.remove('animate'); };
-  const activePage = document.querySelector('.page.active');
-  if (!activePage) { setTimeout(stopBars, 500); return; }
-  let page = activePage.id.replace('page-', '');
-  if (page === 'league') page = lgState.tab;
-  let job;
-  if (page === 'overview') {
-    job = loadLeagueOverview(lgState.code, lgState.season);
-  } else if (page === 'history') {
-    delete lgHistoryCache[lgState.code];
-    job = loadLeagueHistory(lgState.code);
-  } else if (page === 'myteams') {
-    job = loadMyTeamsPage();
-  } else if (page === 'predict') {
-    job = Promise.all([loadTodayMatches(), loadBigMatch(), loadMyTeamWidget(), loadAccuracy(), loadTrackStrip()]);
-  } else if (page === 'champion') {
-    job = loadChampion(currentLeagueCode || 'PL');
-  } else if (page === 'standings') {
-    if (document.getElementById('ucl-tournament-content').style.display === 'block') {
-      job = loadTournament();
-    } else {
-      const activeLeagueTab = document.querySelector('#league-tabs .league-tab.active');
-      const lg = activeLeagueTab ? activeLeagueTab.dataset.league : 'PL';
-      job = lg === 'CL' ? (uclView === 'standings' && uclGroupEra() ? loadUclGroups() : loadStandings('CL')) : loadStandings(lg);
-    }
-  } else if (page === 'schedule') {
-    delete scheduleData[schedKeyOf(lgState.code, lgState.season)];
-    job = loadSchedule(lgState.code, null, lgState.season);
-  } else if (page === 'players') {
-    job = loadPlayers();
-  } else if (page === 'shootout') {
-    initShootout();
-  }
-  Promise.resolve(job).catch(() => {}).finally(stopBars);
-}
 let currentChampionData = null;
 let currentLeagueCode = 'PL';
 
@@ -6590,7 +6572,7 @@ function renderChampionResults(data) {
   const inU = byUcl[data.uclSpots - 1], outU = byUcl[data.uclSpots];
   document.getElementById('champ-summary').innerHTML = `<div class="st-summary champ-sum">
     ${sumTeam(byChamp[0], '우승 1순위', `우승 확률 ${pctTxt(byChamp[0].champion_prob)}${byChamp[1] ? ` · 2위 ${shortName(byChamp[1].team)} ${pctTxt(byChamp[1].champion_prob)}` : ''}`, 'champ')}
-    ${inU && outU ? `<div class="st-sum"><span class="st-sum-label">UCL권 경계 (${data.uclSpots}위)</span><span class="st-sum-team"><b>${shortName(inU.team)} ${pctTxt(inU.ucl_prob)}</b></span><span class="st-sum-sub">바로 아래 ${shortName(outU.team)} ${pctTxt(outU.ucl_prob)}</span></div>` : ''}
+    ${inU && outU ? `<div class="st-sum"><span class="st-sum-label">UCL권 경계 (${data.uclSpots}위)</span><span class="st-sum-team" onclick="openTeamInfo('${escJs(inU.team)}')"><img src="${inU.logo || logos[inU.team] || ''}" alt="" onerror="this.style.display='none'"><b>${shortName(inU.team)} ${pctTxt(inU.ucl_prob)}</b></span><span class="st-sum-sub st-sum-sub-team"><img src="${outU.logo || logos[outU.team] || ''}" alt="" onerror="this.style.display='none'">바로 아래 ${shortName(outU.team)} ${pctTxt(outU.ucl_prob)}</span></div>` : ''}
     ${sumTeam(byRele[0], '강등 위험 1순위', `강등 확률 ${pctTxt(byRele[0].relegation_prob)}`, 'rel')}
     <div class="st-sum"><span class="st-sum-label">시뮬레이션</span><span class="st-sum-team"><b>${data.nSim.toLocaleString()}회</b></span><span class="st-sum-sub">남은 ${data.remaining}경기 · 약 0.1초</span></div>
   </div>`;
@@ -7170,7 +7152,7 @@ function renderStandings(data, leagueCode, keepSort) {
   // 지난 라운드 대비 순위 변동: 이번 시즌 "전체" 순위표에서만(서버가 같이 받아 둔 data.movement)
   const mvMap = view === 'all' && !finished && data.movement && Object.keys(data.movement).length ? data.movement : null;
   const sortBar = sort !== 'rank' ? `<div class="st-sortbar"><span>${sort === 'gf' ? '득점 많은 순' : '실점 적은 순'}으로 보는 중 · 왼쪽 숫자는 ${sort === 'gf' ? '득점' : '실점'} 순위, 괄호는 리그 순위</span><button onclick="setStandingsSort('rank')">순위표로 돌아가기</button></div>` : '';
-  let html = `${sortBar}<div class="st-table-wrap"><table class="standings-table st-table sort-${sort}"><thead><tr><th style="width:${mvMap ? 58 : 44}px">#</th><th>팀</th><th class="center">경기</th><th class="center">승</th><th class="center">무</th><th class="center">패</th><th class="center hide-mobile col-gf">득점</th><th class="center hide-mobile col-ga">실점</th><th class="center">득실</th><th class="center hide-mobile">최근 5경기</th><th class="center">승점</th></tr></thead><tbody>`;
+  let html = `${sortBar}<div class="st-table-wrap"><table class="standings-table st-table sort-${sort}"><thead><tr><th style="width:${mvMap ? 58 : 44}px">#</th><th>팀</th><th class="center n">경기</th><th class="center n">승</th><th class="center n">무</th><th class="center n">패</th><th class="center n hide-mobile col-gf">득점</th><th class="center n hide-mobile col-ga">실점</th><th class="center n">득실</th><th class="center hide-mobile">최근 5경기</th><th class="center">승점</th></tr></thead><tbody>`;
   shown.forEach((team, i) => {
     const idx = team.rank - 1;
     let zc = '';
@@ -8607,7 +8589,7 @@ function renderShootoutPickKickersHtml() {
     return `
       <div class="kicker-row ${idx >= 0 ? 'selected' : ''}" onclick="toggleMyKicker('${escJs(p.name)}')">
         ${kickerAvatarHtml(p)}
-        <div class="kicker-row-info"><div class="kicker-row-name">${p.name}</div><div class="kicker-row-pos">${POSITION_LABEL[p.position] || p.position}</div></div>
+        <div class="kicker-row-info"><div class="kicker-row-name">${p.name}</div><div class="kicker-row-pos">${({ Goalkeeper: 'GK', Defence: 'DF', Midfield: 'MF', Offence: 'FW' })[p.position] || p.position}</div></div>
         <div class="kicker-order-badge">${idx >= 0 ? idx + 1 : ''}</div>
       </div>
     `;
@@ -9381,13 +9363,32 @@ async function cbSearch(q) {
   const ko = Object.fromEntries(Object.entries(await fetchTeamsMeta()).map(([t, v]) => [t, v.ko]));
   const all = getAllTeamsForSearch().filter(t => cbLeagueOf(t));
   const norm = s => String(s || '').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, '');
-  const hits = all.filter(t => [t, shortName(t), cleanTeamName(t), ko[t]].some(n => norm(n).includes(norm(q)))).slice(0, 8);
-  box.innerHTML = hits.length ? hits.map((t, k) => `<button class="cb-res${k ? '' : ' first'}" data-team="${cbAttr(t)}" onclick="cbGoToTeam(this.dataset.team)"><img src="${logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'"><b>${shortName(t)}</b><small>${ko[t] || ''}</small><em>${(CB_LEAGUES.find(l => l[0] === cbLeagueOf(t)) || [])[1] || ''}</em></button>`).join('')
-    : '<div class="cb-res none">찾는 구단이 없어요 · 5대 리그·챔스 이번 시즌 구단만 있어요</div>';
-  box.classList.add('open');
+  const hits = all.filter(t => [t, shortName(t), cleanTeamName(t), ko[t]].some(n => norm(n).includes(norm(q)))).slice(0, 5);
+  const seq = ++cbSearchSeq;
+  const teamHtml = hits.map(t => `<button class="cb-res" data-team="${cbAttr(t)}" onclick="cbGoToTeam(this.dataset.team)"><img src="${logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'"><b>${shortName(t)}</b><small>${ko[t] || ''}</small><em>${(CB_LEAGUES.find(l => l[0] === cbLeagueOf(t)) || [])[1] || ''}</em></button>`).join('');
+  const paint = players => {
+    if (seq !== cbSearchSeq) return;
+    const plHtml = (players || []).map(p => `<button class="cb-res cb-res-pl" data-team="${cbAttr(p.team)}" data-pid="${p.id}" onclick="cbOpenPlayer(this)"><img class="cb-pl-ph" src="${p.photo || ''}" alt="" onerror="this.style.visibility='hidden'"><b>${p.name}</b><small>${shortName(p.team)}${POS_KO[p.pos] ? ' · ' + POS_KO[p.pos] : ''}</small><img class="cb-pl-crest" src="${logos[p.team] || ''}" alt="" onerror="this.remove()"></button>`).join('');
+    box.innerHTML = (teamHtml ? `<div class="cb-res-h">구단</div>${teamHtml}` : '') + (plHtml ? `<div class="cb-res-h">선수 <span>이번 시즌 5대 리그</span></div>${plHtml}` : '')
+      || (players ? '<div class="cb-res none">찾는 구단·선수가 없어요 · 5대 리그·챔스 이번 시즌 구단과 5대 리그 선수만 있어요</div>' : '<div class="cb-res none">찾는 중…</div>');
+    box.querySelector('.cb-res:not(.none)')?.classList.add('first');
+    box.classList.add('open');
+  };
+  paint(null);   // 구단은 바로, 선수는 서버 검색이 오면(입력이 멈춘 뒤 0.18초)
+  clearTimeout(cbSearchTimer);
+  if (q.length < 2) { paint([]); return; }
+  cbSearchTimer = setTimeout(() => fetch(`${API}/players/search?q=${encodeURIComponent(document.getElementById('cb-search-input').value.trim())}&limit=8`)
+    .then(r => (r.ok ? r.json() : { players: [] })).then(d => paint(d.players || [])).catch(() => paint([])), 180);
+}
+let cbSearchSeq = 0, cbSearchTimer = null;
+// 더보기 "구단·선수 검색" — 구단 둘러보기를 열고 검색창에 바로 입력
+function openSearch() { openClubBrowser(); setTimeout(() => document.getElementById('cb-search-input')?.focus(), 350); }
+function cbOpenPlayer(el) {
+  track('player_search', { team: shortName(el.dataset.team) });
+  openPlayerCard(el.dataset.team, +el.dataset.pid);
 }
 function cbSearchKey(e) {
-  if (e.key === 'Enter') { const f = document.querySelector('#cb-results .cb-res.first'); if (f) cbGoToTeam(f.dataset.team); }
+  if (e.key === 'Enter') { const f = document.querySelector('#cb-results .cb-res.first'); if (f) f.click(); }
   else if (e.key === 'Escape') { e.stopPropagation(); if (e.target.value) { e.target.value = ''; cbSearch(''); } else closeClubBrowser(); }
 }
 async function cbGoToTeam(team) {
@@ -9443,6 +9444,12 @@ document.addEventListener('keydown', e => {
   addEventListener('resize', () => { if (document.getElementById('club-browser').classList.contains('show')) layoutCb(true); });
 })();
 
+// ── 새로고침 = 첫 화면(2026-10-08, 사용자 요청): 주소에 남은 탭(#league/…)·경기(?match=)를 지우고 경기 예측 첫 화면으로.
+// 공유 링크·랜딩 링크로 처음 들어온 경우(새로고침이 아님)는 그대로 그 화면
+try {
+  if (performance.getEntriesByType('navigation')[0]?.type === 'reload' && (location.hash || /[?&]match=/.test(location.search)))
+    history.replaceState(null, '', location.pathname);
+} catch (e) {}
 // ── 뒤로가기(2026-09-30): 폰에서 창을 닫으려고 뒤로가기를 누르면 사이트를 나가버렸음(기록이 하나도 안 쌓였음) ──
 // · 탭 이동은 기록에 남김(주소 #standings 등 — 새로고침해도 그 탭) → 뒤로가기 = 이전 탭
 // · 창(선수 카드·팀 정보·미리보기·구단 둘러보기 등)이 떠 있는 동안 기록에 "창" 한 칸(fdGuard)을 얹어 둠 → 뒤로가기 = 가장 위 창 하나 닫기
@@ -9474,13 +9481,18 @@ const nav = { pendingBack: false, deferred: null };
 const ovOpen = ([id, , cls = 'show']) => !!document.getElementById(id)?.classList.contains(cls);
 const anyOverlay = () => OVERLAYS.some(ovOpen);
 function curPage() { return document.querySelector('.page.active')?.id.slice(5) || 'predict'; }
+// 기록 규칙(2026-10-08, 사용자 요청 — 리그·탭을 오가다 보면 경기 예측·랜딩으로 돌아가려고 뒤로가기를 수십 번 눌러야 했음):
+// 앱 안에선 "홈(경기 예측) + 지금 화면" 두 칸만. 홈에서 다른 화면으로 갈 때만 한 칸 쌓고(fdDepth 1), 그다음 화면 이동·리그·탭·시즌
+// 바꾸기는 그 칸을 덮어씀 → 어디서든 뒤로가기 한 번 = 홈, 한 번 더 = 앱에 들어오기 전(랜딩). 다른 화면에서 홈으로 가면 그 칸을 되돌림.
+// 홈이 아닌 화면으로 바로 들어왔으면(랜딩의 순위표 링크 등) 칸을 쌓지 않고 덮어씀(뒤로가기 한 번 = 랜딩)
 function navPush(page) {
   if (nav.pendingBack) { nav.deferred = page; return; }   // 창 칸을 치우는 중이면 그게 끝난 뒤에
   const url = location.pathname + (page === 'predict' ? '' : '#' + page);
+  const st = history.state || {}, depth = st.fdDepth || 0, entryHome = !!st.fdEntryHome;
   try {
-    // 창을 닫자마자 탭을 옮긴 경우(팀 정보 → "순위표 보기") 남은 창 칸을 새 탭으로 바꿔 씀
-    if (history.state?.fdGuard && !anyOverlay()) history.replaceState({ fdPage: page }, '', url);
-    else history.pushState({ fdPage: page }, '', url);
+    if (depth === 1 && page === 'predict') { nav.homeBack = true; history.back(); return; }   // 홈 칸으로 되돌아감
+    if (depth === 0 && entryHome && page !== 'predict') history.pushState({ fdPage: page, fdDepth: 1, fdEntryHome: true }, '', url);
+    else history.replaceState({ fdPage: page, fdDepth: depth, fdEntryHome: entryHome }, '', url);
   } catch (e) { /* file:// 등 */ }
 }
 const SCROLL_LOCK = ['cal-modal', 'pc-modal', 'team-search-modal', 'ti-modal', 'match-predict-modal', 'track-record-modal', 't-modal'];   // 화면을 덮는 창만(후원·팀 선택 팝업 제외, 구단 둘러보기는 자체 잠금)
@@ -9489,17 +9501,18 @@ function navSync() {
   if (nav.pendingBack) return;
   const guard = history.state?.fdGuard, open = anyOverlay();
   try {
-    if (open && !guard) history.pushState({ fdPage: curRoute(), fdGuard: true }, '');
+    if (open && !guard) history.pushState({ fdPage: curRoute(), fdGuard: true, fdDepth: history.state?.fdDepth || 0, fdEntryHome: !!history.state?.fdEntryHome }, '');
     else if (!open && guard) { nav.pendingBack = true; history.back(); }
   } catch (e) {}
 }
 (function () {
   try { history.scrollRestoration = 'manual'; } catch (e) {}
-  const h = location.hash.slice(1);
-  try { history.replaceState({ fdPage: isRoute(h) ? h : 'predict' }, ''); } catch (e) {}
+  const h = location.hash.slice(1), entry = isRoute(h) ? h : 'predict';
+  try { history.replaceState({ fdPage: entry, fdDepth: 0, fdEntryHome: entry === 'predict' }, ''); } catch (e) {}
   const mo = new MutationObserver(navSync);   // 같은 순간에 닫고 여는 경우(미리보기 → 팀 정보)는 한 번에 모여 와서 칸이 그대로 유지됨
   OVERLAYS.forEach(([id]) => { const el = document.getElementById(id); if (el) mo.observe(el, { attributes: true, attributeFilter: ['class'] }); });
   addEventListener('popstate', e => {
+    if (nav.homeBack) { nav.homeBack = false; return; }   // navPush가 홈 칸으로 되돌린 것(화면은 이미 홈)
     if (nav.pendingBack) {   // 우리가 치운 창 칸
       nav.pendingBack = false;
       if (nav.deferred) { const p = nav.deferred; nav.deferred = null; navPush(p); }
@@ -9518,7 +9531,7 @@ if (location.hash) setTimeout(() => {
   const r = decodeURIComponent(location.hash.slice(1));
   if (!isRoute(r) || r === 'predict') return;
   goRoute(r, true);
-  try { history.replaceState({ fdPage: curRoute() }, '', location.pathname + location.search + '#' + curRoute()); } catch (e) {}   // 예전 주소(#standings)는 새 주소로 바꿔 둠
+  try { history.replaceState({ ...(history.state || {}), fdPage: curRoute() }, '', location.pathname + location.search + '#' + curRoute()); } catch (e) {}   // 예전 주소(#standings)는 새 주소로 바꿔 둠
 }, 100);
 </script>
 

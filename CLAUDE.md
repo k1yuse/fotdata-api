@@ -118,7 +118,7 @@ Vercel 루트는 `index.html`. landing.html을 고치면 **반드시 `cp landing
 | 리그 | `/standings/{리그}?season=&view=` · `/standings/{리그}/movement` · `/schedule/{리그}?season=` · `/ucl/tournament` · `/ucl/groups` · `/league/seasons/{리그}` · `/league/history/{리그}` · `/league/players/{리그}?season=` · `/league/bestxi/{리그}?season=&round=` |
 | 팀·선수 | `/team/info/{팀}`(wiki·rivals·manager) · `/team/squad/{팀}?season=`(best11·manager) · `/team/stats/{팀}` · `/team/players/{팀}` · `/player/profile/{id}` · `/player/seasons/{id}` · `/players/leaders/{리그}` |
 | 경기 | `/matches/window` · `/matches/live` · `/match/detail` · `/match/preview` · `/bigmatch` |
-| 기타 | `/teams` · `/teams/meta` · `/teams/ko` · `/logos` · `/meta/countries` · `/proxy/logo` · `/calendar/{slug}.ics` · `/calendar/my.ics?t=` · `/accuracy` |
+| 기타 | `/players/search?q=`(이번 시즌 5대 리그 선수 이름 검색 — 3글자 이하는 단어 첫머리만) · `/teams` · `/teams/meta` · `/teams/ko` · `/logos` · `/meta/countries` · `/proxy/logo` · `/calendar/{slug}.ics` · `/calendar/my.ics?t=` · `/accuracy` |
 
 리그 코드: `PL` `PD` `BL1` `SA` `FL1` `CL`
 
@@ -132,6 +132,8 @@ Vercel 루트는 `index.html`. landing.html을 고치면 **반드시 `cp landing
 - 예측 결과: 두 독립 세로 열(`.predict-col`) — 왼쪽 예측 결과·다른 경기·결장·부상·홈팀 최근 경기 / 오른쪽 맞대결·경기 분석·라인업·주요 선수·원정팀 최근 경기. `fitMoreCard()`가 짧은 열에 "다른 경기" 카드를 넣거나 간격을 넓혀 두 열 끝을 맞춤(부가 정보가 올 때마다 다시). 폰은 `display: contents` + `order`.
 - 리그 개요: 넓은 화면 두 열 끝 맞춤 `fitLoCols()`(차이 220px 이하일 때만 `.fit`).
 - 공유 링크 `/m/{홈}-vs-{원정}`, 앱 주소창은 `/app?match=`.
+- **뒤로가기 기록**(`navPush`): 앱 안에선 "홈(경기 예측) + 지금 화면" 두 칸만 — 홈에서 다른 화면으로 갈 때만 한 칸 쌓고(`fdDepth` 1) 그 뒤 화면·리그·탭·시즌 이동은 덮어씀, 홈으로 가면 그 칸을 되돌림 → 어디서든 뒤로 한 번 = 홈, 한 번 더 = 랜딩. 창(팀 정보 등)은 그 위 "창" 칸(`fdGuard`)으로 따로. **새로고침**은 주소의 탭·`?match=`를 지우고 첫 화면(공유 링크로 처음 들어온 건 그대로), 로고 클릭 = `/app` 새로 열기.
+- 검색(⌘K·상단 검색·더보기 "구단·선수 검색"): 구단 둘러보기 검색창이 구단(바로) + 선수(`/players/search`, 0.18초 멈춘 뒤) — 선수를 누르면 선수 카드. 경기 예측 팀 선택 팝업 맨 위엔 ★ 내 팀 줄(즐겨찾기 바로 선택).
 
 ### 8.2 디자인 규칙
 - 색은 `:root` 토큰(`--bg #0a1020` 밤하늘 남색, `--surface`, `--blue #58a6ff` …), 둥글기 `--r-*`, 그림자 `--shadow-*`, 글자 `--fs-*`. 템플릿 문자열·캔버스·SVG 속성만 hex 그대로.
@@ -140,6 +142,7 @@ Vercel 루트는 `index.html`. landing.html을 고치면 **반드시 `cp landing
 - 경고는 화면 안 상자 대신 `showToast(msg, ms, 'warn')`. 용어 도움말은 `TIPS` + `<button class="ii" data-tip="키">`.
 - 시각은 `koClock()`("오후 8:30", 앞자리 0 없음), 남은 시간 `koRel()`. 짧은 팀 이름 `teamNameHtml()`(≤768px 짧은 이름).
 - 이름: 경기장 위 = "M. Salah"(`mdInitialName`), 목록·카드 = 전체 이름(`afFullName`). 등번호는 이름 앞 회색.
+- 포지션은 **영어 약자**(GK·CB·LB·RB·LWB·RWB·CDM·CM·CAM·LM·RM·LW·RW·ST, 묶음은 GK·DF·MF·FW — `DPOS_KO`·`POS_KO`·`POSITION_LABEL`, 이름은 예전 그대로 값만 약자). 주장은 글자 대신 초록 원 안 C(`.cap-ic`).
 - 3D 로고·구단 로고엔 원본에 없는 효과(테두리·광택)를 더하지 않음. 홍보물엔 구단 엠블럼 금지(상표).
 - 카드 높이를 바꾸면 첫 화면 자리 잡기 `.slot-wait` min-height도 같이(빅매치 331/폰 175, 트랙레코드 67, 내 팀 53).
 
