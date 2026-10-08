@@ -100,7 +100,7 @@
       --shadow-lg: 0 16px 48px rgba(0,0,0,0.5), 0 4px 12px rgba(0,0,0,0.3);
       --glow-btn: 0 6px 20px rgba(31,111,235,0.35);
       --glow-btn-hover: 0 8px 26px rgba(31,111,235,0.45);
-      --fs-xs: 11px; --fs-sm: 12px; --fs-md: 13px; --fs-base: 14px; --fs-lg: 16px; --fs-xl: 18px; --fs-2xl: 22px; --fs-3xl: 28px;
+      --fs-xs: 12px; --fs-sm: 12px; --fs-md: 13px; --fs-base: 14px; --fs-lg: 16px; --fs-xl: 18px; --fs-2xl: 22px; --fs-3xl: 28px;
     }
     /* 버튼·입력칸도 사이트 글꼴(브라우저 기본값 Arial이 섞였었음) */
     button, input, select, textarea { font-family: inherit; }
@@ -117,7 +117,7 @@
     /* 푸터 출처 표기 — football-data 이용 약관 7.1의 문구("Football data provided by the Football-Data.org API")는 그대로 둘 것 */
     .ft-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; text-align: right; max-width: 680px; }
     .ft-copy { font-size: 12px; color: var(--muted); }
-    .ft-credits { font-size: 11px; line-height: 1.55; color: var(--faint); }
+    .ft-credits { font-size: 12px; line-height: 1.55; color: var(--faint); }
     .ft-credits a { color: inherit; text-decoration: underline; text-decoration-color: rgba(124,136,161,0.45); text-underline-offset: 2px; }
     .ft-credits a:hover { color: var(--blue); }
     .ft-links { font-size: 12px; color: var(--faint); margin-top: 2px; }   /* 개인정보처리방침은 굵게(다른 링크와 구분 — 개인정보보호법 안내 관례) */
@@ -133,7 +133,7 @@
     .scroll-fade-x.fade-left:not(.fade-right) { -webkit-mask-image: linear-gradient(to left, #000 calc(100% - 20px), transparent 100%); mask-image: linear-gradient(to left, #000 calc(100% - 20px), transparent 100%); }
     .nav-search-btn { flex-shrink: 0; display: flex; align-items: center; gap: 6px; margin-left: 8px; padding: 7px 10px; background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 10px; color: var(--muted); cursor: pointer; transition: all .15s; }
     .nav-search-btn:hover { border-color: var(--blue); color: var(--text); }
-    .nav-search-kbd { font-size: 11px; font-weight: 600; }
+    .nav-search-kbd { font-size: 12px; font-weight: 600; }
     .nav-donate-btn { display: none; }
     @media (min-width: 640px) {
       .nav-donate-btn { flex-shrink: 0; display: flex; align-items: center; justify-content: center; margin-left: 8px; width: 34px; height: 34px; padding: 0; background: rgba(88,166,255,0.1); border: 0.5px solid rgba(88,166,255,0.4); border-radius: 10px; color: var(--blue); cursor: pointer; transition: background .15s; }
@@ -159,7 +159,7 @@
     .trs-icon svg { width: 18px; height: 18px; fill: none; stroke: var(--green); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .trs-main { flex: 1; min-width: 0; }
     .trs-t { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; color: var(--text); }
-    .trs-chip { font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 99px; color: var(--green); background: rgba(63,185,80,0.13); white-space: nowrap; }
+    .trs-chip { font-size: 12px; font-weight: 800; padding: 2px 8px; border-radius: 99px; color: var(--green); background: rgba(63,185,80,0.13); white-space: nowrap; }
     .trs-chip.soon { color: var(--blue-text); background: rgba(88,166,255,0.12); font-weight: 700; }
     .trs-s { margin-top: 3px; font-size: 12px; color: var(--muted); line-height: 1.45; word-break: keep-all; } .trs-s b { color: var(--text); }
     @media (max-width: 600px) { .trs-s { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } }   /* 폰은 한 줄(첫 화면 높이 절약) */
@@ -169,28 +169,28 @@
     .modal.trm-modal { width: 460px; }
     .trm-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .trm-tile { display: flex; flex-direction: column; gap: 2px; padding: 10px; border-radius: 14px; border: 0.5px solid var(--border); background: rgba(10,16,32,0.45); min-width: 0; }
-    .trm-tile span { font-size: 11px; color: var(--muted); font-weight: 600; } .trm-tile b { font-size: 20px; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; } .trm-tile small { font-size: 11px; color: var(--faint); }
+    .trm-tile span { font-size: 12px; color: var(--muted); font-weight: 600; } .trm-tile b { font-size: 20px; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; } .trm-tile small { font-size: 12px; color: var(--faint); }
     .trm-tile.main { border-color: rgba(63,185,80,0.4); background: linear-gradient(160deg, rgba(63,185,80,0.13), rgba(10,16,32,0.4) 70%); } .trm-tile.main b { color: var(--green); }
     .trm-cmp { display: grid; grid-template-columns: 64px 1fr 74px; align-items: center; gap: 8px; margin: 6px 0; font-size: 12px; color: var(--text-2); }
     .trm-cmp.lg { grid-template-columns: 96px 1fr 74px; } .trm-cmp span { display: flex; align-items: center; gap: 6px; white-space: nowrap; } .trm-cmp span img { width: 14px; height: 14px; object-fit: contain; }
     .trm-cmp div { height: 8px; border-radius: 99px; background: var(--surface-2); overflow: hidden; } .trm-cmp div i { display: block; height: 100%; border-radius: 99px; background: var(--faint); } .trm-cmp div i.ai { background: linear-gradient(90deg, var(--green-strong), var(--green)); }
-    .trm-cmp b { text-align: right; font-variant-numeric: tabular-nums; color: var(--text); } .trm-cmp b small { color: var(--faint); font-weight: 500; font-size: 11px; }
+    .trm-cmp b { text-align: right; font-variant-numeric: tabular-nums; color: var(--text); } .trm-cmp b small { color: var(--faint); font-weight: 500; font-size: 12px; }
     .mr-row.trm-row { grid-template-columns: 40px minmax(0,1fr) 34px minmax(0,1fr) 62px; cursor: default; } .mr-row.trm-row[onclick] { cursor: pointer; } .mr-row.trm-row[onclick]:hover { background: rgba(88,166,255,0.07); }
-    .mr-row.trm-row b.when { font-size: 11px; color: var(--faint); }
-    .trm-pick { justify-self: end; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 99px; white-space: nowrap; color: var(--blue-text); background: rgba(88,166,255,0.1); }
+    .mr-row.trm-row b.when { font-size: 12px; color: var(--faint); }
+    .trm-pick { justify-self: end; font-size: 12px; font-weight: 700; padding: 2px 7px; border-radius: 99px; white-space: nowrap; color: var(--blue-text); background: rgba(88,166,255,0.1); }
     .trm-pick.away_win { color: var(--away); background: rgba(240,136,62,0.1); } .trm-pick.draw { color: var(--text-2); background: rgba(142,154,179,0.12); }
     .trm-pick.hit { color: var(--green); background: rgba(63,185,80,0.13); } .trm-pick.miss { color: var(--muted); background: rgba(142,154,179,0.12); }
     .trm-how { display: flex; flex-direction: column; gap: 8px; } .trm-how div { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-2); word-break: keep-all; } .trm-how strong { color: var(--text); margin-right: 6px; }
-    .trm-how b { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--blue-text); background: rgba(88,166,255,0.12); border: 0.5px solid rgba(88,166,255,0.35); }
+    .trm-how b { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--blue-text); background: rgba(88,166,255,0.12); border: 0.5px solid rgba(88,166,255,0.35); }
     .trm-first { margin-top: 14px; padding: 12px; border-radius: 14px; text-align: center; font-size: 13px; color: var(--text-2); background: rgba(31,111,235,0.08); border: 0.5px solid rgba(88,166,255,0.3); } .trm-first b { color: var(--blue-text); }
-    .trm-first small { display: block; margin-top: 3px; font-size: 11px; color: var(--faint); }
+    .trm-first small { display: block; margin-top: 3px; font-size: 12px; color: var(--faint); }
     @media (max-width: 420px) { .trm-tile b { font-size: 18px; } .mr-row.trm-row { grid-template-columns: 32px minmax(0,1fr) 28px minmax(0,1fr) 58px; gap: 4px; } .mr-row.trm-row .t img { width: 16px; height: 16px; } }
     .track-record-box { width: 480px; max-width: 92vw; max-height: 80vh; display: flex; flex-direction: column; }
     .track-record-box #track-record-body { overflow-y: auto; padding: 16px; }
     .tr-summary { display: flex; gap: 10px; margin-bottom: 16px; }
     .tr-summary-box { flex: 1; background: var(--bg); border: 0.5px solid var(--border); border-radius: 10px; padding: 12px; text-align: center; }
     .tr-summary-val { font-size: 22px; font-weight: 800; color: var(--blue); }
-    .tr-summary-label { font-size: 11px; color: var(--muted); margin-top: 4px; }
+    .tr-summary-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
     .tr-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 0.5px solid var(--surface-2); }
     .tr-row:last-child { border-bottom: none; }
     .tr-row-icon { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0; }
@@ -198,8 +198,8 @@
     .tr-row-icon.wrong { background: rgba(218,54,51,0.16); color: #e5484d; }
     .tr-row-info { flex: 1; min-width: 0; }
     .tr-row-match { font-size: 13px; color: var(--text); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .tr-row-detail { font-size: 11px; color: var(--muted); margin-top: 2px; }
-    .tr-row-date { font-size: 11px; color: var(--faint); flex-shrink: 0; }
+    .tr-row-detail { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .tr-row-date { font-size: 12px; color: var(--faint); flex-shrink: 0; }
     .team-search-input-wrap { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 0.5px solid var(--border); flex-shrink: 0; }
     .team-search-input-wrap input { flex: 1; background: none; border: none; outline: none; color: var(--text); font-size: 15px; font-family: inherit; }
     .team-search-input-wrap input::placeholder { color: var(--muted); }
@@ -260,7 +260,7 @@
 
 
     .standings-table { width: 100%; max-width: 1100px; margin: 0 auto; border-collapse: separate; border-spacing: 0; }
-    .standings-table th { font-size: 11px; font-weight: 700; color: var(--text-2); text-align: left; padding: 8px 12px; border-bottom: 0.5px solid var(--border); }
+    .standings-table th { font-size: 12px; font-weight: 700; color: var(--text-2); text-align: left; padding: 8px 12px; border-bottom: 0.5px solid var(--border); }
     @media (min-width: 769px) {
       .standings-table th { position: sticky; top: var(--nav-height, 60px); background: var(--surface); z-index: 5; box-shadow: 0 1px 0 var(--border); }
     }
@@ -289,8 +289,8 @@
     .today-head { justify-content: space-between; }
     .today-seg { text-transform: none; letter-spacing: 0; }
     .today-seg button { padding: 5px 11px; font-size: 12px; }
-    .today-card-date { font-size: 11px; color: var(--blue-text); font-weight: 700; margin-left: auto; font-variant-numeric: tabular-nums; }
-    .today-card-league { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 4px; margin-bottom: 8px; white-space: nowrap; }
+    .today-card-date { font-size: 12px; color: var(--blue-text); font-weight: 700; margin-left: auto; font-variant-numeric: tabular-nums; }
+    .today-card-league { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 4px; margin-bottom: 8px; white-space: nowrap; }
     .today-card-league img { width: 16px; height: 16px; object-fit: contain; }
     /* 작은 리그 로고 테두리 빛: 남색·짙은 로고(리그앙 등)가 어두운 바탕에 묻혀서 — 흰색 반전(EPL·챔스)은 인라인 filter가 우선이라 그대로 */
     .today-card-league img, .league-badge-sm img, .ti-fx-comp, .mp-meta img, .league-tab img, .champ-league-btn img, .more-meta img { filter: drop-shadow(0 0 1px rgba(236,241,250,0.45)); }
@@ -300,16 +300,16 @@
     .today-card-row img { width: 16px; height: 16px; object-fit: contain; flex-shrink: 0; }
     .today-card-row span.name { max-width: 92px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: color .15s; }
     .today-card-row span.score { font-weight: 700; color: var(--blue); margin-left: auto; }
-    .today-card-time { font-size: 11px; color: var(--muted); text-align: center; margin-top: 4px; }
+    .today-card-time { font-size: 12px; color: var(--muted); text-align: center; margin-top: 4px; }
     /* 다음 경기 카드 AI 예측: 팀 옆 승리 확률 + 짧은 막대 + 무(가장 높은 값만 진하게) */
-    .tc-pct { margin-left: auto; padding-left: 8px; font-size: 11px; font-weight: 600; color: var(--faint); font-variant-numeric: tabular-nums; }
+    .tc-pct { margin-left: auto; padding-left: 8px; font-size: 12px; font-weight: 600; color: var(--faint); font-variant-numeric: tabular-nums; }
     .tc-pct.home.top { color: var(--blue-text); font-weight: 800; } .tc-pct.away.top { color: var(--away); font-weight: 800; }
     .sp-mini.tc-bar { width: 100%; margin-top: 7px; }
     .tc-d { font-variant-numeric: tabular-nums; } .tc-d.top { color: var(--text); font-weight: 700; }
     .today-card-row.lose .today-card-hit, .today-card-row.lose .score { opacity: .45; }
-    .today-card .sp-verdict { font-size: 11px; }
+    .today-card .sp-verdict { font-size: 12px; }
     .player-hero { position: relative; display: flex; align-items: center; gap: 16px; padding: 18px 16px; margin-bottom: 8px; border-radius: 14px; background: linear-gradient(135deg, rgba(240,192,64,0.14), rgba(240,192,64,0.02)); border: 0.5px solid rgba(240,192,64,0.35); overflow: hidden; box-shadow: 0 6px 20px rgba(240,192,64,0.08); }
-    .player-hero-badge { font-size: 11px; font-weight: 700; color: var(--gold); display: flex; align-items: center; gap: 4px; margin-bottom: 3px; }
+    .player-hero-badge { font-size: 12px; font-weight: 700; color: var(--gold); display: flex; align-items: center; gap: 4px; margin-bottom: 3px; }
     .player-hero-badge svg { width: 12px; height: 12px; flex-shrink: 0; }
     .player-hero-photo { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; background: var(--surface-2); border: 2px solid var(--gold); flex-shrink: 0; }
     .player-hero-info { flex: 1; min-width: 0; }
@@ -318,8 +318,8 @@
     .player-hero-team img { width: 16px; height: 16px; object-fit: contain; }
     .player-hero-stat { text-align: right; flex-shrink: 0; }
     .player-hero-value { font-size: 20px; font-weight: 800; color: var(--gold); line-height: 1; }
-    .player-hero-unit { display: block; font-size: 11px; color: var(--muted); margin-top: 2px; }
-    .player-hero-rating { font-size: 11px; color: var(--muted); margin-top: 4px; }
+    .player-hero-unit { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .player-hero-rating { font-size: 12px; color: var(--muted); margin-top: 4px; }
 
     /* 팀 비교 레이더 차트 */
     .radar-legend { display: flex; justify-content: center; gap: 20px; margin-top: 4px; font-size: 12px; font-weight: 600; }
@@ -333,11 +333,11 @@
     .myteam-logo { width: 30px; height: 30px; object-fit: contain; flex-shrink: 0; }
     .myteam-info { flex: 1; min-width: 0; }
     .myteam-name { font-size: 13px; font-weight: 800; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .myteam-star { color: var(--ac); font-size: 11px; margin-right: 4px; vertical-align: 1px; }
-    .myteam-next { font-size: 11px; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
-    .myteam-badge { font-size: 11px; font-weight: 800; color: var(--ac); background: color-mix(in srgb, var(--ac) 14%, transparent); border-radius: 99px; padding: 1px 6px; margin-right: 5px; font-variant-numeric: tabular-nums; }   /* 둘째 줄 앞 — 이름이 한 줄을 다 쓰게(오른쪽 배지였을 땐 1000px에서 "Liver…"로 잘렸음) */
+    .myteam-star { color: var(--ac); font-size: 12px; margin-right: 4px; vertical-align: 1px; }
+    .myteam-next { font-size: 12px; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+    .myteam-badge { font-size: 12px; font-weight: 800; color: var(--ac); background: color-mix(in srgb, var(--ac) 14%, transparent); border-radius: 99px; padding: 1px 6px; margin-right: 5px; font-variant-numeric: tabular-nums; }   /* 둘째 줄 앞 — 이름이 한 줄을 다 쓰게(오른쪽 배지였을 땐 1000px에서 "Liver…"로 잘렸음) */
     .myteam-add { display: flex; align-items: center; justify-content: center; gap: 6px; border-radius: 14px; border: 1px dashed var(--border); background: transparent; color: var(--faint); font-size: 12px; font-weight: 600; font-family: inherit; cursor: pointer; min-height: 52px; transition: border-color .15s, color .15s; }
-    .myteam-add span { font-size: 16px; line-height: 1; } .myteam-add small { font-size: 11px; opacity: .8; }
+    .myteam-add span { font-size: 16px; line-height: 1; } .myteam-add small { font-size: 12px; opacity: .8; }
     .myteam-add:hover { border-color: var(--blue); color: var(--blue-text); }
     @media (max-width: 768px) {
       .myteam-row { display: flex; overflow-x: auto; scrollbar-width: none; } .myteam-row::-webkit-scrollbar { display: none; }
@@ -349,7 +349,7 @@
     .bigmatch-label { font-size: 13px; font-weight: 700; color: var(--blue); text-transform: none; letter-spacing: 0.5px; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 6px; }
     .bigmatch-label img { width: 32px; height: 32px; object-fit: contain; }
     /* PL 원본은 정사각형 캔버스 가운데 가로 띠에만 로고가 있어서(위아래 여백 ~55%) 정사각형 박스로는 작게 보임 — 가로로 넓은 박스에 cover로 여백만 잘라냄 */
-    .bigmatch-venue { text-align: center; font-size: 11px; color: var(--faint); margin-bottom: 18px; display: flex; align-items: center; justify-content: center; gap: 4px; }
+    .bigmatch-venue { text-align: center; font-size: 12px; color: var(--faint); margin-bottom: 18px; display: flex; align-items: center; justify-content: center; gap: 4px; }
     .bigmatch-venue svg { width: 11px; height: 11px; flex-shrink: 0; }
     .bigmatch-teams { display: flex; align-items: center; justify-content: center; gap: 28px; margin-bottom: 20px; }
     .bigmatch-team { display: flex; flex-direction: column; align-items: center; gap: 10px; flex: 1; max-width: 220px; min-width: 0; }
@@ -366,7 +366,7 @@
     .bigmatch-prob-bar .seg.home { background: var(--blue); }
     .bigmatch-prob-bar .seg.draw { background: var(--muted); }
     .bigmatch-prob-bar .seg.away { background: var(--away); }
-    .bigmatch-draw-prob { font-size: 11px; color: var(--muted); }
+    .bigmatch-draw-prob { font-size: 12px; color: var(--muted); }
     .bigmatch-countdown { display: flex; justify-content: center; gap: 12px; }
     .bigmatch-unit { background: var(--bg); border: 0.5px solid var(--border); border-radius: 10px; padding: 10px 0; text-align: center; width: 64px; box-sizing: border-box; }
     .bigmatch-unit .num { font-size: 28px; font-weight: 800; color: var(--blue); line-height: 1; font-variant-numeric: tabular-nums; }
@@ -379,7 +379,7 @@
       background-size: 260% 100%; background-position: 150% 0; animation: bannerSweep 7s ease-in-out 1.2s infinite; }
     @keyframes bannerSweep { 0% { background-position: 150% 0; } 22%, 100% { background-position: -50% 0; } }
     @media (prefers-reduced-motion: reduce) { .bigmatch-banner::after { animation: none; display: none; } .bigmatch-unit .num.flip { animation: none; } }
-    .bigmatch-unit .lbl { font-size: 11px; color: var(--muted); margin-top: 4px; }
+    .bigmatch-unit .lbl { font-size: 12px; color: var(--muted); margin-top: 4px; }
     @media (max-width: 480px) {
       .bigmatch-banner { padding: 16px; }
       .bigmatch-teams { gap: 10px; }
@@ -407,7 +407,7 @@
       .bigmatch-countdown { gap: 6px; }
       .bigmatch-unit { display: flex; align-items: baseline; justify-content: center; gap: 2px; width: auto; min-width: 54px; padding: 5px 8px; border-radius: 10px; }
       .bigmatch-unit .num { font-size: 15px; }
-      .bigmatch-unit .lbl { margin-top: 0; font-size: 11px; }
+      .bigmatch-unit .lbl { margin-top: 0; font-size: 12px; }
     }
     @media (max-width: 340px) {
       .bigmatch-teams { gap: 6px; }
@@ -441,7 +441,7 @@
     .pwa-install-icon { width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0; }
     .pwa-install-text { flex: 1; min-width: 0; }
     .pwa-install-text .t1 { font-size: 13px; font-weight: 700; color: var(--text); }
-    .pwa-install-text .t2 { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .pwa-install-text .t2 { font-size: 12px; color: var(--muted); margin-top: 2px; }
     .pwa-install-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
     .pwa-install-btn { background: linear-gradient(135deg, var(--blue), #4090e8); color: var(--bg); border: none; font-size: 12px; font-weight: 700; padding: 8px 12px; border-radius: 6px; cursor: pointer; }
     .pwa-install-btn:hover { box-shadow: var(--glow-btn-hover); } .pwa-install-close:hover { color: var(--text); }
@@ -478,7 +478,7 @@
     }
     .pts { font-weight: 700; color: var(--blue); }
     .form-badges { display: flex; gap: 3px; justify-content: center; }
-    .form-badge { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+    .form-badge { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
     .form-badge.W { background: var(--green-strong); color: #fff; }
     .form-badge.D { background: var(--faint); color: #fff; }
     .form-badge.L { background: var(--red-strong); color: #fff; }
@@ -506,12 +506,12 @@
     .st-sum { border: 0.5px solid var(--border); border-radius: 14px; padding: 10px 12px; background: rgba(10,16,32,0.4); min-width: 0; display: flex; flex-direction: column; gap: 4px; }
     .st-sum.champ { border-color: rgba(227,179,65,0.45); background: linear-gradient(160deg, rgba(227,179,65,0.14), rgba(10,16,32,0.4) 70%); }
     .st-sum.lead { border-color: rgba(88,166,255,0.4); background: linear-gradient(160deg, rgba(88,166,255,0.12), rgba(10,16,32,0.4) 70%); }
-    .st-sum-label { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: .2px; }
+    .st-sum-label { font-size: 12px; color: var(--muted); font-weight: 600; letter-spacing: .2px; }
     .st-sum.champ .st-sum-label { color: var(--gold); } .st-sum.lead .st-sum-label { color: var(--blue-text); }
     .st-sum-team { display: flex; align-items: center; gap: 8px; min-width: 0; cursor: pointer; }
     .st-sum-team img { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
     .st-sum-team b { font-size: 14px; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .st-sum-sub { font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .st-sum-sub { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
     .st-sum-rel { display: flex; flex-direction: column; gap: 2px; }
     .st-sum-rel span { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #ffa198; cursor: pointer; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
     .st-sum-rel img { width: 16px; height: 16px; object-fit: contain; }
@@ -531,8 +531,8 @@
     .st-table tr.champ:hover td { background: rgba(227,179,65,0.13); }
     /* 승점은 칸 가운데 그대로, 감점은 그 오른쪽에 붙임(흐름 밖이라 승점 위치가 안 밀림) */
     .st-pts-wrap { position: relative; display: inline-block; }
-    .st-ded { position: absolute; left: 100%; top: 50%; transform: translateY(-50%); margin-left: 5px; font-size: 11px; font-weight: 700; color: var(--red); background: rgba(248,81,73,0.12); border-radius: 4px; padding: 1px 4px; cursor: help; white-space: nowrap; }
-    .st-rank small { font-size: 9px; color: var(--faint); font-weight: 500; margin-left: 1px; }
+    .st-ded { position: absolute; left: 100%; top: 50%; transform: translateY(-50%); margin-left: 5px; font-size: 12px; font-weight: 700; color: var(--red); background: rgba(248,81,73,0.12); border-radius: 4px; padding: 1px 4px; cursor: help; white-space: nowrap; }
+    .st-rank small { font-size: 10px; color: var(--faint); font-weight: 500; margin-left: 1px; }
     .st-table.sort-gf td.col-gf, .st-table.sort-ga td.col-ga { color: var(--blue-text); font-weight: 700; background: rgba(88,166,255,0.06); }
     /* 우승 줄에선 금색 바탕을 그대로 두고 글자만 파랗게(파란 칸이 금색 줄을 끊어 보이던 문제) */
     .st-table.sort-gf tr.champ td.col-gf, .st-table.sort-ga tr.champ td.col-ga { background: rgba(227,179,65,0.085); }
@@ -555,7 +555,7 @@
     .st-gd.pos { color: var(--green); } .st-gd.neg { color: var(--red); } .st-gd { color: var(--muted); font-variant-numeric: tabular-nums; }
     .st-pts { display: inline-block; min-width: 34px; padding: 3px 8px; border-radius: 10px; background: rgba(88,166,255,0.12); color: var(--blue-text); font-weight: 800; font-size: 13px; font-variant-numeric: tabular-nums; }
     .st-table tr.champ .st-pts { background: rgba(227,179,65,0.16); color: #f2cc60; }
-    .st-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 16px; max-width: 1100px; margin: 14px auto 0; font-size: 11px; color: var(--muted); }
+    .st-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 16px; max-width: 1100px; margin: 14px auto 0; font-size: 12px; color: var(--muted); }
     .st-legend i { display: inline-block; width: 8px; height: 8px; border-radius: 4px; margin-right: 5px; vertical-align: 0; }
     .st-legend-note { color: var(--faint); }
     @media (max-width: 768px) {
@@ -563,7 +563,7 @@
       .st-controls { gap: 8px; }
       .st-seg button { padding: 6px 11px; font-size: 12px; }
       .st-table td { padding: 8px 5px; }
-      .st-rank { min-width: 22px; height: 20px; font-size: 11px; }
+      .st-rank { min-width: 22px; height: 20px; font-size: 12px; }
       .st-pts { min-width: 28px; padding: 2px 6px; font-size: 12px; }
     }
 
@@ -573,7 +573,7 @@
     .grp-title { font-size: 14px; font-weight: 800; color: var(--text); padding: 11px 14px; border-bottom: 0.5px solid var(--surface-2); }
     .grp-table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
     .grp-table td { white-space: nowrap; }   /* 득실 "21-9"가 두 줄로 접혔음 */
-    .grp-table th { font-size: 11px; font-weight: 500; color: var(--faint); padding: 8px 4px; text-align: center; }
+    .grp-table th { font-size: 12px; font-weight: 500; color: var(--faint); padding: 8px 4px; text-align: center; }
     .grp-table th.grp-team-h { text-align: left; } .grp-table th.grp-form-h { text-align: left; padding-left: 8px; }
     .grp-table td { padding: 8px 4px; text-align: center; color: var(--text-2); border-top: 0.5px solid var(--surface-2); }
     .grp-table td:first-child { position: relative; width: 30px; }
@@ -585,7 +585,7 @@
     .grp-table td:nth-child(2) { text-align: left; }
     .grp-pts { color: var(--text); }
     .grp-form { display: flex; gap: 3px; padding-left: 4px; }
-    .gf { width: 20px; height: 20px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; }
+    .gf { width: 20px; height: 20px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; }
     .gf.W { background: var(--green-strong); } .gf.D { background: var(--faint); } .gf.L { background: var(--red-strong); }
     @media (max-width: 900px) { .grp-grid { grid-template-columns: 1fr; } }
     .grp-table th { white-space: nowrap; }
@@ -595,7 +595,7 @@
       .grp-table { font-size: 12px; }
       .grp-table td, .grp-table th { padding: 7px 3px; }
       .grp-table .team-cell span { max-width: 92px; }
-      .gf { width: 18px; height: 18px; font-size: 9.5px; border-radius: 4px; }
+      .gf { width: 18px; height: 18px; font-size: 10.5px; border-radius: 4px; }
     }
     @media (max-width: 480px) { .grp-table th:nth-child(3), .grp-table td:nth-child(3) { display: none; } /* 경기 수는 조별리그라 전부 6 */
       .grp-form .gf:nth-child(-n+3) { display: none; } .grp-table .team-cell img { width: 18px; height: 18px; } .grp-table .team-cell { gap: 6px; } .grp-table .team-cell span { max-width: 76px; } }
@@ -605,7 +605,7 @@
     .ko-bracket.with-po { min-width: 1120px; gap: 14px; }
     .ko-col { display: flex; flex-direction: column; flex: 1 1 0; min-width: 0; max-width: 150px; position: relative; z-index: 1; }
     .ko-final-col { max-width: 176px; flex: 1.2 1 0; }
-    .ko-label { text-align: center; font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: .4px; margin-bottom: 10px; }
+    .ko-label { text-align: center; font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .4px; margin-bottom: 10px; }
     .ko-label.gold { color: var(--gold); }
     .ko-stack { flex: 1; display: flex; flex-direction: column; justify-content: space-around; gap: 12px; min-height: 460px; }
     .ko-lines { position: absolute; left: 0; top: 0; pointer-events: none; z-index: 0; overflow: visible; }
@@ -627,7 +627,7 @@
     .tie:not(.tbd) .tie-row img { cursor: pointer; }
     .ko-champ[onclick] { cursor: pointer; } .ko-champ[onclick]:hover span { color: var(--blue); }
     .t-team-hit { cursor: pointer; transition: color .15s; } .modal-team-name.t-team-hit:hover { color: var(--blue) !important; }
-    .tie-foot { margin-top: 3px; padding-top: 3px; border-top: 0.5px solid var(--surface-2); font-size: 11px; color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tie-foot { margin-top: 3px; padding-top: 3px; border-top: 0.5px solid var(--surface-2); font-size: 12px; color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     /* 결승 카드만 흐름에 두고(= 4강 카드와 같은 높이) 트로피·우승 배지는 그 위로 띄움 */
     .ko-final { position: relative; display: flex; flex-direction: column; align-items: center; }
     .ko-final-top { position: absolute; bottom: calc(100% + 12px); left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 10px; width: max-content; }
@@ -639,10 +639,10 @@
     .ko-champ { display: flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 14px; background: linear-gradient(135deg, rgba(227,179,65,0.2), rgba(227,179,65,0.05)); border: 0.5px solid rgba(227,179,65,0.5); box-shadow: 0 0 22px rgba(227,179,65,0.18); }
     .ko-champ img { width: 26px; height: 26px; object-fit: contain; }
     .ko-champ span { display: flex; flex-direction: column; font-size: 13px; font-weight: 800; color: #f2cc60; line-height: 1.2; }
-    .ko-champ small { font-size: 11px; font-weight: 600; color: var(--gold); }
-    .tie-pk { font-size: 8.5px; font-weight: 800; color: var(--blue-text); border: 0.5px solid rgba(88,166,255,0.5); border-radius: 4px; padding: 0 3px; line-height: 13px; }
+    .ko-champ small { font-size: 12px; font-weight: 600; color: var(--gold); }
+    .tie-pk { font-size: 9.5px; font-weight: 800; color: var(--blue-text); border: 0.5px solid rgba(88,166,255,0.5); border-radius: 4px; padding: 0 3px; line-height: 13px; }
     .ko-key { font-weight: 700; } .ko-key.win { color: var(--blue-text); } .ko-key.lose { color: var(--muted); opacity: .6; }
-    .ko-note { text-align: center; font-size: 11px; color: var(--faint); margin-top: 8px; }
+    .ko-note { text-align: center; font-size: 12px; color: var(--faint); margin-top: 8px; }
     .ko-empty { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 44px 16px; text-align: center; color: var(--gold); }
     .ko-empty b { font-size: 15px; color: var(--text); } .ko-empty span { font-size: 12px; color: var(--muted); max-width: 420px; line-height: 1.6; }
     .ko-mobile { display: none; }
@@ -653,7 +653,7 @@
       .ko-round-seg button { flex: 1; justify-content: center; }
       .ko-mlist { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
       .ko-mlist .tie { padding: 8px 10px; }
-      .ko-mlist .tie-name { font-size: 13px; } .ko-mlist .tie-foot { font-size: 11px; }
+      .ko-mlist .tie-name { font-size: 13px; } .ko-mlist .tie-foot { font-size: 12px; }
     }
     @media (max-width: 420px) { .ko-mlist { grid-template-columns: 1fr; } }
     /* 모달 */
@@ -673,26 +673,26 @@
     .modal-vs { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 0 12px; }
     .modal-score { font-size: 24px; font-weight: 700; display: flex; gap: 8px; align-items: center; color: var(--muted); }
     .modal-score .w { color: var(--blue); }
-    .modal-agg { font-size: 11px; color: var(--muted); }
+    .modal-agg { font-size: 12px; color: var(--muted); }
     .modal-legs { padding: 12px 16px; }
     .leg-item { margin-bottom: 12px; }
     .leg-item:last-child { margin-bottom: 0; }
-    .leg-ttl { font-size: 11px; color: var(--muted); text-transform: none; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .leg-ttl { font-size: 12px; color: var(--muted); text-transform: none; letter-spacing: 0.5px; margin-bottom: 6px; }
     .leg-row { display: flex; align-items: center; justify-content: space-between; background: var(--surface-2); border-radius: 6px; padding: 8px 10px; }
     .leg-t { font-size: 12px; color: var(--text); flex: 1; }
     .leg-t.w { color: var(--blue); font-weight: 600; }
     .leg-s { font-size: 13px; font-weight: 700; color: var(--muted); padding: 0 8px; }
     .leg-s.w { color: var(--blue); }
-    .leg-tbd { text-align: center; font-size: 11px; color: var(--border); font-style: italic; padding: 8px; background: var(--surface-2); border-radius: 6px; }
-    .modal-badge { margin: 0 16px 14px; text-align: center; padding: 6px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+    .leg-tbd { text-align: center; font-size: 12px; color: var(--border); font-style: italic; padding: 8px; background: var(--surface-2); border-radius: 6px; }
+    .modal-badge { margin: 0 16px 14px; text-align: center; padding: 6px; border-radius: 6px; font-size: 12px; font-weight: 600; }
     .modal-badge.live { background: #2a1e00; color: var(--amber); border: 0.5px solid #d2992260; }
     .modal-badge.done { background: #0a1a0a; color: var(--green-strong); border: 0.5px solid #23863660; }
-    .acc-note { font-size: 11px; color: #8e9ab3; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; transition: color .15s; } .acc-note:hover { color: var(--blue-text); }
+    .acc-note { font-size: 12px; color: #8e9ab3; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; transition: color .15s; } .acc-note:hover { color: var(--blue-text); }
     .grp-table tr[onclick] { cursor: pointer; } .grp-table tr[onclick]:hover td { background: rgba(88,166,255,0.07); }
     .clickable-team { cursor: pointer; }
     .clickable-team:hover { color: var(--blue); }
     .ti-modal { width: min(760px, 94vw); max-height: 85vh; display: flex; flex-direction: column; }
-    .ti-fx-tag { display: inline-block; margin-left: 8px; padding: 1px 7px; border-radius: 99px; font-size: 11px; font-weight: 700; vertical-align: 1px; }
+    .ti-fx-tag { display: inline-block; margin-left: 8px; padding: 1px 7px; border-radius: 99px; font-size: 12px; font-weight: 700; vertical-align: 1px; }
     .ti-fx-tag.cl { background: rgba(88,166,255,0.12); color: var(--blue-text); border: 0.5px solid rgba(88,166,255,0.35); }
     .ti-fx-tag.next { background: rgba(63,185,80,0.14); color: var(--green); border: 0.5px solid rgba(63,185,80,0.4); }
     .sched-date-header.ti-fx-head { display: flex; align-items: center; gap: 7px; }
@@ -711,26 +711,26 @@
     .tf-main { min-width: 0; }
     .tf-top { display: flex; align-items: center; gap: 8px; min-width: 0; }
     .tf-name { font-size: 14px; font-weight: 600; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .tf-dir { flex-shrink: 0; font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 99px; }
+    .tf-dir { flex-shrink: 0; font-size: 12px; font-weight: 700; padding: 1px 7px; border-radius: 99px; }
     .tf-dir.in { color: var(--green); background: rgba(63,185,80,0.14); } .tf-dir.out { color: var(--red); background: rgba(248,81,73,0.13); }
     .tf-move { display: flex; align-items: center; gap: 6px; margin-top: 5px; min-width: 0; font-size: 12px; }
     .tf-club { display: inline-flex; align-items: center; gap: 5px; min-width: 0; color: var(--muted); }
     .tf-club.self { color: var(--text); font-weight: 600; }
     .tf-club img, .tf-crest-ph { width: 18px; height: 18px; object-fit: contain; flex-shrink: 0; }
-    .tf-crest-ph { border-radius: 50%; background: var(--border); color: var(--text-2); font-size: 7.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; letter-spacing: -0.3px; }
+    .tf-crest-ph { border-radius: 50%; background: var(--border); color: var(--text-2); font-size: 8.5px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; letter-spacing: -0.3px; }
     .tf-club-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .tf-arrow { flex-shrink: 0; color: var(--tf-c); font-weight: 700; }
     .tf-side { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-    .tf-type { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; color: var(--text-2); background: rgba(142,154,179,0.14); }
+    .tf-type { font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 6px; color: var(--text-2); background: rgba(142,154,179,0.14); }
     .tf-type.loan { color: #d2a8ff; background: rgba(163,113,247,0.14); } .tf-type.fa { color: var(--gold); background: rgba(210,153,34,0.14); }
-    .tf-date { font-size: 11px; color: var(--faint); font-variant-numeric: tabular-nums; }
-    .tf-note { font-size: 11px; color: var(--faint); text-align: right; padding-top: 10px; }
-    @media (max-width: 480px) { .tf-row { grid-template-columns: 38px 1fr auto; gap: 10px; } .tf-photo { width: 38px; height: 38px; } .tf-move { font-size: 11px; } .tf-club-name { max-width: 88px; } }
+    .tf-date { font-size: 12px; color: var(--faint); font-variant-numeric: tabular-nums; }
+    .tf-note { font-size: 12px; color: var(--faint); text-align: right; padding-top: 10px; }
+    @media (max-width: 480px) { .tf-row { grid-template-columns: 38px 1fr auto; gap: 10px; } .tf-photo { width: 38px; height: 38px; } .tf-move { font-size: 12px; } .tf-club-name { max-width: 88px; } }
     /* 팀 정보 · 개요 탭 */
     .ti-about { background: rgba(88,166,255,0.05); border: 0.5px solid rgba(88,166,255,0.18); border-radius: 14px; padding: 14px 16px 10px; margin-bottom: 12px; }
     .ti-about-text { font-size: 14px; line-height: 1.75; color: var(--text-2); display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; word-break: keep-all; }
     .ti-about.open .ti-about-text { -webkit-line-clamp: unset; display: block; }
-    .ti-about-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 11px; }
+    .ti-about-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; font-size: 12px; }
     .ti-about-more { background: none; border: none; color: var(--blue); font-size: 12px; font-family: inherit; cursor: pointer; padding: 2px 0; } .ti-about-more:hover { color: var(--blue-text); text-decoration: underline; text-underline-offset: 2px; }
     .ti-about-foot a { color: var(--faint); text-decoration: none; margin-left: auto; }
     .ti-about-foot a:hover { color: var(--text-2); }
@@ -750,21 +750,21 @@
     .ti-history { grid-column: 1 / -1; border: 0.5px solid var(--border); border-radius: 14px; padding: 12px 14px 10px; cursor: pointer; background: rgba(10,16,32,0.4); transition: border-color .15s; min-width: 0; }
     .ti-history:hover { border-color: var(--blue); }
     .rh-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px; }
-    .rh-head small { margin-left: auto; font-size: 11px; color: var(--faint); }
+    .rh-head small { margin-left: auto; font-size: 12px; color: var(--faint); }
     .rh-scroll { overflow-x: auto; scrollbar-width: none; } .rh-scroll::-webkit-scrollbar { display: none; }
     .rh-cols { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(26px, 1fr); gap: 4px; min-width: max-content; width: 100%; height: 92px; align-items: end; }
     .rh-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 3px; min-width: 26px; }
     .rh-col b { font-family: var(--font-num); font-size: 14px; font-weight: 700; color: var(--text); line-height: 1; font-variant-numeric: tabular-nums; }
     .rh-col i { display: block; width: 100%; max-width: 10px; border-radius: 3px 3px 1px 1px; background: rgba(142,154,179,0.35); }
-    .rh-col small { font-size: 10px; color: var(--faint); font-variant-numeric: tabular-nums; }
+    .rh-col small { font-size: 11px; color: var(--faint); font-variant-numeric: tabular-nums; }
     .rh-col.champ b { color: var(--gold); } .rh-col.champ i { background: linear-gradient(180deg, #f6d66b, var(--gold)); box-shadow: 0 0 10px rgba(240,192,64,0.35); }
     .rh-col.none b { color: var(--disabled); } .rh-col.none i { background: none; border: 0.5px dashed rgba(142,154,179,0.3); height: 6px !important; }
-    .rh-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 8px; font-size: 11px; color: var(--muted); }
+    .rh-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 8px; font-size: 12px; color: var(--muted); }
     .rh-legend span { display: inline-flex; align-items: center; gap: 4px; } .rh-legend i { width: 8px; height: 8px; border-radius: 2px; }
     /* 개요: 시즌 베스트 11 */
     .ti-bx { border: 0.5px solid var(--border); border-radius: 14px; padding: 12px 14px; background: rgba(10,16,32,0.4); margin-bottom: 12px; }
     .ti-bx:empty { display: none; }
-    .ti-ha { font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 99px; flex-shrink: 0; }
+    .ti-ha { font-size: 12px; font-weight: 700; padding: 2px 7px; border-radius: 99px; flex-shrink: 0; }
     .ti-ha.home { color: var(--blue-text); background: rgba(88,166,255,0.14); } .ti-ha.away { color: var(--away); background: rgba(240,136,62,0.14); }
     .ti-season-card.sk, .ti-history.sk { cursor: default; } .ti-season-card.sk:hover, .ti-history.sk:hover { border-color: var(--border); }
     /* 개요: 우승 기록 · 이적료 기록 */
@@ -775,24 +775,24 @@
     .tr-icon { width: 26px; height: 26px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: rgba(227,179,65,0.12); color: var(--gold); flex-shrink: 0; }
     .tr-icon svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
     .tr-title { font-size: 13px; font-weight: 700; color: var(--text); }
-    .tr-total { margin-left: auto; font-size: 11px; color: var(--gold); font-weight: 600; }
+    .tr-total { margin-left: auto; font-size: 12px; color: var(--gold); font-weight: 600; }
     .tr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 6px; }
     .tr-tile { position: relative; border-radius: 10px; padding: 8px 9px; background: rgba(142,154,179,0.08); border: 0.5px solid rgba(142,154,179,0.14); display: flex; flex-direction: column; gap: 1px; min-width: 0; }
     .tr-tile b { font-size: 20px; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; line-height: 1.1; }
-    .tr-tile span { font-size: 11px; color: var(--text-2); word-break: keep-all; }
-    .tr-tile small { font-size: 11px; color: var(--faint); }
+    .tr-tile span { font-size: 12px; color: var(--text-2); word-break: keep-all; }
+    .tr-tile small { font-size: 12px; color: var(--faint); }
     .tr-tile.gold { background: linear-gradient(160deg, rgba(227,179,65,0.16), rgba(227,179,65,0.04)); border-color: rgba(227,179,65,0.35); }
     .tr-tile.gold b { color: #f2cc60; }
     .tr-tile .comp-ic { position: absolute; top: 7px; right: 7px; width: 26px; height: 26px; } .tr-tile .comp-ic img { width: 17px; height: 17px; } .tr-tile .comp-ic svg { width: 14px; height: 14px; }
     .tr-sub, .tr-empty { font-size: 12px; color: var(--muted); margin-top: 8px; }
     .tr-empty { margin-top: 0; }
-    .tr-foot { margin-top: auto; padding-top: 10px; text-align: right; font-size: 11px; }
+    .tr-foot { margin-top: auto; padding-top: 10px; text-align: right; font-size: 12px; }
     .tr-foot a { color: var(--faint); text-decoration: none; } .tr-foot a:hover { color: var(--text-2); }
     .rec-row { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 0.5px solid var(--surface-2); }
     .rec-row:last-of-type { border-bottom: none; }
     .rec-main { min-width: 0; flex: 1; display: flex; flex-direction: column; }
     .rec-main b { font-size: 13px; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .rec-main span { font-size: 11px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .rec-main span { font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .rec-fee { font-size: 13px; font-weight: 700; color: var(--text); white-space: nowrap; }
     @media (max-width: 640px) { .tr-wrap { grid-template-columns: 1fr; } }
     .rv-card { border: 0.5px solid var(--border); border-radius: 14px; padding: 12px 14px; background: rgba(10,16,32,0.4); margin-bottom: 12px; }
@@ -802,9 +802,9 @@
     .rv-item.link { cursor: pointer; } .rv-item.link:hover { border-color: var(--blue); }
     .rv-item img { width: 32px; height: 32px; object-fit: contain; flex-shrink: 0; }
     .rv-main { display: flex; flex-direction: column; min-width: 0; }
-    .rv-derby { font-size: 11px; font-weight: 700; color: var(--red); }
+    .rv-derby { font-size: 12px; font-weight: 700; color: var(--red); }
     .rv-main b { font-size: 14px; color: var(--text); }
-    .rv-rec { font-size: 11px; color: var(--muted); } .rv-rec b { font-size: 11px; } .rv-rec b.w { color: var(--green); } .rv-rec b.l { color: var(--red); }
+    .rv-rec { font-size: 12px; color: var(--muted); } .rv-rec b { font-size: 12px; } .rv-rec b.w { color: var(--green); } .rv-rec b.l { color: var(--red); }
     .ti-top { margin-bottom: 12px; } .ti-top .ti-about { margin-bottom: 0; }
     .ti-top > .mgr-panel { margin-bottom: 12px; } .ti-top.two > .mgr-panel { margin-bottom: 0; }
     .ti-top.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 12px; align-items: stretch; }
@@ -815,12 +815,12 @@
     .mgr-en { font-size: 12px; color: var(--muted); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .mgr-list { display: flex; flex-direction: column; gap: 6px; }
     .mgr-li { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: 13px; } .mgr-li > span { color: var(--muted); flex-shrink: 0; }
-    .mgr-li b { font-weight: 600; color: var(--text); text-align: right; } .mgr-li b small { font-size: 11px; font-weight: 500; color: var(--muted); }
+    .mgr-li b { font-weight: 600; color: var(--text); text-align: right; } .mgr-li b small { font-size: 12px; font-weight: 500; color: var(--muted); }
     .mgr-rec { margin-top: auto; padding-top: 10px; border-top: 0.5px solid rgba(142,154,179,0.18); }
     .mgr-rec-t { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--muted); } .mgr-rec-t b { color: var(--text); font-weight: 600; }
     .mgr-bar { display: flex; height: 6px; border-radius: 3px; overflow: hidden; margin: 8px 0 6px; background: var(--surface-2); gap: 2px; }
     .mgr-bar i.w { background: var(--green); } .mgr-bar i.d { background: var(--disabled); } .mgr-bar i.l { background: var(--red); }
-    .mgr-rec-n { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); } .mgr-rec-n .w { color: var(--green); } .mgr-rec-n .l { color: var(--red); }
+    .mgr-rec-n { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); } .mgr-rec-n .w { color: var(--green); } .mgr-rec-n .l { color: var(--red); }
     .mgr-ph { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; flex-shrink: 0; background: var(--surface-2); }
     .mgr-ph.none { display: flex; align-items: center; justify-content: center; color: var(--muted); } .mgr-ph.none svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.6; }
     .mgr-ph.sm { width: 28px; height: 28px; } .mgr-ph.sm.none svg { width: 15px; height: 15px; }
@@ -837,7 +837,7 @@
     .ti-fact2-icon svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
     .ti-fact2-body { min-width: 0; }
     .ti-fact2 .ti-fact-value { font-size: 13px; }
-    .ti-fact2-sub { font-size: 11px; font-weight: 500; color: var(--muted); }
+    .ti-fact2-sub { font-size: 12px; font-weight: 500; color: var(--muted); }
     .ti-swatches { display: inline-flex; gap: 3px; margin-right: 6px; vertical-align: -2px; }
     .ti-swatch { width: 12px; height: 12px; border-radius: 50%; box-shadow: 0 0 0 1px rgba(255,255,255,0.18); }
     /* 팀 정보 · 팀 통계 탭 */
@@ -852,18 +852,18 @@
     .ts-kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
     .ts-kpis.three { grid-template-columns: repeat(3, 1fr); }
     .ts-kpi { border: 0.5px solid var(--surface-2); border-radius: 10px; padding: 10px 12px; background: rgba(10,16,32,0.4); min-width: 0; }
-    .ts-kpi small { font-size: 11px; color: var(--faint); font-weight: 400; }
+    .ts-kpi small { font-size: 12px; color: var(--faint); font-weight: 400; }
     .ts-kpi-val { font-size: 24px; font-weight: 800; color: var(--text); margin: 2px 0; font-variant-numeric: tabular-nums; letter-spacing: -0.5px; }
     .ts-kpi-val small { font-size: 12px; margin-left: 3px; color: var(--muted); }
     .tz-cl, .tz-cl-q { color: var(--blue) !important; } .tz-el { color: var(--away) !important; } .tz-ecl { color: var(--green) !important; } .tz-rel, .tz-rel-po { color: var(--red) !important; }
-    .ts-kpi-sub { font-size: 11px; color: var(--muted); }
-    .ts-rank { display: inline-block; margin-top: 4px; font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 99px; color: var(--text-2); background: rgba(142,154,179,0.14); white-space: nowrap; }
+    .ts-kpi-sub { font-size: 12px; color: var(--muted); }
+    .ts-rank { display: inline-block; margin-top: 4px; font-size: 12px; font-weight: 700; padding: 1px 7px; border-radius: 99px; color: var(--text-2); background: rgba(142,154,179,0.14); white-space: nowrap; }
     .ts-rank.top { color: var(--blue-text); background: rgba(88,166,255,0.14); } .ts-rank.low { color: #ffa198; background: rgba(248,81,73,0.12); }
     .ts-wdl { display: flex; height: 6px; border-radius: 99px; overflow: hidden; background: var(--surface-2); margin-top: 6px; }
     .ts-wdl i { display: block; height: 100%; } .ts-wdl .w { background: var(--green); } .ts-wdl .d { background: var(--faint); } .ts-wdl .l { background: var(--red); }
-    .ts-wdl-legend { font-size: 11px; color: var(--muted); margin-top: 4px; }
+    .ts-wdl-legend { font-size: 12px; color: var(--muted); margin-top: 4px; }
     .ts-section-title { font-size: 13px; font-weight: 700; color: var(--text); margin: 18px 0 8px; }
-    .ts-section-title span { font-size: 11px; font-weight: 400; color: var(--faint); margin-left: 6px; }
+    .ts-section-title span { font-size: 12px; font-weight: 400; color: var(--faint); margin-left: 6px; }
     .ts-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
     .ts-metric { margin-bottom: 12px; }
     .ts-metric-head { display: flex; align-items: center; gap: 6px; }
@@ -876,26 +876,26 @@
     .ts-track i.good, .ts-track i.top { background: linear-gradient(90deg, var(--blue-strong), var(--blue)); } .ts-track i.bad { background: linear-gradient(90deg, #9e4a1b, var(--away)); }
     .ts-track i.neutral { background: var(--muted); } .ts-track i.bottom { background: linear-gradient(90deg, var(--green-strong), var(--green)); }
     .ts-track b { position: absolute; top: -3px; bottom: -3px; width: 2px; margin-left: -1px; background: var(--text); border-radius: 4px; opacity: .75; }
-    .ts-metric-avg { font-size: 11px; color: var(--faint); margin-top: 4px; }
+    .ts-metric-avg { font-size: 12px; color: var(--faint); margin-top: 4px; }
     .ts-split { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .ts-split-card { border: 0.5px solid var(--surface-2); border-radius: 10px; padding: 10px 12px; background: rgba(10,16,32,0.4); }
     .ts-split-card.home { box-shadow: inset 3px 0 0 var(--blue); } .ts-split-card.away { box-shadow: inset 3px 0 0 var(--away); }
     .ts-split-head { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--text); flex-wrap: wrap; }
     .ts-split-head .ts-rank { margin: 0; }
-    .ts-split-ppg { font-size: 11px; font-weight: 400; color: var(--muted); margin-left: auto; } .ts-split-ppg b { color: var(--text); font-size: 13px; }
+    .ts-split-ppg { font-size: 12px; font-weight: 400; color: var(--muted); margin-left: auto; } .ts-split-ppg b { color: var(--text); font-size: 13px; }
     .ts-split-goals { font-size: 12px; color: var(--muted); margin-top: 6px; } .ts-split-goals b { color: var(--text-2); }
     .ts-vs-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-    .ts-vs-label { width: 112px; font-size: 12px; color: var(--text-2); flex-shrink: 0; } .ts-vs-label small { color: var(--faint); font-size: 11px; }
+    .ts-vs-label { width: 112px; font-size: 12px; color: var(--text-2); flex-shrink: 0; } .ts-vs-label small { color: var(--faint); font-size: 12px; }
     .ts-vs-val { width: 38px; text-align: right; font-size: 14px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
     .ts-chart { width: 100%; }
     .ts-chart svg { display: block; overflow: visible; }
-    .ts-ax text { font-size: 10px; fill: var(--faint); font-family: inherit; }
+    .ts-ax text { font-size: 11px; fill: var(--faint); font-family: inherit; }
     .ts-line { fill: none; stroke: var(--blue); stroke-width: 2.2; stroke-linejoin: round; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: tsDraw 1s ease forwards; filter: drop-shadow(0 0 4px rgba(88,166,255,0.5)); }
     .ts-dot { fill: var(--blue); stroke: var(--bg); stroke-width: 2; }
     @keyframes tsDraw { to { stroke-dashoffset: 0; } }
     @media (prefers-reduced-motion: reduce) { .ts-line { animation: none; stroke-dashoffset: 0; } }
     .ts-table { width: 100%; border-collapse: collapse; font-size: 12px; font-variant-numeric: tabular-nums; }
-    .ts-table th { font-size: 11px; font-weight: 500; color: var(--faint); text-align: left; padding: 6px 8px; border-bottom: 0.5px solid var(--border); }
+    .ts-table th { font-size: 12px; font-weight: 500; color: var(--faint); text-align: left; padding: 6px 8px; border-bottom: 0.5px solid var(--border); }
     .ts-table td { padding: 8px; color: var(--text-2); border-bottom: 0.5px solid var(--surface-2); }
     .ts-table .c { text-align: center; }
     .ts-table tbody tr { cursor: pointer; } .ts-table tbody tr:hover td { background: rgba(88,166,255,0.05); }
@@ -925,7 +925,7 @@
     .ti-fav-btn.active svg { fill: var(--gold); }
     .ti-logo { width: 44px; height: 44px; object-fit: contain; flex-shrink: 0; }
     .ti-name { font-size: 15px; font-weight: 700; color: var(--text); }
-    .ti-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .ti-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
     .ti-tabs { display: flex; gap: 4px; padding: 0 16px; border-bottom: 0.5px solid var(--border); overflow-x: auto; flex-shrink: 0; scrollbar-width: none; }
     .ti-tabs::-webkit-scrollbar { display: none; }
     .ti-tab { padding: 10px 12px; font-size: 12px; color: var(--muted); cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent; transition: color .15s, border-color .15s; }
@@ -934,20 +934,20 @@
     .ti-panel { flex: 1; min-height: 0; overflow-y: auto; padding: 14px 16px; }
     .ti-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
     .ti-fact { background: var(--bg); border: 0.5px solid var(--surface-2); border-radius: 10px; padding: 8px 10px; }
-    .ti-fact-label { font-size: 11px; color: var(--muted); }
+    .ti-fact-label { font-size: 12px; color: var(--muted); }
     .ti-fact-value { font-size: 12px; color: var(--text); font-weight: 600; margin-top: 2px; }
-    .ti-section-title { font-size: 11px; color: var(--muted); font-weight: 600; margin: 14px 0 6px; }
+    .ti-section-title { font-size: 12px; color: var(--muted); font-weight: 600; margin: 14px 0 6px; }
     .ti-section-title:first-child { margin-top: 0; }
     .ti-player-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 2px; border-bottom: 0.5px solid var(--surface-2); font-size: 12px; }
     .ti-player-name { color: var(--text); }
-    .ti-player-nation { display: inline-flex; align-items: center; gap: 5px; color: var(--muted); font-size: 11px; white-space: nowrap; }
+    .ti-player-nation { display: inline-flex; align-items: center; gap: 5px; color: var(--muted); font-size: 12px; white-space: nowrap; }
     .ti-player-nation img { width: 16px; height: 12px; object-fit: cover; border-radius: 2px; }
     .ti-dpos { font-style: normal; color: var(--text-2); margin-right: 6px; }
     .ti-player-row.link { cursor: pointer; border-radius: var(--r-sm); transition: background .15s; } .ti-player-row.link:hover { background: rgba(88,166,255,0.07); }
     @media (max-width: 480px) { .ti-dpos { display: none; } }
     .ti-empty { text-align: center; color: var(--muted); font-size: 12px; padding: 20px 0; }
     .ti-standings-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-    .ti-standings-table th { text-align: left; color: var(--muted); font-weight: 500; font-size: 11px; padding: 6px 4px; border-bottom: 0.5px solid var(--border); }
+    .ti-standings-table th { text-align: left; color: var(--muted); font-weight: 500; font-size: 12px; padding: 6px 4px; border-bottom: 0.5px solid var(--border); }
     .ti-standings-table th.center, .ti-standings-table td.center { text-align: center; }
     .ti-standings-table td { padding: 6px 4px; border-bottom: 0.5px solid var(--surface-2); color: var(--text); }
     .ti-standings-table tr.me { background: rgba(31,111,235,0.16); } .ti-standings-table tr.me td { font-weight: 700; }
@@ -955,17 +955,17 @@
     .ti-standings-table td:first-child { position: relative; }
     .ti-standings-table tr[style*="--zc"] td:first-child::before { content: ''; position: absolute; left: 0; top: 6px; bottom: 6px; width: 3px; border-radius: 4px; background: var(--zc); }
     .ti-standings-table tr[style*="--zc"] .st-rank { color: var(--zc); background: color-mix(in srgb, var(--zc) 13%, transparent); }
-    .ti-standings-table .st-rank { min-width: 24px; height: 20px; font-size: 11px; }
+    .ti-standings-table .st-rank { min-width: 24px; height: 20px; font-size: 12px; }
     .ti-standings-table .st-pts { min-width: 30px; padding: 2px 6px; font-size: 12px; }
     .ti-standings-team span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: color .15s; }
-    .ti-st-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 12px; font-size: 11px; color: var(--muted); }
+    .ti-st-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 12px; font-size: 12px; color: var(--muted); }
     .ti-st-legend i { display: inline-block; width: 8px; height: 8px; border-radius: 4px; margin-right: 5px; }
     .ti-st-legend .note { color: var(--faint); margin-left: auto; }
     .ti-standings-team { display: flex; align-items: center; gap: 6px; }
     .ti-standings-team img { width: 16px; height: 16px; object-fit: contain; }
     @media (max-width: 560px) {
       .ti-modal { width: 94vw; }
-      .ti-standings-table { font-size: 11px; }
+      .ti-standings-table { font-size: 12px; }
     }
 
     /* 예측 */
@@ -977,18 +977,18 @@
     /* "다른 경기도 예측해보기": 왼쪽 열이 오른쪽보다 짧은 만큼 정확히 채우는 카드(fitMoreCard) —
        높이를 맞추면 양쪽 맨 아래 "최근 경기" 카드가 위·아래 모두 나란히 정렬됨 */
     .pg-more { display: none; flex-direction: column; overflow: hidden; }
-    .pg-inj { display: none; } .pg-inj.on { display: block; } .pg-inj .mp-sec:first-child { margin-top: 0; padding-top: 0; border-top: 0; } .pg-inj .mp-sec-t { font-size: 13px; font-weight: 400; letter-spacing: 0.5px; margin-bottom: 14px; align-items: baseline; } .pg-inj .mp-sec-t .mp-sec-n { font-size: 11px; letter-spacing: 0; }
+    .pg-inj { display: none; } .pg-inj.on { display: block; } .pg-inj .mp-sec:first-child { margin-top: 0; padding-top: 0; border-top: 0; } .pg-inj .mp-sec-t { font-size: 13px; font-weight: 400; letter-spacing: 0.5px; margin-bottom: 14px; align-items: baseline; } .pg-inj .mp-sec-t .mp-sec-n { font-size: 12px; letter-spacing: 0; }
     .pg-more.on { display: flex; }
     .more-list { display: flex; flex-direction: column; }
     /* 행 구조·크기는 아래 "최근 경기" 목록(matchRowHtml)과 동일하게 — 윗줄 날짜(10px)+오른쪽 20px 뱃지 자리,
        아랫줄 .sched-match(홈 · 가운데 고정폭 vs · 원정) — 그래야 두 카드의 좌우·중앙선이 정확히 겹침 */
     .more-row { padding: 8px 0; border-bottom: 0.5px solid var(--surface-2); cursor: pointer; }
     .more-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; min-height: 20px; }
-    .more-meta { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); min-width: 0; white-space: nowrap; overflow: hidden; }
+    .more-meta { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--muted); min-width: 0; white-space: nowrap; overflow: hidden; }
     .more-meta img { width: 16px; height: 16px; object-fit: contain; flex-shrink: 0; }
     .more-tag { display: inline-flex; align-items: center; gap: 4px; margin-left: 6px; font-weight: 600; color: var(--text-2); }
     .more-tag .mi-dot { width: 6px; height: 6px; }
-    .more-go { flex-shrink: 0; height: 20px; display: inline-flex; align-items: center; padding: 0 9px; border-radius: 10px; border: 0.5px solid var(--border); font-size: 11px; font-weight: 600; color: var(--muted); transition: color .15s, border-color .15s, background-color .15s; }
+    .more-go { flex-shrink: 0; height: 20px; display: inline-flex; align-items: center; padding: 0 9px; border-radius: 10px; border: 0.5px solid var(--border); font-size: 12px; font-weight: 600; color: var(--muted); transition: color .15s, border-color .15s, background-color .15s; }
     .more-row .sched-vs .vs { font-size: 12px; color: var(--faint); }
     .more-row:hover { background: rgba(88,166,255,0.07); } .more-row:hover .more-go { color: var(--blue); }
     .more-foot { margin-top: auto; align-self: flex-end; display: inline-flex; align-items: center; gap: 2px; background: none; border: none; color: var(--muted); font-size: 12px; cursor: pointer; padding: 10px 0 0; font-family: inherit; }
@@ -1007,7 +1007,7 @@
     .team-logo-placeholder { display: flex; align-items: center; justify-content: center; color: var(--disabled); }
     .team-logo-placeholder svg { width: 36px; height: 36px; display: block; }
     .league-badge-sm { font-size: 12px; color: var(--muted); display: flex; align-items: center; justify-content: center; gap: 5px; min-height: 20px; white-space: nowrap; }
-    @media (max-width: 480px) { .league-badge-sm { gap: 4px; font-size: 11px; } }   /* 좁은 폰: 한 줄 유지 */
+    @media (max-width: 480px) { .league-badge-sm { gap: 4px; font-size: 12px; } }   /* 좁은 폰: 한 줄 유지 */
     .league-badge-sm img { width: 18px; height: 18px; object-fit: contain; }
     .vs-center { font-size: 22px; font-weight: 700; color: var(--muted); margin-top: 50px; }
     /* 홈·원정 바꾸기 버튼(VS 자리) — VS 글자 + 화살표 동그라미 + "바꾸기", 누르면 화살표가 반 바퀴 돌고 두 로고가 서로 건너감 */
@@ -1015,7 +1015,7 @@
     .vs-swap .vs-txt { font-size: 22px; font-weight: 700; line-height: 1; }
     .vs-swap .vs-ico { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); background: color-mix(in srgb, var(--surface-2) 80%, transparent); color: var(--text-2); transition: border-color .2s, color .2s, background .2s, transform .45s cubic-bezier(.34,1.4,.5,1); }
     .vs-swap .vs-ico svg { width: 17px; height: 17px; }
-    .vs-swap .vs-cap { font-size: 11px; font-weight: 600; color: var(--faint); transition: color .2s; }
+    .vs-swap .vs-cap { font-size: 12px; font-weight: 600; color: var(--faint); transition: color .2s; }
     .vs-swap:hover .vs-ico, .vs-swap:focus-visible .vs-ico { border-color: var(--blue); color: var(--blue); background: color-mix(in srgb, var(--blue) 12%, transparent); }
     .vs-swap:hover .vs-cap { color: var(--blue-text); }
     .vs-swap.spin .vs-ico { transform: rotate(180deg); }
@@ -1051,7 +1051,7 @@
     .popup-team-row:hover { background: var(--surface-2); }
     .popup-team-row.selected { background: #1f4e8c; color: var(--blue); }
     .popup-team-row img { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
-    .popup-team-nodata { margin-left: auto; flex-shrink: 0; font-size: 11px; color: var(--faint); border: 0.5px solid var(--border); border-radius: 4px; padding: 1px 6px; }
+    .popup-team-nodata { margin-left: auto; flex-shrink: 0; font-size: 12px; color: var(--faint); border: 0.5px solid var(--border); border-radius: 4px; padding: 1px 6px; }
     .popup-team-list::-webkit-scrollbar { width: 4px; }
     .popup-team-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
     /* 주 버튼은 브랜드 파랑(2026-09-29 — 예전 초록은 미리보기 창 "전체 분석 보기"·순위 예측 버튼과 따로 놀았음) */
@@ -1075,7 +1075,7 @@
         .result-team-name { font-size: 13px; font-weight: 600; text-align: center; max-width: 130px; cursor: pointer; transition: color .15s; }
     .result-team:hover .result-team-name { color: var(--team-glow); }
     .result-vs { font-size: 18px; color: var(--muted); font-weight: 700; }
-    .score-alt-label { font-size: 11px; color: var(--faint); text-align: center; margin-bottom: 8px; }
+    .score-alt-label { font-size: 12px; color: var(--faint); text-align: center; margin-bottom: 8px; }
     .score-alt-list { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
     .score-alt-chip { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 20px; font-size: 15px; }
     .score-alt-chip .sc { font-weight: 700; color: var(--blue); }
@@ -1084,7 +1084,7 @@
     .rr-row { display: grid; grid-template-columns: 50px minmax(0,1fr) 44px minmax(0,1fr); align-items: center; gap: 6px; padding: 9px 2px; border-bottom: 0.5px solid rgba(142,154,179,0.14); font-size: 13px; }
     .rr-row.with-badge { grid-template-columns: 50px minmax(0,1fr) 44px minmax(0,1fr) 22px; }
     .rr-row:last-child { border-bottom: none; }
-    .rr-date { font-size: 11px; color: var(--faint); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .rr-date { font-size: 12px; color: var(--faint); font-variant-numeric: tabular-nums; white-space: nowrap; }
     .rr-team { display: flex; align-items: center; gap: 6px; min-width: 0; color: var(--text-2); cursor: pointer; transition: color .15s, opacity .15s; }
     .rr-team.a { justify-content: flex-end; text-align: right; }
     .rr-team em { font-style: normal; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -1098,7 +1098,7 @@
     @media (max-width: 480px) {
       .rr-row { grid-template-columns: 46px minmax(0,1fr) 36px minmax(0,1fr); gap: 4px; font-size: 12px; }   /* 날짜 칸 46px: Pretendard가 조금 넓어 "26.09.1/9"처럼 두 줄로 쪼개졌음(2026-10-05) */
       .rr-row.with-badge { grid-template-columns: 40px minmax(0,1fr) 36px minmax(0,1fr) 20px; }
-      .rr-date { font-size: 10px; letter-spacing: -0.2px; }
+      .rr-date { font-size: 11px; letter-spacing: -0.2px; }
       .rr-team { gap: 5px; } .rr-team img { width: 16px; height: 16px; }
     }
     .prediction-badge { text-align: center; margin-bottom: 20px; }
@@ -1127,28 +1127,28 @@
     .h2h-num.wins { color: var(--blue); }
     .h2h-num.draws { color: var(--muted); }
     .h2h-num.losses { color: var(--away); }
-    .h2h-label { font-size: 11px; color: var(--muted); margin-top: 4px; }
+    .h2h-label { font-size: 12px; color: var(--muted); margin-top: 4px; display: flex; align-items: center; justify-content: center; gap: 6px; } .h2h-label img { width: 18px; height: 18px; object-fit: contain; }
     .h2h-match { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 0.5px solid var(--surface-2); font-size: 13px; }
-    .h2h-date { color: var(--muted); font-size: 11px; }
+    .h2h-date { color: var(--muted); font-size: 12px; }
     .h2h-score { font-weight: 600; }
     .h2h-score.W { color: var(--green-strong); }
     .h2h-score.D { color: var(--muted); }
     .h2h-score.L { color: var(--red-strong); }
     /* 5대 리그 밖 UCL 팀이 낀 예측 — UCL 경기 기록만으로 계산한 참고용 */
-    .limited-note { display: flex; align-items: center; gap: 6px; width: fit-content; max-width: 100%; margin: 10px auto 0; padding: 6px 10px; border-radius: 10px; font-size: 11px; line-height: 1.4; color: var(--amber); background: rgba(210,153,34,0.1); border: 0.5px solid rgba(210,153,34,0.35); }
+    .limited-note { display: flex; align-items: center; gap: 6px; width: fit-content; max-width: 100%; margin: 10px auto 0; padding: 6px 10px; border-radius: 10px; font-size: 12px; line-height: 1.4; color: var(--amber); background: rgba(210,153,34,0.1); border: 0.5px solid rgba(210,153,34,0.35); }
     .limited-note b { font-weight: 700; }
     .limited-note svg { width: 14px; height: 14px; flex-shrink: 0; }
     /* ── 경기 분석(맞대결 카드 아래): 순위·홈/원정·경기 성향·파워 레이팅 ── */
     .mi-section { margin-top: 18px; padding-top: 18px; border-top: 0.5px solid var(--border); }
     .mi-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
-    .mi-title { font-size: 11px; color: var(--muted); text-transform: none; letter-spacing: 0.5px; }
-    .mi-note { font-size: 11px; color: var(--faint); white-space: nowrap; }
+    .mi-title { font-size: 12px; color: var(--muted); text-transform: none; letter-spacing: 0.5px; }
+    .mi-note { font-size: 12px; color: var(--faint); white-space: nowrap; }
     .mi-teams { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 10px; }
     .mi-team { display: flex; align-items: center; gap: 7px; min-width: 0; font-size: 12px; font-weight: 600; color: var(--text); }
     .mi-team.away { flex-direction: row-reverse; text-align: right; }
     .mi-team img { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
     .mi-team .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .mi-team .tag { font-size: 11px; font-weight: 500; color: var(--muted); white-space: nowrap; }
+    .mi-team .tag { font-size: 12px; font-weight: 500; color: var(--muted); white-space: nowrap; }
     .mi-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
     .mi-dot.home { background: var(--blue); } .mi-dot.away { background: var(--away); }
     .mi-rank-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -1159,9 +1159,9 @@
     .mi-rank-tile.away .mi-team { flex-direction: row; text-align: left; }
     .mi-rank-num { font-size: 28px; font-weight: 800; line-height: 1; color: var(--text); font-variant-numeric: tabular-nums; }
     .mi-rank-num small { font-size: 13px; font-weight: 600; color: var(--muted); margin-left: 2px; }
-    .mi-rank-num .of { font-size: 11px; font-weight: 500; color: var(--faint); margin-left: 4px; }
-    .mi-zone { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 10px; margin-top: 8px; }
-    .mi-rank-sub { font-size: 11px; color: var(--muted); margin-top: 8px; line-height: 1.5; }
+    .mi-rank-num .of { font-size: 12px; font-weight: 500; color: var(--faint); margin-left: 4px; }
+    .mi-zone { display: inline-block; font-size: 12px; font-weight: 600; padding: 2px 7px; border-radius: 10px; margin-top: 8px; }
+    .mi-rank-sub { font-size: 12px; color: var(--muted); margin-top: 8px; line-height: 1.5; }
     .mi-rank-sub b { color: var(--text); font-weight: 600; }
     .mi-rank-empty { font-size: 12px; color: var(--faint); padding: 8px 0 4px; }
     .mi-track { position: relative; margin-top: 14px; padding: 26px 0 24px; }
@@ -1172,25 +1172,25 @@
     .mi-track-mark.home { top: 0; } .mi-track-mark.away { bottom: 0; flex-direction: column-reverse; }
     .mi-track-mark .stem { width: 2px; height: 5px; border-radius: 4px; }
     .mi-track-mark.home .stem { background: var(--blue); } .mi-track-mark.away .stem { background: var(--away); }
-    .mi-track-ends { display: flex; justify-content: space-between; font-size: 11px; color: var(--faint); margin-top: 4px; }
+    .mi-track-ends { display: flex; justify-content: space-between; font-size: 12px; color: var(--faint); margin-top: 4px; }
     .mi-wdl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
     .mi-wdl-bar { display: flex; height: 10px; border-radius: 4px; overflow: hidden; background: var(--surface-2); gap: 2px; }
     .mi-wdl-bar i { display: block; height: 100%; width: 0; transition: width .7s cubic-bezier(.2,.8,.2,1); }
     .mi-wdl-bar .w { background: var(--green-strong); } .mi-wdl-bar .d { background: var(--faint); } .mi-wdl-bar .l { background: var(--red-strong); }
-    .mi-wdl-txt { display: flex; gap: 8px; font-size: 11px; color: var(--muted); margin-top: 6px; font-variant-numeric: tabular-nums; }
+    .mi-wdl-txt { display: flex; gap: 8px; font-size: 12px; color: var(--muted); margin-top: 6px; font-variant-numeric: tabular-nums; }
     .mi-wdl-txt b { font-weight: 700; } .mi-wdl-txt .w b { color: var(--green); } .mi-wdl-txt .d b { color: var(--text-2); } .mi-wdl-txt .l b { color: var(--red); }
     .mi-wdl-grid > div:last-child .mi-wdl-txt { justify-content: flex-end; }
     .mi-cmp { display: grid; grid-template-columns: 34px 1fr 84px 1fr 34px; align-items: center; gap: 8px; padding: 5px 0; }
     .mi-cmp-val { font-size: 13px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
     .mi-cmp-val.home { text-align: left; } .mi-cmp-val.away { text-align: right; }
     .mi-cmp-val.dim { color: var(--faint); font-weight: 500; }
-    .mi-cmp-label { font-size: 11px; color: var(--muted); text-align: center; white-space: nowrap; }
+    .mi-cmp-label { font-size: 12px; color: var(--muted); text-align: center; white-space: nowrap; }
     .mi-cmp-bar { height: 6px; background: var(--surface-2); border-radius: 4px; display: flex; overflow: hidden; }
     .mi-cmp-bar.home { justify-content: flex-end; }
     .mi-cmp-bar i { display: block; height: 100%; width: 0; border-radius: 4px; transition: width .7s cubic-bezier(.2,.8,.2,1); }
     .mi-cmp-bar.home i { background: var(--blue); } .mi-cmp-bar.away i { background: var(--away); }
     .mi-cmp-bar.dim i { opacity: .35; }
-    .mi-caption { font-size: 11px; color: var(--muted); background: var(--bg); border: 0.5px solid var(--surface-2); border-radius: 10px; padding: 8px 10px; margin-top: 10px; line-height: 1.5; }
+    .mi-caption { font-size: 12px; color: var(--muted); background: var(--bg); border: 0.5px solid var(--surface-2); border-radius: 10px; padding: 8px 10px; margin-top: 10px; line-height: 1.5; }
     .mi-power-legend { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 10px; }
     .mi-power-item { display: flex; align-items: center; gap: 8px; min-width: 0; }
     .mi-power-item.away { flex-direction: row-reverse; }
@@ -1200,7 +1200,7 @@
       .mi-power-item { flex-direction: column; align-items: flex-start; gap: 3px; }
       .mi-power-item.away { flex-direction: column; align-items: flex-end; }
     }
-    .mi-delta { font-size: 11px; font-weight: 600; margin-left: 3px; }
+    .mi-delta { font-size: 12px; font-weight: 600; margin-left: 3px; }
     .mi-delta.up { color: var(--green); } .mi-delta.down { color: var(--red); } .mi-delta.flat { color: var(--muted); }
     /* 차트는 카드 실제 폭(px)으로 1:1로 그림 — viewBox로 늘리면 넓은 화면에서 글자까지 커짐 */
     .mi-chart { width: 100%; max-width: 100%; }
@@ -1218,11 +1218,11 @@
     .stat-box.sb { text-align: left; padding: 10px 12px; min-width: 0; }
     .sb-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
     @media (max-width: 480px) { .sb-lg { display: none; } }   /* 좁은 폰: "리그 12위" → "12위" — 팀 이름(Man United)이 잘리지 않게 */
-    .sb-label { font-size: 11px; color: var(--muted); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .sb-rank { flex-shrink: 0; font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 99px; color: var(--text-2); background: rgba(142,154,179,0.14); font-variant-numeric: tabular-nums; }
+    .sb-label { font-size: 12px; color: var(--muted); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sb-rank { flex-shrink: 0; font-size: 12px; font-weight: 700; padding: 1px 7px; border-radius: 99px; color: var(--text-2); background: rgba(142,154,179,0.14); font-variant-numeric: tabular-nums; }
     .sb-rank.good { color: var(--blue-text); background: rgba(88,166,255,0.14); } .sb-rank.bad { color: var(--red); background: rgba(248,81,73,0.12); }
     .sb-val { display: flex; align-items: baseline; gap: 6px; margin: 4px 0 7px; }
-    .sb-val b { font-size: 20px; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; } .sb-val small { font-size: 11px; color: var(--faint); }
+    .sb-val b { font-size: 20px; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; } .sb-val small { font-size: 12px; color: var(--faint); }
     .sb-bar { position: relative; height: 5px; border-radius: 99px; background: var(--surface-2); }
     .sb-bar i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 99px; transition: width .9s cubic-bezier(.22,.8,.2,1); }
     .sb.home .sb-bar i { background: linear-gradient(90deg, var(--blue-strong), var(--blue)); } .sb.away .sb-bar i { background: linear-gradient(90deg, var(--away), var(--away)); }
@@ -1244,7 +1244,7 @@
     @media (prefers-reduced-motion: reduce) { .badge.thinking::after, .badge.reveal, .prob-bars .prob-row.win .prob-bar-bg::after { animation: none; } .pred-summary { transition: none; } }
     .stat-box { background: var(--surface-2); border-radius: 10px; padding: 12px; text-align: center; }
     .stat-val { font-size: 18px; font-weight: 700; }
-    .stat-label { font-size: 11px; color: var(--muted); margin-top: 4px; }
+    .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
     /* 키보드로 이동할 때만 보이는 초점 테두리(마우스 클릭엔 안 보임) */
     :focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 6px; }
     .nav-tab:focus-visible, .ti-tab:focus-visible, .tabbar-item:focus-visible { outline-offset: -3px; }
@@ -1255,7 +1255,7 @@
     .wake-bar { width: min(240px, 70%); height: 4px; border-radius: 99px; background: rgba(142,154,179,0.18); overflow: hidden; }
     .wake-bar i { display: block; height: 100%; transform-origin: left; transform: scaleX(0.04); background: linear-gradient(90deg, var(--blue-strong), var(--blue)); box-shadow: 0 0 10px rgba(88,166,255,0.6); animation: wakeFill 55s cubic-bezier(.15,.6,.3,1) forwards; }
     @keyframes wakeFill { to { transform: scaleX(0.94); } }
-    .wake-sub { font-size: 11px; color: var(--muted); }
+    .wake-sub { font-size: 12px; color: var(--muted); }
 
     /* 로고의 그래프 바 애니메이션 — 로고 클릭(새로고침) 피드백 + 로딩 표시 공용 */
     .logo-bars { display: flex; align-items: flex-end; }
@@ -1272,12 +1272,12 @@
     .kicker-row.selected { border-color: var(--blue); background: rgba(88,166,255,0.08); }
     .kicker-row-info { flex: 1; min-width: 0; }
     .kicker-row-name { font-size: 13px; font-weight: 600; color: var(--text); }
-    .kicker-row-pos { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .kicker-row-pos { font-size: 12px; color: var(--muted); margin-top: 2px; }
     .kicker-order-badge { width: 24px; height: 24px; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--muted); flex-shrink: 0; }
     .kicker-row.selected .kicker-order-badge { background: var(--blue); border-color: var(--blue); color: var(--bg); }
     .shootout-scoreboard { display: flex; align-items: center; justify-content: center; gap: 28px; margin: 0 auto 20px; max-width: 460px; }
     .shootout-score-side { text-align: center; flex: 1; min-width: 0; max-width: 170px; border-radius: 14px; padding: 8px; }
-    .shootout-mark { font-size: 11px; font-weight: 700; color: var(--muted); margin-bottom: 5px; }
+    .shootout-mark { font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 5px; }
     .shootout-mark.mine { color: var(--blue); }
     .shootout-score-side img { width: 44px; height: 44px; object-fit: contain; margin-bottom: 8px; }
     .shootout-score-name { font-size: 15px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -1309,7 +1309,7 @@
     .shootout-ball svg { width: 100%; height: 100%; }
     .shootout-keeper { position: absolute; width: 30px; height: 30px; left: 50%; top: 62%; transform: translate(-50%, -50%); transition: left .45s ease, top .45s ease; z-index: 3; color: var(--green); filter: drop-shadow(0 2px 3px rgba(0,0,0,.5)); }
     .shootout-keeper svg { width: 100%; height: 100%; }
-    .shootout-mode-badge { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 12px; border-radius: 14px; margin-bottom: 7px; }
+    .shootout-mode-badge { display: inline-block; font-size: 12px; font-weight: 700; padding: 3px 12px; border-radius: 14px; margin-bottom: 7px; }
     .shootout-mode-badge.attack { background: rgba(88,166,255,0.15); color: var(--blue); }
     .shootout-mode-badge.defend { background: rgba(240,136,62,0.15); color: var(--away); }
     .shootout-stage-attack .shootout-goal-frame { box-shadow: 0 0 0 2px rgba(88,166,255,0.35); }
@@ -1340,7 +1340,7 @@
     /* ── 승부차기 리디자인(2026-09-29): 단계 표시, 원근 페널티 박스 위 골대, 유리 전광판, 브랜드 파랑 버튼 ── */
     .so-steps { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 0 auto 18px; flex-wrap: wrap; }
     .so-steps span { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--faint); white-space: nowrap; }
-    .so-steps span b { width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 10.5px; background: rgba(38,51,77,0.7); color: var(--muted); }
+    .so-steps span b { width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11.5px; background: rgba(38,51,77,0.7); color: var(--muted); }
     .so-steps span.on { color: var(--text); } .so-steps span.on b { background: var(--blue-strong); color: #fff; box-shadow: 0 0 12px rgba(31,111,235,0.5); }
     .so-steps span.done { color: var(--muted); } .so-steps span.done b { background: rgba(63,185,80,0.18); color: var(--green); }
     .so-steps i { width: 18px; height: 1px; background: var(--border); }
@@ -1350,8 +1350,8 @@
     .so-team-head img { width: 30px; height: 30px; object-fit: contain; } .so-team-head b { font-size: 16px; color: var(--text); }
     .so-sec-t { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--text); margin: 18px 0 10px; }
     .so-sec-t:first-of-type { margin-top: 0; }
-    .so-sec-t b { width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; background: rgba(88,166,255,0.14); color: var(--blue-text); border: 0.5px solid rgba(88,166,255,0.35); }
-    .so-sec-t span { margin-left: auto; font-size: 11px; font-weight: 500; color: var(--muted); }
+    .so-sec-t b { width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; background: rgba(88,166,255,0.14); color: var(--blue-text); border: 0.5px solid rgba(88,166,255,0.35); }
+    .so-sec-t span { margin-left: auto; font-size: 12px; font-weight: 500; color: var(--muted); }
     .so-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px; }
     .so-grid .kicker-row { margin-bottom: 0; background: rgba(10,16,32,0.45); }
     .kicker-row.selected { border-color: rgba(88,166,255,0.7); background: rgba(31,111,235,0.12); box-shadow: 0 0 0 1px rgba(88,166,255,0.25) inset; }
@@ -1407,8 +1407,8 @@
     .so-result-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
     @media (max-width: 480px) {
       .shootout-stage { height: 300px; } .shootout-goal-frame { height: 170px; left: 3%; width: 94%; } .so-pitch { top: 188px; height: 108px; }
-      .so-glow { height: 170px; } .so-steps { flex-wrap: nowrap; gap: 4px; } .so-steps i { width: 10px; } .so-steps span { font-size: 11px; }
-      .so-steps span:not(.on) { font-size: 0; gap: 0; } .so-steps span:not(.on) b { font-size: 10.5px; }   /* 좁은 폰: 지금 단계만 글자, 나머지는 번호만 */
+      .so-glow { height: 170px; } .so-steps { flex-wrap: nowrap; gap: 4px; } .so-steps i { width: 10px; } .so-steps span { font-size: 12px; }
+      .so-steps span:not(.on) { font-size: 0; gap: 0; } .so-steps span:not(.on) b { font-size: 11.5px; }   /* 좁은 폰: 지금 단계만 글자, 나머지는 번호만 */
     }
     .skeleton { background: linear-gradient(90deg, var(--surface-2) 25%, #2d333b 37%, var(--surface-2) 63%); background-size: 400% 100%; animation: skeletonShimmer 1.4s ease infinite; border-radius: 6px; }
     @keyframes skeletonShimmer { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
@@ -1431,7 +1431,7 @@
       .standings-table { min-width: 480px; }
       #standings-content { overflow-x: auto; -webkit-overflow-scrolling: touch; }
       .standings-table .hide-mobile { display: none; }
-      .standings-table td, .standings-table th { padding: 8px 6px; font-size: 11px; }
+      .standings-table td, .standings-table th { padding: 8px 6px; font-size: 12px; }
       .team-cell span { display: inline-block; max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle; }
       .player-col { flex: 1 1 100%; min-width: 0; }
     }
@@ -1459,7 +1459,7 @@
     .lg-item:hover { background: rgba(88,166,255,0.08); color: var(--text); }
     .lg-item.active { background: rgba(88,166,255,0.14); color: var(--blue-text, var(--blue)); font-weight: 700; }
     .lg-item-logo { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
-    .lg-item-star { margin-left: auto; color: var(--gold); font-size: 11px; flex-shrink: 0; }
+    .lg-item-star { margin-left: auto; color: var(--gold); font-size: 12px; flex-shrink: 0; }
     .lg-chips { display: none; }
     .lg-head { padding: 18px 20px 0; }
     .lg-head-top { display: flex; align-items: center; gap: 14px; }
@@ -1524,7 +1524,7 @@
     .lo-card .sched-date-header { margin: 12px 0 6px; }
     .lo-card .sched-date-header:first-child { margin-top: 0; }
     .lo-table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
-    .lo-table th { font-size: 11px; color: var(--faint); font-weight: 600; padding: 0 6px 8px; text-align: center; }
+    .lo-table th { font-size: 12px; color: var(--faint); font-weight: 600; padding: 0 6px 8px; text-align: center; }
     .lo-table td { padding: 7px 6px; text-align: center; color: var(--text-2); border-top: 0.5px solid rgba(38,51,77,0.6); }
     .lo-table th.lo-tm, .lo-table td.lo-tm { text-align: left; width: 100%; }
     .lo-table tr { cursor: pointer; }
@@ -1538,9 +1538,9 @@
     .lo-table td.pos { color: var(--green); } .lo-table td.neg { color: var(--red); }
     .lo-table tr.is-fav td { background: rgba(88,166,255,0.08); }
     .lo-table tr.is-fav .lo-team { color: var(--blue); font-weight: 700; }
-    .lo-note { font-size: 11px; color: var(--faint); margin-top: 10px; line-height: 1.5; }
+    .lo-note { font-size: 12px; color: var(--faint); margin-top: 10px; line-height: 1.5; }
     .lo-table .fav-star { margin-left: 2px; }
-    .lo-ded { font-family: var(--font-ui); font-size: 10px; color: var(--red); margin-left: 3px; font-weight: 600; }
+    .lo-ded { font-family: var(--font-ui); font-size: 11px; color: var(--red); margin-left: 3px; font-weight: 600; }
     /* 지난 시즌 개요: 시즌 결과(우승·준우승·강등) */
     .lo-res-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: var(--r-md); cursor: pointer; margin-bottom: 8px; background: rgba(24,35,58,0.55); border: 0.5px solid var(--border); }
     .lo-res-row.gold { background: rgba(240,192,64,0.08); border-color: rgba(240,192,64,0.35); }
@@ -1556,7 +1556,7 @@
     .lo-res-rel button { display: inline-flex; align-items: center; gap: 5px; padding: 4px 9px; border-radius: var(--r-pill); border: 0.5px solid var(--border); background: none; color: var(--text-2); font-family: inherit; font-size: 12px; cursor: pointer; }
     .lo-res-rel button:hover { border-color: var(--blue); color: var(--text); }
     .lo-res-rel img { width: 16px; height: 16px; object-fit: contain; }
-    .lo-res-rel small { color: var(--amber); font-size: 10px; }
+    .lo-res-rel small { color: var(--amber); font-size: 11px; }
     /* 시즌 탭: 역대 우승·준우승 */
     .lh-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; margin: 4px 2px 12px; }
     .lh-head b { font-size: 16px; color: var(--text); } .lh-head span { font-size: 12px; color: var(--muted); }
@@ -1567,15 +1567,15 @@
     .lh-now { border-color: rgba(88,166,255,0.35); }
     .lh-season { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-family: var(--font-num); font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 10px; letter-spacing: 0.3px; }
     .lh-go { font-family: var(--font-ui); font-size: 12px; font-weight: 500; color: var(--blue); }
-    .lh-live { font-family: var(--font-ui); font-size: 11px; font-weight: 600; color: var(--blue-text, var(--blue)); background: rgba(88,166,255,0.12); padding: 3px 8px; border-radius: var(--r-pill); }
+    .lh-live { font-family: var(--font-ui); font-size: 12px; font-weight: 600; color: var(--blue-text, var(--blue)); background: rgba(88,166,255,0.12); padding: 3px 8px; border-radius: var(--r-pill); }
     .lh-team { display: flex; align-items: center; gap: 10px; padding: 6px 0; cursor: pointer; min-width: 0; }
     .lh-team.plain { cursor: inherit; }
     .lh-team img, .lh-ini { width: 30px; height: 30px; object-fit: contain; flex-shrink: 0; }
-    .lh-ini { border-radius: 50%; background: var(--surface-2); color: var(--muted); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .lh-ini { border-radius: 50%; background: var(--surface-2); color: var(--muted); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
     .lh-team > span { display: flex; flex-direction: column; min-width: 0; }
     .lh-team b { font-size: 14px; color: var(--text); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .lh-team:not(.plain):hover b { color: var(--blue); }
-    .lh-team small { font-size: 11px; color: var(--muted); }
+    .lh-team small { font-size: 12px; color: var(--muted); }
     .lh-team.gold small { color: var(--gold); font-weight: 600; }
     .lh-stripped { text-decoration: line-through; color: var(--muted) !important; }
     .lh-src { margin-top: 14px; } .lh-src a { color: var(--muted); }
@@ -1591,12 +1591,12 @@
     .lo-sim-bar i.gold { background: var(--gold); } .lo-sim-bar i.red { background: var(--red-strong); }
     .lo-sim-row b { text-align: right; font-family: var(--font-num); font-size: 15px; color: var(--text); }
     .lo-pl-row { display: flex; align-items: center; gap: 9px; padding: 6px; margin: 0 -6px; border-radius: var(--r-sm); min-width: 0; transition: background .15s; } .lo-pl-row[onclick]:hover { background: rgba(88,166,255,0.07); }
-    .lo-pl-photo { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; background: var(--surface-2); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--muted); }
+    .lo-pl-photo { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; background: var(--surface-2); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--muted); }
     .lo-pl-photo svg { width: 16px; height: 16px; }
     .lo-pl-info { display: flex; flex-direction: column; min-width: 0; flex: 1; }
     .lo-pl-info b { font-size: 13px; color: var(--text); font-weight: 600; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-    .lo-pl-info small { font-size: 11px; color: var(--muted); }
-    .lo-pl-val { font-size: 11px; color: var(--muted); white-space: nowrap; }
+    .lo-pl-info small { font-size: 12px; color: var(--muted); }
+    .lo-pl-val { font-size: 12px; color: var(--muted); white-space: nowrap; }
     .lo-pl-val b { font-family: var(--font-num); font-size: 18px; color: var(--text); margin-right: 2px; }
     @media (max-width: 900px) {   /* 한 줄: 다음 경기 → 순위 → 우승·강등 → 득점 */
       .lo-grid { display: flex; flex-direction: column; align-items: stretch; gap: 0; }
@@ -1624,20 +1624,20 @@
     .mt-rank { text-align: right; flex-shrink: 0; }
     .mt-rank b { display: block; font-family: var(--font-num); font-size: 28px; color: var(--text); line-height: 1; }
     .mt-rank b small { font-size: 13px; color: var(--muted); font-family: var(--font-ui); margin-left: 1px; }
-    .mt-rank span { font-size: 11px; color: var(--muted); }
-    .mt-form { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); }
+    .mt-rank span { font-size: 12px; color: var(--muted); }
+    .mt-form { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--muted); }
     .mt-form span { margin-right: 4px; }
-    .mt-form i { width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-style: normal; font-size: 10.5px; font-weight: 700; color: #fff; background: var(--faint); }
+    .mt-form i { width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-style: normal; font-size: 11.5px; font-weight: 700; color: #fff; background: var(--faint); }
     .mt-form i.W { background: var(--green-strong); } .mt-form i.L { background: var(--red-strong); }
     .mt-next { border-top: 0.5px solid var(--border); padding-top: 10px; cursor: pointer; }
     .mt-next[onclick]:hover { background: rgba(88,166,255,0.07); }
     .mt-none { color: var(--muted); font-size: 13px; cursor: default; }
-    .mt-next-h { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 10px; font-size: 11px; color: var(--muted); margin-bottom: 7px; }
+    .mt-next-h { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 10px; font-size: 12px; color: var(--muted); margin-bottom: 7px; }
     .mt-next-h > span:first-child { color: var(--text-2); font-weight: 600; }
     .mt-comp { display: inline-flex; align-items: center; gap: 4px; }
     .mt-when { margin-left: auto; }
     .mt-vs { display: flex; align-items: center; gap: 8px; min-width: 0; }
-    .mt-ha { font-size: 11px; padding: 2px 7px; border-radius: var(--r-pill); background: var(--surface-2); color: var(--text-2); flex-shrink: 0; }
+    .mt-ha { font-size: 12px; padding: 2px 7px; border-radius: var(--r-pill); background: var(--surface-2); color: var(--text-2); flex-shrink: 0; }
     .mt-opp { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--text); min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
     .mt-opp img { width: 20px; height: 20px; object-fit: contain; }
     .mt-pred { margin-left: auto; display: flex; gap: 8px; font-size: 12px; color: var(--muted); white-space: nowrap; }
@@ -1671,7 +1671,7 @@
     @media (max-width: 768px) {
       :root { --tabbar-h: calc(58px + env(safe-area-inset-bottom)); }
       .tabbar { display: grid; grid-template-columns: repeat(4, 1fr); position: fixed; left: 0; right: 0; bottom: 0; z-index: 300; height: var(--tabbar-h); padding-bottom: env(safe-area-inset-bottom); background: rgba(10,16,32,0.86); backdrop-filter: blur(16px) saturate(140%); -webkit-backdrop-filter: blur(16px) saturate(140%); border-top: 0.5px solid rgba(142,154,179,0.18); }
-      .tabbar-item { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-width: 0; padding: 0 2px; background: none; border: none; color: var(--muted); font-family: inherit; font-size: 11px; font-weight: 500; letter-spacing: -0.2px; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color .15s; }
+      .tabbar-item { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-width: 0; padding: 0 2px; background: none; border: none; color: var(--muted); font-family: inherit; font-size: 12px; font-weight: 500; letter-spacing: -0.2px; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: color .15s; }
       .tabbar-item svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s cubic-bezier(.3,1.5,.5,1); }
       .tabbar-item span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
       .tabbar-item.active { color: var(--blue); font-weight: 600; }
@@ -1689,7 +1689,7 @@
       .pwa-install-banner { bottom: calc(var(--tabbar-h) + 10px); }
       .pwa-install-banner:not(.show) { transform: translateY(calc(100% + var(--tabbar-h) + 24px)); }
     }
-    @media (max-width: 360px) { .tabbar-item { font-size: 9.5px; letter-spacing: -0.4px; } }
+    @media (max-width: 360px) { .tabbar-item { font-size: 10.5px; letter-spacing: -0.4px; } }
     .champ-league-btn { padding: 8px 16px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 10px; color: var(--muted); font-size: 13px; font-family: inherit; cursor: pointer; transition: all .15s; display: inline-flex; align-items: center; }
     .champ-league-btn:hover { border-color: var(--blue); }
     .champ-league-btn.active { background: var(--blue-strong); border-color: var(--blue-strong); color: #fff; font-weight: 600; }
@@ -1721,16 +1721,16 @@
     .ct-row[style*="--zc"] .st-rank { color: var(--zc); background: color-mix(in srgb, var(--zc) 13%, transparent); }
     .ct-row[style*="--zc"]::before { content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px; border-radius: 4px; background: var(--zc); }
     .ct-head, .ct-row { display: grid; grid-template-columns: 30px minmax(0,1fr) 64px 58px 58px 58px; align-items: center; gap: 8px; padding: 0 12px; }
-    .ct-head { font-size: 11px; color: var(--faint); padding-bottom: 8px; border-bottom: 0.5px solid var(--border); }
+    .ct-head { font-size: 12px; color: var(--faint); padding-bottom: 8px; border-bottom: 0.5px solid var(--border); }
     .ct-head span { text-align: center; } .ct-head span:nth-child(2) { text-align: left; }
     .ct-row { padding-top: 9px; padding-bottom: 9px; border-bottom: 0.5px solid var(--surface-2); }
     .ct-rank { font-size: 14px; font-weight: 700; text-align: center; color: var(--muted); font-variant-numeric: tabular-nums; }
     .ct-team { display: flex; align-items: center; gap: 10px; min-width: 0; }
     .ct-team img { width: 24px; height: 24px; object-fit: contain; flex-shrink: 0; cursor: pointer; }
     .ct-name { font-size: 13px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .ct-sub { font-size: 10px; color: var(--faint); margin-top: 2px; }
+    .ct-sub { font-size: 11px; color: var(--faint); margin-top: 2px; }
     .ct-pts { text-align: center; font-size: 15px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
-    .ct-pts small { display: block; font-size: 10px; font-weight: 500; color: var(--faint); margin-top: 1px; }
+    .ct-pts small { display: block; font-size: 11px; font-weight: 500; color: var(--faint); margin-top: 1px; }
     .ct-cell { height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; }
     .ct-cell.none { color: var(--disabled); font-weight: 500; }
     .ct-cell.wait { border: 0.5px dashed var(--border); }
@@ -1749,16 +1749,16 @@
     .cd-chart { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 3px; height: 70px; align-items: end; }
     .cd-col { display: flex; flex-direction: column; align-items: stretch; justify-content: flex-end; height: 100%; }
     .cd-col i { display: block; background: var(--disabled); border-radius: 3px 3px 1px 1px; animation: cdBar .5s cubic-bezier(.22,.8,.2,1) both; transform-origin: bottom; }
-    .cd-col span { font-size: 9px; color: var(--faint); text-align: center; margin-top: 3px; font-variant-numeric: tabular-nums; }
+    .cd-col span { font-size: 10px; color: var(--faint); text-align: center; margin-top: 3px; font-variant-numeric: tabular-nums; }
     @keyframes cdBar { from { transform: scaleY(0); } }
     @media (prefers-reduced-motion: reduce) { .ct-dist, .cd-col i { animation: none; } }
-    .ct-legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 14px; font-size: 11px; color: var(--muted); }
+    .ct-legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 14px; font-size: 12px; color: var(--muted); }
     .ct-meta { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
     .ct-meta b { color: var(--text); font-weight: 600; }
     @media (max-width: 768px) {
       .ct-head, .ct-row { grid-template-columns: 24px minmax(0,1fr) 44px 46px 46px 46px; gap: 6px; padding-left: 4px; padding-right: 4px; }
       .ct-team img { width: 20px; height: 20px; } .ct-team { gap: 7px; }
-      .ct-cell { font-size: 11px; }
+      .ct-cell { font-size: 12px; }
     }
     /* 좁은 폰: 이름 칸이 32px까지 줄어 "Ar…"로 잘리고 "현재 12점 · 5경기"가 세 줄로 접혔음 → 숫자 칸을 줄이고 아랫줄은 한 줄로 */
     @media (max-width: 480px) {
@@ -1768,7 +1768,7 @@
       .ct-sub { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
       .ct-sub-k { display: none; }
       .ct-pts { font-size: 14px; }
-      .ct-head { font-size: 11px; }
+      .ct-head { font-size: 12px; }
     }
 
 
@@ -1790,7 +1790,7 @@
     .cb-res { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: none; border-radius: 10px; background: transparent; color: var(--text); font-family: inherit; text-align: left; cursor: pointer; }
     .cb-res:hover, .cb-res.first { background: rgba(88,166,255,0.1); }
     .cb-res img { width: 22px; height: 22px; object-fit: contain; } .cb-res b { font-size: 13px; font-weight: 600; }
-    .cb-res small { font-size: 11px; color: var(--muted); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .cb-res em { font-style: normal; font-size: 11px; color: var(--faint); }
+    .cb-res small { font-size: 12px; color: var(--muted); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .cb-res em { font-style: normal; font-size: 12px; color: var(--faint); }
     .cb-res.none { font-size: 12px; color: var(--muted); cursor: default; padding: 10px; }
     .cb-close { flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%; border: 0.5px solid var(--border); background: rgba(17,26,46,0.85); color: var(--text-2); font-size: 15px; cursor: pointer; }
     .cb-close:hover { color: #fff; border-color: var(--disabled); }
@@ -1833,7 +1833,7 @@
     .cb-card:not(.center) .cb-star, .cb-card:not(.center) .cb-rec { visibility: hidden; }
     /* 내 팀 강조(즐겨찾기 — 순위표·순위 예측·일정) */
     .st-row.is-fav td { background: rgba(88,166,255,0.07); }
-    .fav-star { color: var(--gold); font-size: 11px; margin-left: 4px; flex-shrink: 0; }
+    .fav-star { color: var(--gold); font-size: 12px; margin-left: 4px; flex-shrink: 0; }
     .ct-row.is-fav { background: rgba(88,166,255,0.08); }
     .ct-row.is-fav .ct-name { color: var(--blue-text); font-weight: 700; }
     .sched-match.is-fav { background: rgba(88,166,255,0.06); border-radius: 10px; }
@@ -1856,37 +1856,37 @@
     @media (prefers-reduced-motion: reduce) { #tip-pop { transition: none; } }
     /* 순위 변동(지난 라운드 대비) */
     .st-rank-cell { display: inline-flex; align-items: center; gap: 3px; }
-    .st-mv { font-size: 9.5px; font-weight: 800; font-style: normal; line-height: 1; font-variant-numeric: tabular-nums; }
+    .st-mv { font-size: 10.5px; font-weight: 800; font-style: normal; line-height: 1; font-variant-numeric: tabular-nums; }
     .st-mv.up { color: var(--green); } .st-mv.down { color: var(--red); } .st-mv.same { color: var(--disabled); }
-    @media (max-width: 480px) { .st-mv b { display: none; } .st-mv { font-size: 8px; } }
+    @media (max-width: 480px) { .st-mv b { display: none; } .st-mv { font-size: 9px; } }
     /* 킥오프까지 남은 시간 — 1시간 전부터 초 단위 카운트다운 */
     .ko-rel:empty { display: none; }
-    .ko-rel { display: inline-block; font-size: 11px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .ko-rel { display: inline-block; font-size: 12px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
     .ko-rel.soon { color: var(--away); font-weight: 800; }
     .ko-rel.soon::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--away); margin-right: 4px; vertical-align: 1px; animation: koPulse 1s ease-in-out infinite; }
     @keyframes koPulse { 50% { opacity: .25; } }
     @media (prefers-reduced-motion: reduce) { .ko-rel.soon::before { animation: none; } }
     .today-card-time .ko-rel { display: block; margin-top: 2px; }
-    .sched-vs .ko-rel { font-size: 11px; }
+    .sched-vs .ko-rel { font-size: 12px; }
     .mp-meta .ko-rel, #mp-meta .ko-rel { margin-left: 6px; }
-    .cb-mv { font-style: normal; font-size: 11px; font-weight: 800; margin: 0 2px; } .cb-mv.up { color: var(--green); } .cb-mv.down { color: var(--red); } .cb-mv.same { color: var(--faint); }
-    .cb-dot .mv { font-size: 8px; line-height: 1; } .cb-dot .mv.up { color: var(--green); } .cb-dot .mv.down { color: var(--red); }
+    .cb-mv { font-style: normal; font-size: 12px; font-weight: 800; margin: 0 2px; } .cb-mv.up { color: var(--green); } .cb-mv.down { color: var(--red); } .cb-mv.same { color: var(--faint); }
+    .cb-dot .mv { font-size: 9px; line-height: 1; } .cb-dot .mv.up { color: var(--green); } .cb-dot .mv.down { color: var(--red); }
     .cb-card.landed .cb-logo-wrap { animation: cbLand .7s cubic-bezier(.2,.8,.2,1); }
     @keyframes cbLand { 0% { transform: scale(.86); filter: brightness(1.6); } 60% { transform: scale(1.05); } 100% { transform: none; filter: none; } }
     .cb-back-in { height: 100%; overflow-y: auto; padding: 16px 16px 14px; box-sizing: border-box; overscroll-behavior: contain; }
     .cb-bh { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
     .cb-bh img { width: 40px; height: 40px; object-fit: contain; }
     .cb-bh > div { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.25; }
-    .cb-bh b { font-size: 16px; color: #fff; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .cb-bh small { font-size: 11px; color: var(--muted); }
+    .cb-bh b { font-size: 16px; color: #fff; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .cb-bh small { font-size: 12px; color: var(--muted); }
     .cb-turn { width: 30px; height: 30px; border-radius: 50%; border: 0.5px solid var(--border); background: rgba(10,16,32,0.6); color: var(--text-2); font-size: 15px; cursor: pointer; flex-shrink: 0; }
     .cb-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 12px; }
     .cb-fact { padding: 8px 10px; border-radius: 10px; background: rgba(10,16,32,0.5); border: 0.5px solid rgba(142,154,179,0.16); min-width: 0; }
-    .cb-fact small { display: block; font-size: 11px; color: var(--muted); } .cb-fact b { display: block; font-size: 12px; color: var(--text); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .cb-back .tp-t { font-size: 13px; flex-wrap: wrap; } .cb-back .tp-t span { font-size: 11px; }
+    .cb-fact small { display: block; font-size: 12px; color: var(--muted); } .cb-fact b { display: block; font-size: 12px; color: var(--text); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cb-back .tp-t { font-size: 13px; flex-wrap: wrap; } .cb-back .tp-t span { font-size: 12px; }
     .cb-back .bx-pitch { aspect-ratio: 68 / 60; }
     .cb-back .bx-note { display: none; }
     .cb-tp { display: flex; align-items: center; gap: 8px; padding: 5px 0; font-size: 12px; border-top: 0.5px solid rgba(142,154,179,0.1); }
-    .cb-tp b { flex: 1; min-width: 0; color: var(--text); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .cb-tp span { color: var(--muted); font-size: 11px; }
+    .cb-tp b { flex: 1; min-width: 0; color: var(--text); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .cb-tp span { color: var(--muted); font-size: 12px; }
     .cb-tp .pl-photo { width: 26px; height: 26px; }
     .cb-actions { display: flex; gap: 8px; margin-top: 12px; }
     .cb-more { flex: 1; padding: 10px; border-radius: 10px; border: none; background: #2f81f7; color: #fff; font-size: 13px; font-weight: 700; font-family: inherit; cursor: pointer; }
@@ -1896,11 +1896,11 @@
     .cb-nav.prev { left: max(16px, calc(50% - 480px)); } .cb-nav.next { right: max(16px, calc(50% - 480px)); }
     .cb-strip { position: relative; z-index: 2; display: flex; gap: 4px; padding: 6px 20px; margin: 0 auto; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
     .cb-strip::-webkit-scrollbar { display: none; }
-    .cb-dot { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 2px; width: 40px; padding: 5px 0 3px; border-radius: 10px; border: 0.5px solid transparent; background: transparent; color: var(--faint); font-size: 11px; font-weight: 700; font-family: inherit; cursor: pointer; opacity: .55; transition: opacity .2s, background .2s; }
+    .cb-dot { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 2px; width: 40px; padding: 5px 0 3px; border-radius: 10px; border: 0.5px solid transparent; background: transparent; color: var(--faint); font-size: 12px; font-weight: 700; font-family: inherit; cursor: pointer; opacity: .55; transition: opacity .2s, background .2s; }
     .cb-dot img { width: 22px; height: 22px; object-fit: contain; }
     .cb-dot:hover { opacity: .9; } .cb-dot.on { opacity: 1; background: rgba(88,166,255,0.14); border-color: rgba(88,166,255,0.45); color: #fff; }
     .cb-foot { position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; padding: 8px 20px calc(14px + env(safe-area-inset-bottom)); }
-    .cb-hint { font-size: 11px; color: var(--faint); }
+    .cb-hint { font-size: 12px; color: var(--faint); }
     .cb-picked { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
     .cb-pick-btns { display: flex; gap: 8px; } .cb-pick-btns .ob-done { min-width: 180px; }
     .cb-overlay:not(.pick) .cb-card .cb-star:not(.wide) { }
@@ -1923,15 +1923,15 @@
     .ob-lg img { width: 14px; height: 14px; object-fit: contain; }
     .ob-lg.active { border-color: var(--blue); color: #fff; background: rgba(88,166,255,.14); }
     .ob-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; max-height: 288px; overflow-y: auto; padding: 2px; }
-    .ob-team { position: relative; display: flex; flex-direction: column; align-items: center; gap: 5px; min-width: 0; padding: 10px 4px 8px; border-radius: 10px; border: 0.5px solid var(--border); background: rgba(17,26,46,.6); color: var(--text-2); font-size: 11px; font-weight: 600; cursor: pointer; font-family: inherit; transition: border-color .15s, background .15s, transform .15s; }
+    .ob-team { position: relative; display: flex; flex-direction: column; align-items: center; gap: 5px; min-width: 0; padding: 10px 4px 8px; border-radius: 10px; border: 0.5px solid var(--border); background: rgba(17,26,46,.6); color: var(--text-2); font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; transition: border-color .15s, background .15s, transform .15s; }
     .ob-team img { width: 32px; height: 32px; object-fit: contain; }
     .ob-team span { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .ob-team:hover { border-color: var(--disabled); }
     .ob-team:active { transform: scale(.96); }
     .ob-team.on { border-color: var(--blue); background: rgba(88,166,255,.13); color: #fff; }
-    .ob-team.on::after { content: '★'; position: absolute; top: 4px; right: 6px; font-size: 11px; color: #f2cc60; }
-    .ob-picked { display: flex; flex-wrap: wrap; gap: 6px; min-height: 26px; margin: 12px 0 4px; align-items: center; font-size: 11px; color: var(--faint); }
-    .ob-chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px 3px 4px; border-radius: 99px; background: rgba(88,166,255,.12); border: 0.5px solid rgba(88,166,255,.35); color: var(--text); font-size: 11px; font-weight: 600; cursor: pointer; font-family: inherit; }
+    .ob-team.on::after { content: '★'; position: absolute; top: 4px; right: 6px; font-size: 12px; color: #f2cc60; }
+    .ob-picked { display: flex; flex-wrap: wrap; gap: 6px; min-height: 26px; margin: 12px 0 4px; align-items: center; font-size: 12px; color: var(--faint); }
+    .ob-chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px 3px 4px; border-radius: 99px; background: rgba(88,166,255,.12); border: 0.5px solid rgba(88,166,255,.35); color: var(--text); font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; }
     .ob-chip img { width: 16px; height: 16px; object-fit: contain; }
     .ob-chip b { color: var(--faint); font-weight: 500; margin-left: 1px; }
     .ob-foot { display: flex; gap: 8px; margin-top: 10px; }
@@ -1974,7 +1974,7 @@
     }
     .mp-top { display: flex; align-items: center; gap: 10px; padding: 14px 16px 0; }
     .mp-title { font-size: 13px; font-weight: 700; color: var(--text); }
-    .mp-meta { flex: 1; min-width: 0; display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+    .mp-meta { flex: 1; min-width: 0; display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
     .mp-meta img { width: 18px; height: 18px; object-fit: contain; }
     .mp-top .modal-close { margin-left: auto; }
     .mp-hero { position: relative; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 6px; padding: 18px 16px 16px; }
@@ -1988,14 +1988,14 @@
     .mp-crest img { width: 42px; height: 42px; object-fit: contain; }
         .mp-name { max-width: 100%; font-size: 13px; font-weight: 700; color: var(--text); text-align: center; line-height: 1.25; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; word-break: keep-all; transition: color .15s; }
     .mp-team:hover .mp-name { color: var(--blue); }
-    .mp-side { font-size: 11px; font-weight: 700; letter-spacing: .3px; padding: 1px 7px; border-radius: 99px; }
+    .mp-side { font-size: 12px; font-weight: 700; letter-spacing: .3px; padding: 1px 7px; border-radius: 99px; }
     .mp-team.home .mp-side { color: var(--blue-text); background: rgba(88,166,255,0.12); } .mp-team.away .mp-side { color: var(--away); background: rgba(240,136,62,0.12); }
     .mp-center { position: relative; display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 96px; }
     .mp-vs { font-size: 14px; font-weight: 800; color: var(--faint); letter-spacing: 1px; }
-    .mp-score-label { font-size: 11px; color: var(--muted); font-weight: 600; }
+    .mp-score-label { font-size: 12px; color: var(--muted); font-weight: 600; }
     .mp-score { display: flex; align-items: center; gap: 8px; font-size: 34px; font-weight: 800; line-height: 1.1; font-variant-numeric: tabular-nums; }
     .mp-score b.h { color: var(--blue-text); } .mp-score b.a { color: var(--away); } .mp-score i { font-style: normal; color: var(--disabled); font-size: 26px; }
-    .mp-xg { font-size: 11px; color: var(--faint); font-variant-numeric: tabular-nums; }
+    .mp-xg { font-size: 12px; color: var(--faint); font-variant-numeric: tabular-nums; }
     .mp-body { padding: 4px 16px 16px; }
     .mp-verdict { display: flex; align-items: center; justify-content: center; gap: 7px; width: max-content; max-width: 100%; margin: 0 auto 14px; padding: 6px 14px; border-radius: 99px; font-size: 13px; font-weight: 700; border: 0.5px solid; }
     .mp-verdict .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 8px currentColor; }
@@ -2011,7 +2011,7 @@
     .mp-probs div { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
     .mp-probs .d { align-items: center; } .mp-probs .a { align-items: flex-end; text-align: right; }
     .mp-probs b { font-size: 16px; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
-    .mp-probs span { font-size: 11px; color: var(--faint); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .mp-probs span { font-size: 12px; color: var(--faint); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     /* 대진 창: 진출 팀 파란 링, 결승 우승 금색, 탈락 흐리게 */
     .tie-hero .mp-crest { border-color: rgba(142,154,179,0.45); box-shadow: none; }
     .tie-hero .mp-team.win .mp-crest { border-color: rgba(88,166,255,0.7); box-shadow: 0 0 22px rgba(88,166,255,0.3); }
@@ -2019,9 +2019,9 @@
     .tie-hero .mp-team.win .mp-name { color: var(--blue-text); } .tie-hero .mp-team.win.gold .mp-name { color: #f2cc60; }
     .mp-score.tie-score b { color: var(--text-2); } .mp-score.tie-score b.w { color: var(--blue-text); } .mp-score.tie-score.gold b.w { color: #f2cc60; }
     .mp-verdict.gold { color: #f2cc60; border-color: rgba(227,179,65,0.45); background: rgba(227,179,65,0.1); }
-    .mr-row.tie-leg b.when { font-size: 11px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+    .mr-row.tie-leg b.when { font-size: 12px; font-weight: 600; color: var(--muted); white-space: nowrap; }
     .mr-row.tie-leg .tbd { grid-column: 2 / -1; text-align: center; font-size: 12px; color: var(--faint); }
-    .mp-verdict small { font-size: 11px; font-weight: 600; opacity: .7; margin-left: 4px; }
+    .mp-verdict small { font-size: 12px; font-weight: 600; opacity: .7; margin-left: 4px; }
     .mp-team.lose { opacity: .45; } .mp-team.win .mp-name { color: #fff; }
     .mp-score.final b.h, .mp-score.final b.a { color: var(--text); }
     .mr-nolog { font-size: 12px; color: var(--muted); text-align: center; padding: 10px 12px; border-radius: 10px; background: rgba(10,16,32,0.45); border: 0.5px dashed var(--border); line-height: 1.5; word-break: keep-all; }
@@ -2030,8 +2030,8 @@
     .mr-row { display: grid; grid-template-columns: 50px 1fr 42px 1fr; align-items: center; gap: 6px; padding: 6px 4px; border-radius: 10px; font-size: 12px; font-variant-numeric: tabular-nums; }
     .mr-row + .mr-row { border-top: 0.5px solid rgba(142,154,179,0.12); }
     .mr-row.cur { background: rgba(88,166,255,0.08); } .mr-row.cur .dt { color: var(--blue-text); font-weight: 700; }
-    .mr-nolog small { font-size: 11px; color: var(--faint); }
-    .mr-row .dt { font-size: 11px; color: var(--faint); }
+    .mr-nolog small { font-size: 12px; color: var(--faint); }
+    .mr-row .dt { font-size: 12px; color: var(--faint); }
     .mr-row .t { display: flex; align-items: center; gap: 6px; min-width: 0; color: var(--text); } .mr-row .t.a { justify-content: flex-end; } .mr-row .t.lose { opacity: .45; }
     .mr-row .t em { font-style: normal; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .mr-row .t img { width: 18px; height: 18px; object-fit: contain; flex-shrink: 0; }
@@ -2040,15 +2040,15 @@
     .mr-row b { text-align: center; color: var(--text); }
     .mp-probs .h.top b { color: var(--blue-text); font-weight: 800; } .mp-probs .a.top b { color: var(--away); font-weight: 800; } .mp-probs .d.top b { color: var(--text); font-weight: 800; }
     .mp-sec { margin-top: 14px; padding-top: 12px; border-top: 0.5px solid rgba(142,154,179,0.18); }
-    .mp-sec-t { display: flex; justify-content: space-between; gap: 8px; font-size: 11px; color: var(--muted); font-weight: 600; margin-bottom: 8px; }
-    .mp-sec-n { font-weight: 500; color: var(--faint); font-size: 11px; }
+    .mp-sec-t { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--muted); font-weight: 600; margin-bottom: 8px; }
+    .mp-sec-n { font-weight: 500; color: var(--faint); font-size: 12px; }
     /* 경기 상세 [요약 | 라인업 | 통계] (2026-09-30) — 홈 파랑·원정 주황, 평점 색: 8+ 파랑 · 7+ 초록 · 6+ 노랑 · 그 아래 주황 */
     .md-tabs { display: flex; gap: 3px; padding: 3px; margin: 0 0 14px; border-radius: 10px; background: rgba(10,16,32,0.5); border: 0.5px solid var(--border); }
     .md-tabs[hidden] { display: none; }
     .md-tabs button { flex: 1; padding: 7px 0; border: none; border-radius: 6px; background: transparent; color: var(--muted); font-size: 12px; font-weight: 600; font-family: inherit; cursor: pointer; transition: background .15s, color .15s; }
     .md-tabs button:hover { color: var(--text-2); }
     .md-tabs button.active { background: var(--surface-2); color: #fff; box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset; }
-    .md-rt { display: inline-flex; align-items: center; justify-content: center; min-width: 26px; padding: 1px 4px; border-radius: 4px; font-size: 10px; font-weight: 800; font-style: normal; color: var(--bg); font-variant-numeric: tabular-nums; line-height: 1.35; }
+    .md-rt { display: inline-flex; align-items: center; justify-content: center; min-width: 26px; padding: 1px 4px; border-radius: 4px; font-size: 11px; font-weight: 800; font-style: normal; color: var(--bg); font-variant-numeric: tabular-nums; line-height: 1.35; }
     .md-rt.r8 { background: var(--blue); } .md-rt.r7 { background: var(--green); } .md-rt.r6 { background: var(--amber); } .md-rt.r5 { background: var(--away); }
     .md-ic { width: 13px; height: 13px; flex-shrink: 0; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
     .md-ic.ball { stroke: var(--text); } .md-ic.ball.og { stroke: var(--red); } .md-ic.ball.miss { stroke: var(--faint); opacity: .8; }
@@ -2056,34 +2056,34 @@
     .md-card { display: inline-block; width: 9px; height: 12px; border-radius: 4px; flex-shrink: 0; }
     .md-card.y { background: #f2cc60; } .md-card.r { background: var(--red); }
     .md-card.y2 { background: linear-gradient(135deg, #f2cc60 50%, var(--red) 50%); }
-    .md-var { font-size: 8.5px; font-weight: 800; letter-spacing: .3px; padding: 1px 3px; border-radius: 4px; border: 1px solid var(--muted); color: var(--text-2); }
+    .md-var { font-size: 9.5px; font-weight: 800; letter-spacing: .3px; padding: 1px 3px; border-radius: 4px; border: 1px solid var(--muted); color: var(--text-2); }
     /* 요약: 경기 최우수 선수 + 타임라인(홈은 가운데 왼쪽, 원정은 오른쪽) */
     .md-potm { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 14px; background: linear-gradient(135deg, rgba(88,166,255,0.12), rgba(10,16,32,0.4)); border: 0.5px solid rgba(88,166,255,0.28); }
     .md-potm > img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; background: var(--surface-2); border: 1.5px solid rgba(88,166,255,0.5); }
     .md-potm > div { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
-    .md-potm small { font-size: 10px; color: var(--muted); font-weight: 600; }
+    .md-potm small { font-size: 11px; color: var(--muted); font-weight: 600; }
     .md-potm b { font-size: 14px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .md-potm > div > span { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); } .md-potm > div > span img { width: 13px; height: 13px; object-fit: contain; }
+    .md-potm > div > span { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--muted); } .md-potm > div > span img { width: 13px; height: 13px; object-fit: contain; }
     .md-potm .md-rt { font-size: 14px; padding: 4px 7px; border-radius: 6px; }
     .md-tl { display: flex; flex-direction: column; gap: 2px; }
     .md-ev { display: grid; grid-template-columns: 1fr 50px 1fr; align-items: center; min-height: 28px; font-size: 12px; }
-    .md-ev-min { grid-column: 2; grid-row: 1; text-align: center; font-size: 10.5px; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .md-ev-min { grid-column: 2; grid-row: 1; text-align: center; font-size: 11.5px; font-weight: 700; color: var(--muted); font-variant-numeric: tabular-nums; }
     .md-ev-body { grid-row: 1; display: flex; align-items: center; gap: 6px; min-width: 0; }
     .md-ev.home .md-ev-body { grid-column: 1; justify-content: flex-start; flex-direction: row-reverse; text-align: right; }
     .md-ev.home .md-ev-txt { align-items: flex-end; }
     .md-ev.away .md-ev-body { grid-column: 3; }
     .md-ev-txt { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
     .md-ev-txt b { font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .md-ev-txt small { font-size: 10px; color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .md-ev-txt small { font-size: 11px; color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .md-ev.goal .md-ev-txt b { color: #fff; font-weight: 800; }
     .md-ev.goal .md-ev-min { color: var(--text); }
-    .md-ev-sc { font-style: normal; font-size: 10.5px; font-weight: 800; padding: 1px 6px; border-radius: 99px; background: rgba(236,241,250,0.1); color: var(--text); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .md-ev-sc { font-style: normal; font-size: 11.5px; font-weight: 800; padding: 1px 6px; border-radius: 99px; background: rgba(236,241,250,0.1); color: var(--text); font-variant-numeric: tabular-nums; white-space: nowrap; }
     .md-in { color: #7ee2a8; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .md-out { font-size: 10px; color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .md-mark { display: flex; align-items: center; gap: 8px; margin: 6px 0; font-size: 10.5px; color: var(--faint); font-weight: 600; }
+    .md-out { font-size: 11px; color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .md-mark { display: flex; align-items: center; gap: 8px; margin: 6px 0; font-size: 11.5px; color: var(--faint); font-weight: 600; }
     .md-mark::before, .md-mark::after { content: ''; flex: 1; height: 0.5px; background: rgba(142,154,179,0.22); }
     .md-mark b { color: var(--text-2); font-variant-numeric: tabular-nums; }
-    .md-meta { margin-top: 8px; font-size: 10.5px; color: var(--faint); text-align: center; }
+    .md-meta { margin-top: 8px; font-size: 11.5px; color: var(--faint); text-align: center; }
     /* 라인업: 세로 경기장(위 = 원정, 아래 = 홈), 선수 = 구단 유니폼 색 동그라미 + 등번호 + 평점 */
     .md-pitch { position: relative; width: 100%; aspect-ratio: 68 / 100; border-radius: 14px; overflow: hidden; border: 0.5px solid rgba(142,154,179,0.25);
       background: linear-gradient(180deg, rgba(240,136,62,0.07), rgba(10,16,32,0.35) 45%, rgba(10,16,32,0.35) 55%, rgba(88,166,255,0.08)),
@@ -2093,39 +2093,39 @@
     .md-lines .circle { left: 50%; top: 50%; width: 26%; aspect-ratio: 1; border-radius: 50%; transform: translate(-50%, -50%); }
     .md-lines .box { left: 20%; right: 20%; height: 15%; } .md-lines .box.t { top: 0; border-top: 0; } .md-lines .box.b { bottom: 0; border-bottom: 0; }
     .md-lines .six { left: 36%; right: 36%; height: 5.5%; } .md-lines .six.t { top: 0; border-top: 0; } .md-lines .six.b { bottom: 0; border-bottom: 0; }
-    .md-form { position: absolute; left: 10px; font-size: 10px; font-weight: 700; color: var(--muted); z-index: 2; }
+    .md-form { position: absolute; left: 10px; font-size: 11px; font-weight: 700; color: var(--muted); z-index: 2; }
     .md-form.t { top: 8px; } .md-form.b { bottom: 8px; }
-    .md-form { max-width: 46%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .md-form-coach { font-style: normal; font-weight: 500; }
+    .md-form { max-width: 46%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .md-form-logo { width: 16px; height: 16px; object-fit: contain; vertical-align: -3px; margin-right: 5px; } .md-form-coach { font-style: normal; font-weight: 500; }
     .md-form.t, .md-form.b { max-width: 34%; white-space: normal; line-height: 1.35; } .md-form.t .md-form-coach, .md-form.b .md-form-coach { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .md-form.t .md-form-coach b, .md-form.b .md-form-coach b { display: none; }
     .md-pl { position: absolute; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 3px; width: 64px; z-index: 1; }
-    .md-shirt { position: relative; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--kb); color: var(--kn); font-size: 11.5px; font-weight: 800; border: 1.5px solid rgba(255,255,255,0.75); box-shadow: var(--shadow-sm); font-variant-numeric: tabular-nums; }
-    .md-shirt .md-rt { position: absolute; top: -7px; right: -17px; font-size: 9px; min-width: 22px; padding: 0 3px; }
-    .md-offm { position: absolute; bottom: -4px; right: -15px; display: flex; align-items: center; font-size: 8.5px; font-weight: 700; color: var(--red); background: rgba(10,16,32,0.85); padding: 0 3px; border-radius: 4px; }
-    .md-offm::before { content: '▼'; font-size: 6px; margin-right: 1px; }
+    .md-shirt { position: relative; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--kb); color: var(--kn); font-size: 12.5px; font-weight: 800; border: 1.5px solid rgba(255,255,255,0.75); box-shadow: var(--shadow-sm); font-variant-numeric: tabular-nums; }
+    .md-shirt .md-rt { position: absolute; top: -7px; right: -17px; font-size: 10px; min-width: 22px; padding: 0 3px; }
+    .md-offm { position: absolute; bottom: -4px; right: -15px; display: flex; align-items: center; font-size: 9.5px; font-weight: 700; color: var(--red); background: rgba(10,16,32,0.85); padding: 0 3px; border-radius: 4px; }
+    .md-offm::before { content: '▼'; font-size: 7px; margin-right: 1px; }
     .md-marks { position: absolute; bottom: -4px; left: -12px; display: flex; gap: 1px; align-items: center; background: rgba(10,16,32,0.85); padding: 1px 2px; border-radius: 4px; }
     .md-marks .md-ic { width: 10px; height: 10px; } .md-marks .md-card { width: 7px; height: 9px; }
-    .md-pn { max-width: 64px; font-size: 10.5px; font-weight: 600; color: var(--text); text-shadow: 0 1px 3px rgba(0,0,0,0.9); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .md-rt-legend { display: flex; justify-content: center; align-items: center; gap: 5px; margin: 8px 0 0; font-size: 10px; color: var(--faint); }
-    .md-rt-legend .md-rt { font-size: 9px; font-weight: 700; }
+    .md-pn { max-width: 64px; font-size: 11.5px; font-weight: 600; color: var(--text); text-shadow: 0 1px 3px rgba(0,0,0,0.9); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .md-rt-legend { display: flex; justify-content: center; align-items: center; gap: 5px; margin: 8px 0 0; font-size: 11px; color: var(--faint); }
+    .md-rt-legend .md-rt { font-size: 10px; font-weight: 700; }
     .md-benches { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
     .md-bench { min-width: 0; padding: 10px; border-radius: 10px; background: rgba(10,16,32,0.45); border: 0.5px solid rgba(142,154,179,0.18); }
     .md-bench.home { border-top: 2px solid rgba(88,166,255,0.55); } .md-bench.away { border-top: 2px solid rgba(240,136,62,0.55); }
-    .md-bench-h { display: flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
-    .md-bench-h img { width: 14px; height: 14px; object-fit: contain; } .md-bench-h span { margin-left: auto; font-size: 10px; color: var(--faint); font-weight: 600; white-space: nowrap; }
+    .md-bench-h { display: flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .md-bench-h img { width: 14px; height: 14px; object-fit: contain; } .md-bench-h span { margin-left: auto; font-size: 11px; color: var(--faint); font-weight: 600; white-space: nowrap; }
     .md-bench-h b { min-width: 0; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     @media (max-width: 480px) {   /* 좁은 폰: 경기장을 세로로 늘리고 선수 표시를 줄여 윗줄 이름과 평점이 안 겹치게 */
       .md-pitch { aspect-ratio: 68 / 118; }
       .md-pl { width: 56px; gap: 2px; }
-      .md-shirt { width: 26px; height: 26px; font-size: 10.5px; }
-      .md-shirt .md-rt { top: -6px; right: -16px; font-size: 8.5px; min-width: 20px; }
-      .md-pn { max-width: 56px; font-size: 9.5px; }
+      .md-shirt { width: 26px; height: 26px; font-size: 11.5px; }
+      .md-shirt .md-rt { top: -6px; right: -16px; font-size: 9.5px; min-width: 20px; }
+      .md-pn { max-width: 56px; font-size: 10.5px; }
       .md-benches { gap: 8px; } .md-bench { padding: 9px 8px; }
     }
-    .md-sub { display: flex; align-items: center; gap: 5px; padding: 3px 0; font-size: 11px; color: var(--text-2); }
-    .md-sub.none { color: var(--faint); font-size: 10.5px; }
-    .md-in-m { font-size: 9.5px; font-weight: 700; color: var(--green); min-width: 22px; font-variant-numeric: tabular-nums; }
+    .md-sub { display: flex; align-items: center; gap: 5px; padding: 3px 0; font-size: 12px; color: var(--text-2); }
+    .md-sub.none { color: var(--faint); font-size: 11.5px; }
+    .md-in-m { font-size: 10.5px; font-weight: 700; color: var(--green); min-width: 22px; font-variant-numeric: tabular-nums; }
     .md-sub-n { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .md-coach { margin-top: 6px; padding-top: 6px; border-top: 0.5px solid rgba(142,154,179,0.15); font-size: 10.5px; color: var(--muted); }
+    .md-coach { margin-top: 6px; padding-top: 6px; border-top: 0.5px solid rgba(142,154,179,0.15); font-size: 11.5px; color: var(--muted); }
     /* 통계: 가운데 라벨 + 좌우로 뻗는 막대(좋은 쪽만 진하게), 점유율은 한 줄 막대 */
     .md-st-head { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 12px; font-weight: 700; color: var(--text); }
     .md-st-head span { display: flex; align-items: center; gap: 6px; } .md-st-head img { width: 18px; height: 18px; object-fit: contain; }
@@ -2133,13 +2133,13 @@
     .md-poss-bar { display: flex; gap: 2px; height: 22px; border-radius: 99px; overflow: hidden; background: var(--surface-2); }
     .md-poss-bar i { display: flex; align-items: center; width: 0; font-style: normal; transition: width .8s cubic-bezier(.22,.8,.2,1); overflow: hidden; }
     .md-poss-bar i.h { background: var(--blue); justify-content: flex-start; padding-left: 8px; } .md-poss-bar i.a { background: var(--away); justify-content: flex-end; padding-right: 8px; }
-    .md-poss-bar b { font-size: 11px; font-weight: 800; color: var(--bg); font-variant-numeric: tabular-nums; }
-    .md-poss span { display: block; margin-top: 4px; font-size: 10.5px; color: var(--muted); font-weight: 600; }
+    .md-poss-bar b { font-size: 12px; font-weight: 800; color: var(--bg); font-variant-numeric: tabular-nums; }
+    .md-poss span { display: block; margin-top: 4px; font-size: 11.5px; color: var(--muted); font-weight: 600; }
     .md-sts { display: flex; flex-direction: column; gap: 9px; }
     .md-st { display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; gap: 8px; }
     .md-st > b { font-size: 13px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
     .md-st > b.a { text-align: right; } .md-st > b.on.h { color: var(--blue-text); font-weight: 800; } .md-st > b.on.a { color: var(--away); font-weight: 800; }
-    .md-st-mid span { display: block; text-align: center; font-size: 11px; color: var(--text-2); margin-bottom: 4px; }
+    .md-st-mid span { display: block; text-align: center; font-size: 12px; color: var(--text-2); margin-bottom: 4px; }
     .md-st.xg .md-st-mid span { color: #fff; font-weight: 700; }
     .md-st-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
     .md-st-bars > div { height: 5px; border-radius: 99px; background: var(--surface-2); overflow: hidden; display: flex; }
@@ -2151,28 +2151,28 @@
     .md-lines .circle.top { top: 0; }
     /* 팀 소식(경기 미리보기·예측 결과): 라인업 · 결장·부상 · 주요 선수 */
     .team-news .md-pitch { max-width: 420px; margin: 0 auto; }
-    .tn-chip { font-style: normal; font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 99px; margin-left: 4px; color: var(--amber); background: rgba(210,153,34,0.14); border: 0.5px solid rgba(210,153,34,0.4); }
+    .tn-chip { font-style: normal; font-size: 12px; font-weight: 700; padding: 1px 6px; border-radius: 99px; margin-left: 4px; color: var(--amber); background: rgba(210,153,34,0.14); border: 0.5px solid rgba(210,153,34,0.4); }
     .tn-chip.ok { color: var(--green); background: rgba(63,185,80,0.14); border-color: rgba(63,185,80,0.4); }
     .tn-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .tn-col, .tn-kp { min-width: 0; }
     .tn-col-h { display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
     .tn-col-h img { width: 14px; height: 14px; object-fit: contain; }
-    .tn-inj { display: flex; align-items: center; gap: 7px; padding: 5px 0; font-size: 11px; }
+    .tn-inj { display: flex; align-items: center; gap: 7px; padding: 5px 0; font-size: 12px; }
     .tn-inj[onclick] { cursor: pointer; border-radius: var(--r-sm); transition: background .15s; } .tn-inj[onclick]:hover { background: rgba(88,166,255,0.07); }
     .tn-inj img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; background: var(--surface-2); flex-shrink: 0; }
     .tn-inj > div { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
     .tn-inj b { font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .tn-inj small { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .tn-abs { flex-shrink: 0; font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 99px; }
+    .tn-inj small { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tn-abs { flex-shrink: 0; font-size: 12px; font-weight: 700; padding: 1px 6px; border-radius: 99px; }
     .tn-abs.out { color: var(--red); background: rgba(248,81,73,0.14); } .tn-abs.doubtful { color: var(--gold); background: rgba(210,153,34,0.14); }
-    .tn-none { font-size: 11px; color: var(--faint); padding: 4px 0; }
+    .tn-none { font-size: 12px; color: var(--faint); padding: 4px 0; }
     .tn-kp + .tn-kp { margin-top: 12px; }
     .tn-row { display: flex; align-items: center; gap: 9px; padding: 6px 8px; margin: 0 -8px; border-radius: 10px; cursor: pointer; transition: background .15s; }
     .tn-row:hover { background: rgba(88,166,255,0.07); }
     .tn-row img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; background: var(--surface-2); flex-shrink: 0; }
     .tn-info { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
     .tn-info b { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .tn-info small { font-size: 11px; color: var(--muted); }
+    .tn-info small { font-size: 12px; color: var(--muted); }
     /* 선수 카드 — 다른 창(경기 결과·팀 정보) 위에 뜸 */
     .modal-overlay.pc-overlay { z-index: 1100; }
     /* ── 선수 탭(2026-10-06): 분야별 TOP 3 카드 + 전체 순위 ── */
@@ -2181,7 +2181,7 @@
     .pls-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
     .pls-card { border-radius: 14px; border: 0.5px solid rgba(142,154,179,0.16); background: rgba(10,16,32,0.4); padding: 4px 12px 6px; min-width: 0; }
     .pls-card-h { display: flex; align-items: baseline; gap: 6px; width: 100%; padding: 10px 0 8px; border: none; background: none; color: var(--text); font: inherit; cursor: pointer; text-align: left; }
-    .pls-card-h b { font-size: 14px; font-weight: 700; } .pls-card-h small { font-size: 11px; color: var(--faint); }
+    .pls-card-h b { font-size: 14px; font-weight: 700; } .pls-card-h small { font-size: 12px; color: var(--faint); }
     .pls-card-h span { margin-left: auto; font-size: 18px; color: var(--muted); line-height: 1; }
     .pls-card-h:hover b, .pls-card-h:hover span { color: var(--blue-text); }
     .pls-row, .pls-lrow { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 8px 0; border-top: 0.5px solid rgba(142,154,179,0.1); cursor: pointer; }
@@ -2189,23 +2189,23 @@
     .pls-ph { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; background: var(--surface-2); }
     .pls-nm { min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
     .pls-nm b { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .pls-nm small { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; }
+    .pls-nm small { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; }
     .pls-nm small img { width: 14px; height: 14px; object-fit: contain; }
     .pls-v { min-width: 34px; text-align: center; font-family: var(--font-num); font-size: 18px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; padding: 2px 7px; border-radius: 99px; }
     .pls-v.top { background: var(--blue); color: var(--bg); }
     .pls-v.r8.top { background: var(--blue); } .pls-v.r7.top { background: var(--green); } .pls-v.r6.top { background: var(--amber); }
-    .pls-note { font-size: 11px; color: var(--faint); margin-top: 12px; }
+    .pls-note { font-size: 12px; color: var(--faint); margin-top: 12px; }
     .pls-lhead { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
     .pls-back { border: 0.5px solid var(--border); background: rgba(10,16,32,0.5); color: var(--text-2); font: inherit; font-size: 12px; font-weight: 600; padding: 6px 12px; border-radius: 99px; cursor: pointer; }
     .pls-back:hover { color: var(--text); border-color: var(--blue); }
-    .pls-ltitle { display: flex; flex-direction: column; line-height: 1.25; } .pls-ltitle b { font-size: 18px; font-weight: 800; color: var(--text); } .pls-ltitle small { font-size: 11px; color: var(--muted); }
+    .pls-ltitle { display: flex; flex-direction: column; line-height: 1.25; } .pls-ltitle b { font-size: 18px; font-weight: 800; color: var(--text); } .pls-ltitle small { font-size: 12px; color: var(--muted); }
     .pls-sel { margin-left: auto; font: inherit; font-size: 12px; font-weight: 700; color: var(--text); background: rgba(10,16,32,0.6); border: 0.5px solid var(--border); border-radius: 8px; padding: 6px 8px; cursor: pointer; }
     .pls-lcols, .pls-lrow { display: grid; grid-template-columns: 28px 34px minmax(0, 1fr) 44px 64px 64px; align-items: center; gap: 8px; }
-    .pls-lcols { font-size: 11px; color: var(--faint); padding: 0 0 6px; }
+    .pls-lcols { font-size: 12px; color: var(--faint); padding: 0 0 6px; }
     .pls-lrow { padding: 7px 0; }
     .pls-rk { font-family: var(--font-num); font-size: 15px; font-weight: 700; color: var(--muted); text-align: center; }
     .pls-c { text-align: center; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
-    .pls-lcols .pls-v { font-family: inherit; font-size: 11px; color: var(--faint); font-weight: 500; }
+    .pls-lcols .pls-v { font-family: inherit; font-size: 12px; color: var(--faint); font-weight: 500; }
     .pls-lrow .pls-v { justify-self: center; }
     @media (max-width: 600px) {
       /* 폰: 묶음마다 옆으로 넘기는 카드(세로로 17장이 쌓여 4,000px 가까이 됐음) */
@@ -2275,7 +2275,7 @@
     .pc2-pos-row { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 20px; align-items: center; }
     .pc2-mini { position: relative; aspect-ratio: 105 / 68; border-radius: 6px; background: var(--surface-2); }
     .pc2-mini .xi-lines { position: absolute; inset: 5px; width: calc(100% - 10px); height: calc(100% - 10px); }
-    .pc2-dot { position: absolute; transform: translate(-50%, -50%); min-width: 26px; height: 18px; padding: 0 4px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: var(--text-2); background: var(--border); }
+    .pc2-dot { position: absolute; transform: translate(-50%, -50%); min-width: 26px; height: 18px; padding: 0 4px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--text-2); background: var(--border); }
     .pc2-dot.main { background: var(--blue); color: var(--bg); z-index: 1; }
     .pc2-pos-list { list-style: none; margin: 0; padding: 0; }
     .pc2-pos-list li { display: flex; justify-content: space-between; gap: 8px; padding: 7px 0; font-size: 14px; color: var(--muted); border-top: 1px solid var(--border); }
@@ -2352,7 +2352,7 @@
       .pc2-tabs { gap: 20px; } .pc2-tabs button { font-size: 13px; }
       .pc2-info { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 14px; }
       .pc2-info > div:nth-child(3) { padding-left: 0; border-left: none; }
-      .pc2-fig { padding: 0 8px; } .pc2-fig b { font-size: 26px; } .pc2-fig span { font-size: 11px; }
+      .pc2-fig { padding: 0 8px; } .pc2-fig b { font-size: 26px; } .pc2-fig span { font-size: 12px; }
       .pc2-figs.sm { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 12px; } .pc2-figs.sm .pc2-fig:nth-child(3) { padding-left: 0; border-left: none; }
       .pc2-grps { grid-template-columns: minmax(0, 1fr); }
       .pc2-pos-row { gap: 14px; }
@@ -2365,7 +2365,7 @@
       border: 0.5px solid rgba(142,154,179,0.2); }
     .xi-pitch.v { aspect-ratio: 68 / 100; } .xi-pitch.h { aspect-ratio: 105 / 74; } .xi-pitch.h.compact { aspect-ratio: 105 / 86; }   /* 한 줄에 4~5명이 세로로 서서 이름·골/도움 줄이 겹치지 않을 높이 */
     .xi-pitch.compact .xi-p { width: 70px; gap: 3px; transform: translate(-50%, -18px); } .xi-pitch.compact .xi-ph { width: 36px; height: 36px; }
-    .xi-pitch.compact .xi-rt { font-size: 11px; right: -17px; top: -7px; } .xi-pitch.compact .xi-nm { max-width: 70px; font-size: 10px; }
+    .xi-pitch.compact .xi-rt { font-size: 12px; right: -17px; top: -7px; } .xi-pitch.compact .xi-nm { max-width: 70px; font-size: 11px; }
     .xi-pitch.compact .xi-crest { width: 17px; height: 17px; left: -7px; }
     .xi-lines { position: absolute; inset: 0; width: 100%; height: 100%; fill: none; stroke: rgba(236,241,250,0.11); stroke-width: 0.35; vector-effect: non-scaling-stroke; }
     .xi-lines * { vector-effect: non-scaling-stroke; stroke-width: 1; }
@@ -2375,14 +2375,14 @@
     .xi-rt { position: absolute; top: -6px; right: -18px; font-family: var(--font-num); font-size: 12px; font-weight: 700; line-height: 1; padding: 3px 4px 2px; border-radius: 4px; color: var(--bg); background: var(--muted); font-variant-numeric: tabular-nums; }
     .xi-rt.r8 { background: var(--blue); } .xi-rt.r7 { background: var(--green); } .xi-rt.r6 { background: var(--amber); } .xi-rt.r5 { background: var(--away); }
     .xi-crest { position: absolute; left: -8px; bottom: -4px; width: 20px; height: 20px; object-fit: contain; padding: 2px; border-radius: 50%; background: var(--surface); }
-    .xi-nm { max-width: 78px; font-size: 11px; font-weight: 600; color: var(--text); text-shadow: 0 1px 4px rgba(0,0,0,0.95); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .xi-nm { max-width: 78px; font-size: 12px; font-weight: 600; color: var(--text); text-shadow: 0 1px 4px rgba(0,0,0,0.95); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .xi-nm i { font-style: normal; color: var(--faint); margin-right: 3px; font-variant-numeric: tabular-nums; }
-    .xi-st { margin-top: -2px; font-size: 10px; font-weight: 600; color: var(--blue-text); white-space: nowrap; text-shadow: 0 1px 3px rgba(0,0,0,0.9); }
+    .xi-st { margin-top: -2px; font-size: 11px; font-weight: 600; color: var(--blue-text); white-space: nowrap; text-shadow: 0 1px 3px rgba(0,0,0,0.9); }
     .xi-p:hover .xi-nm { color: var(--blue-text); }
     .xi-p:focus-visible { outline: none; } .xi-p:focus-visible .xi-ph { outline: 2px solid var(--blue); outline-offset: 2px; }
     @media (max-width: 480px) {
       .xi-p { width: 62px; gap: 3px; transform: translate(-50%, -18px); } .xi-ph { width: 36px; height: 36px; }
-      .xi-rt { font-size: 11px; right: -16px; top: -7px; } .xi-nm { max-width: 62px; font-size: 10px; }
+      .xi-rt { font-size: 12px; right: -16px; top: -7px; } .xi-nm { max-width: 62px; font-size: 11px; }
       .xi-crest { width: 17px; height: 17px; left: -7px; }
     }
     .bx-card { margin-top: 4px; }
@@ -2394,7 +2394,7 @@
     .bx-sea option { background: var(--surface); }
     .bx-sea-one { font-size: 13px; font-weight: 600; color: var(--text-2); }
     .bx-meta { margin-left: auto; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
-    .bx-note { font-size: 11px; color: var(--faint); margin-top: 8px; }
+    .bx-note { font-size: 12px; color: var(--faint); margin-top: 8px; }
     /* 캘린더 구독 창 */
     .ti-cal-btn:hover { color: var(--blue); }
     .cal-modal { width: 380px; }
@@ -2411,33 +2411,33 @@
     .cal-opt .ic svg { width: 18px; height: 18px; }
     .cal-opt b { display: block; font-size: 14px; font-weight: 700; }
     .cal-opt small { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
-    .cal-opt .tag { margin-left: auto; font-size: 11px; font-weight: 800; color: var(--blue); background: rgba(88,166,255,0.13); padding: 2px 7px; border-radius: 99px; flex-shrink: 0; }
-    .cal-note { font-size: 11px; color: var(--faint); margin-top: 12px; line-height: 1.55; }
+    .cal-opt .tag { margin-left: auto; font-size: 12px; font-weight: 800; color: var(--blue); background: rgba(88,166,255,0.13); padding: 2px 7px; border-radius: 99px; flex-shrink: 0; }
+    .cal-note { font-size: 12px; color: var(--faint); margin-top: 12px; line-height: 1.55; }
     .pc-hero { display: flex; align-items: center; gap: 14px; padding: 4px 0 14px; }
     .pc-photo { width: 76px; height: 76px; border-radius: 50%; object-fit: cover; background: var(--surface-2); border: 2px solid rgba(88,166,255,0.45); box-shadow: 0 0 24px rgba(88,166,255,0.2); flex-shrink: 0; }
     .pc-id { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
     .pc-name { font-size: 18px; font-weight: 800; color: #fff; line-height: 1.2; }
-    .pc-full { font-size: 11px; color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pc-full { font-size: 12px; color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .pc-team { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text-2); } .pc-team img { width: 16px; height: 16px; object-fit: contain; }
     .pc-tags { display: flex; gap: 5px; margin-top: 2px; }
-    .pc-tags em { font-style: normal; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 99px; background: rgba(142,154,179,0.15); color: var(--text-2); }
+    .pc-tags em { font-style: normal; font-size: 12px; font-weight: 700; padding: 2px 7px; border-radius: 99px; background: rgba(142,154,179,0.15); color: var(--text-2); }
     .pc-pos.GK { color: var(--gold); background: rgba(227,179,65,0.14); } .pc-pos.DF { color: var(--green); background: rgba(63,185,80,0.14); }
     .pc-pos.MF { color: var(--blue-text); background: rgba(88,166,255,0.14); } .pc-pos.FW { color: var(--away); background: rgba(240,136,62,0.14); }
     .pc-tags .pc-inj { color: var(--red); background: rgba(248,81,73,0.14); } .pc-tags .pc-cap { color: #f2cc60; background: rgba(242,204,96,0.14); }
     .pc-rt { display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0; }
     .pc-rt .md-rt { font-size: 17px; padding: 5px 8px; border-radius: 10px; }
-    .pc-rt small { font-size: 11px; color: var(--muted); }
+    .pc-rt small { font-size: 12px; color: var(--muted); }
     .pc-cells { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
     .pc-cell { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 9px 4px; border-radius: 10px; background: rgba(10,16,32,0.45); border: 0.5px solid rgba(142,154,179,0.16); text-align: center; min-width: 0; }
-    .pc-cell small { font-size: 11px; color: var(--muted); } .pc-cell b { font-size: 13px; color: var(--text); font-weight: 700; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .pc-cell span { font-size: 11px; color: var(--faint); font-variant-numeric: tabular-nums; }
+    .pc-cell small { font-size: 12px; color: var(--muted); } .pc-cell b { font-size: 13px; color: var(--text); font-weight: 700; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .pc-cell span { font-size: 12px; color: var(--faint); font-variant-numeric: tabular-nums; }
     .pc-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-bottom: 10px; }
     .pc-tile { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 10px 4px; border-radius: 10px; background: rgba(88,166,255,0.07); border: 0.5px solid rgba(88,166,255,0.18); }
     .pc-tile b { font-size: 18px; font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; white-space: nowrap; }
-    .pc-tile b i { font-style: normal; font-size: 11px; font-weight: 600; color: var(--muted); margin-left: 2px; }
-    .pc-tile small { font-size: 11px; color: var(--muted); }
+    .pc-tile b i { font-style: normal; font-size: 12px; font-weight: 600; color: var(--muted); margin-left: 2px; }
+    .pc-tile small { font-size: 12px; color: var(--muted); }
     .pc-grp { margin-top: 8px; }
-    .pc-grp-t { font-size: 11px; font-weight: 700; color: var(--faint); margin-bottom: 3px; }
+    .pc-grp-t { font-size: 12px; font-weight: 700; color: var(--faint); margin-bottom: 3px; }
     .pc-kv { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; font-size: 12px; border-bottom: 0.5px solid rgba(142,154,179,0.1); }
     .pc-kv span { color: var(--muted); } .pc-kv b { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
     /* 순위 막대(같은 리그·포지션 대비 90분당 백분위): 라벨 | 값 | 막대 — 상위 1/3 초록 · 중간 노랑 · 하위 1/3 빨강 */
@@ -2446,38 +2446,38 @@
     .pc-bar { display: block; height: 6px; border-radius: 99px; background: var(--surface-2); overflow: hidden; }
     .pc-bar u { display: block; height: 100%; border-radius: 99px; text-decoration: none; }
     .pc-bar u.hi, .pc-legend i.hi { background: var(--green); } .pc-bar u.mid, .pc-legend i.mid { background: var(--amber); } .pc-bar u.lo, .pc-legend i.lo { background: var(--red); }
-    .pc-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin-top: 10px; font-size: 11px; color: var(--muted); }
+    .pc-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin-top: 10px; font-size: 12px; color: var(--muted); }
     .pc-legend span { display: flex; align-items: center; gap: 4px; } .pc-legend i { width: 10px; height: 4px; border-radius: 99px; }
     .pc-legend em { font-style: normal; color: var(--faint); flex-basis: 100%; }
     .pc-mode { display: inline-flex; gap: 2px; padding: 2px; border-radius: 99px; background: rgba(10,16,32,0.55); border: 0.5px solid var(--border); }
-    .pc-mode button { border: none; background: transparent; color: var(--muted); font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 99px; cursor: pointer; font-family: inherit; }
+    .pc-mode button { border: none; background: transparent; color: var(--muted); font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 99px; cursor: pointer; font-family: inherit; }
     .pc-mode button.on { background: var(--text); color: var(--bg); }
     .pc-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }
-    .pc-chip { font-size: 11px; color: var(--muted); padding: 4px 9px; border-radius: 99px; background: rgba(10,16,32,0.45); border: 0.5px solid rgba(142,154,179,0.18); }
+    .pc-chip { font-size: 12px; color: var(--muted); padding: 4px 9px; border-radius: 99px; background: rgba(10,16,32,0.45); border: 0.5px solid rgba(142,154,179,0.18); }
     .pc-chip b { color: var(--text); margin-left: 3px; font-variant-numeric: tabular-nums; }
     /* 최근 경기 */
     .pcm-head, .pcm-row { display: grid; grid-template-columns: 38px minmax(0, 1fr) 58px 34px 24px 34px 32px; align-items: center; gap: 4px; font-size: 12px; }
-    .pcm-head { font-size: 11px; color: var(--faint); padding-bottom: 4px; } .pcm-head span:nth-child(n+3) { text-align: center; }
+    .pcm-head { font-size: 12px; color: var(--faint); padding-bottom: 4px; } .pcm-head span:nth-child(n+3) { text-align: center; }
     .pcm-row { padding: 6px 0; border-top: 0.5px solid rgba(142,154,179,0.1); color: var(--text-2); font-variant-numeric: tabular-nums; }
     .pcm-row > span:nth-child(n+3) { text-align: center; display: flex; align-items: center; justify-content: center; gap: 3px; }
-    .pcm-row .dt { color: var(--muted); font-size: 11px; }
+    .pcm-row .dt { color: var(--muted); font-size: 12px; }
     .pcm-row .opp { display: flex; align-items: center; gap: 5px; min-width: 0; } .pcm-row .opp img { width: 16px; height: 16px; object-fit: contain; flex-shrink: 0; }
     .pcm-row .opp em { font-style: normal; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .pcm-row .res b { font-size: 11px; padding: 1px 4px; border-radius: 4px; margin-right: 2px; }
+    .pcm-row .res b { font-size: 12px; padding: 1px 4px; border-radius: 4px; margin-right: 2px; }
     .pcm-row .res.w b { background: rgba(63,185,80,0.18); color: var(--green); } .pcm-row .res.d b { background: rgba(142,154,179,0.18); color: var(--text-2); } .pcm-row .res.l b { background: rgba(248,81,73,0.16); color: var(--red); }
     .pcm-row .md-rt { justify-self: center; }
     /* 경력·트로피·부상 이력 */
-    .pp-sub { font-size: 11px; font-weight: 700; color: var(--faint); margin: 6px 0 2px; }
+    .pp-sub { font-size: 12px; font-weight: 700; color: var(--faint); margin: 6px 0 2px; }
     .pp-row, .pp-tr { display: flex; align-items: center; gap: 10px; padding: 6px 0; border-top: 0.5px solid rgba(142,154,179,0.1); }
     .pp-row img { width: 24px; height: 24px; object-fit: contain; flex-shrink: 0; }
     .pp-row > div, .pp-tr > div { min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
     .pp-row b, .pp-tr b { font-size: 12px; font-weight: 600; color: var(--text); }
-    .pp-row small, .pp-tr small { font-size: 11px; color: var(--muted); }
+    .pp-row small, .pp-tr small { font-size: 12px; color: var(--muted); }
     .pp-n { flex-shrink: 0; min-width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #f2cc60; background: rgba(242,204,96,0.12); border: 0.5px solid rgba(242,204,96,0.35); }
     .pp-n.ru { color: var(--text-2); background: rgba(142,154,179,0.14); border-color: rgba(142,154,179,0.35); }
-    .pp-now { margin-left: auto; font-style: normal; font-size: 11px; font-weight: 700; color: var(--green); padding: 1px 6px; border-radius: 99px; background: rgba(63,185,80,0.14); }
+    .pp-now { margin-left: auto; font-style: normal; font-size: 12px; font-weight: 700; color: var(--green); padding: 1px 6px; border-radius: 99px; background: rgba(63,185,80,0.14); }
     .pp-inj { display: flex; justify-content: space-between; gap: 10px; padding: 6px 0; font-size: 12px; border-top: 0.5px solid rgba(142,154,179,0.1); }
-    .pp-inj span { color: var(--text); } .pp-inj small { color: var(--muted); font-size: 11px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .pp-inj span { color: var(--text); } .pp-inj small { color: var(--muted); font-size: 12px; white-space: nowrap; font-variant-numeric: tabular-nums; }
     /* 팀 정보 · 시즌 베스트 11 + 선수별 시즌 기록 */
     .bx-pitch { aspect-ratio: 68 / 64; max-width: 420px; margin: 0 auto; }
     .md-shirt.ph { width: 36px; height: 36px; background: var(--surface-2); border-color: var(--kb); border-width: 2px; }
@@ -2488,29 +2488,29 @@
     @media (max-width: 480px) { .md-pl { width: 56px; } .md-pn { max-width: 56px; } .md-pn .nm-f { display: none; } .md-pn .nm-s { display: inline; } }
     .pl-num { display: inline-block; min-width: 20px; margin-right: 6px; text-align: right; }
     .md-shirt.ph img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-    .bx-note { margin-top: 6px; font-size: 11px; color: var(--faint); text-align: center; }
+    .bx-note { margin-top: 6px; font-size: 12px; color: var(--faint); text-align: center; }
     .sq-head, .sq-row { display: grid; grid-template-columns: 30px minmax(0, 1fr) 34px 30px 30px 40px; align-items: center; gap: 6px; }
-    .sq-head { font-size: 11px; color: var(--faint); padding: 0 4px 4px; text-align: center; } .sq-head span:nth-child(2) { text-align: left; }
+    .sq-head { font-size: 12px; color: var(--faint); padding: 0 4px 4px; text-align: center; } .sq-head span:nth-child(2) { text-align: left; }
     .sq-row { padding: 6px 4px; border-radius: 10px; cursor: pointer; font-size: 12px; transition: background .15s; }
     .sq-row:hover { background: rgba(88,166,255,0.07); }
     .sq-row + .sq-row { border-top: 0.5px solid rgba(142,154,179,0.1); }
     .sq-row img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; background: var(--surface-2); }
     .sq-info { min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
-    .sq-info b { font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .sq-info small { font-size: 11px; color: var(--muted); }
+    .sq-info b { font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .sq-info small { font-size: 12px; color: var(--muted); }
     .sq-n { text-align: center; color: var(--text-2); font-variant-numeric: tabular-nums; }
     .sq-row .md-rt { justify-self: center; }
     .sq-more { display: block; width: 100%; margin-top: 8px; padding: 8px; border-radius: 10px; border: 0.5px solid var(--border); background: transparent; color: var(--muted); font-size: 12px; font-family: inherit; cursor: pointer; }
     .sq-more:hover { color: var(--text-2); border-color: var(--disabled); }
     @media (max-width: 480px) { .pc-cells, .pc-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } .tn-cols { grid-template-columns: 1fr; } }
     .mp-scores { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-    .mp-scores span { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 7px 4px; border-radius: 10px; background: rgba(10,16,32,0.45); border: 0.5px solid var(--border); font-size: 11px; color: var(--faint); font-variant-numeric: tabular-nums; }
+    .mp-scores span { display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 7px 4px; border-radius: 10px; background: rgba(10,16,32,0.45); border: 0.5px solid var(--border); font-size: 12px; color: var(--faint); font-variant-numeric: tabular-nums; }
     .mp-scores span b { font-size: 14px; color: var(--text); font-weight: 700; }
     .mp-scores span.first { border-color: rgba(88,166,255,0.45); background: rgba(31,111,235,0.1); } .mp-scores span.first b { color: var(--blue-text); }
     .mp-scores span.first.away { border-color: rgba(240,136,62,0.45); background: rgba(240,136,62,0.1); } .mp-scores span.first.away b { color: var(--away); }
     .mp-scores span.first.draw { border-color: rgba(142,154,179,0.5); background: rgba(142,154,179,0.1); } .mp-scores span.first.draw b { color: var(--text); }
     .mp-why { display: flex; flex-wrap: wrap; gap: 6px; }
     .mp-why span { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 99px; }
-    .mp-why span small { font-size: 11px; font-weight: 500; opacity: .75; }
+    .mp-why span small { font-size: 12px; font-weight: 500; opacity: .75; }
     .mp-why .up { color: var(--green); background: rgba(63,185,80,0.12); } .mp-why .down { color: var(--red); background: rgba(248,81,73,0.1); }
     .mp-cta { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; margin-top: 16px; padding: 12px; border: none; border-radius: 14px; background: linear-gradient(135deg, var(--blue-strong), #3b82f6); color: #fff; font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer; box-shadow: var(--glow-btn); transition: transform .15s, box-shadow .15s; }
     .mp-cta svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: transform .15s; }
@@ -2528,18 +2528,18 @@
     /* 팀 정보 · 플레이어 통계 탭(2026-09-29) */
     .tp-sec + .tp-sec { margin-top: 18px; padding-top: 14px; border-top: 0.5px solid rgba(142,154,179,0.18); }
     .tp-t { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
-    .tp-t span { font-size: 11px; font-weight: 500; color: var(--faint); }
+    .tp-t span { font-size: 12px; font-weight: 500; color: var(--faint); }
     .tp-row { display: grid; grid-template-columns: 38px minmax(0,1fr) 38px 38px; align-items: center; gap: 10px; padding: 8px 2px; border-bottom: 0.5px solid rgba(142,154,179,0.12); }
     .tp-row:last-child { border-bottom: none; }
     .tp-info { min-width: 0; } .tp-name { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .tp-sub { font-size: 11px; color: var(--faint); margin-top: 2px; font-variant-numeric: tabular-nums; }
+    .tp-sub { font-size: 12px; color: var(--faint); margin-top: 2px; font-variant-numeric: tabular-nums; }
     .tp-share { height: 3px; margin-top: 5px; border-radius: 99px; background: var(--surface-2); overflow: hidden; } .tp-share i { display: block; height: 100%; background: linear-gradient(90deg, var(--blue-strong), var(--blue)); border-radius: 99px; }
-    .tp-num { text-align: center; } .tp-num b { display: block; font-size: 16px; font-weight: 800; color: var(--blue-text); font-variant-numeric: tabular-nums; line-height: 1.1; } .tp-num.a b { color: var(--text-2); } .tp-num small { font-size: 11px; color: var(--faint); }
+    .tp-num { text-align: center; } .tp-num b { display: block; font-size: 16px; font-weight: 800; color: var(--blue-text); font-variant-numeric: tabular-nums; line-height: 1.1; } .tp-num.a b { color: var(--text-2); } .tp-num small { font-size: 12px; color: var(--faint); }
     .tp-pos { display: flex; gap: 2px; height: 10px; border-radius: 99px; overflow: hidden; }
     .tp-pos i { display: block; }
     .tp-pos-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 8px; font-size: 12px; color: var(--muted); }
     .tp-pos-legend i { display: inline-block; width: 8px; height: 8px; border-radius: 4px; margin-right: 5px; } .tp-pos-legend b { color: var(--text); margin-left: 2px; }
-    .tp-nat { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 12px; } .tp-nat-t { font-size: 11px; color: var(--faint); margin-right: 2px; }
+    .tp-nat { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 12px; } .tp-nat-t { font-size: 12px; color: var(--faint); margin-right: 2px; }
     .tp-chip { font-size: 12px; color: var(--text-2); padding: 3px 9px; border-radius: 99px; background: rgba(10,16,32,0.45); border: 0.5px solid var(--border); } .tp-chip b { color: var(--blue-text); margin-left: 2px; }
     /* 선수 탭 목록(2026-09-29) */
     .pl-col-t { font-size: 14px; color: var(--text); margin-bottom: 12px; }
@@ -2550,11 +2550,11 @@
     .pl-ph svg { width: 55%; height: 55%; color: var(--disabled); }
     .player-hero-photo.pl-ph { font-size: 20px; }
     .pl-info { min-width: 0; } .pl-name { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .pl-team { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); cursor: pointer; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: color .15s; }
+    .pl-team { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--muted); cursor: pointer; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: color .15s; }
     .pl-team:hover { color: var(--blue); } .pl-team img { width: 16px; height: 16px; object-fit: contain; flex-shrink: 0; }
-    .pl-val { text-align: right; } .pl-val b { display: block; font-size: 18px; font-weight: 800; color: var(--blue-text); font-variant-numeric: tabular-nums; } .pl-val small { font-size: 11px; color: var(--faint); white-space: nowrap; }
+    .pl-val { text-align: right; } .pl-val b { display: block; font-size: 18px; font-weight: 800; color: var(--blue-text); font-variant-numeric: tabular-nums; } .pl-val small { font-size: 12px; color: var(--faint); white-space: nowrap; }
     @media (max-width: 480px) { .pl-row { gap: 8px; } .pl-val small { white-space: normal; display: block; max-width: 96px; margin-left: auto; line-height: 1.35; } }   /* 좁은 폰: 오른쪽 기록 줄이 길면 두 줄로 — 선수 이름이 잘리지 않게 */
-    .pl-note { margin-top: 10px; font-size: 11px; color: var(--faint); line-height: 1.5; word-break: keep-all; }
+    .pl-note { margin-top: 10px; font-size: 12px; color: var(--faint); line-height: 1.5; word-break: keep-all; }
     .player-hero-rating { white-space: nowrap; }
     /* 일정 */
     .sched-month-nav { display: flex; align-items: center; justify-content: center; gap: 14px; margin: 0 auto 16px; max-width: 640px; }
@@ -2594,7 +2594,7 @@
     .sched-team img { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
     .sched-vs { font-size: 12px; color: var(--muted); padding: 0 14px; text-align: center; min-width: 60px; flex-shrink: 0; }
     .sched-score { font-weight: 700; color: var(--text); }
-    .sched-time { font-size: 11px; color: var(--muted); }
+    .sched-time { font-size: 12px; color: var(--muted); }
     /* 일정 탭 AI 예측(2026-09-29 개편): 막대를 한 줄 전체로 길게 그리면 경기 목록이 읽기 어려워서 →
        가운데 칸(시간/스코어) 아래 짧은 막대 + 각 팀 승리 확률은 팀 이름 안쪽(가운데 칸 바로 옆), 무승부는 막대 아래 */
     .sched-match.has-pred .sched-vs { min-width: 92px; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 0 10px; }
@@ -2604,7 +2604,7 @@
     .sp-mini { display: flex; width: 72px; height: 4px; border-radius: 99px; overflow: hidden; background: var(--surface-2); }
     .sp-mini i { display: block; height: 100%; } .sp-mini i + i { margin-left: 1.5px; }
     .sp-mini i.h, .sched-pred-legend i.h { background: var(--blue); } .sp-mini i.d, .sched-pred-legend i.d { background: var(--faint); } .sp-mini i.a, .sched-pred-legend i.a { background: var(--away); }
-    .sp-d { font-size: 11px; color: var(--faint); font-variant-numeric: tabular-nums; line-height: 1; }
+    .sp-d { font-size: 12px; color: var(--faint); font-variant-numeric: tabular-nums; line-height: 1; }
     .sp-d.top { color: var(--text-2); font-weight: 700; }
     /* 끝난 경기: 이긴 팀 굵게·진 팀 흐리게 + 경기 전에 기록해둔 AI 예측의 적중 여부 */
     /* 진 팀은 로고·이름 통째로 흐리게(글자색만 바꿨을 땐 이긴 팀과 티가 잘 안 났음), 이긴 팀은 굵게 */
@@ -2614,7 +2614,7 @@
     .sched-match.done .sched-score { font-size: 14px; letter-spacing: .5px; }
     /* 진행 중 경기(경기 당일 결과, 2026-09-30): 스코어 + 빨간 점 칩 — 무료 데이터라 몇 분 늦을 수 있어서 "LIVE" 대신 "진행 중" */
     .sched-match.live .sched-score { font-size: 14px; letter-spacing: .5px; color: #fff; }
-    .live-chip { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; color: var(--red); white-space: nowrap; line-height: 1.2; font-variant-numeric: tabular-nums; }
+    .live-chip { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; color: var(--red); white-space: nowrap; line-height: 1.2; font-variant-numeric: tabular-nums; }
     .live-chip i { width: 6px; height: 6px; border-radius: 50%; background: var(--red); box-shadow: 0 0 0 0 rgba(248,81,73,.5); animation: livePulse 1.8s ease-out infinite; }
     @keyframes livePulse { 0% { box-shadow: 0 0 0 0 rgba(248,81,73,.55); } 70%, 100% { box-shadow: 0 0 0 6px rgba(248,81,73,0); } }
     @media (prefers-reduced-motion: reduce) { .live-chip i { animation: none; } }
@@ -2622,7 +2622,7 @@
     .sched-team-hit.me span { color: var(--blue-text); font-weight: 700; }
     .sched-match.done .sp-mini { opacity: .45; }
     .sched-match.done .sp-pct { opacity: .7; }
-    .sp-verdict { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 99px; line-height: 1.2; white-space: nowrap; }
+    .sp-verdict { display: inline-flex; align-items: center; gap: 3px; font-size: 12px; font-weight: 700; padding: 2px 7px; border-radius: 99px; line-height: 1.2; white-space: nowrap; }
     .sp-verdict.hit { color: var(--green); background: rgba(63,185,80,0.13); }
     .sp-verdict.miss { color: var(--muted); background: rgba(142,154,179,0.12); }
     @media (max-width: 480px) {
@@ -2631,10 +2631,10 @@
       /* 좁은 폰: 확률을 팀 이름 옆에 두면 이름이 "New..."처럼 잘려서 → 이름 아래 줄로 */
       .sched-match.has-pred .sched-team { flex-wrap: wrap; row-gap: 2px; }
       .sched-match.has-pred .sched-team-hit { max-width: 100%; }
-      .sp-pct { order: 2; flex-basis: 100%; margin: 0; padding: 0 0 0 28px; font-size: 11px; }
+      .sp-pct { order: 2; flex-basis: 100%; margin: 0; padding: 0 0 0 28px; font-size: 12px; }
       .sched-team.away .sp-pct { margin: 0; padding: 0 28px 0 0; text-align: right; }
     }
-    .sched-pred-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; justify-content: center; font-size: 11px; color: var(--muted); margin: 0 0 12px; }
+    .sched-pred-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; justify-content: center; font-size: 12px; color: var(--muted); margin: 0 0 12px; }
     .sched-pred-legend i { display: inline-block; width: 10px; height: 4px; border-radius: 4px; margin-right: 5px; vertical-align: 2px; }
     .sched-pred-legend .note { color: var(--faint); }
     /* 모바일 리그 칩: 2~3줄로 쌓여 표가 아래로 밀리던 것 → 한 줄 가로 스크롤(양 끝 흐림은 initScrollFade) */
@@ -2653,7 +2653,7 @@
       .st-table .team-cell { gap: 6px; }
       .st-table .team-cell img { width: 20px; height: 20px; }
       .st-table .team-cell span { max-width: 92px; }
-      .st-rank { min-width: 20px; height: 19px; font-size: 11px; }
+      .st-rank { min-width: 20px; height: 19px; font-size: 12px; }
       .st-pts { min-width: 26px; padding: 2px 5px; font-size: 12px; }
       .st-table th:first-child { width: 28px !important; }
     }
@@ -2759,7 +2759,7 @@
   </div>
   
   <div style="margin-bottom:18px">
-    <div style="font-size:11px;color:#8e9ab3;margin-bottom:8px;font-weight:600;text-transform: none;letter-spacing:0.5px">시즌 우승팀</div>
+    <div style="font-size:12px;color:#8e9ab3;margin-bottom:8px;font-weight:600;text-transform: none;letter-spacing:0.5px">시즌 우승팀</div>
     <div id="champions-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px"></div>
   </div>
 
@@ -2771,7 +2771,7 @@
   </div>
   
   <div>
-    <div style="font-size:11px;color:#8e9ab3;margin-bottom:8px;font-weight:600;text-transform: none;letter-spacing:0.5px">카운트다운</div>
+    <div style="font-size:12px;color:#8e9ab3;margin-bottom:8px;font-weight:600;text-transform: none;letter-spacing:0.5px">카운트다운</div>
     <div id="countdown-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px"></div>
   </div>
 </div>
@@ -2969,7 +2969,7 @@
           <div class="popup-relative">
             <div class="select-trigger" id="home-trigger" onclick="togglePopup('home')">
               <span id="home-selected-text" style="color:#8e9ab3">팀 선택</span>
-              <span style="margin-left:auto;font-size:11px;color:#8e9ab3">▼</span>
+              <span style="margin-left:auto;font-size:12px;color:#8e9ab3">▼</span>
             </div>
             <div class="team-popup" id="home-popup">
              <div class="popup-inner">
@@ -3003,7 +3003,7 @@
           <div class="popup-relative">
             <div class="select-trigger" id="away-trigger" onclick="togglePopup('away')">
               <span id="away-selected-text" style="color:#8e9ab3">팀 선택</span>
-              <span style="margin-left:auto;font-size:11px;color:#8e9ab3">▼</span>
+              <span style="margin-left:auto;font-size:12px;color:#8e9ab3">▼</span>
             </div>
             <div class="team-popup" id="away-popup">
              <div class="popup-inner">
@@ -3048,19 +3048,19 @@
             <div class="prob-row" style="grid-template-columns:120px 1fr 45px"><span class="prob-label" id="prob-label-away">원정승</span><div class="prob-bar-bg"><div class="prob-bar away" id="bar-away" style="width:0%"></div></div><span class="prob-value" id="val-away"></span></div>
           </div>
           <div style="margin-top:16px;padding-top:16px;border-top:0.5px solid #26334d">
-            <div style="font-size:11px;color:#8e9ab3;text-transform: none;letter-spacing:0.5px;margin-bottom:10px">예측 근거 <span style="font-size:11px;color:#7c88a1;text-transform:none;letter-spacing:0">(이 예측에서 크게 반영된 요인 순)</span><button type="button" class="ii" data-tip="factors" aria-label="예측 근거 설명">i</button></div>
+            <div style="font-size:12px;color:#8e9ab3;text-transform: none;letter-spacing:0.5px;margin-bottom:10px">예측 근거 <span style="font-size:12px;color:#7c88a1;text-transform:none;letter-spacing:0">(이 예측에서 크게 반영된 요인 순)</span><button type="button" class="ii" data-tip="factors" aria-label="예측 근거 설명">i</button></div>
             <div id="explanation-factors"></div>
           </div>
           <div class="stats-grid sb-grid" id="stat-boxes"></div>
           <div style="margin-top:16px;padding-top:16px;border-top:0.5px solid #26334d">
-            <div style="font-size:11px;color:#8e9ab3;text-transform: none;letter-spacing:0.5px;margin-bottom:10px">팀 비교</div>
+            <div style="font-size:12px;color:#8e9ab3;text-transform: none;letter-spacing:0.5px;margin-bottom:10px">팀 비교</div>
             <div id="radar-chart-wrap"></div>
           </div>
           <div style="margin-top:16px;padding-top:16px;border-top:0.5px solid #26334d">
-            <div style="font-size:11px;color:#8e9ab3;text-transform: none;letter-spacing:0.5px;margin-bottom:10px">예상 스코어 <span style="font-size:11px;color:#7c88a1;text-transform:none;letter-spacing:0">(AI 추정·참고용)</span><button type="button" class="ii" data-tip="xg" aria-label="예상 스코어 설명">i</button></div>
+            <div style="font-size:12px;color:#8e9ab3;text-transform: none;letter-spacing:0.5px;margin-bottom:10px">예상 스코어 <span style="font-size:12px;color:#7c88a1;text-transform:none;letter-spacing:0">(AI 추정·참고용)</span><button type="button" class="ii" data-tip="xg" aria-label="예상 스코어 설명">i</button></div>
             <div style="text-align:center;margin-bottom:10px">
               <div style="font-size:32px;font-weight:800;color:#58a6ff" id="score-most-likely">- : -</div>
-              <div style="font-size:11px;color:#8e9ab3;margin-top:2px" id="score-most-likely-sub"></div>
+              <div style="font-size:12px;color:#8e9ab3;margin-top:2px" id="score-most-likely-sub"></div>
             </div>
             <div id="score-top-list" class="prob-bars"></div>
           </div>
@@ -4821,7 +4821,7 @@ function mdLineupHtml(d, home, away, opts = {}) {   // opts.bench === false → 
     }); }).join('');
   };
   // 경기 전 라인업(벤치 칸이 없는 화면)은 포메이션 옆에 감독 이름
-  const formLbl = side => `${shortName(side === 'home' ? home : away)} ${L[side].formation || ''}${opts.bench === false && L[side].coach ? `<i class="md-form-coach"><b> · </b>감독 ${L[side].coach}</i>` : ''}`;
+  const formLbl = side => `${logos[side === 'home' ? home : away] ? `<img class="md-form-logo" src="${logos[side === 'home' ? home : away]}" alt="" onerror="this.remove()">` : ''}${shortName(side === 'home' ? home : away)} ${L[side].formation || ''}${opts.bench === false && L[side].coach ? `<i class="md-form-coach"><b> · </b>감독 ${L[side].coach}</i>` : ''}`;
   const bench = side => {
     const lu = L[side], used = lu.subs.filter(p => p.on != null).sort((x, y) => x.on - y.on), rest = lu.subs.length - used.length;
     return `<div class="md-bench ${side}"><div class="md-bench-h"><img src="${logos[side === 'home' ? home : away] || ''}" alt="" onerror="this.style.display='none'"><b>${shortName(side === 'home' ? home : away)}</b><span>${lu.formation || ''}</span></div>
@@ -4903,7 +4903,7 @@ function teamNewsHtml(pv, sqH, sqA, home, away, parts, horizontal) {
   let html = '', side = '', injHtml = '';
   const lu = pv?.lineups?.home && pv?.lineups?.away ? { lineups: pv.lineups, kind: 'confirmed' }
     : pv?.predicted?.home && pv?.predicted?.away ? { lineups: pv.predicted, kind: 'predicted' } : null;
-  if (lu) html += `<div class="mp-sec"><div class="mp-sec-t"><span>${lu.kind === 'confirmed' ? '선발 라인업 <em class="tn-chip ok">확정</em>' : '예상 라인업 <em class="tn-chip">예상</em>'}</span>
+  if (lu) html += `<div class="mp-sec"><div class="mp-sec-t"><span>${lu.kind === 'confirmed' ? '라인업' : '라인업 <em class="tn-chip">예상</em>'}</span>
       <span class="mp-sec-n">${lu.kind === 'confirmed' ? '킥오프 전 발표' : '각 팀 지난 경기 선발 기준'}</span></div>${mdLineupHtml({ lineups: lu.lineups }, home, away, { bench: false, photos: true, horizontal })}</div>`;
   if (pv?.injuries) {
     const col = (side, team) => { const l = inj[side] || [];
@@ -4987,7 +4987,7 @@ function xiPitchHtml(xi, o = {}) {
   const orient = o.orient || 'v', n = xi.lines.length;
   const dots = xi.lines.map((line, r) => line.map((p, i) => {
     // 자리 = 사진 가운데. 사진 아래로 이름·골/도움 줄이 붙으므로 아래쪽 여백을 더 남김(가장자리 선수 글자가 잘렸음)
-    const along = n === 1 ? 50 : 12 + (r / (n - 1)) * 76;
+    const along = n === 1 ? 50 : orient === 'v' ? 10 + (r / (n - 1)) * 68 : 7 + (r / (n - 1)) * 70;   // 골키퍼는 골문 앞, 공격수는 페널티 박스 바깥
     const across = orient === 'v' ? (i + 0.5) / line.length * 100 : 6 + (i + 0.5) / line.length * 80;
     const pos = orient === 'v' ? `left:${across}%;top:${100 - along}%` : `left:${along}%;top:${across}%`;
     const nm = p.name || p.full_name || '';
@@ -7672,7 +7672,7 @@ function renderMatchInsights(ins) {
   // C. 경기 성향
   const ht = h.tendency, at = a.tendency;
   if (ht.n && at.n) {
-    const cnt = (v, tot) => `${v}<span style="font-size:11px;color:#7c88a1;font-weight:500">/${tot}</span>`;
+    const cnt = (v, tot) => `${v}<span style="font-size:12px;color:#7c88a1;font-weight:500">/${tot}</span>`;
     let caption = '';
     if (ht.total_goals >= 3 && at.total_goals >= 3) caption = '두 팀 모두 최근 경기당 3골 이상 — 골이 많이 나는 흐름이에요.';
     else if (ht.total_goals <= 2.2 && at.total_goals <= 2.2) caption = '두 팀 모두 최근 경기에서 골이 적었어요 — 팽팽한 저득점 흐름이에요.';
@@ -7999,7 +7999,8 @@ function showResult(data,home,away){
   }
   // 아직 안 온 칸은 자리 표시(스켈레톤) — fillResultExtras가 도착하는 대로 채움
   ['h2h-home-wins','h2h-draws','h2h-away-wins'].forEach(id=>document.getElementById(id).textContent='-');
-  document.getElementById('h2h-home-label').textContent=homeShortLabel+' 승';document.getElementById('h2h-away-label').textContent=awayShortLabel+' 승';
+  const h2hLbl=(t,lbl)=>`${logos[t]?`<img src="${logos[t]}" alt="" onerror="this.remove()">`:''}${lbl} 승`;
+  document.getElementById('h2h-home-label').innerHTML=h2hLbl(home,homeShortLabel);document.getElementById('h2h-away-label').innerHTML=h2hLbl(away,awayShortLabel);
   document.getElementById('h2h-matches').innerHTML=skeletonMatchRows(3);
   document.getElementById('match-insights').innerHTML='<div class="mi-section"><div class="skeleton skeleton-line" style="width:38%;margin-bottom:12px"></div><div class="skeleton" style="height:120px;border-radius:10px"></div></div>';
   document.getElementById('home-form-title').textContent=shortName(home);document.getElementById('away-form-title').textContent=shortName(away);
@@ -8461,7 +8462,7 @@ function updateCountdown() {
       <div style="background:#18233a;border:0.5px solid #26334d;padding:10px;border-radius:10px;display:flex;align-items:center;gap:8px">
         <img alt="" src="${l.logo}" style="width:18px;height:18px;${l.filter?`filter:${l.filter}`:''}" onerror="this.style.display='none'">
         <div style="flex:1;min-width:0">
-          <div style="font-size:11px;color:#c5cedf">${l.name}</div>
+          <div style="font-size:12px;color:#c5cedf">${l.name}</div>
           <div style="font-size:13px">${badge}</div>
         </div>
       </div>
@@ -8485,8 +8486,8 @@ function renderChampions() {
     <div style="background:#18233a;border:0.5px solid #26334d;padding:10px;border-radius:10px;display:flex;align-items:center;gap:8px">
       <img alt="" src="${c.logo}" style="width:24px;height:24px;object-fit:contain" onerror="this.style.display='none'">
       <div style="flex:1;min-width:0">
-        <div style="font-size:9px;color:#c5cedf">${c.league}</div>
-        <div style="font-size:11px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.team}</div>
+        <div style="font-size:10px;color:#c5cedf">${c.league}</div>
+        <div style="font-size:12px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.team}</div>
       </div>
     </div>
   `).join('');
