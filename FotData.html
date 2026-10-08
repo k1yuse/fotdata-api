@@ -716,6 +716,7 @@
     .tf-filter:not(.active):hover { color: var(--text); border-color: var(--blue); }
     .tf-filter.active { background: rgba(88,166,255,0.14); border-color: rgba(88,166,255,0.5); color: var(--blue-text); font-weight: 600; }
     .tf-row { display: grid; grid-template-columns: 44px 1fr auto; gap: 12px; align-items: center; padding: 11px 4px; border-bottom: 0.5px solid var(--surface-2); }
+    .tf-row[onclick] { cursor: pointer; border-radius: var(--r-sm); transition: background .15s; } .tf-row[onclick]:hover { background: rgba(88,166,255,0.07); }   /* 누르면 선수 카드(떠난 선수는 마지막 시즌 기록·프로필로) */
     .tf-photo { position: relative; width: 44px; height: 44px; border-radius: 50%; overflow: hidden; background: var(--surface-2); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 2px var(--tf-c); }
     .tf-row.in { --tf-c: rgba(63,185,80,0.55); } .tf-row.out { --tf-c: rgba(248,81,73,0.5); }
     .tf-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
@@ -2283,7 +2284,9 @@
     .pc2-club:hover span { color: var(--blue-text); }
     .pc2-meta { display: flex; flex-wrap: wrap; font-size: 14px; color: var(--muted); line-height: 18px; }
     .pc2-meta span + span::before { content: ''; display: inline-block; width: 1px; height: 10px; margin: 0 8px; background: var(--border); vertical-align: -1px; }
-    .pc2-meta .inj { color: var(--red); } .pc2-cap { margin-left: 8px; vertical-align: 3px; }
+    .pc2-meta .inj { color: var(--red); }
+    .pc2-nostat { font-size: 13px; color: var(--muted); line-height: 1.6; margin: 14px 0 4px; }
+    .pc2-now { display: inline-flex; align-items: center; gap: 4px; color: var(--amber); } .pc2-now img { width: 14px; height: 14px; object-fit: contain; } .pc2-cap { margin-left: 8px; vertical-align: 3px; }
     .pc2-rt { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
     .pc2-rt b { font-family: var(--font-num); font-size: 26px; font-weight: 700; line-height: 1; padding: 5px 8px 4px; border-radius: 6px; color: var(--bg); background: var(--muted); font-variant-numeric: tabular-nums; }
     .pc2-rt b.r8 { background: var(--blue); } .pc2-rt b.r7 { background: var(--green); } .pc2-rt b.r6 { background: var(--amber); } .pc2-rt b.r5 { background: var(--away); }
@@ -5107,7 +5110,7 @@ document.addEventListener('mouseover', e => {
   const m = /openPlayerCard\('(?:[^'\\]|\\.)*',\s*(\d+)/.exec(el.getAttribute('onclick'));
   if (m) setTimeout(() => { if (el.matches(':hover')) fetchPlayerProfile(+m[1]); }, 150);
 }, { passive: true });
-async function openPlayerCard(team, pid, season, keepTab) {
+async function openPlayerCard(team, pid, season, keepTab, noJump) {
   const modal = document.getElementById('pc-modal'), body = document.getElementById('pc-body');
   if (!modal || pid == null) return;
   const seq = ++pcSeq;
@@ -5124,7 +5127,21 @@ async function openPlayerCard(team, pid, season, keepTab) {
     p = { id: pid, name: f.name, full_name: f.name, photo: f.photo, number: f.number, pos: { G: 'GK', D: 'DF', M: 'MF', F: 'FW' }[f.pos] || f.pos, apps: 0, minutes: 0, goals: 0, assists: 0, rating: null };
     team = f.team || team;
   }
-  if (!p) { body.innerHTML = '<div class="ti-empty">이 선수의 기록이 아직 없어요.</div>'; return; }
+  if (!p && !noJump) {   // 이번 시즌 이 팀 기록에 없는 선수(떠난 선수·예전 선수) → 우리 데이터에서 마지막으로 뛴 시즌으로(2026-10-08)
+    const last = (seasons || []).find(s => s[0] !== 'CL') || (seasons || [])[0];
+    if (last && !(last[1] === (season || LG_CUR_YEAR) && last[2] === team)) return openPlayerCard(last[2], pid, last[1], keepTab, true);
+  }
+  if (!p) {   // 우리 리그 경기 기록이 아예 없는 선수 → 프로필(나이·국적·키)과 경력·트로피만으로
+    const prof = await fetchPlayerProfile(pid);
+    if (seq !== pcSeq) return;
+    const b = prof?.bio;
+    if (!b) { body.innerHTML = '<div class="ti-empty">이 선수의 정보를 찾지 못했어요.</div>'; return; }
+    p = { id: pid, name: b.name, full_name: b.name, firstname: b.firstname, lastname: b.lastname, photo: b.photo, nationality: b.nationality, age: b.age,
+          height: parseInt(b.height) || null, weight: parseInt(b.weight) || null, apps: 0, starts: 0, minutes: 0, goals: 0, assists: 0, rating: null, noStats: true };
+    pcCur = { team, pid, season: season || LG_CUR_YEAR, tab: tab === 'overview' || tab === 'stats' ? 'career' : tab, mode: 'total', p, sq, seasons, prof };
+    pcRender();
+    return;
+  }
   pcCur = { team, pid, season: sq?.season || season || LG_CUR_YEAR, tab, mode: pcCur?.pid === pid ? pcCur.mode : 'total', p, sq, seasons, prof: pcCur?.pid === pid ? pcCur.prof : null };
   pcRender();
   if (!pcCur.prof) fetchPlayerProfile(pid).then(d => { if (seq !== pcSeq || !pcCur || pcCur.pid !== pid) return; pcCur.prof = d || {}; pcRender(true); });
@@ -5163,10 +5180,16 @@ function pcHeroHtml(c) {
     <div class="pc2-id">
       <h3 class="pc2-name"${legal && legal !== name ? ` title="${legal.replace(/"/g, '&quot;')}"` : ''}>${name}${p.captain ? '<i class="cap-ic pc2-cap" title="주장" aria-label="주장">C</i>' : ''}</h3>
       <button type="button" class="pc2-club" onclick="closePlayerCard();openTeamInfo('${escJs(team)}')">${logos[team] ? `<img src="${logos[team]}" alt="" onerror="this.remove()">` : ''}<span>${shortName(team)}</span></button>
-      <div class="pc2-meta">${[posKo, p.number != null ? `${p.number}번` : ''].filter(Boolean).map(x => `<span>${x}</span>`).join('')}${p.injured ? '<span class="inj">부상</span>' : ''}</div>
+      <div class="pc2-meta">${[posKo, p.number != null ? `${p.number}번` : ''].filter(Boolean).map(x => `<span>${x}</span>`).join('')}${p.injured ? '<span class="inj">부상</span>' : ''}${pcNowClub(c)}</div>
     </div>
     ${p.rating ? `<div class="pc2-rt"><b class="${mdRatingClass(p.rating)}">${p.rating.toFixed(2)}</b><small>${seasonLabel(c.season)} 평점</small></div>` : ''}
   </div>`;
+}
+// 지금 소속(경력에서 진행 중인 1군 클럽)이 카드에 보이는 팀과 다르면 "지금 ○○" — 떠난 선수·예전 선수
+function pcNowClub(c) {
+  const now = (c.prof?.career || []).find(x => x.to == null && !x.youth && !x.national);
+  if (!now || shortName(now.team) === shortName(c.team) || cleanTeamName(now.team) === cleanTeamName(c.team)) return '';
+  return `<span class="pc2-now">${now.logo ? `<img src="${now.logo}" alt="" onerror="this.remove()">` : ''}지금 ${now.team}</span>`;
 }
 function pcSeasonSelect(c) {
   const list = (c.seasons || []).filter(s => s[0] !== 'CL');
@@ -5186,6 +5209,7 @@ function pcOverviewHtml(c) {
     <div><dt>나이</dt><dd${bd ? ` title="${bd}"` : ''}>${age != null ? `${age}세` : '–'}</dd></div>
     <div><dt>키</dt><dd>${h ? `${h}cm` : '–'}</dd></div>
     <div><dt>몸무게</dt><dd>${w ? `${w}kg` : '–'}</dd></div></dl>`;
+  if (p.noStats) return info + '<p class="pc2-nostat">우리 데이터(5대 리그·챔스, 2015-16 시즌부터)에 이 선수의 경기 기록이 없어요 — 경력·트로피 탭에서 소속 구단별 기록을 볼 수 있어요.</p>';
   const figs = gk ? [[p.apps, '경기'], [p.conceded ?? '–', '실점'], [p.clean_sheets ?? '–', '클린시트'], [p.saves ?? '–', '선방']]
     : [[p.apps, '경기'], [p.goals, '골', 'acc'], [p.assists, '도움'], [p.minutes ? Math.round(p.minutes).toLocaleString() : 0, '출전 시간(분)']];
   // 포지션 지도: 이번 시즌 선발 자리 횟수(dpos) — 22-23 시즌 전 기록엔 없음
@@ -5210,6 +5234,7 @@ const PC_STATS = {
 };
 const pcTier = v => (v >= 67 ? 'hi' : v >= 34 ? 'mid' : 'lo');
 function pcStatsHtml(c) {
+  if (c.p.noStats) return '<p class="pc2-nostat">우리 데이터(5대 리그·챔스, 2015-16 시즌부터)에 이 선수의 경기 기록이 없어요.</p>';
   const p = c.p, gk = p.pos === 'GK';
   const mode = p.minutes >= 90 ? c.mode : 'total';
   const posKo = POS_KO[p.pos] || '선수';
@@ -6239,7 +6264,7 @@ function renderTiTransfers() {
     <div class="tf-list">${shown.map(t => {
       const d = t.date ? new Date(t.date) : null;
       const when = d && !isNaN(d) ? `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}` : '';
-      return `<div class="tf-row ${t.dir}">
+      return `<div class="tf-row ${t.dir}"${t.player_id ? ` onclick="openPlayerCard('${escJs(tiState.team)}', ${t.player_id})"` : ''}>
         <div class="tf-photo">${t.photo ? `<img src="${t.photo}" alt="" loading="lazy" onerror="this.remove()">` : ''}<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="4"/><path d="M4.5 20.5c1.2-3.8 4-5.5 7.5-5.5s6.3 1.7 7.5 5.5"/></svg></div>
         <div class="tf-main">
           <div class="tf-top"><span class="tf-name">${t.player || ''}</span><span class="tf-dir ${t.dir}">${t.dir === 'in' ? '영입' : '방출'}</span></div>
