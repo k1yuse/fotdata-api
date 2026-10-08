@@ -220,8 +220,9 @@
       --text: #ecf1fa;
       --muted: #8e9ab3;
       --blue: #58a6ff;
-      --green: #238636;
+      --green: #3fb950;   /* 앱과 같은 색(2026-10-08 — 예전 GitHub 초록·노랑이 남아 있었음) */
       --yellow: #d29922;
+      --draw: #7c88a1;   /* 무승부 = 회색(앱 규칙: 홈 파랑·무 회색·원정 주황) */
       --red: #f85149;
     }
     html { scroll-behavior: smooth; }
@@ -513,7 +514,8 @@
       transition: border-color .2s, transform .2s, box-shadow .2s;
       box-shadow: 0 4px 16px rgba(0,0,0,0.2);
     }
-    .feat-card:hover { border-color: rgba(88,166,255,0.4); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+    a.feat-card { display: block; color: inherit; text-decoration: none; }
+    .feat-card:hover { border-color: var(--blue); }   /* 앱 규칙: 큰 카드는 파란 테두리만(들림·그림자 없음) */
     .feat-icon {
       width: 44px; height: 44px;
       background: rgba(88,166,255,0.1);
@@ -690,7 +692,7 @@
     .story-bars .row span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .story-bars .bg { height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
     .story-bars i { display: block; height: 100%; width: 0; border-radius: 3px; }
-    .story-bars i.h { background: #58a6ff; } .story-bars i.d { background: #d29922; } .story-bars i.a { background: #f0883e; }
+    .story-bars i.h { background: #58a6ff; } .story-bars i.d { background: var(--draw); } .story-bars i.a { background: #f0883e; }
     .story-bars b { text-align: right; color: var(--text); font-weight: 700; font-variant-numeric: tabular-nums; }
     .story-sim-list { list-style: none; margin-top: 20px; display: flex; flex-direction: column; gap: 8px; }
     .story-sim-list li { display: grid; grid-template-columns: 22px 1fr auto; gap: 10px; align-items: center; font-size: 14px; }
@@ -778,11 +780,10 @@
 
 <div class="nav-links">
     <a data-umami-event="landing_nav" href="/app">경기 예측</a>
-    <a data-umami-event="landing_nav" href="/app#champion">순위 예측</a>
-    <a data-umami-event="landing_nav" href="/app#standings">순위표</a>
-    <a data-umami-event="landing_nav" href="/app#schedule">일정</a>
-    <a data-umami-event="landing_nav" href="/app#players">선수</a>
-    <a data-umami-event="landing_nav" href="/app#shootout">승부차기</a>
+    <a data-umami-event="landing_nav" href="/app#league/PL">리그</a>
+    <a data-umami-event="landing_nav" href="/app#league/PL/champion">순위 예측</a>
+    <a data-umami-event="landing_nav" href="/app#search">선수</a>
+    <a data-umami-event="landing_nav" href="/app#myteams">내 팀</a>
   </div>
   <div style="display: flex; align-items: center; gap: 14px; justify-self: end;">
     <button class="nav-donate-btn" onclick="toggleKofiPanel()" aria-label="후원하기" title="후원하기">
@@ -987,8 +988,8 @@
     <div class="mock-card">
       <div class="mock-topbar">
         <div class="mock-dot" style="background:#f85149"></div>
-        <div class="mock-dot" style="background:#d29922"></div>
-        <div class="mock-dot" style="background:#238636"></div>
+        <div class="mock-dot" style="background:#7c88a1"></div>
+        <div class="mock-dot" style="background:#3fb950"></div>
         <span class="mock-topbar-title">FotData · 경기 예측</span>
       </div>
       <div class="mock-body">
@@ -1066,51 +1067,51 @@
       <div class="section-title">필요한 모든 축구 데이터</div>
     </div>
     <div class="feat-grid">
-      <div class="feat-card reveal">
-        <div class="feat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/><path d="M9 6h11M9 12h11M9 18h11"/></svg></div>
-        <h3>최신 순위표</h3>
-        <p>6개 리그 순위, 폼, 득실 현황을 한눈에 — 매일 새벽 자동 갱신, 경기 당일 결과도 바로 반영.</p>
-      </div>
-      <div class="feat-card reveal">
+      <a class="feat-card reveal" href="/app" data-umami-event="landing_feature" data-umami-event-feature="AI 경기 예측">
         <div class="feat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1" fill="#58a6ff"/></svg></div>
         <h3>AI 경기 예측</h3>
-        <p>머신러닝이 분석한 승/무/패 확률과 예상 스코어까지 한번에 확인하세요.</p>
-      </div>
-      <div class="feat-card reveal">
-        <div class="feat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4L3 12l6 8M15 4l6 8-6 8"/></svg></div>
-        <h3>H2H 맞대결 기록</h3>
-        <p>두 팀의 역대 맞대결 기록(2010-11 시즌부터)과 상세 경기 결과.</p>
-      </div>
-      <div class="feat-card reveal">
-        <div class="feat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V11M10 20V4M16 20V14M22 20V8"/></svg></div>
-        <h3>팀 스탯 분석</h3>
-        <p>공격력, 수비력, 승률 등 팀별 상세 퍼포먼스 지표.</p>
-      </div>
-      <div class="feat-card reveal">
-        <div class="feat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></div>
-        <h3>경기 일정</h3>
-        <p>5대 리그+UCL 시즌 전체 일정을 월별로, 완료 경기는 결과까지.</p>
-      </div>
-      <div class="feat-card reveal">
-        <div class="feat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0114-5.3"/><path d="M20 12a8 8 0 01-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg></div>
-        <h3>자동 업데이트</h3>
-        <p>매일 새벽 최신 경기 결과가 자동으로 반영됩니다.</p>
-      </div>
-      <div class="feat-card reveal">
-        <div class="feat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg></div>
-        <h3>승부차기 미니게임</h3>
-        <p>내 팀 키커 순서를 직접 정하고 실제 승부차기 규칙으로 AI와 대결하세요.</p>
-      </div>
-      <div class="feat-card reveal">
+        <p>승·무·패 확률과 예상 스코어, 예측에 크게 작용한 요인까지. 학습에 안 쓴 최근 경기로 정확도를 검증해요.</p>
+      </a>
+      <a class="feat-card reveal" href="/app#league/PL" data-umami-event="landing_feature" data-umami-event-feature="리그 한눈에">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/><path d="M9 6h11M9 12h11M9 18h11"/></svg></div>
+        <h3>리그 한눈에</h3>
+        <p>5대 리그·챔스 순위와 일정을 날짜·라운드·팀별로. 2010-11 시즌부터 지난 시즌 기록과 역대 우승까지.</p>
+      </a>
+      <a class="feat-card reveal" href="/app#league/PL/champion" data-umami-event="landing_feature" data-umami-event-feature="순위 예측">
         <div class="feat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v3a4 4 0 01-4 4 4 4 0 01-4-4V4z"/><path d="M8 5H5a3 3 0 003 3M16 5h3a3 3 0 01-3 3"/><path d="M12 11v4M9 20h6M10 17h4v3h-4z"/></svg></div>
-        <h3>우승 확률 예측</h3>
-        <p>현재 승점에서 출발해 남은 경기를 1,000번 시뮬레이션한 우승·UCL권·강등 확률을 확인하세요.</p>
-      </div>
-      <div class="feat-card reveal">
+        <h3>순위 예측</h3>
+        <p>지금 승점에서 남은 경기를 수천 번 돌려 우승·UCL권·강등 확률과 예상 승점을 계산해요.</p>
+      </a>
+      <a class="feat-card reveal" href="/app" data-umami-event="landing_feature" data-umami-event-feature="경기 상세">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></div>
+        <h3>경기 상세</h3>
+        <p>끝난 경기의 득점·카드·교체 타임라인, 라인업과 선수 평점, xG까지. 경기 전엔 예상 라인업과 결장자.</p>
+      </a>
+      <a class="feat-card reveal" href="/app#search" data-umami-event="landing_feature" data-umami-event-feature="선수 검색·선수 카드">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></div>
+        <h3>선수 검색·선수 카드</h3>
+        <p>5대 리그 선수를 이름으로 찾고 시즌 기록·90분당 순위·경력·트로피를 한 장에서.</p>
+      </a>
+      <a class="feat-card reveal" href="/app#league/PL" data-umami-event="landing_feature" data-umami-event-feature="베스트 11">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 4v16"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <h3>베스트 11</h3>
+        <p>라운드마다 이주의 팀, 구단별 시즌 베스트 11을 선수 평점으로 골라 경기장에 세워요.</p>
+      </a>
+      <a class="feat-card reveal" href="/app" data-umami-event="landing_feature" data-umami-event-feature="구단 정보">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.6-3 8.3-7 10-4-1.7-7-5.4-7-10V6z"/></svg></div>
+        <h3>구단 정보</h3>
+        <p>감독·스쿼드·이적 기록·우승 기록·라이벌 맞대결까지. 구단 이름을 누르면 어디서든 열려요.</p>
+      </a>
+      <a class="feat-card reveal" href="/app#myteams" data-umami-event="landing_feature" data-umami-event-feature="내 팀">
+        <div class="feat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/></svg></div>
+        <h3>내 팀</h3>
+        <p>응원하는 팀을 5개까지. 순위와 다음 경기 AI 예측을 모아 보고, 경기 일정을 캘린더로 구독해요.</p>
+      </a>
+      <a class="feat-card reveal" href="/app" data-umami-event="landing_feature" data-umami-event-feature="AI 예측 트랙레코드">
         <div class="feat-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#58a6ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6M9 12l2 2 4-4"/></svg></div>
         <h3>AI 예측 트랙레코드</h3>
-        <p>실제 서빙 중인 모델이 남긴 예측 기록과 적중률을 투명하게 공개합니다.</p>
-      </div>
+        <p>킥오프 전에 남긴 예측을 경기가 끝나면 자동으로 채점해 적중률을 그대로 공개해요.</p>
+      </a>
     </div>
   </div>
 </section>

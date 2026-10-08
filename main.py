@@ -1079,44 +1079,41 @@ def _rank_progress(league, season, team):
     return _season_rank_progress(league, season).get(team, [])
 
 # 서버가 뜰 때 백그라운드에서 전 리그·시즌 통계를 미리 계산(재배포 직후 첫 사용자도 기다리지 않게, ~1초)
-def _warm_team_stats():
-    # 일정 탭 예측(리그당 수백 경기 한 번에 계산)도 먼저 — 첫 사용자의 예측 막대가 늦게 뜨지 않게
-    try:
+# 서버 시작 때 미리 계산 — Render 무료 CPU는 로컬보다 20~40배 느려서, 예전처럼 한 번에 몰아 계산하면 재시작 뒤 몇 분 동안
+# 모든 요청이 같이 느려졌음(2026-10-08 사용자 지적 "로딩 화면이 계속 나옴"). → 사용자가 먼저 보는 것부터, 한 단위마다 잠깐 쉬어
+# 요청 처리 스레드가 CPU를 먼저 쓰게 하고, 공유 썸네일 미리 그리기(로컬 8초 — 가장 무거움)는 맨 끝에
+def _warm_yield():
+    _time.sleep(0.03)
+
+def _warm_all():
+    steps = [lambda c=c: _af_league_squads(c) for c in ("PL", "PD", "BL1", "SA", "FL1")]   # 선수 기록(선수 탭·베스트 11·선수 카드)
+    steps += [lambda: _league_rows("CL", CURRENT_SEASON_YEAR), _ps_index, _player_search_index]
+    steps += [lambda lg=lg: _league_display_ranks(lg) for lg in ("PL", "PD", "BL1", "SA", "FL1")]
+    steps += [lambda lg=lg: _schedule_predictions(lg) for lg in ("PL", "PD", "BL1", "SA", "FL1", "CL")]   # 일정 탭·다음 경기 예측 막대
+    steps += [_team_season_league]
+    for yr in sorted(STAT_SEASONS, reverse=True):   # 팀 통계(최근 시즌부터)
         for lg in ("PL", "PD", "BL1", "SA", "FL1"):
-            _league_display_ranks(lg)
-    except Exception:
-        pass
-    for lg in ("PL", "PD", "BL1", "SA", "FL1", "CL"):
-        try:
-            _schedule_predictions(lg)
-        except Exception:
-            pass
-    try:   # 공유 썸네일 배경(빛번짐·공·경기장)도 미리 — 첫 링크 미리보기 봇이 기다리지 않게
+            steps.append(lambda lg=lg, yr=yr: _league_season_stats(lg, yr) and _season_rank_progress(lg, yr))
+    steps += [lambda t=t: _team_stats(t) for t in list(team_state)[:200]]
+    steps += [_dpos_hint]
+    def share():
         import share_card
         share_card._background()
         share_card.warm_crests(team_logos_cache.values())
-        _warm_share_cards()
-    except Exception:
-        pass
-    _team_season_league()
-    for lg in ("PL", "PD", "BL1", "SA", "FL1"):
-        for yr in STAT_SEASONS:
-            try:
-                if _league_season_stats(lg, yr):
-                    _season_rank_progress(lg, yr)
-            except Exception:
-                pass
-    for t in list(team_state)[:200]:   # 팀 통계 응답도 미리(첫 사용자 대기 0)
+    steps += [share, _warm_share_cards]
+    t0 = _time.time()
+    for f in steps:
         try:
-            _team_stats(t)
-        except Exception:
-            pass
+            f()
+        except Exception as e:
+            print("⚠️ 미리 계산 실패:", e)
+        _warm_yield()
+    print(f"✅ 미리 계산 끝 {_time.time() - t0:.1f}초")
 
 @app.on_event("startup")
 def _start_warmup():
     import threading
-    threading.Thread(target=_warm_team_stats, daemon=True).start()
-    threading.Thread(target=_warm_af, daemon=True).start()   # 선수 시즌 기록(경기 상세 합산) 미리 계산
+    threading.Thread(target=_warm_all, daemon=True).start()
 
 @app.get("/team/stats/{team_name}")
 def get_team_stats(team_name: str):
@@ -2243,17 +2240,6 @@ def get_match_preview(home_team: str, away_team: str, date: str = None):
 
 
 
-def _warm_af():
-    """서버 시작 때 리그별 선수 시즌 기록을 미리 합산(첫 요청이 느리지 않게)"""
-    try:
-        for c in ("PL", "PD", "BL1", "SA", "FL1"):
-            _af_league_squads(c)
-        _league_rows("CL", CURRENT_SEASON_YEAR)
-        _ps_index()
-        _dpos_hint()   # 지난 시즌 베스트 11 자리 추정용(첫 호출 1~2초)
-    except Exception as e:
-        print("⚠️ 선수 기록 미리 계산 실패:", e)
-
 @app.get("/matches/live")
 def get_matches_live():
     """오늘 경기 최신 상태만(가벼움) — 화면이 진행 중 경기가 있을 때 1분마다 부름"""
@@ -2670,6 +2656,7 @@ def _warm_share_cards(days=10):
                     _share_jpg(h, a)
             except Exception:
                 pass
+            _time.sleep(0.1)   # 한 장마다 쉬어서 사용자 요청이 먼저(서버 시작 뒤 미리 그리는 중에도 화면이 느려지지 않게)
 
 # ── 구단 일정 캘린더 구독(.ics) (2026-10-03, 정식 출시 전 킵 항목) ──
 # 앱의 "캘린더에 추가"가 webcal:// 주소로 구독하게 함 → 킥오프 시각이 바뀌거나(방송 일정 확정) 결과가 나면 캘린더 앱이

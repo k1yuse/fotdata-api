@@ -13,8 +13,12 @@
       theme = q || sessionStorage.getItem('fotdataTheme') || 'glass';
     } catch (e) {}
     if (theme !== 'default') document.documentElement.classList.add('theme-glass');
+    // 주소에 탭(#league/… 등)이 있으면 그 탭으로 바꿀 때까지 화면을 숨김 — 새로고침·로고 클릭 때 경기 예측이 잠깐 보였다 넘어갔음(2026-10-08)
+    var h = location.hash.slice(1);
+    if (h && h !== 'predict') document.documentElement.classList.add('route-boot');
   })();
   </script>
+  <style>html.route-boot .page, html.route-boot #page-predict { visibility: hidden; }</style>
   <meta name="description" content="5대 리그+UCL 순위·일정, AI 경기 예측, 역대 맞대결 기록. 데이터로 보는 축구 인사이트를 무료로.">
   <meta property="og:title" content="FotData - AI 축구 분석 플랫폼">
   <meta property="og:description" content="5대 리그+UCL 순위·일정, AI 경기 예측, 역대 맞대결 기록. 데이터로 보는 축구 인사이트를 무료로.">
@@ -9635,12 +9639,16 @@ function navSync() {
 
 loadLogos();predictableTeamsReady=loadPredictableTeams();loadAccuracy();loadTodayMatches();loadBigMatch();loadMyTeamWidget();loadTrackStrip();openSharedPrediction();maybeOnboard();
 
-if (location.hash) setTimeout(() => {
+(function () {   // 주소의 탭으로 바로 이동(예전엔 0.1초 뒤라 그 사이 경기 예측이 보였음) — 끝나면 숨김(route-boot) 해제
+  const done = () => document.documentElement.classList.remove('route-boot');
+  setTimeout(done, 1500);   // 안전장치
+  if (!location.hash) return done();
   const r = decodeURIComponent(location.hash.slice(1));
-  if (!isRoute(r) || r === 'predict') return;
-  goRoute(r, true);
+  if (!isRoute(r) || r === 'predict') return done();
+  try { goRoute(r, true); } catch (e) { console.error(e); }
   try { history.replaceState({ ...(history.state || {}), fdPage: curRoute() }, '', location.pathname + location.search + '#' + curRoute()); } catch (e) {}   // 예전 주소(#standings)는 새 주소로 바꿔 둠
-}, 100);
+  requestAnimationFrame(done);
+})();
 </script>
 
 <footer style="padding:20px 24px;padding-bottom:calc(20px + env(safe-area-inset-bottom));border-top:0.5px solid #26334d;display:flex;align-items:center;justify-content:space-between;background:#111a2e">

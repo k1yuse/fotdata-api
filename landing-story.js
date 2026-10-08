@@ -101,7 +101,7 @@ async function loadData() {
     if (big) {
       const p = await fetch(API + '/predict', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ home_team: big.home_team, away_team: big.away_team }) }).then(r => r.json());
       const d = new Date(big.date), wd = ['일', '월', '화', '수', '목', '금', '토'][d.getDay()];
-      const hm = d.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false });
+      const hm = `${d.getHours() < 12 ? '오전' : '오후'} ${d.getHours() % 12 || 12}:${String(d.getMinutes()).padStart(2, '0')}`;   // 앱과 같은 표기("오전 1:30")
       data.match = { home: big.home_team, away: big.away_team, league: big.league, homeLogo: big.home_logo, awayLogo: big.away_logo,
         p: [p.probabilities.home_win, p.probabilities.draw, p.probabilities.away_win],
         when: `${LEAGUE_KO[big.league] || big.league} · ${d.getMonth() + 1}.${d.getDate()} (${wd}) ${hm}` };
