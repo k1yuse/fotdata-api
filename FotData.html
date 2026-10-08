@@ -270,6 +270,7 @@
       .standings-table th { position: sticky; top: var(--nav-height, 60px); background: var(--surface); z-index: 5; box-shadow: 0 1px 0 var(--border); }
     }
     .standings-table th.center { text-align: center; }
+    .cap-in { width: 16px; height: 16px; font-size: 10px; margin-left: 6px; vertical-align: 1px; }
     .nm-cap-wrap { position: relative; display: inline-block; max-width: 100%; }
     .nm-cap-wrap > .md-pn, .nm-cap-wrap > .xi-nm { display: block; }
     .nm-cap { position: absolute; right: calc(100% + 3px); top: 50%; transform: translateY(-50%); width: 14px; height: 14px; font-size: 9px; }
@@ -4789,6 +4790,7 @@ function mdInitialName(n) {
   return `${t[0][0]}. ${t.slice(i).join(' ')}`;
 }
 // 경기장 위 이름 칸: 넓은 화면은 이니셜+성, 좁은 폰(≤480px)은 성만(CSS로 전환), 등번호가 있으면 앞에 회색
+const capInline = on => (on ? '<i class="cap-ic cap-in" title="주장" aria-label="주장">C</i>' : '');   // 목록(스쿼드·선수 기록·주요 선수)은 이름 뒤 — 등번호·이름 줄 맞춤 유지
 const capWrap = (html, cap) => (cap ? `<span class="nm-cap-wrap"><i class="cap-ic nm-cap" title="주장" aria-label="주장">C</i>${html}</span>` : html);   // 주장 C — 이름(등번호) 바로 왼쪽
 const mdNameHtml = (name, num, cap) => capWrap(`<span class="md-pn">${num != null ? `<i>${num}</i>` : ''}<span class="nm-f">${mdInitialName(name)}</span><span class="nm-s">${mdShortName(name)}</span></span>`, cap);
 // 목록·기록·선수 카드 이름: API-Football "B. Saka" → 이름(firstname)에서 이니셜이 맞는 단어를 붙여 "Bukayo Saka"
@@ -4956,10 +4958,10 @@ function keyPlayers(sq, n = 3) {
   const maxMin = Math.max(0, ...ps.map(p => p.minutes));
   return ps.filter(p => p.minutes >= maxMin * 0.25).sort((a, b) => ((b.rating || 0) - (a.rating || 0)) || ((b.goals + b.assists) - (a.goals + a.assists))).slice(0, n);
 }
-function tnPlayerRow(p, team, absent) {
+function tnPlayerRow(p, team, absent, capId) {
   const ga = p.pos === 'GK' ? `${p.apps}경기 · 실점 ${p.conceded ?? '-'}` : `${p.goals}골 ${p.assists}도움 · ${p.apps}경기`;
   return `<div class="tn-row" onclick="openPlayerCard('${escJs(team)}', ${p.id})"><img src="${p.photo || ''}" alt="" onerror="this.style.visibility='hidden'">
-    <div class="tn-info"><b>${afFullName(p)}</b><small>${POS_KO[p.pos] || ''} · ${ga}</small></div>
+    <div class="tn-info"><b>${afFullName(p)}${capInline(capId != null && p.id === capId)}</b><small>${POS_KO[p.pos] || ''} · ${ga}</small></div>
     ${absent ? `<span class="tn-abs ${absent.status}">${absent.status === 'out' ? '결장' : '불투명'}</span>` : ''}${mdRating(p.rating)}</div>`;
 }
 // 팀 소식(경기 미리보기 창·예측 결과 공용): 라인업(확정 또는 지난 경기 선발 기준 예상) + 결장·부상 + 주요 선수(결장이면 표시)
@@ -4985,7 +4987,7 @@ function teamNewsHtml(pv, sqH, sqA, home, away, parts, horizontal) {
   if (sqH || sqA) {
     const block = (sq, side, team) => { const ks = keyPlayers(sq), ab = absentOf(side);
       return `<div class="tn-kp ${side}"><div class="tn-col-h"><img src="${logos[team] || ''}" alt="" onerror="this.style.display='none'">${shortName(team)}</div>
-        ${ks.length ? ks.map(p => tnPlayerRow(p, team, ab.get(p.id))).join('') : '<div class="tn-none">시즌 기록이 아직 없어요</div>'}</div>`; };
+        ${ks.length ? ks.map(p => tnPlayerRow(p, team, ab.get(p.id), sq?.captain)).join('') : '<div class="tn-none">시즌 기록이 아직 없어요</div>'}</div>`; };
     side += `<div class="mp-sec"><div class="mp-sec-t">주요 선수 <span class="mp-sec-n">시즌 평균 평점 순 · 누르면 선수 카드</span></div><div class="tn-kps">${block(sqH, 'home', home)}${block(sqA, 'away', away)}</div></div>`;
   }
   return parts ? { main: html, side, inj: injHtml, kp: side.slice(injHtml.length) } : html + side;
@@ -5301,7 +5303,7 @@ function squadListHtml(sq, team, sort = 'rating', showAll = false) {
   const key = `${team}@${sq.season || ''}`;
   sqListStore[key] = { sq, team };
   const row = p => `<div class="sq-row" onclick="openPlayerCard('${escJs(team)}', ${p.id}, ${sq.season || 'null'})"><img src="${p.photo || ''}" alt="" onerror="this.style.visibility='hidden'">
-      <div class="sq-info"><b>${afFullName(p)}</b><small>${POS_KO[p.pos] || ''}${p.age ? ` · ${p.age}세` : ''}</small></div>
+      <div class="sq-info"><b>${afFullName(p)}${capInline(sq.captain != null && p.id === sq.captain)}</b><small>${POS_KO[p.pos] || ''}${p.age ? ` · ${p.age}세` : ''}</small></div>
       <span class="sq-n${sort === 'apps' ? ' on' : ''}">${p.apps}</span><span class="sq-n${sort === 'goals' ? ' on' : ''}">${p.pos === 'GK' ? '-' : p.goals}</span><span class="sq-n${sort === 'assists' ? ' on' : ''}">${p.pos === 'GK' ? '-' : p.assists}</span>${mdRating(p.rating) || '<span class="md-rt">-</span>'}</div>`;
   const hd = k => `<button type="button" class="sq-sort${sort === k ? ' on' : ''}" onclick="sqSort(this,'${k}')" aria-pressed="${sort === k}">${SQ_SORT[k][0] === '평균 평점' ? '평점' : SQ_SORT[k][0]}</button>`;
   const all = showAll || ps.length <= 12;
@@ -5709,7 +5711,7 @@ async function switchTiTab(tab) {
           return `<div class="ti-player-row${pid ? ' link' : ''}"${pid ? ` onclick="openPlayerCard('${escJs(team)}', ${pid})"` : ''}>
           <div style="display:flex;align-items:center;gap:8px;min-width:0">
             ${p.photo ? `<img alt="" src="${p.photo}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;background:#18233a" onerror="this.style.display='none'">` : ''}
-            <span class="ti-player-name" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${hasNum ? `<i class="pl-num">${p.shirtNumber || ''}</i>` : ''}${p.name}</span>
+            <span class="ti-player-name" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${hasNum ? `<i class="pl-num">${p.shirtNumber || ''}</i>` : ''}${p.name}${capInline(pid && afSq?.captain === pid)}</span>
           </div>
           <span class="ti-player-nation">${dp ? `<em class="ti-dpos">${DPOS_KO[dp]}</em>` : ''}${fl ? `<img src="${fl}" alt="">` : ''}${natKo(nat) || ''}</span>
         </div>`; }).join('');

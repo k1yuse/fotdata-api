@@ -1859,7 +1859,7 @@ def _team_league_in(team, yr):
     return next((c for c in codes if c != "CL"), codes[0] if codes else None)
 
 # ── 선수 검색(2026-10-08): 이번 시즌 5대 리그 선수(af_players.json, 약 2,600명) — 이름 일부로(악센트·대소문자 무시), 이번 시즌 출전 시간 많은 선수부터 ──
-def _norm_name(s):
+def _search_norm(s):   # 선수 검색용(문자열) — 위 _norm_name(단어 목록, 스쿼드 이름 맞추기용)과 이름이 겹쳐 덮어썼던 것(2026-10-08) 분리
     import unicodedata
     return unicodedata.normalize("NFKD", (s or "").replace("ß", "ss").replace("ø", "o").replace("Ø", "o").replace("ł", "l")).encode("ascii", "ignore").decode().lower()
 
@@ -1876,7 +1876,7 @@ def _player_search_index():
     for team, v in (_load_json("af_players.json") or {}).items():
         for pid, p in (v.get("players") or {}).items():
             full = p.get("full_name") or p.get("name") or ""
-            keys = " ".join(sorted({_norm_name(x) for x in (full, p.get("name"), p.get("firstname"), p.get("lastname")) if x}))
+            keys = " ".join(sorted({_search_norm(x) for x in (full, p.get("name"), p.get("firstname"), p.get("lastname")) if x}))
             r = stat.get(int(pid)) or {}
             out.append({"id": int(pid), "team": team, "league": v.get("league"), "name": full, "photo": p.get("photo"),
                         "pos": r.get("pos_profile") or p.get("pos") or r.get("pos"), "nationality": p.get("nationality"), "age": p.get("age"),
@@ -1888,7 +1888,7 @@ def _player_search_index():
 def players_search(q: str = "", league: str = None, pos: str = None, limit: int = 12, offset: int = 0):
     """선수 검색(이번 시즌 5대 리그) — q가 있으면 이름(3글자 이하는 단어 첫머리만), 없으면 꾸준히 뛴 선수(270분 이상) 평점 순.
     league(PL·PD·BL1·SA·FL1)·pos(GK·DF·MF·FW)로 거름"""
-    qn = _norm_name(q).strip()
+    qn = _search_norm(q).strip()
     toks = qn.split()
     idx = [p for p in _player_search_index() if (not league or p["league"] == league) and (not pos or p["pos"] == pos)]
     hits = []
@@ -1930,6 +1930,7 @@ def get_team_squad(team_name: str, season: int = None):
     v = (_load_json("af_players.json") or {}).get(team) or {}
     return {"team": team, "league": code, "season": yr, "updated": v.get("updated"), "players": players, "seasons": seasons,
             "manager": _manager_of(team) if yr == CURRENT_SEASON_YEAR else None,
+            "captain": (_team_captain_order(team, players) or [None])[0],   # 팀 주장(완장을 가장 많이 찬 선수) — 선수 목록·스쿼드의 C 표시
             "best11": _xi_caps(_xi_out(_season_xi([r for r in players if r.get("minutes")], share=0.25)), _team_captain_order(team, players))}
 
 _LP_KEYS = ("id", "team", "full_name", "name", "photo", "pos", "apps", "starts", "minutes", "goals", "assists", "rating", "rated", "shots", "shots_on",

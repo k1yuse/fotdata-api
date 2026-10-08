@@ -142,7 +142,7 @@ Vercel 루트는 `index.html`. landing.html을 고치면 **반드시 `cp landing
 - 경고는 화면 안 상자 대신 `showToast(msg, ms, 'warn')`. 용어 도움말은 `TIPS` + `<button class="ii" data-tip="키">`.
 - 시각은 `koClock()`("오후 8:30", 앞자리 0 없음), 남은 시간 `koRel()`. 짧은 팀 이름 `teamNameHtml()`(≤768px 짧은 이름).
 - 이름: 경기장 위 = "M. Salah"(`mdInitialName`), 목록·카드 = 전체 이름(`afFullName`). 등번호는 이름 앞 회색.
-- 포지션은 **영어 약자**(GK·CB·LB·RB·LWB·RWB·CDM·CM·CAM·LM·RM·LW·RW·ST, 묶음은 GK·DF·MF·FW — `DPOS_KO`·`POS_KO`·`POSITION_LABEL`, 이름은 예전 그대로 값만 약자). 주장은 글자 대신 초록 원 안 C(`.cap-ic` — 선수 카드는 이름 옆, 경기장 위(라인업·베스트 11)는 등번호 바로 왼쪽 `capWrap` — 사진을 가리지 않게). 끝난 경기·예상 라인업 = 그 경기 실제 완장(경기 기록 `cap`), 확정 라인업·구단 베스트 11 = 이번 시즌 완장 많이 찬 순(`_team_captain_order`) 주장 → 부주장 → 없으면 표시 안 함. 구단 선수별 시즌 기록은 머리글(출전·골·도움·평점)을 누르면 그 순으로(`sqSort`).
+- 포지션은 **영어 약자**(GK·CB·LB·RB·LWB·RWB·CDM·CM·CAM·LM·RM·LW·RW·ST, 묶음은 GK·DF·MF·FW — `DPOS_KO`·`POS_KO`·`POSITION_LABEL`, 이름은 예전 그대로 값만 약자). 주장은 글자 대신 초록 원 안 C(`.cap-ic` — 선수 카드는 이름 옆, 경기장 위(라인업·구단 베스트 11)는 등번호 바로 왼쪽 `capWrap`, 팀 목록(스쿼드·선수별 기록·주요 선수)은 이름 뒤 `capInline` — 팀 주장 = `/team/squad`의 `captain`. 리그 베스트 11처럼 여러 팀이 섞인 곳엔 안 넣음). 끝난 경기·예상 라인업 = 그 경기 실제 완장(경기 기록 `cap`), 확정 라인업·구단 베스트 11 = 이번 시즌 완장 많이 찬 순(`_team_captain_order`) 주장 → 부주장 → 없으면 표시 안 함. 구단 선수별 시즌 기록은 머리글(출전·골·도움·평점)을 누르면 그 순으로(`sqSort`).
 - 3D 로고·구단 로고엔 원본에 없는 효과(테두리·광택)를 더하지 않음. 홍보물엔 구단 엠블럼 금지(상표).
 - 카드 높이를 바꾸면 첫 화면 자리 잡기 `.slot-wait` min-height도 같이(빅매치 331/폰 175, 트랙레코드 67, 내 팀 53).
 
@@ -155,6 +155,7 @@ Vercel 루트는 `index.html`. landing.html을 고치면 **반드시 `cp landing
 - `onerror="..."`에 HTML 문자열을 넣지 말 것(따옴표 충돌) — 함수 호출로.
 - 좁은 그리드 열은 `minmax(0, 1fr)`(긴 팀 이름 가로 넘침).
 - 같은 인라인 스크립트 블록 `const` 이름 충돌 → 스크립트 전체가 멈춤. 푸시 전 인라인 스크립트 전부 `node --check`.
+- main.py·FotData.html은 커서 새 함수 이름이 기존 것과 겹치기 쉬움 — 만들기 전에 `grep -n 'def 이름\|function 이름'`(2026-10-08 선수 검색용 `_norm_name`이 스쿼드 이름 맞추기용을 덮어써 스쿼드가 줄인 이름으로 나왔음 → `_search_norm`).
 
 ### 8.4 속도 (2026-10-07 라이브 실측, 한국 → Render 미국 왕복 약 0.2초 포함)
 - 대부분의 API 0.2~0.6초, 팀 정보 개요 첫 표시 0.4초·전부 1초 안, 리그 개요 0.5초, 경기 미리보기 0.5초, 선수 카드 0.6초.
