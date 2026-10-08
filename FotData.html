@@ -270,7 +270,9 @@
       .standings-table th { position: sticky; top: var(--nav-height, 60px); background: var(--surface); z-index: 5; box-shadow: 0 1px 0 var(--border); }
     }
     .standings-table th.center { text-align: center; }
-    .md-cap, .xi-cap { position: absolute; left: -5px; top: -5px; width: 15px; height: 15px; font-size: 10px; z-index: 2; box-shadow: 0 0 0 1.5px var(--bg); }
+    .nm-cap-wrap { position: relative; display: inline-block; max-width: 100%; }
+    .nm-cap-wrap > .md-pn, .nm-cap-wrap > .xi-nm { display: block; }
+    .nm-cap { position: absolute; right: calc(100% + 3px); top: 50%; transform: translateY(-50%); width: 14px; height: 14px; font-size: 9px; }
     .cap-ic { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; background: var(--green); color: #fff; font-style: normal; font-size: 11px; font-weight: 800; line-height: 1; flex-shrink: 0; }   /* 주장 표시(초록 원 안 C) */
     .st-sum-sub-team { display: inline-flex; align-items: center; gap: 5px; } .st-sum-sub-team img { width: 14px; height: 14px; object-fit: contain; }
     @media (min-width: 769px) { .st-table th.n { width: 64px; } }   /* 숫자 칸 폭을 같게 — 글자 수(경기·득점 2글자, 승·무·패 1글자)에 따라 간격이 달랐음 */
@@ -4787,7 +4789,8 @@ function mdInitialName(n) {
   return `${t[0][0]}. ${t.slice(i).join(' ')}`;
 }
 // 경기장 위 이름 칸: 넓은 화면은 이니셜+성, 좁은 폰(≤480px)은 성만(CSS로 전환), 등번호가 있으면 앞에 회색
-const mdNameHtml = (name, num) => `<span class="md-pn">${num != null ? `<i>${num}</i>` : ''}<span class="nm-f">${mdInitialName(name)}</span><span class="nm-s">${mdShortName(name)}</span></span>`;
+const capWrap = (html, cap) => (cap ? `<span class="nm-cap-wrap"><i class="cap-ic nm-cap" title="주장" aria-label="주장">C</i>${html}</span>` : html);   // 주장 C — 이름(등번호) 바로 왼쪽
+const mdNameHtml = (name, num, cap) => capWrap(`<span class="md-pn">${num != null ? `<i>${num}</i>` : ''}<span class="nm-f">${mdInitialName(name)}</span><span class="nm-s">${mdShortName(name)}</span></span>`, cap);
 // 목록·기록·선수 카드 이름: API-Football "B. Saka" → 이름(firstname)에서 이니셜이 맞는 단어를 붙여 "Bukayo Saka"
 function afFullName(p) {
   if (!p) return '';
@@ -4880,8 +4883,8 @@ function mdLineupHtml(d, home, away, opts = {}) {   // opts.bench === false → 
       const pos = opts.horizontal ? (side === 'home' ? `left:${6 + t * 39}%;top:${x}%` : `left:${94 - t * 39}%;top:${100 - x}%`)
         : `left:${side === 'home' ? x : 100 - x}%;top:${side === 'home' ? 94 - t * 39 : 6 + t * 39}%`;
       return `<div class="md-pl${p.off != null ? ' off' : ''}" style="${pos};--kb:${bg};--kn:${fg}" title="${p.name}${p.rating ? ' · 평점 ' + p.rating.toFixed(1) : ''}"${p.id ? ` onclick="openPlayerCard('${escJs(side === 'home' ? home : away)}', ${p.id})"` : ''}>
-        <span class="md-shirt${ph ? ' ph' : ''}">${ph ? `<img src="${ph}" alt="" onerror="this.remove()">` : p.number ?? ''}${mdRating(p.rating)}${p.cap ? '<i class="cap-ic md-cap" title="주장">C</i>' : ''}${p.off != null ? `<span class="md-offm">${p.off}'</span>` : ''}${marks ? `<span class="md-marks">${marks}</span>` : ''}</span>
-        ${mdNameHtml(p.name, ph ? p.number : null)}</div>`;
+        <span class="md-shirt${ph ? ' ph' : ''}">${ph ? `<img src="${ph}" alt="" onerror="this.remove()">` : p.number ?? ''}${mdRating(p.rating)}${p.off != null ? `<span class="md-offm">${p.off}'</span>` : ''}${marks ? `<span class="md-marks">${marks}</span>` : ''}</span>
+        ${mdNameHtml(p.name, ph ? p.number : null, p.cap)}</div>`;
     }); }).join('');
   };
   // 경기 전 라인업(벤치 칸이 없는 화면)은 포메이션 옆에 감독 이름
@@ -5058,11 +5061,11 @@ function xiPitchHtml(xi, o = {}) {
     const st = [p.goals ? `${p.goals}골` : '', p.assists ? `${p.assists}도움` : ''].filter(Boolean).join(' ');
     const team = p.team || o.team || '';
     return `<button type="button" class="xi-p" style="${pos}" onclick="openPlayerCard('${escJs(team)}', ${p.id}, ${o.season || 'null'})" title="${(p.full_name || nm).replace(/"/g, '&quot;')} · 평점 ${p.rating != null ? p.rating.toFixed(2) : '-'}">
-      <span class="xi-ph">${p.cap ? '<i class="cap-ic xi-cap" title="주장">C</i>' : ''}<img src="${p.photo || `https://media.api-sports.io/football/players/${p.id}.png`}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+      <span class="xi-ph"><img src="${p.photo || `https://media.api-sports.io/football/players/${p.id}.png`}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
         ${p.rating != null ? `<b class="xi-rt ${mdRatingClass(p.rating)}">${(o.dec2 ? p.rating.toFixed(2) : p.rating.toFixed(1))}</b>` : ''}
         ${o.teamLogo && logos[team] ? `<img class="xi-crest" src="${logos[team]}" alt="" onerror="this.remove()">` : ''}
 </span>
-      <span class="xi-nm">${o.num && p.num != null ? `<i>${p.num}</i>` : ''}${mdShortName(nm)}</span>${st ? `<span class="xi-st">${st}</span>` : ''}</button>`;
+      ${capWrap(`<span class="xi-nm">${o.num && p.num != null ? `<i>${p.num}</i>` : ''}${mdShortName(nm)}</span>`, p.cap)}${st ? `<span class="xi-st">${st}</span>` : ''}</button>`;
   }).join('')).join('');
   return `<div class="xi-pitch ${orient}${o.compact ? ' compact' : ''}">${PITCH_SVG[orient]}${dots}</div>`;
 }

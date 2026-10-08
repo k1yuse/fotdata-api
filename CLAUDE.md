@@ -142,7 +142,7 @@ Vercel 루트는 `index.html`. landing.html을 고치면 **반드시 `cp landing
 - 경고는 화면 안 상자 대신 `showToast(msg, ms, 'warn')`. 용어 도움말은 `TIPS` + `<button class="ii" data-tip="키">`.
 - 시각은 `koClock()`("오후 8:30", 앞자리 0 없음), 남은 시간 `koRel()`. 짧은 팀 이름 `teamNameHtml()`(≤768px 짧은 이름).
 - 이름: 경기장 위 = "M. Salah"(`mdInitialName`), 목록·카드 = 전체 이름(`afFullName`). 등번호는 이름 앞 회색.
-- 포지션은 **영어 약자**(GK·CB·LB·RB·LWB·RWB·CDM·CM·CAM·LM·RM·LW·RW·ST, 묶음은 GK·DF·MF·FW — `DPOS_KO`·`POS_KO`·`POSITION_LABEL`, 이름은 예전 그대로 값만 약자). 주장은 글자 대신 초록 원 안 C(`.cap-ic` — 선수 카드 이름 옆·라인업·구단 베스트 11). 끝난 경기·예상 라인업 = 그 경기 실제 완장(경기 기록 `cap`), 확정 라인업·구단 베스트 11 = 이번 시즌 완장 많이 찬 순(`_team_captain_order`) 주장 → 부주장 → 없으면 표시 안 함. 구단 선수별 시즌 기록은 머리글(출전·골·도움·평점)을 누르면 그 순으로(`sqSort`).
+- 포지션은 **영어 약자**(GK·CB·LB·RB·LWB·RWB·CDM·CM·CAM·LM·RM·LW·RW·ST, 묶음은 GK·DF·MF·FW — `DPOS_KO`·`POS_KO`·`POSITION_LABEL`, 이름은 예전 그대로 값만 약자). 주장은 글자 대신 초록 원 안 C(`.cap-ic` — 선수 카드는 이름 옆, 경기장 위(라인업·베스트 11)는 등번호 바로 왼쪽 `capWrap` — 사진을 가리지 않게). 끝난 경기·예상 라인업 = 그 경기 실제 완장(경기 기록 `cap`), 확정 라인업·구단 베스트 11 = 이번 시즌 완장 많이 찬 순(`_team_captain_order`) 주장 → 부주장 → 없으면 표시 안 함. 구단 선수별 시즌 기록은 머리글(출전·골·도움·평점)을 누르면 그 순으로(`sqSort`).
 - 3D 로고·구단 로고엔 원본에 없는 효과(테두리·광택)를 더하지 않음. 홍보물엔 구단 엠블럼 금지(상표).
 - 카드 높이를 바꾸면 첫 화면 자리 잡기 `.slot-wait` min-height도 같이(빅매치 331/폰 175, 트랙레코드 67, 내 팀 53).
 
