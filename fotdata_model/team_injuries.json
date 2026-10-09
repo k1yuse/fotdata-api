@@ -32,7 +32,7 @@
     "id": 24839,
     "name": "M. Friedrich",
     "photo": "https://media.api-sports.io/football/players/24839.png",
-    "reason": "Injury",
+    "reason": "Knock",
     "status": "out"
    },
    {
@@ -124,7 +124,7 @@
     "id": 31532,
     "name": "P. Ciurria",
     "photo": "https://media.api-sports.io/football/players/31532.png",
-    "reason": "Inactive",
+    "reason": "Muscle Injury",
     "status": "out"
    },
    {
@@ -230,7 +230,7 @@
     "id": 191240,
     "name": "M. Senaya",
     "photo": "https://media.api-sports.io/football/players/191240.png",
-    "reason": "Injury",
+    "reason": "Hamstring Injury",
     "status": "out"
    },
    {
@@ -452,14 +452,14 @@
     "id": 444961,
     "name": "M. Culbreath",
     "photo": "https://media.api-sports.io/football/players/444961.png",
-    "reason": "Injury",
+    "reason": "Foot Injury",
     "status": "out"
    },
    {
     "id": 161747,
     "name": "G. Doue",
     "photo": "https://media.api-sports.io/football/players/161747.png",
-    "reason": "Muscle Injury",
+    "reason": "Calf Injury",
     "status": "out"
    },
    {
@@ -959,7 +959,7 @@
     "id": 174596,
     "name": "I. Boura",
     "photo": "https://media.api-sports.io/football/players/174596.png",
-    "reason": "Injury",
+    "reason": "Hip Injury",
     "status": "out"
    },
    {
@@ -973,7 +973,7 @@
     "id": 275478,
     "name": "M. Ifnaoui",
     "photo": "https://media.api-sports.io/football/players/275478.png",
-    "reason": "Injury",
+    "reason": "Calf Injury",
     "status": "out"
    },
    {
@@ -987,7 +987,7 @@
     "id": 395810,
     "name": "Y. Titi",
     "photo": "https://media.api-sports.io/football/players/395810.png",
-    "reason": "Injury",
+    "reason": "Leg Injury",
     "status": "out"
    }
   ]
@@ -1013,7 +1013,7 @@
     "id": 162771,
     "name": "J. Ngankam",
     "photo": "https://media.api-sports.io/football/players/162771.png",
-    "reason": "Injury",
+    "reason": "Hamstring Injury",
     "status": "out"
    }
   ]
@@ -1056,7 +1056,7 @@
     "id": 202755,
     "name": "T. Breithaupt",
     "photo": "https://media.api-sports.io/football/players/202755.png",
-    "reason": "Injury",
+    "reason": "Toe Injury",
     "status": "out"
    },
    {
@@ -1167,7 +1167,7 @@
     "id": 162018,
     "name": "B. Fadiga",
     "photo": "https://media.api-sports.io/football/players/162018.png",
-    "reason": "Injury",
+    "reason": "Ankle Injury",
     "status": "out"
    },
    {
@@ -1235,7 +1235,7 @@
     "id": 126899,
     "name": "Zaidu",
     "photo": "https://media.api-sports.io/football/players/126899.png",
-    "reason": "Injury",
+    "reason": "Muscle Injury",
     "status": "out"
    }
   ]
@@ -1428,7 +1428,7 @@
     "id": 37147,
     "name": "B. Nieuwkoop",
     "photo": "https://media.api-sports.io/football/players/37147.png",
-    "reason": "Injury",
+    "reason": "Knee Injury",
     "status": "out"
    },
    {
@@ -1831,21 +1831,21 @@
     "id": 961,
     "name": "F. Mambimbi",
     "photo": "https://media.api-sports.io/football/players/961.png",
-    "reason": "Injury",
+    "reason": "Achilles Tendon Injury",
     "status": "out"
    },
    {
     "id": 24012,
     "name": "L. Mpasi-Nzau",
     "photo": "https://media.api-sports.io/football/players/24012.png",
-    "reason": "Injury",
+    "reason": "Achilles Tendon Injury",
     "status": "out"
    },
    {
     "id": 162067,
     "name": "T. Pembele",
     "photo": "https://media.api-sports.io/football/players/162067.png",
-    "reason": "Inactive",
+    "reason": "Muscle Injury",
     "status": "out"
    },
    {
@@ -1859,7 +1859,7 @@
     "id": 513415,
     "name": "S. Zagadou",
     "photo": "https://media.api-sports.io/football/players/513415.png",
-    "reason": "Injury",
+    "reason": "Knee Injury",
     "status": "out"
    }
   ]
@@ -2041,7 +2041,7 @@
     "id": 115589,
     "name": "B. Sesko",
     "photo": "https://media.api-sports.io/football/players/115589.png",
-    "reason": "Inactive",
+    "reason": "Leg Injury",
     "status": "out"
    },
    {
@@ -2267,14 +2267,14 @@
     "id": 926,
     "name": "G. Kondogbia",
     "photo": "https://media.api-sports.io/football/players/926.png",
-    "reason": "Injury",
+    "reason": "Thigh Injury",
     "status": "out"
    },
    {
     "id": 354298,
     "name": "T. Nnadi",
     "photo": "https://media.api-sports.io/football/players/354298.png",
-    "reason": "Injury",
+    "reason": "Knee Injury",
     "status": "out"
    }
   ]
@@ -2321,7 +2321,7 @@
     "id": 25646,
     "name": "A. Plea",
     "photo": "https://media.api-sports.io/football/players/25646.png",
-    "reason": "Injury",
+    "reason": "Surgery",
     "status": "out"
    },
    {
@@ -2335,7 +2335,7 @@
     "id": 191233,
     "name": "K. Sildillia",
     "photo": "https://media.api-sports.io/football/players/191233.png",
-    "reason": "Injury",
+    "reason": "Surgery",
     "status": "out"
    }
   ]
@@ -2347,7 +2347,7 @@
     "id": 490981,
     "name": "E. Mbemba",
     "photo": "https://media.api-sports.io/football/players/490981.png",
-    "reason": "Inactive",
+    "reason": "Leg Injury",
     "status": "out"
    },
    {
@@ -2569,7 +2569,7 @@
     "id": 178708,
     "name": "M. Nawrocki",
     "photo": "https://media.api-sports.io/football/players/178708.png",
-    "reason": "Injury",
+    "reason": "Knee Injury",
     "status": "out"
    },
    {
@@ -3029,7 +3029,7 @@
     "id": 515985,
     "name": "M. Zekri",
     "photo": "https://media.api-sports.io/football/players/515985.png",
-    "reason": "Injury",
+    "reason": "Muscle Injury",
     "status": "out"
    }
   ]
@@ -3425,14 +3425,14 @@
     "id": 25061,
     "name": "A. Bella-Kotchap",
     "photo": "https://media.api-sports.io/football/players/25061.png",
-    "reason": "Injury",
+    "reason": "Thigh Injury",
     "status": "out"
    },
    {
     "id": 51266,
     "name": "G. Busio",
     "photo": "https://media.api-sports.io/football/players/51266.png",
-    "reason": "Injury",
+    "reason": "Thigh Injury",
     "status": "out"
    },
    {
@@ -3446,14 +3446,14 @@
     "id": 14704,
     "name": "B. Franjic",
     "photo": "https://media.api-sports.io/football/players/14704.png",
-    "reason": "Injury",
+    "reason": "Shoulder Injury",
     "status": "out"
    },
    {
     "id": 37144,
     "name": "R. Haps",
     "photo": "https://media.api-sports.io/football/players/37144.png",
-    "reason": "Inactive",
+    "reason": "Injury",
     "status": "out"
    },
    {
