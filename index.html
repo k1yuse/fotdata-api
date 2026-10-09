@@ -464,8 +464,8 @@
     .mock-vs { font-size: 20px; font-weight: 700; color: var(--muted); margin-bottom: 10px; }
     .mock-badge { display: inline-block; padding: 4px 14px; background: rgba(88,166,255,0.15); color: var(--blue); border-radius: 20px; font-size: 11px; font-weight: 600; }
     .mock-bars { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
-    .mock-bar-row { display: grid; grid-template-columns: 52px 1fr 42px; align-items: center; gap: 10px; }
-    .mock-bar-label { font-size: 12px; color: var(--muted); font-weight: 600; }
+    .mock-bar-row { display: grid; grid-template-columns: 82px 1fr 42px; align-items: center; gap: 10px; }
+    .mock-bar-label { font-size: 12px; color: var(--muted); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .mock-bar-bg { background: var(--bg3); border-radius: 99px; height: 10px; overflow: hidden; }
     .mock-bar-fill { height: 100%; border-radius: 99px; width: var(--w); }
     .mock-bar-fill.home { background: linear-gradient(90deg, #1f6feb, #58a6ff); } .mock-bar-fill.draw { background: #6e7681; } .mock-bar-fill.away { background: linear-gradient(90deg, #f0883e, #ffa657); }
@@ -998,24 +998,24 @@
             <div class="mock-team-logo">
               <img src="https://crests.football-data.org/57.png" onerror="this.style.display='none'">
             </div>
-            <div class="mock-team-name">Arsenal FC</div>
+            <div class="mock-team-name">Arsenal</div>
             <div class="mock-team-sub">홈 · EPL</div>
           </div>
           <div class="mock-vs-center">
             <div class="mock-vs">VS</div>
-            <div class="mock-badge">홈팀 승리 예측</div>
+            <div class="mock-badge">Arsenal 승리 예측</div>
           </div>
           <div class="mock-team">
             <div class="mock-team-logo">
               <img src="https://crests.football-data.org/61.png" onerror="this.style.display='none'">
             </div>
-            <div class="mock-team-name">Chelsea FC</div>
+            <div class="mock-team-name">Chelsea</div>
             <div class="mock-team-sub">원정 · EPL</div>
           </div>
         </div>
         <div class="mock-bars">
           <div class="mock-bar-row">
-            <span class="mock-bar-label">홈승</span>
+            <span class="mock-bar-label">Arsenal 승</span>
             <div class="mock-bar-bg"><div class="mock-bar-fill home" style="--w:52%"></div></div>
             <span class="mock-bar-val home" data-v="52">52%</span>
           </div>
@@ -1025,7 +1025,7 @@
             <span class="mock-bar-val draw" data-v="24">24%</span>
           </div>
           <div class="mock-bar-row">
-            <span class="mock-bar-label">원정승</span>
+            <span class="mock-bar-label">Chelsea 승</span>
             <div class="mock-bar-bg"><div class="mock-bar-fill away" style="--w:24%"></div></div>
             <span class="mock-bar-val away" data-v="24">24%</span>
           </div>
