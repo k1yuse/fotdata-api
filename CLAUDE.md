@@ -138,7 +138,9 @@ Vercel 루트는 `index.html`. landing.html을 고치면 **반드시 `cp landing
 - 검색(⌘K·상단 검색·더보기 "구단·선수 검색"): 구단 둘러보기 검색창이 구단(바로) + 선수(`/players/search`, 0.18초 멈춘 뒤) — 선수를 누르면 선수 카드. 경기 예측 팀 선택 팝업 맨 위엔 ★ 내 팀 줄(즐겨찾기 바로 선택).
 
 ### 8.2 디자인 규칙
-- **유리 표면**(`<style id="glass-v2">`, `html.theme-glass`): 카드 = 반투명 남색 + 흐림 28px + 왼쪽 위가 밝은 1px 빛 테두리(`::before` mask), 폰은 흐림 끔. 알약·배지는 `--gp-{blue,org,grn,red,amb,neu}-{bg,bd,tx}` 토큰(반투명 바탕 + 같은 색 테두리 + 밝은 글자), 고른 칩 = 파란 유리, 주 버튼 = 파란 세로 그라데이션. 새 알약·칩도 이 토큰으로.
+- **디자인 테마**(FotData.html 맨 위 스크립트 `theme` 기본값): **`theme-a`(기본, 2026-10-10)** = 유리 층(`<style id="glass-v2">`, `html.theme-glass`) 위에 `<style id="theme-a">`를 얹음. `?theme=glass`(유리)·`?theme=default`(유리 이전)로 비교, 되돌리기는 기본값 한 글자 또는 태그 `design-glass`. **새 디자인은 덮어쓰지 말고 테마 층으로 추가**.
+  - theme-a 규칙: 파랑·주황은 홈·원정 **데이터만**, 브랜드·강조는 오로라(`--iris`, 로고 공·주 버튼 테두리·고른 메뉴 아이콘 — SVG는 `url(#fdIris)`), 링크·고른 항목은 흰 계열(`--blue-text`도 흰 계열로 덮음). 층은 ① 주인공 유리(빅매치·창·위 메뉴·폰 탭바) ② 패널(`.card` — 옅은 판 + 얇은 테두리, 흐림 없음) ③ 패널 안은 상자 대신 줄. 버튼은 유리(주 버튼 = 오로라 테두리), 탭·세그먼트·칩은 어두운 홈 안에 고른 칸만 뜬 유리 알약(`--a-seg-on`). 평점 배지는 초록 단계(파랑 금지). 레이더 대신 두 팀 비교 막대(`cmpBarsHtml`, 공격·수비 칸 `#stat-boxes`는 숨김). 폰 탭바는 떠 있는 유리 알약(`--tabbar-h` 84px+안전 영역).
+  - 유리 층 토큰: 알약·배지 `--gp-{blue,org,grn,red,amb,neu}-{bg,bd,tx}`.
 - **움직임**(`<style id="motion-v1">`, Emil Kowalski 기준): 곡선은 `--ease-out`(나타남·사라짐)·`--ease-in-out`(화면 안 이동)·`--ease-drawer`만, UI는 0.3초 안, 닫힘이 열림보다 빠르게(창 0.26/0.15초), 누르면 `scale: .97`(transform 말고 scale 속성 — translate로 자리 잡은 버튼이 안 튐), `transition: all` 금지, 탭 전환 6px·0.22초, 키보드(⌘K)로 여는 건 애니메이션 없이. 드물게 보는 순간(예측 결과 배지)만 튀는 연출.
 - **마우스 올림(`:hover`)은 전부 `@media (hover: hover) and (pointer: fine)` 안에** — 폰에서 손 뗀 뒤 올림 효과가 남지 않게. 새 `:hover` 규칙도 반드시 이 안에.
 - 설명 문구는 짧게, 기준·방법 설명은 ⓘ(`TIPS`)로. "A · B · C" 식 긴 설명 줄 만들지 말 것.
@@ -156,6 +158,7 @@ Vercel 루트는 `index.html`. landing.html을 고치면 **반드시 `cp landing
 - `data-w`는 경기 분석 막대 애니메이션이 씀 — 다른 용도로 `data-*` 이름 겹치지 않게.
 - SVG에 글자가 있는 차트는 viewBox 확대 금지 — 컨테이너 실제 폭으로 1:1로 그림.
 - `backdrop-filter` 카드 안 절대 위치 팝업은 아래 카드에 가려질 수 있음 → 부모 카드에 z-index.
+- 카드 `::before`(빛 테두리)가 inset -1px라 `scrollHeight`가 1px 커짐 — 넘침 판정은 여유(+2px)를 둘 것("다른 경기" 카드가 안 뜨던 전례). 예측 결과 두 열 맞춤은 `fitMoreCard` + ResizeObserver(열 안 내용만 관찰).
 - flex 부모 밑 `margin: auto` 중앙 정렬 요소는 `width: 100%` 필요.
 - 로고 `<img>`가 빈 src로 먼저 그려지면 onerror로 숨은 채 굳음 → `logosReady`를 기다렸다 그림.
 - `onerror="..."`에 HTML 문자열을 넣지 말 것(따옴표 충돌) — 함수 호출로.
