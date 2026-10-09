@@ -4498,9 +4498,9 @@
       "stage": "REGULAR_SEASON",
       "home_team": "Málaga CF",
       "away_team": "RCD Espanyol de Barcelona",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
+      "home_goals": 1,
+      "away_goals": 1,
+      "status": "FINISHED"
     },
     {
       "date": "2026-10-10T12:00:00Z",
@@ -7970,9 +7970,9 @@
       "stage": "REGULAR_SEASON",
       "home_team": "Borussia Dortmund",
       "away_team": "SV Werder Bremen",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
+      "home_goals": 2,
+      "away_goals": 2,
+      "status": "FINISHED"
     },
     {
       "date": "2026-10-10T13:30:00Z",
@@ -14924,9 +14924,9 @@
       "stage": "REGULAR_SEASON",
       "home_team": "Racing Club de Lens",
       "away_team": "Olympique Lyonnais",
-      "home_goals": null,
-      "away_goals": null,
-      "status": "TIMED"
+      "home_goals": 2,
+      "away_goals": 1,
+      "status": "FINISHED"
     },
     {
       "date": "2026-10-10T15:15:00Z",

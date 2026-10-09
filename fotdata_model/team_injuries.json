@@ -491,20 +491,13 @@
   ]
  },
  "Borussia Dortmund": {
-  "date": "2026-09-19",
+  "date": "2026-10-09",
   "players": [
    {
     "id": 864,
     "name": "E. Can",
     "photo": "https://media.api-sports.io/football/players/864.png",
     "reason": "Knee Injury",
-    "status": "out"
-   },
-   {
-    "id": 479116,
-    "name": "M. Kaba",
-    "photo": "https://media.api-sports.io/football/players/479116.png",
-    "reason": "Injury",
     "status": "out"
    },
    {
@@ -515,18 +508,39 @@
     "status": "out"
    },
    {
+    "id": 138935,
+    "name": "C. Chukwuemeka",
+    "photo": "https://media.api-sports.io/football/players/138935.png",
+    "reason": "Muscle Injury",
+    "status": "doubtful"
+   },
+   {
+    "id": 404891,
+    "name": "K. Karetsas",
+    "photo": "https://media.api-sports.io/football/players/404891.png",
+    "reason": "Illness",
+    "status": "doubtful"
+   },
+   {
     "id": 465666,
     "name": "J. Lerma",
     "photo": "https://media.api-sports.io/football/players/465666.png",
     "reason": "Muscle Injury",
-    "status": "out"
+    "status": "doubtful"
    },
    {
     "id": 341839,
     "name": "F. Mane",
     "photo": "https://media.api-sports.io/football/players/341839.png",
     "reason": "Muscle Injury",
-    "status": "out"
+    "status": "doubtful"
+   },
+   {
+    "id": 24845,
+    "name": "J. Ryerson",
+    "photo": "https://media.api-sports.io/football/players/24845.png",
+    "reason": "Ribs Injury",
+    "status": "doubtful"
    }
   ]
  },
@@ -2061,22 +2075,8 @@
   ]
  },
  "Málaga CF": {
-  "date": "2026-09-20",
+  "date": "2026-10-09",
   "players": [
-   {
-    "id": 296695,
-    "name": "H. Abaida",
-    "photo": "https://media.api-sports.io/football/players/296695.png",
-    "reason": "Inactive",
-    "status": "out"
-   },
-   {
-    "id": 431921,
-    "name": "A. Aznou",
-    "photo": "https://media.api-sports.io/football/players/431921.png",
-    "reason": "Muscle Injury",
-    "status": "out"
-   },
    {
     "id": 15797,
     "name": "J. Cajuste",
@@ -2085,10 +2085,10 @@
     "status": "out"
    },
    {
-    "id": 47478,
-    "name": "F. Calero",
-    "photo": "https://media.api-sports.io/football/players/47478.png",
-    "reason": "Ribs Injury",
+    "id": 328192,
+    "name": "M. Diarra",
+    "photo": "https://media.api-sports.io/football/players/328192.png",
+    "reason": "Calf Injury",
     "status": "out"
    },
    {
@@ -2111,6 +2111,20 @@
     "photo": "https://media.api-sports.io/football/players/444451.png",
     "reason": "Knee Injury",
     "status": "out"
+   },
+   {
+    "id": 184407,
+    "name": "J. Salinas",
+    "photo": "https://media.api-sports.io/football/players/184407.png",
+    "reason": "Loan agreement",
+    "status": "out"
+   },
+   {
+    "id": 185202,
+    "name": "J. Cruz",
+    "photo": "https://media.api-sports.io/football/players/185202.png",
+    "reason": "Injury",
+    "status": "doubtful"
    }
   ]
  },
@@ -2222,21 +2236,14 @@
     "id": 1914,
     "name": "M. Sanson",
     "photo": "https://media.api-sports.io/football/players/1914.png",
-    "reason": "Surgery",
+    "reason": "Knee Injury",
     "status": "out"
    }
   ]
  },
  "Olympique Lyonnais": {
-  "date": "2026-09-19",
+  "date": "2026-10-09",
   "players": [
-   {
-    "id": 368230,
-    "name": "J. Duranville",
-    "photo": "https://media.api-sports.io/football/players/368230.png",
-    "reason": "Muscle Injury",
-    "status": "out"
-   },
    {
     "id": 497617,
     "name": "R. Himbert",
@@ -2245,17 +2252,24 @@
     "status": "out"
    },
    {
-    "id": 493026,
-    "name": "N. Kamara",
-    "photo": "https://media.api-sports.io/football/players/493026.png",
-    "reason": "Inactive",
+    "id": 25916,
+    "name": "M. Niakhate",
+    "photo": "https://media.api-sports.io/football/players/25916.png",
+    "reason": "Muscle Injury",
+    "status": "out"
+   },
+   {
+    "id": 412049,
+    "name": "M. Ouedraogo",
+    "photo": "https://media.api-sports.io/football/players/412049.png",
+    "reason": "Knee Injury",
     "status": "out"
    },
    {
     "id": 529,
     "name": "N. Tagliafico",
     "photo": "https://media.api-sports.io/football/players/529.png",
-    "reason": "Muscle Injury",
+    "reason": "Rest",
     "status": "out"
    }
   ]
@@ -2361,7 +2375,7 @@
     "id": 389322,
     "name": "N. Sangui",
     "photo": "https://media.api-sports.io/football/players/389322.png",
-    "reason": "Injury",
+    "reason": "Muscle Injury",
     "status": "out"
    }
   ]
@@ -2509,15 +2523,8 @@
   ]
  },
  "RCD Espanyol de Barcelona": {
-  "date": "2026-09-18",
+  "date": "2026-10-09",
   "players": [
-   {
-    "id": 286601,
-    "name": "O. El Hilali",
-    "photo": "https://media.api-sports.io/football/players/286601.png",
-    "reason": "Red Card",
-    "status": "out"
-   },
    {
     "id": 47396,
     "name": "K. Garcia",
@@ -2531,38 +2538,24 @@
     "photo": "https://media.api-sports.io/football/players/182674.png",
     "reason": "Groin Injury",
     "status": "out"
-   },
-   {
-    "id": 47349,
-    "name": "J. Puado",
-    "photo": "https://media.api-sports.io/football/players/47349.png",
-    "reason": "Knee Injury",
-    "status": "out"
    }
   ]
  },
  "Racing Club de Lens": {
-  "date": "2026-09-18",
+  "date": "2026-10-09",
   "players": [
-   {
-    "id": 44594,
-    "name": "S. Abdulhamid",
-    "photo": "https://media.api-sports.io/football/players/44594.png",
-    "reason": "Contusion",
-    "status": "out"
-   },
-   {
-    "id": 322984,
-    "name": "S. Baidoo",
-    "photo": "https://media.api-sports.io/football/players/322984.png",
-    "reason": "Knee Injury",
-    "status": "out"
-   },
    {
     "id": 237191,
     "name": "J. Chavez",
     "photo": "https://media.api-sports.io/football/players/237191.png",
     "reason": "Thigh Injury",
+    "status": "out"
+   },
+   {
+    "id": 2929,
+    "name": "T. Hazard",
+    "photo": "https://media.api-sports.io/football/players/2929.png",
+    "reason": "Inactive",
     "status": "out"
    },
    {
@@ -2573,10 +2566,17 @@
     "status": "out"
    },
    {
-    "id": 327599,
-    "name": "Y. Titraoui",
-    "photo": "https://media.api-sports.io/football/players/327599.png",
-    "reason": "Injury",
+    "id": 277191,
+    "name": "A. Sima",
+    "photo": "https://media.api-sports.io/football/players/277191.png",
+    "reason": "Muscle Injury",
+    "status": "out"
+   },
+   {
+    "id": 138,
+    "name": "J. Todibo",
+    "photo": "https://media.api-sports.io/football/players/138.png",
+    "reason": "Inactive",
     "status": "out"
    }
   ]
@@ -2852,7 +2852,7 @@
     "id": 30784,
     "name": "N. Rovella",
     "photo": "https://media.api-sports.io/football/players/30784.png",
-    "reason": "Injury",
+    "reason": "Calf Injury",
     "status": "out"
    }
   ]
@@ -2924,7 +2924,7 @@
   ]
  },
  "SV Werder Bremen": {
-  "date": "2026-09-19",
+  "date": "2026-10-09",
   "players": [
    {
     "id": 26319,
@@ -2934,10 +2934,24 @@
     "status": "out"
    },
    {
+    "id": 193720,
+    "name": "S. Alvero",
+    "photo": "https://media.api-sports.io/football/players/193720.png",
+    "reason": "Calf Injury",
+    "status": "out"
+   },
+   {
     "id": 38798,
     "name": "S. Lynen",
     "photo": "https://media.api-sports.io/football/players/38798.png",
     "reason": "Hip Injury",
+    "status": "out"
+   },
+   {
+    "id": 432519,
+    "name": "S. Musah",
+    "photo": "https://media.api-sports.io/football/players/432519.png",
+    "reason": "Muscle Injury",
     "status": "out"
    },
    {

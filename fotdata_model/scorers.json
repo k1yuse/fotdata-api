@@ -2,7 +2,7 @@
  "PL": {
   "season": "2026",
   "matchday": 6,
-  "updated": "2026-10-08",
+  "updated": "2026-10-09",
   "scorers": [
    {
     "id": 38101,
@@ -1179,7 +1179,7 @@
  "PD": {
   "season": "2026",
   "matchday": 8,
-  "updated": "2026-10-08",
+  "updated": "2026-10-09",
   "scorers": [
    {
     "id": 37428,
@@ -1241,7 +1241,7 @@
     "shirt": null,
     "team": "RCD Espanyol de Barcelona",
     "team_logo": "https://crests.football-data.org/80.png",
-    "played": 7,
+    "played": 8,
     "goals": 6,
     "assists": 0,
     "penalties": 0
@@ -1585,6 +1585,19 @@
     "penalties": 0
    },
    {
+    "id": 221308,
+    "name": "Adrián",
+    "nationality": "Spain",
+    "position": "Offence",
+    "shirt": null,
+    "team": "Málaga CF",
+    "team_logo": "https://crests.football-data.org/84.png",
+    "played": 4,
+    "goals": 2,
+    "assists": 0,
+    "penalties": 0
+   },
+   {
     "id": 156746,
     "name": "Iván Romero",
     "nationality": "Spain",
@@ -1735,7 +1748,7 @@
     "shirt": null,
     "team": "RCD Espanyol de Barcelona",
     "team_logo": "https://crests.football-data.org/80.png",
-    "played": 7,
+    "played": 8,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -1813,7 +1826,7 @@
     "shirt": null,
     "team": "RCD Espanyol de Barcelona",
     "team_logo": "https://crests.football-data.org/80.png",
-    "played": 7,
+    "played": 8,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -1852,7 +1865,7 @@
     "shirt": null,
     "team": "Málaga CF",
     "team_logo": "https://crests.football-data.org/84.png",
-    "played": 7,
+    "played": 8,
     "goals": 1,
     "assists": 0,
     "penalties": 1
@@ -2164,7 +2177,7 @@
     "shirt": null,
     "team": "RCD Espanyol de Barcelona",
     "team_logo": "https://crests.football-data.org/80.png",
-    "played": 7,
+    "played": 8,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -2308,19 +2321,6 @@
     "team": "RC Celta de Vigo",
     "team_logo": "https://crests.football-data.org/558.png",
     "played": 7,
-    "goals": 1,
-    "assists": 0,
-    "penalties": 0
-   },
-   {
-    "id": 221308,
-    "name": "Adrián",
-    "nationality": "Spain",
-    "position": "Offence",
-    "shirt": null,
-    "team": "Málaga CF",
-    "team_logo": "https://crests.football-data.org/84.png",
-    "played": 3,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -2476,7 +2476,7 @@
     "shirt": null,
     "team": "Málaga CF",
     "team_logo": "https://crests.football-data.org/84.png",
-    "played": 6,
+    "played": 7,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -2486,7 +2486,7 @@
  "BL1": {
   "season": "2026",
   "matchday": 5,
-  "updated": "2026-10-08",
+  "updated": "2026-10-09",
   "scorers": [
    {
     "id": 113765,
@@ -2541,6 +2541,19 @@
     "penalties": 0
    },
    {
+    "id": 304,
+    "name": "Niclas Füllkrug",
+    "nationality": "Germany",
+    "position": "Offence",
+    "shirt": null,
+    "team": "SV Werder Bremen",
+    "team_logo": "https://crests.football-data.org/12.png",
+    "played": 5,
+    "goals": 4,
+    "assists": 0,
+    "penalties": 0
+   },
+   {
     "id": 45593,
     "name": "Phillip Tietz",
     "nationality": "Germany",
@@ -2574,19 +2587,6 @@
     "shirt": null,
     "team": "FC Augsburg",
     "team_logo": "https://crests.football-data.org/16.png",
-    "played": 4,
-    "goals": 3,
-    "assists": 0,
-    "penalties": 0
-   },
-   {
-    "id": 304,
-    "name": "Niclas Füllkrug",
-    "nationality": "Germany",
-    "position": "Offence",
-    "shirt": null,
-    "team": "SV Werder Bremen",
-    "team_logo": "https://crests.football-data.org/12.png",
     "played": 4,
     "goals": 3,
     "assists": 0,
@@ -2743,7 +2743,7 @@
     "shirt": 9,
     "team": "Borussia Dortmund",
     "team_logo": "https://crests.football-data.org/4.png",
-    "played": 4,
+    "played": 5,
     "goals": 2,
     "assists": 2,
     "penalties": 0
@@ -2756,9 +2756,9 @@
     "shirt": null,
     "team": "SV Werder Bremen",
     "team_logo": "https://crests.football-data.org/12.png",
-    "played": 4,
+    "played": 5,
     "goals": 2,
-    "assists": 3,
+    "assists": 4,
     "penalties": 0
    },
    {
@@ -2769,9 +2769,9 @@
     "shirt": null,
     "team": "Borussia Dortmund",
     "team_logo": "https://crests.football-data.org/4.png",
-    "played": 4,
+    "played": 5,
     "goals": 2,
-    "assists": 0,
+    "assists": 1,
     "penalties": 0
    },
    {
@@ -2847,7 +2847,7 @@
     "shirt": null,
     "team": "Borussia Dortmund",
     "team_logo": "https://crests.football-data.org/4.png",
-    "played": 4,
+    "played": 5,
     "goals": 2,
     "assists": 0,
     "penalties": 0
@@ -3029,7 +3029,7 @@
     "shirt": null,
     "team": "SV Werder Bremen",
     "team_logo": "https://crests.football-data.org/12.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -3107,7 +3107,7 @@
     "shirt": null,
     "team": "SV Werder Bremen",
     "team_logo": "https://crests.football-data.org/12.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -3549,7 +3549,7 @@
     "shirt": null,
     "team": "SV Werder Bremen",
     "team_logo": "https://crests.football-data.org/12.png",
-    "played": 2,
+    "played": 3,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -3575,7 +3575,7 @@
     "shirt": null,
     "team": "Borussia Dortmund",
     "team_logo": "https://crests.football-data.org/4.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 2,
     "penalties": 0
@@ -3631,13 +3631,52 @@
     "goals": 1,
     "assists": 0,
     "penalties": 0
+   },
+   {
+    "id": 145937,
+    "name": "Daniel Svensson",
+    "nationality": "Sweden",
+    "position": "Defence",
+    "shirt": null,
+    "team": "Borussia Dortmund",
+    "team_logo": "https://crests.football-data.org/4.png",
+    "played": 5,
+    "goals": 1,
+    "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 75539,
+    "name": "Nico Schlotterbeck",
+    "nationality": "Germany",
+    "position": "Defence",
+    "shirt": null,
+    "team": "Borussia Dortmund",
+    "team_logo": "https://crests.football-data.org/4.png",
+    "played": 3,
+    "goals": 1,
+    "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 7532,
+    "name": "Ludovit Reis",
+    "nationality": "Netherlands",
+    "position": "Midfield",
+    "shirt": null,
+    "team": "SV Werder Bremen",
+    "team_logo": "https://crests.football-data.org/12.png",
+    "played": 5,
+    "goals": 1,
+    "assists": 0,
+    "penalties": 0
    }
   ]
  },
  "SA": {
   "season": "2026",
   "matchday": 6,
-  "updated": "2026-10-08",
+  "updated": "2026-10-09",
   "scorers": [
    {
     "id": 7457,
@@ -4879,7 +4918,7 @@
  "FL1": {
   "season": "2026",
   "matchday": 6,
-  "updated": "2026-10-08",
+  "updated": "2026-10-09",
   "scorers": [
    {
     "id": 8476,
@@ -4954,9 +4993,9 @@
     "shirt": 26,
     "team": "Racing Club de Lens",
     "team_logo": "https://crests.football-data.org/546.png",
-    "played": 5,
+    "played": 6,
     "goals": 3,
-    "assists": 3,
+    "assists": 5,
     "penalties": 3
    },
    {
@@ -5019,7 +5058,7 @@
     "shirt": null,
     "team": "Olympique Lyonnais",
     "team_logo": "https://crests.football-data.org/523.png",
-    "played": 5,
+    "played": 6,
     "goals": 3,
     "assists": 1,
     "penalties": 0
@@ -5058,7 +5097,7 @@
     "shirt": null,
     "team": "Racing Club de Lens",
     "team_logo": "https://crests.football-data.org/546.png",
-    "played": 5,
+    "played": 6,
     "goals": 2,
     "assists": 0,
     "penalties": 0
@@ -5123,7 +5162,7 @@
     "shirt": null,
     "team": "Olympique Lyonnais",
     "team_logo": "https://crests.football-data.org/523.png",
-    "played": 5,
+    "played": 6,
     "goals": 2,
     "assists": 2,
     "penalties": 0
@@ -5152,6 +5191,19 @@
     "played": 5,
     "goals": 2,
     "assists": 1,
+    "penalties": 0
+   },
+   {
+    "id": 8717,
+    "name": "Matthieu Udol",
+    "nationality": "France",
+    "position": "Defence",
+    "shirt": 3,
+    "team": "Racing Club de Lens",
+    "team_logo": "https://crests.football-data.org/546.png",
+    "played": 6,
+    "goals": 2,
+    "assists": 0,
     "penalties": 0
    },
    {
@@ -5188,7 +5240,7 @@
     "shirt": null,
     "team": "Racing Club de Lens",
     "team_logo": "https://crests.football-data.org/546.png",
-    "played": 1,
+    "played": 2,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -5214,7 +5266,7 @@
     "shirt": null,
     "team": "Racing Club de Lens",
     "team_logo": "https://crests.football-data.org/546.png",
-    "played": 3,
+    "played": 4,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -5266,7 +5318,7 @@
     "shirt": null,
     "team": "Olympique Lyonnais",
     "team_logo": "https://crests.football-data.org/523.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -5409,7 +5461,7 @@
     "shirt": null,
     "team": "Olympique Lyonnais",
     "team_logo": "https://crests.football-data.org/523.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -5552,7 +5604,7 @@
     "shirt": null,
     "team": "Olympique Lyonnais",
     "team_logo": "https://crests.football-data.org/523.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -5805,19 +5857,6 @@
     "penalties": 0
    },
    {
-    "id": 8717,
-    "name": "Matthieu Udol",
-    "nationality": "France",
-    "position": "Defence",
-    "shirt": 3,
-    "team": "Racing Club de Lens",
-    "team_logo": "https://crests.football-data.org/546.png",
-    "played": 5,
-    "goals": 1,
-    "assists": 0,
-    "penalties": 0
-   },
-   {
     "id": 108520,
     "name": "Ilan Kebbal",
     "nationality": "Algeria",
@@ -5916,7 +5955,7 @@
     "shirt": null,
     "team": "Olympique Lyonnais",
     "team_logo": "https://crests.football-data.org/523.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 2,
     "penalties": 0
@@ -5959,13 +5998,39 @@
     "goals": 1,
     "assists": 1,
     "penalties": 0
+   },
+   {
+    "id": 64837,
+    "name": "Florian Sotoca",
+    "nationality": "France",
+    "position": "Offence",
+    "shirt": 7,
+    "team": "Racing Club de Lens",
+    "team_logo": "https://crests.football-data.org/546.png",
+    "played": 6,
+    "goals": 1,
+    "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 281451,
+    "name": "Khalis Merah",
+    "nationality": "France",
+    "position": "Midfield",
+    "shirt": null,
+    "team": "Olympique Lyonnais",
+    "team_logo": "https://crests.football-data.org/523.png",
+    "played": 5,
+    "goals": 1,
+    "assists": 0,
+    "penalties": 0
    }
   ]
  },
  "CL": {
   "season": "2026",
   "matchday": 2,
-  "updated": "2026-10-08",
+  "updated": "2026-10-09",
   "scorers": [
    {
     "id": 33242,

@@ -30,58 +30,9 @@
      "photo": "https://media.api-sports.io/football/players/178250.png",
      "reason": "Knee Injury",
      "status": "out"
-    },
-    {
-     "id": 280358,
-     "name": "J. Castrop",
-     "photo": "https://media.api-sports.io/football/players/280358.png",
-     "reason": "Shoulder Injury",
-     "status": "out"
-    },
-    {
-     "id": 20784,
-     "name": "F. Honorat",
-     "photo": "https://media.api-sports.io/football/players/20784.png",
-     "reason": "Muscle Injury",
-     "status": "out"
-    },
-    {
-     "id": 38753,
-     "name": "N. Kuhn",
-     "photo": "https://media.api-sports.io/football/players/38753.png",
-     "reason": "Muscle Injury",
-     "status": "out"
-    },
-    {
-     "id": 178250,
-     "name": "E. Leopold",
-     "photo": "https://media.api-sports.io/football/players/178250.png",
-     "reason": "Knee Injury",
-     "status": "out"
     }
    ],
    "home": [
-    {
-     "id": 93016,
-     "name": "T. Dallinga",
-     "photo": "https://media.api-sports.io/football/players/93016.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 90641,
-     "name": "T. Hubers",
-     "photo": "https://media.api-sports.io/football/players/90641.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 8641,
-     "name": "A. Castro-Montes",
-     "photo": "https://media.api-sports.io/football/players/8641.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
     {
      "id": 93016,
      "name": "T. Dallinga",
@@ -111,25 +62,11 @@
   "injuries": {
    "away": [
     {
-     "id": 392254,
-     "name": "F. Onyeka",
-     "photo": "https://media.api-sports.io/football/players/392254.png",
-     "reason": "Foot Injury",
+     "id": 25063,
+     "name": "J. Gyamerah",
+     "photo": "https://media.api-sports.io/football/players/25063.png",
+     "reason": "Groin Injury",
      "status": "out"
-    },
-    {
-     "id": 583807,
-     "name": "L. Seifert",
-     "photo": "https://media.api-sports.io/football/players/583807.png",
-     "reason": "Ankle Injury",
-     "status": "out"
-    },
-    {
-     "id": 26642,
-     "name": "L. Schnellbacher",
-     "photo": "https://media.api-sports.io/football/players/26642.png",
-     "reason": "Injury",
-     "status": "doubtful"
     },
     {
      "id": 392254,
@@ -144,21 +81,21 @@
      "photo": "https://media.api-sports.io/football/players/583807.png",
      "reason": "Ankle Injury",
      "status": "out"
-    },
-    {
-     "id": 26642,
-     "name": "L. Schnellbacher",
-     "photo": "https://media.api-sports.io/football/players/26642.png",
-     "reason": "Injury",
-     "status": "doubtful"
     }
    ],
    "home": [
     {
-     "id": 24839,
-     "name": "M. Friedrich",
-     "photo": "https://media.api-sports.io/football/players/24839.png",
-     "reason": "Knock",
+     "id": 45892,
+     "name": "A. Ilic",
+     "photo": "https://media.api-sports.io/football/players/45892.png",
+     "reason": "Illness",
+     "status": "out"
+    },
+    {
+     "id": 14330,
+     "name": "J. Juranovic",
+     "photo": "https://media.api-sports.io/football/players/14330.png",
+     "reason": "Achilles Tendon Injury",
      "status": "out"
     },
     {
@@ -169,38 +106,10 @@
      "status": "out"
     },
     {
-     "id": 1124,
-     "name": "O. Burke",
-     "photo": "https://media.api-sports.io/football/players/1124.png",
-     "reason": "Achilles Tendon Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 45892,
-     "name": "A. Ilic",
-     "photo": "https://media.api-sports.io/football/players/45892.png",
-     "reason": "Illness",
-     "status": "doubtful"
-    },
-    {
      "id": 270,
      "name": "S. Nsoki",
      "photo": "https://media.api-sports.io/football/players/270.png",
      "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 24839,
-     "name": "M. Friedrich",
-     "photo": "https://media.api-sports.io/football/players/24839.png",
-     "reason": "Knock",
-     "status": "out"
-    },
-    {
-     "id": 413294,
-     "name": "A. Markgraf",
-     "photo": "https://media.api-sports.io/football/players/413294.png",
-     "reason": "Knee Injury",
      "status": "out"
     },
     {
@@ -208,20 +117,6 @@
      "name": "O. Burke",
      "photo": "https://media.api-sports.io/football/players/1124.png",
      "reason": "Achilles Tendon Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 45892,
-     "name": "A. Ilic",
-     "photo": "https://media.api-sports.io/football/players/45892.png",
-     "reason": "Illness",
-     "status": "doubtful"
-    },
-    {
-     "id": 270,
-     "name": "S. Nsoki",
-     "photo": "https://media.api-sports.io/football/players/270.png",
-     "reason": "Muscle Injury",
      "status": "doubtful"
     }
    ]
@@ -260,77 +155,14 @@
      "status": "doubtful"
     },
     {
-     "id": 444961,
-     "name": "M. Culbreath",
-     "photo": "https://media.api-sports.io/football/players/444961.png",
-     "reason": "Foot Injury",
-     "status": "out"
-    },
-    {
-     "id": 161747,
-     "name": "G. Doue",
-     "photo": "https://media.api-sports.io/football/players/161747.png",
-     "reason": "Calf Injury",
-     "status": "out"
-    },
-    {
-     "id": 505295,
-     "name": "C. Kofane",
-     "photo": "https://media.api-sports.io/football/players/505295.png",
-     "reason": "Muscle Injury",
-     "status": "out"
-    },
-    {
-     "id": 503467,
-     "name": "K. Eichhorn",
-     "photo": "https://media.api-sports.io/football/players/503467.png",
-     "reason": "Illness",
+     "id": 380587,
+     "name": "I. Maza",
+     "photo": "https://media.api-sports.io/football/players/380587.png",
+     "reason": "Ankle Injury",
      "status": "doubtful"
     }
    ],
    "home": [
-    {
-     "id": 979,
-     "name": "D. Kohr",
-     "photo": "https://media.api-sports.io/football/players/979.png",
-     "reason": "Foot Injury",
-     "status": "out"
-    },
-    {
-     "id": 20617,
-     "name": "Silas",
-     "photo": "https://media.api-sports.io/football/players/20617.png",
-     "reason": "Broken shinbone",
-     "status": "out"
-    },
-    {
-     "id": 25906,
-     "name": "R. Zentner",
-     "photo": "https://media.api-sports.io/football/players/25906.png",
-     "reason": "Hand Injury",
-     "status": "out"
-    },
-    {
-     "id": 202736,
-     "name": "P. Nebel",
-     "photo": "https://media.api-sports.io/football/players/202736.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 318083,
-     "name": "O. Ruoppi",
-     "photo": "https://media.api-sports.io/football/players/318083.png",
-     "reason": "Knee Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 48378,
-     "name": "S. Widmer",
-     "photo": "https://media.api-sports.io/football/players/48378.png",
-     "reason": "Knee Injury",
-     "status": "doubtful"
-    },
     {
      "id": 979,
      "name": "D. Kohr",
@@ -386,13 +218,6 @@
      "photo": "https://media.api-sports.io/football/players/15793.png",
      "reason": "Calf Injury",
      "status": "out"
-    },
-    {
-     "id": 15793,
-     "name": "R. Nicolaisen",
-     "photo": "https://media.api-sports.io/football/players/15793.png",
-     "reason": "Calf Injury",
-     "status": "out"
     }
    ],
    "home": [
@@ -402,55 +227,6 @@
      "photo": "https://media.api-sports.io/football/players/386276.png",
      "reason": "Suspended",
      "status": "out"
-    },
-    {
-     "id": 135775,
-     "name": "A. Fati",
-     "photo": "https://media.api-sports.io/football/players/135775.png",
-     "reason": "Calf Injury",
-     "status": "out"
-    },
-    {
-     "id": 419035,
-     "name": "M. Coulibaly",
-     "photo": "https://media.api-sports.io/football/players/419035.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 340152,
-     "name": "S. Idumbo",
-     "photo": "https://media.api-sports.io/football/players/340152.png",
-     "reason": "Groin Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 386276,
-     "name": "P. Brunner",
-     "photo": "https://media.api-sports.io/football/players/386276.png",
-     "reason": "Suspended",
-     "status": "out"
-    },
-    {
-     "id": 135775,
-     "name": "A. Fati",
-     "photo": "https://media.api-sports.io/football/players/135775.png",
-     "reason": "Calf Injury",
-     "status": "out"
-    },
-    {
-     "id": 419035,
-     "name": "M. Coulibaly",
-     "photo": "https://media.api-sports.io/football/players/419035.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 340152,
-     "name": "S. Idumbo",
-     "photo": "https://media.api-sports.io/football/players/340152.png",
-     "reason": "Groin Injury",
-     "status": "doubtful"
     }
    ]
   }
@@ -460,32 +236,11 @@
   "injuries": {
    "away": [
     {
-     "id": 313059,
-     "name": "M. Joseph",
-     "photo": "https://media.api-sports.io/football/players/313059.png",
-     "reason": "Knee Injury",
+     "id": 19329,
+     "name": "D. James",
+     "photo": "https://media.api-sports.io/football/players/19329.png",
+     "reason": "Back Injury",
      "status": "out"
-    },
-    {
-     "id": 19321,
-     "name": "J. Rodon",
-     "photo": "https://media.api-sports.io/football/players/19321.png",
-     "reason": "Muscle Injury",
-     "status": "out"
-    },
-    {
-     "id": 369674,
-     "name": "J. Bahoya",
-     "photo": "https://media.api-sports.io/football/players/369674.png",
-     "reason": "Ankle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 19221,
-     "name": "H. Wilson",
-     "photo": "https://media.api-sports.io/football/players/19221.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
     },
     {
      "id": 313059,
@@ -551,43 +306,15 @@
      "photo": "https://media.api-sports.io/football/players/19354.png",
      "reason": "Muscle Injury",
      "status": "doubtful"
-    },
-    {
-     "id": 22090,
-     "name": "W. Saliba",
-     "photo": "https://media.api-sports.io/football/players/22090.png",
-     "reason": "Back Injury",
-     "status": "out"
-    },
-    {
-     "id": 161800,
-     "name": "C. Tzolis",
-     "photo": "https://media.api-sports.io/football/players/161800.png",
-     "reason": "Hamstring Injury",
-     "status": "out"
-    },
-    {
-     "id": 442044,
-     "name": "M. Dowman",
-     "photo": "https://media.api-sports.io/football/players/442044.png",
-     "reason": "Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 978,
-     "name": "K. Havertz",
-     "photo": "https://media.api-sports.io/football/players/978.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 19354,
-     "name": "E. Konsa",
-     "photo": "https://media.api-sports.io/football/players/19354.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
     }
    ]
+  }
+ },
+ "Arsenal FC|Lille OSC|2026-10-13": {
+  "fixture_id": 1635612,
+  "injuries": {
+   "away": [],
+   "home": []
   }
  },
  "Aston Villa FC|Brentford FC|2026-10-10": {
@@ -602,52 +329,10 @@
      "status": "out"
     },
     {
-     "id": 36922,
-     "name": "S. van den Berg",
-     "photo": "https://media.api-sports.io/football/players/36922.png",
-     "reason": "Injury",
-     "status": "out"
-    },
-    {
-     "id": 19495,
-     "name": "N. Collins",
-     "photo": "https://media.api-sports.io/football/players/19495.png",
-     "reason": "Calf Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 15908,
-     "name": "M. Damsgaard",
-     "photo": "https://media.api-sports.io/football/players/15908.png",
-     "reason": "Ankle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 19362,
-     "name": "J. Dasilva",
-     "photo": "https://media.api-sports.io/football/players/19362.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
      "id": 47438,
      "name": "M. Jensen",
      "photo": "https://media.api-sports.io/football/players/47438.png",
      "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 284797,
-     "name": "D. Ouattara",
-     "photo": "https://media.api-sports.io/football/players/284797.png",
-     "reason": "Illness",
-     "status": "doubtful"
-    },
-    {
-     "id": 393193,
-     "name": "K. Furo",
-     "photo": "https://media.api-sports.io/football/players/393193.png",
-     "reason": "Surgery",
      "status": "out"
     },
     {
@@ -675,13 +360,6 @@
      "id": 19362,
      "name": "J. Dasilva",
      "photo": "https://media.api-sports.io/football/players/19362.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 47438,
-     "name": "M. Jensen",
-     "photo": "https://media.api-sports.io/football/players/47438.png",
      "reason": "Muscle Injury",
      "status": "doubtful"
     },
@@ -694,27 +372,6 @@
     }
    ],
    "home": [
-    {
-     "id": 138816,
-     "name": "I. Maatsen",
-     "photo": "https://media.api-sports.io/football/players/138816.png",
-     "reason": "Ankle Injury",
-     "status": "out"
-    },
-    {
-     "id": 162714,
-     "name": "A. Onana",
-     "photo": "https://media.api-sports.io/football/players/162714.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 511,
-     "name": "L. Goretzka",
-     "photo": "https://media.api-sports.io/football/players/511.png",
-     "reason": "Knee Injury",
-     "status": "doubtful"
-    },
     {
      "id": 138816,
      "name": "I. Maatsen",
@@ -744,266 +401,89 @@
   "injuries": {
    "away": [
     {
+     "id": 51266,
+     "name": "G. Busio",
+     "photo": "https://media.api-sports.io/football/players/51266.png",
+     "reason": "Thigh Injury",
+     "status": "out"
+    },
+    {
      "id": 14704,
-     "name": "B. Franjić",
+     "name": "B. Franjic",
      "photo": "https://media.api-sports.io/football/players/14704.png",
-     "reason": "Wound",
+     "reason": "Shoulder Injury",
+     "status": "out"
+    },
+    {
+     "id": 26095,
+     "name": "M. Sverko",
+     "photo": "https://media.api-sports.io/football/players/26095.png",
+     "reason": "Hip Injury",
      "status": "out"
     },
     {
      "id": 212,
      "name": "A. Adorante",
      "photo": "https://media.api-sports.io/football/players/212.png",
-     "reason": "Inguinal Hernia",
-     "status": "out"
+     "reason": "Hernia",
+     "status": "doubtful"
     },
     {
      "id": 1266,
-     "name": "T. Bašić",
+     "name": "T. Basic",
      "photo": "https://media.api-sports.io/football/players/1266.png",
      "reason": "Foot Injury",
-     "status": "out"
+     "status": "doubtful"
     },
     {
-     "id": 26095,
-     "name": "M. Šverko",
-     "photo": "https://media.api-sports.io/football/players/26095.png",
-     "reason": "Hip Injury",
-     "status": "out"
+     "id": 25061,
+     "name": "A. Bella-Kotchap",
+     "photo": "https://media.api-sports.io/football/players/25061.png",
+     "reason": "Thigh Injury",
+     "status": "doubtful"
+    },
+    {
+     "id": 342025,
+     "name": "M. Dagasso",
+     "photo": "https://media.api-sports.io/football/players/342025.png",
+     "reason": "Inactive",
+     "status": "doubtful"
+    },
+    {
+     "id": 37144,
+     "name": "R. Haps",
+     "photo": "https://media.api-sports.io/football/players/37144.png",
+     "reason": "Injury",
+     "status": "doubtful"
     }
    ],
    "home": [
     {
-     "id": 199837,
-     "name": "K. Sulemana",
-     "photo": "https://media.api-sports.io/football/players/199837.png",
-     "reason": "Jumpers Knee",
+     "id": 48119,
+     "name": "O. Kossounou",
+     "photo": "https://media.api-sports.io/football/players/48119.png",
+     "reason": "Thigh Injury",
+     "status": "out"
+    },
+    {
+     "id": 30543,
+     "name": "G. Raspadori",
+     "photo": "https://media.api-sports.io/football/players/30543.png",
+     "reason": "Thigh Injury",
      "status": "out"
     },
     {
      "id": 137976,
      "name": "I. Hien",
      "photo": "https://media.api-sports.io/football/players/137976.png",
-     "reason": "Muscle Bruise",
-     "status": "out"
-    }
-   ]
-  }
- },
- "Borussia Dortmund|SV Werder Bremen|2026-10-09": {
-  "fixture_id": 1575176,
-  "injuries": {
-   "away": [
-    {
-     "id": 26319,
-     "name": "F. Agu",
-     "photo": "https://media.api-sports.io/football/players/26319.png",
-     "reason": "Calf Injury",
-     "status": "out"
-    },
-    {
-     "id": 193720,
-     "name": "S. Alvero",
-     "photo": "https://media.api-sports.io/football/players/193720.png",
-     "reason": "Calf Injury",
-     "status": "out"
-    },
-    {
-     "id": 38798,
-     "name": "S. Lynen",
-     "photo": "https://media.api-sports.io/football/players/38798.png",
-     "reason": "Hip Injury",
-     "status": "out"
-    },
-    {
-     "id": 432519,
-     "name": "S. Musah",
-     "photo": "https://media.api-sports.io/football/players/432519.png",
      "reason": "Muscle Injury",
-     "status": "out"
+     "status": "doubtful"
     },
     {
-     "id": 175415,
-     "name": "M. N'Diaye",
-     "photo": "https://media.api-sports.io/football/players/175415.png",
-     "reason": "Groin Injury",
-     "status": "out"
-    },
-    {
-     "id": 177807,
-     "name": "J. Njinmah",
-     "photo": "https://media.api-sports.io/football/players/177807.png",
-     "reason": "Thigh Injury",
-     "status": "out"
-    },
-    {
-     "id": 15592,
-     "name": "J. Stage",
-     "photo": "https://media.api-sports.io/football/players/15592.png",
-     "reason": "Muscle Injury",
-     "status": "out"
-    },
-    {
-     "id": 334334,
-     "name": "K. Topp",
-     "photo": "https://media.api-sports.io/football/players/334334.png",
+     "id": 199837,
+     "name": "K. Sulemana",
+     "photo": "https://media.api-sports.io/football/players/199837.png",
      "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 26319,
-     "name": "F. Agu",
-     "photo": "https://media.api-sports.io/football/players/26319.png",
-     "reason": "Calf Injury",
-     "status": "out"
-    },
-    {
-     "id": 193720,
-     "name": "S. Alvero",
-     "photo": "https://media.api-sports.io/football/players/193720.png",
-     "reason": "Calf Injury",
-     "status": "out"
-    },
-    {
-     "id": 38798,
-     "name": "S. Lynen",
-     "photo": "https://media.api-sports.io/football/players/38798.png",
-     "reason": "Hip Injury",
-     "status": "out"
-    },
-    {
-     "id": 432519,
-     "name": "S. Musah",
-     "photo": "https://media.api-sports.io/football/players/432519.png",
-     "reason": "Muscle Injury",
-     "status": "out"
-    },
-    {
-     "id": 175415,
-     "name": "M. N'Diaye",
-     "photo": "https://media.api-sports.io/football/players/175415.png",
-     "reason": "Groin Injury",
-     "status": "out"
-    },
-    {
-     "id": 177807,
-     "name": "J. Njinmah",
-     "photo": "https://media.api-sports.io/football/players/177807.png",
-     "reason": "Thigh Injury",
-     "status": "out"
-    },
-    {
-     "id": 15592,
-     "name": "J. Stage",
-     "photo": "https://media.api-sports.io/football/players/15592.png",
-     "reason": "Muscle Injury",
-     "status": "out"
-    },
-    {
-     "id": 334334,
-     "name": "K. Topp",
-     "photo": "https://media.api-sports.io/football/players/334334.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    }
-   ],
-   "home": [
-    {
-     "id": 864,
-     "name": "E. Can",
-     "photo": "https://media.api-sports.io/football/players/864.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 162410,
-     "name": "G. Konstantelias",
-     "photo": "https://media.api-sports.io/football/players/162410.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 138935,
-     "name": "C. Chukwuemeka",
-     "photo": "https://media.api-sports.io/football/players/138935.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 404891,
-     "name": "K. Karetsas",
-     "photo": "https://media.api-sports.io/football/players/404891.png",
-     "reason": "Illness",
-     "status": "doubtful"
-    },
-    {
-     "id": 465666,
-     "name": "J. Lerma",
-     "photo": "https://media.api-sports.io/football/players/465666.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 341839,
-     "name": "F. Mane",
-     "photo": "https://media.api-sports.io/football/players/341839.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 24845,
-     "name": "J. Ryerson",
-     "photo": "https://media.api-sports.io/football/players/24845.png",
-     "reason": "Ribs Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 864,
-     "name": "E. Can",
-     "photo": "https://media.api-sports.io/football/players/864.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 162410,
-     "name": "G. Konstantelias",
-     "photo": "https://media.api-sports.io/football/players/162410.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 138935,
-     "name": "C. Chukwuemeka",
-     "photo": "https://media.api-sports.io/football/players/138935.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 404891,
-     "name": "K. Karetsas",
-     "photo": "https://media.api-sports.io/football/players/404891.png",
-     "reason": "Illness",
-     "status": "doubtful"
-    },
-    {
-     "id": 465666,
-     "name": "J. Lerma",
-     "photo": "https://media.api-sports.io/football/players/465666.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 341839,
-     "name": "F. Mane",
-     "photo": "https://media.api-sports.io/football/players/341839.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 24845,
-     "name": "J. Ryerson",
-     "photo": "https://media.api-sports.io/football/players/24845.png",
-     "reason": "Ribs Injury",
      "status": "doubtful"
     }
    ]
@@ -1014,76 +494,90 @@
   "injuries": {
    "away": [
     {
-     "id": 339883,
-     "name": "K. Yıldız",
-     "photo": "https://media.api-sports.io/football/players/339883.png",
-     "reason": "Foot Injury",
-     "status": "out"
-    },
-    {
-     "id": 125674,
-     "name": "J. Cabal",
-     "photo": "https://media.api-sports.io/football/players/125674.png",
-     "reason": "Thigh Problems",
-     "status": "out"
-    },
-    {
-     "id": 30531,
-     "name": "J. Boga",
-     "photo": "https://media.api-sports.io/football/players/30531.png",
-     "reason": "Muscle Bruise",
-     "status": "out"
-    },
-    {
-     "id": 116,
-     "name": "K. Thuram",
-     "photo": "https://media.api-sports.io/football/players/116.png",
-     "reason": "Jumpers Knee",
+     "id": 15573,
+     "name": "K. Grabara",
+     "photo": "https://media.api-sports.io/football/players/15573.png",
+     "reason": "Knee Injury",
      "status": "out"
     },
     {
      "id": 30533,
      "name": "M. Locatelli",
      "photo": "https://media.api-sports.io/football/players/30533.png",
-     "reason": "Jumpers Knee",
+     "reason": "Knee Injury",
      "status": "out"
+    },
+    {
+     "id": 333,
+     "name": "A. Milik",
+     "photo": "https://media.api-sports.io/football/players/333.png",
+     "reason": "Inactive",
+     "status": "out"
+    },
+    {
+     "id": 116,
+     "name": "K. Thuram",
+     "photo": "https://media.api-sports.io/football/players/116.png",
+     "reason": "Knee Injury",
+     "status": "out"
+    },
+    {
+     "id": 339883,
+     "name": "K. Yildiz",
+     "photo": "https://media.api-sports.io/football/players/339883.png",
+     "reason": "Foot Injury",
+     "status": "out"
+    },
+    {
+     "id": 30531,
+     "name": "J. Boga",
+     "photo": "https://media.api-sports.io/football/players/30531.png",
+     "reason": "Muscle Injury",
+     "status": "doubtful"
     },
     {
      "id": 451504,
      "name": "J. Ekhator",
      "photo": "https://media.api-sports.io/football/players/451504.png",
-     "reason": "Muscle Bruise",
-     "status": "out"
-    },
-    {
-     "id": 15573,
-     "name": "K. Grabara",
-     "photo": "https://media.api-sports.io/football/players/15573.png",
-     "reason": "Jumpers Knee",
-     "status": "out"
+     "reason": "Muscle Injury",
+     "status": "doubtful"
     }
    ],
    "home": [
     {
-     "id": 31318,
-     "name": "M&apos;Bala Nzola",
-     "photo": "https://media.api-sports.io/football/players/31318.png",
-     "reason": "Fitness",
+     "id": 30561,
+     "name": "A. Deiola",
+     "photo": "https://media.api-sports.io/football/players/30561.png",
+     "reason": "Knee Injury",
+     "status": "out"
+    },
+    {
+     "id": 31734,
+     "name": "M. Felici",
+     "photo": "https://media.api-sports.io/football/players/31734.png",
+     "reason": "Knee Injury",
+     "status": "out"
+    },
+    {
+     "id": 383026,
+     "name": "R. Idrissi",
+     "photo": "https://media.api-sports.io/football/players/383026.png",
+     "reason": "Knee Injury",
+     "status": "out"
+    },
+    {
+     "id": 188319,
+     "name": "Kevin",
+     "photo": "https://media.api-sports.io/football/players/188319.png",
+     "reason": "Muscle Injury",
      "status": "out"
     },
     {
      "id": 584116,
      "name": "Y. Trepy",
      "photo": "https://media.api-sports.io/football/players/584116.png",
-     "reason": "Wound",
-     "status": "out"
-    },
-    {
-     "id": 383026,
-     "name": "Riyad Idrissi",
-     "photo": "https://media.api-sports.io/football/players/383026.png",
-     "reason": "Jumpers Knee",
-     "status": "out"
+     "reason": "Injury",
+     "status": "doubtful"
     }
    ]
   }
@@ -1093,53 +587,11 @@
   "injuries": {
    "away": [
     {
-     "id": 51051,
-     "name": "J. Araujo",
-     "photo": "https://media.api-sports.io/football/players/51051.png",
-     "reason": "Thigh Injury",
-     "status": "out"
-    },
-    {
-     "id": 792,
-     "name": "J. Kluivert",
-     "photo": "https://media.api-sports.io/football/players/792.png",
-     "reason": "Muscle Injury",
-     "status": "out"
-    },
-    {
-     "id": 368030,
-     "name": "E. J. Kroupi",
-     "photo": "https://media.api-sports.io/football/players/368030.png",
-     "reason": "Foot Injury",
-     "status": "out"
-    },
-    {
-     "id": 304853,
-     "name": "A. Scott",
-     "photo": "https://media.api-sports.io/football/players/304853.png",
-     "reason": "Thigh Injury",
-     "status": "out"
-    },
-    {
      "id": 129682,
      "name": "A. Adli",
      "photo": "https://media.api-sports.io/football/players/129682.png",
      "reason": "Calf Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 18870,
-     "name": "D. Brooks",
-     "photo": "https://media.api-sports.io/football/players/18870.png",
-     "reason": "Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 412719,
-     "name": "V. Milosavljevic",
-     "photo": "https://media.api-sports.io/football/players/412719.png",
-     "reason": "Injury",
-     "status": "doubtful"
+     "status": "out"
     },
     {
      "id": 51051,
@@ -1163,6 +615,13 @@
      "status": "out"
     },
     {
+     "id": 412719,
+     "name": "V. Milosavljevic",
+     "photo": "https://media.api-sports.io/football/players/412719.png",
+     "reason": "Injury",
+     "status": "out"
+    },
+    {
      "id": 304853,
      "name": "A. Scott",
      "photo": "https://media.api-sports.io/football/players/304853.png",
@@ -1170,23 +629,9 @@
      "status": "out"
     },
     {
-     "id": 129682,
-     "name": "A. Adli",
-     "photo": "https://media.api-sports.io/football/players/129682.png",
-     "reason": "Calf Injury",
-     "status": "doubtful"
-    },
-    {
      "id": 18870,
      "name": "D. Brooks",
      "photo": "https://media.api-sports.io/football/players/18870.png",
-     "reason": "Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 412719,
-     "name": "V. Milosavljevic",
-     "photo": "https://media.api-sports.io/football/players/412719.png",
      "reason": "Injury",
      "status": "doubtful"
     }
@@ -1226,43 +671,15 @@
      "photo": "https://media.api-sports.io/football/players/383018.png",
      "reason": "Thigh Injury",
      "status": "doubtful"
-    },
-    {
-     "id": 286894,
-     "name": "J. Gittens",
-     "photo": "https://media.api-sports.io/football/players/286894.png",
-     "reason": "Ankle Injury",
-     "status": "out"
-    },
-    {
-     "id": 116117,
-     "name": "M. Caicedo",
-     "photo": "https://media.api-sports.io/football/players/116117.png",
-     "reason": "Calf Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 203762,
-     "name": "E. Emegha",
-     "photo": "https://media.api-sports.io/football/players/203762.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 10329,
-     "name": "Joao Pedro",
-     "photo": "https://media.api-sports.io/football/players/10329.png",
-     "reason": "Knee Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 383018,
-     "name": "M. Palestra",
-     "photo": "https://media.api-sports.io/football/players/383018.png",
-     "reason": "Thigh Injury",
-     "status": "doubtful"
     }
    ]
+  }
+ },
+ "Club Atlético de Madrid|Manchester United FC|2026-10-13": {
+  "fixture_id": 1635623,
+  "injuries": {
+   "away": [],
+   "home": []
   }
  },
  "Como 1907|AS Roma|2026-10-11": {
@@ -1282,72 +699,9 @@
      "photo": "https://media.api-sports.io/football/players/778.png",
      "reason": "Injury",
      "status": "doubtful"
-    },
-    {
-     "id": 249,
-     "name": "D. Malen",
-     "photo": "https://media.api-sports.io/football/players/249.png",
-     "reason": "Knee Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 349001,
-     "name": "Wesley Franca",
-     "photo": "https://media.api-sports.io/football/players/349001.png",
-     "reason": "Thigh Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 626686,
-     "name": "M. Bah",
-     "photo": "https://media.api-sports.io/football/players/626686.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 778,
-     "name": "B. Cristante",
-     "photo": "https://media.api-sports.io/football/players/778.png",
-     "reason": "Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 249,
-     "name": "D. Malen",
-     "photo": "https://media.api-sports.io/football/players/249.png",
-     "reason": "Knee Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 349001,
-     "name": "Wesley Franca",
-     "photo": "https://media.api-sports.io/football/players/349001.png",
-     "reason": "Thigh Injury",
-     "status": "doubtful"
     }
    ],
    "home": [
-    {
-     "id": 877,
-     "name": "M. Kean",
-     "photo": "https://media.api-sports.io/football/players/877.png",
-     "reason": "Health problems",
-     "status": "doubtful"
-    },
-    {
-     "id": 14266,
-     "name": "I. Smolcic",
-     "photo": "https://media.api-sports.io/football/players/14266.png",
-     "reason": "Illness",
-     "status": "doubtful"
-    },
-    {
-     "id": 877,
-     "name": "M. Kean",
-     "photo": "https://media.api-sports.io/football/players/877.png",
-     "reason": "Health problems",
-     "status": "doubtful"
-    },
     {
      "id": 14266,
      "name": "I. Smolcic",
@@ -1375,13 +729,6 @@
      "photo": "https://media.api-sports.io/football/players/181806.png",
      "reason": "Knee Injury",
      "status": "doubtful"
-    },
-    {
-     "id": 181806,
-     "name": "N. Savona",
-     "photo": "https://media.api-sports.io/football/players/181806.png",
-     "reason": "Knee Injury",
-     "status": "doubtful"
     }
    ],
    "home": [
@@ -1393,25 +740,18 @@
      "status": "out"
     },
     {
-     "id": 19088,
-     "name": "D. Henderson",
-     "photo": "https://media.api-sports.io/football/players/19088.png",
-     "reason": "Foot Injury",
-     "status": "out"
-    },
-    {
-     "id": 25927,
-     "name": "J. Mateta",
-     "photo": "https://media.api-sports.io/football/players/25927.png",
-     "reason": "Hamstring Injury",
-     "status": "out"
-    },
-    {
      "id": 278898,
      "name": "C. Riad",
      "photo": "https://media.api-sports.io/football/players/278898.png",
      "reason": "Knee Injury",
      "status": "out"
+    },
+    {
+     "id": 19088,
+     "name": "D. Henderson",
+     "photo": "https://media.api-sports.io/football/players/19088.png",
+     "reason": "Foot Injury",
+     "status": "doubtful"
     },
     {
      "id": 338735,
@@ -1421,45 +761,10 @@
      "status": "doubtful"
     },
     {
-     "id": 2597,
-     "name": "T. Tomiyasu",
-     "photo": "https://media.api-sports.io/football/players/2597.png",
-     "reason": "Calf Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 21998,
-     "name": "A. Disasi",
-     "photo": "https://media.api-sports.io/football/players/21998.png",
-     "reason": "Red Card",
-     "status": "out"
-    },
-    {
-     "id": 19088,
-     "name": "D. Henderson",
-     "photo": "https://media.api-sports.io/football/players/19088.png",
-     "reason": "Foot Injury",
-     "status": "out"
-    },
-    {
      "id": 25927,
      "name": "J. Mateta",
      "photo": "https://media.api-sports.io/football/players/25927.png",
      "reason": "Hamstring Injury",
-     "status": "out"
-    },
-    {
-     "id": 278898,
-     "name": "C. Riad",
-     "photo": "https://media.api-sports.io/football/players/278898.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 338735,
-     "name": "A. Khalaili",
-     "photo": "https://media.api-sports.io/football/players/338735.png",
-     "reason": "Muscle Injury",
      "status": "doubtful"
     },
     {
@@ -1497,27 +802,6 @@
      "photo": "https://media.api-sports.io/football/players/332645.png",
      "reason": "Ankle Injury",
      "status": "out"
-    },
-    {
-     "id": 6638,
-     "name": "F. Garces",
-     "photo": "https://media.api-sports.io/football/players/6638.png",
-     "reason": "Suspended",
-     "status": "out"
-    },
-    {
-     "id": 106759,
-     "name": "V. Koski",
-     "photo": "https://media.api-sports.io/football/players/106759.png",
-     "reason": "Muscle Injury",
-     "status": "out"
-    },
-    {
-     "id": 332645,
-     "name": "M. Rodriguez",
-     "photo": "https://media.api-sports.io/football/players/332645.png",
-     "reason": "Ankle Injury",
-     "status": "out"
     }
    ]
   }
@@ -1525,8 +809,87 @@
  "ES Troyes AC|Olympique de Marseille|2026-10-11": {
   "fixture_id": 1552782,
   "injuries": {
-   "away": [],
-   "home": []
+   "away": [
+    {
+     "id": 51295,
+     "name": "D. Cornelius",
+     "photo": "https://media.api-sports.io/football/players/51295.png",
+     "reason": "Hip Injury",
+     "status": "out"
+    },
+    {
+     "id": 2735,
+     "name": "P. Hojbjerg",
+     "photo": "https://media.api-sports.io/football/players/2735.png",
+     "reason": "Muscle Injury",
+     "status": "out"
+    },
+    {
+     "id": 1138,
+     "name": "T. Weah",
+     "photo": "https://media.api-sports.io/football/players/1138.png",
+     "reason": "Red Card",
+     "status": "out"
+    },
+    {
+     "id": 85041,
+     "name": "A. Gouiri",
+     "photo": "https://media.api-sports.io/football/players/85041.png",
+     "reason": "Thigh Injury",
+     "status": "doubtful"
+    },
+    {
+     "id": 926,
+     "name": "G. Kondogbia",
+     "photo": "https://media.api-sports.io/football/players/926.png",
+     "reason": "Thigh Injury",
+     "status": "doubtful"
+    }
+   ],
+   "home": [
+    {
+     "id": 442933,
+     "name": "A. Ouzenadji",
+     "photo": "https://media.api-sports.io/football/players/442933.png",
+     "reason": "Injury",
+     "status": "out"
+    },
+    {
+     "id": 395810,
+     "name": "Y. Titi",
+     "photo": "https://media.api-sports.io/football/players/395810.png",
+     "reason": "Leg Injury",
+     "status": "out"
+    },
+    {
+     "id": 174596,
+     "name": "I. Boura",
+     "photo": "https://media.api-sports.io/football/players/174596.png",
+     "reason": "Hip Injury",
+     "status": "doubtful"
+    },
+    {
+     "id": 859,
+     "name": "P. Gozzi",
+     "photo": "https://media.api-sports.io/football/players/859.png",
+     "reason": "Muscle Injury",
+     "status": "doubtful"
+    },
+    {
+     "id": 275478,
+     "name": "M. Ifnaoui",
+     "photo": "https://media.api-sports.io/football/players/275478.png",
+     "reason": "Calf Injury",
+     "status": "doubtful"
+    },
+    {
+     "id": 670620,
+     "name": "Y. Kone",
+     "photo": "https://media.api-sports.io/football/players/670620.png",
+     "reason": "Injury",
+     "status": "doubtful"
+    }
+   ]
   }
  },
  "Elche CF|RC Celta de Vigo|2026-10-11": {
@@ -1560,48 +923,6 @@
      "photo": "https://media.api-sports.io/football/players/481678.png",
      "reason": "Ankle Injury",
      "status": "doubtful"
-    },
-    {
-     "id": 51535,
-     "name": "S. Caceres",
-     "photo": "https://media.api-sports.io/football/players/51535.png",
-     "reason": "Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 351913,
-     "name": "J. El Abdellaoui",
-     "photo": "https://media.api-sports.io/football/players/351913.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 333502,
-     "name": "M. Roman",
-     "photo": "https://media.api-sports.io/football/players/333502.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 47988,
-     "name": "C. Starfelt",
-     "photo": "https://media.api-sports.io/football/players/47988.png",
-     "reason": "Injury",
-     "status": "out"
-    },
-    {
-     "id": 481678,
-     "name": "A. Antanon",
-     "photo": "https://media.api-sports.io/football/players/481678.png",
-     "reason": "Ankle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 51535,
-     "name": "S. Caceres",
-     "photo": "https://media.api-sports.io/football/players/51535.png",
-     "reason": "Injury",
-     "status": "doubtful"
     }
    ],
    "home": [
@@ -1613,39 +934,11 @@
      "status": "out"
     },
     {
-     "id": 446067,
-     "name": "Buba Sangare",
-     "photo": "https://media.api-sports.io/football/players/446067.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
      "id": 284415,
      "name": "Y. Santiago",
      "photo": "https://media.api-sports.io/football/players/284415.png",
      "reason": "Knee Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 311345,
-     "name": "F. Redondo Solari",
-     "photo": "https://media.api-sports.io/football/players/311345.png",
-     "reason": "Red Card",
      "status": "out"
-    },
-    {
-     "id": 446067,
-     "name": "Buba Sangare",
-     "photo": "https://media.api-sports.io/football/players/446067.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 284415,
-     "name": "Y. Santiago",
-     "photo": "https://media.api-sports.io/football/players/284415.png",
-     "reason": "Knee Injury",
-     "status": "doubtful"
     }
    ]
   }
@@ -1667,51 +960,9 @@
      "photo": "https://media.api-sports.io/football/players/181812.png",
      "reason": "Muscle Injury",
      "status": "out"
-    },
-    {
-     "id": 330612,
-     "name": "T. Buchmann",
-     "photo": "https://media.api-sports.io/football/players/330612.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 181812,
-     "name": "J. Musiala",
-     "photo": "https://media.api-sports.io/football/players/181812.png",
-     "reason": "Muscle Injury",
-     "status": "out"
     }
    ],
    "home": [
-    {
-     "id": 413065,
-     "name": "N. Banks",
-     "photo": "https://media.api-sports.io/football/players/413065.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 202755,
-     "name": "T. Breithaupt",
-     "photo": "https://media.api-sports.io/football/players/202755.png",
-     "reason": "Toe Injury",
-     "status": "out"
-    },
-    {
-     "id": 3395,
-     "name": "S. Mounie",
-     "photo": "https://media.api-sports.io/football/players/3395.png",
-     "reason": "Injury",
-     "status": "out"
-    },
-    {
-     "id": 343159,
-     "name": "S. Suso",
-     "photo": "https://media.api-sports.io/football/players/343159.png",
-     "reason": "Muscle Injury",
-     "status": "out"
-    },
     {
      "id": 413065,
      "name": "N. Banks",
@@ -1767,41 +1018,6 @@
      "photo": "https://media.api-sports.io/football/players/46813.png",
      "reason": "Muscle Injury",
      "status": "doubtful"
-    },
-    {
-     "id": 195512,
-     "name": "M. Satriano",
-     "photo": "https://media.api-sports.io/football/players/195512.png",
-     "reason": "Knee Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 47320,
-     "name": "Juanmi",
-     "photo": "https://media.api-sports.io/football/players/47320.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 403554,
-     "name": "C. Uche",
-     "photo": "https://media.api-sports.io/football/players/403554.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 46813,
-     "name": "A. Abqar",
-     "photo": "https://media.api-sports.io/football/players/46813.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 195512,
-     "name": "M. Satriano",
-     "photo": "https://media.api-sports.io/football/players/195512.png",
-     "reason": "Knee Injury",
-     "status": "doubtful"
     }
    ],
    "home": [
@@ -1820,37 +1036,9 @@
      "status": "out"
     },
     {
-     "id": 538,
-     "name": "F. de Jong",
-     "photo": "https://media.api-sports.io/football/players/538.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 182718,
-     "name": "J. Garcia",
-     "photo": "https://media.api-sports.io/football/players/182718.png",
-     "reason": "Knee Injury",
-     "status": "doubtful"
-    },
-    {
      "id": 1496,
      "name": "Raphinha",
      "photo": "https://media.api-sports.io/football/players/1496.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 338958,
-     "name": "R. Bardghji",
-     "photo": "https://media.api-sports.io/football/players/338958.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 2282,
-     "name": "A. Christensen",
-     "photo": "https://media.api-sports.io/football/players/2282.png",
      "reason": "Muscle Injury",
      "status": "out"
     },
@@ -1860,22 +1048,15 @@
      "photo": "https://media.api-sports.io/football/players/538.png",
      "reason": "Knee Injury",
      "status": "out"
-    },
-    {
-     "id": 182718,
-     "name": "J. Garcia",
-     "photo": "https://media.api-sports.io/football/players/182718.png",
-     "reason": "Knee Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 1496,
-     "name": "Raphinha",
-     "photo": "https://media.api-sports.io/football/players/1496.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
     }
    ]
+  }
+ },
+ "FC Internazionale Milano|Club Brugge KV|2026-10-13": {
+  "fixture_id": 1635671,
+  "injuries": {
+   "away": [],
+   "home": []
   }
  },
  "FC Internazionale Milano|Parma Calcio 1913|2026-10-10": {
@@ -1904,83 +1085,27 @@
      "status": "doubtful"
     },
     {
-     "id": 576948,
-     "name": "D. Drobnic",
-     "photo": "https://media.api-sports.io/football/players/576948.png",
-     "reason": "Arm Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 292543,
-     "name": "M. Frigan",
-     "photo": "https://media.api-sports.io/football/players/292543.png",
-     "reason": "Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 48193,
-     "name": "P. Almqvist",
-     "photo": "https://media.api-sports.io/football/players/48193.png",
-     "reason": "Calf Injury",
-     "status": "out"
-    },
-    {
-     "id": 881,
-     "name": "H. Nicolussi Caviglia",
-     "photo": "https://media.api-sports.io/football/players/881.png",
-     "reason": "Groin Injury",
-     "status": "out"
-    },
-    {
-     "id": 628,
-     "name": "A. Bernabe",
-     "photo": "https://media.api-sports.io/football/players/628.png",
-     "reason": "Thigh Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 576948,
-     "name": "D. Drobnic",
-     "photo": "https://media.api-sports.io/football/players/576948.png",
-     "reason": "Arm Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 292543,
-     "name": "M. Frigan",
-     "photo": "https://media.api-sports.io/football/players/292543.png",
-     "reason": "Injury",
+     "id": 203483,
+     "name": "A. Ndiaye",
+     "photo": "https://media.api-sports.io/football/players/203483.png",
+     "reason": "Knock",
      "status": "doubtful"
     }
    ],
    "home": [
     {
-     "id": 1640,
-     "name": "H. Calhanoglu",
-     "photo": "https://media.api-sports.io/football/players/1640.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
+     "id": 293,
+     "name": "C. Jones",
+     "photo": "https://media.api-sports.io/football/players/293.png",
+     "reason": "Thigh Injury",
+     "status": "out"
     },
     {
      "id": 626,
      "name": "J. Stones",
      "photo": "https://media.api-sports.io/football/players/626.png",
      "reason": "Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 1640,
-     "name": "H. Calhanoglu",
-     "photo": "https://media.api-sports.io/football/players/1640.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 626,
-     "name": "J. Stones",
-     "photo": "https://media.api-sports.io/football/players/626.png",
-     "reason": "Injury",
-     "status": "doubtful"
+     "status": "out"
     }
    ]
   }
@@ -1990,42 +1115,14 @@
   "injuries": {
    "away": [
     {
-     "id": 490981,
-     "name": "E. Mbemba",
-     "photo": "https://media.api-sports.io/football/players/490981.png",
-     "reason": "Leg Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 490981,
-     "name": "E. Mbemba",
-     "photo": "https://media.api-sports.io/football/players/490981.png",
-     "reason": "Leg Injury",
-     "status": "doubtful"
+     "id": 389322,
+     "name": "N. Sangui",
+     "photo": "https://media.api-sports.io/football/players/389322.png",
+     "reason": "Muscle Injury",
+     "status": "out"
     }
    ],
    "home": [
-    {
-     "id": 162018,
-     "name": "B. Fadiga",
-     "photo": "https://media.api-sports.io/football/players/162018.png",
-     "reason": "Ankle Injury",
-     "status": "out"
-    },
-    {
-     "id": 384112,
-     "name": "P. Katseris",
-     "photo": "https://media.api-sports.io/football/players/384112.png",
-     "reason": "Hamstring Injury",
-     "status": "out"
-    },
-    {
-     "id": 298006,
-     "name": "N. Mbamba",
-     "photo": "https://media.api-sports.io/football/players/298006.png",
-     "reason": "Muscle Injury",
-     "status": "out"
-    },
     {
      "id": 162018,
      "name": "B. Fadiga",
@@ -2050,22 +1147,22 @@
    ]
   }
  },
+ "Galatasaray SK|FC Barcelona|2026-10-13": {
+  "fixture_id": 1635666,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
  "Genoa CFC|ACF Fiorentina|2026-10-10": {
   "fixture_id": 1550140,
   "injuries": {
    "away": [
     {
-     "id": 136087,
-     "name": "F. Parisi",
-     "photo": "https://media.api-sports.io/football/players/136087.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 31507,
-     "name": "R. Sottil",
-     "photo": "https://media.api-sports.io/football/players/31507.png",
-     "reason": "Back Injury",
+     "id": 347644,
+     "name": "A. Atta",
+     "photo": "https://media.api-sports.io/football/players/347644.png",
+     "reason": "Abdominal strain",
      "status": "out"
     },
     {
@@ -2099,31 +1196,10 @@
      "status": "out"
     },
     {
-     "id": 452033,
-     "name": "L. Venturino",
-     "photo": "https://media.api-sports.io/football/players/452033.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 162561,
-     "name": "E. Havel",
-     "photo": "https://media.api-sports.io/football/players/162561.png",
-     "reason": "Ankle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 263481,
-     "name": "L. Colombo",
-     "photo": "https://media.api-sports.io/football/players/263481.png",
-     "reason": "Ankle Injury",
-     "status": "out"
-    },
-    {
-     "id": 475672,
-     "name": "F. Meichtry",
-     "photo": "https://media.api-sports.io/football/players/475672.png",
-     "reason": "Muscle Injury",
+     "id": 957,
+     "name": "D. Sow",
+     "photo": "https://media.api-sports.io/football/players/957.png",
+     "reason": "Injury",
      "status": "out"
     },
     {
@@ -2148,16 +1224,9 @@
   "injuries": {
    "away": [
     {
-     "id": 30407,
-     "name": "C. Norgaard",
-     "photo": "https://media.api-sports.io/football/players/30407.png",
-     "reason": "Groin Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 202854,
-     "name": "M. Rohl",
-     "photo": "https://media.api-sports.io/football/players/202854.png",
+     "id": 2165,
+     "name": "V. Mykolenko",
+     "photo": "https://media.api-sports.io/football/players/2165.png",
      "reason": "Injury",
      "status": "doubtful"
     },
@@ -2217,90 +1286,6 @@
      "name": "T. Iroegbunam",
      "photo": "https://media.api-sports.io/football/players/284500.png",
      "reason": "Groin Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 358431,
-     "name": "N. Mendy",
-     "photo": "https://media.api-sports.io/football/players/358431.png",
-     "reason": "Concussion",
-     "status": "doubtful"
-    },
-    {
-     "id": 32960,
-     "name": "H. Morita",
-     "photo": "https://media.api-sports.io/football/players/32960.png",
-     "reason": "Calf Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 284570,
-     "name": "B. Norton-Cuffy",
-     "photo": "https://media.api-sports.io/football/players/284570.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 226765,
-     "name": "E. Stroud",
-     "photo": "https://media.api-sports.io/football/players/226765.png",
-     "reason": "Illness",
-     "status": "doubtful"
-    },
-    {
-     "id": 18941,
-     "name": "M. Targett",
-     "photo": "https://media.api-sports.io/football/players/18941.png",
-     "reason": "Ankle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 380873,
-     "name": "I. Ansah",
-     "photo": "https://media.api-sports.io/football/players/380873.png",
-     "reason": "Back Injury",
-     "status": "out"
-    },
-    {
-     "id": 2930,
-     "name": "J. Butland",
-     "photo": "https://media.api-sports.io/football/players/2930.png",
-     "reason": "Arm Injury",
-     "status": "out"
-    },
-    {
-     "id": 282124,
-     "name": "D. Gyabi",
-     "photo": "https://media.api-sports.io/football/players/282124.png",
-     "reason": "Groin Injury",
-     "status": "out"
-    },
-    {
-     "id": 162991,
-     "name": "E. Matazo",
-     "photo": "https://media.api-sports.io/football/players/162991.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 331551,
-     "name": "C. Hughes",
-     "photo": "https://media.api-sports.io/football/players/331551.png",
-     "reason": "Groin Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 284500,
-     "name": "T. Iroegbunam",
-     "photo": "https://media.api-sports.io/football/players/284500.png",
-     "reason": "Groin Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 358431,
-     "name": "N. Mendy",
-     "photo": "https://media.api-sports.io/football/players/358431.png",
-     "reason": "Concussion",
      "status": "doubtful"
     },
     {
@@ -2346,17 +1331,10 @@
      "status": "doubtful"
     },
     {
-     "id": 657,
-     "name": "K. Tete",
-     "photo": "https://media.api-sports.io/football/players/657.png",
-     "reason": "Concussion",
-     "status": "doubtful"
-    },
-    {
-     "id": 19025,
-     "name": "T. Cairney",
-     "photo": "https://media.api-sports.io/football/players/19025.png",
-     "reason": "Knee Injury",
+     "id": 19549,
+     "name": "A. Robinson",
+     "photo": "https://media.api-sports.io/football/players/19549.png",
+     "reason": "Ankle Injury",
      "status": "doubtful"
     },
     {
@@ -2368,13 +1346,6 @@
     }
    ],
    "home": [
-    {
-     "id": 303467,
-     "name": "I. Fatawu",
-     "photo": "https://media.api-sports.io/football/players/303467.png",
-     "reason": "Red Card",
-     "status": "out"
-    },
     {
      "id": 303467,
      "name": "I. Fatawu",
@@ -2411,45 +1382,10 @@
      "status": "out"
     },
     {
-     "id": 21103,
-     "name": "A. Toure",
-     "photo": "https://media.api-sports.io/football/players/21103.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 513415,
-     "name": "S. Zagadou",
-     "photo": "https://media.api-sports.io/football/players/513415.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 341234,
-     "name": "E. Jelert",
-     "photo": "https://media.api-sports.io/football/players/341234.png",
-     "reason": "Thigh Injury",
-     "status": "doubtful"
-    },
-    {
      "id": 162067,
      "name": "T. Pembele",
      "photo": "https://media.api-sports.io/football/players/162067.png",
      "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 961,
-     "name": "F. Mambimbi",
-     "photo": "https://media.api-sports.io/football/players/961.png",
-     "reason": "Achilles Tendon Injury",
-     "status": "out"
-    },
-    {
-     "id": 24012,
-     "name": "L. Mpasi-Nzau",
-     "photo": "https://media.api-sports.io/football/players/24012.png",
-     "reason": "Achilles Tendon Injury",
      "status": "out"
     },
     {
@@ -2471,24 +1407,10 @@
      "name": "E. Jelert",
      "photo": "https://media.api-sports.io/football/players/341234.png",
      "reason": "Thigh Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 162067,
-     "name": "T. Pembele",
-     "photo": "https://media.api-sports.io/football/players/162067.png",
-     "reason": "Muscle Injury",
      "status": "doubtful"
     }
    ],
    "home": [
-    {
-     "id": 306979,
-     "name": "H. Igamane",
-     "photo": "https://media.api-sports.io/football/players/306979.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
     {
      "id": 306979,
      "name": "H. Igamane",
@@ -2516,20 +1438,6 @@
      "photo": "https://media.api-sports.io/football/players/307123.png",
      "reason": "Injury",
      "status": "out"
-    },
-    {
-     "id": 631,
-     "name": "P. Foden",
-     "photo": "https://media.api-sports.io/football/players/631.png",
-     "reason": "Red Card",
-     "status": "out"
-    },
-    {
-     "id": 307123,
-     "name": "N. O'Reilly",
-     "photo": "https://media.api-sports.io/football/players/307123.png",
-     "reason": "Injury",
-     "status": "out"
     }
    ],
    "home": [
@@ -2548,52 +1456,17 @@
      "status": "out"
     },
     {
-     "id": 409047,
-     "name": "G. Leoni",
-     "photo": "https://media.api-sports.io/football/players/409047.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 30410,
-     "name": "F. Chiesa",
-     "photo": "https://media.api-sports.io/football/players/30410.png",
-     "reason": "Back Injury",
-     "status": "doubtful"
-    },
-    {
      "id": 247,
      "name": "C. Gakpo",
      "photo": "https://media.api-sports.io/football/players/247.png",
      "reason": "Ankle Injury",
-     "status": "doubtful"
+     "status": "out"
     },
     {
      "id": 2864,
      "name": "A. Isak",
      "photo": "https://media.api-sports.io/football/players/2864.png",
      "reason": "Thigh Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 367636,
-     "name": "J. Jacquet",
-     "photo": "https://media.api-sports.io/football/players/367636.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 180317,
-     "name": "C. Bradley",
-     "photo": "https://media.api-sports.io/football/players/180317.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 174565,
-     "name": "H. Ekitike",
-     "photo": "https://media.api-sports.io/football/players/174565.png",
-     "reason": "Achilles Tendon Injury",
      "status": "out"
     },
     {
@@ -2608,20 +1481,6 @@
      "name": "F. Chiesa",
      "photo": "https://media.api-sports.io/football/players/30410.png",
      "reason": "Back Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 247,
-     "name": "C. Gakpo",
-     "photo": "https://media.api-sports.io/football/players/247.png",
-     "reason": "Ankle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 2864,
-     "name": "A. Isak",
-     "photo": "https://media.api-sports.io/football/players/2864.png",
-     "reason": "Thigh Injury",
      "status": "doubtful"
     },
     {
@@ -2679,48 +1538,6 @@
      "photo": "https://media.api-sports.io/football/players/152849.png",
      "reason": "Wrist Injury",
      "status": "doubtful"
-    },
-    {
-     "id": 63577,
-     "name": "M. Mudryk",
-     "photo": "https://media.api-sports.io/football/players/63577.png",
-     "reason": "Ankle Injury",
-     "status": "out"
-    },
-    {
-     "id": 336564,
-     "name": "W. Odobert",
-     "photo": "https://media.api-sports.io/football/players/336564.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 47519,
-     "name": "P. Porro",
-     "photo": "https://media.api-sports.io/football/players/47519.png",
-     "reason": "Muscle Injury",
-     "status": "out"
-    },
-    {
-     "id": 162016,
-     "name": "X. Simons",
-     "photo": "https://media.api-sports.io/football/players/162016.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 30435,
-     "name": "D. Kulusevski",
-     "photo": "https://media.api-sports.io/football/players/30435.png",
-     "reason": "Knee Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 152849,
-     "name": "M. van de Ven",
-     "photo": "https://media.api-sports.io/football/players/152849.png",
-     "reason": "Wrist Injury",
-     "status": "doubtful"
     }
    ],
    "home": [
@@ -2781,195 +1598,11 @@
      "status": "doubtful"
     },
     {
-     "id": 909,
-     "name": "M. Rashford",
-     "photo": "https://media.api-sports.io/football/players/909.png",
-     "reason": "Health problems",
-     "status": "doubtful"
-    },
-    {
      "id": 115589,
      "name": "B. Sesko",
      "photo": "https://media.api-sports.io/football/players/115589.png",
      "reason": "Leg Injury",
      "status": "doubtful"
-    },
-    {
-     "id": 51494,
-     "name": "M. Ugarte",
-     "photo": "https://media.api-sports.io/football/players/51494.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 532,
-     "name": "M. de Ligt",
-     "photo": "https://media.api-sports.io/football/players/532.png",
-     "reason": "Back Injury",
-     "status": "out"
-    },
-    {
-     "id": 18885,
-     "name": "K. Darlow",
-     "photo": "https://media.api-sports.io/football/players/18885.png",
-     "reason": "Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 157997,
-     "name": "A. Diallo",
-     "photo": "https://media.api-sports.io/football/players/157997.png",
-     "reason": "Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 382452,
-     "name": "P. Dorgu",
-     "photo": "https://media.api-sports.io/football/players/382452.png",
-     "reason": "Hamstring Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 2931,
-     "name": "T. Heaton",
-     "photo": "https://media.api-sports.io/football/players/2931.png",
-     "reason": "Abdominal strain",
-     "status": "doubtful"
-    },
-    {
-     "id": 284322,
-     "name": "K. Mainoo",
-     "photo": "https://media.api-sports.io/football/players/284322.png",
-     "reason": "Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 545,
-     "name": "N. Mazraoui",
-     "photo": "https://media.api-sports.io/football/players/545.png",
-     "reason": "Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 909,
-     "name": "M. Rashford",
-     "photo": "https://media.api-sports.io/football/players/909.png",
-     "reason": "Health problems",
-     "status": "doubtful"
-    },
-    {
-     "id": 115589,
-     "name": "B. Sesko",
-     "photo": "https://media.api-sports.io/football/players/115589.png",
-     "reason": "Leg Injury",
-     "status": "doubtful"
-    }
-   ]
-  }
- },
- "Málaga CF|RCD Espanyol de Barcelona|2026-10-09": {
-  "fixture_id": 1570408,
-  "injuries": {
-   "away": [
-    {
-     "id": 47396,
-     "name": "K. Garcia",
-     "photo": "https://media.api-sports.io/football/players/47396.png",
-     "reason": "Hamstring Injury",
-     "status": "out"
-    },
-    {
-     "id": 47396,
-     "name": "K. Garcia",
-     "photo": "https://media.api-sports.io/football/players/47396.png",
-     "reason": "Hamstring Injury",
-     "status": "out"
-    }
-   ],
-   "home": [
-    {
-     "id": 15797,
-     "name": "J. Cajuste",
-     "photo": "https://media.api-sports.io/football/players/15797.png",
-     "reason": "Injury",
-     "status": "out"
-    },
-    {
-     "id": 328192,
-     "name": "M. Diarra",
-     "photo": "https://media.api-sports.io/football/players/328192.png",
-     "reason": "Calf Injury",
-     "status": "out"
-    },
-    {
-     "id": 182602,
-     "name": "J. Lobete",
-     "photo": "https://media.api-sports.io/football/players/182602.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 185234,
-     "name": "D. Murillo",
-     "photo": "https://media.api-sports.io/football/players/185234.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 444451,
-     "name": "A. Ochoa",
-     "photo": "https://media.api-sports.io/football/players/444451.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 184407,
-     "name": "J. Salinas",
-     "photo": "https://media.api-sports.io/football/players/184407.png",
-     "reason": "Loan agreement",
-     "status": "out"
-    },
-    {
-     "id": 15797,
-     "name": "J. Cajuste",
-     "photo": "https://media.api-sports.io/football/players/15797.png",
-     "reason": "Injury",
-     "status": "out"
-    },
-    {
-     "id": 328192,
-     "name": "M. Diarra",
-     "photo": "https://media.api-sports.io/football/players/328192.png",
-     "reason": "Calf Injury",
-     "status": "out"
-    },
-    {
-     "id": 182602,
-     "name": "J. Lobete",
-     "photo": "https://media.api-sports.io/football/players/182602.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 185234,
-     "name": "D. Murillo",
-     "photo": "https://media.api-sports.io/football/players/185234.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 444451,
-     "name": "A. Ochoa",
-     "photo": "https://media.api-sports.io/football/players/444451.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 184407,
-     "name": "J. Salinas",
-     "photo": "https://media.api-sports.io/football/players/184407.png",
-     "reason": "Loan agreement",
-     "status": "out"
     }
    ]
   }
@@ -2998,41 +1631,6 @@
      "photo": "https://media.api-sports.io/football/players/271542.png",
      "reason": "Inactive",
      "status": "doubtful"
-    },
-    {
-     "id": 341453,
-     "name": "Oso",
-     "photo": "https://media.api-sports.io/football/players/341453.png",
-     "reason": "Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 359386,
-     "name": "M. Godo",
-     "photo": "https://media.api-sports.io/football/players/359386.png",
-     "reason": "Muscle Injury",
-     "status": "out"
-    },
-    {
-     "id": 390742,
-     "name": "J. Panichelli",
-     "photo": "https://media.api-sports.io/football/players/390742.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 271542,
-     "name": "I. Doukoure",
-     "photo": "https://media.api-sports.io/football/players/271542.png",
-     "reason": "Inactive",
-     "status": "doubtful"
-    },
-    {
-     "id": 341453,
-     "name": "Oso",
-     "photo": "https://media.api-sports.io/football/players/341453.png",
-     "reason": "Injury",
-     "status": "doubtful"
     }
    ],
    "home": [
@@ -3058,23 +1656,9 @@
      "status": "out"
     },
     {
-     "id": 20917,
-     "name": "L. Abergel",
-     "photo": "https://media.api-sports.io/football/players/20917.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 407017,
-     "name": "M. Bombito",
-     "photo": "https://media.api-sports.io/football/players/407017.png",
-     "reason": "Leg Injury",
-     "status": "out"
-    },
-    {
-     "id": 313937,
-     "name": "A. Mendy",
-     "photo": "https://media.api-sports.io/football/players/313937.png",
+     "id": 1914,
+     "name": "M. Sanson",
+     "photo": "https://media.api-sports.io/football/players/1914.png",
      "reason": "Knee Injury",
      "status": "out"
     }
@@ -3112,38 +1696,24 @@
      "photo": "https://media.api-sports.io/football/players/174939.png",
      "reason": "Injury",
      "status": "doubtful"
-    },
-    {
-     "id": 608142,
-     "name": "A. Bourabaa",
-     "photo": "https://media.api-sports.io/football/players/608142.png",
-     "reason": "Ankle Injury",
-     "status": "out"
-    },
-    {
-     "id": 102,
-     "name": "D. Sidibe",
-     "photo": "https://media.api-sports.io/football/players/102.png",
-     "reason": "Yellow Cards",
-     "status": "out"
-    },
-    {
-     "id": 21448,
-     "name": "L. Buades",
-     "photo": "https://media.api-sports.io/football/players/21448.png",
-     "reason": "Knock",
-     "status": "doubtful"
-    },
-    {
-     "id": 174939,
-     "name": "E. Colas",
-     "photo": "https://media.api-sports.io/football/players/174939.png",
-     "reason": "Injury",
-     "status": "doubtful"
     }
    ],
    "home": [
     {
+     "id": 153,
+     "name": "O. Dembele",
+     "photo": "https://media.api-sports.io/football/players/153.png",
+     "reason": "Rest",
+     "status": "out"
+    },
+    {
+     "id": 606062,
+     "name": "A. Longoni",
+     "photo": "https://media.api-sports.io/football/players/606062.png",
+     "reason": "Injury",
+     "status": "out"
+    },
+    {
      "id": 409216,
      "name": "S. Mayulu",
      "photo": "https://media.api-sports.io/football/players/409216.png",
@@ -3151,39 +1721,11 @@
      "status": "out"
     },
     {
-     "id": 931,
-     "name": "F. Torres",
-     "photo": "https://media.api-sports.io/football/players/931.png",
-     "reason": "Ankle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 336657,
-     "name": "W. Zaire-Emery",
-     "photo": "https://media.api-sports.io/football/players/336657.png",
-     "reason": "Thigh Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 409216,
-     "name": "S. Mayulu",
-     "photo": "https://media.api-sports.io/football/players/409216.png",
-     "reason": "Groin Injury",
+     "id": 263482,
+     "name": "N. Mendes",
+     "photo": "https://media.api-sports.io/football/players/263482.png",
+     "reason": "Rest",
      "status": "out"
-    },
-    {
-     "id": 931,
-     "name": "F. Torres",
-     "photo": "https://media.api-sports.io/football/players/931.png",
-     "reason": "Ankle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 336657,
-     "name": "W. Zaire-Emery",
-     "photo": "https://media.api-sports.io/football/players/336657.png",
-     "reason": "Thigh Injury",
-     "status": "doubtful"
     }
    ]
   }
@@ -3196,35 +1738,7 @@
      "id": 585451,
      "name": "J. Maluze",
      "photo": "https://media.api-sports.io/football/players/585451.png",
-     "reason": "Thigh Injury",
-     "status": "out"
-    },
-    {
-     "id": 585850,
-     "name": "M. Pimpong",
-     "photo": "https://media.api-sports.io/football/players/585850.png",
-     "reason": "Injury",
-     "status": "out"
-    },
-    {
-     "id": 276670,
-     "name": "F. Chaibi",
-     "photo": "https://media.api-sports.io/football/players/276670.png",
-     "reason": "Lacking Match Fitness",
-     "status": "doubtful"
-    },
-    {
-     "id": 162771,
-     "name": "J. Ngankam",
-     "photo": "https://media.api-sports.io/football/players/162771.png",
-     "reason": "Hamstring Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 585451,
-     "name": "J. Maluze",
-     "photo": "https://media.api-sports.io/football/players/585451.png",
-     "reason": "Thigh Injury",
+     "reason": "Illness",
      "status": "out"
     },
     {
@@ -3251,39 +1765,11 @@
    ],
    "home": [
     {
-     "id": 392270,
-     "name": "M. Guiu",
-     "photo": "https://media.api-sports.io/football/players/392270.png",
-     "reason": "Hamstring Injury",
-     "status": "out"
-    },
-    {
-     "id": 380978,
-     "name": "A. Ouedraogo",
-     "photo": "https://media.api-sports.io/football/players/380978.png",
-     "reason": "Shoulder Injury",
-     "status": "out"
-    },
-    {
      "id": 715,
      "name": "C. Baumgartner",
      "photo": "https://media.api-sports.io/football/players/715.png",
      "reason": "Thigh Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 328225,
-     "name": "B. Gruda",
-     "photo": "https://media.api-sports.io/football/players/328225.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 203007,
-     "name": "R. Reitz",
-     "photo": "https://media.api-sports.io/football/players/203007.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
+     "status": "out"
     },
     {
      "id": 392270,
@@ -3300,106 +1786,34 @@
      "status": "out"
     },
     {
-     "id": 715,
-     "name": "C. Baumgartner",
-     "photo": "https://media.api-sports.io/football/players/715.png",
-     "reason": "Thigh Injury",
-     "status": "doubtful"
+     "id": 203007,
+     "name": "R. Reitz",
+     "photo": "https://media.api-sports.io/football/players/203007.png",
+     "reason": "Muscle Injury",
+     "status": "out"
     },
     {
      "id": 328225,
      "name": "B. Gruda",
      "photo": "https://media.api-sports.io/football/players/328225.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 203007,
-     "name": "R. Reitz",
-     "photo": "https://media.api-sports.io/football/players/203007.png",
      "reason": "Muscle Injury",
      "status": "doubtful"
     }
    ]
   }
  },
- "Racing Club de Lens|Olympique Lyonnais|2026-10-09": {
-  "fixture_id": 1552775,
+ "RB Leipzig|PSV|2026-10-13": {
+  "fixture_id": 1635711,
   "injuries": {
-   "away": [
-    {
-     "id": 25916,
-     "name": "M. Niakhate",
-     "photo": "https://media.api-sports.io/football/players/25916.png",
-     "reason": "Muscle Injury",
-     "status": "out"
-    },
-    {
-     "id": 412049,
-     "name": "M. Ouedraogo",
-     "photo": "https://media.api-sports.io/football/players/412049.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 529,
-     "name": "N. Tagliafico",
-     "photo": "https://media.api-sports.io/football/players/529.png",
-     "reason": "Rest",
-     "status": "out"
-    },
-    {
-     "id": 25916,
-     "name": "M. Niakhate",
-     "photo": "https://media.api-sports.io/football/players/25916.png",
-     "reason": "Muscle Injury",
-     "status": "out"
-    },
-    {
-     "id": 412049,
-     "name": "M. Ouedraogo",
-     "photo": "https://media.api-sports.io/football/players/412049.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 529,
-     "name": "N. Tagliafico",
-     "photo": "https://media.api-sports.io/football/players/529.png",
-     "reason": "Rest",
-     "status": "out"
-    }
-   ],
-   "home": [
-    {
-     "id": 178708,
-     "name": "M. Nawrocki",
-     "photo": "https://media.api-sports.io/football/players/178708.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 277191,
-     "name": "A. Sima",
-     "photo": "https://media.api-sports.io/football/players/277191.png",
-     "reason": "Muscle Injury",
-     "status": "out"
-    },
-    {
-     "id": 178708,
-     "name": "M. Nawrocki",
-     "photo": "https://media.api-sports.io/football/players/178708.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 277191,
-     "name": "A. Sima",
-     "photo": "https://media.api-sports.io/football/players/277191.png",
-     "reason": "Muscle Injury",
-     "status": "out"
-    }
-   ]
+   "away": [],
+   "home": []
+  }
+ },
+ "Racing Club de Lens|Sporting Clube de Portugal|2026-10-13": {
+  "fixture_id": 1635679,
+  "injuries": {
+   "away": [],
+   "home": []
   }
  },
  "Rayo Vallecano de Madrid|Athletic Club|2026-10-10": {
@@ -3407,32 +1821,11 @@
   "injuries": {
    "away": [
     {
-     "id": 332305,
-     "name": "U. Egiluz",
-     "photo": "https://media.api-sports.io/football/players/332305.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 128398,
-     "name": "O. Sancet",
-     "photo": "https://media.api-sports.io/football/players/128398.png",
-     "reason": "Muscle Injury",
-     "status": "out"
-    },
-    {
-     "id": 183799,
-     "name": "N. Williams",
-     "photo": "https://media.api-sports.io/football/players/183799.png",
-     "reason": "Thigh Injury",
-     "status": "out"
-    },
-    {
      "id": 190489,
      "name": "A. Djalo",
      "photo": "https://media.api-sports.io/football/players/190489.png",
-     "reason": "Injury",
-     "status": "doubtful"
+     "reason": "Illness",
+     "status": "out"
     },
     {
      "id": 332305,
@@ -3454,37 +1847,9 @@
      "photo": "https://media.api-sports.io/football/players/183799.png",
      "reason": "Thigh Injury",
      "status": "out"
-    },
-    {
-     "id": 190489,
-     "name": "A. Djalo",
-     "photo": "https://media.api-sports.io/football/players/190489.png",
-     "reason": "Injury",
-     "status": "doubtful"
     }
    ],
    "home": [
-    {
-     "id": 11379,
-     "name": "A. Batalla",
-     "photo": "https://media.api-sports.io/football/players/11379.png",
-     "reason": "Broken calfbone",
-     "status": "out"
-    },
-    {
-     "id": 20520,
-     "name": "I. Balliu",
-     "photo": "https://media.api-sports.io/football/players/20520.png",
-     "reason": "Ankle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 1847,
-     "name": "Luiz Felipe",
-     "photo": "https://media.api-sports.io/football/players/1847.png",
-     "reason": "Hamstring Injury",
-     "status": "doubtful"
-    },
     {
      "id": 11379,
      "name": "A. Batalla",
@@ -3512,21 +1877,58 @@
  "Real Betis Balompié|CA Osasuna|2026-10-11": {
   "fixture_id": 1570405,
   "injuries": {
-   "away": [],
-   "home": []
+   "away": [
+    {
+     "id": 2214,
+     "name": "R. Del Castillo",
+     "photo": "https://media.api-sports.io/football/players/2214.png",
+     "reason": "Muscle Injury",
+     "status": "out"
+    },
+    {
+     "id": 182592,
+     "name": "J. Herrando",
+     "photo": "https://media.api-sports.io/football/players/182592.png",
+     "reason": "Muscle Injury",
+     "status": "out"
+    },
+    {
+     "id": 264470,
+     "name": "R. Moro",
+     "photo": "https://media.api-sports.io/football/players/264470.png",
+     "reason": "Muscle Injury",
+     "status": "out"
+    },
+    {
+     "id": 46667,
+     "name": "K. Barja",
+     "photo": "https://media.api-sports.io/football/players/46667.png",
+     "reason": "Muscle Injury",
+     "status": "doubtful"
+    }
+   ],
+   "home": [
+    {
+     "id": 1564,
+     "name": "J. Firpo",
+     "photo": "https://media.api-sports.io/football/players/1564.png",
+     "reason": "Groin Injury",
+     "status": "out"
+    },
+    {
+     "id": 47119,
+     "name": "A. Ruibal",
+     "photo": "https://media.api-sports.io/football/players/47119.png",
+     "reason": "Knee Injury",
+     "status": "out"
+    }
+   ]
   }
  },
  "Real Madrid CF|Villarreal CF|2026-10-10": {
   "fixture_id": 1570411,
   "injuries": {
    "away": [
-    {
-     "id": 51016,
-     "name": "T. Buchanan",
-     "photo": "https://media.api-sports.io/football/players/51016.png",
-     "reason": "Muscle Injury",
-     "status": "out"
-    },
     {
      "id": 51016,
      "name": "T. Buchanan",
@@ -3544,45 +1946,10 @@
      "status": "out"
     },
     {
-     "id": 361497,
-     "name": "D. Huijsen",
-     "photo": "https://media.api-sports.io/football/players/361497.png",
-     "reason": "Red Card",
-     "status": "out"
-    },
-    {
-     "id": 653,
-     "name": "F. Mendy",
-     "photo": "https://media.api-sports.io/football/players/653.png",
-     "reason": "Hip Injury",
-     "status": "out"
-    },
-    {
-     "id": 10009,
-     "name": "Rodrygo",
-     "photo": "https://media.api-sports.io/football/players/10009.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
      "id": 372,
      "name": "Eder Militao",
      "photo": "https://media.api-sports.io/football/players/372.png",
      "reason": "Hamstring Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 756,
-     "name": "F. Valverde",
-     "photo": "https://media.api-sports.io/football/players/756.png",
-     "reason": "Ankle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 341640,
-     "name": "R. Asencio",
-     "photo": "https://media.api-sports.io/football/players/341640.png",
-     "reason": "Broken Leg",
      "status": "out"
     },
     {
@@ -3605,20 +1972,6 @@
      "photo": "https://media.api-sports.io/football/players/10009.png",
      "reason": "Knee Injury",
      "status": "out"
-    },
-    {
-     "id": 372,
-     "name": "Eder Militao",
-     "photo": "https://media.api-sports.io/football/players/372.png",
-     "reason": "Hamstring Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 756,
-     "name": "F. Valverde",
-     "photo": "https://media.api-sports.io/football/players/756.png",
-     "reason": "Ankle Injury",
-     "status": "doubtful"
     }
    ]
   }
@@ -3626,8 +1979,73 @@
  "Real Racing Club de Santander|Valencia CF|2026-10-11": {
   "fixture_id": 1570409,
   "injuries": {
-   "away": [],
-   "home": []
+   "away": [
+    {
+     "id": 19352,
+     "name": "S. Canos",
+     "photo": "https://media.api-sports.io/football/players/19352.png",
+     "reason": "Knee Injury",
+     "status": "out"
+    },
+    {
+     "id": 162127,
+     "name": "D. Lopez",
+     "photo": "https://media.api-sports.io/football/players/162127.png",
+     "reason": "Knee Injury",
+     "status": "out"
+    },
+    {
+     "id": 31406,
+     "name": "U. Sadiq",
+     "photo": "https://media.api-sports.io/football/players/31406.png",
+     "reason": "Muscle Injury",
+     "status": "out"
+    },
+    {
+     "id": 181582,
+     "name": "J. Copete",
+     "photo": "https://media.api-sports.io/football/players/181582.png",
+     "reason": "Ankle Injury",
+     "status": "doubtful"
+    },
+    {
+     "id": 83,
+     "name": "A. Danjuma",
+     "photo": "https://media.api-sports.io/football/players/83.png",
+     "reason": "Injury",
+     "status": "doubtful"
+    },
+    {
+     "id": 916,
+     "name": "M. Diakhaby",
+     "photo": "https://media.api-sports.io/football/players/916.png",
+     "reason": "Muscle Injury",
+     "status": "doubtful"
+    },
+    {
+     "id": 47251,
+     "name": "D. Foulquier",
+     "photo": "https://media.api-sports.io/football/players/47251.png",
+     "reason": "Injury",
+     "status": "doubtful"
+    },
+    {
+     "id": 46933,
+     "name": "L. Rioja",
+     "photo": "https://media.api-sports.io/football/players/46933.png",
+     "reason": "Heel Injury",
+     "status": "doubtful"
+    }
+   ],
+   "home": [
+    {
+     "id": 408875,
+     "name": "S. Eriksson",
+     "photo": "https://media.api-sports.io/football/players/408875.png",
+     "reason": "Shoulder Injury",
+     "status": "doubtful"
+    }
+   ]
   }
  },
  "Real Sociedad de Fútbol|RC Deportivo La Coruña|2026-10-11": {
@@ -3649,90 +2067,20 @@
      "status": "out"
     },
     {
-     "id": 346865,
-     "name": "L. Amatucci",
-     "photo": "https://media.api-sports.io/football/players/346865.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 628615,
-     "name": "N. Carrillo",
-     "photo": "https://media.api-sports.io/football/players/628615.png",
-     "reason": "Ankle Injury",
-     "status": "doubtful"
-    },
-    {
      "id": 37616,
      "name": "Z. Eddahchouri",
      "photo": "https://media.api-sports.io/football/players/37616.png",
      "reason": "Wrist Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 1465,
-     "name": "P. Aubameyang",
-     "photo": "https://media.api-sports.io/football/players/1465.png",
-     "reason": "Knee Injury",
      "status": "out"
-    },
-    {
-     "id": 329728,
-     "name": "M. Casado",
-     "photo": "https://media.api-sports.io/football/players/329728.png",
-     "reason": "Collarbone injury",
-     "status": "out"
-    },
-    {
-     "id": 346865,
-     "name": "L. Amatucci",
-     "photo": "https://media.api-sports.io/football/players/346865.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 628615,
-     "name": "N. Carrillo",
-     "photo": "https://media.api-sports.io/football/players/628615.png",
-     "reason": "Ankle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 37616,
-     "name": "Z. Eddahchouri",
-     "photo": "https://media.api-sports.io/football/players/37616.png",
-     "reason": "Wrist Injury",
-     "status": "doubtful"
     }
    ],
    "home": [
     {
-     "id": 737,
-     "name": "A. Odriozola",
-     "photo": "https://media.api-sports.io/football/players/737.png",
-     "reason": "Knee Injury",
+     "id": 199044,
+     "name": "J. Aramburu",
+     "photo": "https://media.api-sports.io/football/players/199044.png",
+     "reason": "Muscle Injury",
      "status": "out"
-    },
-    {
-     "id": 61774,
-     "name": "O. Oskarsson",
-     "photo": "https://media.api-sports.io/football/players/61774.png",
-     "reason": "Red Card",
-     "status": "out"
-    },
-    {
-     "id": 386859,
-     "name": "H. Fort",
-     "photo": "https://media.api-sports.io/football/players/386859.png",
-     "reason": "Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 47314,
-     "name": "I. Zubeldia",
-     "photo": "https://media.api-sports.io/football/players/47314.png",
-     "reason": "Injury",
-     "status": "doubtful"
     },
     {
      "id": 737,
@@ -3769,20 +2117,6 @@
   "fixture_id": 1575179,
   "injuries": {
    "away": [
-    {
-     "id": 1725,
-     "name": "D. Ljubicic",
-     "photo": "https://media.api-sports.io/football/players/1725.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 90977,
-     "name": "T. Becker",
-     "photo": "https://media.api-sports.io/football/players/90977.png",
-     "reason": "Ankle Injury",
-     "status": "doubtful"
-    },
     {
      "id": 1725,
      "name": "D. Ljubicic",
@@ -3839,79 +2173,9 @@
      "photo": "https://media.api-sports.io/football/players/13.png",
      "reason": "Muscle Injury",
      "status": "out"
-    },
-    {
-     "id": 323449,
-     "name": "A. Al Dakhil",
-     "photo": "https://media.api-sports.io/football/players/323449.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 287927,
-     "name": "J. Diehl",
-     "photo": "https://media.api-sports.io/football/players/287927.png",
-     "reason": "Muscle Injury",
-     "status": "out"
-    },
-    {
-     "id": 24806,
-     "name": "N. Nartey",
-     "photo": "https://media.api-sports.io/football/players/24806.png",
-     "reason": "Muscle Injury",
-     "status": "out"
-    },
-    {
-     "id": 265363,
-     "name": "T. Tomas",
-     "photo": "https://media.api-sports.io/football/players/265363.png",
-     "reason": "Muscle Injury",
-     "status": "out"
-    },
-    {
-     "id": 13,
-     "name": "D. Zagadou",
-     "photo": "https://media.api-sports.io/football/players/13.png",
-     "reason": "Muscle Injury",
-     "status": "out"
     }
    ],
    "home": [
-    {
-     "id": 373443,
-     "name": "N. Awortwie-Grant",
-     "photo": "https://media.api-sports.io/football/players/373443.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 606733,
-     "name": "L. Eickel",
-     "photo": "https://media.api-sports.io/football/players/606733.png",
-     "reason": "Back Injury",
-     "status": "out"
-    },
-    {
-     "id": 108640,
-     "name": "T. Gayret",
-     "photo": "https://media.api-sports.io/football/players/108640.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 119173,
-     "name": "M. Hoffmeier",
-     "photo": "https://media.api-sports.io/football/players/119173.png",
-     "reason": "Muscle Injury",
-     "status": "out"
-    },
-    {
-     "id": 26333,
-     "name": "S. Klaas",
-     "photo": "https://media.api-sports.io/football/players/26333.png",
-     "reason": "Muscle Injury",
-     "status": "out"
-    },
     {
      "id": 373443,
      "name": "N. Awortwie-Grant",
@@ -3974,27 +2238,6 @@
      "photo": "https://media.api-sports.io/football/players/384543.png",
      "reason": "Foot Injury",
      "status": "doubtful"
-    },
-    {
-     "id": 30436,
-     "name": "M. Pessina",
-     "photo": "https://media.api-sports.io/football/players/30436.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 56293,
-     "name": "I. Toure",
-     "photo": "https://media.api-sports.io/football/players/56293.png",
-     "reason": "Contusion",
-     "status": "doubtful"
-    },
-    {
-     "id": 384543,
-     "name": "J. Ziolkowski",
-     "photo": "https://media.api-sports.io/football/players/384543.png",
-     "reason": "Foot Injury",
-     "status": "doubtful"
     }
    ],
    "home": [
@@ -4013,45 +2256,10 @@
      "status": "out"
     },
     {
-     "id": 30554,
-     "name": "L. Pellegrini",
-     "photo": "https://media.api-sports.io/football/players/30554.png",
-     "reason": "Inactive",
-     "status": "out"
-    },
-    {
-     "id": 1852,
-     "name": "D. Cataldi",
-     "photo": "https://media.api-sports.io/football/players/1852.png",
-     "reason": "Groin Injury",
-     "status": "doubtful"
-    },
-    {
      "id": 1844,
      "name": "A. Marusic",
      "photo": "https://media.api-sports.io/football/players/1844.png",
      "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 30784,
-     "name": "N. Rovella",
-     "photo": "https://media.api-sports.io/football/players/30784.png",
-     "reason": "Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 63934,
-     "name": "A. Furlanetto",
-     "photo": "https://media.api-sports.io/football/players/63934.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 2799,
-     "name": "A. Gudmundsson",
-     "photo": "https://media.api-sports.io/football/players/2799.png",
-     "reason": "Shoulder Injury",
      "status": "out"
     },
     {
@@ -4069,17 +2277,10 @@
      "status": "doubtful"
     },
     {
-     "id": 1844,
-     "name": "A. Marusic",
-     "photo": "https://media.api-sports.io/football/players/1844.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
      "id": 30784,
      "name": "N. Rovella",
      "photo": "https://media.api-sports.io/football/players/30784.png",
-     "reason": "Injury",
+     "reason": "Calf Injury",
      "status": "doubtful"
     }
    ]
@@ -4109,99 +2310,22 @@
      "photo": "https://media.api-sports.io/football/players/314254.png",
      "reason": "Health problems",
      "status": "doubtful"
-    },
-    {
-     "id": 126892,
-     "name": "D. Birligea",
-     "photo": "https://media.api-sports.io/football/players/126892.png",
-     "reason": "Muscle Injury",
-     "status": "out"
-    },
-    {
-     "id": 719,
-     "name": "F. Grillitsch",
-     "photo": "https://media.api-sports.io/football/players/719.png",
-     "reason": "Thigh Injury",
-     "status": "out"
-    },
-    {
-     "id": 314254,
-     "name": "A. Raimondo",
-     "photo": "https://media.api-sports.io/football/players/314254.png",
-     "reason": "Health problems",
-     "status": "doubtful"
     }
    ],
    "home": [
     {
-     "id": 31226,
-     "name": "A. Buongiorno",
-     "photo": "https://media.api-sports.io/football/players/31226.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 348532,
-     "name": "C. Favasuli",
-     "photo": "https://media.api-sports.io/football/players/348532.png",
-     "reason": "Thigh Injury",
-     "status": "out"
-    },
-    {
-     "id": 347395,
-     "name": "A. Vergara",
-     "photo": "https://media.api-sports.io/football/players/347395.png",
-     "reason": "Calf Injury",
-     "status": "out"
-    },
-    {
      "id": 310943,
      "name": "Alisson Santos",
      "photo": "https://media.api-sports.io/football/players/310943.png",
      "reason": "Muscle Injury",
-     "status": "doubtful"
+     "status": "out"
     },
     {
      "id": 3406,
      "name": "F. Anguissa",
      "photo": "https://media.api-sports.io/football/players/3406.png",
      "reason": "Groin Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 312615,
-     "name": "Giovane",
-     "photo": "https://media.api-sports.io/football/players/312615.png",
-     "reason": "Groin Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 388547,
-     "name": "L. Marianucci",
-     "photo": "https://media.api-sports.io/football/players/388547.png",
-     "reason": "Knee Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 903,
-     "name": "S. McTominay",
-     "photo": "https://media.api-sports.io/football/players/903.png",
-     "reason": "Heart Problems",
-     "status": "doubtful"
-    },
-    {
-     "id": 312,
-     "name": "A. Meret",
-     "photo": "https://media.api-sports.io/football/players/312.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 47254,
-     "name": "M. Olivera",
-     "photo": "https://media.api-sports.io/football/players/47254.png",
-     "reason": "Groin Injury",
-     "status": "doubtful"
+     "status": "out"
     },
     {
      "id": 31226,
@@ -4218,25 +2342,18 @@
      "status": "out"
     },
     {
+     "id": 47254,
+     "name": "M. Olivera",
+     "photo": "https://media.api-sports.io/football/players/47254.png",
+     "reason": "Groin Injury",
+     "status": "out"
+    },
+    {
      "id": 347395,
      "name": "A. Vergara",
      "photo": "https://media.api-sports.io/football/players/347395.png",
      "reason": "Calf Injury",
      "status": "out"
-    },
-    {
-     "id": 310943,
-     "name": "Alisson Santos",
-     "photo": "https://media.api-sports.io/football/players/310943.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 3406,
-     "name": "F. Anguissa",
-     "photo": "https://media.api-sports.io/football/players/3406.png",
-     "reason": "Groin Injury",
-     "status": "doubtful"
     },
     {
      "id": 312615,
@@ -4246,40 +2363,34 @@
      "status": "doubtful"
     },
     {
-     "id": 388547,
-     "name": "L. Marianucci",
-     "photo": "https://media.api-sports.io/football/players/388547.png",
-     "reason": "Knee Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 903,
-     "name": "S. McTominay",
-     "photo": "https://media.api-sports.io/football/players/903.png",
-     "reason": "Heart Problems",
-     "status": "doubtful"
-    },
-    {
      "id": 312,
      "name": "A. Meret",
      "photo": "https://media.api-sports.io/football/players/312.png",
      "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 47254,
-     "name": "M. Olivera",
-     "photo": "https://media.api-sports.io/football/players/47254.png",
-     "reason": "Groin Injury",
      "status": "doubtful"
     }
    ]
   }
  },
+ "Sabah FK|SK Slavia Praha|2026-10-13": {
+  "fixture_id": 1635721,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
  "Stade Brestois 29|Angers SCO|2026-10-10": {
   "fixture_id": 1552774,
   "injuries": {
-   "away": [],
+   "away": [
+    {
+     "id": 275385,
+     "name": "U. Simbakoli",
+     "photo": "https://media.api-sports.io/football/players/275385.png",
+     "reason": "Muscle Injury",
+     "status": "doubtful"
+    }
+   ],
    "home": [
     {
      "id": 20546,
@@ -4296,59 +2407,17 @@
      "status": "out"
     },
     {
-     "id": 158587,
-     "name": "R. Cagnon",
-     "photo": "https://media.api-sports.io/football/players/158587.png",
-     "reason": "Shoulder Injury",
-     "status": "doubtful"
+     "id": 327697,
+     "name": "G. Versini",
+     "photo": "https://media.api-sports.io/football/players/327697.png",
+     "reason": "Leg Injury",
+     "status": "out"
     },
     {
      "id": 302915,
      "name": "M. Diambou",
      "photo": "https://media.api-sports.io/football/players/302915.png",
      "reason": "Ankle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 327697,
-     "name": "G. Versini",
-     "photo": "https://media.api-sports.io/football/players/327697.png",
-     "reason": "Leg Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 20546,
-     "name": "B. Chardonnet",
-     "photo": "https://media.api-sports.io/football/players/20546.png",
-     "reason": "Calf Injury",
-     "status": "out"
-    },
-    {
-     "id": 498791,
-     "name": "R. Le Guen",
-     "photo": "https://media.api-sports.io/football/players/498791.png",
-     "reason": "Broken Leg",
-     "status": "out"
-    },
-    {
-     "id": 158587,
-     "name": "R. Cagnon",
-     "photo": "https://media.api-sports.io/football/players/158587.png",
-     "reason": "Shoulder Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 302915,
-     "name": "M. Diambou",
-     "photo": "https://media.api-sports.io/football/players/302915.png",
-     "reason": "Ankle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 327697,
-     "name": "G. Versini",
-     "photo": "https://media.api-sports.io/football/players/327697.png",
-     "reason": "Leg Injury",
      "status": "doubtful"
     }
    ]
@@ -4366,6 +2435,13 @@
      "status": "out"
     },
     {
+     "id": 193505,
+     "name": "S. Fofana",
+     "photo": "https://media.api-sports.io/football/players/193505.png",
+     "reason": "Groin Injury",
+     "status": "out"
+    },
+    {
      "id": 412926,
      "name": "C. Makosso",
      "photo": "https://media.api-sports.io/football/players/412926.png",
@@ -4373,38 +2449,10 @@
      "status": "out"
     },
     {
-     "id": 115588,
-     "name": "B. Okoh",
-     "photo": "https://media.api-sports.io/football/players/115588.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 191240,
-     "name": "M. Senaya",
-     "photo": "https://media.api-sports.io/football/players/191240.png",
-     "reason": "Hamstring Injury",
-     "status": "out"
-    },
-    {
-     "id": 402542,
-     "name": "T. Siwe",
-     "photo": "https://media.api-sports.io/football/players/402542.png",
+     "id": 435514,
+     "name": "R. Mandengue",
+     "photo": "https://media.api-sports.io/football/players/435514.png",
      "reason": "Muscle Injury",
-     "status": "out"
-    },
-    {
-     "id": 30748,
-     "name": "A. Diousse",
-     "photo": "https://media.api-sports.io/football/players/30748.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
-     "id": 412926,
-     "name": "C. Makosso",
-     "photo": "https://media.api-sports.io/football/players/412926.png",
-     "reason": "Yellow Cards",
      "status": "out"
     },
     {
@@ -4437,67 +2485,11 @@
   "injuries": {
    "away": [
     {
-     "id": 129643,
-     "name": "E. Ferguson",
-     "photo": "https://media.api-sports.io/football/players/129643.png",
-     "reason": "Ankle Injury",
-     "status": "out"
-    },
-    {
-     "id": 383685,
-     "name": "Y. Minteh",
-     "photo": "https://media.api-sports.io/football/players/383685.png",
-     "reason": "Injury",
-     "status": "out"
-    },
-    {
-     "id": 343311,
-     "name": "S. Tzimas",
-     "photo": "https://media.api-sports.io/football/players/343311.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
      "id": 282637,
      "name": "F. Azeez",
      "photo": "https://media.api-sports.io/football/players/282637.png",
      "reason": "Abdominal strain",
-     "status": "doubtful"
-    },
-    {
-     "id": 305730,
-     "name": "J. Hinshelwood",
-     "photo": "https://media.api-sports.io/football/players/305730.png",
-     "reason": "Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 106835,
-     "name": "K. Mitoma",
-     "photo": "https://media.api-sports.io/football/players/106835.png",
-     "reason": "Hamstring Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 64003,
-     "name": "P. Struijk",
-     "photo": "https://media.api-sports.io/football/players/64003.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 92993,
-     "name": "M. Wieffer",
-     "photo": "https://media.api-sports.io/football/players/92993.png",
-     "reason": "Knee Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 524411,
-     "name": "Z. Yohanna",
-     "photo": "https://media.api-sports.io/football/players/524411.png",
-     "reason": "Lacking Match Fitness",
-     "status": "doubtful"
+     "status": "out"
     },
     {
      "id": 129643,
@@ -4514,6 +2506,13 @@
      "status": "out"
     },
     {
+     "id": 106835,
+     "name": "K. Mitoma",
+     "photo": "https://media.api-sports.io/football/players/106835.png",
+     "reason": "Hamstring Injury",
+     "status": "out"
+    },
+    {
      "id": 343311,
      "name": "S. Tzimas",
      "photo": "https://media.api-sports.io/football/players/343311.png",
@@ -4521,11 +2520,18 @@
      "status": "out"
     },
     {
-     "id": 282637,
-     "name": "F. Azeez",
-     "photo": "https://media.api-sports.io/football/players/282637.png",
-     "reason": "Abdominal strain",
-     "status": "doubtful"
+     "id": 92993,
+     "name": "M. Wieffer",
+     "photo": "https://media.api-sports.io/football/players/92993.png",
+     "reason": "Knee Injury",
+     "status": "out"
+    },
+    {
+     "id": 524411,
+     "name": "Z. Yohanna",
+     "photo": "https://media.api-sports.io/football/players/524411.png",
+     "reason": "Lacking Match Fitness",
+     "status": "out"
     },
     {
      "id": 305730,
@@ -4535,62 +2541,27 @@
      "status": "doubtful"
     },
     {
-     "id": 106835,
-     "name": "K. Mitoma",
-     "photo": "https://media.api-sports.io/football/players/106835.png",
-     "reason": "Hamstring Injury",
-     "status": "doubtful"
-    },
-    {
      "id": 64003,
      "name": "P. Struijk",
      "photo": "https://media.api-sports.io/football/players/64003.png",
      "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 92993,
-     "name": "M. Wieffer",
-     "photo": "https://media.api-sports.io/football/players/92993.png",
-     "reason": "Knee Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 524411,
-     "name": "Z. Yohanna",
-     "photo": "https://media.api-sports.io/football/players/524411.png",
-     "reason": "Lacking Match Fitness",
      "status": "doubtful"
     }
    ],
    "home": [
     {
-     "id": 327631,
-     "name": "H. Diarra",
-     "photo": "https://media.api-sports.io/football/players/327631.png",
-     "reason": "Hamstring Injury",
-     "status": "out"
-    },
-    {
-     "id": 284414,
-     "name": "R. Mundle",
-     "photo": "https://media.api-sports.io/football/players/284414.png",
-     "reason": "Knee Injury",
-     "status": "out"
-    },
-    {
      "id": 55904,
      "name": "D. Ballard",
      "photo": "https://media.api-sports.io/football/players/55904.png",
      "reason": "Muscle Injury",
-     "status": "doubtful"
+     "status": "out"
     },
     {
      "id": 38750,
      "name": "B. Brobbey",
      "photo": "https://media.api-sports.io/football/players/38750.png",
      "reason": "Muscle Injury",
-     "status": "doubtful"
+     "status": "out"
     },
     {
      "id": 327631,
@@ -4605,20 +2576,6 @@
      "photo": "https://media.api-sports.io/football/players/284414.png",
      "reason": "Knee Injury",
      "status": "out"
-    },
-    {
-     "id": 55904,
-     "name": "D. Ballard",
-     "photo": "https://media.api-sports.io/football/players/55904.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 38750,
-     "name": "B. Brobbey",
-     "photo": "https://media.api-sports.io/football/players/38750.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
     }
    ]
   }
@@ -4642,38 +2599,10 @@
      "status": "out"
     },
     {
-     "id": 14335,
-     "name": "M. Vuskovic",
-     "photo": "https://media.api-sports.io/football/players/14335.png",
-     "reason": "Doping",
-     "status": "out"
-    },
-    {
-     "id": 283252,
-     "name": "Z. El Ouahdi",
-     "photo": "https://media.api-sports.io/football/players/283252.png",
-     "reason": "Illness",
-     "status": "doubtful"
-    },
-    {
      "id": 470282,
      "name": "A. Rossing-Lelesiit",
      "photo": "https://media.api-sports.io/football/players/470282.png",
      "reason": "Ankle Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 1098,
-     "name": "P. Daka",
-     "photo": "https://media.api-sports.io/football/players/1098.png",
-     "reason": "Thigh Injury",
-     "status": "out"
-    },
-    {
-     "id": 263177,
-     "name": "A. Gronbaek",
-     "photo": "https://media.api-sports.io/football/players/263177.png",
-     "reason": "Thigh Injury",
      "status": "out"
     },
     {
@@ -4688,31 +2617,10 @@
      "name": "Z. El Ouahdi",
      "photo": "https://media.api-sports.io/football/players/283252.png",
      "reason": "Illness",
-     "status": "doubtful"
-    },
-    {
-     "id": 470282,
-     "name": "A. Rossing-Lelesiit",
-     "photo": "https://media.api-sports.io/football/players/470282.png",
-     "reason": "Ankle Injury",
      "status": "doubtful"
     }
    ],
    "home": [
-    {
-     "id": 18964,
-     "name": "Bernardo",
-     "photo": "https://media.api-sports.io/football/players/18964.png",
-     "reason": "Achilles Tendon Injury",
-     "status": "doubtful"
-    },
-    {
-     "id": 278453,
-     "name": "A. Hajdari",
-     "photo": "https://media.api-sports.io/football/players/278453.png",
-     "reason": "Muscle Injury",
-     "status": "doubtful"
-    },
     {
      "id": 18964,
      "name": "Bernardo",
@@ -4800,35 +2708,14 @@
      "status": "doubtful"
     },
     {
-     "id": 47985,
-     "name": "E. Holm",
-     "photo": "https://media.api-sports.io/football/players/47985.png",
-     "reason": "Thigh Injury",
-     "status": "out"
-    },
-    {
-     "id": 30542,
-     "name": "J. Odgaard",
-     "photo": "https://media.api-sports.io/football/players/30542.png",
-     "reason": "Thigh Injury",
-     "status": "out"
-    },
-    {
-     "id": 15811,
-     "name": "A. Dovbyk",
-     "photo": "https://media.api-sports.io/football/players/15811.png",
-     "reason": "Muscle Injury",
+     "id": 346866,
+     "name": "S. Mbangula",
+     "photo": "https://media.api-sports.io/football/players/346866.png",
+     "reason": "Injury",
      "status": "doubtful"
     }
    ],
    "home": [
-    {
-     "id": 335071,
-     "name": "M. Berisha",
-     "photo": "https://media.api-sports.io/football/players/335071.png",
-     "reason": "Lacking Match Fitness",
-     "status": "doubtful"
-    },
     {
      "id": 335071,
      "name": "M. Berisha",
@@ -4842,51 +2729,87 @@
  "US Sassuolo Calcio|AC Milan|2026-10-11": {
   "fixture_id": 1550145,
   "injuries": {
-   "away": [],
+   "away": [
+    {
+     "id": 1417,
+     "name": "A. Saelemaekers",
+     "photo": "https://media.api-sports.io/football/players/1417.png",
+     "reason": "Ankle Injury",
+     "status": "out"
+    }
+   ],
    "home": [
     {
+     "id": 37651,
+     "name": "J. Idzes",
+     "photo": "https://media.api-sports.io/football/players/37651.png",
+     "reason": "Muscle Injury",
+     "status": "out"
+    },
+    {
      "id": 328046,
-     "name": "I. Koné",
+     "name": "I. Kone",
      "photo": "https://media.api-sports.io/football/players/328046.png",
      "reason": "Broken Leg",
-     "status": "out"
-    },
-    {
-     "id": 342055,
-     "name": "E. Pieragnolo",
-     "photo": "https://media.api-sports.io/football/players/342055.png",
-     "reason": "Jumpers Knee",
-     "status": "out"
-    },
-    {
-     "id": 40582,
-     "name": "S. Walukiewicz",
-     "photo": "https://media.api-sports.io/football/players/40582.png",
-     "reason": "Muscle Bruise",
-     "status": "out"
-    },
-    {
-     "id": 41371,
-     "name": "Fali Candé",
-     "photo": "https://media.api-sports.io/football/players/41371.png",
-     "reason": "Jumpers Knee",
-     "status": "out"
-    },
-    {
-     "id": 291780,
-     "name": "D. Boloca",
-     "photo": "https://media.api-sports.io/football/players/291780.png",
-     "reason": "Muscle Bruise",
      "status": "out"
     },
     {
      "id": 59513,
      "name": "Y. Paz",
      "photo": "https://media.api-sports.io/football/players/59513.png",
-     "reason": "Jumpers Knee",
+     "reason": "Knee Injury",
      "status": "out"
+    },
+    {
+     "id": 342055,
+     "name": "E. Pieragnolo",
+     "photo": "https://media.api-sports.io/football/players/342055.png",
+     "reason": "Knee Injury",
+     "status": "out"
+    },
+    {
+     "id": 342035,
+     "name": "C. Volpato",
+     "photo": "https://media.api-sports.io/football/players/342035.png",
+     "reason": "Thigh Injury",
+     "status": "out"
+    },
+    {
+     "id": 291780,
+     "name": "D. Boloca",
+     "photo": "https://media.api-sports.io/football/players/291780.png",
+     "reason": "Muscle Injury",
+     "status": "doubtful"
+    },
+    {
+     "id": 41371,
+     "name": "F. Cande",
+     "photo": "https://media.api-sports.io/football/players/41371.png",
+     "reason": "Knee Injury",
+     "status": "doubtful"
+    },
+    {
+     "id": 40582,
+     "name": "S. Walukiewicz",
+     "photo": "https://media.api-sports.io/football/players/40582.png",
+     "reason": "Muscle Injury",
+     "status": "doubtful"
     }
    ]
+  }
+ },
+ "Viking FK|FC Bayern München|2026-10-13": {
+  "fixture_id": 1635742,
+  "injuries": {
+   "away": [],
+   "home": []
+  }
+ },
+ "Villarreal CF|SSC Napoli|2026-10-13": {
+  "fixture_id": 1635748,
+  "injuries": {
+   "away": [],
+   "home": []
   }
  }
 }
