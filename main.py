@@ -1527,6 +1527,7 @@ def _live_overlay():
                 row["injury_time"] = m["injuryTime"]
             row["utc"] = m["utcDate"]
             data[_live_key(m["homeTeam"]["name"], m["awayTeam"]["name"], m["utcDate"])] = row
+        _af_live_merge(data)
         quiet = not any(v["status"] in LIVE_STATUSES for v in data.values()) and _all_started_done(data, now)
         _live.update(at=_t.time(), data=data, quiet=quiet)
         return data
@@ -1536,6 +1537,28 @@ def _live_overlay():
         return _live["data"]
     finally:
         _live_lock.release()
+
+# ── 실시간(2026-10-09): API-Football /fixtures?live=all 한 번(전 세계 진행 중 경기, 1분 캐시)으로 우리 경기의 점수·분을 덮음.
+# football-data 무료 점수는 몇 분 늦고 추가시간·하프타임 구분이 약했음. 키가 없거나 실패하면 football-data 값 그대로
+AF_LIVE_MAP = {"1H": "IN_PLAY", "2H": "IN_PLAY", "ET": "EXTRA_TIME", "BT": "EXTRA_TIME", "P": "PENALTY_SHOOTOUT", "HT": "PAUSED", "LIVE": "IN_PLAY", "INT": "PAUSED",
+               "FT": "FINISHED", "AET": "FINISHED", "PEN": "FINISHED"}
+def _af_live_merge(data):
+    rows = _af_live_get("/fixtures", 55, live="all")
+    if not rows:
+        return
+    by_id = {e["id"]: e for e in (_load_json("af_fixtures.json") or {}).get("fixtures", [])}
+    for fx in rows:
+        e = by_id.get((fx.get("fixture") or {}).get("id"))
+        if not e:
+            continue
+        st = fx["fixture"]["status"]
+        k = _live_key(e["home_team"], e["away_team"], e["date"])
+        row = {**data.get(k, {}), "status": AF_LIVE_MAP.get(st.get("short"), "IN_PLAY"), "af_status": st.get("short"),
+               "home_goals": (fx.get("goals") or {}).get("home"), "away_goals": (fx.get("goals") or {}).get("away"), "utc": e["kickoff"], "source": "api-football"}
+        if st.get("elapsed") is not None:
+            row["minute"] = st["elapsed"]
+        row["injury_time"] = st.get("extra") or None
+        data[k] = row
 
 def _next_kickoff(now):
     ts = [pd.Timestamp(m["date"]) for ms in (_load_json("schedule.json") or {}).values() for m in ms
@@ -1705,6 +1728,25 @@ def _team_captain_order(team, rows=None):
 def _pick_cap(ids, order):
     """라인업 선수 ID들 중 완장 주인 — 주장이 없으면 부주장, 둘 다 없으면 None"""
     return next((c for c in order if c in ids), None)
+
+@app.get("/match/live")
+def get_match_live(home_team: str, away_team: str, date: str):
+    """진행 중 경기 상세(골·카드·교체 타임라인, 라인업, 팀 통계, 분) — API-Football /fixtures?id= 45초 캐시(모든 사용자 공유).
+    킥오프 10분 전~끝난 뒤 30분까지만, 그 밖이면 204(끝난 경기는 /match/detail)"""
+    e = _af_index()[0].get(f"{home_team}|{away_team}|{date[:10]}")
+    if not e:
+        return Response(status_code=204)
+    now, ko = pd.Timestamp.now(tz="UTC"), pd.Timestamp(e["kickoff"])
+    if not (ko - pd.Timedelta(minutes=10) <= now <= ko + pd.Timedelta(hours=3, minutes=30)):
+        return Response(status_code=204)
+    r = _af_live_get("/fixtures", 45, id=e["id"])
+    if not r:
+        return Response(status_code=204)
+    fx = r[0]
+    det = _mark_match_caps({**af_match_detail(fx), **{k: e[k] for k in ("league", "home_team", "away_team", "date")},
+                            "home_goals": (fx.get("goals") or {}).get("home"), "away_goals": (fx.get("goals") or {}).get("away"),
+                            "kickoff": e["kickoff"], "live": True})
+    return {k: v for k, v in det.items() if k != "pstats"}
 
 @app.get("/match/detail")
 def get_match_detail(home_team: str, away_team: str, date: str):

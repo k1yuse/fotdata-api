@@ -2037,6 +2037,18 @@
     .mp-center { position: relative; display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 96px; }
     .mp-vs { font-size: 14px; font-weight: 800; color: var(--faint); letter-spacing: 1px; }
     .mp-score-label { font-size: 12px; color: var(--muted); font-weight: 600; }
+    .mp-score.live-sc b.h, .mp-score.live-sc b.a { color: var(--text); }
+    .mp-score.goal-flash { animation: goalFlash 1.6s ease-out 1; } @keyframes goalFlash { 0%, 30% { color: #fff; text-shadow: 0 0 18px rgba(63,185,80,.9); transform: scale(1.12); } 100% { text-shadow: none; transform: none; } }
+    .mp-verdict.live .dot { background: var(--red); animation: livePulse 1.8s ease-out infinite; } .mp-verdict.live { color: var(--text); }
+    .ml-bar { font-size: 13px; font-weight: 600; color: var(--text-2); }
+    .ml-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px 4px 9px; border-radius: var(--r-pill); background: rgba(248,81,73,0.14); border: 0.5px solid rgba(248,81,73,0.45);
+      color: #ff8a82; font-size: 12px; font-weight: 700; line-height: 1.2; white-space: nowrap; font-variant-numeric: tabular-nums; margin-bottom: 4px; }
+    .ml-badge i { width: 6px; height: 6px; border-radius: 50%; background: var(--red); animation: livePulse 1.8s ease-out infinite; }
+    .ml-badge.done { background: rgba(142,154,179,0.14); border-color: rgba(142,154,179,0.35); color: var(--text-2); padding-left: 11px; }
+    @media (prefers-reduced-motion: reduce) { .ml-badge i { animation: none; } }
+    .md-mark.live { display: flex; justify-content: center; align-items: center; gap: 10px; color: var(--text); }
+    .md-empty { text-align: center; font-size: 13px; color: var(--muted); padding: 14px 0 6px; }
+    @media (prefers-reduced-motion: reduce) { .mp-score.goal-flash, .mp-verdict.live .dot { animation: none; } }
     .mp-score { display: flex; align-items: center; gap: 8px; font-size: 34px; font-weight: 800; line-height: 1.1; font-variant-numeric: tabular-nums; }
     .mp-score b.h { color: var(--blue-text); } .mp-score b.a { color: var(--away); } .mp-score i { font-style: normal; color: var(--disabled); font-size: 26px; }
     .mp-xg { font-size: 12px; color: var(--faint); font-variant-numeric: tabular-nums; }
@@ -4060,7 +4072,7 @@ function renderTodayCards(container, matches, opts = {}) {
     const foot = live ? `<div class="today-card-time">${liveChip(m)}</div>` : played
       ? (px ? `<div class="today-card-time"><span class="sp-verdict ${x.correct ? 'hit' : 'miss'}">${x.correct ? 'AI 적중' : 'AI 빗나감'}</span></div>` : '<div class="today-card-time">종료</div>')
       : (px ? `<span class="sp-mini tc-bar"><i class="h" style="width:${px[0]}%"></i><i class="d" style="width:${px[1]}%"></i><i class="a" style="width:${px[2]}%"></i></span>` : '') + `<div class="today-card-time">${timeStr}${px ? ` · <span class="${tc(px[1]) ? 'tc-d top' : 'tc-d'}">무 ${px[1]}%</span>` : ''}${koRel(m.date)}</div>`;
-    const click = played ? `openMatchResultModal('${escJs(m.home_team)}','${escJs(m.away_team)}','${m.date}','${m.league}')` : `openMatchPredictModal('${escJs(m.home_team)}','${escJs(m.away_team)}')`;
+    const click = live ? `openMatchLiveModal('${escJs(m.home_team)}','${escJs(m.away_team)}','${m.date}','${m.league}')` : played ? `openMatchResultModal('${escJs(m.home_team)}','${escJs(m.away_team)}','${m.date}','${m.league}')` : `openMatchPredictModal('${escJs(m.home_team)}','${escJs(m.away_team)}')`;
     return `<div class="today-card${isFav ? ' today-card-fav' : ''}${live ? ' live' : ''}" onclick="${click}" style="cursor:pointer"${px ? ` title="${played ? '경기 전 AI 예측' : 'AI 예측'}: 홈승 ${px[0]}% · 무 ${px[1]}% · 원정승 ${px[2]}%"` : ''}>
       <div class="today-card-league"><img alt="" src="${li.logo}" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">${li.name}${opts.showDate ? `<span class="today-card-date">${(() => { const d = new Date(m.date); return `${d.getMonth() + 1}.${d.getDate()} (${'일월화수목금토'[d.getDay()]})`; })()}</span>` : ''}</div>
       ${row(m.home_team, homeShort, 0, m.home_goals, w === 2)}${row(m.away_team, awayShort, 2, m.away_goals, w === 1)}
@@ -4836,10 +4848,13 @@ function mdOwnGoalFor(d, hg, ag) {
 function mdSummaryHtml(d, home, away, hg, ag) {
   const og = mdOwnGoalFor(d, hg, ag);
   const ev = [...d.events].sort((a, b) => (a.min - b.min) || ((a.extra || 0) - (b.extra || 0)));
+  const st = d.live ? (d.status?.short || '') : '';
   let h = 0, a = 0, html = '', htShown = false;
+  const chunks = [];   // 실시간이면 순서를 뒤집어 최신이 위로
+  const push = x => { chunks.push(x); };
   const firstHalf = e => e.min <= 45;   // 45+2분 같은 전반 추가시간 포함
   ev.forEach(e => {
-    if (!htShown && !firstHalf(e)) { html += `<div class="md-mark">하프타임 <b>${h} - ${a}</b></div>`; htShown = true; }
+    if (!htShown && !firstHalf(e)) { push(`<div class="md-mark">하프타임 <b>${h} - ${a}</b></div>`); htShown = true; }
     let sc = '';
     if (e.type === 'goal' || e.type === 'pen_goal' || e.type === 'own_goal') {
       const forHome = e.type === 'own_goal' ? ((e.side === 'home') === (og === 'same')) : e.side === 'home';
@@ -4856,11 +4871,17 @@ function mdSummaryHtml(d, home, away, hg, ag) {
       main = `<b>${mdShortName(e.player)}</b>${extra}`;
     }
     const big = ['goal', 'pen_goal', 'own_goal'].includes(e.type) ? ' goal' : '';
-    html += `<div class="md-ev ${e.side}${big}"><div class="md-ev-body">${mdIcon(e.type)}<span class="md-ev-txt">${main}</span>${sc}</div><span class="md-ev-min">${mdMin(e)}</span></div>`;
+    push(`<div class="md-ev ${e.side}${big}"><div class="md-ev-body">${mdIcon(e.type)}<span class="md-ev-txt">${main}</span>${sc}</div><span class="md-ev-min">${mdMin(e)}</span></div>`);
   });
-  if (!htShown && ev.length) html += `<div class="md-mark">하프타임 <b>${h} - ${a}</b></div>`;
-  html += `<div class="md-mark">경기 종료 <b>${hg} - ${ag}</b></div>`;
-  const p = d.potm;
+  if (d.live) {
+    if (!htShown && !['1H', 'NS', 'TBD', ''].includes(st)) push(`<div class="md-mark">하프타임 <b>${h} - ${a}</b></div>`);
+    chunks.reverse();
+    html = `<div class="md-mark live"><span class="live-chip"><i></i>${mdLiveLabel(d.status)}</span><b>${hg} - ${ag}</b></div>` + (chunks.length ? chunks.join('') : '<div class="md-empty">아직 득점·카드·교체가 없어요</div>');
+  } else {
+    if (!htShown && ev.length) push(`<div class="md-mark">하프타임 <b>${h} - ${a}</b></div>`);
+    html = chunks.join('') + `<div class="md-mark">경기 종료 <b>${hg} - ${ag}</b></div>`;
+  }
+  const p = d.live ? null : d.potm;   // 평점은 경기가 끝나야 확정이라 진행 중엔 최우수 선수를 안 뽑음
   const potm = p ? `<div class="md-potm"><img src="${p.photo || ''}" alt="" onerror="this.style.visibility='hidden'"><div><small>경기 최우수 선수 · 평점 기준</small><b>${p.name}</b><span><img src="${logos[p.side === 'home' ? home : away] || ''}" alt="" onerror="this.style.display='none'">${shortName(p.side === 'home' ? home : away)}</span></div>${mdRating(p.rating)}</div>` : '';
   const meta = [d.referee ? `주심 ${d.referee}` : '', d.venue || ''].filter(Boolean).join(' · ');
   return `${potm}<div class="mp-sec" style="${potm ? '' : 'margin-top:0;padding-top:0;border-top:none'}"><div class="mp-sec-t">경기 기록</div><div class="md-tl">${html}</div>${meta ? `<div class="md-meta">${meta}</div>` : ''}</div>`;
@@ -5352,6 +5373,71 @@ function renderMatchDetail(d, home, away, hg, ag) {
   document.getElementById('md-summary').innerHTML = mdSummaryHtml(d, home, away, hg, ag);
   body.querySelector('.md-pane[data-p="lineup"]').innerHTML = mdLineupHtml(d, home, away);
   body.querySelector('.md-pane[data-p="stats"]').innerHTML = mdStatsHtml(d, home, away);
+}
+
+// ── 실시간 경기 창(2026-10-09): 진행 중 경기를 누르면 — 점수·분, 골·카드·교체 타임라인(최신이 위), 라인업, 팀 통계를
+// API-Football로 1분마다 다시 받음(/match/live, 서버 45초 캐시). 골이 나면 점수가 반짝, 끝나면 "경기 종료"로 바뀌고 새로고침 멈춤
+const LIVE_SHORT_KO = { '1H': '전반', '2H': '후반', HT: '하프타임', ET: '연장전', BT: '연장 휴식', P: '승부차기', INT: '중단', SUSP: '중단', LIVE: '진행 중', FT: '경기 종료', AET: '연장 종료', PEN: '승부차기 종료', NS: '킥오프 전' };
+function mdLiveLabel(st) {
+  const s = st?.short || '', min = st?.elapsed;
+  if (['HT', 'BT', 'P', 'INT', 'SUSP', 'FT', 'AET', 'PEN', 'NS'].includes(s)) return LIVE_SHORT_KO[s];
+  return min != null ? `${LIVE_SHORT_KO[s] || '진행 중'} ${min}${st.extra ? '+' + st.extra : ''}'` : (LIVE_SHORT_KO[s] || '진행 중');
+}
+let liveModalTimer = null;
+async function openMatchLiveModal(home, away, date, league) {
+  const seq = ++mpSeq;
+  clearInterval(liveModalTimer);
+  track('match_live');
+  const modal = document.getElementById('match-predict-modal');
+  const body = document.getElementById('match-predict-body');
+  const same = x => x.home_team === home && x.away_team === away && x.date === date;
+  const m = (windowMatchesList || []).find(same) || (scheduleData[league] || []).find(same) || { home_team: home, away_team: away, date, league };
+  mpSetHeader(home, away, '실시간');
+  modal.querySelector('.mp-modal').classList.remove('wide');
+  document.getElementById('mp-meta').innerHTML = mpMetaHtml(league, date);
+  document.querySelector('#mp-meta .ko-rel')?.remove();   // 진행 중이라 "N시간 후" 같은 남은 시간은 빼고
+  const round = league === 'CL' ? (STAGE_LABEL[m.stage] || '') : (m.matchday ? `${m.matchday}라운드` : '');
+  const setScore = (hg, ag, label, done) => {
+    const c = document.getElementById('mp-center'), old = c.dataset.sc, now = `${hg ?? 0}-${ag ?? 0}`;
+    c.innerHTML = `<span class="ml-badge${done ? ' done' : ''}">${done ? '경기 종료' : `<i></i>${label}`}</span><span class="mp-score live-sc${done ? ' final' : ''}"><b class="h">${hg ?? 0}</b><i>:</i><b class="a">${ag ?? 0}</b></span>`;
+    if (old && old !== now) c.querySelector('.mp-score').classList.add('goal-flash');   // 골이 나면 점수가 반짝
+    c.dataset.sc = now;
+  };
+  document.getElementById('mp-center').dataset.sc = '';
+  setScore(m.home_goals, m.away_goals, liveChip(m).replace(/<[^>]+>/g, ''), false);
+  body.innerHTML = `${round ? `<div class="mp-verdict ml-bar">${round}</div>` : ''}
+    <div class="md-tabs" id="md-tabs" hidden role="tablist"><button class="active" data-p="summary" onclick="mdTab('summary')">요약</button><button data-p="lineup" onclick="mdTab('lineup')">라인업</button><button data-p="stats" onclick="mdTab('stats')">통계</button></div>
+    <div class="md-pane" data-p="summary"><div id="md-summary"><div class="mp-skel"><i style="width:100%;height:10px"></i><i style="width:80%"></i><i style="width:60%"></i></div></div><div id="mr-pred"></div></div>
+    <div class="md-pane" data-p="lineup" hidden></div><div class="md-pane" data-p="stats" hidden></div>`;
+  modal.classList.add('show');
+  // 경기 전 AI 예측 — 지금 점수 기준으로 "예측대로 가는 중 / 예측과 다르게 가는 중"
+  const paintPred = (hg, ag) => {
+    const x = schedPredOf(m, league), box = document.getElementById('mr-pred');
+    if (!box || !x) return;
+    const [h, d, a] = x.p.map(v => Math.round(v * 100)), top = Math.max(h, d, a), tc = v => v === top ? ' top' : '';
+    const cur = hg > ag ? 'home_win' : hg < ag ? 'away_win' : 'draw';
+    const pick = x.predicted === 'home_win' ? `${shortTeamName(home)} 승` : x.predicted === 'away_win' ? `${shortTeamName(away)} 승` : '무승부';
+    box.innerHTML = `<div class="mp-sec"><div class="mp-sec-t">경기 전 AI 예측 <span class="sp-verdict ${cur === x.predicted ? 'hit' : 'miss'}">${cur === x.predicted ? '지금은 예측대로' : '지금은 예측과 다르게'}</span></div>
+      <div class="mp-bar"><i class="h" style="width:${h}%"></i><i class="d" style="width:${d}%"></i><i class="a" style="width:${a}%"></i></div>
+      <div class="mp-probs"><div class="h${tc(h)}"><b>${h}%</b><span>${shortTeamName(home)} 승</span></div><div class="d${tc(d)}"><b>${d}%</b><span>무승부</span></div><div class="a${tc(a)}"><b>${a}%</b><span>${shortTeamName(away)} 승</span></div></div>
+      <div class="mr-pick">AI 예측 <b>${pick}</b> · 경기가 끝나면 자동으로 채점돼요</div></div>`;
+  };
+  const tick = async () => {
+    if (seq !== mpSeq || !modal.classList.contains('show')) { clearInterval(liveModalTimer); return; }
+    let d = null;
+    try { const r = await fetch(`${API}/match/live?home_team=${encodeURIComponent(home)}&away_team=${encodeURIComponent(away)}&date=${date.slice(0, 10)}`); d = r.ok && r.status !== 204 ? await r.json() : null; } catch (e) { /* 다음 번에 */ }
+    if (seq !== mpSeq) return;
+    if (!d) { ensureSchedulePreds(league).then(() => seq === mpSeq && paintPred(m.home_goals ?? 0, m.away_goals ?? 0)); return; }
+    const done = ['FT', 'AET', 'PEN'].includes(d.status?.short);
+    setScore(d.home_goals, d.away_goals, mdLiveLabel(d.status), done);
+    const tabNow = document.querySelector('#md-tabs button.active')?.dataset.p || 'summary';
+    renderMatchDetail({ ...d, live: !done }, home, away, d.home_goals ?? 0, d.away_goals ?? 0);
+    mdTab(tabNow);
+    ensureSchedulePreds(league).then(() => seq === mpSeq && paintPred(d.home_goals ?? 0, d.away_goals ?? 0));
+    if (done) clearInterval(liveModalTimer);
+  };
+  await tick();
+  if (seq === mpSeq) liveModalTimer = setInterval(() => { if (!document.hidden) tick(); }, 60000);
 }
 
 // ── 경기 결과 창(끝난 경기) ──
@@ -7100,7 +7186,7 @@ function schedRowHtml(m, league, opts = {}) {
     ? `<span class="sched-score">${m.home_goals} - ${m.away_goals}</span>` + (px ? `<span class="sp-verdict ${x.correct ? 'hit' : 'miss'}">${x.correct ? 'AI 적중' : 'AI 빗나감'}</span>` : '')
     : `<span class="sched-time">${timeStr}</span>${koRel(m.date)}` + (px ? `<span class="sp-mini"><i class="h" style="width:${px[0]}%"></i><i class="d" style="width:${px[1]}%"></i><i class="a" style="width:${px[2]}%"></i></span><span class="sp-d${tc(px[1])}">무 ${px[1]}%${x.limited ? ' · 참고용' : ''}</span>` : '');
   const lg = league || m.league || '';
-  const click = (opts.team ? 'closeTeamInfoModal();' : '') + (played
+  const click = (opts.team ? 'closeTeamInfoModal();' : '') + (live ? `openMatchLiveModal('${escJs(m.home_team)}','${escJs(m.away_team)}','${m.date}','${lg}')` : played
     ? `openMatchResultModal('${escJs(m.home_team)}','${escJs(m.away_team)}','${m.date}','${lg}')`
     : `openMatchPredictModal('${escJs(m.home_team)}','${escJs(m.away_team)}')`);
   const me = t => (opts.team || opts.me) === t ? ' me' : (!opts.team && favSet.has(t) ? ' fav' : '');   // opts.me = 일정 팀별 보기의 그 팀
