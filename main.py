@@ -1639,7 +1639,7 @@ def _rank_movement(code):
 # match_previews.json(결장·부상자) · af_players.json(선수 프로필). 시즌 기록은 경기 상세 합산(af_transform.af_season_players).
 # Render 환경변수 API_FOOTBALL_KEY가 있으면 새벽 수집 전이라도 요청 때 바로 받음: 막 끝난 경기 상세, 킥오프 약 1시간 전 확정 라인업, 선수 경력·트로피·부상 이력
 from af_transform import (af_match_detail, af_season_players, add_percentiles, af_player_profile, md_read, af_league_agg, pick_xi, round_xi,
-                          xi_line, plain_can, GRID_FROM, DPOS_LINE, af_compact_player_season, af_compact_transfers, AF_CALENDAR_COMPS)
+                          xi_line, plain_can, GRID_FROM, DPOS_LINE, af_compact_player_season, af_compact_transfers, AF_CALENDAR_COMPS, dedupe_injuries)
 AF_KEY = os.environ.get("API_FOOTBALL_KEY", "")
 AF_URL = "https://v3.football.api-sports.io"
 MD_DIR = os.path.join(MODEL_DIR, "match_details")
@@ -2273,7 +2273,7 @@ def get_match_preview(home_team: str, away_team: str, date: str = None):
     # 경기별 결장자 명단은 킥오프 1~2일 전에야 올라와서 그 전엔 비어 있었음(2026-10-07) → 비어 있는 팀은 그 팀 "가장 최근 경기"의
     # 결장자(team_injuries.json — 새벽 수집, /injuries 리그·시즌 전체에서 팀별 마지막 경기)로 대신하고 그 경기 날짜를 붙임
     ti = _load_json("team_injuries.json") or {}
-    inj = {k: list(v) for k, v in (pv.get("injuries") or {}).items()}
+    inj = {k: dedupe_injuries(v) for k, v in (pv.get("injuries") or {}).items()}   # 저장된 명단에 같은 선수가 두 번씩 있던 것(2026-10-10)
     for sd, team in (("home", home_team), ("away", away_team)):
         if not inj.get(sd) and (ti.get(team) or {}).get("players"):
             inj[sd] = [{**x, "last": ti[team]["date"]} for x in ti[team]["players"]]

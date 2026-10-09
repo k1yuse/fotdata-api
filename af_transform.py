@@ -203,14 +203,36 @@ def af_player_profile(teams, trophies, sidelined, nationality=None, current_seas
     return {"career": career, "trophies": tro, "sidelined": sd}
 
 def af_injury_rows(resp, team_id):
-    """/injuries 응답 → 그 팀 결장자 [{id, name, photo, status: out(결장)|doubtful(출전 불투명), reason}]"""
-    out = []
+    """/injuries 응답 → 그 팀 결장자 [{id, name, photo, status: out(결장)|doubtful(출전 불투명), reason}]
+    같은 선수가 여러 번 오기도 해서(2026-10-10 아스널–리즈: 5명이 두 번씩) 선수당 한 줄 — 결장이 하나라도 있으면 결장"""
+    out, seen = [], {}
     for x in resp or []:
         if (x.get("team") or {}).get("id") != team_id:
             continue
         pl = x.get("player") or {}
-        out.append({"id": pl.get("id"), "name": pl.get("name"), "photo": pl.get("photo"),
-                    "status": "doubtful" if pl.get("type") == "Questionable" else "out", "reason": pl.get("reason")})
+        row = {"id": pl.get("id"), "name": pl.get("name"), "photo": pl.get("photo"),
+               "status": "doubtful" if pl.get("type") == "Questionable" else "out", "reason": pl.get("reason")}
+        k = row["id"] or row["name"]
+        if k in seen:
+            if row["status"] == "out":
+                seen[k]["status"] = "out"
+            continue
+        seen[k] = row
+        out.append(row)
+    return out
+
+
+def dedupe_injuries(rows):
+    """이미 저장된 결장자 목록의 같은 선수 중복을 한 줄로(af_injury_rows와 같은 규칙)"""
+    out, seen = [], {}
+    for r in rows or []:
+        k = r.get("id") or r.get("name")
+        if k in seen:
+            if r.get("status") == "out":
+                seen[k]["status"] = "out"
+            continue
+        seen[k] = dict(r)
+        out.append(seen[k])
     return out
 
 
