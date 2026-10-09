@@ -383,7 +383,7 @@
     .bigmatch-unit { background: var(--bg); border: 0.5px solid var(--border); border-radius: 10px; padding: 10px 0; text-align: center; width: 64px; box-sizing: border-box; }
     .bigmatch-unit .num { font-size: 28px; font-weight: 800; color: var(--blue); line-height: 1; font-variant-numeric: tabular-nums; }
     .bigmatch-unit { overflow: hidden; }
-    .bigmatch-unit .num.flip { animation: numFlip .42s cubic-bezier(.2,.8,.2,1); }
+    .bigmatch-unit .num.flip { animation: numFlip .42s var(--ease-out); }
     @keyframes numFlip { from { transform: translateY(-65%); opacity: 0; filter: blur(2px); } to { transform: none; opacity: 1; filter: none; } }
     /* 배너 위로 7초마다 경기장 조명처럼 빛이 한 번 스쳐 지나감 */
     .bigmatch-banner::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
@@ -473,7 +473,7 @@
     .kofi-panel { position: fixed; left: 16px; bottom: 136px; width: 340px; max-width: 92vw; height: 560px; max-height: 70vh; border-radius: 14px; box-shadow: var(--shadow-lg); overflow: hidden; z-index: 401; opacity: 0; pointer-events: none; transition: opacity .2s ease; will-change: transform, opacity; }
     @media (min-width: 640px) { .kofi-float-btn { display: none; } }
     .kofi-panel.open { opacity: 1; pointer-events: auto; }
-    .kofi-panel-inner { width: 100%; height: 100%; background: #fff; display: flex; flex-direction: column; transform: translateY(100%); transition: transform .32s cubic-bezier(.22,.68,0,1.01); will-change: transform; }
+    .kofi-panel-inner { width: 100%; height: 100%; background: #fff; display: flex; flex-direction: column; transform: translateY(100%); transition: transform .32s var(--ease-drawer); will-change: transform; }
     .kofi-panel.open .kofi-panel-inner { transform: translateY(0); }
     .kofi-panel.kofi-anchor-top .kofi-panel-inner { transform: translateY(-100%); }
     .kofi-panel.kofi-anchor-top.open .kofi-panel-inner { transform: translateY(0); }
@@ -671,7 +671,7 @@
     /* 모달 */
     .modal-overlay { display: flex; visibility: hidden; opacity: 0; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 1000; align-items: center; justify-content: center; transition: opacity .2s ease, visibility .2s; }
     .modal-overlay.show { visibility: visible; opacity: 1; }
-    .modal { background: var(--surface); border: 0.5px solid var(--border); border-radius: 14px; width: 320px; overflow: hidden; transform: scale(0.95) translateY(10px); opacity: 0; transition: transform .25s cubic-bezier(.2,.9,.3,1), opacity .25s ease; box-shadow: var(--shadow-lg); }
+    .modal { background: var(--surface); border: 0.5px solid var(--border); border-radius: 14px; width: 320px; overflow: hidden; transform: scale(0.95) translateY(10px); opacity: 0; transition: transform .25s var(--ease-out), opacity .25s ease; box-shadow: var(--shadow-lg); }
     .modal-overlay.show .modal { transform: scale(1) translateY(0); opacity: 1; }
     .modal-header { padding: 14px 16px; border-bottom: 0.5px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
     .modal-title { font-size: 14px; font-weight: 600; color: var(--text); }
@@ -885,7 +885,7 @@
     .ts-metric-val { font-size: 14px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
     .ts-track { position: relative; height: 6px; border-radius: 99px; background: var(--surface-2); margin-top: 6px; }
     .ts-track.big { height: 10px; flex: 1; margin: 0; }
-    .ts-track i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 99px; transition: width .5s cubic-bezier(.2,.8,.2,1); }
+    .ts-track i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 99px; transition: width .5s var(--ease-out); }
     .ts-track i.good, .ts-track i.top { background: linear-gradient(90deg, var(--blue-strong), var(--blue)); } .ts-track i.bad { background: linear-gradient(90deg, #9e4a1b, var(--away)); }
     .ts-track i.neutral { background: var(--muted); } .ts-track i.bottom { background: linear-gradient(90deg, var(--green-strong), var(--green)); }
     .ts-track b { position: absolute; top: -3px; bottom: -3px; width: 2px; margin-left: -1px; background: var(--text); border-radius: 4px; opacity: .75; }
@@ -1035,7 +1035,7 @@
     .vs-swap:disabled { cursor: default; opacity: .45; }
     .vs-swap.nudge .vs-ico { animation: vsNudge .35s ease; }   /* 고른 팀이 없을 때 누르면 살짝 흔들림 */
     @keyframes vsNudge { 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
-    .team-logo-wrap.swap-move { transition: transform .42s cubic-bezier(.65,0,.35,1); position: relative; z-index: 3; }
+    .team-logo-wrap.swap-move { transition: transform .42s var(--ease-in-out); position: relative; z-index: 3; }
     .league-badge-sm.swap-fade, .select-trigger.swap-fade { transition: opacity .18s ease; opacity: 0; }
     @media (prefers-reduced-motion: reduce) { .vs-swap .vs-ico, .team-logo-wrap.swap-move { transition: none; } .vs-swap.nudge .vs-ico { animation: none; } }
     @media (max-width: 480px) { .vs-swap { margin-top: 30px; gap: 5px; } .vs-swap .vs-txt { font-size: 20px; } .vs-swap .vs-ico { width: 32px; height: 32px; } }
@@ -1047,7 +1047,7 @@
     .select-trigger img { width: 20px; height: 20px; object-fit: contain; border-radius: 50%; }
     .team-popup { display: none; position: absolute; width: 480px; max-width: 92vw; background: var(--surface); border: 0.5px solid var(--border); border-radius: 14px; overflow: hidden; z-index: 200; top: calc(100% + 4px); left: 50%; transform: translateX(-50%); opacity: 0; pointer-events: none; transition: opacity .2s ease; }
     .team-popup.show { opacity: 1; pointer-events: auto; }
-    .popup-inner { transform: translateY(-100%); transition: transform .32s cubic-bezier(.22,.68,0,1.01); }
+    .popup-inner { transform: translateY(-100%); transition: transform .32s var(--ease-drawer); }
     .team-popup.show .popup-inner { transform: translateY(0); }
     .popup-header { padding: 12px 14px; border-bottom: 0.5px solid var(--border); display: flex; align-items: center; gap: 8px; }
     .popup-search-input { flex: 1; padding: 7px 12px; background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 6px; color: var(--text); font-size: 13px; }
@@ -1083,7 +1083,7 @@
     .result-teams > :not(.result-pitch) { position: relative; z-index: 1; }
     /* 결과 머리 뒤 원근 경기장 선(랜딩 02 장면과 같은 그림) — 결과가 뜰 때마다 선이 그려짐 */
     .result-pitch { position: absolute; left: -8px; right: -8px; top: -14px; bottom: -8px; width: calc(100% + 16px); height: calc(100% + 22px); z-index: 0; pointer-events: none; opacity: 0.6; }
-    .result-pitch path.ln { fill: none; stroke-width: 1.3; stroke-linecap: round; vector-effect: non-scaling-stroke; stroke-dasharray: 1; stroke-dashoffset: 1; animation: pitchDraw 1.2s cubic-bezier(.3,.7,.2,1) forwards; }
+    .result-pitch path.ln { fill: none; stroke-width: 1.3; stroke-linecap: round; vector-effect: non-scaling-stroke; stroke-dasharray: 1; stroke-dashoffset: 1; animation: pitchDraw 1.2s var(--ease-out) forwards; }
     .result-pitch path.ln.away { animation-delay: .08s; } .result-pitch path.ln.mid { animation-delay: .18s; }
     .result-pitch path.half { opacity: 0; animation: miFade .8s ease .5s forwards; }
     @keyframes pitchDraw { to { stroke-dashoffset: 0; } }
@@ -1185,7 +1185,7 @@
     .mi-track { position: relative; margin-top: 14px; padding: 26px 0 24px; }
     .mi-track-bar { display: flex; gap: 2px; height: 6px; }
     .mi-track-bar i { flex: 1; border-radius: 4px; background: var(--surface-2); }
-    .mi-track-mark { position: absolute; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; transition: left .7s cubic-bezier(.2,.8,.2,1); }
+    .mi-track-mark { position: absolute; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; transition: left .7s var(--ease-out); }
     .mi-track-mark img { width: 18px; height: 18px; object-fit: contain; }
     .mi-track-mark.home { top: 0; } .mi-track-mark.away { bottom: 0; flex-direction: column-reverse; }
     .mi-track-mark .stem { width: 2px; height: 5px; border-radius: 4px; }
@@ -1193,7 +1193,7 @@
     .mi-track-ends { display: flex; justify-content: space-between; font-size: 12px; color: var(--faint); margin-top: 4px; }
     .mi-wdl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
     .mi-wdl-bar { display: flex; height: 10px; border-radius: 4px; overflow: hidden; background: var(--surface-2); gap: 2px; }
-    .mi-wdl-bar i { display: block; height: 100%; width: 0; transition: width .7s cubic-bezier(.2,.8,.2,1); }
+    .mi-wdl-bar i { display: block; height: 100%; width: 0; transition: width .7s var(--ease-out); }
     .mi-wdl-bar .w { background: var(--green-strong); } .mi-wdl-bar .d { background: var(--faint); } .mi-wdl-bar .l { background: var(--red-strong); }
     .mi-wdl-txt { display: flex; gap: 8px; font-size: 12px; color: var(--muted); margin-top: 6px; font-variant-numeric: tabular-nums; }
     .mi-wdl-txt b { font-weight: 700; } .mi-wdl-txt .w b { color: var(--green); } .mi-wdl-txt .d b { color: var(--text-2); } .mi-wdl-txt .l b { color: var(--red); }
@@ -1205,7 +1205,7 @@
     .mi-cmp-label { font-size: 12px; color: var(--muted); text-align: center; white-space: nowrap; }
     .mi-cmp-bar { height: 6px; background: var(--surface-2); border-radius: 4px; display: flex; overflow: hidden; }
     .mi-cmp-bar.home { justify-content: flex-end; }
-    .mi-cmp-bar i { display: block; height: 100%; width: 0; border-radius: 4px; transition: width .7s cubic-bezier(.2,.8,.2,1); }
+    .mi-cmp-bar i { display: block; height: 100%; width: 0; border-radius: 4px; transition: width .7s var(--ease-out); }
     .mi-cmp-bar.home i { background: var(--blue); } .mi-cmp-bar.away i { background: var(--away); }
     .mi-cmp-bar.dim i { opacity: .35; }
     .mi-caption { font-size: 12px; color: var(--muted); background: var(--bg); border: 0.5px solid var(--surface-2); border-radius: 10px; padding: 8px 10px; margin-top: 10px; line-height: 1.5; }
@@ -1225,7 +1225,7 @@
     .mi-chart svg { display: block; overflow: visible; }
     .mi-chart.static .line { animation: none; stroke-dashoffset: 0; }
     .mi-chart.static .pt { animation: none; opacity: 1; }
-    .mi-chart .line { fill: none; stroke-width: 2.2; stroke-linejoin: round; stroke-linecap: round; stroke-dasharray: var(--len); stroke-dashoffset: var(--len); animation: miDraw 1.1s cubic-bezier(.3,.7,.2,1) .1s forwards; }
+    .mi-chart .line { fill: none; stroke-width: 2.2; stroke-linejoin: round; stroke-linecap: round; stroke-dasharray: var(--len); stroke-dashoffset: var(--len); animation: miDraw 1.1s var(--ease-out) .1s forwards; }
     .mi-chart .pt { opacity: 0; animation: miFade .3s ease 1s forwards; }
     @keyframes miDraw { to { stroke-dashoffset: 0; } }
     @keyframes miFade { to { opacity: 1; } }
@@ -1242,7 +1242,7 @@
     .sb-val { display: flex; align-items: baseline; gap: 6px; margin: 4px 0 7px; }
     .sb-val b { font-size: 20px; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; } .sb-val small { font-size: 12px; color: var(--faint); }
     .sb-bar { position: relative; height: 5px; border-radius: 99px; background: var(--surface-2); }
-    .sb-bar i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 99px; transition: width .9s cubic-bezier(.22,.8,.2,1); }
+    .sb-bar i { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 99px; transition: width .9s var(--ease-out); }
     .sb.home .sb-bar i { background: linear-gradient(90deg, var(--blue-strong), var(--blue)); } .sb.away .sb-bar i { background: linear-gradient(90deg, var(--away), var(--away)); }
     .sb.worse .sb-bar i { opacity: .45; }
     .sb-bar em { position: absolute; top: -3px; bottom: -3px; width: 2px; margin-left: -1px; border-radius: 4px; background: var(--text); opacity: .7; }
@@ -1271,14 +1271,14 @@
     .loading.wake { gap: 10px; }
     .wake-title { font-size: 14px; font-weight: 600; color: var(--text); }
     .wake-bar { width: min(240px, 70%); height: 4px; border-radius: 99px; background: rgba(142,154,179,0.18); overflow: hidden; }
-    .wake-bar i { display: block; height: 100%; transform-origin: left; transform: scaleX(0.04); background: linear-gradient(90deg, var(--blue-strong), var(--blue)); box-shadow: 0 0 10px rgba(88,166,255,0.6); animation: wakeFill 55s cubic-bezier(.15,.6,.3,1) forwards; }
+    .wake-bar i { display: block; height: 100%; transform-origin: left; transform: scaleX(0.04); background: linear-gradient(90deg, var(--blue-strong), var(--blue)); box-shadow: 0 0 10px rgba(88,166,255,0.6); animation: wakeFill 55s var(--ease-out) forwards; }
     @keyframes wakeFill { to { transform: scaleX(0.94); } }
     .wake-sub { font-size: 12px; color: var(--muted); }
 
     /* 로고의 그래프 바 애니메이션 — 로고 클릭(새로고침) 피드백 + 로딩 표시 공용 */
     .logo-bars { display: flex; align-items: flex-end; }
     .logo-bars { display: inline-block; transform-origin: 50% 50%; }
-    .logo-bars.animate { animation: logoBallSpin 1.6s cubic-bezier(.65,0,.35,1) infinite; }
+    .logo-bars.animate { animation: logoBallSpin 1.6s var(--ease-in-out) infinite; }
     @keyframes logoBallSpin { 0% { transform: rotate(0deg); } 40% { transform: rotate(360deg); } 100% { transform: rotate(360deg); } }
 
     /* ── 승부차기 미니게임 ── */
@@ -1323,7 +1323,7 @@
     .shootout-zone { position: relative; cursor: pointer; transition: background .15s; z-index: 2; }
     .shootout-zone:hover { background: rgba(88,166,255,0.18); }
     .shootout-zone.disabled { cursor: default; pointer-events: none; }
-    .shootout-ball { position: absolute; width: 30px; height: 30px; left: 50%; top: 108%; transform: translate(-50%, -50%); transition: left .5s cubic-bezier(.2,.7,.3,1), top .5s cubic-bezier(.2,.7,.3,1); z-index: 3; filter: drop-shadow(0 2px 3px rgba(0,0,0,.5)); }
+    .shootout-ball { position: absolute; width: 30px; height: 30px; left: 50%; top: 108%; transform: translate(-50%, -50%); transition: left .5s var(--ease-out), top .5s var(--ease-out); z-index: 3; filter: drop-shadow(0 2px 3px rgba(0,0,0,.5)); }
     .shootout-ball svg { width: 100%; height: 100%; }
     .shootout-keeper { position: absolute; width: 30px; height: 30px; left: 50%; top: 62%; transform: translate(-50%, -50%); transition: left .45s ease, top .45s ease; z-index: 3; color: var(--green); filter: drop-shadow(0 2px 3px rgba(0,0,0,.5)); }
     .shootout-keeper svg { width: 100%; height: 100%; }
@@ -1776,7 +1776,7 @@
     .ct-cell.wait { border: 0.5px dashed var(--border); }
     .ct-pts.wait { color: var(--disabled); font-weight: 500; }
     .ct-row { background: var(--surface); position: relative; }
-    .ct-row.reveal .ct-cell, .ct-row.reveal .ct-pts { animation: ctPop .4s cubic-bezier(.2,.8,.2,1) both; animation-delay: var(--d, 0ms); }
+    .ct-row.reveal .ct-cell, .ct-row.reveal .ct-pts { animation: ctPop .4s var(--ease-out) both; animation-delay: var(--d, 0ms); }
     @keyframes ctPop { from { opacity: 0; transform: scale(.82); } to { opacity: 1; transform: none; } }
     #sim-btn.pulse { animation: simPulse 1.8s ease-in-out infinite; }
     @keyframes simPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(88,166,255,.45); } 50% { box-shadow: 0 0 0 7px rgba(88,166,255,0); } }
@@ -1788,7 +1788,7 @@
     .cd-head b { color: var(--text); } .cd-head span { color: var(--muted); } .cd-head em { font-style: normal; color: var(--blue-text); font-weight: 700; }
     .cd-chart { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 3px; height: 70px; align-items: end; }
     .cd-col { display: flex; flex-direction: column; align-items: stretch; justify-content: flex-end; height: 100%; }
-    .cd-col i { display: block; background: var(--disabled); border-radius: 3px 3px 1px 1px; animation: cdBar .5s cubic-bezier(.22,.8,.2,1) both; transform-origin: bottom; }
+    .cd-col i { display: block; background: var(--disabled); border-radius: 3px 3px 1px 1px; animation: cdBar .5s var(--ease-out) both; transform-origin: bottom; }
     .cd-col span { font-size: 10px; color: var(--faint); text-align: center; margin-top: 3px; font-variant-numeric: tabular-nums; }
     @keyframes cdBar { from { transform: scaleY(0); } }
     @media (prefers-reduced-motion: reduce) { .ct-dist, .cd-col i { animation: none; } }
@@ -1846,7 +1846,7 @@
     .cb-track { position: absolute; inset: 0; transform-style: preserve-3d; }
     .cb-loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: var(--muted); font-size: 13px; }
     .cb-card { position: absolute; left: 50%; top: 50%; width: 340px; height: 470px; margin: -235px 0 0 -170px; transform-style: preserve-3d; will-change: transform, opacity;
-      transition: transform var(--cbdur, .55s) cubic-bezier(.2,.8,.2,1), opacity var(--cbdur, .55s) ease; }
+      transition: transform var(--cbdur, .55s) var(--ease-out), opacity var(--cbdur, .55s) ease; }
     .cb-card.far { visibility: hidden; transition: none; will-change: auto; }
     .cb-card:not(.center):hover .cb-logo-wrap { transform: scale(1.06); } .cb-card:not(.center) .cb-logo-wrap { transition: transform .2s; }
     .cb-card:not(.center):hover .cb-name { color: var(--blue-text); }
@@ -1915,7 +1915,7 @@
     .mp-meta .ko-rel, #mp-meta .ko-rel { margin-left: 6px; }
     .cb-mv { font-style: normal; font-size: 12px; font-weight: 800; margin: 0 2px; } .cb-mv.up { color: var(--green); } .cb-mv.down { color: var(--red); } .cb-mv.same { color: var(--faint); }
     .cb-dot .mv { font-size: 9px; line-height: 1; } .cb-dot .mv.up { color: var(--green); } .cb-dot .mv.down { color: var(--red); }
-    .cb-card.landed .cb-logo-wrap { animation: cbLand .7s cubic-bezier(.2,.8,.2,1); }
+    .cb-card.landed .cb-logo-wrap { animation: cbLand .7s var(--ease-out); }
     @keyframes cbLand { 0% { transform: scale(.86); filter: brightness(1.6); } 60% { transform: scale(1.05); } 100% { transform: none; filter: none; } }
     .cb-back-in { height: 100%; overflow-y: auto; padding: 16px 16px 14px; box-sizing: border-box; overscroll-behavior: contain; }
     .cb-bh { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
@@ -2060,7 +2060,7 @@
     .mp-verdict.away { color: var(--away); border-color: rgba(240,136,62,0.4); background: rgba(240,136,62,0.1); }
     .mp-verdict.draw { color: var(--text-2); border-color: rgba(142,154,179,0.4); background: rgba(142,154,179,0.1); }
     .mp-bar { display: flex; height: 10px; border-radius: 99px; overflow: hidden; background: var(--surface-2); }
-    .mp-bar i { display: block; height: 100%; transform-origin: left; animation: mpGrow .6s cubic-bezier(.2,.8,.2,1) both; } .mp-bar i + i { margin-left: 2px; }
+    .mp-bar i { display: block; height: 100%; transform-origin: left; animation: mpGrow .6s var(--ease-out) both; } .mp-bar i + i { margin-left: 2px; }
     .mp-bar i.h { background: linear-gradient(90deg, var(--blue-strong), var(--blue)); } .mp-bar i.d { background: var(--faint); } .mp-bar i.a { background: linear-gradient(90deg, var(--away), var(--away)); }
     @keyframes mpGrow { from { transform: scaleX(0); } }
     .mp-probs { display: grid; grid-template-columns: 1fr 1fr 1fr; margin-top: 8px; }
@@ -2187,7 +2187,7 @@
     .md-st-head span { display: flex; align-items: center; gap: 6px; } .md-st-head img { width: 18px; height: 18px; object-fit: contain; }
     .md-poss { margin-bottom: 12px; text-align: center; }
     .md-poss-bar { display: flex; gap: 2px; height: 22px; border-radius: 99px; overflow: hidden; background: var(--surface-2); }
-    .md-poss-bar i { display: flex; align-items: center; width: 0; font-style: normal; transition: width .8s cubic-bezier(.22,.8,.2,1); overflow: hidden; }
+    .md-poss-bar i { display: flex; align-items: center; width: 0; font-style: normal; transition: width .8s var(--ease-out); overflow: hidden; }
     .md-poss-bar i.h { background: var(--blue); justify-content: flex-start; padding-left: 8px; } .md-poss-bar i.a { background: var(--away); justify-content: flex-end; padding-right: 8px; }
     .md-poss-bar b { font-size: 12px; font-weight: 800; color: var(--bg); font-variant-numeric: tabular-nums; }
     .md-poss span { display: block; margin-top: 4px; font-size: 11.5px; color: var(--muted); font-weight: 600; }
@@ -2200,7 +2200,7 @@
     .md-st-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
     .md-st-bars > div { height: 5px; border-radius: 99px; background: var(--surface-2); overflow: hidden; display: flex; }
     .md-st-bars .l { justify-content: flex-end; }
-    .md-st-bars i { display: block; height: 100%; width: 0; border-radius: 99px; transition: width .7s cubic-bezier(.22,.8,.2,1); opacity: .45; }
+    .md-st-bars i { display: block; height: 100%; width: 0; border-radius: 99px; transition: width .7s var(--ease-out); opacity: .45; }
     .md-st-bars i.h { background: var(--blue); } .md-st-bars i.a { background: var(--away); } .md-st-bars i.on { opacity: 1; }
     @media (prefers-reduced-motion: reduce) { .md-poss-bar i, .md-st-bars i { transition: none; } }
     .md-pl[onclick] { cursor: pointer; } .md-pl[onclick]:hover .md-pn { color: var(--blue-text); }
@@ -2222,6 +2222,10 @@
     .tn-abs { flex-shrink: 0; font-size: 12px; font-weight: 700; padding: 1px 6px; border-radius: 99px; }
     .tn-abs.out { color: var(--red); background: rgba(248,81,73,0.14); } .tn-abs.doubtful { color: var(--gold); background: rgba(210,153,34,0.14); }
     .tn-none { font-size: 12px; color: var(--faint); padding: 4px 0; }
+    .ti-inj-title { display: flex; align-items: baseline; gap: 8px; } .ti-inj-title span { font-weight: 500; color: var(--faint); }
+    .ti-player-row.ti-inj { justify-content: flex-start; gap: 9px; padding: 6px 2px; } .ti-player-row.ti-inj img { width: 28px; height: 28px; }
+    .ti-player-row .tn-abs { margin-right: 6px; }
+    .ti-season-inj { display: flex; align-items: center; gap: 6px; margin-top: 8px; padding-top: 8px; border-top: 0.5px solid rgba(255,255,255,0.07); font-size: 12px; color: var(--muted); min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .tn-kp + .tn-kp { margin-top: 12px; }
     .tn-row { display: flex; align-items: center; gap: 9px; padding: 6px 8px; margin: 0 -8px; border-radius: 10px; cursor: pointer; transition: background .15s; }
     .tn-row:hover { background: rgba(88,166,255,0.07); }
@@ -2775,6 +2779,175 @@
     }
   </style>
   <script src="analytics.js" defer></script>
+<style id="glass-v2">
+/* ── 섹션 제목·예상 스코어(예전 인라인 스타일을 클래스로 옮긴 것 — 모양은 예전 그대로) ── */
+.rs-sec { margin-top: 16px; padding-top: 16px; border-top: 0.5px solid rgba(255,255,255,0.08); }
+.rs-sec-t { font-size: 12px; color: #8e9ab3; letter-spacing: 0.5px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.rs-score { text-align: center; margin-bottom: 10px; }
+.rs-score-main { font-size: 32px; font-weight: 800; color: #58a6ff; }
+.rs-score-sub { font-size: 12px; color: #8e9ab3; margin-top: 2px; }
+
+/* ── 투명 유리(2026-10-09): 카드가 뒤 배경(빛번짐·3D 공)을 비춰 보이게 — 더 투명하게 + 강한 흐림·채도 + 빛 받는 테두리 ──
+   레이아웃·글자·색 규칙은 그대로, 표면만 */
+html.theme-glass body::before {
+  background:
+    radial-gradient(900px 640px at 88% 14%, rgba(88,166,255,0.16), transparent 70%),
+    radial-gradient(760px 600px at 2% 70%, rgba(124,92,255,0.10), transparent 70%),
+    radial-gradient(1100px 800px at 50% 115%, rgba(56,189,248,0.07), transparent 70%);
+}
+html.theme-glass .card, html.theme-glass .myteam-widget {
+  position: relative;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,0.085) 0%, rgba(255,255,255,0.025) 38%, rgba(255,255,255,0.015) 62%, rgba(255,255,255,0.045) 100%),
+    rgba(15,23,42,0.42);
+  backdrop-filter: blur(28px) saturate(170%); -webkit-backdrop-filter: blur(28px) saturate(170%);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), inset 0 -1px 0 rgba(255,255,255,0.03), 0 1px 2px rgba(0,0,0,0.25), 0 24px 56px -28px rgba(0,0,0,0.7);
+}
+/* 빛 받는 테두리: 왼쪽 위가 밝고 아래로 갈수록 사라지는 1px 선 */
+html.theme-glass .card::before, html.theme-glass .myteam-widget::before {
+  content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; pointer-events: none;
+  background: linear-gradient(150deg, rgba(255,255,255,0.32), rgba(255,255,255,0.06) 30%, rgba(255,255,255,0) 55%, rgba(120,170,255,0.14) 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
+}
+@media (hover: hover) and (pointer: fine) {
+  html.theme-glass .card, html.theme-glass .myteam-widget {
+    background:
+      radial-gradient(520px circle at var(--mx, -999px) var(--my, -999px), rgba(140,190,255,0.10), transparent 55%),
+      linear-gradient(145deg, rgba(255,255,255,0.085) 0%, rgba(255,255,255,0.025) 38%, rgba(255,255,255,0.015) 62%, rgba(255,255,255,0.045) 100%),
+      rgba(15,23,42,0.42);
+  }
+}
+/* 카드 안 칸(지표·순위·다음 경기 등)도 어두운 상자 대신 얇은 유리 */
+html.theme-glass .today-card, html.theme-glass .mi-rank-tile, html.theme-glass .stat-box, html.theme-glass .ti-season-card, html.theme-glass .ti-history,
+html.theme-glass .mgr-panel, html.theme-glass .ti-about, html.theme-glass .lo-stat, html.theme-glass .ti-fact2 {
+  background: linear-gradient(160deg, rgba(255,255,255,0.06), rgba(255,255,255,0.015)) !important;
+  border-color: rgba(255,255,255,0.08);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.07);
+}
+html.theme-glass .modal {
+  background: linear-gradient(150deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02) 45%), rgba(14,21,38,0.72);
+  backdrop-filter: blur(32px) saturate(170%); -webkit-backdrop-filter: blur(32px) saturate(170%);
+  border-color: rgba(255,255,255,0.12);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), 0 40px 90px -30px rgba(0,0,0,0.8);
+}
+html.theme-glass .nav, html.theme-glass .tabbar { background: rgba(10,16,32,0.55); backdrop-filter: blur(24px) saturate(170%); -webkit-backdrop-filter: blur(24px) saturate(170%); }
+/* 폰: 카드마다 흐림은 무거워서 끄되, 반투명 + 빛 테두리는 유지 */
+@media (max-width: 768px) {
+  html.theme-glass .card, html.theme-glass .myteam-widget {
+    backdrop-filter: none; -webkit-backdrop-filter: none;
+    background: linear-gradient(145deg, rgba(255,255,255,0.075) 0%, rgba(255,255,255,0.02) 40%, rgba(255,255,255,0.035) 100%), rgba(15,23,42,0.78);
+  }
+}
+
+/* ── 유리 부품(2026-10-09): 알약·배지·칩·세그먼트·버튼·탭을 유리 톤으로 — 반투명 색 바탕 + 같은 색 얇은 테두리 + 위쪽 빛 한 줄 + 밝은 글자 ── */
+html.theme-glass {
+  --gp-blue-bg: rgba(88,166,255,0.15); --gp-blue-bd: rgba(130,185,255,0.38); --gp-blue-tx: #b5d6ff;
+  --gp-org-bg: rgba(240,136,62,0.15); --gp-org-bd: rgba(255,170,110,0.38); --gp-org-tx: #ffcaa1;
+  --gp-grn-bg: rgba(63,185,80,0.15); --gp-grn-bd: rgba(110,220,130,0.36); --gp-grn-tx: #a5ebb0;
+  --gp-red-bg: rgba(248,81,73,0.15); --gp-red-bd: rgba(255,130,120,0.38); --gp-red-tx: #ffb1ab;
+  --gp-amb-bg: rgba(210,153,34,0.16); --gp-amb-bd: rgba(240,192,64,0.38); --gp-amb-tx: #f7d684;
+  --gp-neu-bg: rgba(255,255,255,0.07); --gp-neu-bd: rgba(255,255,255,0.14); --gp-neu-tx: #dfe6f3;
+  --gp-hi: inset 0 1px 0 rgba(255,255,255,0.14);
+}
+/* 작은 알약·배지 공통 */
+html.theme-glass :is(.sb-rank, .mi-zone, .tn-chip, .sp-verdict, .ti-ha, .tf-dir, .tn-abs, .today-card-date, .h2h-sub) { box-shadow: var(--gp-hi); border: 1px solid var(--gp-neu-bd); background: var(--gp-neu-bg); color: var(--gp-neu-tx); }
+html.theme-glass .h2h-sub { box-shadow: none; border: 0; background: none; color: rgba(238,242,250,0.5); }
+html.theme-glass .today-card-date { box-shadow: none; border: 0; background: none; }
+html.theme-glass :is(.sb-rank.good, .ti-ha.home) { background: var(--gp-blue-bg); border-color: var(--gp-blue-bd); color: var(--gp-blue-tx); }
+html.theme-glass .ti-ha.away { background: var(--gp-org-bg); border-color: var(--gp-org-bd); color: var(--gp-org-tx); }
+html.theme-glass :is(.sp-verdict.hit, .tf-dir.in) { background: var(--gp-grn-bg); border-color: var(--gp-grn-bd); color: var(--gp-grn-tx); }
+html.theme-glass :is(.sb-rank.bad, .tf-dir.out, .tn-abs.out) { background: var(--gp-red-bg); border-color: var(--gp-red-bd); color: var(--gp-red-tx); }
+html.theme-glass :is(.tn-chip, .tn-abs.doubtful) { background: var(--gp-amb-bg); border-color: var(--gp-amb-bd); color: var(--gp-amb-tx); }
+html.theme-glass .tn-chip.ok { background: var(--gp-grn-bg); border-color: var(--gp-grn-bd); color: var(--gp-grn-tx); }
+html.theme-glass .sp-verdict.miss { color: rgba(238,242,250,0.6); }
+/* 예측 결론 배지: 큰 유리 알약 + 팀 색 빛 */
+html.theme-glass .badge { border-width: 1px; padding: 9px 20px; font-size: 15px; letter-spacing: -0.01em; box-shadow: var(--gp-hi), 0 8px 26px -12px currentColor; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+html.theme-glass .badge.home { background: linear-gradient(180deg, rgba(88,166,255,0.22), rgba(88,166,255,0.08)); border-color: var(--gp-blue-bd); color: var(--gp-blue-tx); }
+html.theme-glass .badge.away { background: linear-gradient(180deg, rgba(240,136,62,0.22), rgba(240,136,62,0.08)); border-color: var(--gp-org-bd); color: var(--gp-org-tx); }
+html.theme-glass .badge.draw { background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04)); border-color: var(--gp-neu-bd); color: var(--gp-neu-tx); }
+/* 필터 칩(리그·포지션·이적 등) */
+html.theme-glass :is(.league-tab, .champ-league-btn, .ps-chip, .tf-filter, .popup-league-btn, .sched-fav-toggle, .lo-res-rel button) {
+  background: rgba(255,255,255,0.045); border: 1px solid rgba(255,255,255,0.1); color: rgba(238,242,250,0.72); box-shadow: var(--gp-hi);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+}
+html.theme-glass :is(.league-tab, .champ-league-btn, .ps-chip, .tf-filter, .popup-league-btn):hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); color: #fff; }
+html.theme-glass :is(.league-tab.active, .champ-league-btn.active, .ps-chip.on, .tf-filter.active, .popup-league-btn.active) {
+  background: linear-gradient(180deg, rgba(88,166,255,0.36), rgba(88,166,255,0.16)); border-color: rgba(150,200,255,0.55); color: #fff; font-weight: 650;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.28), 0 8px 22px -10px rgba(88,166,255,0.75);
+}
+/* 세그먼트(보기 전환·시즌·결과 창 탭) */
+html.theme-glass :is(.st-seg, .md-tabs) { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09); box-shadow: inset 0 1px 2px rgba(0,0,0,0.25); }
+html.theme-glass :is(.st-seg button.active, .md-tabs button.active, .ts-seg.active) {
+  background: linear-gradient(180deg, rgba(255,255,255,0.16), rgba(255,255,255,0.07)); color: #fff;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.22), 0 4px 12px -6px rgba(0,0,0,0.6);
+}
+/* 밑줄 탭: 빛나는 파란 선 */
+html.theme-glass :is(.ti-tab.active, .lg-tab.active) { border-bottom-color: transparent; background-image: linear-gradient(90deg, transparent, #6fb3ff 20%, #6fb3ff 80%, transparent); background-size: 100% 2px; background-position: bottom; background-repeat: no-repeat; }
+html.theme-glass .pc2-tabs button.on::after { background: linear-gradient(90deg, transparent, #6fb3ff 20%, #6fb3ff 80%, transparent); box-shadow: 0 0 10px rgba(88,166,255,0.6); }
+html.theme-glass .pc2-tabs { background: rgba(14,21,38,0.82); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+/* 버튼 */
+html.theme-glass :is(.predict-btn, .share-result-btn.primary, .mp-cta, #sim-btn, .ob-done) {
+  background: linear-gradient(180deg, #6eb5ff 0%, #3d8bf2 100%); color: #fff; border: 1px solid rgba(170,210,255,0.55);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -1px 0 rgba(0,0,0,0.15), 0 12px 30px -12px rgba(88,166,255,0.8);
+  text-shadow: 0 1px 1px rgba(0,30,80,0.35);
+}
+html.theme-glass :is(.predict-btn, .share-result-btn.primary, .mp-cta, #sim-btn):hover { filter: brightness(1.07); }
+html.theme-glass :is(.share-result-btn:not(.primary), .sq-more, .sim-share button) {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: #dfe6f3; box-shadow: var(--gp-hi);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+}
+html.theme-glass :is(.share-result-btn:not(.primary), .sq-more, .sim-share button):hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.2); color: #fff; }
+/* 스코어 칩·카운트다운 칸 */
+html.theme-glass .score-alt-chip, html.theme-glass .bigmatch-unit { background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.025)); border: 1px solid rgba(255,255,255,0.11); box-shadow: var(--gp-hi); }
+html.theme-glass .score-alt-chip .sc { color: var(--gp-blue-tx); }
+/* 글자: 카드 제목은 조금 더 밝고 또렷하게, 흐린 글자는 같은 투명도 단계로 */
+html.theme-glass .card-title { color: rgba(238,242,250,0.78); font-weight: 600; letter-spacing: 0.2px; }
+html.theme-glass .rs-sec-t, html.theme-glass .mi-title { color: rgba(238,242,250,0.66); }
+</style>
+<style id="motion-v1">
+/* ── 움직임 규칙(2026-10-09, Emil Kowalski 기준) ──
+   들어오고 나가는 것 = 강한 ease-out, 화면 안에서 움직이는 것 = ease-in-out, 서랍 = drawer 곡선.
+   UI는 0.3초 안, 닫힘은 열림보다 빠르게, 누르면 살짝 눌림(0.97), 자주 보는 화면 전환은 짧고 작게, 키보드(⌘K)로 여는 건 바로 */
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+/* transition: all 대신 바뀌는 속성만 */
+.nav-search-btn, .league-tab, .popup-league-btn, .champ-league-btn, .sched-fav-toggle { transition: color .15s ease, background-color .15s ease, border-color .15s ease, box-shadow .15s ease, scale .14s var(--ease-out); }
+.nav-tab { transition: color .15s ease, border-color .15s ease; }
+/* 누름 반응: transform을 건드리지 않는 scale 속성이라 translate로 자리 잡은 버튼도 안 튐 */
+:is(.nav-search-btn, .league-tab, .popup-league-btn, .champ-league-btn, .sched-fav-toggle, .ps-chip, .tf-filter, .st-seg button, .md-tabs button, .ts-seg,
+    .share-result-btn, .predict-btn, .mp-cta, #sim-btn, .sq-more, .sim-share button, .score-alt-chip, .lo-res-rel button, .ob-done, .ti-tab, .lg-tab, .pc2-tabs button) { scale: 1; transition-property: color, background-color, background, border-color, box-shadow, opacity, filter, scale; transition-duration: .15s, .15s, .15s, .15s, .15s, .15s, .15s, .14s; transition-timing-function: ease, ease, ease, ease, ease, ease, ease, var(--ease-out); }
+:is(.nav-search-btn, .league-tab, .popup-league-btn, .champ-league-btn, .sched-fav-toggle, .ps-chip, .tf-filter, .st-seg button, .md-tabs button, .ts-seg,
+    .share-result-btn, .predict-btn, .mp-cta, #sim-btn, .sq-more, .sim-share button, .score-alt-chip, .lo-res-rel button, .ob-done, .ti-tab, .lg-tab, .pc2-tabs button):active:not(:disabled) { scale: .97; }
+.predict-btn:active, .share-result-btn:active, .sim-share button:active { transform: none; }   /* 예전 transform 눌림은 scale로 대체 */
+/* 화면(탭) 전환: 하루 수십 번 → 6px·0.22초로 작게, 카드마다 또 움직이던 건 뺌. 끝나면 transform이 남지 않게 backwards */
+@keyframes pageIn { from { opacity: 0; transform: translateY(6px); } }
+.page-enter { animation: pageIn .22s var(--ease-out) backwards; }
+.page-enter .card, .page-enter > div > .card { animation: none; }
+.result-section.show { animation: pageIn .3s var(--ease-out) backwards; }
+@keyframes rowIn { from { opacity: 0; transform: translateY(4px); } }
+.row-enter { animation: rowIn .24s var(--ease-out) backwards; }
+/* 창: 열림 0.26초, 닫힘 0.15초(시스템 응답은 빠르게) */
+.modal-overlay { transition: opacity .15s ease, visibility 0s linear .15s; }
+.modal-overlay.show { transition: opacity .2s ease, visibility 0s; }
+.modal { transform: scale(.96) translateY(8px); transition: transform .15s var(--ease-out), opacity .15s ease; }
+.modal-overlay.show .modal { transform: scale(1) translateY(0); transition: transform .26s var(--ease-out), opacity .2s ease; }
+.cb-overlay { transition: opacity .15s ease, visibility 0s linear .15s; }
+.cb-overlay.show { transition: opacity .22s ease, visibility 0s; }
+.cb-overlay.instant, .cb-overlay.instant * { transition: none !important; }
+/* 알림 */
+.toast { animation: toastIn .22s var(--ease-out) both; }
+.toast.hide { animation: toastOut .16s var(--ease-out) both; }
+/* 움직임 줄이기 설정: 위치 이동은 빼고 투명도만 */
+@media (prefers-reduced-motion: reduce) {
+  .page-enter, .result-section.show, .row-enter { animation: fadeIn .15s ease backwards; }
+  .modal, .modal-overlay.show .modal { transform: none; }
+  :is(.nav-search-btn, .league-tab, .predict-btn, .share-result-btn):active { scale: 1; }
+}
+</style>
 </head>
 <body>
 
@@ -3075,7 +3248,6 @@
         <button type="button" class="vs-swap" id="vs-swap" onclick="swapTeams()" aria-label="홈팀과 원정팀 바꾸기" title="홈·원정 바꾸기">
           <span class="vs-txt">VS</span>
           <span class="vs-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h14l-3.5-3.5"/><path d="M20 16H6l3.5 3.5"/></svg></span>
-          <span class="vs-cap">바꾸기</span>
         </button>
         <div class="team-box">
           <label>원정팀</label>
@@ -3129,20 +3301,20 @@
             <div class="prob-row" style="grid-template-columns:120px 1fr 45px"><span class="prob-label">무승부</span><div class="prob-bar-bg"><div class="prob-bar draw" id="bar-draw" style="width:0%"></div></div><span class="prob-value" id="val-draw"></span></div>
             <div class="prob-row" style="grid-template-columns:120px 1fr 45px"><span class="prob-label" id="prob-label-away">원정승</span><div class="prob-bar-bg"><div class="prob-bar away" id="bar-away" style="width:0%"></div></div><span class="prob-value" id="val-away"></span></div>
           </div>
-          <div style="margin-top:16px;padding-top:16px;border-top:0.5px solid #26334d">
-            <div style="font-size:12px;color:#8e9ab3;text-transform: none;letter-spacing:0.5px;margin-bottom:10px">예측 근거 <span style="font-size:12px;color:#7c88a1;text-transform:none;letter-spacing:0">(이 예측에서 크게 반영된 요인 순)</span><button type="button" class="ii" data-tip="factors" aria-label="예측 근거 설명">i</button></div>
+          <div class="rs-sec">
+            <div class="rs-sec-t">예측 근거<button type="button" class="ii" data-tip="factors" aria-label="예측 근거 설명">i</button></div>
             <div id="explanation-factors"></div>
           </div>
           <div class="stats-grid sb-grid" id="stat-boxes"></div>
-          <div style="margin-top:16px;padding-top:16px;border-top:0.5px solid #26334d">
-            <div style="font-size:12px;color:#8e9ab3;text-transform: none;letter-spacing:0.5px;margin-bottom:10px">팀 비교</div>
+          <div class="rs-sec">
+            <div class="rs-sec-t">팀 비교</div>
             <div id="radar-chart-wrap"></div>
           </div>
-          <div style="margin-top:16px;padding-top:16px;border-top:0.5px solid #26334d">
-            <div style="font-size:12px;color:#8e9ab3;text-transform: none;letter-spacing:0.5px;margin-bottom:10px">예상 스코어 <span style="font-size:12px;color:#7c88a1;text-transform:none;letter-spacing:0">(AI 추정·참고용)</span><button type="button" class="ii" data-tip="xg" aria-label="예상 스코어 설명">i</button></div>
-            <div style="text-align:center;margin-bottom:10px">
-              <div style="font-size:32px;font-weight:800;color:#58a6ff" id="score-most-likely">- : -</div>
-              <div style="font-size:12px;color:#8e9ab3;margin-top:2px" id="score-most-likely-sub"></div>
+          <div class="rs-sec">
+            <div class="rs-sec-t">예상 스코어<button type="button" class="ii" data-tip="xg" aria-label="예상 스코어 설명">i</button></div>
+            <div class="rs-score">
+              <div class="rs-score-main" id="score-most-likely">- : -</div>
+              <div class="rs-score-sub" id="score-most-likely-sub"></div>
             </div>
             <div id="score-top-list" class="prob-bars"></div>
           </div>
@@ -3685,7 +3857,7 @@ function renderLoSim(results, n) {
   const rel = [...results].sort((a, b) => b.relegation_prob - a.relegation_prob).slice(0, 3);
   el.innerHTML = `<div class="lo-sim-grid"><div><div class="lo-sub">우승</div>${champ.map(r => row(r, r.champion_prob, 'gold')).join('')}</div>
     <div><div class="lo-sub">강등 위험</div>${rel.map(r => row(r, r.relegation_prob, 'red')).join('')}</div></div>
-    <div class="lo-note">남은 경기를 AI 예측 확률로 ${n.toLocaleString()}번 돌린 결과 · 돌릴 때마다 조금씩 달라요</div>`;
+    <div class="lo-note">남은 경기를 ${n.toLocaleString()}번 시뮬레이션한 결과 <button type="button" class="ii" data-tip="mc" aria-label="시뮬레이션 설명">i</button></div>`;
 }
 function renderLoPlayers(d, af) {
   const el = document.querySelector('#lo-players .lo-body'); if (!el) return;
@@ -3988,6 +4160,8 @@ const TIPS = {
   mc: ['몬테카를로 시뮬레이션', '남은 경기를 AI 예측 확률대로 주사위 굴리듯 끝까지 치러 보는 걸 수천 번 반복해요. 우승 확률 46% = 1,000번 중 약 460번 우승했다는 뜻이고, 시즌 중 팀 전력이 오르내리는 것도 반영해요.'],
   simcols: ['표 읽는 법', '예상 승점 = 시뮬레이션 평균 최종 승점, 아래 범위 = 10번 중 8번 들어오는 구간. UCL권 = 다음 시즌 챔피언스리그 진출 순위(EPL·라리가 5위, 분데스·세리에A·리그앙 4위까지). 강등 = 하위 3팀(분데스·리그앙은 2팀).'],
   acc: ['정확도(시간순 검증)', '과거 경기로만 학습한 모델에게 학습에 안 쓴 가장 최근 경기들을 맞히게 해서 낸 적중률이에요. 승·무·패 중 하나를 맞히는 거라 무작위로 찍으면 33%, 전부 홈승으로 찍으면 약 44%예요.'],
+  bxround: ['이주의 팀 선정 기준', '그 라운드에서 45분 이상 뛴 선수 중 자리마다 평점이 가장 높은 선수를 골랐어요.'],
+  bxseason: ['시즌 베스트 11 선정 기준', '출전 시간이 리그 최다의 40% 이상인 선수 중 자리마다 평균 평점이 가장 높은 선수를 골랐어요. 21-22 시즌까지는 세부 포지션 없이 줄(수비·미드·공격)만 구분해요.'],
   baseline: ['기준선', '같은 경기들을 전부 "홈팀 승"으로 찍었을 때의 적중률이에요. 축구는 홈팀이 이기는 경우가 가장 많아서, AI가 이것보다 높아야 의미가 있어요.'],
 };
 let tipFor = null;
@@ -4613,6 +4787,8 @@ function closeTeamSearch(e) {
 document.addEventListener('keydown', (e) => {
   if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
     e.preventDefault();
+    const cbEl = document.getElementById('club-browser');
+    cbEl.classList.add('instant'); requestAnimationFrame(() => requestAnimationFrame(() => cbEl.classList.remove('instant')));
     openTeamSearch();
   } else if (e.key === 'Escape') {
     // 가장 위에 떠 있는 것 하나만 닫음(팀 정보는 경기 미리보기 위에 겹쳐 뜰 수 있음)
@@ -4987,6 +5163,14 @@ function tnPlayerRow(p, team, absent, capId) {
   return `<div class="tn-row" onclick="openPlayerCard('${escJs(team)}', ${p.id})"><img src="${p.photo || ''}" alt="" onerror="this.style.visibility='hidden'">
     <div class="tn-info"><b>${afFullName(p)}${capInline(capId != null && p.id === capId)}</b><small>${POS_KO[p.pos] || ''} · ${ga}</small></div>
     ${absent ? `<span class="tn-abs ${absent.status}">${absent.status === 'out' ? '결장' : '불투명'}</span>` : ''}${mdRating(p.rating)}</div>`;
+}
+// 팀 정보 개요 다음 경기 카드 아래: 지난 경기 결장자 "결장 3 · W. Saliba, B. White 외 1"
+function injLine(sq) {
+  const l = sq?.injuries?.players || [];
+  if (!l.length) return '';
+  const byId = new Map((sq.players || []).map(p => [p.id, p]));
+  const nm = x => { const p = byId.get(x.id); return p ? mdInitialName(afFullName(p)) : x.name; };
+  return `<div class="ti-season-inj"><span class="tn-abs out">결장 ${l.length}</span>${l.slice(0, 2).map(nm).join(', ')}${l.length > 2 ? ` 외 ${l.length - 2}` : ''}</div>`;
 }
 // 팀 소식(경기 미리보기 창·예측 결과 공용): 라인업(확정 또는 지난 경기 선발 기준 예상) + 결장·부상 + 주요 선수(결장이면 표시)
 function teamNewsHtml(pv, sqH, sqA, home, away, parts, horizontal) {
@@ -5814,6 +5998,13 @@ async function switchTiTab(tab) {
       const hasNum = squad.some(p => p.shirtNumber);   // 번호가 있는 팀이면 번호 없는 선수도 빈 칸을 둬서 이름 줄을 맞춤
       const mg = afSq?.manager || info.manager;
       let html = mg ? `<div class="ti-section-title">감독</div><div class="ti-player-row mgr-row"><div style="display:flex;align-items:center;gap:8px;min-width:0">${mgrPhoto(mg, 'mgr-ph sm')}<span class="ti-player-name">${mg.full_name || mg.name}</span></div><span class="ti-player-nation">${mgrMeta({ ...mg, start: null })}</span></div>` : '';
+      const injs = afSq?.injuries?.players || [], injById = new Map(injs.map(x => [x.id, x]));
+      if (injs.length) {
+        const dt = afSq.injuries.date;
+        html += `<div class="ti-section-title ti-inj-title">결장·부상 (${injs.length})<span>${+dt.slice(5, 7)}.${+dt.slice(8, 10)} 경기 기준</span></div>`
+          + injs.map(x => { const ap = afById[x.id];
+            return `<div class="ti-player-row tn-inj ti-inj${x.id ? ' link' : ''}"${x.id ? ` onclick="openPlayerCard('${escJs(team)}', ${x.id})"` : ''}><img src="${x.photo || ''}" alt="" onerror="this.style.visibility='hidden'"><div><b>${ap ? afFullName(ap) : x.name}</b><small>${injReason(x.reason)}</small></div><span class="tn-abs ${x.status}">${x.status === 'out' ? '결장' : '불투명'}</span></div>`; }).join('');
+      }
       Object.keys(POSITION_LABEL).forEach(pos => {
         const players = groups[pos];
         if (!players || !players.length) return;
@@ -5824,7 +6015,7 @@ async function switchTiTab(tab) {
             ${p.photo ? `<img alt="" src="${p.photo}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;background:#18233a" onerror="this.style.display='none'">` : ''}
             <span class="ti-player-name" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${hasNum ? `<i class="pl-num">${p.shirtNumber || ''}</i>` : ''}${p.name}${capInline(pid && afSq?.captain === pid)}</span>
           </div>
-          <span class="ti-player-nation">${dp ? `<em class="ti-dpos">${DPOS_KO[dp]}</em>` : ''}${fl ? `<img src="${fl}" alt="">` : ''}${natKo(nat) || ''}</span>
+          <span class="ti-player-nation">${pid && injById.has(pid) ? `<span class="tn-abs ${injById.get(pid).status}">${injById.get(pid).status === 'out' ? '결장' : '불투명'}</span>` : ''}${dp ? `<em class="ti-dpos">${DPOS_KO[dp]}</em>` : ''}${fl ? `<img src="${fl}" alt="">` : ''}${natKo(nat) || ''}</span>
         </div>`; }).join('');
       });
       panel.innerHTML = html || '<div class="ti-empty">스쿼드 정보가 없어요.</div>';
@@ -6052,7 +6243,7 @@ async function fillTiSeason(team, code) {
   });
 
   safe('next', async () => {
-    const all = await fetchWindowMatches();
+    const [all, sq] = await Promise.all([fetchWindowMatches(), fetchAfSquad(team).catch(() => null)]);
     const next = all.filter(m => (m.home_team === team || m.away_team === team) && m.status !== 'FINISHED' && new Date(m.date) > Date.now())
       .sort((a, b) => new Date(a.date) - new Date(b.date))[0];
     if (!next) return '';
@@ -6064,6 +6255,7 @@ async function fillTiSeason(team, code) {
       <div class="ti-fact-label">다음 경기 · ${li.name || ''}</div>
       <div class="ti-season-next"><span class="ti-ha ${home ? 'home' : 'away'}">${home ? '홈' : '원정'}</span><img src="${logos[opp] || ''}" alt="" onerror="this.style.display='none'"><span>vs ${shortTeamName(opp)}</span></div>
       <div class="ti-season-sub">${d.getMonth() + 1}.${d.getDate()} (${wd}) ${koClock(d)} ${koRel(next.date)} · 예측 보기 ›</div>
+      ${injLine(sq)}
     </div>`;
   });
 
@@ -6787,7 +6979,7 @@ function renderChampionResults(data) {
     void content.offsetHeight;
     rows.forEach(r => {
       if (!r.style.transform) return;
-      r.style.transition = 'transform .7s cubic-bezier(.2,.8,.2,1)';
+      r.style.transition = 'transform .7s var(--ease-out)';
       r.style.transform = '';
       r.addEventListener('transitionend', () => { r.style.zIndex = ''; r.style.transition = ''; }, { once: true });
     });
@@ -6962,7 +7154,7 @@ async function loadLoXI(code, season, round) {
       <button type="button" aria-label="다음 라운드" ${d.mode === 'season' || i >= rounds.length - 1 ? 'disabled' : ''} onclick="loadLoXI('${code}','${season}',${rounds[i + 1]})">›</button></span>`;
   } else h.textContent = '시즌 베스트 11';
   el.innerHTML = xiPitchHtml(d.xi, { orient: xiOrient(el), compact: el.clientWidth < 600, teamLogo: true, season: d.season, dec2: d.mode === 'season' }) +
-    `<div class="bx-note">${d.xi.formation} · 평균 평점 ${d.xi.avg.toFixed(2)} · ${d.mode === 'round' ? `${d.round}${code === 'CL' ? '차전' : '라운드'} ${d.matches}경기에서 45분 이상 뛴 선수 중 자리별 평점 순` : `출전 시간이 리그 최다의 40% 이상인 선수 중 자리별 평균 평점 순${d.season < 2022 ? ' · 21-22 시즌까지는 세부 포지션 없이 줄만 구분' : ''}`}</div>`;
+    `<div class="bx-note">${d.xi.formation} · 평균 평점 ${d.xi.avg.toFixed(2)} <button type="button" class="ii" data-tip="${d.mode === 'round' ? 'bxround' : 'bxseason'}" aria-label="선정 기준">i</button></div>`;
 }
 
 // 선수 한 줄(1위는 큰 카드). 사진이 없으면 등번호 배지(없으면 실루엣)
@@ -7346,7 +7538,7 @@ function renderStandings(data, leagueCode, keepSort) {
     const fav = favSet.has(team.team);
     const mv = mvMap && sort === 'rank' ? mvMap[team.team] : null;
     const mvHtml = mv == null ? '' : mv > 0 ? `<i class="st-mv up" title="지난 라운드보다 ${mv}계단 상승">▲<b>${mv}</b></i>` : mv < 0 ? `<i class="st-mv down" title="지난 라운드보다 ${-mv}계단 하락">▼<b>${-mv}</b></i>` : '<i class="st-mv same" title="지난 라운드와 같음">–</i>';
-    html += `<tr class="st-row ${zc} ${champ ? 'champ' : ''}${fav ? ' is-fav' : ''} row-enter" style="animation-delay:${Math.min(i * 35, 600)}ms" onclick="openTeamInfo('${escJs(team.team)}')">
+    html += `<tr class="st-row ${zc} ${champ ? 'champ' : ''}${fav ? ' is-fav' : ''} row-enter" style="animation-delay:${Math.min(i * 20, 200)}ms" onclick="openTeamInfo('${escJs(team.team)}')">
       <td><span class="st-rank-cell"><span class="st-rank">${num}</span>${mvHtml}</span></td>
       <td><div class="team-cell"><img alt="" src="${team.logo}" width="24" height="24" style="object-fit:contain" onerror="this.style.visibility='hidden'"><div class="tc-nm"><span>${teamNameHtml(team.team)}</span>${team.form && team.form.length ? `<i class="st-mini-form" title="최근 ${team.form.length}경기: ${team.form.map(f => ({ W: '승', D: '무', L: '패' })[f] || f).join(' ')}">${team.form.map(f => `<b class="${f}"></b>`).join('')}</i>` : ''}</div>${fav ? '<span class="fav-star" title="내 팀">★</span>' : ''}${champ ? `<span class="st-crown" title="우승">${TROPHY_ICON}</span>` : ''}</div></td>
       <td class="center">${team.played}</td><td class="center">${team.wins}</td><td class="center">${team.draws}</td><td class="center">${team.losses}</td>
@@ -7468,7 +7660,7 @@ async function loadTrackStrip() {
         <div class="trs-dots" aria-label="최근 10경기 적중 여부">${(d.last10 || []).map(c => `<i class="${c ? 'hit' : 'miss'}"></i>`).join('')}</div>${chev}`;
     } else if (up.count) {
       el.innerHTML = `${icon}<div class="trs-main"><div class="trs-t">AI 트랙레코드 <span class="trs-chip soon">첫 검증 ${trDate(up.first_date)}</span></div>
-        <div class="trs-s">킥오프 전 예측 <b>${sm.total_scheduled}건</b> 사전 기록 완료 · 경기 종료 후 자동 채점</div></div>${chev}`;
+        <div class="trs-s">킥오프 전에 기록한 예측 <b>${sm.total_scheduled}건</b>, 경기가 끝나면 자동 채점</div></div>${chev}`;
     } else { el.style.display = 'none'; return; }
     el.style.display = '';
   } catch (e) { el.style.display = 'none'; }
@@ -7629,11 +7821,7 @@ function renderExplanationFactors(data) {
   const factors = data.explanation;
   if (!factors || !factors.length) { wrap.innerHTML = ''; return; }
   // 1% 미만(모델이 거의 안 쓰는 요인 — 예: 상대전적은 학습에서 계수가 0에 가까움)은 "0%" + 빈 막대가 고장처럼 보여서 글로 표시
-  wrap.innerHTML = factors.map(f => f.influence_pct < 1 ? `
-    <div class="prob-row" style="grid-template-columns:88px 1fr;opacity:.6" title="이 경기 예측에 거의 반영되지 않은 요인">
-      <span class="prob-label">${f.label}</span>
-      <span style="font-size:12px;color:#7c88a1">이번 예측엔 영향이 거의 없어요</span>
-    </div>` : `
+  wrap.innerHTML = factors.filter(f => f.influence_pct >= 1).map(f => `
     <div class="prob-row" style="grid-template-columns:88px 1fr 42px">
       <span class="prob-label">${f.label}</span>
       <div class="prob-bar-bg"><div class="prob-bar factor-support" style="width:${f.influence_pct}%"></div></div>
@@ -7844,7 +8032,6 @@ function renderMatchInsights(ins) {
       ${miCompareRow('3골 이상 경기', ht.over_2_5, at.over_2_5, ht.n, v => cnt(v, ht.n), null)}
       ${miCompareRow('양 팀 득점', ht.btts, at.btts, ht.n, v => cnt(v, ht.n), null)}
       ${miCompareRow('무실점', ht.clean_sheets, at.clean_sheets, ht.n, v => cnt(v, ht.n), 'high')}
-      ${caption ? `<div class="mi-caption">${caption}</div>` : ''}
     </div>`;
   }
 
@@ -7854,7 +8041,6 @@ function renderMatchInsights(ins) {
     html += `<div class="mi-section">${miSectionHead('파워 레이팅 추이<button type="button" class="ii" data-tip="elo" aria-label="파워 레이팅 설명">i</button>', `최근 ${Math.max(hh.length, ah.length)}경기`)}
       <div class="mi-power-legend">${miPowerItem(h, 'home')}${miPowerItem(a, 'away')}</div>
       <div class="mi-chart" id="mi-power-chart"></div>
-      <div class="mi-caption">AI 예측 모델이 실제로 쓰는 팀 전력 점수(ELO)예요. 이기면 오르고 지면 내려가며, 강팀을 잡을수록 크게 올라요.</div>
     </div>`;
   }
 
@@ -8131,7 +8317,7 @@ function showResult(data,home,away){
   void document.getElementById('bar-home').offsetWidth;
   bars.forEach(([b, v, pct], i) => {
     const el = document.getElementById(b);
-    el.style.transition = RM ? 'none' : `width .9s cubic-bezier(.22,.8,.2,1) ${0.25 + i * 0.18}s`;
+    el.style.transition = RM ? 'none' : `width .9s var(--ease-out) ${0.25 + i * 0.18}s`;
     el.style.width = pct + '%';
     if (RM) document.getElementById(v).textContent = pct + '%';
     else later(() => animateCountUp(document.getElementById(v), pct, { suffix: '%', duration: 900 }), 250 + i * 180);
@@ -8152,7 +8338,7 @@ function showResult(data,home,away){
       later(() => { const t0 = performance.now(), step = now => { const k = Math.min(1, (now - t0) / 700), e = 1 - Math.pow(1 - k, 3);
         scoreEl.textContent = `${Math.round(shg * e)} : ${Math.round(sag * e)}`; if (k < 1) requestAnimationFrame(step); }; requestAnimationFrame(step); }, 900);
     }
-    document.getElementById('score-most-likely-sub').textContent=`확률 ${sp.top_scores[0].prob}% · 예상 득점 ${homeShortLabel} ${sp.expected_goals.home} - ${sp.expected_goals.away} ${awayShortLabel}`;
+    document.getElementById('score-most-likely-sub').textContent=`확률 ${sp.top_scores[0].prob}% · 기대 득점 ${Number(sp.expected_goals.home).toFixed(2)} – ${Number(sp.expected_goals.away).toFixed(2)}`;
     const altScores=sp.top_scores.slice(1,4);
     document.getElementById('score-top-list').innerHTML=altScores.length ? `
       <div class="score-alt-label">다른 가능성</div>
@@ -8911,7 +9097,7 @@ function startCoinToss() {
     const endDeg = spins * 360 + (s.firstKicker === 'me' ? 0 : 180);
     const anim = coin.animate(
       [{ transform: 'rotateY(0deg)' }, { transform: `rotateY(${endDeg}deg)` }],
-      { duration: 1400, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'forwards' }
+      { duration: 1400, easing: 'var(--ease-out)', fill: 'forwards' }
     );
     anim.onfinish = () => {
       const resultEl = document.getElementById('coin-result-text');

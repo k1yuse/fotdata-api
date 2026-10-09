@@ -1973,6 +1973,8 @@ def get_team_squad(team_name: str, season: int = None):
     return {"team": team, "league": code, "season": yr, "updated": v.get("updated"), "players": players, "seasons": seasons,
             "manager": _manager_of(team) if yr == CURRENT_SEASON_YEAR else None,
             "captain": (_team_captain_order(team, players) or [None])[0],   # 팀 주장(완장을 가장 많이 찬 선수) — 선수 목록·스쿼드의 C 표시
+            # 결장·부상(팀 정보 스쿼드·다음 경기) — 그 팀 가장 최근 경기의 결장자(team_injuries.json, 새벽 수집). 지난 시즌 화면엔 안 줌
+            "injuries": ((_load_json("team_injuries.json") or {}).get(team) if yr == CURRENT_SEASON_YEAR else None),
             "best11": _xi_caps(_xi_out(_season_xi([r for r in players if r.get("minutes")], share=0.25)), _team_captain_order(team, players))}
 
 _LP_KEYS = ("id", "team", "full_name", "name", "photo", "pos", "apps", "starts", "minutes", "goals", "assists", "rating", "rated", "shots", "shots_on",
