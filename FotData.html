@@ -990,6 +990,8 @@
     /* "다른 경기도 예측해보기": 왼쪽 열이 오른쪽보다 짧은 만큼 정확히 채우는 카드(fitMoreCard) —
        높이를 맞추면 양쪽 맨 아래 "최근 경기" 카드가 위·아래 모두 나란히 정렬됨 */
     .pg-more { display: none; flex-direction: column; overflow: hidden; }
+    .h2h-rest { max-height: 420px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.18) transparent; border-top: 0.5px solid var(--border); border-bottom: 0.5px solid var(--border); }
+    @media (max-width: 768px) { .h2h-rest { max-height: 50vh; } }
     .pg-inj { display: none; } .pg-inj.on { display: block; } .pg-inj .mp-sec:first-child { margin-top: 0; padding-top: 0; border-top: 0; } .pg-inj .mp-sec-t { font-size: 13px; font-weight: 400; letter-spacing: 0.5px; margin-bottom: 14px; align-items: baseline; } .pg-inj .mp-sec-t .mp-sec-n { font-size: 12px; letter-spacing: 0; }
     .pg-more.on { display: flex; }
     .more-list { display: flex; flex-direction: column; }
@@ -8130,7 +8132,7 @@ function fitMoreCard() {
     card.classList.add('on');
     card.style.height = (gapAbs - GAP) + 'px';
     list.innerHTML = moreCandidates.map(moreRowHtml).join('');
-    const overflow = () => card.scrollHeight > card.clientHeight;
+    const overflow = () => card.scrollHeight > card.clientHeight + 2;   // 유리 카드의 빛 테두리(::before, inset -1px)가 1px 넘쳐 늘 넘친다고 잘못 판단하던 것(2026-10-10)
     while (list.children.length > 1 && overflow()) list.lastElementChild.remove();
     if (overflow()) card.classList.add('compact');   // 한 줄도 안 들어가면 "전체 일정" 링크를 빼고 재시도
     if (!overflow()) return;
@@ -8149,6 +8151,15 @@ function fitMoreCard() {
 }
 let moreFitTimer = null;
 window.addEventListener('resize', () => { clearTimeout(moreFitTimer); moreFitTimer = setTimeout(fitMoreCard, 180); });
+// 두 열 안 내용이 뒤늦게 바뀌면(맞대결·경기 분석·라인업·결장 도착, 맞대결 펼치기) 다시 맞춤(2026-10-10 — 예전엔 처음 몇 번만 맞춰서
+// 늦게 온 내용이나 "더 보기"로 한쪽 열만 길어진 채 빈칸이 남았음). fitMoreCard가 직접 바꾸는 카드(예측 결과·맞대결 카드 자체, 다른 경기 카드)는
+// 지켜보지 않고 그 안의 내용만 지켜봐서 되먹임이 없음
+(function () {
+  if (!window.ResizeObserver) return;
+  const ro = new ResizeObserver(() => { clearTimeout(moreFitTimer); moreFitTimer = setTimeout(fitMoreCard, 80); });
+  const watch = () => document.querySelectorAll('.pg-result > *, .pg-h2h > *, .pg-inj, .pg-home-form, .pg-away-form').forEach(el => ro.observe(el));
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', watch); else watch();
+})();
 
 // ── 유리 카드 빛 반사: 마우스가 올라간 카드에만 커서 좌표를 넘김(화면 갱신당 1번) ──
 (function () {
@@ -8206,8 +8217,14 @@ function renderH2H(h2h) {
   const sub=document.getElementById('h2h-sub');
   if(sub) sub.textContent=h2h.total?`${String(h2h.since||'').slice(0,4)}년부터 리그·챔스 ${h2h.total}경기`:'';
   document.getElementById('h2h-matches').innerHTML=first.length
-    ? first.map(row).join('')+(rest.length?`<div hidden>${rest.map(row).join('')}</div><button type="button" class="sq-more" onclick="this.previousElementSibling.hidden=false;this.remove();clearTimeout(moreFitTimer);moreFitTimer=setTimeout(fitMoreCard,60)">이전 맞대결 ${rest.length}경기 더 보기</button>`:'')
+    ? first.map(row).join('')+(rest.length?`<div class="h2h-rest" hidden>${rest.map(row).join('')}</div><button type="button" class="sq-more" data-n="${rest.length}" onclick="toggleH2hRest(this)">이전 맞대결 ${rest.length}경기 더 보기</button>`:'')
     : '<div style="color:#8e9ab3;font-size:13px;padding:8px 0">2010-11 시즌 이후 리그·챔스 맞대결 기록이 없어요</div>';
+}
+// 이전 맞대결 펼치기/접기 — 펼친 목록은 높이를 정해 그 안에서 스크롤(2026-10-10: 23경기가 통째로 붙어 오른쪽 열만 800px 넘게 늘고 화면이 그만큼 밀렸음)
+function toggleH2hRest(btn){
+  const box=btn.previousElementSibling, open=box.hidden;
+  box.hidden=!open; if(open) box.scrollTop=0;
+  btn.textContent=open?'접기':`이전 맞대결 ${btn.dataset.n}경기 더 보기`;
 }
 function renderForm(fd,cid,tid){
   document.getElementById(tid).textContent=shortName(fd.team);   // "MANCHESTER CITY FC 최근 경기"처럼 대문자 전체 이름이던 것
