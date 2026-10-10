@@ -3128,6 +3128,12 @@
         "position": "Offence",
         "nationality": "Spain",
         "shirtNumber": null
+      },
+      {
+        "name": "Christian Imga",
+        "position": null,
+        "nationality": "Spain",
+        "shirtNumber": null
       }
     ]
   },
@@ -11516,6 +11522,12 @@
       {
         "name": "Simone Lontani",
         "position": "Offence",
+        "nationality": "Italy",
+        "shirtNumber": null
+      },
+      {
+        "name": "Djibril Diallo",
+        "position": null,
         "nationality": "Italy",
         "shirtNumber": null
       }

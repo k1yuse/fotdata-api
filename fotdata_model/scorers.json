@@ -2,8 +2,21 @@
  "PL": {
   "season": "2026",
   "matchday": 6,
-  "updated": "2026-10-09",
+  "updated": "2026-10-10",
   "scorers": [
+   {
+    "id": 103125,
+    "name": "João Pedro",
+    "nationality": "Brazil",
+    "position": "Offence",
+    "shirt": null,
+    "team": "Chelsea FC",
+    "team_logo": "https://crests.football-data.org/61.png",
+    "played": 5,
+    "goals": 5,
+    "assists": 3,
+    "penalties": 0
+   },
    {
     "id": 38101,
     "name": "Erling Haaland",
@@ -15,6 +28,19 @@
     "played": 5,
     "goals": 5,
     "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 82140,
+    "name": "Morgan Rogers",
+    "nationality": "England",
+    "position": "Midfield",
+    "shirt": null,
+    "team": "Chelsea FC",
+    "team_logo": "https://crests.football-data.org/61.png",
+    "played": 6,
+    "goals": 4,
+    "assists": 1,
     "penalties": 0
    },
    {
@@ -38,7 +64,7 @@
     "shirt": null,
     "team": "Arsenal FC",
     "team_logo": "https://crests.football-data.org/57.png",
-    "played": 5,
+    "played": 6,
     "goals": 3,
     "assists": 0,
     "penalties": 1
@@ -51,35 +77,9 @@
     "shirt": null,
     "team": "AFC Bournemouth",
     "team_logo": "https://crests.football-data.org/bournemouth.png",
-    "played": 5,
+    "played": 6,
     "goals": 3,
     "assists": 0,
-    "penalties": 0
-   },
-   {
-    "id": 103125,
-    "name": "João Pedro",
-    "nationality": "Brazil",
-    "position": "Offence",
-    "shirt": null,
-    "team": "Chelsea FC",
-    "team_logo": "https://crests.football-data.org/61.png",
-    "played": 4,
-    "goals": 3,
-    "assists": 3,
-    "penalties": 0
-   },
-   {
-    "id": 82140,
-    "name": "Morgan Rogers",
-    "nationality": "England",
-    "position": "Midfield",
-    "shirt": null,
-    "team": "Chelsea FC",
-    "team_logo": "https://crests.football-data.org/61.png",
-    "played": 5,
-    "goals": 3,
-    "assists": 1,
     "penalties": 0
    },
    {
@@ -103,9 +103,9 @@
     "shirt": null,
     "team": "Brighton & Hove Albion FC",
     "team_logo": "https://crests.football-data.org/397.png",
-    "played": 5,
+    "played": 6,
     "goals": 3,
-    "assists": 3,
+    "assists": 4,
     "penalties": 1
    },
    {
@@ -116,7 +116,7 @@
     "shirt": 16,
     "team": "Brentford FC",
     "team_logo": "https://crests.football-data.org/402.png",
-    "played": 5,
+    "played": 6,
     "goals": 3,
     "assists": 0,
     "penalties": 0
@@ -129,10 +129,23 @@
     "shirt": null,
     "team": "Manchester United FC",
     "team_logo": "https://crests.football-data.org/66.png",
-    "played": 5,
+    "played": 6,
     "goals": 3,
     "assists": 1,
     "penalties": 1
+   },
+   {
+    "id": 8626,
+    "name": "Bryan Mbeumo",
+    "nationality": "Cameroon",
+    "position": "Offence",
+    "shirt": null,
+    "team": "Manchester United FC",
+    "team_logo": "https://crests.football-data.org/66.png",
+    "played": 6,
+    "goals": 3,
+    "assists": 0,
+    "penalties": 0
    },
    {
     "id": 97535,
@@ -155,7 +168,7 @@
     "shirt": null,
     "team": "Arsenal FC",
     "team_logo": "https://crests.football-data.org/57.png",
-    "played": 5,
+    "played": 6,
     "goals": 2,
     "assists": 0,
     "penalties": 0
@@ -168,7 +181,7 @@
     "shirt": null,
     "team": "Arsenal FC",
     "team_logo": "https://crests.football-data.org/57.png",
-    "played": 5,
+    "played": 6,
     "goals": 2,
     "assists": 0,
     "penalties": 0
@@ -181,7 +194,7 @@
     "shirt": null,
     "team": "Ipswich Town FC",
     "team_logo": "https://crests.football-data.org/349.png",
-    "played": 5,
+    "played": 6,
     "goals": 2,
     "assists": 1,
     "penalties": 0
@@ -207,9 +220,22 @@
     "shirt": null,
     "team": "Brentford FC",
     "team_logo": "https://crests.football-data.org/402.png",
-    "played": 5,
+    "played": 6,
     "goals": 2,
     "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 142075,
+    "name": "Maxim De Cuyper",
+    "nationality": "Belgium",
+    "position": "Defence",
+    "shirt": 55,
+    "team": "Brighton & Hove Albion FC",
+    "team_logo": "https://crests.football-data.org/397.png",
+    "played": 6,
+    "goals": 2,
+    "assists": 2,
     "penalties": 0
    },
    {
@@ -259,7 +285,7 @@
     "shirt": null,
     "team": "Fulham FC",
     "team_logo": "https://crests.football-data.org/63.png",
-    "played": 5,
+    "played": 6,
     "goals": 2,
     "assists": 0,
     "penalties": 0
@@ -272,9 +298,9 @@
     "shirt": null,
     "team": "Chelsea FC",
     "team_logo": "https://crests.football-data.org/61.png",
-    "played": 5,
+    "played": 6,
     "goals": 2,
-    "assists": 2,
+    "assists": 3,
     "penalties": 0
    },
    {
@@ -285,7 +311,7 @@
     "shirt": null,
     "team": "Brighton & Hove Albion FC",
     "team_logo": "https://crests.football-data.org/397.png",
-    "played": 5,
+    "played": 6,
     "goals": 2,
     "assists": 0,
     "penalties": 0
@@ -298,7 +324,7 @@
     "shirt": null,
     "team": "Leeds United FC",
     "team_logo": "https://crests.football-data.org/341.png",
-    "played": 5,
+    "played": 6,
     "goals": 2,
     "assists": 1,
     "penalties": 0
@@ -311,22 +337,9 @@
     "shirt": null,
     "team": "Ipswich Town FC",
     "team_logo": "https://crests.football-data.org/349.png",
-    "played": 5,
+    "played": 6,
     "goals": 2,
     "assists": 1,
-    "penalties": 0
-   },
-   {
-    "id": 8626,
-    "name": "Bryan Mbeumo",
-    "nationality": "Cameroon",
-    "position": "Offence",
-    "shirt": null,
-    "team": "Manchester United FC",
-    "team_logo": "https://crests.football-data.org/66.png",
-    "played": 5,
-    "goals": 2,
-    "assists": 0,
     "penalties": 0
    },
    {
@@ -337,7 +350,7 @@
     "shirt": null,
     "team": "Leeds United FC",
     "team_logo": "https://crests.football-data.org/341.png",
-    "played": 5,
+    "played": 6,
     "goals": 2,
     "assists": 0,
     "penalties": 0
@@ -369,6 +382,19 @@
     "penalties": 0
    },
    {
+    "id": 1684,
+    "name": "Bruno Guimarães",
+    "nationality": "Brazil",
+    "position": "Midfield",
+    "shirt": 39,
+    "team": "Arsenal FC",
+    "team_logo": "https://crests.football-data.org/57.png",
+    "played": 5,
+    "goals": 2,
+    "assists": 0,
+    "penalties": 0
+   },
+   {
     "id": 264300,
     "name": "Charalampos Kostoulas",
     "nationality": "Greece",
@@ -376,9 +402,22 @@
     "shirt": null,
     "team": "Brighton & Hove Albion FC",
     "team_logo": "https://crests.football-data.org/397.png",
-    "played": 5,
+    "played": 6,
     "goals": 2,
     "assists": 1,
+    "penalties": 0
+   },
+   {
+    "id": 152515,
+    "name": "Nicolas Jackson",
+    "nationality": "Senegal",
+    "position": "Offence",
+    "shirt": null,
+    "team": "Aston Villa FC",
+    "team_logo": "https://crests.football-data.org/58.png",
+    "played": 5,
+    "goals": 2,
+    "assists": 0,
     "penalties": 0
    },
    {
@@ -392,6 +431,19 @@
     "played": 5,
     "goals": 2,
     "assists": 3,
+    "penalties": 0
+   },
+   {
+    "id": 3320,
+    "name": "Jordan Henderson",
+    "nationality": "England",
+    "position": "Midfield",
+    "shirt": null,
+    "team": "Chelsea FC",
+    "team_logo": "https://crests.football-data.org/61.png",
+    "played": 2,
+    "goals": 2,
+    "assists": 1,
     "penalties": 0
    },
    {
@@ -428,7 +480,7 @@
     "shirt": null,
     "team": "Sunderland AFC",
     "team_logo": "https://crests.football-data.org/71.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -441,9 +493,9 @@
     "shirt": null,
     "team": "Ipswich Town FC",
     "team_logo": "https://crests.football-data.org/349.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
-    "assists": 0,
+    "assists": 1,
     "penalties": 0
    },
    {
@@ -454,7 +506,7 @@
     "shirt": null,
     "team": "Leeds United FC",
     "team_logo": "https://crests.football-data.org/341.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -480,7 +532,7 @@
     "shirt": null,
     "team": "Brentford FC",
     "team_logo": "https://crests.football-data.org/402.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -493,7 +545,7 @@
     "shirt": null,
     "team": "Brentford FC",
     "team_logo": "https://crests.football-data.org/402.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -519,19 +571,6 @@
     "shirt": null,
     "team": "Manchester City FC",
     "team_logo": "https://crests.football-data.org/65.png",
-    "played": 5,
-    "goals": 1,
-    "assists": 2,
-    "penalties": 0
-   },
-   {
-    "id": 142075,
-    "name": "Maxim De Cuyper",
-    "nationality": "Belgium",
-    "position": "Defence",
-    "shirt": 55,
-    "team": "Brighton & Hove Albion FC",
-    "team_logo": "https://crests.football-data.org/397.png",
     "played": 5,
     "goals": 1,
     "assists": 2,
@@ -571,7 +610,7 @@
     "shirt": null,
     "team": "Fulham FC",
     "team_logo": "https://crests.football-data.org/63.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -675,7 +714,7 @@
     "shirt": null,
     "team": "Sunderland AFC",
     "team_logo": "https://crests.football-data.org/71.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -688,7 +727,7 @@
     "shirt": null,
     "team": "Chelsea FC",
     "team_logo": "https://crests.football-data.org/61.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -701,9 +740,9 @@
     "shirt": null,
     "team": "Chelsea FC",
     "team_logo": "https://crests.football-data.org/61.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
-    "assists": 0,
+    "assists": 1,
     "penalties": 0
    },
    {
@@ -714,7 +753,7 @@
     "shirt": null,
     "team": "Ipswich Town FC",
     "team_logo": "https://crests.football-data.org/349.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -753,7 +792,7 @@
     "shirt": null,
     "team": "Brighton & Hove Albion FC",
     "team_logo": "https://crests.football-data.org/397.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -766,7 +805,7 @@
     "shirt": 10,
     "team": "Sunderland AFC",
     "team_logo": "https://crests.football-data.org/71.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 1,
     "penalties": 1
@@ -779,7 +818,7 @@
     "shirt": null,
     "team": "Fulham FC",
     "team_logo": "https://crests.football-data.org/63.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -870,7 +909,7 @@
     "shirt": null,
     "team": "Ipswich Town FC",
     "team_logo": "https://crests.football-data.org/349.png",
-    "played": 3,
+    "played": 4,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -896,7 +935,7 @@
     "shirt": null,
     "team": "Aston Villa FC",
     "team_logo": "https://crests.football-data.org/58.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -928,19 +967,6 @@
     "penalties": 0
    },
    {
-    "id": 1684,
-    "name": "Bruno Guimarães",
-    "nationality": "Brazil",
-    "position": "Midfield",
-    "shirt": 39,
-    "team": "Arsenal FC",
-    "team_logo": "https://crests.football-data.org/57.png",
-    "played": 4,
-    "goals": 1,
-    "assists": 0,
-    "penalties": 0
-   },
-   {
     "id": 8259,
     "name": "Lewis Dunk",
     "nationality": "England",
@@ -948,7 +974,7 @@
     "shirt": null,
     "team": "Brighton & Hove Albion FC",
     "team_logo": "https://crests.football-data.org/397.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -961,7 +987,7 @@
     "shirt": 26,
     "team": "Brighton & Hove Albion FC",
     "team_logo": "https://crests.football-data.org/397.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -974,7 +1000,7 @@
     "shirt": null,
     "team": "Leeds United FC",
     "team_logo": "https://crests.football-data.org/341.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -1000,9 +1026,9 @@
     "shirt": null,
     "team": "Brentford FC",
     "team_logo": "https://crests.football-data.org/402.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
-    "assists": 0,
+    "assists": 1,
     "penalties": 0
    },
    {
@@ -1013,7 +1039,7 @@
     "shirt": null,
     "team": "Brentford FC",
     "team_logo": "https://crests.football-data.org/402.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -1026,7 +1052,7 @@
     "shirt": null,
     "team": "Brentford FC",
     "team_logo": "https://crests.football-data.org/402.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -1039,22 +1065,9 @@
     "shirt": null,
     "team": "Aston Villa FC",
     "team_logo": "https://crests.football-data.org/58.png",
-    "played": 2,
+    "played": 3,
     "goals": 1,
-    "assists": 1,
-    "penalties": 0
-   },
-   {
-    "id": 152515,
-    "name": "Nicolas Jackson",
-    "nationality": "Senegal",
-    "position": "Offence",
-    "shirt": null,
-    "team": "Aston Villa FC",
-    "team_logo": "https://crests.football-data.org/58.png",
-    "played": 4,
-    "goals": 1,
-    "assists": 0,
+    "assists": 2,
     "penalties": 0
    },
    {
@@ -1065,7 +1078,7 @@
     "shirt": null,
     "team": "Aston Villa FC",
     "team_logo": "https://crests.football-data.org/58.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -1078,7 +1091,7 @@
     "shirt": null,
     "team": "Tottenham Hotspur FC",
     "team_logo": "https://crests.football-data.org/73.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -1091,7 +1104,7 @@
     "shirt": null,
     "team": "Tottenham Hotspur FC",
     "team_logo": "https://crests.football-data.org/73.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -1104,7 +1117,7 @@
     "shirt": null,
     "team": "Brighton & Hove Albion FC",
     "team_logo": "https://crests.football-data.org/397.png",
-    "played": 3,
+    "played": 4,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -1169,9 +1182,126 @@
     "shirt": null,
     "team": "Manchester United FC",
     "team_logo": "https://crests.football-data.org/66.png",
+    "played": 6,
+    "goals": 1,
+    "assists": 2,
+    "penalties": 0
+   },
+   {
+    "id": 5613,
+    "name": "James Justin",
+    "nationality": "England",
+    "position": "Defence",
+    "shirt": null,
+    "team": "Leeds United FC",
+    "team_logo": "https://crests.football-data.org/341.png",
+    "played": 6,
+    "goals": 1,
+    "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 133512,
+    "name": "Riccardo Calafiori",
+    "nationality": "Italy",
+    "position": "Defence",
+    "shirt": null,
+    "team": "Arsenal FC",
+    "team_logo": "https://crests.football-data.org/57.png",
+    "played": 6,
+    "goals": 1,
+    "assists": 2,
+    "penalties": 0
+   },
+   {
+    "id": 147891,
+    "name": "Jaouen Hadjam",
+    "nationality": "Algeria",
+    "position": "Defence",
+    "shirt": 3,
+    "team": "Brighton & Hove Albion FC",
+    "team_logo": "https://crests.football-data.org/397.png",
     "played": 5,
     "goals": 1,
+    "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 131260,
+    "name": "Evanilson",
+    "nationality": "Brazil",
+    "position": "Offence",
+    "shirt": null,
+    "team": "AFC Bournemouth",
+    "team_logo": "https://crests.football-data.org/bournemouth.png",
+    "played": 6,
+    "goals": 1,
+    "assists": 3,
+    "penalties": 0
+   },
+   {
+    "id": 3959,
+    "name": "Ryan Sessegnon",
+    "nationality": "England",
+    "position": "Defence",
+    "shirt": null,
+    "team": "Fulham FC",
+    "team_logo": "https://crests.football-data.org/63.png",
+    "played": 5,
+    "goals": 1,
+    "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 270889,
+    "name": "Abdoul Ouattara",
+    "nationality": "Ivory Coast",
+    "position": "Defence",
+    "shirt": null,
+    "team": "Ipswich Town FC",
+    "team_logo": "https://crests.football-data.org/349.png",
+    "played": 6,
+    "goals": 1,
+    "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 25650,
+    "name": "Dara O'Shea",
+    "nationality": "Ireland",
+    "position": "Defence",
+    "shirt": null,
+    "team": "Ipswich Town FC",
+    "team_logo": "https://crests.football-data.org/349.png",
+    "played": 6,
+    "goals": 1,
+    "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 204421,
+    "name": "Yegor Yarmolyuk",
+    "nationality": "Ukraine",
+    "position": "Midfield",
+    "shirt": null,
+    "team": "Brentford FC",
+    "team_logo": "https://crests.football-data.org/402.png",
+    "played": 6,
+    "goals": 1,
     "assists": 1,
+    "penalties": 0
+   },
+   {
+    "id": 34646,
+    "name": "John McGinn",
+    "nationality": "Scotland",
+    "position": "Midfield",
+    "shirt": null,
+    "team": "Aston Villa FC",
+    "team_logo": "https://crests.football-data.org/58.png",
+    "played": 6,
+    "goals": 1,
+    "assists": 2,
     "penalties": 0
    }
   ]
@@ -1179,7 +1309,7 @@
  "PD": {
   "season": "2026",
   "matchday": 8,
-  "updated": "2026-10-09",
+  "updated": "2026-10-10",
   "scorers": [
    {
     "id": 37428,
@@ -1202,7 +1332,7 @@
     "shirt": null,
     "team": "Rayo Vallecano de Madrid",
     "team_logo": "https://crests.football-data.org/87.png",
-    "played": 7,
+    "played": 8,
     "goals": 7,
     "assists": 1,
     "penalties": 0
@@ -1215,7 +1345,7 @@
     "shirt": null,
     "team": "Real Madrid CF",
     "team_logo": "https://crests.football-data.org/86.png",
-    "played": 7,
+    "played": 8,
     "goals": 7,
     "assists": 2,
     "penalties": 1
@@ -1228,9 +1358,9 @@
     "shirt": null,
     "team": "FC Barcelona",
     "team_logo": "https://crests.football-data.org/81.png",
-    "played": 7,
+    "played": 8,
     "goals": 7,
-    "assists": 4,
+    "assists": 5,
     "penalties": 1
    },
    {
@@ -1299,6 +1429,19 @@
     "penalties": 0
    },
    {
+    "id": 11113,
+    "name": "Lucas Boyé",
+    "nationality": "Argentina",
+    "position": "Offence",
+    "shirt": null,
+    "team": "Deportivo Alavés",
+    "team_logo": "https://crests.football-data.org/263.png",
+    "played": 7,
+    "goals": 5,
+    "assists": 0,
+    "penalties": 1
+   },
+   {
     "id": 213278,
     "name": "Álex Baena",
     "nationality": "Spain",
@@ -1306,9 +1449,9 @@
     "shirt": null,
     "team": "Club Atlético de Madrid",
     "team_logo": "https://crests.football-data.org/78.png",
-    "played": 7,
+    "played": 8,
     "goals": 4,
-    "assists": 1,
+    "assists": 2,
     "penalties": 0
    },
    {
@@ -1319,22 +1462,9 @@
     "shirt": null,
     "team": "FC Barcelona",
     "team_logo": "https://crests.football-data.org/81.png",
-    "played": 7,
+    "played": 8,
     "goals": 4,
     "assists": 2,
-    "penalties": 0
-   },
-   {
-    "id": 11113,
-    "name": "Lucas Boyé",
-    "nationality": "Argentina",
-    "position": "Offence",
-    "shirt": null,
-    "team": "Deportivo Alavés",
-    "team_logo": "https://crests.football-data.org/263.png",
-    "played": 6,
-    "goals": 4,
-    "assists": 0,
     "penalties": 0
    },
    {
@@ -1345,7 +1475,7 @@
     "shirt": null,
     "team": "Deportivo Alavés",
     "team_logo": "https://crests.football-data.org/263.png",
-    "played": 7,
+    "played": 8,
     "goals": 3,
     "assists": 3,
     "penalties": 0
@@ -1358,7 +1488,7 @@
     "shirt": 22,
     "team": "Villarreal CF",
     "team_logo": "https://crests.football-data.org/94.png",
-    "played": 7,
+    "played": 8,
     "goals": 3,
     "assists": 0,
     "penalties": 1
@@ -1371,7 +1501,7 @@
     "shirt": null,
     "team": "Real Madrid CF",
     "team_logo": "https://crests.football-data.org/86.png",
-    "played": 7,
+    "played": 8,
     "goals": 3,
     "assists": 2,
     "penalties": 0
@@ -1403,6 +1533,19 @@
     "penalties": 0
    },
    {
+    "id": 16739,
+    "name": "Alejandro Grimaldo",
+    "nationality": "Spain",
+    "position": "Defence",
+    "shirt": null,
+    "team": "Club Atlético de Madrid",
+    "team_logo": "https://crests.football-data.org/78.png",
+    "played": 8,
+    "goals": 3,
+    "assists": 1,
+    "penalties": 2
+   },
+   {
     "id": 8924,
     "name": "Jonathan David",
     "nationality": "Canada",
@@ -1410,9 +1553,9 @@
     "shirt": null,
     "team": "Club Atlético de Madrid",
     "team_logo": "https://crests.football-data.org/78.png",
-    "played": 4,
+    "played": 5,
     "goals": 3,
-    "assists": 1,
+    "assists": 2,
     "penalties": 0
    },
    {
@@ -1423,7 +1566,7 @@
     "shirt": null,
     "team": "Rayo Vallecano de Madrid",
     "team_logo": "https://crests.football-data.org/87.png",
-    "played": 7,
+    "played": 8,
     "goals": 2,
     "assists": 2,
     "penalties": 0
@@ -1449,7 +1592,7 @@
     "shirt": null,
     "team": "Club Atlético de Madrid",
     "team_logo": "https://crests.football-data.org/78.png",
-    "played": 7,
+    "played": 8,
     "goals": 2,
     "assists": 1,
     "penalties": 0
@@ -1475,7 +1618,7 @@
     "shirt": null,
     "team": "Real Madrid CF",
     "team_logo": "https://crests.football-data.org/86.png",
-    "played": 7,
+    "played": 8,
     "goals": 2,
     "assists": 0,
     "penalties": 0
@@ -1488,7 +1631,7 @@
     "shirt": null,
     "team": "Villarreal CF",
     "team_logo": "https://crests.football-data.org/94.png",
-    "played": 7,
+    "played": 8,
     "goals": 2,
     "assists": 0,
     "penalties": 1
@@ -1501,7 +1644,7 @@
     "shirt": 18,
     "team": "Villarreal CF",
     "team_logo": "https://crests.football-data.org/94.png",
-    "played": 7,
+    "played": 8,
     "goals": 2,
     "assists": 1,
     "penalties": 1
@@ -1514,7 +1657,7 @@
     "shirt": null,
     "team": "Club Atlético de Madrid",
     "team_logo": "https://crests.football-data.org/78.png",
-    "played": 7,
+    "played": 8,
     "goals": 2,
     "assists": 2,
     "penalties": 0
@@ -1527,7 +1670,7 @@
     "shirt": null,
     "team": "FC Barcelona",
     "team_logo": "https://crests.football-data.org/81.png",
-    "played": 7,
+    "played": 8,
     "goals": 2,
     "assists": 2,
     "penalties": 0
@@ -1579,7 +1722,7 @@
     "shirt": null,
     "team": "Athletic Club",
     "team_logo": "https://crests.football-data.org/77.png",
-    "played": 7,
+    "played": 8,
     "goals": 2,
     "assists": 0,
     "penalties": 0
@@ -1611,19 +1754,6 @@
     "penalties": 0
    },
    {
-    "id": 16739,
-    "name": "Alejandro Grimaldo",
-    "nationality": "Spain",
-    "position": "Defence",
-    "shirt": null,
-    "team": "Club Atlético de Madrid",
-    "team_logo": "https://crests.football-data.org/78.png",
-    "played": 7,
-    "goals": 2,
-    "assists": 1,
-    "penalties": 2
-   },
-   {
     "id": 32415,
     "name": "Cucho Hernández",
     "nationality": "Colombia",
@@ -1637,6 +1767,19 @@
     "penalties": 0
    },
    {
+    "id": 3236,
+    "name": "Gabriel Jesus",
+    "nationality": "Brazil",
+    "position": "Offence",
+    "shirt": null,
+    "team": "FC Barcelona",
+    "team_logo": "https://crests.football-data.org/81.png",
+    "played": 5,
+    "goals": 2,
+    "assists": 0,
+    "penalties": 0
+   },
+   {
     "id": 150533,
     "name": "Alberto Moleiro",
     "nationality": "Spain",
@@ -1644,7 +1787,7 @@
     "shirt": null,
     "team": "Villarreal CF",
     "team_logo": "https://crests.football-data.org/94.png",
-    "played": 7,
+    "played": 8,
     "goals": 2,
     "assists": 3,
     "penalties": 0
@@ -1670,7 +1813,7 @@
     "shirt": null,
     "team": "Deportivo Alavés",
     "team_logo": "https://crests.football-data.org/263.png",
-    "played": 7,
+    "played": 8,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -1813,7 +1956,7 @@
     "shirt": null,
     "team": "Athletic Club",
     "team_logo": "https://crests.football-data.org/77.png",
-    "played": 7,
+    "played": 8,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -1839,7 +1982,7 @@
     "shirt": null,
     "team": "Club Atlético de Madrid",
     "team_logo": "https://crests.football-data.org/78.png",
-    "played": 7,
+    "played": 8,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -1878,7 +2021,7 @@
     "shirt": null,
     "team": "Real Madrid CF",
     "team_logo": "https://crests.football-data.org/86.png",
-    "played": 7,
+    "played": 8,
     "goals": 1,
     "assists": 3,
     "penalties": 0
@@ -1995,7 +2138,7 @@
     "shirt": null,
     "team": "Club Atlético de Madrid",
     "team_logo": "https://crests.football-data.org/78.png",
-    "played": 7,
+    "played": 8,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -2008,7 +2151,7 @@
     "shirt": null,
     "team": "Real Madrid CF",
     "team_logo": "https://crests.football-data.org/86.png",
-    "played": 7,
+    "played": 8,
     "goals": 1,
     "assists": 2,
     "penalties": 0
@@ -2034,7 +2177,7 @@
     "shirt": null,
     "team": "Athletic Club",
     "team_logo": "https://crests.football-data.org/77.png",
-    "played": 7,
+    "played": 8,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -2138,7 +2281,7 @@
     "shirt": null,
     "team": "FC Barcelona",
     "team_logo": "https://crests.football-data.org/81.png",
-    "played": 7,
+    "played": 8,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -2151,7 +2294,7 @@
     "shirt": null,
     "team": "Deportivo Alavés",
     "team_logo": "https://crests.football-data.org/263.png",
-    "played": 7,
+    "played": 8,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -2190,7 +2333,7 @@
     "shirt": null,
     "team": "Getafe CF",
     "team_logo": "https://crests.football-data.org/82.png",
-    "played": 7,
+    "played": 8,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -2268,7 +2411,7 @@
     "shirt": 63,
     "team": "Deportivo Alavés",
     "team_logo": "https://crests.football-data.org/263.png",
-    "played": 7,
+    "played": 8,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -2294,7 +2437,7 @@
     "shirt": null,
     "team": "Athletic Club",
     "team_logo": "https://crests.football-data.org/77.png",
-    "played": 7,
+    "played": 8,
     "goals": 1,
     "assists": 2,
     "penalties": 0
@@ -2307,7 +2450,7 @@
     "shirt": null,
     "team": "Real Madrid CF",
     "team_logo": "https://crests.football-data.org/86.png",
-    "played": 7,
+    "played": 8,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -2333,7 +2476,7 @@
     "shirt": null,
     "team": "FC Barcelona",
     "team_logo": "https://crests.football-data.org/81.png",
-    "played": 7,
+    "played": 8,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -2346,7 +2489,7 @@
     "shirt": null,
     "team": "Getafe CF",
     "team_logo": "https://crests.football-data.org/82.png",
-    "played": 6,
+    "played": 7,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -2372,7 +2515,7 @@
     "shirt": null,
     "team": "Rayo Vallecano de Madrid",
     "team_logo": "https://crests.football-data.org/87.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -2411,7 +2554,7 @@
     "shirt": null,
     "team": "Club Atlético de Madrid",
     "team_logo": "https://crests.football-data.org/78.png",
-    "played": 6,
+    "played": 7,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -2424,7 +2567,7 @@
     "shirt": null,
     "team": "FC Barcelona",
     "team_logo": "https://crests.football-data.org/81.png",
-    "played": 7,
+    "played": 8,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -2438,19 +2581,6 @@
     "team": "Real Racing Club de Santander",
     "team_logo": "https://crests.football-data.org/5335.png",
     "played": 7,
-    "goals": 1,
-    "assists": 0,
-    "penalties": 0
-   },
-   {
-    "id": 3236,
-    "name": "Gabriel Jesus",
-    "nationality": "Brazil",
-    "position": "Offence",
-    "shirt": null,
-    "team": "FC Barcelona",
-    "team_logo": "https://crests.football-data.org/81.png",
-    "played": 4,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -2486,8 +2616,21 @@
  "BL1": {
   "season": "2026",
   "matchday": 5,
-  "updated": "2026-10-09",
+  "updated": "2026-10-10",
   "scorers": [
+   {
+    "id": 1826,
+    "name": "Patrik Schick",
+    "nationality": "Czech Republic",
+    "position": "Offence",
+    "shirt": null,
+    "team": "Bayer 04 Leverkusen",
+    "team_logo": "https://crests.football-data.org/3.png",
+    "played": 5,
+    "goals": 5,
+    "assists": 1,
+    "penalties": 0
+   },
    {
     "id": 113765,
     "name": "Michael Olise",
@@ -2496,7 +2639,7 @@
     "shirt": null,
     "team": "FC Bayern München",
     "team_logo": "https://crests.football-data.org/5.png",
-    "played": 4,
+    "played": 5,
     "goals": 4,
     "assists": 1,
     "penalties": 0
@@ -2509,20 +2652,7 @@
     "shirt": null,
     "team": "Eintracht Frankfurt",
     "team_logo": "https://crests.football-data.org/19.png",
-    "played": 4,
-    "goals": 4,
-    "assists": 1,
-    "penalties": 0
-   },
-   {
-    "id": 1826,
-    "name": "Patrik Schick",
-    "nationality": "Czech Republic",
-    "position": "Offence",
-    "shirt": null,
-    "team": "Bayer 04 Leverkusen",
-    "team_logo": "https://crests.football-data.org/3.png",
-    "played": 4,
+    "played": 5,
     "goals": 4,
     "assists": 1,
     "penalties": 0
@@ -2561,9 +2691,35 @@
     "shirt": null,
     "team": "1. FSV Mainz 05",
     "team_logo": "https://crests.football-data.org/15.png",
-    "played": 4,
+    "played": 5,
     "goals": 4,
     "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 8484,
+    "name": "Christopher Nkunku",
+    "nationality": "France",
+    "position": "Offence",
+    "shirt": null,
+    "team": "RB Leipzig",
+    "team_logo": "https://crests.football-data.org/721.png",
+    "played": 5,
+    "goals": 4,
+    "assists": 1,
+    "penalties": 0
+   },
+   {
+    "id": 169295,
+    "name": "Antonio Nusa",
+    "nationality": "Norway",
+    "position": "Offence",
+    "shirt": null,
+    "team": "RB Leipzig",
+    "team_logo": "https://crests.football-data.org/721.png",
+    "played": 5,
+    "goals": 3,
+    "assists": 3,
     "penalties": 0
    },
    {
@@ -2587,7 +2743,7 @@
     "shirt": null,
     "team": "FC Augsburg",
     "team_logo": "https://crests.football-data.org/16.png",
-    "played": 4,
+    "played": 5,
     "goals": 3,
     "assists": 0,
     "penalties": 0
@@ -2600,7 +2756,7 @@
     "shirt": null,
     "team": "SV 07 Elversberg",
     "team_logo": "https://crests.football-data.org/719.png",
-    "played": 4,
+    "played": 5,
     "goals": 3,
     "assists": 0,
     "penalties": 0
@@ -2613,9 +2769,22 @@
     "shirt": null,
     "team": "Eintracht Frankfurt",
     "team_logo": "https://crests.football-data.org/19.png",
-    "played": 4,
+    "played": 5,
     "goals": 3,
     "assists": 1,
+    "penalties": 0
+   },
+   {
+    "id": 65692,
+    "name": "Robin Fellhauer",
+    "nationality": "Germany",
+    "position": "Midfield",
+    "shirt": 14,
+    "team": "FC Augsburg",
+    "team_logo": "https://crests.football-data.org/16.png",
+    "played": 5,
+    "goals": 3,
+    "assists": 0,
     "penalties": 0
    },
    {
@@ -2626,9 +2795,9 @@
     "shirt": null,
     "team": "FC Bayern München",
     "team_logo": "https://crests.football-data.org/5.png",
-    "played": 4,
+    "played": 5,
     "goals": 3,
-    "assists": 0,
+    "assists": 2,
     "penalties": 1
    },
    {
@@ -2639,7 +2808,7 @@
     "shirt": null,
     "team": "VfB Stuttgart",
     "team_logo": "https://crests.football-data.org/10.png",
-    "played": 4,
+    "played": 5,
     "goals": 2,
     "assists": 1,
     "penalties": 0
@@ -2652,22 +2821,9 @@
     "shirt": null,
     "team": "RB Leipzig",
     "team_logo": "https://crests.football-data.org/721.png",
-    "played": 4,
+    "played": 5,
     "goals": 2,
     "assists": 0,
-    "penalties": 0
-   },
-   {
-    "id": 169295,
-    "name": "Antonio Nusa",
-    "nationality": "Norway",
-    "position": "Offence",
-    "shirt": null,
-    "team": "RB Leipzig",
-    "team_logo": "https://crests.football-data.org/721.png",
-    "played": 4,
-    "goals": 2,
-    "assists": 2,
     "penalties": 0
    },
    {
@@ -2678,7 +2834,7 @@
     "shirt": null,
     "team": "1. FC Union Berlin",
     "team_logo": "https://crests.football-data.org/28.png",
-    "played": 4,
+    "played": 5,
     "goals": 2,
     "assists": 0,
     "penalties": 0
@@ -2691,7 +2847,7 @@
     "shirt": null,
     "team": "SV 07 Elversberg",
     "team_logo": "https://crests.football-data.org/719.png",
-    "played": 4,
+    "played": 5,
     "goals": 2,
     "assists": 0,
     "penalties": 0
@@ -2717,7 +2873,7 @@
     "shirt": null,
     "team": "TSG 1899 Hoffenheim",
     "team_logo": "https://crests.football-data.org/2.png",
-    "played": 4,
+    "played": 5,
     "goals": 2,
     "assists": 2,
     "penalties": 0
@@ -2746,6 +2902,19 @@
     "played": 5,
     "goals": 2,
     "assists": 2,
+    "penalties": 0
+   },
+   {
+    "id": 178772,
+    "name": "Rodrigo Ribeiro",
+    "nationality": "Portugal",
+    "position": "Offence",
+    "shirt": null,
+    "team": "FC Augsburg",
+    "team_logo": "https://crests.football-data.org/16.png",
+    "played": 5,
+    "goals": 2,
+    "assists": 0,
     "penalties": 0
    },
    {
@@ -2808,22 +2977,9 @@
     "shirt": null,
     "team": "1. FSV Mainz 05",
     "team_logo": "https://crests.football-data.org/15.png",
-    "played": 4,
+    "played": 5,
     "goals": 2,
     "assists": 3,
-    "penalties": 0
-   },
-   {
-    "id": 65692,
-    "name": "Robin Fellhauer",
-    "nationality": "Germany",
-    "position": "Midfield",
-    "shirt": 14,
-    "team": "FC Augsburg",
-    "team_logo": "https://crests.football-data.org/16.png",
-    "played": 4,
-    "goals": 2,
-    "assists": 0,
     "penalties": 0
    },
    {
@@ -2834,7 +2990,7 @@
     "shirt": 20,
     "team": "TSG 1899 Hoffenheim",
     "team_logo": "https://crests.football-data.org/2.png",
-    "played": 4,
+    "played": 5,
     "goals": 2,
     "assists": 0,
     "penalties": 0
@@ -2860,7 +3016,7 @@
     "shirt": null,
     "team": "Eintracht Frankfurt",
     "team_logo": "https://crests.football-data.org/19.png",
-    "played": 4,
+    "played": 5,
     "goals": 2,
     "assists": 0,
     "penalties": 0
@@ -2879,6 +3035,58 @@
     "penalties": 0
    },
    {
+    "id": 211796,
+    "name": "Tidiam Gomis",
+    "nationality": "France",
+    "position": "Offence",
+    "shirt": null,
+    "team": "RB Leipzig",
+    "team_logo": "https://crests.football-data.org/721.png",
+    "played": 5,
+    "goals": 2,
+    "assists": 2,
+    "penalties": 0
+   },
+   {
+    "id": 130173,
+    "name": "Ismael Saibari",
+    "nationality": "Morocco",
+    "position": "Midfield",
+    "shirt": 9,
+    "team": "FC Bayern München",
+    "team_logo": "https://crests.football-data.org/5.png",
+    "played": 5,
+    "goals": 2,
+    "assists": 3,
+    "penalties": 0
+   },
+   {
+    "id": 3466,
+    "name": "Yussuf Poulsen",
+    "nationality": "Denmark",
+    "position": "Offence",
+    "shirt": null,
+    "team": "Hamburger SV",
+    "team_logo": "https://crests.football-data.org/7.png",
+    "played": 5,
+    "goals": 2,
+    "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 8785,
+    "name": "Anthony Caci",
+    "nationality": "France",
+    "position": "Defence",
+    "shirt": 19,
+    "team": "1. FSV Mainz 05",
+    "team_logo": "https://crests.football-data.org/15.png",
+    "played": 5,
+    "goals": 2,
+    "assists": 1,
+    "penalties": 0
+   },
+   {
     "id": 9541,
     "name": "Dayot Upamecano",
     "nationality": "France",
@@ -2886,7 +3094,7 @@
     "shirt": null,
     "team": "FC Bayern München",
     "team_logo": "https://crests.football-data.org/5.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -2899,7 +3107,7 @@
     "shirt": null,
     "team": "FC Bayern München",
     "team_logo": "https://crests.football-data.org/5.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -2912,7 +3120,7 @@
     "shirt": null,
     "team": "FC Bayern München",
     "team_logo": "https://crests.football-data.org/5.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -2925,7 +3133,7 @@
     "shirt": null,
     "team": "RB Leipzig",
     "team_logo": "https://crests.football-data.org/721.png",
-    "played": 1,
+    "played": 2,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -2951,7 +3159,7 @@
     "shirt": null,
     "team": "1. FC Union Berlin",
     "team_logo": "https://crests.football-data.org/28.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -2964,7 +3172,7 @@
     "shirt": null,
     "team": "SV 07 Elversberg",
     "team_logo": "https://crests.football-data.org/719.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -2977,7 +3185,7 @@
     "shirt": null,
     "team": "SV 07 Elversberg",
     "team_logo": "https://crests.football-data.org/719.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -3003,7 +3211,7 @@
     "shirt": null,
     "team": "TSG 1899 Hoffenheim",
     "team_logo": "https://crests.football-data.org/2.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -3042,22 +3250,9 @@
     "shirt": null,
     "team": "FC Augsburg",
     "team_logo": "https://crests.football-data.org/16.png",
-    "played": 1,
+    "played": 2,
     "goals": 1,
     "assists": 1,
-    "penalties": 0
-   },
-   {
-    "id": 178772,
-    "name": "Rodrigo Ribeiro",
-    "nationality": "Portugal",
-    "position": "Offence",
-    "shirt": null,
-    "team": "FC Augsburg",
-    "team_logo": "https://crests.football-data.org/16.png",
-    "played": 4,
-    "goals": 1,
-    "assists": 0,
     "penalties": 0
    },
    {
@@ -3068,7 +3263,7 @@
     "shirt": null,
     "team": "VfB Stuttgart",
     "team_logo": "https://crests.football-data.org/10.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -3081,7 +3276,7 @@
     "shirt": null,
     "team": "VfB Stuttgart",
     "team_logo": "https://crests.football-data.org/10.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -3094,7 +3289,7 @@
     "shirt": null,
     "team": "VfB Stuttgart",
     "team_logo": "https://crests.football-data.org/10.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -3120,7 +3315,7 @@
     "shirt": null,
     "team": "TSG 1899 Hoffenheim",
     "team_logo": "https://crests.football-data.org/2.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -3133,7 +3328,7 @@
     "shirt": null,
     "team": "TSG 1899 Hoffenheim",
     "team_logo": "https://crests.football-data.org/2.png",
-    "played": 3,
+    "played": 4,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -3146,7 +3341,7 @@
     "shirt": null,
     "team": "Bayer 04 Leverkusen",
     "team_logo": "https://crests.football-data.org/3.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -3159,7 +3354,7 @@
     "shirt": 14,
     "team": "Bayer 04 Leverkusen",
     "team_logo": "https://crests.football-data.org/3.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -3172,7 +3367,7 @@
     "shirt": null,
     "team": "Bayer 04 Leverkusen",
     "team_logo": "https://crests.football-data.org/3.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -3198,7 +3393,7 @@
     "shirt": null,
     "team": "SV 07 Elversberg",
     "team_logo": "https://crests.football-data.org/719.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -3211,7 +3406,7 @@
     "shirt": null,
     "team": "1. FSV Mainz 05",
     "team_logo": "https://crests.football-data.org/15.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -3224,7 +3419,7 @@
     "shirt": null,
     "team": "1. FSV Mainz 05",
     "team_logo": "https://crests.football-data.org/15.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -3237,7 +3432,7 @@
     "shirt": null,
     "team": "FC Augsburg",
     "team_logo": "https://crests.football-data.org/16.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -3263,7 +3458,7 @@
     "shirt": null,
     "team": "FC Augsburg",
     "team_logo": "https://crests.football-data.org/16.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 3,
     "penalties": 0
@@ -3315,7 +3510,7 @@
     "shirt": null,
     "team": "VfB Stuttgart",
     "team_logo": "https://crests.football-data.org/10.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -3334,19 +3529,6 @@
     "penalties": 0
    },
    {
-    "id": 211796,
-    "name": "Tidiam Gomis",
-    "nationality": "France",
-    "position": "Offence",
-    "shirt": null,
-    "team": "RB Leipzig",
-    "team_logo": "https://crests.football-data.org/721.png",
-    "played": 4,
-    "goals": 1,
-    "assists": 2,
-    "penalties": 0
-   },
-   {
     "id": 9537,
     "name": "Willi Orban",
     "nationality": "Hungary",
@@ -3354,22 +3536,9 @@
     "shirt": null,
     "team": "RB Leipzig",
     "team_logo": "https://crests.football-data.org/721.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
-    "penalties": 0
-   },
-   {
-    "id": 8484,
-    "name": "Christopher Nkunku",
-    "nationality": "France",
-    "position": "Offence",
-    "shirt": null,
-    "team": "RB Leipzig",
-    "team_logo": "https://crests.football-data.org/721.png",
-    "played": 4,
-    "goals": 1,
-    "assists": 1,
     "penalties": 0
    },
    {
@@ -3380,7 +3549,7 @@
     "shirt": null,
     "team": "RB Leipzig",
     "team_logo": "https://crests.football-data.org/721.png",
-    "played": 2,
+    "played": 3,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -3393,7 +3562,7 @@
     "shirt": null,
     "team": "FC Bayern München",
     "team_logo": "https://crests.football-data.org/5.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -3412,19 +3581,6 @@
     "penalties": 0
    },
    {
-    "id": 130173,
-    "name": "Ismael Saibari",
-    "nationality": "Morocco",
-    "position": "Midfield",
-    "shirt": 9,
-    "team": "FC Bayern München",
-    "team_logo": "https://crests.football-data.org/5.png",
-    "played": 4,
-    "goals": 1,
-    "assists": 3,
-    "penalties": 0
-   },
-   {
     "id": 102974,
     "name": "Nicolás Capaldo",
     "nationality": "Argentina",
@@ -3432,20 +3588,7 @@
     "shirt": null,
     "team": "Hamburger SV",
     "team_logo": "https://crests.football-data.org/7.png",
-    "played": 4,
-    "goals": 1,
-    "assists": 0,
-    "penalties": 0
-   },
-   {
-    "id": 3466,
-    "name": "Yussuf Poulsen",
-    "nationality": "Denmark",
-    "position": "Offence",
-    "shirt": null,
-    "team": "Hamburger SV",
-    "team_logo": "https://crests.football-data.org/7.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -3497,7 +3640,7 @@
     "shirt": null,
     "team": "1. FSV Mainz 05",
     "team_logo": "https://crests.football-data.org/15.png",
-    "played": 1,
+    "played": 2,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -3510,7 +3653,7 @@
     "shirt": null,
     "team": "1. FSV Mainz 05",
     "team_logo": "https://crests.football-data.org/15.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -3536,7 +3679,7 @@
     "shirt": null,
     "team": "FC Augsburg",
     "team_logo": "https://crests.football-data.org/16.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -3588,7 +3731,7 @@
     "shirt": null,
     "team": "Bayer 04 Leverkusen",
     "team_logo": "https://crests.football-data.org/3.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 3,
     "penalties": 0
@@ -3601,7 +3744,7 @@
     "shirt": null,
     "team": "SC Paderborn 07",
     "team_logo": "https://crests.football-data.org/29.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -3614,7 +3757,7 @@
     "shirt": null,
     "team": "SC Paderborn 07",
     "team_logo": "https://crests.football-data.org/29.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -3627,7 +3770,7 @@
     "shirt": null,
     "team": "SC Paderborn 07",
     "team_logo": "https://crests.football-data.org/29.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -3670,13 +3813,117 @@
     "goals": 1,
     "assists": 0,
     "penalties": 0
+   },
+   {
+    "id": 45611,
+    "name": "Robert Andrich",
+    "nationality": "Germany",
+    "position": "Midfield",
+    "shirt": null,
+    "team": "Bayer 04 Leverkusen",
+    "team_logo": "https://crests.football-data.org/3.png",
+    "played": 5,
+    "goals": 1,
+    "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 176718,
+    "name": "Jarell Quansah",
+    "nationality": "England",
+    "position": "Defence",
+    "shirt": null,
+    "team": "Bayer 04 Leverkusen",
+    "team_logo": "https://crests.football-data.org/3.png",
+    "played": 5,
+    "goals": 1,
+    "assists": 1,
+    "penalties": 0
+   },
+   {
+    "id": 2240,
+    "name": "Moussa Diaby",
+    "nationality": "France",
+    "position": "Offence",
+    "shirt": null,
+    "team": "Bayer 04 Leverkusen",
+    "team_logo": "https://crests.football-data.org/3.png",
+    "played": 4,
+    "goals": 1,
+    "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 150647,
+    "name": "Benedict Hollerbach",
+    "nationality": "Germany",
+    "position": "Offence",
+    "shirt": null,
+    "team": "1. FSV Mainz 05",
+    "team_logo": "https://crests.football-data.org/15.png",
+    "played": 4,
+    "goals": 1,
+    "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 7748,
+    "name": "Julian Chabot",
+    "nationality": "Germany",
+    "position": "Defence",
+    "shirt": null,
+    "team": "VfB Stuttgart",
+    "team_logo": "https://crests.football-data.org/10.png",
+    "played": 5,
+    "goals": 1,
+    "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 206,
+    "name": "Chris Führich",
+    "nationality": "Germany",
+    "position": "Offence",
+    "shirt": null,
+    "team": "VfB Stuttgart",
+    "team_logo": "https://crests.football-data.org/10.png",
+    "played": 4,
+    "goals": 1,
+    "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 212285,
+    "name": "Livan Burcu",
+    "nationality": "Turkey",
+    "position": "Offence",
+    "shirt": null,
+    "team": "1. FC Union Berlin",
+    "team_logo": "https://crests.football-data.org/28.png",
+    "played": 5,
+    "goals": 1,
+    "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 177525,
+    "name": "Bambase Conte",
+    "nationality": "Germany",
+    "position": "Midfield",
+    "shirt": null,
+    "team": "TSG 1899 Hoffenheim",
+    "team_logo": "https://crests.football-data.org/2.png",
+    "played": 5,
+    "goals": 1,
+    "assists": 2,
+    "penalties": 0
    }
   ]
  },
  "SA": {
   "season": "2026",
   "matchday": 6,
-  "updated": "2026-10-09",
+  "updated": "2026-10-10",
   "scorers": [
    {
     "id": 7457,
@@ -3712,7 +3959,7 @@
     "shirt": null,
     "team": "Frosinone Calcio",
     "team_logo": "https://crests.football-data.org/470.png",
-    "played": 5,
+    "played": 6,
     "goals": 4,
     "assists": 0,
     "penalties": 0
@@ -3725,10 +3972,36 @@
     "shirt": null,
     "team": "FC Internazionale Milano",
     "team_logo": "https://crests.football-data.org/108.png",
-    "played": 5,
+    "played": 6,
     "goals": 4,
     "assists": 0,
     "penalties": 0
+   },
+   {
+    "id": 1754,
+    "name": "Hakan Çalhanoğlu",
+    "nationality": "Turkey",
+    "position": "Midfield",
+    "shirt": null,
+    "team": "FC Internazionale Milano",
+    "team_logo": "https://crests.football-data.org/108.png",
+    "played": 4,
+    "goals": 3,
+    "assists": 0,
+    "penalties": 1
+   },
+   {
+    "id": 3654,
+    "name": "Kevin De Bruyne",
+    "nationality": "Belgium",
+    "position": "Midfield",
+    "shirt": null,
+    "team": "SSC Napoli",
+    "team_logo": "https://crests.football-data.org/113.png",
+    "played": 6,
+    "goals": 3,
+    "assists": 1,
+    "penalties": 1
    },
    {
     "id": 2200,
@@ -3744,6 +4017,32 @@
     "penalties": 0
    },
    {
+    "id": 67743,
+    "name": "Milutin Osmajić",
+    "nationality": "Montenegro",
+    "position": "Offence",
+    "shirt": null,
+    "team": "Genoa CFC",
+    "team_logo": "https://crests.football-data.org/107.png",
+    "played": 5,
+    "goals": 3,
+    "assists": 1,
+    "penalties": 0
+   },
+   {
+    "id": 8685,
+    "name": "Marcus Thuram-Ulien",
+    "nationality": "France",
+    "position": "Offence",
+    "shirt": null,
+    "team": "FC Internazionale Milano",
+    "team_logo": "https://crests.football-data.org/108.png",
+    "played": 6,
+    "goals": 3,
+    "assists": 2,
+    "penalties": 0
+   },
+   {
     "id": 211564,
     "name": "Giorgi Kvernadze",
     "nationality": "Georgia",
@@ -3751,7 +4050,7 @@
     "shirt": null,
     "team": "Frosinone Calcio",
     "team_logo": "https://crests.football-data.org/470.png",
-    "played": 5,
+    "played": 6,
     "goals": 3,
     "assists": 1,
     "penalties": 0
@@ -3790,7 +4089,7 @@
     "shirt": null,
     "team": "ACF Fiorentina",
     "team_logo": "https://crests.football-data.org/99.png",
-    "played": 5,
+    "played": 6,
     "goals": 3,
     "assists": 0,
     "penalties": 0
@@ -3835,19 +4134,6 @@
     "penalties": 0
    },
    {
-    "id": 1754,
-    "name": "Hakan Çalhanoğlu",
-    "nationality": "Turkey",
-    "position": "Midfield",
-    "shirt": null,
-    "team": "FC Internazionale Milano",
-    "team_logo": "https://crests.football-data.org/108.png",
-    "played": 3,
-    "goals": 2,
-    "assists": 0,
-    "penalties": 0
-   },
-   {
     "id": 215433,
     "name": "Francesco Esposito",
     "nationality": "Italy",
@@ -3855,7 +4141,7 @@
     "shirt": null,
     "team": "FC Internazionale Milano",
     "team_logo": "https://crests.football-data.org/108.png",
-    "played": 5,
+    "played": 6,
     "goals": 2,
     "assists": 1,
     "penalties": 0
@@ -3972,7 +4258,7 @@
     "shirt": null,
     "team": "SSC Napoli",
     "team_logo": "https://crests.football-data.org/113.png",
-    "played": 5,
+    "played": 6,
     "goals": 2,
     "assists": 0,
     "penalties": 0
@@ -3988,19 +4274,6 @@
     "played": 5,
     "goals": 2,
     "assists": 1,
-    "penalties": 0
-   },
-   {
-    "id": 67743,
-    "name": "Milutin Osmajić",
-    "nationality": "Montenegro",
-    "position": "Offence",
-    "shirt": null,
-    "team": "Genoa CFC",
-    "team_logo": "https://crests.football-data.org/107.png",
-    "played": 4,
-    "goals": 2,
-    "assists": 0,
     "penalties": 0
    },
    {
@@ -4024,22 +4297,9 @@
     "shirt": null,
     "team": "ACF Fiorentina",
     "team_logo": "https://crests.football-data.org/99.png",
-    "played": 5,
+    "played": 6,
     "goals": 2,
     "assists": 0,
-    "penalties": 0
-   },
-   {
-    "id": 8685,
-    "name": "Marcus Thuram-Ulien",
-    "nationality": "France",
-    "position": "Offence",
-    "shirt": null,
-    "team": "FC Internazionale Milano",
-    "team_logo": "https://crests.football-data.org/108.png",
-    "played": 5,
-    "goals": 2,
-    "assists": 2,
     "penalties": 0
    },
    {
@@ -4089,7 +4349,7 @@
     "shirt": null,
     "team": "Parma Calcio 1913",
     "team_logo": "https://crests.football-data.org/112.png",
-    "played": 5,
+    "played": 6,
     "goals": 2,
     "assists": 0,
     "penalties": 0
@@ -4115,7 +4375,7 @@
     "shirt": null,
     "team": "FC Internazionale Milano",
     "team_logo": "https://crests.football-data.org/108.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -4128,20 +4388,7 @@
     "shirt": null,
     "team": "FC Internazionale Milano",
     "team_logo": "https://crests.football-data.org/108.png",
-    "played": 5,
-    "goals": 1,
-    "assists": 1,
-    "penalties": 0
-   },
-   {
-    "id": 3654,
-    "name": "Kevin De Bruyne",
-    "nationality": "Belgium",
-    "position": "Midfield",
-    "shirt": null,
-    "team": "SSC Napoli",
-    "team_logo": "https://crests.football-data.org/113.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -4310,7 +4557,7 @@
     "shirt": null,
     "team": "Frosinone Calcio",
     "team_logo": "https://crests.football-data.org/470.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -4401,7 +4648,7 @@
     "shirt": null,
     "team": "SSC Napoli",
     "team_logo": "https://crests.football-data.org/113.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -4453,7 +4700,7 @@
     "shirt": null,
     "team": "Parma Calcio 1913",
     "team_logo": "https://crests.football-data.org/112.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -4596,7 +4843,7 @@
     "shirt": 5,
     "team": "Genoa CFC",
     "team_logo": "https://crests.football-data.org/107.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -4674,7 +4921,7 @@
     "shirt": null,
     "team": "SSC Napoli",
     "team_logo": "https://crests.football-data.org/113.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -4752,7 +4999,7 @@
     "shirt": null,
     "team": "FC Internazionale Milano",
     "team_logo": "https://crests.football-data.org/108.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -4765,7 +5012,7 @@
     "shirt": null,
     "team": "FC Internazionale Milano",
     "team_logo": "https://crests.football-data.org/108.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -4778,7 +5025,7 @@
     "shirt": null,
     "team": "FC Internazionale Milano",
     "team_logo": "https://crests.football-data.org/108.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -4843,7 +5090,7 @@
     "shirt": null,
     "team": "SSC Napoli",
     "team_logo": "https://crests.football-data.org/113.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -4856,7 +5103,7 @@
     "shirt": null,
     "team": "ACF Fiorentina",
     "team_logo": "https://crests.football-data.org/99.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -4869,7 +5116,7 @@
     "shirt": null,
     "team": "Frosinone Calcio",
     "team_logo": "https://crests.football-data.org/470.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -4912,13 +5159,52 @@
     "goals": 1,
     "assists": 1,
     "penalties": 0
+   },
+   {
+    "id": 97869,
+    "name": "Junior Messias",
+    "nationality": "Brazil",
+    "position": "Offence",
+    "shirt": null,
+    "team": "Genoa CFC",
+    "team_logo": "https://crests.football-data.org/107.png",
+    "played": 6,
+    "goals": 1,
+    "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 154013,
+    "name": "Petar Sucic",
+    "nationality": "Croatia",
+    "position": "Midfield",
+    "shirt": null,
+    "team": "FC Internazionale Milano",
+    "team_logo": "https://crests.football-data.org/108.png",
+    "played": 6,
+    "goals": 1,
+    "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 7565,
+    "name": "Noa Lang",
+    "nationality": "Netherlands",
+    "position": "Offence",
+    "shirt": null,
+    "team": "SSC Napoli",
+    "team_logo": "https://crests.football-data.org/113.png",
+    "played": 6,
+    "goals": 1,
+    "assists": 0,
+    "penalties": 0
    }
   ]
  },
  "FL1": {
   "season": "2026",
   "matchday": 6,
-  "updated": "2026-10-09",
+  "updated": "2026-10-10",
   "scorers": [
    {
     "id": 8476,
@@ -4934,6 +5220,19 @@
     "penalties": 1
    },
    {
+    "id": 124178,
+    "name": "Louis Mafouta",
+    "nationality": "Central African Republic",
+    "position": "Offence",
+    "shirt": null,
+    "team": "Le Mans FC",
+    "team_logo": "https://crests.football-data.org/535.png",
+    "played": 6,
+    "goals": 4,
+    "assists": 0,
+    "penalties": 1
+   },
+   {
     "id": 175942,
     "name": "Kamory Doumbia",
     "nationality": "Mali",
@@ -4941,7 +5240,7 @@
     "shirt": null,
     "team": "Stade Brestois 29",
     "team_logo": "https://crests.football-data.org/512.png",
-    "played": 5,
+    "played": 6,
     "goals": 4,
     "assists": 1,
     "penalties": 1
@@ -4954,7 +5253,7 @@
     "shirt": null,
     "team": "Paris Saint-Germain FC",
     "team_logo": "https://crests.football-data.org/524.png",
-    "played": 5,
+    "played": 6,
     "goals": 4,
     "assists": 0,
     "penalties": 0
@@ -4967,7 +5266,7 @@
     "shirt": null,
     "team": "Paris FC",
     "team_logo": "https://crests.football-data.org/1045.png",
-    "played": 5,
+    "played": 6,
     "goals": 4,
     "assists": 1,
     "penalties": 2
@@ -4986,6 +5285,19 @@
     "penalties": 0
    },
    {
+    "id": 129381,
+    "name": "Casper Tengstedt",
+    "nationality": "Denmark",
+    "position": "Offence",
+    "shirt": null,
+    "team": "Toulouse FC",
+    "team_logo": "https://crests.football-data.org/511.png",
+    "played": 4,
+    "goals": 4,
+    "assists": 1,
+    "penalties": 2
+   },
+   {
     "id": 3370,
     "name": "Florian Thauvin",
     "nationality": "France",
@@ -4997,19 +5309,6 @@
     "goals": 3,
     "assists": 5,
     "penalties": 3
-   },
-   {
-    "id": 124178,
-    "name": "Louis Mafouta",
-    "nationality": "Central African Republic",
-    "position": "Offence",
-    "shirt": null,
-    "team": "Le Mans FC",
-    "team_logo": "https://crests.football-data.org/535.png",
-    "played": 5,
-    "goals": 3,
-    "assists": 0,
-    "penalties": 1
    },
    {
     "id": 149850,
@@ -5032,7 +5331,7 @@
     "shirt": null,
     "team": "Paris Saint-Germain FC",
     "team_logo": "https://crests.football-data.org/524.png",
-    "played": 5,
+    "played": 6,
     "goals": 3,
     "assists": 0,
     "penalties": 0
@@ -5077,19 +5376,6 @@
     "penalties": 0
    },
    {
-    "id": 129381,
-    "name": "Casper Tengstedt",
-    "nationality": "Denmark",
-    "position": "Offence",
-    "shirt": null,
-    "team": "Toulouse FC",
-    "team_logo": "https://crests.football-data.org/511.png",
-    "played": 3,
-    "goals": 3,
-    "assists": 0,
-    "penalties": 1
-   },
-   {
     "id": 183643,
     "name": "Franjo Ivanovic",
     "nationality": "Austria",
@@ -5110,9 +5396,22 @@
     "shirt": null,
     "team": "Lille OSC",
     "team_logo": "https://crests.football-data.org/521.png",
-    "played": 5,
+    "played": 6,
     "goals": 2,
     "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 151295,
+    "name": "Dilane Bakwa",
+    "nationality": "France",
+    "position": "Offence",
+    "shirt": null,
+    "team": "Lille OSC",
+    "team_logo": "https://crests.football-data.org/521.png",
+    "played": 5,
+    "goals": 2,
+    "assists": 1,
     "penalties": 0
    },
    {
@@ -5136,9 +5435,22 @@
     "shirt": null,
     "team": "Le Havre AC",
     "team_logo": "https://crests.football-data.org/533.png",
-    "played": 5,
+    "played": 6,
     "goals": 2,
     "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 723,
+    "name": "Ludovic Ajorque",
+    "nationality": "France",
+    "position": "Offence",
+    "shirt": 25,
+    "team": "Stade Brestois 29",
+    "team_logo": "https://crests.football-data.org/512.png",
+    "played": 6,
+    "goals": 2,
+    "assists": 1,
     "penalties": 0
    },
    {
@@ -5149,7 +5461,7 @@
     "shirt": 36,
     "team": "Lille OSC",
     "team_logo": "https://crests.football-data.org/521.png",
-    "played": 3,
+    "played": 4,
     "goals": 2,
     "assists": 0,
     "penalties": 0
@@ -5188,7 +5500,7 @@
     "shirt": null,
     "team": "Toulouse FC",
     "team_logo": "https://crests.football-data.org/511.png",
-    "played": 5,
+    "played": 6,
     "goals": 2,
     "assists": 1,
     "penalties": 0
@@ -5204,6 +5516,32 @@
     "played": 6,
     "goals": 2,
     "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 278087,
+    "name": "Prosper Peter",
+    "nationality": "Nigeria",
+    "position": "Offence",
+    "shirt": null,
+    "team": "Angers SCO",
+    "team_logo": "https://crests.football-data.org/532.png",
+    "played": 6,
+    "goals": 2,
+    "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 218249,
+    "name": "Pathé Mboup",
+    "nationality": "Senegal",
+    "position": "Offence",
+    "shirt": null,
+    "team": "Stade Brestois 29",
+    "team_logo": "https://crests.football-data.org/512.png",
+    "played": 6,
+    "goals": 2,
+    "assists": 1,
     "penalties": 0
    },
    {
@@ -5305,7 +5643,7 @@
     "shirt": null,
     "team": "Le Mans FC",
     "team_logo": "https://crests.football-data.org/535.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -5344,7 +5682,7 @@
     "shirt": null,
     "team": "Lille OSC",
     "team_logo": "https://crests.football-data.org/521.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 2,
     "penalties": 0
@@ -5357,7 +5695,7 @@
     "shirt": null,
     "team": "AS Monaco FC",
     "team_logo": "https://crests.football-data.org/548.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -5383,22 +5721,9 @@
     "shirt": null,
     "team": "Lille OSC",
     "team_logo": "https://crests.football-data.org/521.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
-    "penalties": 0
-   },
-   {
-    "id": 151295,
-    "name": "Dilane Bakwa",
-    "nationality": "France",
-    "position": "Offence",
-    "shirt": null,
-    "team": "Lille OSC",
-    "team_logo": "https://crests.football-data.org/521.png",
-    "played": 4,
-    "goals": 1,
-    "assists": 1,
     "penalties": 0
    },
    {
@@ -5409,7 +5734,7 @@
     "shirt": null,
     "team": "Paris Saint-Germain FC",
     "team_logo": "https://crests.football-data.org/524.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -5448,9 +5773,9 @@
     "shirt": null,
     "team": "FC Lorient",
     "team_logo": "https://crests.football-data.org/525.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
-    "assists": 0,
+    "assists": 1,
     "penalties": 0
    },
    {
@@ -5474,7 +5799,7 @@
     "shirt": 14,
     "team": "Angers SCO",
     "team_logo": "https://crests.football-data.org/532.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -5500,7 +5825,7 @@
     "shirt": null,
     "team": "Angers SCO",
     "team_logo": "https://crests.football-data.org/532.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -5513,7 +5838,7 @@
     "shirt": null,
     "team": "Angers SCO",
     "team_logo": "https://crests.football-data.org/532.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -5526,7 +5851,7 @@
     "shirt": null,
     "team": "Toulouse FC",
     "team_logo": "https://crests.football-data.org/511.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -5539,20 +5864,7 @@
     "shirt": null,
     "team": "Toulouse FC",
     "team_logo": "https://crests.football-data.org/511.png",
-    "played": 5,
-    "goals": 1,
-    "assists": 0,
-    "penalties": 0
-   },
-   {
-    "id": 723,
-    "name": "Ludovic Ajorque",
-    "nationality": "France",
-    "position": "Offence",
-    "shirt": 25,
-    "team": "Stade Brestois 29",
-    "team_logo": "https://crests.football-data.org/512.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -5565,7 +5877,7 @@
     "shirt": null,
     "team": "Paris FC",
     "team_logo": "https://crests.football-data.org/1045.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -5617,7 +5929,7 @@
     "shirt": null,
     "team": "AS Monaco FC",
     "team_logo": "https://crests.football-data.org/548.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -5630,7 +5942,7 @@
     "shirt": null,
     "team": "AS Monaco FC",
     "team_logo": "https://crests.football-data.org/548.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -5643,7 +5955,7 @@
     "shirt": null,
     "team": "FC Lorient",
     "team_logo": "https://crests.football-data.org/525.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -5656,7 +5968,7 @@
     "shirt": null,
     "team": "Le Havre AC",
     "team_logo": "https://crests.football-data.org/533.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
     "penalties": 1
@@ -5773,7 +6085,7 @@
     "shirt": 2,
     "team": "Angers SCO",
     "team_logo": "https://crests.football-data.org/532.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -5799,7 +6111,7 @@
     "shirt": null,
     "team": "FC Lorient",
     "team_logo": "https://crests.football-data.org/525.png",
-    "played": 3,
+    "played": 4,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -5838,9 +6150,9 @@
     "shirt": null,
     "team": "Le Mans FC",
     "team_logo": "https://crests.football-data.org/535.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
-    "assists": 1,
+    "assists": 2,
     "penalties": 0
    },
    {
@@ -5864,7 +6176,7 @@
     "shirt": 20,
     "team": "Paris FC",
     "team_logo": "https://crests.football-data.org/1045.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -5877,7 +6189,7 @@
     "shirt": null,
     "team": "Paris FC",
     "team_logo": "https://crests.football-data.org/1045.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -5890,7 +6202,7 @@
     "shirt": null,
     "team": "Le Mans FC",
     "team_logo": "https://crests.football-data.org/535.png",
-    "played": 3,
+    "played": 4,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -5903,7 +6215,7 @@
     "shirt": null,
     "team": "FC Lorient",
     "team_logo": "https://crests.football-data.org/525.png",
-    "played": 4,
+    "played": 5,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -5916,20 +6228,7 @@
     "shirt": 9,
     "team": "Le Havre AC",
     "team_logo": "https://crests.football-data.org/533.png",
-    "played": 5,
-    "goals": 1,
-    "assists": 0,
-    "penalties": 0
-   },
-   {
-    "id": 278087,
-    "name": "Prosper Peter",
-    "nationality": "Nigeria",
-    "position": "Offence",
-    "shirt": null,
-    "team": "Angers SCO",
-    "team_logo": "https://crests.football-data.org/532.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 0,
     "penalties": 0
@@ -5942,7 +6241,7 @@
     "shirt": null,
     "team": "Angers SCO",
     "team_logo": "https://crests.football-data.org/532.png",
-    "played": 5,
+    "played": 6,
     "goals": 1,
     "assists": 1,
     "penalties": 0
@@ -5958,19 +6257,6 @@
     "played": 6,
     "goals": 1,
     "assists": 2,
-    "penalties": 0
-   },
-   {
-    "id": 218249,
-    "name": "Pathé Mboup",
-    "nationality": "Senegal",
-    "position": "Offence",
-    "shirt": null,
-    "team": "Stade Brestois 29",
-    "team_logo": "https://crests.football-data.org/512.png",
-    "played": 5,
-    "goals": 1,
-    "assists": 0,
     "penalties": 0
    },
    {
@@ -6024,13 +6310,143 @@
     "goals": 1,
     "assists": 0,
     "penalties": 0
+   },
+   {
+    "id": 8465,
+    "name": "Lucas Tousart",
+    "nationality": "France",
+    "position": "Midfield",
+    "shirt": null,
+    "team": "Stade Brestois 29",
+    "team_logo": "https://crests.football-data.org/512.png",
+    "played": 6,
+    "goals": 1,
+    "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 8778,
+    "name": "Kenny Lala",
+    "nationality": "France",
+    "position": "Defence",
+    "shirt": 10,
+    "team": "Stade Brestois 29",
+    "team_logo": "https://crests.football-data.org/512.png",
+    "played": 6,
+    "goals": 1,
+    "assists": 0,
+    "penalties": 1
+   },
+   {
+    "id": 43707,
+    "name": "Mama Baldé",
+    "nationality": "Guinea-Bissau",
+    "position": "Offence",
+    "shirt": null,
+    "team": "Stade Brestois 29",
+    "team_logo": "https://crests.football-data.org/512.png",
+    "played": 5,
+    "goals": 1,
+    "assists": 1,
+    "penalties": 0
+   },
+   {
+    "id": 279671,
+    "name": "Gabin Bernardeau",
+    "nationality": "France",
+    "position": "Midfield",
+    "shirt": null,
+    "team": "FC Lorient",
+    "team_logo": "https://crests.football-data.org/525.png",
+    "played": 6,
+    "goals": 1,
+    "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 169204,
+    "name": "Lucas Beraldo",
+    "nationality": "Brazil",
+    "position": "Defence",
+    "shirt": null,
+    "team": "Paris Saint-Germain FC",
+    "team_logo": "https://crests.football-data.org/524.png",
+    "played": 6,
+    "goals": 1,
+    "assists": 0,
+    "penalties": 1
+   },
+   {
+    "id": 113285,
+    "name": "Khvicha Kvaratskhelia",
+    "nationality": "Georgia",
+    "position": "Offence",
+    "shirt": 21,
+    "team": "Paris Saint-Germain FC",
+    "team_logo": "https://crests.football-data.org/524.png",
+    "played": 6,
+    "goals": 1,
+    "assists": 1,
+    "penalties": 0
+   },
+   {
+    "id": 175701,
+    "name": "Maghnes Akliouche",
+    "nationality": "France",
+    "position": "Offence",
+    "shirt": null,
+    "team": "Paris Saint-Germain FC",
+    "team_logo": "https://crests.football-data.org/524.png",
+    "played": 6,
+    "goals": 1,
+    "assists": 0,
+    "penalties": 0
+   },
+   {
+    "id": 204238,
+    "name": "Edan Diop",
+    "nationality": "France",
+    "position": "Midfield",
+    "shirt": null,
+    "team": "AS Monaco FC",
+    "team_logo": "https://crests.football-data.org/548.png",
+    "played": 3,
+    "goals": 1,
+    "assists": 1,
+    "penalties": 0
+   },
+   {
+    "id": 170412,
+    "name": "Matthis Abline",
+    "nationality": "France",
+    "position": "Offence",
+    "shirt": null,
+    "team": "AS Monaco FC",
+    "team_logo": "https://crests.football-data.org/548.png",
+    "played": 5,
+    "goals": 1,
+    "assists": 1,
+    "penalties": 0
+   },
+   {
+    "id": 274822,
+    "name": "Sion Oppong",
+    "nationality": "Sweden",
+    "position": "Offence",
+    "shirt": null,
+    "team": "Toulouse FC",
+    "team_logo": "https://crests.football-data.org/511.png",
+    "played": 6,
+    "goals": 1,
+    "assists": 0,
+    "penalties": 0
    }
   ]
  },
  "CL": {
   "season": "2026",
   "matchday": 2,
-  "updated": "2026-10-09",
+  "updated": "2026-10-10",
   "scorers": [
    {
     "id": 33242,

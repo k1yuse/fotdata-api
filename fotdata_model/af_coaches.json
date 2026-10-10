@@ -106,7 +106,7 @@
   "nationality": "Italy",
   "photo": "https://media.api-sports.io/football/coachs/2393.png",
   "start": "2025-07-01",
-  "updated": "2026-10-09"
+  "updated": "2026-10-10"
  },
  "Angers SCO": {
   "birth_date": "1974-04-30",
@@ -455,15 +455,14 @@
   "updated": "2026-10-07"
  },
  "Getafe CF": {
-  "birth_date": "1964-03-05",
-  "full_name": "José Bordalás",
-  "id": 1596,
-  "name": "José Bordalás",
-  "name_ko": "호세 보르달라스",
-  "nationality": "Spain",
-  "photo": "https://media.api-sports.io/football/coachs/1596.png",
-  "start": "2023-04-01",
-  "updated": "2026-10-07"
+  "birth_date": null,
+  "full_name": "Pepe Bordalás",
+  "id": null,
+  "name": "Pepe Bordalás",
+  "nationality": null,
+  "photo": null,
+  "start": null,
+  "updated": "2026-10-10"
  },
  "Hamburger SV": {
   "birth_date": "1990-11-07",
@@ -686,14 +685,15 @@
   "updated": "2026-10-07"
  },
  "Parma Calcio 1913": {
-  "birth_date": null,
-  "full_name": "Carlos Cuesta García",
-  "id": 25381,
-  "name": "Carlos Cuesta García",
-  "nationality": null,
-  "photo": "https://media.api-sports.io/football/coachs/25381.png",
-  "start": "2025-07-01",
-  "updated": "2026-10-07"
+  "birth_date": "1982-07-05",
+  "full_name": "Alberto Gilardino",
+  "id": null,
+  "name": "A. Gilardino",
+  "name_ko": "알베르토 질라르디노",
+  "nationality": "Italy",
+  "photo": null,
+  "start": "2026-09-29",
+  "updated": "2026-10-10"
  },
  "RB Leipzig": {
   "birth_date": "1980-12-20",
