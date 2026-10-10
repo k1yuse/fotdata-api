@@ -1107,6 +1107,12 @@
         .result-team-name { font-size: 13px; font-weight: 600; text-align: center; max-width: 130px; cursor: pointer; transition: color .15s; }
     @media (hover: hover) and (pointer: fine) { .result-team:hover .result-team-name { color: var(--team-glow); } }
     .result-vs { font-size: 18px; color: var(--muted); font-weight: 700; }
+    /* 바쁜 버튼(btnBusy): 폭 고정 + 작은 회전 표시, 글자는 한 줄 */
+    .is-busy { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: progress; }
+    .btn-spin { display: inline-block; flex-shrink: 0; width: 13px; height: 13px; margin-right: 7px; vertical-align: -2px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; opacity: .85; animation: btnSpin .7s linear infinite; }
+    .btn-lbl { overflow: hidden; text-overflow: ellipsis; }
+    @keyframes btnSpin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .btn-spin { animation-duration: 1.8s; } }
     .score-alt-label { font-size: 12px; color: var(--faint); text-align: center; margin-bottom: 8px; }
     .score-alt-list { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
     .score-alt-chip { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; background: var(--surface); border: 0.5px solid var(--border); border-radius: 20px; font-size: 15px; }
@@ -3365,6 +3371,15 @@ html.theme-a .pg-more .more-foot { align-self: flex-end; }
   html.theme-a .bmA-mid .bigmatch-unit .lbl { display: block; font-size: 10px; margin: 4px 0 0; }
 }
 html.theme-a .resA-p .team-news .md-pitch.h { max-width: 1000px; }
+/* 넓은 가로 경기장(예측 결과·경기 미리보기 창): 선수 사진 36 → 52px, 이름 13px — 작은 원이 경기장 위에 멀리 흩어져 보였음(2026-10-10) */
+@media (min-width: 769px) {
+  html.theme-a :is(.resA-p .team-news, .mp-modal.wide .mp-lineup) .md-pitch.h .md-pl { width: 98px; gap: 5px; }
+  html.theme-a :is(.resA-p .team-news, .mp-modal.wide .mp-lineup) .md-pitch.h .md-pn { max-width: 98px; font-size: 13px; }
+  html.theme-a :is(.resA-p .team-news, .mp-modal.wide .mp-lineup) .md-pitch.h .md-shirt { width: 42px; height: 42px; font-size: 14px; }
+  html.theme-a :is(.resA-p .team-news, .mp-modal.wide .mp-lineup) .md-pitch.h .md-shirt.ph { width: 52px; height: 52px; border-width: 2.5px; }
+  html.theme-a :is(.resA-p .team-news, .mp-modal.wide .mp-lineup) .md-pitch.h .md-shirt .md-rt { top: -6px; right: -20px; font-size: 11px; }
+}
+@media (max-width: 768px) { html.theme-a .resA-p .team-news .md-shirt.ph { width: 42px; height: 42px; } }   /* 폰 세로 경기장은 살짝만
 
 /* ── 리그 개요: 숫자 4칸 = 한 패널, 아래는 줄마다 두 패널(7:5) ── */
 html.theme-a .lo-stats { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 0; padding: 18px 8px; margin-bottom: 20px; border-radius: 22px;
@@ -3439,6 +3454,9 @@ html.theme-a .bigmatch-unit.z { display: none !important; }
 /* 맞대결 펼침: 카드 높이 그대로, 목록 안에서 스크롤 + 접기 버튼은 아래에 붙음 */
 html.theme-a #h2h-matches.h2h-open { overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.18) transparent; }
 html.theme-a #h2h-matches.h2h-open .h2h-rest { max-height: none; overflow: visible; border: 0; }
+.h2h-rest.h2h-new > * { animation: h2hIn .32s var(--ease-out) both; } .h2h-rest.h2h-new > *:nth-child(n+2) { animation-delay: 40ms; } .h2h-rest.h2h-new > *:nth-child(n+3) { animation-delay: 80ms; } .h2h-rest.h2h-new > *:nth-child(n+4) { animation-delay: 120ms; }
+@keyframes h2hIn { from { opacity: 0; transform: translateY(6px); } }
+@media (prefers-reduced-motion: reduce) { .h2h-rest.h2h-new > * { animation: none; } }
 html.theme-a #h2h-matches .sq-more { position: sticky; bottom: 0; z-index: 1; }
 /* 두 팀 비교 패널: 옆 맞대결이 더 길면 줄 간격을 고르게 벌림 */
 html.theme-a .resA-p:has(.cmpx-wrap) { display: flex; flex-direction: column; }
@@ -3452,12 +3470,18 @@ html.theme-a .resA-p .cmpx-wrap { flex: 1; display: flex; flex-direction: column
 .facA-bar i { display: block; height: 100%; width: 0; border-radius: 99px; background: var(--iris); transition: width .7s var(--ease-out); }
 @media (prefers-reduced-motion: reduce) { .facA-bar i { transition: none; } }
 .scg { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--a-line); }
-.scg-cap { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; margin-bottom: 6px; } .scg-cap .h { color: #8fc1ff; } .scg-cap .a { color: #ffb889; }
+.scg-cap { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; margin-bottom: 6px; padding-left: 21px; } .scg-cap .h { color: #8fc1ff; } .scg-cap .a { color: #ffb889; }
 .scg-grid { display: grid; grid-template-columns: 18px repeat(4, minmax(0, 1fr)); gap: 3px; }
 .scg-grid span { display: grid; place-items: center; height: 24px; font-size: 11.5px; font-variant-numeric: tabular-nums; }
 .scg-grid .ax { font-size: 11px; font-weight: 700; } .scg-grid .ax.h { color: #8fc1ff; } .scg-grid .ax.a { color: #ffb889; height: 16px; }
-.scg-grid .cell { border-radius: 6px; color: var(--a-ink-2); background: rgba(185,168,255, calc(0.04 + var(--k) * 0.3)); }
-.scg-grid .cell.top { color: #fff; font-weight: 700; box-shadow: inset 0 0 0 1.5px rgba(222,214,255,0.9); }
+.scg-grid .cell { border-radius: 6px; color: var(--a-ink-2); }
+.scg-grid .cell.hw { background: rgba(88,166,255, calc(0.05 + var(--k) * 0.42)); } .scg-grid .cell.aw { background: rgba(240,136,62, calc(0.05 + var(--k) * 0.42)); }
+.scg-grid .cell.dr { background: rgba(142,154,179, calc(0.05 + var(--k) * 0.32)); }
+.scg-grid .cell.top { color: #fff; font-weight: 700; box-shadow: inset 0 0 0 1.5px #fff; }
+.scg-leg { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 12px; margin-top: 8px; font-size: 11px; color: var(--a-ink-3); }
+.scg-leg span { display: inline-flex; align-items: center; gap: 5px; } .scg-leg span::before { content: ''; width: 8px; height: 8px; border-radius: 2px; }
+.scg-leg .hw::before { background: rgba(88,166,255,0.6); } .scg-leg .dr::before { background: rgba(142,154,179,0.5); } .scg-leg .aw::before { background: rgba(240,136,62,0.6); }
+.scg-leg .tp::before { box-shadow: inset 0 0 0 1.5px #fff; }
 html.theme-a #score-most-likely { color: #fff; }   /* 스코어는 홈·원정 어느 쪽 데이터도 아님(예전 파랑) */
 </style>
 </head>
@@ -3465,7 +3489,7 @@ html.theme-a #score-most-likely { color: #fff; }   /* 스코어는 홈·원정 �
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="fdIris" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9cc9ff"/><stop offset=".5" stop-color="#b9a8ff"/><stop offset="1" stop-color="#ffbf98"/></linearGradient></defs></svg>
 <nav class="nav">
-  <div class="nav-logo" style="display:flex;align-items:center;gap:11px;cursor:pointer" onclick="fdReloadTab()" title="지금 탭 새로고침">
+  <div class="nav-logo" style="display:flex;align-items:center;gap:11px;cursor:pointer" onclick="fdReloadTab(true)" title="지금 탭 새로고침">
     <svg class="logo-bars" id="nav-logo-bars" viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg>
     <div class="nav-wordmark">
       <span style="font-size:20px;font-weight:800;color:#ecf1fa;letter-spacing:-0.5px">Fot</span>
@@ -7571,14 +7595,14 @@ function runSimulation(auto) {
   const data = currentChampionData;
   if (!data) return;
   const simBtn = document.getElementById('sim-btn');
-  if (simBtn) { simBtn.classList.add('busy'); simBtn.querySelector('span').textContent = '계산 중...'; }
+  if (simBtn) { simBtn.style.width = simBtn.getBoundingClientRect().width + 'px'; simBtn.classList.add('busy'); simBtn.querySelector('span').textContent = '계산 중'; }
 
   setTimeout(() => {
     const nSim = parseInt(document.getElementById('sim-slider').value);
     if (auto !== true) track('simulation', { league: currentLeagueCode, runs: nSim });   // 들어올 때 자동으로 돈 건 세지 않음
     const { results, F, z } = simulateSeason(data, nSim, currentLeagueCode);
     renderChampionResults({ teams: results, nSim, remaining: F, uclSpots: z.cl, releSpots: z.rel });
-    if (simBtn) { simBtn.classList.remove('busy'); simBtn.querySelector('span').textContent = '다시 돌리기'; }
+    if (simBtn) { simBtn.classList.remove('busy'); simBtn.querySelector('span').textContent = '다시 돌리기'; }   // 폭은 그대로(글자만 바뀜)
   }, 50);
 }
 
@@ -8511,9 +8535,9 @@ async function predict(){
   const missing=unpredictableTeamsIn(home,away);
   if(missing.length){showToast(unpredictableMessage(missing),4200,'warn');return;}
   const seq=++predictSeq;
-  btn.disabled=true; btn.textContent='예측 중...';
+  btnBusy(btn,'예측 중');
   window.fotBg?.burst();
-  const onRetry=(a,r)=>{btn.textContent=`서버를 깨우는 중... (${a}/${r})`;};
+  const onRetry=(a,r)=>{btnLabel(btn,`서버 준비 중 ${a}/${r}`);};
   const q=`home_team=${encodeURIComponent(home)}&away_team=${encodeURIComponent(away)}`;
   const getJson=url=>fetchWithRetry(url).then(r=>r.json());
   const extras={
@@ -8532,7 +8556,7 @@ async function predict(){
     track('predict',{match:`${shortName(home)} vs ${shortName(away)}`});
     fillResultExtras(extras,pD,home,away,seq);
   }catch(e){showToast(e.status===404?unpredictableMessage(null):'서버에 연결하지 못했어요. 잠시 후 다시 눌러주세요',4200,'warn');}
-  finally{btn.disabled=false;btn.textContent='경기 예측하기';window.fotBg?.settle();}
+  finally{btnIdle(btn,'경기 예측하기');window.fotBg?.settle();}
 }
 
 // ── 팀 비교 레이더 차트 ──
@@ -8633,10 +8657,17 @@ function scoreGridHtml(sp, home, away) {
   let tot = 0; for (let h = 0; h <= MAXG; h++) for (let a = 0; a <= MAXG; a++) tot += pois(lh, h) * pois(la, a);
   const P = [...Array(N)].map((_, h) => [...Array(N)].map((_, a) => pois(lh, h) * pois(la, a) / tot));
   const max = Math.max(...P.flat()), [mh, ma] = String(sp.most_likely || '').split('-').map(Number);
+  // 서버가 준 스코어 확률(top_scores)은 그 숫자 그대로 — 기대 득점이 반올림돼 와서 계산값이 0.1~0.2%p 다를 수 있음(예상 스코어 8.6% vs 표 8.8%)
+  const sv = Object.fromEntries((sp.top_scores || []).map(x => [x.score, x.prob]));
   const pc = p => p >= 0.095 ? Math.round(p * 100) : (p * 100).toFixed(1);
+  const hn = shortName(home), an = shortName(away);
   const head = `<span></span>${[...Array(N)].map((_, a) => `<span class="ax a">${a}</span>`).join('')}`;
-  const rows = P.map((r, h) => `<span class="ax h">${h}</span>${r.map((p, a) => `<span class="cell${h === mh && a === ma ? ' top' : ''}" style="--k:${(p / max).toFixed(3)}">${pc(p)}</span>`).join('')}`).join('');
-  return `<div class="scg"><div class="scg-cap"><span class="h">${shortName(home)} 골</span><span class="a">${shortName(away)} 골 →</span></div><div class="scg-grid">${head}${rows}</div></div>`;
+  // 칸 색 = 그 스코어의 결과(홈 승 파랑 · 무 회색 · 원정 승 주황), 진하기 = 확률 — "어느 쪽 승리 스코어인지"가 한눈에(2026-10-10, 읽는 법을 묻는 일이 있었음)
+  const rows = P.map((r, h) => `<span class="ax h">${h}</span>${r.map((p, a) => {
+    const v = sv[`${h}-${a}`] ?? pc(p), cls = h > a ? 'hw' : h < a ? 'aw' : 'dr';
+    return `<span class="cell ${cls}${h === mh && a === ma ? ' top' : ''}" style="--k:${(p / max).toFixed(3)}" title="${hn} ${h} : ${a} ${an} · ${v}%">${v}</span>`; }).join('')}`).join('');
+  return `<div class="scg"><div class="scg-cap"><span class="h">세로 ↓ ${hn} 골</span><span class="a">가로 → ${an} 골</span></div><div class="scg-grid">${head}${rows}</div>
+    <div class="scg-leg"><span class="hw">${hn} 승</span><span class="dr">무승부</span><span class="aw">${an} 승</span><span class="tp">예상 스코어</span></div></div>`;
 }
 function renderExplanationFactors(data) {
   const wrap = document.getElementById('explanation-factors');
@@ -9105,6 +9136,14 @@ function toggleH2hRest(btn){
   if(isThemeA()){ if(open){ list.style.maxHeight=list.offsetHeight+'px'; list.classList.add('h2h-open'); } else { list.classList.remove('h2h-open'); list.style.maxHeight=''; } list.scrollTop=0; }
   box.hidden=!open; if(open) box.scrollTop=0;
   btn.textContent=open?'접기':`이전 맞대결 ${btn.dataset.n}경기 더 보기`;
+  if(open){   // 새로 보인 경기로 바로 데려감(2026-10-10 — 눌러도 화면이 그대로라 "더 있는 건가?" 헷갈렸음) + 새 줄이 살짝 떠오름
+    const smooth=matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth';
+    box.classList.remove('h2h-new'); void box.offsetWidth; box.classList.add('h2h-new');
+    requestAnimationFrame(()=>{
+      if(isThemeA()) list.scrollTo({top:list.scrollTop+box.getBoundingClientRect().top-list.getBoundingClientRect().top-6,behavior:smooth});   // 카드 안 스크롤
+      else box.scrollIntoView({block:'nearest',behavior:smooth});   // 예전 테마: 펼친 목록이 화면에 들어오게
+    });
+  }
 }
 function renderForm(fd,cid,tid){
   document.getElementById(tid).textContent=shortName(fd.team);   // "MANCHESTER CITY FC 최근 경기"처럼 대문자 전체 이름이던 것
@@ -9400,8 +9439,8 @@ async function shareSimCard(kind, btn) {
   if (!d) return;
   track('share_image', { kind: kind === 'top5' ? 'sim_top5' : 'sim_table', league: d.league });
   const orig = btn ? btn.innerHTML : '';
-  if (btn) { btn.disabled = true; btn.textContent = '만드는 중...'; }
-  const done = () => { if (btn) { btn.disabled = false; btn.innerHTML = orig; } };
+  btnBusy(btn, '만드는 중');
+  const done = () => btnIdle(btn, orig);
   try {
     const FONT = '"Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", sans-serif';
     const isA = kind === 'top5';
@@ -9721,7 +9760,7 @@ async function drawShareCardA({ data, h2h, home, away, homeImg, awayImg, ballImg
 // 만든 이미지를 저장(넓은 화면) / 공유 시트(폰)
 function deliverShareCanvas(canvas, home, away, btn, origHtml) {
   canvas.toBlob(async (blob) => {
-    btn.disabled = false; btn.innerHTML = origHtml;
+    btnIdle(btn, origHtml);
     if (!blob) { showToast('이미지 생성에 실패했어요'); return; }
     const safeName = s => s.replace(/[^a-zA-Z0-9가-힣]/g, '_');
     const filename = `fotdata_${safeName(home)}_vs_${safeName(away)}.png`;
@@ -9741,12 +9780,29 @@ function deliverShareCanvas(canvas, home, away, btn, origHtml) {
     }
   }, 'image/png');
 }
+// 버튼 글자만 바뀌고 크기는 그대로(2026-10-10 — "예측 중..."·"생성 중..."처럼 글자가 바뀌면 버튼 폭이 변해 그 줄 배치가 흔들렸음).
+// 누르는 순간의 폭을 고정하고, 글자 앞에 작은 회전 표시. 끝나면 원래 내용(btn.dataset.idle)으로
+function btnBusy(btn, label) {
+  if (!btn) return;
+  if (btn.dataset.idle == null) btn.dataset.idle = btn.innerHTML;
+  const w = btn.getBoundingClientRect().width;
+  if (w) btn.style.width = w + 'px';
+  btn.disabled = true; btn.classList.add('is-busy');
+  btn.innerHTML = `<span class="btn-spin" aria-hidden="true"></span><span class="btn-lbl">${label}</span>`;
+}
+function btnLabel(btn, label) { const l = btn && btn.querySelector('.btn-lbl'); if (l) l.textContent = label; }
+function btnIdle(btn, html) {
+  if (!btn) return;
+  btn.innerHTML = html != null ? html : (btn.dataset.idle ?? btn.innerHTML);
+  delete btn.dataset.idle;
+  btn.disabled = false; btn.classList.remove('is-busy'); btn.style.width = '';
+}
 async function shareResultCard() {
   if (!lastPrediction) return;
   track('share_image');
   const btn = document.getElementById('share-result-btn');
   const origHtml = btn.innerHTML;
-  btn.disabled = true; btn.textContent = '생성 중...';
+  btnBusy(btn, '만드는 중');
   try {
     const { data, h2h, home, away } = lastPrediction;
     const prob = data.probabilities, sp = data.score_prediction;
@@ -9891,7 +9947,7 @@ async function shareResultCard() {
     ctx.fillText('fotdata-official.com · AI 추정 결과이므로 참고용으로만 활용하세요', W / 2, H - 36);
 
     canvas.toBlob(async (blob) => {
-      btn.disabled = false; btn.innerHTML = origHtml;
+      btnIdle(btn, origHtml);
       if (!blob) { showToast('이미지 생성에 실패했어요'); return; }
       const safeName = s => s.replace(/[^a-zA-Z0-9가-힣]/g, '_');
       const filename = `fotdata_${safeName(home)}_vs_${safeName(away)}.png`;
@@ -9917,7 +9973,7 @@ async function shareResultCard() {
       }
     }, 'image/png');
   } catch (e) {
-    btn.disabled = false; btn.innerHTML = origHtml;
+    btnIdle(btn, origHtml);
     showToast('공유 카드 생성 중 오류가 발생했어요');
   }
 }
@@ -11008,7 +11064,14 @@ try {
   if (performance.getEntriesByType('navigation')[0]?.type === 'reload' && /[?&]match=/.test(location.search))
     history.replaceState(history.state, '', location.pathname + location.hash);
 } catch (e) {}
-function fdReloadTab() { try { history.replaceState(history.state, '', location.pathname + location.hash); } catch (e) {} location.reload(); }
+// spin = 로고 클릭: 로고 공이 한 바퀴 도는 걸 보여준 뒤 새로고침(2026-10-10 다시 — 바로 새로고침하면 돌 틈이 없었음. 랜딩 로고와 같은 동작)
+function fdReloadTab(spin) {
+  try { history.replaceState(history.state, '', location.pathname + location.hash); } catch (e) {}
+  const bars = spin && document.getElementById('nav-logo-bars');
+  if (!bars || matchMedia('(prefers-reduced-motion: reduce)').matches) return location.reload();
+  bars.classList.add('animate');
+  setTimeout(() => location.reload(), 650);   // logoBallSpin 한 바퀴(1.6초의 40%)
+}
 // ── 뒤로가기(2026-09-30): 폰에서 창을 닫으려고 뒤로가기를 누르면 사이트를 나가버렸음(기록이 하나도 안 쌓였음) ──
 // · 탭 이동은 기록에 남김(주소 #standings 등 — 새로고침해도 그 탭) → 뒤로가기 = 이전 탭
 // · 창(선수 카드·팀 정보·미리보기·구단 둘러보기 등)이 떠 있는 동안 기록에 "창" 한 칸(fdGuard)을 얹어 둠 → 뒤로가기 = 가장 위 창 하나 닫기
