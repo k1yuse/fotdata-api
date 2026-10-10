@@ -1577,7 +1577,7 @@ def _live_overlay():
 # — 끝난 결과는 프로세스가 살아 있는 동안 기억(새벽 업데이트 뒤엔 일정이 '끝남'이라 다시 안 찾음), 아직이면 5분 뒤 다시
 AF_LIVE_MAP = {"1H": "IN_PLAY", "2H": "IN_PLAY", "ET": "EXTRA_TIME", "BT": "EXTRA_TIME", "P": "PENALTY_SHOOTOUT", "HT": "PAUSED", "LIVE": "IN_PLAY", "INT": "PAUSED",
                "SUSP": "PAUSED", "FT": "FINISHED", "AET": "FINISHED", "PEN": "FINISHED", "AWD": "AWARDED", "WO": "AWARDED"}
-_af_final = {}   # API-Football 경기 ID → (확인한 시각, 끝난 결과 row 또는 None)
+_af_final = {}   # API-Football 경기 ID → (확인한 시각, 받은 row 또는 None) — 끝난 결과는 계속, 아니면(중단 등) 5분 동안 그대로 씀
 
 def _af_live_row(fx, e, base):
     st = (fx.get("fixture") or {}).get("status") or {}
@@ -1625,7 +1625,7 @@ def _af_live_merge(data, now):
             if not e or e["id"] in seen or (data.get(k) or {}).get("status") in DONE_STATUSES:
                 continue
             hit = _af_final.get(e["id"])
-            if hit and (hit[1] is not None or _time.time() - hit[0] < 300):
+            if hit and ((hit[1] or {}).get("status") in DONE_STATUSES or _time.time() - hit[0] < 300):
                 if hit[1]:
                     data[k] = {**data.get(k, {}), **hit[1]}
                 continue
@@ -1636,7 +1636,7 @@ def _af_live_merge(data, now):
                (_af_live_get("/fixtures", 55, ids="-".join(str(e["id"]) for _, e in chunk)) or [])}
         for k, e in chunk:
             row = _af_live_row(got[e["id"]], e, {}) if e["id"] in got else None
-            _af_final[e["id"]] = (_time.time(), row if row and row["status"] in DONE_STATUSES else None)
+            _af_final[e["id"]] = (_time.time(), row)
             if row:
                 data[k] = {**data.get(k, {}), **row}
 

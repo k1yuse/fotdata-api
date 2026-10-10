@@ -181,7 +181,8 @@
     .trs-dots { display: flex; gap: 3px; flex-shrink: 0; } .trs-dots i { width: 7px; height: 7px; border-radius: 50%; } .trs-dots i.hit { background: var(--green); } .trs-dots i.miss { background: var(--disabled); }
     .trs-chev { width: 16px; height: 16px; flex-shrink: 0; fill: none; stroke: var(--faint); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     @media (max-width: 480px) { .trs-dots { display: none; } }
-    .modal.trm-modal { width: 460px; }
+    /* 넓은 화면(2026-10-10): 창을 넓혀 기준선·리그별 | 누적 추이 두 칸, 경기 목록은 전체 폭(알약이 로고를 덮던 것) */
+    @media (min-width: 769px) { .modal.mp-modal.trm-modal { width: 760px; } .trm-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 32px; align-items: start; } }
     .trm-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .trm-tile { display: flex; flex-direction: column; gap: 2px; padding: 10px; border-radius: 14px; border: 0.5px solid var(--border); background: rgba(10,16,32,0.45); min-width: 0; }
     .trm-tile span { font-size: 12px; color: var(--muted); font-weight: 600; } .trm-tile b { font-size: 20px; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; } .trm-tile small { font-size: 12px; color: var(--faint); }
@@ -190,16 +191,19 @@
     .trm-cmp.lg { grid-template-columns: 96px 1fr 74px; } .trm-cmp span { display: flex; align-items: center; gap: 6px; white-space: nowrap; } .trm-cmp span img { width: 14px; height: 14px; object-fit: contain; }
     .trm-cmp div { height: 8px; border-radius: 99px; background: var(--surface-2); overflow: hidden; } .trm-cmp div i { display: block; height: 100%; border-radius: 99px; background: var(--faint); } .trm-cmp div i.ai { background: linear-gradient(90deg, var(--green-strong), var(--green)); }
     .trm-cmp b { text-align: right; font-variant-numeric: tabular-nums; color: var(--text); } .trm-cmp b small { color: var(--faint); font-weight: 500; font-size: 12px; }
-    .mr-row.trm-row { grid-template-columns: 40px minmax(0,1fr) 34px minmax(0,1fr) 62px; cursor: default; } .mr-row.trm-row[onclick] { cursor: pointer; } @media (hover: hover) and (pointer: fine) { .mr-row.trm-row[onclick]:hover { background: rgba(88,166,255,0.07); } }
-    .mr-row.trm-row b.when { font-size: 12px; color: var(--faint); }
-    .trm-pick { justify-self: end; font-size: 12px; font-weight: 700; padding: 2px 7px; border-radius: 99px; white-space: nowrap; color: var(--blue-text); background: rgba(88,166,255,0.1); }
+    .trm-day { margin: 12px 4px 2px; font-size: 12px; font-weight: 600; color: var(--faint); } .mp-sec-t + .trm-day { margin-top: 0; }
+    .mr-row.trm-row { grid-template-columns: minmax(0,1fr) 44px minmax(0,1fr) 92px; padding: 8px 4px; cursor: default; } .mr-row.trm-row[onclick] { cursor: pointer; } @media (hover: hover) and (pointer: fine) { .mr-row.trm-row[onclick]:hover { background: rgba(88,166,255,0.07); } }
+    .mr-row.trm-row b.when { font-size: 12px; color: var(--faint); font-weight: 500; } .mr-row.trm-row b.when .tm { display: none; }
+    .trm-pick small { display: none; font: inherit; }
+    @media (min-width: 769px) { .mr-row.trm-row { grid-template-columns: minmax(0,1fr) 76px minmax(0,1fr) 124px; } .mr-row.trm-row b.when .tm { display: inline; } .mr-row.trm-row b.when .vs { display: none; } .trm-pick small { display: inline; } }
+    .trm-pick { justify-self: end; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 99px; white-space: nowrap; color: var(--blue-text); background: rgba(88,166,255,0.1); }
     .trm-pick.away_win { color: var(--away); background: rgba(240,136,62,0.1); } .trm-pick.draw { color: var(--text-2); background: rgba(142,154,179,0.12); }
     .trm-pick.hit { color: var(--green); background: rgba(63,185,80,0.13); } .trm-pick.miss { color: var(--muted); background: rgba(142,154,179,0.12); }
     .trm-how { display: flex; flex-direction: column; gap: 8px; } .trm-how div { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-2); word-break: keep-all; } .trm-how strong { color: var(--text); margin-right: 6px; }
     .trm-how b { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--blue-text); background: rgba(88,166,255,0.12); border: 0.5px solid rgba(88,166,255,0.35); }
     .trm-first { margin-top: 14px; padding: 12px; border-radius: 14px; text-align: center; font-size: 13px; color: var(--text-2); background: rgba(31,111,235,0.08); border: 0.5px solid rgba(88,166,255,0.3); } .trm-first b { color: var(--blue-text); }
     .trm-first small { display: block; margin-top: 3px; font-size: 12px; color: var(--faint); }
-    @media (max-width: 420px) { .trm-tile b { font-size: 18px; } .mr-row.trm-row { grid-template-columns: 32px minmax(0,1fr) 28px minmax(0,1fr) 58px; gap: 4px; } .mr-row.trm-row .t img { width: 16px; height: 16px; } }
+    @media (max-width: 420px) { .trm-tile b { font-size: 18px; } .mr-row.trm-row { grid-template-columns: minmax(0,1fr) 34px minmax(0,1fr) 84px; gap: 4px; } .mr-row.trm-row .t img { width: 16px; height: 16px; } }
     .track-record-box { width: 480px; max-width: 92vw; max-height: 80vh; display: flex; flex-direction: column; }
     .track-record-box #track-record-body { overflow-y: auto; padding: 16px; }
     .tr-summary { display: flex; gap: 10px; margin-bottom: 16px; }
@@ -2145,6 +2149,7 @@
     .md-potm > img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; background: var(--surface-2); border: 1.5px solid rgba(88,166,255,0.5); }
     .md-potm > div { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
     .md-potm small { font-size: 11px; color: var(--muted); font-weight: 600; }
+    .md-potm[onclick] { cursor: pointer; transition: border-color .15s var(--ease-out); } @media (hover: hover) and (pointer: fine) { .md-potm[onclick]:hover { border-color: rgba(255,255,255,0.35); } }
     .md-potm b { font-size: 14px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .md-potm > div > span { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--muted); } .md-potm > div > span img { width: 13px; height: 13px; object-fit: contain; }
     .md-potm .md-rt { font-size: 14px; padding: 4px 7px; border-radius: 6px; }
@@ -2164,6 +2169,11 @@
     .md-in { color: #7ee2a8; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .md-out { font-size: 11px; color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .md-mark { display: flex; align-items: center; gap: 8px; margin: 6px 0; font-size: 11.5px; color: var(--faint); font-weight: 600; }
+    .md-scorers { display: grid; grid-template-columns: minmax(0, 1fr) 16px minmax(0, 1fr); gap: 12px; align-items: start; margin: -2px 0 14px; font-size: 12px; color: var(--muted); line-height: 1.6; font-variant-numeric: tabular-nums; }
+    .md-scorers:empty { display: none; }
+    .md-scorers > div { display: flex; flex-direction: column; min-width: 0; } .md-scorers .h { text-align: right; } .md-scorers .a { text-align: left; }
+    .md-scorers span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .md-scorers b { font-weight: 600; color: var(--text-2); }
+    .md-scorers .md-ic.ball { width: 14px; height: 14px; margin-top: 3px; justify-self: center; opacity: .6; }
     .md-mark::before, .md-mark::after { content: ''; flex: 1; height: 0.5px; background: rgba(142,154,179,0.22); }
     .md-mark b { color: var(--text-2); font-variant-numeric: tabular-nums; }
     .md-meta { margin-top: 8px; font-size: 11.5px; color: var(--faint); text-align: center; }
@@ -4695,9 +4705,11 @@ function liveMinute(m) {
   if (m.injury_time && !s.includes('+')) s += `+${m.injury_time}`;
   return `${s}분`;
 }
+// 전반·후반은 API-Football 상태(1H·2H)로, 없으면(football-data만) 분으로 — 실시간 창과 같은 "전반 7분" 표기
+const liveHalf = m => m.af_status === '2H' ? '후반' : m.af_status === '1H' ? '전반' : m.minute == null || m.minute === '' ? '' : parseInt(m.minute, 10) > 45 ? '후반' : '전반';
 function liveChip(m) {
   const min = liveMinute(m);
-  const t = m.af_status === 'INT' || m.af_status === 'SUSP' ? '경기 중단' : m.status === 'PAUSED' ? '하프타임' : m.status === 'PENALTY_SHOOTOUT' ? '승부차기' : m.status === 'EXTRA_TIME' ? `연장전${min ? ' ' + min : ''}` : min ? `진행 중 ${min}` : '진행 중';
+  const t = m.af_status === 'INT' || m.af_status === 'SUSP' ? '경기 중단' : m.status === 'PAUSED' ? '하프타임' : m.status === 'PENALTY_SHOOTOUT' ? '승부차기' : m.status === 'EXTRA_TIME' ? `연장전${min ? ' ' + min : ''}` : min ? `${liveHalf(m) || '진행 중'} ${min}` : '진행 중';
   return `<span class="live-chip"><i></i>${t}</span>`;
 }
 let windowMatchesList = null, liveTimer = null;
@@ -5712,12 +5724,26 @@ function mdOwnGoalFor(d, hg, ag) {
   }); return h === hg && a === ag; };
   return tally(false) || !tally(true) ? 'opponent' : 'same';
 }
+// 점수 아래 득점자 명단(2026-10-10): 홈은 오른쪽 맞춤 · 원정은 왼쪽 맞춤, 같은 선수는 한 줄에 분만 이어서. 자책골은 득점 인정 팀 쪽에
+function mdScorersHtml(d, hg, ag) {
+  const og = mdOwnGoalFor(d, hg, ag), by = { home: new Map(), away: new Map() };
+  [...(d.events || [])].sort((a, b) => (a.min - b.min) || ((a.extra || 0) - (b.extra || 0))).forEach(e => {
+    if (!['goal', 'pen_goal', 'own_goal'].includes(e.type) || !e.player) return;
+    const side = (e.type === 'own_goal' ? (e.side === 'home') === (og === 'same') : e.side === 'home') ? 'home' : 'away';
+    const k = mdShortName(e.player) + (e.type === 'own_goal' ? ' (자책)' : ''), l = by[side].get(k) || [];
+    l.push(`${e.min}${e.extra ? '+' + e.extra : ''}'${e.type === 'pen_goal' ? ' (PK)' : ''}`);
+    by[side].set(k, l);
+  });
+  if (!by.home.size && !by.away.size) return '';
+  const col = side => [...by[side]].map(([n, ms]) => `<span><b>${n}</b> ${ms.join(', ')}</span>`).join('');
+  return `<div class="h">${col('home')}</div>${MD_BALL}<div class="a">${col('away')}</div>`;
+}
 function mdSummaryHtml(d, home, away, hg, ag) {
   const og = mdOwnGoalFor(d, hg, ag);
   const ev = [...d.events].sort((a, b) => (a.min - b.min) || ((a.extra || 0) - (b.extra || 0)));
   const st = d.live ? (d.status?.short || '') : '';
   let h = 0, a = 0, html = '', htShown = false;
-  const chunks = [];   // 실시간이면 순서를 뒤집어 최신이 위로
+  const chunks = [];   // 순서를 뒤집어 최신이 위로(끝난 경기도 — 사용자 결정 2026-10-10: 결과부터 거꾸로 읽음)
   const push = x => { chunks.push(x); };
   const firstHalf = e => e.min <= 45;   // 45+2분 같은 전반 추가시간 포함
   ev.forEach(e => {
@@ -5746,10 +5772,11 @@ function mdSummaryHtml(d, home, away, hg, ag) {
     html = `<div class="md-mark live"><span class="live-chip"><i></i>${mdLiveLabel(d.status)}</span><b>${hg} - ${ag}</b></div>` + (chunks.length ? chunks.join('') : '<div class="md-empty">아직 득점·카드·교체가 없어요</div>');
   } else {
     if (!htShown && ev.length) push(`<div class="md-mark">하프타임 <b>${h} - ${a}</b></div>`);
-    html = chunks.join('') + `<div class="md-mark">경기 종료 <b>${hg} - ${ag}</b></div>`;
+    chunks.reverse();
+    html = `<div class="md-mark">경기 종료 <b>${hg} - ${ag}</b></div>` + chunks.join('');
   }
   const p = d.live ? null : d.potm;   // 평점은 경기가 끝나야 확정이라 진행 중엔 최우수 선수를 안 뽑음
-  const potm = p ? `<div class="md-potm"><img src="${p.photo || ''}" alt="" onerror="this.style.visibility='hidden'"><div><small>경기 최우수 선수 · 평점 기준</small><b>${p.name}</b><span><img src="${logos[p.side === 'home' ? home : away] || ''}" alt="" onerror="this.style.display='none'">${shortName(p.side === 'home' ? home : away)}</span></div>${mdRating(p.rating)}</div>` : '';
+  const potm = p ? `<div class="md-potm"${p.id ? ` role="button" tabindex="0" onclick="openPlayerCard('${escJs(p.side === 'home' ? home : away)}', ${p.id})" onkeydown="if(event.key==='Enter')this.click()"` : ''}><img src="${p.photo || ''}" alt="" onerror="this.style.visibility='hidden'"><div><small>경기 최우수 선수 · 평점 기준</small><b>${p.name}</b><span><img src="${logos[p.side === 'home' ? home : away] || ''}" alt="" onerror="this.style.display='none'">${shortName(p.side === 'home' ? home : away)}</span></div>${mdRating(p.rating)}</div>` : '';
   const meta = [d.referee ? `주심 ${d.referee}` : '', d.venue || ''].filter(Boolean).join(' · ');
   return `${potm}<div class="mp-sec" style="${potm ? '' : 'margin-top:0;padding-top:0;border-top:none'}"><div class="mp-sec-t">경기 기록</div><div class="md-tl">${html}</div>${meta ? `<div class="md-meta">${meta}</div>` : ''}</div>`;
 }
@@ -5777,7 +5804,7 @@ function mdLineupHtml(d, home, away, opts = {}) {   // opts.bench === false → 
         : `left:${side === 'home' ? x : 100 - x}%;top:${side === 'home' ? 94 - t * 39 : 6 + t * 39}%`;
       return `<div class="md-pl${p.off != null ? ' off' : ''}" style="${pos};--kb:${bg};--kn:${fg}" title="${p.name}${p.rating ? ' · 평점 ' + p.rating.toFixed(1) : ''}"${p.id ? ` onclick="openPlayerCard('${escJs(side === 'home' ? home : away)}', ${p.id})"` : ''}>
         <span class="md-shirt${ph ? ' ph' : ''}">${ph ? `<img src="${ph}" alt="" onerror="this.remove()">` : p.number ?? ''}${mdRating(p.rating)}${p.off != null ? `<span class="md-offm">${p.off}'</span>` : ''}${marks ? `<span class="md-marks">${marks}</span>` : ''}</span>
-        ${mdNameHtml(p.name, ph ? p.number : null, p.cap)}</div>`;
+        ${mdNameHtml(p.name, ph && opts.numbers !== false ? p.number : null, p.cap)}</div>`;
     }); }).join('');
   };
   // 경기 전 라인업(벤치 칸이 없는 화면)은 포메이션 옆에 감독 이름
@@ -6264,7 +6291,8 @@ function renderMatchDetail(d, home, away, hg, ag) {
   if (!body || !tabs) return;
   tabs.hidden = false;
   document.getElementById('md-summary').innerHTML = mdSummaryHtml(d, home, away, hg, ag);
-  body.querySelector('.md-pane[data-p="lineup"]').innerHTML = mdLineupHtml(d, home, away);
+  const sc = document.getElementById('md-scorers'); if (sc) sc.innerHTML = mdScorersHtml(d, hg, ag);
+  body.querySelector('.md-pane[data-p="lineup"]').innerHTML = mdLineupHtml(d, home, away, { photos: true, numbers: false });   // 경기 전 라인업처럼 선수 사진(테두리 = 유니폼 색) — 평점·교체·골 표시가 붙어 좁아서 등번호는 뺌(이름이 잘리던 것)
   body.querySelector('.md-pane[data-p="stats"]').innerHTML = mdStatsHtml(d, home, away);
 }
 
@@ -6274,7 +6302,7 @@ const LIVE_SHORT_KO = { '1H': '전반', '2H': '후반', HT: '하프타임', ET: 
 function mdLiveLabel(st) {
   const s = st?.short || '', min = st?.elapsed;
   if (['HT', 'BT', 'P', 'INT', 'SUSP', 'FT', 'AET', 'PEN', 'NS'].includes(s)) return LIVE_SHORT_KO[s];
-  return min != null ? `${LIVE_SHORT_KO[s] || '진행 중'} ${min}${st.extra ? '+' + st.extra : ''}'` : (LIVE_SHORT_KO[s] || '진행 중');
+  return min != null ? `${LIVE_SHORT_KO[s] || '진행 중'} ${min}${st.extra ? '+' + st.extra : ''}분` : (LIVE_SHORT_KO[s] || '진행 중');
 }
 let liveModalTimer = null;
 async function openMatchLiveModal(home, away, date, league) {
@@ -6298,19 +6326,18 @@ async function openMatchLiveModal(home, away, date, league) {
   };
   document.getElementById('mp-center').dataset.sc = '';
   setScore(m.home_goals, m.away_goals, liveChip(m).replace(/<[^>]+>/g, ''), false);
-  body.innerHTML = `${round ? `<div class="mp-verdict ml-bar">${round}</div>` : ''}
+  body.innerHTML = `<div id="md-scorers" class="md-scorers"></div>${round ? `<div class="mp-verdict ml-bar">${round}</div>` : ''}
     <div class="md-tabs" id="md-tabs" hidden role="tablist"><button class="active" data-p="summary" onclick="mdTab('summary')">요약</button><button data-p="lineup" onclick="mdTab('lineup')">라인업</button><button data-p="stats" onclick="mdTab('stats')">통계</button></div>
     <div class="md-pane" data-p="summary"><div id="md-summary"><div class="mp-skel"><i style="width:100%;height:10px"></i><i style="width:80%"></i><i style="width:60%"></i></div></div><div id="mr-pred"></div></div>
     <div class="md-pane" data-p="lineup" hidden></div><div class="md-pane" data-p="stats" hidden></div>`;
   modal.classList.add('show');
-  // 경기 전 AI 예측 — 지금 점수 기준으로 "예측대로 가는 중 / 예측과 다르게 가는 중"
+  // 경기 전 AI 예측(진행 중엔 맞았는지 표시 안 함 — "지금은 예측과 다르게" 문구는 사용자 요청으로 뺌)
   const paintPred = (hg, ag) => {
     const x = schedPredOf(m, league), box = document.getElementById('mr-pred');
     if (!box || !x) return;
     const [h, d, a] = x.p.map(v => Math.round(v * 100)), top = Math.max(h, d, a), tc = v => v === top ? ' top' : '';
-    const cur = hg > ag ? 'home_win' : hg < ag ? 'away_win' : 'draw';
     const pick = x.predicted === 'home_win' ? `${shortTeamName(home)} 승` : x.predicted === 'away_win' ? `${shortTeamName(away)} 승` : '무승부';
-    box.innerHTML = `<div class="mp-sec"><div class="mp-sec-t">경기 전 AI 예측 <span class="sp-verdict ${cur === x.predicted ? 'hit' : 'miss'}">${cur === x.predicted ? '지금은 예측대로' : '지금은 예측과 다르게'}</span></div>
+    box.innerHTML = `<div class="mp-sec"><div class="mp-sec-t">경기 전 AI 예측</div>
       <div class="mp-bar"><i class="h" style="width:${h}%"></i><i class="d" style="width:${d}%"></i><i class="a" style="width:${a}%"></i></div>
       <div class="mp-probs"><div class="h${tc(h)}"><b>${h}%</b><span>${shortTeamName(home)} 승</span></div><div class="d${tc(d)}"><b>${d}%</b><span>무승부</span></div><div class="a${tc(a)}"><b>${a}%</b><span>${shortTeamName(away)} 승</span></div></div>
       <div class="mr-pick">AI 예측 <b>${pick}</b> · 경기가 끝나면 자동으로 채점돼요</div></div>`;
@@ -6357,7 +6384,7 @@ async function openMatchResultModal(home, away, date, league) {
   const homeShort = shortTeamName(home), awayShort = shortTeamName(away);
   const verdict = side === 'home' ? `${homeShort} 승리` : side === 'away' ? `${awayShort} 승리` : '무승부';
   const round = league === 'CL' ? (STAGE_LABEL[m.stage] || '') : (m.matchday ? `${m.matchday}라운드` : '');
-  body.innerHTML = `<div class="mp-verdict ${side}"><span class="dot"></span>${verdict}${round ? `<small>${round}</small>` : ''}</div>
+  body.innerHTML = `<div id="md-scorers" class="md-scorers"></div><div class="mp-verdict ${side}"><span class="dot"></span>${verdict}${round ? `<small>${round}</small>` : ''}</div>
     <div class="md-tabs" id="md-tabs" hidden role="tablist"><button class="active" data-p="summary" onclick="mdTab('summary')">요약</button><button data-p="lineup" onclick="mdTab('lineup')">라인업</button><button data-p="stats" onclick="mdTab('stats')">통계</button></div>
     <div class="md-pane" data-p="summary"><div id="md-summary"></div><div id="mr-pred"><div class="mp-skel"><i style="width:100%;height:10px"></i><i style="width:70%"></i></div></div><div id="mr-h2h"></div></div>
     <div class="md-pane" data-p="lineup" hidden></div><div class="md-pane" data-p="stats" hidden></div>
@@ -8396,8 +8423,9 @@ function outcomeTeamLabel(outcome, home, away) {
 }
 
 // ── 누적 적중률 추이 차트 ──
-function buildAccuracyTrendSVG(trend) {
-  const W = 420, H = 130, padL = 34, padR = 10, padT = 14, padB = 20;
+function buildAccuracyTrendSVG(trend, W = 420, H = 130) {   // W·H = 그릴 칸의 실제 크기(글자가 커지거나 작아지지 않게 1:1)
+  const padL = 36, padR = 10, padT = 18, padB = 14;
+  const A = isThemeA(), stroke = A ? 'url(#trmIris)' : '#58a6ff', fill = A ? '#b9a8ff' : '#58a6ff', ink = A ? '#e6e0ff' : '#58a6ff';
   const plotW = W - padL - padR, plotH = H - padT - padB;
   const n = trend.length;
   const xFor = i => padL + (n === 1 ? plotW / 2 : plotW * i / (n - 1));
@@ -8409,22 +8437,23 @@ function buildAccuracyTrendSVG(trend) {
   const areaD = `${pathD} L${fmt(points[points.length - 1][0])},${baseY} L${fmt(points[0][0])},${baseY} Z`;
   const gridLines = [0, 50, 100].map(pct => {
     const y = fmt(yFor(pct));
-    return `<line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="#26334d" stroke-width="1"/><text x="${padL - 8}" y="${Number(y) + 3}" fill="#7c88a1" font-size="9" text-anchor="end">${pct}%</text>`;
+    return `<line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="${A ? 'rgba(255,255,255,0.08)' : '#26334d'}" stroke-width="1"/><text x="${padL - 8}" y="${Number(y) + 4}" fill="#7c88a1" font-size="11" text-anchor="end">${pct}%</text>`;
   }).join('');
   const last = points[points.length - 1];
   const lastPct = trend[trend.length - 1].accuracy_pct;
   const labelAbove = last[1] > 24;
-  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;display:block">
+  return `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" style="display:block;max-width:100%">
+    ${A ? `<defs><linearGradient id="trmIris" gradientUnits="userSpaceOnUse" x1="${padL}" y1="0" x2="${W - padR}" y2="0"><stop offset="0" stop-color="#9cc9ff"/><stop offset=".55" stop-color="#b9a8ff"/><stop offset="1" stop-color="#ffbf98"/></linearGradient></defs>` : ''}
     ${gridLines}
-    <path d="${areaD}" fill="#58a6ff" fill-opacity="0.12" stroke="none"/>
-    <path d="${pathD}" fill="none" stroke="#58a6ff" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
-    <circle cx="${fmt(last[0])}" cy="${fmt(last[1])}" r="4" fill="#58a6ff"/>
-    <text x="${fmt(last[0])}" y="${fmt(last[1] + (labelAbove ? -10 : 16))}" fill="#58a6ff" font-size="12" font-weight="700" text-anchor="end">${lastPct}%</text>
+    <path d="${areaD}" fill="${fill}" fill-opacity="${A ? 0.1 : 0.12}" stroke="none"/>
+    <path d="${pathD}" fill="none" stroke="${stroke}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${fmt(last[0])}" cy="${fmt(last[1])}" r="4" fill="${ink}"/>
+    <text x="${fmt(last[0])}" y="${fmt(last[1] + (labelAbove ? -10 : 18))}" fill="${ink}" font-size="12" font-weight="700" text-anchor="end">${lastPct}%</text>
   </svg>`;
 }
 function renderAccuracyTrendChart(trend) {
   if (!trend || trend.length < 3) return '';
-  return `<div class="mp-sec"><div class="mp-sec-t">누적 적중률 추이 <span class="mp-sec-n">최근 ${trend.length}건</span></div>${buildAccuracyTrendSVG(trend)}</div>`;
+  return `<div class="mp-sec"><div class="mp-sec-t">누적 적중률 추이 <span class="mp-sec-n">최근 ${trend.length}건</span></div><div class="trm-chart"></div></div>`;   // 그림은 창에 넣은 뒤 칸 크기로(drawTrendChart)
 }
 
 // ── AI 트랙레코드(사전 기록 예측의 실전 검증) ──
@@ -8484,8 +8513,10 @@ async function openTrackRecordModal() {
     const data = await fetchTrackRecord();
     const sm = data.summary || {}, up = data.upcoming || {};
     const teamCell = (t, cls) => `<span class="t ${cls}">${cls === 'a' ? `<em>${shortName(t)}</em><img src="${logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'">` : `<img src="${logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'"><em>${shortName(t)}</em>`}</span>`;
-    const upList = (up.matches || []).length ? `<div class="mp-sec"><div class="mp-sec-t">검증 대기 <span class="mp-sec-n">사전 기록 ${up.count}건 중 킥오프 순</span></div>${up.matches.map(e =>
-      `<div class="mr-row trm-row"><span class="dt">${trDate(e.date).replace(/ \(.\)/, '')}</span>${teamCell(e.home_team, 'h')}<b class="when">vs</b>${teamCell(e.away_team, 'a')}<span class="trm-pick ${e.predicted}">${trPick(e)} ${trPickProb(e)}%</span></div>`).join('')}</div>` : '';
+    // 날짜는 줄마다 반복하지 않고 머리글로(그만큼 팀 이름·알약 칸이 넓어짐)
+    const byDay = (list, row) => { let last = ''; return list.map(e => { const d = trDate(e.date), h = d !== last ? `<div class="trm-day">${d}</div>` : ''; last = d; return h + row(e); }).join(''); };
+    const upList = (up.matches || []).length ? `<div class="mp-sec"><div class="mp-sec-t">검증 대기 <span class="mp-sec-n">사전 기록 ${up.count}건 중 킥오프 순</span></div>${byDay(up.matches, e =>
+      `<div class="mr-row trm-row">${teamCell(e.home_team, 'h')}<b class="when"><span class="tm">${koClock(e.date)}</span><span class="vs">vs</span></b>${teamCell(e.away_team, 'a')}<span class="trm-pick ${e.predicted}">${trPick(e)} ${trPickProb(e)}%</span></div>`)}</div>` : '';
     if (!sm.total_resolved) {
       body.innerHTML = `<div class="trm-how">
           <div><b>1</b><span><strong>사전 기록</strong> 킥오프 전, 실제 서비스 중인 모델의 예측을 그대로 저장</span></div>
@@ -8501,21 +8532,31 @@ async function openTrackRecordModal() {
     body.innerHTML = `<div class="trm-tiles">
         ${tile('누적 적중률', `${sm.accuracy_pct}%`, `${sm.total_correct}/${sm.total_resolved}경기`, 'main')}
         ${tile('최근 7일', `${l7.pct ?? '-'}%`, `${l7.correct}/${l7.n}경기`)}
-        ${tile('고확신 예측', cf.n ? `${cf.pct}%` : '-', cf.n ? `확률 60%+ · ${cf.correct}/${cf.n}` : '확률 60%+ 없음')}
+        ${tile('고확신 예측', cf.n ? `${cf.pct}%` : '-', cf.n ? `60%+ 중 ${cf.correct}/${cf.n}` : '60%+ 없음')}
       </div>
+      <div class="trm-grid"><div>
       <div class="mp-sec"><div class="mp-sec-t">기준선 대비<button type="button" class="ii" data-tip="baseline" aria-label="기준선 설명">i</button> <span class="mp-sec-n">기준선 = 같은 경기를 전부 홈승으로 예측</span></div>
         <div class="trm-cmp"><span>AI 모델</span><div><i class="ai" style="width:${sm.accuracy_pct}%"></i></div><b>${sm.accuracy_pct}%</b></div>
         <div class="trm-cmp"><span>기준선</span><div><i style="width:${sm.baseline_home_pct}%"></i></div><b>${sm.baseline_home_pct}%</b></div>
       </div>
-      ${renderAccuracyTrendChart(data.accuracy_trend)}
       ${leagues.length > 1 ? `<div class="mp-sec"><div class="mp-sec-t">리그별 적중률</div>${leagues.map(([lg, v]) => { const li = TODAY_LEAGUE_INFO[lg];
         return `<div class="trm-cmp lg"><span>${li ? `<img src="${li.logo}" alt="" style="${li.invert ? 'filter:brightness(0) invert(1)' : ''}" onerror="this.style.display='none'">${li.name}` : lg}</span><div><i class="ai" style="width:${v.pct}%"></i></div><b>${v.pct}% <small>${v.correct}/${v.n}</small></b></div>`; }).join('')}</div>` : ''}
-      <div class="mp-sec"><div class="mp-sec-t">최근 검증 결과 <span class="mp-sec-n">경기를 누르면 상세</span></div>${(data.recent || []).map(e => {
+      </div><div>${renderAccuracyTrendChart(data.accuracy_trend)}</div></div>
+      <div class="mp-sec"><div class="mp-sec-t">최근 검증 결과 <span class="mp-sec-n">경기를 누르면 상세</span></div>${byDay(data.recent || [], e => {
         const [hg, ag] = (e.actual_score || '').split('-').map(Number);
-        return `<div class="mr-row trm-row" onclick="openTrackResult('${escJs(e.home_team)}','${escJs(e.away_team)}','${e.date}','${e.league || ''}')"><span class="dt">${trDate(e.date).replace(/ \(.\)/, '')}</span>${teamCell(e.home_team, 'h' + (hg < ag ? ' lose' : ''))}<b>${e.actual_score || ''}</b>${teamCell(e.away_team, 'a' + (hg > ag ? ' lose' : ''))}<span class="trm-pick ${e.correct ? 'hit' : 'miss'}" title="AI 예측 ${trPick(e)} ${trPickProb(e)}%">${e.correct ? '✓' : '✕'} ${trPick(e)}</span></div>`; }).join('')}</div>${upList}`;
+        return `<div class="mr-row trm-row" onclick="openTrackResult('${escJs(e.home_team)}','${escJs(e.away_team)}','${e.date}','${e.league || ''}')">${teamCell(e.home_team, 'h' + (hg < ag ? ' lose' : ''))}<b>${e.actual_score || ''}</b>${teamCell(e.away_team, 'a' + (hg > ag ? ' lose' : ''))}<span class="trm-pick ${e.correct ? 'hit' : 'miss'}" title="AI 예측 ${trPick(e)} ${trPickProb(e)}%">${e.correct ? '✓' : '✕'} ${trPick(e)}<small> ${trPickProb(e)}%</small></span></div>`; })}</div>${upList}`;
+    drawTrendChart(body, data.accuracy_trend);
   } catch (e) {
     body.innerHTML = '<div class="ti-empty">트랙레코드를 불러올 수 없어요.</div>';
   }
+}
+// 누적 추이 그림: 칸의 실제 폭으로 그리고, 넓은 화면 두 칸이면 왼쪽(기준선·리그별) 끝까지 높이를 맞춤
+function drawTrendChart(body, trend) {
+  const ch = body.querySelector('.trm-chart'); if (!ch) return;
+  const left = innerWidth > 768 ? ch.closest('.trm-grid')?.firstElementChild : null;
+  // 그리기 전(빈 칸) 오른쪽 칸 높이 = 제목·여백만 → 남는 높이가 그림 높이(두 칸은 그리드 칸이라 여백이 칸 안에 들어감)
+  const h = left ? Math.min(240, Math.max(100, left.offsetHeight - left.nextElementSibling.offsetHeight)) : 130;
+  ch.innerHTML = buildAccuracyTrendSVG(trend, Math.round(ch.clientWidth) || 420, Math.round(h));
 }
 // 트랙레코드의 경기 → 경기 결과 창(그 리그 일정이 없으면 받아서)
 async function openTrackResult(home, away, date, league) {
