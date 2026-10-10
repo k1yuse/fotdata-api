@@ -7595,7 +7595,7 @@ function runSimulation(auto) {
   const data = currentChampionData;
   if (!data) return;
   const simBtn = document.getElementById('sim-btn');
-  if (simBtn) { simBtn.style.width = simBtn.getBoundingClientRect().width + 'px'; simBtn.classList.add('busy'); simBtn.querySelector('span').textContent = '계산 중'; }
+  if (simBtn) { simBtn.style.width = getComputedStyle(simBtn).width; simBtn.classList.add('busy'); simBtn.querySelector('span').textContent = '계산 중'; }
 
   setTimeout(() => {
     const nSim = parseInt(document.getElementById('sim-slider').value);
@@ -9785,8 +9785,9 @@ function deliverShareCanvas(canvas, home, away, btn, origHtml) {
 function btnBusy(btn, label) {
   if (!btn) return;
   if (btn.dataset.idle == null) btn.dataset.idle = btn.innerHTML;
-  const w = btn.getBoundingClientRect().width;
-  if (w) btn.style.width = w + 'px';
+  // 배치 폭(computed)으로 고정 — getBoundingClientRect는 누름 효과(scale .97)가 걸린 채라 4px쯤 작게 재서, 그만큼 옆 칸이 늘었다 돌아오며 흔들렸음
+  const w = getComputedStyle(btn).width;
+  if (w && w !== 'auto') btn.style.width = w;
   btn.disabled = true; btn.classList.add('is-busy');
   btn.innerHTML = `<span class="btn-spin" aria-hidden="true"></span><span class="btn-lbl">${label}</span>`;
 }
