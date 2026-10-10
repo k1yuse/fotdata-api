@@ -2495,7 +2495,7 @@ def get_match_preview(home_team: str, away_team: str, date: str = None):
         pv["injuries"] = {"home": inj.get("home", []), "away": inj.get("away", [])}
     if not pv.get("lineups") and not pv.get("predicted") and not pv.get("injuries"):
         return Response(status_code=204)
-    return {**pv, "date": date}
+    return {**pv, "date": date, **({"kickoff": e["kickoff"]} if e else {})}   # kickoff: 화면이 확정 라인업을 기다릴지 정함
 
 
 

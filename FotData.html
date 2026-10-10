@@ -5921,9 +5921,25 @@ function teamNewsHtml(pv, sqH, sqA, home, away, parts, horizontal) {
   }
   return parts ? { main: html, side, inj: injHtml, kp: side.slice(injHtml.length) } : html + side;
 }
+// 확정 라인업 기다리기(2026-10-10): 예상 라인업을 보여주는 중이고 킥오프 95분 전 ~ 15분 뒤면, 창·예측 결과를 열어 둔 채로도
+// 3분마다 다시 받아 확정이 오면 바로 바꿈(예전엔 창을 다시 열어야 바뀌어서 다른 앱엔 나온 라인업이 우리만 예상으로 남았음).
+// 화면에서 안 보이면(창 닫힘·다른 탭) 멈춤. API-Football 라인업은 풋몹(Opta)보다 늦게, 보통 킥오프 20~40분 전에 들어옴
+function watchLineup(el, pv, again, isLive) {
+  clearTimeout(el._luTimer);
+  if (!pv?.kickoff || (pv.lineups?.home && pv.lineups?.away)) return;
+  const ko = Date.parse(pv.kickoff), now = Date.now();
+  if (now < ko - 95 * 60000 || now > ko + 15 * 60000) return;
+  const tick = () => {
+    if (!isLive() || !el.isConnected || !el.getClientRects().length) return;
+    if (document.hidden) { el._luTimer = setTimeout(tick, 60000); return; }
+    again();
+  };
+  el._luTimer = setTimeout(tick, 185000);   // fetchMatchPreview가 3분 지난 응답만 다시 받으므로 그보다 조금 뒤
+}
 async function loadTeamNews(el, home, away, date, isLive = () => true, sideEl = null, injEl = null) {
   const [pv, sqH, sqA] = await Promise.all([fetchMatchPreview(home, away, date), fetchAfSquad(home), fetchAfSquad(away)]);
   if (!isLive() || !el) return false;
+  watchLineup(el, pv, () => loadTeamNews(el, home, away, date, isLive, sideEl, injEl), isLive);
   if (sideEl) {   // 경기 미리보기 창: 라인업은 왼쪽(el), 결장·부상·주요 선수는 오른쪽(sideEl)
     const r = pv || sqH || sqA ? teamNewsHtml(pv, sqH, sqA, home, away, true, innerWidth > 980) : { main: '', side: '' };
     el.innerHTML = r.main; sideEl.innerHTML = r.side;
