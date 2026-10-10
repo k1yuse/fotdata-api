@@ -2613,6 +2613,8 @@ def _share_data(slug):
         "limited": r.get("limited", False), "meta": _fixture_meta(home, away),
     }
 
+CARD_DESIGN = "a"   # 카드 디자인이 바뀌면 글자를 바꿈 — 같은 날에도 메신저가 예전 카드를 계속 보여주지 않게(2026-10-10 theme-a 카드)
+
 def _data_version():
     """썸네일 주소에 붙이는 버전 — 매일 예측이 바뀌면 메신저가 새 이미지를 받아가게(모델 학습 시각)"""
     acc = _load_json("accuracy.json") or {}
@@ -2635,9 +2637,9 @@ def share_match_page(slug: str):
             desc += f" · 예상 스코어 {d['score']}"
         desc += f" | {d['meta']}" if d["meta"] else ""
         desc += " — FotData AI 축구 경기 예측"
-        image = f"{SITE_URL}/og/m/{d['slug']}.jpg?v={_data_version()}"
+        image = f"{SITE_URL}/og/m/{d['slug']}.jpg?v={_data_version()}{CARD_DESIGN}"
     else:
-        title, desc, image = "FotData — AI 축구 경기 예측", "5대 리그 + 챔피언스리그 AI 경기 예측", f"{SITE_URL}/og-image.png?v=6"
+        title, desc, image = "FotData — AI 축구 경기 예측", "5대 리그 + 챔피언스리그 AI 경기 예측", f"{SITE_URL}/og-image.png?v=7"
     e = lambda s: escape(s, quote=True)
     html = f"""<!doctype html>
 <html lang="ko"><head><meta charset="utf-8">
@@ -2658,10 +2660,10 @@ def share_match_page(slug: str):
 <meta name="twitter:title" content="{e(title)}">
 <meta name="twitter:description" content="{e(desc)}">
 <meta name="twitter:image" content="{e(image)}">
-<meta name="theme-color" content="#0d1117">
+<meta name="theme-color" content="#070b16">
 <script>location.replace({json.dumps(app_url)});</script>
-</head><body style="margin:0;background:#0d1117;color:#e6edf3;font-family:-apple-system,sans-serif;display:grid;place-items:center;min-height:100vh">
-<a href="{e(app_url)}" style="color:#58a6ff">FotData에서 예측 보기</a>
+</head><body style="margin:0;background:#070b16;color:#eef2f8;font-family:-apple-system,sans-serif;display:grid;place-items:center;min-height:100vh">
+<a href="{e(app_url)}" style="color:#cfd7e6">FotData에서 예측 보기</a>
 </body></html>"""
     # 사람은 곧바로 앱으로 넘어가고, 미리보기 봇(JS 실행 안 함)만 위 태그를 읽음. 링크 미리보기 봇이 og:url을
     # 다시 긁어가도 같은 페이지라 안전(og:url을 앱 주소로 두면 페북이 그쪽 공통 태그로 덮어씀)
@@ -2672,7 +2674,7 @@ def share_match_image(name: str):
     slug = re.sub(r"\.(jpe?g|png)$", "", name.lower())
     d = _share_data(slug)
     if not d:
-        return Response(status_code=302, headers={"Location": f"{SITE_URL}/og-image.png?v=6"})
+        return Response(status_code=302, headers={"Location": f"{SITE_URL}/og-image.png?v=7"})
     return Response(_share_jpg(d["home"], d["away"]), media_type="image/jpeg",
                     headers={"Cache-Control": "public, max-age=86400, s-maxage=43200"})
 

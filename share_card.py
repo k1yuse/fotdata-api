@@ -1,8 +1,9 @@
 """
 경기별 링크 공유 썸네일(1200×630 JPEG) — main.py의 /og/match/{slug}.jpg가 부름 (2026-09-30)
 카톡·페북·X 같은 링크 미리보기는 JS를 실행하지 않아서, 예측 결과를 보여주려면 서버가 이미지를 그려야 함.
-디자인은 앱 공유 이미지(FotData.html shareResultCard)·예측 결과 머리와 같은 규칙:
-진한 남색 + 빛번짐 + 와이어프레임 공(generate_bg_ball) + 원근 경기장 선, 홈 파랑 · 무 회색 · 원정 주황.
+디자인(2026-10-10, 앱 theme-a 톤): 밤하늘 남색 + 위쪽 라벤더 빛 + 오로라 와이어프레임 공(generate_bg_ball) + 원근 경기장 선.
+브랜드(로고 공) = 오로라(하늘색 → 라벤더 → 복숭아), 홈 파랑 · 무 회색 · 원정 주황은 데이터에만. 아래 iris_* 도우미는
+generate_og_image.py·generate_icons.py도 같이 씀.
 속도(Render 무료 CPU는 로컬보다 20~40배 느림 — 2배 전체 캔버스로 그렸더니 카드 한 장에 1~4초라 미리보기 봇을 놓칠 수 있었음):
 경기와 상관없는 배경(빛번짐·공·경기장·로고·워드마크)과 팀 색 링은 2배로 그려 줄인 것을 한 번만 만들어 재사용하고,
 경기마다 바뀌는 건 1배 캔버스에 바로 — 테두리가 매끄러워야 하는 칩·막대만 작은 조각을 2배로 그려 줄여서 붙임.
@@ -16,7 +17,7 @@ from functools import lru_cache
 
 import numpy as np
 import requests
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 import generate_bg_ball as ball
 
@@ -25,7 +26,75 @@ S = 2
 W, H = OUT_W * S, OUT_H * S
 FONT_DIR = os.path.join(os.path.dirname(__file__), 'fonts')
 BLUE, ORANGE, GREY = (88, 166, 255), (240, 136, 62), (142, 154, 179)
-TEXT, MUTED = (236, 241, 250), (142, 154, 179)
+TEXT, MUTED = (238, 242, 248), (127, 138, 160)
+INK2 = (185, 195, 212)
+HOME_TX, AWAY_TX = (143, 193, 255), (255, 184, 137)   # 앱 theme-a 홈/원정 글자색(칩 글자 — 막대보다 밝게)
+IRIS = ((156, 201, 255), (185, 168, 255), (255, 191, 152))   # 앱 --iris(#9cc9ff → #b9a8ff → #ffbf98)
+
+
+def iris(t):
+    """0~1 → 오로라 색(RGB)"""
+    t = min(1.0, max(0.0, t)) * 2
+    i = min(1, int(t))
+    f, a, b = t - i, IRIS[i], IRIS[i + 1]
+    return tuple(int(round(a[j] + (b[j] - a[j]) * f)) for j in range(3))
+
+
+def iris_paint(mask, diag=False):
+    """흑백 마스크(L) 모양대로 오로라를 칠한 RGBA. diag=True면 정사각형 대각선(로고 공 — SVG x1=0 y1=0 x2=1 y2=1),
+    아니면 CSS 115°(글자·막대)"""
+    w, h = mask.size
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+    if diag:
+        t = (xx / max(1, w - 1) + yy / max(1, h - 1)) / 2
+    else:
+        t = (xx * 0.906 + yy * 0.423) / max(1.0, w * 0.906 + h * 0.423)
+    t = np.clip(t, 0, 1) * 2
+    lo = t < 1
+    st = np.array(IRIS, dtype=np.float32)
+    f = np.where(lo, t, t - 1)[..., None]
+    rgb = np.where(lo[..., None], st[0] + (st[1] - st[0]) * f, st[1] + (st[2] - st[1]) * f)
+    out = np.dstack([rgb, np.asarray(mask, dtype=np.float32)]).clip(0, 255).astype(np.uint8)
+    return Image.fromarray(out, 'RGBA')
+
+
+LOGO_PENT = [(12, 7.7), (16.09, 10.67), (14.53, 15.48), (9.47, 15.48), (7.91, 10.67)]
+LOGO_SPOKES = [((12, 7.7), (12, 3.8)), ((16.09, 10.67), (19.8, 9.47)), ((14.53, 15.48), (16.82, 18.63)),
+               ((9.47, 15.48), (7.18, 18.63)), ((7.91, 10.67), (4.2, 9.47))]
+
+
+def logo_mask(size, sw=1.4):
+    """사이트 로고 공(viewBox 24: 원 r9 + 오각형 + 바깥 5선, 둥근 끝) 흑백 마스크 — 4배로 그려 줄임"""
+    k4 = 4
+    big = int(size * k4)
+    m = Image.new('L', (big, big), 0)
+    d = ImageDraw.Draw(m)
+    k = big / 24
+    w = max(2, int(round(sw * k)))
+    P = lambda x, y: (x * k, y * k)
+    r = 9 * k + w / 2
+    d.ellipse([12 * k - r, 12 * k - r, 12 * k + r, 12 * k + r], outline=255, width=w)
+    pent = [P(*p) for p in LOGO_PENT]
+    d.line(pent + [pent[0]], fill=255, width=w, joint='curve')
+    for a, b in LOGO_SPOKES:
+        d.line([P(*a), P(*b)], fill=255, width=w)
+    for x, y in pent + [P(*b) for _, b in LOGO_SPOKES]:
+        d.ellipse([x - w / 2, y - w / 2, x + w / 2, y + w / 2], fill=255)
+    return m.resize((int(size), int(size)), Image.LANCZOS)
+
+
+def draw_logo_iris(img, x, y, size, sw=1.4):
+    img.alpha_composite(iris_paint(logo_mask(size, sw), diag=True), (int(x), int(y)))
+
+
+def iris_text(img, xy, text, fnt, anchor='la'):
+    """오로라 글자(마스크에 글자를 쓰고 그 범위만큼 그라데이션)"""
+    m = Image.new('L', img.size, 0)
+    ImageDraw.Draw(m).text(xy, text, font=fnt, fill=255, anchor=anchor)
+    box = m.getbbox()
+    if not box:
+        return
+    img.alpha_composite(iris_paint(m.crop(box)), box[:2])
 
 
 @lru_cache(maxsize=48)
@@ -76,27 +145,16 @@ def _draw_ball(img, cx, cy, size, alpha):
     d = ImageDraw.Draw(layer)
     X = lambda x: cx + (x - ball.SIZE / 2) * k
     Y = lambda y: cy + (y - ball.SIZE / 2) * k
+    tint = lambda x, y: iris(0.5 + ((x - ball.SIZE / 2) * 0.8 + (y - ball.SIZE / 2) * 0.6) / (1.8 * rim))   # 왼쪽 위 → 오른쪽 아래
     for x0, y0, x1, y1, o in sorted(segs, key=lambda s: s[4]):
-        d.line([X(x0), Y(y0), X(x1), Y(y1)], fill=BLUE + (int(255 * o * alpha),), width=int(1.6 * S))
+        d.line([X(x0), Y(y0), X(x1), Y(y1)], fill=tint((x0 + x1) / 2, (y0 + y1) / 2) + (int(255 * o * alpha),), width=int(1.6 * S))
     for x, y, r, o in dots:
         rr = r * k * 1.5
-        d.ellipse([X(x) - rr, Y(y) - rr, X(x) + rr, Y(y) + rr], fill=(142, 195, 255, int(255 * o * alpha)))
+        c = tint(x, y)
+        d.ellipse([X(x) - rr, Y(y) - rr, X(x) + rr, Y(y) + rr], fill=tuple(v + (255 - v) // 4 for v in c) + (int(255 * o * alpha),))
     r = rim * k
-    d.ellipse([cx - r, cy - r, cx + r, cy + r], outline=(120, 184, 255, int(200 * alpha)), width=int(2 * S))
+    d.ellipse([cx - r, cy - r, cx + r, cy + r], outline=(196, 186, 255, int(190 * alpha)), width=int(2 * S))
     img.alpha_composite(layer)
-
-
-def _draw_logo(d, x, y, size):
-    """사이트 로고 축구공(viewBox 24) — generate_og_image.draw_logo와 같은 좌표"""
-    k = size / 24
-    P = lambda px, py: (x + px * k, y + py * k)
-    w = max(2, int(1.5 * k))
-    d.ellipse([*P(3, 3), *P(21, 21)], outline=BLUE, width=w)
-    pent = [P(12, 7.7), P(16.09, 10.67), P(14.53, 15.48), P(9.47, 15.48), P(7.91, 10.67)]
-    d.line(pent + [pent[0]], fill=BLUE, width=w, joint='curve')
-    for a, b in [((12, 7.7), (12, 3.8)), ((16.09, 10.67), (19.8, 9.47)), ((14.53, 15.48), (16.82, 18.63)),
-                 ((9.47, 15.48), (7.18, 18.63)), ((7.91, 10.67), (4.2, 9.47))]:
-        d.line([P(*a), P(*b)], fill=BLUE, width=w)
 
 
 # 팀 원형 배지 위치(1배 좌표)
@@ -109,41 +167,40 @@ def _background():
     """경기와 상관없는 부분 전부(1배로 줄여서 캐시)"""
     img = np.empty((H, W, 3), dtype=np.float32)
     y = np.linspace(0, 1, H)[:, None, None]
-    img[...] = np.array([8, 13, 26]) * (1 - y) + np.array([12, 20, 36]) * y
-    _glow(img, W * 0.5, H * 0.34, W * 0.36, (34, 70, 130), 0.42)       # 가운데(스코어) 뒤
-    _glow(img, HOME_X * S, TEAM_Y * S, W * 0.2, (40, 90, 170), 0.38)   # 홈 파랑
-    _glow(img, AWAY_X * S, TEAM_Y * S, W * 0.2, (150, 80, 30), 0.30)   # 원정 주황
-    _glow(img, W * 0.02, H * 1.0, W * 0.3, (90, 60, 150), 0.22)
+    img[...] = np.array([7, 11, 22]) * (1 - y) + np.array([10, 15, 30]) * y
+    _glow(img, W * 0.5, -H * 0.2, W * 0.55, (70, 66, 140), 0.55)       # 위쪽 라벤더(앱 배경과 같은 빛)
+    _glow(img, W * 0.5, H * 0.4, W * 0.3, (40, 44, 90), 0.35)          # 가운데(스코어) 뒤
+    _glow(img, HOME_X * S, TEAM_Y * S, W * 0.2, (30, 70, 140), 0.30)   # 홈 파랑
+    _glow(img, AWAY_X * S, TEAM_Y * S, W * 0.2, (130, 70, 30), 0.24)   # 원정 주황
     base = Image.fromarray(img.clip(0, 255).astype(np.uint8)).convert('RGBA')
-    _draw_ball(base, W * 0.5, H * 0.4, H * 0.95, 0.2)
+    _draw_ball(base, W * 0.5, H * 0.4, H * 0.95, 0.17)
     # 원근 경기장 선(예측 결과 머리와 같은 그림, 홈 쪽 파랑·원정 쪽 주황)
     layer = Image.new('RGBA', base.size, (0, 0, 0, 0))
     d = ImageDraw.Draw(layer)
-    col = {'home': BLUE, 'away': ORANGE, 'mid': (143, 184, 255)}
+    col = {'home': BLUE, 'away': ORANGE, 'mid': (200, 200, 240)}
     px, py, pw, ph = 40 * S, 96 * S, (OUT_W - 80) * S, 330 * S
     for u1, v1, u2, v2, s in _pitch_segments():
-        d.line([px + u1 * pw, py + v1 * ph, px + u2 * pw, py + v2 * ph], fill=col[s] + (62,), width=int(1.6 * S))
+        d.line([px + u1 * pw, py + v1 * ph, px + u2 * pw, py + v2 * ph], fill=col[s] + (46 if s == 'mid' else 54,), width=int(1.6 * S))
     base.alpha_composite(layer)
-    # 머리 왼쪽: 로고 + FotData
+    # 머리 왼쪽: 오로라 로고 공 + FotData(흰 글자 — 앱 theme-a 워드마크)
+    draw_logo_iris(base, 54 * S, 38 * S, 42 * S)
     d = ImageDraw.Draw(base)
-    _draw_logo(d, 56 * S, 40 * S, 38 * S)
-    fw = font(30 * S, 'Bold')
-    d.text((104 * S, 59 * S), 'Fot', font=fw, fill=TEXT, anchor='lm')
-    d.text((104 * S + d.textlength('Fot', font=fw), 59 * S), 'Data', font=fw, fill=BLUE, anchor='lm')
+    d.text((106 * S, 59 * S), 'FotData', font=font(30 * S, 'Bold'), fill=TEXT, anchor='lm')
     return base.reduce(S)
 
 
 @lru_cache(maxsize=4)
 def _ring(color):
-    """밝은 배지 + 팀 색 링 + 바깥 빛(랜딩 빅매치 카드와 같은 방식 — 남색·검정 엠블럼도 어두운 배경에서 보이게), 1배 조각"""
+    """옅은 유리 원 + 팀 색 링 + 바깥 빛, 1배 조각. 예전엔 하얀 원(어두운 엠블럼이 보이게)이었는데 어두운 화면 위 스티커 같아서
+    2026-10-10 유리 원으로 — 어두운 엠블럼은 _team이 모양을 따라 밝은 테두리 빛을 따로 넣음"""
     size = (BADGE_R + RING_PAD) * 2 * S
     img = Image.new('RGBA', (size, size), (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
     c, r = size / 2, BADGE_R * S
     for i in range(14):
-        rr = r + (8 + i * 2.4) * S
-        d.ellipse([c - rr, c - rr, c + rr, c + rr], outline=color + (int(26 * (1 - i / 14)),), width=int(3 * S))
-    d.ellipse([c - r, c - r, c + r, c + r], fill=(236, 241, 247, 250), outline=color + (255,), width=int(5 * S))
+        rr = r + (6 + i * 2.4) * S
+        d.ellipse([c - rr, c - rr, c + rr, c + rr], outline=color + (int(22 * (1 - i / 14)),), width=int(3 * S))
+    d.ellipse([c - r, c - r, c + r, c + r], fill=(255, 255, 255, 20), outline=color + (200,), width=int(3 * S))
     return img.reduce(S)
 
 
@@ -198,6 +255,28 @@ def _fit(d, text, size, weight, max_w):
     return font(size, weight)
 
 
+def crest_luma(crest):
+    """엠블럼 평균 밝기(0~1, 투명한 곳 빼고) — 앱 저장 이미지(FotData.html crestLuma)와 같은 기준"""
+    a = np.asarray(crest.convert('RGBA'), dtype=np.float32)
+    w = a[..., 3] / 255
+    if w.sum() < 1:
+        return 1.0
+    y = (0.2126 * a[..., 0] + 0.7152 * a[..., 1] + 0.0722 * a[..., 2]) / 255
+    return float((y * w).sum() / w.sum())
+
+
+DARK_CREST = 0.42   # 이보다 어두운 엠블럼(토트넘·유벤투스·PSG 등)은 밝은 테두리 빛
+
+
+def _crest_halo(c, pad=12):
+    """엠블럼 모양을 따라 살짝 넓힌 밝은 빛(어두운 엠블럼이 남색 바탕에 묻히지 않게)"""
+    m = Image.new('L', (c.width + pad * 2, c.height + pad * 2), 0)
+    m.paste(c.split()[3], (pad, pad))
+    m = m.filter(ImageFilter.MaxFilter(5)).filter(ImageFilter.GaussianBlur(2.2))
+    m = Image.fromarray((np.asarray(m, np.float32) * 0.85).astype(np.uint8))
+    return Image.merge('RGBA', [Image.new('L', m.size, v) for v in (236, 241, 250)] + [m])
+
+
 def _team(img, d, cx, color, name, crest):
     ring = _ring(color)
     img.alpha_composite(ring, (int(cx - ring.width / 2), int(TEAM_Y - ring.height / 2)))
@@ -208,41 +287,44 @@ def _team(img, d, cx, color, name, crest):
         if max(c.size) < box:   # 작은 원본은 키워서
             k = box / max(c.size)
             c = c.resize((max(1, int(c.width * k)), max(1, int(c.height * k))), Image.LANCZOS)
+        if crest_luma(c) < DARK_CREST:
+            img.alpha_composite(_crest_halo(c), (int(cx - c.width / 2 - 12), int(TEAM_Y - c.height / 2 - 12)))
         img.alpha_composite(c, (int(cx - c.width / 2), int(TEAM_Y - c.height / 2)))
     else:
-        d.text((cx, TEAM_Y), ''.join(w[0] for w in name.split()[:2]).upper(), font=font(56), fill=(36, 48, 72), anchor='mm')
+        d.text((cx, TEAM_Y), ''.join(w[0] for w in name.split()[:2]).upper(), font=font(56), fill=TEXT, anchor='mm')
     d.text((cx, TEAM_Y + BADGE_R + 50), name, font=_fit(d, name, 34, 'Bold', 300), fill=TEXT, anchor='mm')
 
 
 def _chip(img, cx, cy, tw, color):
-    """예측 칩 배경(반투명 알약) — 작은 조각을 2배로 그려 줄여서 붙임"""
-    w, h = int(tw + 48), 48
+    """예측 칩 = 앱 예측 배지(유리 알약 + 팀 색 안쪽 테두리 + 앞에 점) — 작은 조각을 2배로 그려 줄여서 붙임. 글자 시작 x를 돌려줌"""
+    w, h = int(tw + 70), 50
     piece = Image.new('RGBA', (w * S, h * S), (0, 0, 0, 0))
-    ImageDraw.Draw(piece).rounded_rectangle([1 * S, 1 * S, (w - 1) * S, (h - 1) * S], radius=23 * S,
-                                            fill=color + (40,), outline=color + (140,), width=int(1.5 * S))
-    img.alpha_composite(piece.reduce(S), (int(cx - w / 2), int(cy - h / 2)))
+    pd = ImageDraw.Draw(piece)
+    pd.rounded_rectangle([1 * S, 1 * S, (w - 1) * S, (h - 1) * S], radius=24 * S, fill=(255, 255, 255, 22), outline=color + (120,), width=int(1.5 * S))
+    pd.line([18 * S, 2 * S, (w - 18) * S, 2 * S], fill=(255, 255, 255, 60), width=int(1 * S))   # 위쪽 빛 한 줄(유리)
+    pd.ellipse([22 * S, (h / 2 - 5) * S, 32 * S, (h / 2 + 5) * S], fill=color + (255,))
+    x0 = int(cx - w / 2)
+    img.alpha_composite(piece.reduce(S), (x0, int(cy - h / 2)))
+    return x0 + 42
 
 
 def _bar(img, x0, x1, y, h, pct, win):
-    """한 줄 확률 막대(홈 파랑 · 무 회색 · 원정 주황, 예측한 쪽만 진하게, 칸 사이 틈) — 2배 조각"""
-    w = x1 - x0
+    """확률 막대 = 앱 빅매치(홈 파랑 · 무 회색 · 원정 주황, 둥근 세 조각 사이 틈) — 2배 조각. 각 조각 가운데 x를 돌려줌"""
+    w, gap = x1 - x0, 6
     piece = Image.new('RGBA', (w * S, h * S), (0, 0, 0, 0))
     pd = ImageDraw.Draw(piece)
-    pd.rectangle([0, 0, w * S, h * S], fill=(24, 35, 58, 255))
-    total, x = max(1, sum(pct)), 0.0
-    cuts = []
-    for i, col in enumerate((BLUE, GREY, ORANGE)):
-        seg = w * pct[i] / total
-        if seg > 0:
-            pd.rectangle([x * S, 0, (x + seg) * S, h * S], fill=tuple(int(c * (1 if i == win else 0.42) + 33 * (0 if i == win else 0.58)) for c in col) + (255,))
-        x += seg
-        cuts.append(x)
-    for xx in cuts[:2]:
-        pd.line([xx * S, 0, xx * S, h * S], fill=(10, 16, 32, 255), width=int(3 * S))
-    mask = Image.new('L', piece.size, 0)
-    ImageDraw.Draw(mask).rounded_rectangle([0, 0, w * S - 1, h * S - 1], radius=h / 2 * S, fill=255)
-    piece.putalpha(mask)
+    total = max(1, sum(pct))
+    shown = [i for i in range(3) if pct[i] > 0]
+    usable = w - gap * (len(shown) - 1)
+    x, mids = 0.0, [x0 + w / 2] * 3
+    for i in shown:
+        seg = max(h, usable * pct[i] / total)
+        col = (BLUE, (120, 130, 150), ORANGE)[i]
+        pd.rounded_rectangle([x * S, 0, (x + seg) * S - 1, h * S - 1], radius=h / 2 * S, fill=col + (255,))
+        mids[i] = x0 + x + seg / 2
+        x += seg + gap
     img.alpha_composite(piece.reduce(S), (x0, y))
+    return mids
 
 
 def render(home_name, away_name, home_logo, away_logo, probs, score, prediction, meta=None, limited=False):
@@ -261,33 +343,33 @@ def render(home_name, away_name, home_logo, away_logo, probs, score, prediction,
     d.text((OUT_W / 2, 152), '예상 스코어', font=font(21, 'SemiBold'), fill=MUTED, anchor='mm')
     d.text((OUT_W / 2, 238), (score or '- -').replace('-', ' : '), font=font(112, 'Bold'), fill=TEXT, anchor='mm')
     color = BLUE if prediction == 'home_win' else ORANGE if prediction == 'away_win' else GREY
+    tcol = HOME_TX if prediction == 'home_win' else AWAY_TX if prediction == 'away_win' else INK2
     label = f'{home_name} 승리 예측' if prediction == 'home_win' else f'{away_name} 승리 예측' if prediction == 'away_win' else '무승부 예측'
     fc = _fit(d, label, 24, 'Bold', 300)
-    _chip(img, OUT_W / 2, 336, d.textlength(label, font=fc), color)
-    d.text((OUT_W / 2, 336), label, font=fc, fill=color, anchor='mm')
+    tx = _chip(img, OUT_W / 2, 338, d.textlength(label, font=fc), color)
+    d.text((tx, 338), label, font=fc, fill=tcol, anchor='lm')
 
-    # 아래: 확률 라벨 + 한 줄 막대
+    # 아래: 앱 빅매치처럼 확률 숫자(위) + 이름(아래 작은 글자) + 둥근 세 조각 막대
     ph, pd_, pa = probs
     pct = [round(ph * 100), round(pd_ * 100), round(pa * 100)]
     win = {'home_win': 0, 'draw': 1, 'away_win': 2}.get(prediction, 0)
-    x0, x1, by, bh = 72, OUT_W - 72, 500, 22
-    for i, (lab, col, anc, x) in enumerate([(f'{home_name} 승', BLUE, 'ls', x0), ('무승부', GREY, 'ms', OUT_W / 2), (f'{away_name} 승', ORANGE, 'rs', x1)]):
-        on = i == win
-        fl, fp, num = font(22, 'SemiBold'), font(34 if on else 28, 'Bold'), f'{pct[i]}%'
-        if anc == 'ls':
-            d.text((x, by - 16), num, font=fp, fill=col if on else MUTED, anchor='ls')
-            d.text((x + d.textlength(num, font=fp) + 12, by - 16), lab, font=fl, fill=TEXT if on else MUTED, anchor='ls')
-        elif anc == 'rs':
-            d.text((x, by - 16), num, font=fp, fill=col if on else MUTED, anchor='rs')
-            d.text((x - d.textlength(num, font=fp) - 12, by - 16), lab, font=fl, fill=TEXT if on else MUTED, anchor='rs')
-        else:
-            d.text((x, by - 16), f'{lab} {num}', font=font(24, 'Bold' if on else 'SemiBold'), fill=TEXT if on else MUTED, anchor='ms')
-    _bar(img, x0, x1, by, bh, pct, win)
+    x0, x1, by, bh = 72, OUT_W - 72, 520, 14
+    mids = _bar(img, x0, x1, by, bh, pct, win)
+    fl = font(19, 'SemiBold')
+    labs = [f'{home_name} 승', '무승부', f'{away_name} 승']
+    cols = [(120, 180, 255), (200, 206, 218), (255, 150, 90)]
+    # 무승부 숫자는 무 조각 가운데 — 양옆 숫자와 겹치지 않게 가운데 쪽으로 밀어 넣음
+    dx = min(max(mids[1], x0 + 230), x1 - 230)
+    for i, (x, anc) in enumerate([(x0, 'l'), (dx, 'm'), (x1, 'r')]):
+        num = f'{pct[i]}%'
+        fp = font(52 if i == win else 40, 'Bold')
+        d.text((x, by - 46), num, font=fp, fill=cols[i], anchor=anc + 's')
+        d.text((x, by - 22), labs[i], font=fl, fill=TEXT if i == win else MUTED, anchor=anc + 's')
 
     foot = 'fotdata-official.com  ·  AI 예측은 참고용이에요'
     if limited:
         foot = '5대 리그 밖 팀은 UCL 기록만으로 계산한 참고용 예측  ·  fotdata-official.com'
-    d.text((OUT_W / 2, 584), foot, font=font(18, 'SemiBold'), fill=(124, 136, 161), anchor='mm')
+    d.text((OUT_W / 2, 588), foot, font=font(18, 'SemiBold'), fill=(110, 120, 142), anchor='mm')
 
     buf = io.BytesIO()
     img.convert('RGB').save(buf, 'JPEG', quality=90, subsampling=0, optimize=True, progressive=True)   # PNG 290KB → ~110KB, 인코딩도 빠름

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fotdata-shell-v3';   // v2: 앱 주소 /FotData.html → /app(2026-10-03) · v3: API 저장(2026-10-08)
+const CACHE_NAME = 'fotdata-shell-v4';   // v2: 앱 주소 /FotData.html → /app(2026-10-03) · v3: API 저장(2026-10-08) · v4: theme-a 아이콘(2026-10-10)
 const API_CACHE = 'fotdata-api-v1';
 const APP_SHELL = ['/', '/app', '/manifest.json', '/icon-192.png', '/icon-512.png'];
 const API_ORIGIN = 'https://fotdata-api.onrender.com';

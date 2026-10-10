@@ -23,18 +23,18 @@
   <meta name="description" content="5대 리그+UCL 순위·일정, AI 경기 예측, 역대 맞대결 기록. 데이터로 보는 축구 인사이트를 무료로.">
   <meta property="og:title" content="FotData - AI 축구 분석 플랫폼">
   <meta property="og:description" content="5대 리그+UCL 순위·일정, AI 경기 예측, 역대 맞대결 기록. 데이터로 보는 축구 인사이트를 무료로.">
-  <meta property="og:image" content="https://www.fotdata-official.com/og-image.png?v=6">
+  <meta property="og:image" content="https://www.fotdata-official.com/og-image.png?v=7">
   <meta property="og:image:width" content="2400">
   <meta property="og:image:height" content="1260">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:alt" content="FotData — 축구를 데이터로 예측하다">
   <meta property="og:site_name" content="FotData">
-  <meta name="twitter:image" content="https://www.fotdata-official.com/og-image.png?v=6">
+  <meta name="twitter:image" content="https://www.fotdata-official.com/og-image.png?v=7">
   <meta property="og:url" content="https://www.fotdata-official.com/app">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#111a2e">
+  <meta name="theme-color" content="#070b16">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -115,6 +115,16 @@
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html.modal-open, html.modal-open body { overflow: hidden; }
+    /* 스크롤바(2026-10-10): 브라우저 기본(흰 바탕 막대)이 어두운 화면·유리 창 옆에 따로 떨어져 보였음 → 바탕 없이 얇은 반투명 손잡이.
+       창(.modal 등 둥근 모서리)에선 막대가 모서리 곡선 밖으로 삐져나오지 않게 위아래를 비움. 파이어폭스는 아래 @supports(표준 속성) */
+    :root { color-scheme: dark; }
+    ::-webkit-scrollbar { width: 12px; height: 12px; background: transparent; }
+    ::-webkit-scrollbar-track, ::-webkit-scrollbar-corner { background: transparent; }
+    ::-webkit-scrollbar-thumb { min-height: 40px; border: 4px solid transparent; border-radius: 99px; background-color: rgba(255,255,255,0.16); background-clip: padding-box; }
+    @media (hover: hover) and (pointer: fine) { ::-webkit-scrollbar-thumb:hover { background-color: rgba(255,255,255,0.28); } }
+    ::-webkit-scrollbar-thumb:active { background-color: rgba(255,255,255,0.36); }
+    :is(.modal, .ti-panel, .cb-back-in, #track-record-body, .team-popup .popup-team-list)::-webkit-scrollbar-track { margin: 18px 0; }
+    @supports not selector(::-webkit-scrollbar) { :root { scrollbar-color: rgba(255,255,255,0.2) transparent; } }
     .modal-overlay, #ti-modal, #match-predict-modal, #track-record-modal, #t-modal, #team-search-modal { overscroll-behavior: contain; }
     body { font-family: var(--font-ui); background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; word-break: keep-all; overflow-wrap: break-word; }
     body > .container { flex: 1 0 auto; }
@@ -1076,8 +1086,6 @@
     .popup-team-row.selected { background: #1f4e8c; color: var(--blue); }
     .popup-team-row img { width: 20px; height: 20px; object-fit: contain; flex-shrink: 0; }
     .popup-team-nodata { margin-left: auto; flex-shrink: 0; font-size: 12px; color: var(--faint); border: 0.5px solid var(--border); border-radius: 4px; padding: 1px 6px; }
-    .popup-team-list::-webkit-scrollbar { width: 4px; }
-    .popup-team-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
     /* 주 버튼은 브랜드 파랑(2026-09-29 — 예전 초록은 미리보기 창 "전체 분석 보기"·순위 예측 버튼과 따로 놀았음) */
     .predict-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, var(--blue-strong), #3b82f6); border: none; border-radius: 14px; color: #fff; font-size: 15px; font-weight: 700; font-family: inherit; cursor: pointer; transition: box-shadow 0.2s, transform 0.1s; box-shadow: var(--glow-btn); }
     @media (hover: hover) and (pointer: fine) { .predict-btn:hover { box-shadow: var(--glow-btn-hover); } }
@@ -3096,6 +3104,26 @@ html.theme-a { --blue-text: #cfd7e6; }
 html.theme-a .lg-item { border-radius: 12px; }
 html.theme-a .lg-item.active { color: #fff; background: var(--a-seg-on); box-shadow: inset 0 1px 0 rgba(255,255,255,0.22), inset 0 0 0 1px rgba(255,255,255,0.07); }
 
+/* ── 남은 브랜드 파랑 정리(2026-10-10 전체 점검): 파랑은 홈 데이터만 — 버튼·링크·아이콘·고른 칸은 흰 유리/오로라 ── */
+html.theme-a .pwa-install-banner { border: 0; border-radius: 20px; background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04)), rgba(16,22,40,0.9);
+  backdrop-filter: blur(20px) saturate(170%); -webkit-backdrop-filter: blur(20px) saturate(170%); box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), inset 0 0 0 1px rgba(255,255,255,0.08), 0 18px 40px -14px rgba(0,0,0,0.8); }
+html.theme-a :is(.pwa-install-btn, .shootout-btn) { border: 1px solid transparent; border-radius: 99px; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  background: linear-gradient(180deg, rgba(64,72,104,0.96), rgba(28,34,58,0.96)) padding-box, var(--iris) border-box; box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), 0 10px 26px -12px rgba(150,140,255,0.6); }
+html.theme-a .pwa-install-btn { padding: 8px 16px; }
+html.theme-a .shootout-btn-secondary { border: 0; border-radius: 99px; color: #fff; background: var(--a-gb); box-shadow: var(--a-gb-sh); }
+@media (hover: hover) and (pointer: fine) { html.theme-a :is(.pwa-install-btn, .shootout-btn, .shootout-btn-secondary):hover { filter: brightness(1.15); box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 12px 30px -12px rgba(150,140,255,0.75); } }
+html.theme-a .so-steps span.on b { color: #fff; background: var(--a-seg-on); box-shadow: var(--a-seg-on-sh); }
+html.theme-a .more-item > svg { stroke: url(#fdIris); }
+@media (hover: hover) and (pointer: fine) { html.theme-a :is(.more-item, .more-row):hover { background: rgba(255,255,255,0.035); } }
+html.theme-a .lh-go { color: var(--a-ink-2); }
+html.theme-a .pts { color: #fff; }
+html.theme-a .st-pts { background: rgba(255,255,255,0.07); color: #fff; }
+html.theme-a .st-sum { border: 0; background: rgba(255,255,255,0.03); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06); }
+html.theme-a .st-sum.lead { background: rgba(255,255,255,0.04); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1); } html.theme-a .st-sum.lead .st-sum-label { color: var(--a-ink-2); }
+html.theme-a .st-sum.champ { box-shadow: inset 0 0 0 1px rgba(227,179,65,0.4); }
+html.theme-a .st-sum.on { background: var(--a-seg-on); box-shadow: var(--a-seg-on-sh); }
+html.theme-a .pls-v.top { background: rgba(255,255,255,0.12); color: #fff; } html.theme-a .pls-v.r8.top { background: #1fb36b; color: #fff; }   /* 평점 8+ = 앱 평점 배지와 같은 초록 */
+
 /* ── 팀 고르기 팝업: 넓은 화면은 팀 칸 바로 아래 유리 드롭다운, 폰은 아래에서 올라오는 시트(togglePopup이 .sheet로 body에 옮김) ── */
 html.theme-a .team-popup { width: 440px; max-width: calc(100vw - 24px); border: 0; border-radius: 22px;
   background: linear-gradient(160deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02) 42%), rgba(12,18,34,0.94);
@@ -3129,7 +3157,6 @@ html.theme-a .popup-team-row img.popup-team-lg { width: 16px; height: 16px; }
 @media (hover: hover) and (pointer: fine) { html.theme-a .popup-team-row:not(.selected):hover { background: rgba(255,255,255,0.05); color: var(--a-ink); } }
 html.theme-a .popup-team-row.selected { color: #fff; font-weight: 650; background: var(--a-seg-on); box-shadow: var(--a-seg-on-sh); }
 html.theme-a .popup-team-nodata { border: 0; border-radius: 99px; padding: 2px 8px; font-size: 11px; background: rgba(255,255,255,0.05); color: var(--a-ink-3); }
-html.theme-a .popup-team-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.14); }
 html.theme-a .popup-team-list .ti-empty { padding: 28px 0; text-align: center; font-size: 13px; color: var(--a-ink-3); }
 html.theme-a .tp-scrim { position: fixed; inset: 0; z-index: 605; background: rgba(3,6,14,0.55); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); opacity: 0; pointer-events: none; transition: opacity .2s var(--ease-out); }
 html.theme-a .tp-scrim.show { opacity: 1; pointer-events: auto; }
@@ -3362,6 +3389,7 @@ html.theme-a #ti-panel .ti-bx { border: 0; border-radius: 20px; background: rgba
 /* ── 선수 카드: 섹션 = 패널, 두 칸 줄 ── */
 html.theme-a #pc-modal .pc2-sec { margin: 0 0 14px; padding: 16px 18px 18px; border: 0; border-radius: 18px; background: rgba(255,255,255,0.03); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.055); }
 html.theme-a #pc-modal .pc2-sec h4 { font-size: 15px; font-weight: 700; color: var(--a-ink); }
+html.theme-a #pc-modal .pc2-info { margin-bottom: 18px; }   /* theme-a는 섹션 위 여백이 0이라 국적·나이 줄이 시즌 칸 테두리에 붙어 겹쳐 보였음 */
 .pcA-row { display: flex; gap: 14px; align-items: stretch; margin-bottom: 14px; }
 .pcA-row > .pc2-sec { flex: 1 1 0; min-width: 0; margin: 0 !important; }
 .pcA-row > .pcA-cmp { flex-grow: 2; } .pcA-row > .pcA-inj { flex-grow: .9; } .pcA-row > section:first-child:has(.pc2-ms) { flex-grow: 2; }
@@ -5266,6 +5294,35 @@ let standingsCache = {};
 let tiState = { team: null, code: null, tab: 'overview' };
 
 let teamPrestigeCache = null;
+// ── 구단 검색 공용(2026-10-10) ── 영어 정식·짧은 이름 + 한국어 이름(/teams/meta) + 줄임말·다른 표기. 악센트·띄어쓰기·점 무시.
+// 한국어 이름은 정식 표기("맨체스터 시티 FC")라 흔히 쓰는 줄임말("맨시티"·"맨유")이 안 찾아졌음 → 여기 한 곳에서 관리
+const TEAM_ALIASES = {
+  'Manchester City FC': '맨시티 맨씨 맨city mancity mcfc', 'Manchester United FC': '맨유 manutd manu mufc', 'Tottenham Hotspur FC': '스퍼스 토트넘 spurs thfc',
+  'Arsenal FC': '아스날 gunners', 'Liverpool FC': 'lfc', 'Chelsea FC': 'cfc', 'Newcastle United FC': '뉴캐 nufc', 'Aston Villa FC': '빌라 villa avfc',
+  'West Ham United FC': '웨햄 웨스트햄 hammers', 'Wolverhampton Wanderers FC': '울브스 울버햄튼 wolves', 'Brighton & Hove Albion FC': '브라이튼',
+  'Nottingham Forest FC': '노팅엄 포레스트 forest nffc', 'Crystal Palace FC': '크팰 크리스탈팰리스 palace', 'Brentford FC': '브렌트포드', 'Everton FC': '에버튼',
+  'Leicester City FC': '레스터', 'AFC Bournemouth': '본머스', 'Sunderland AFC': '선덜랜드',
+  'Real Madrid CF': '레알 레마 rmcf', 'FC Barcelona': '바르사 바르샤 바셀 barca', 'Club Atlético de Madrid': '아틀레티코 아틀마 atm atleti',
+  'Athletic Club': '빌바오 bilbao', 'Real Sociedad de Fútbol': '소시에다드 lareal', 'Real Betis Balompié': '베티스', 'RCD Espanyol de Barcelona': '에스파뇰',
+  'FC Bayern München': '뮌헨 바이에른 bayern fcb', 'Borussia Dortmund': '돌문 도르트문트 bvb', 'Bayer 04 Leverkusen': '레버쿠젠 leverkusen',
+  'Borussia Mönchengladbach': '묀글 글라트바흐 글라드바흐 gladbach', 'Eintracht Frankfurt': '프푸 프랑크푸르트 sge', 'RB Leipzig': '라이프치히 leipzig',
+  'FC Internazionale Milano': '인테르 인터밀란 인테르밀란 inter', 'AC Milan': '밀란 acm', 'Juventus FC': '유베 juve', 'SSC Napoli': '나폴리',
+  'Paris Saint-Germain FC': 'psg 파리생제르맹 파생', 'Olympique de Marseille': '마르세유 om', 'Olympique Lyonnais': '리옹 lyon ol', 'AS Monaco FC': '모나코',
+  'Stade Rennais FC 1901': '렌 rennes', 'Racing Club de Lens': '랑스 lens',
+  'Sport Lisboa e Benfica': '벤피카 benfica', 'Sporting Clube de Portugal': '스포르팅 sporting', 'PSV': '에인트호번 eindhoven', 'AFC Ajax': '아약스', 'Galatasaray SK': '갈라타',
+};
+let teamKoMap = {};   // 한국어 이름 — fetchTeamsMeta가 오면 채움
+const searchNorm = v => String(v || '').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[\s.'’&-]+/g, '');
+function teamMatches(t, query) {
+  const q = searchNorm(query);
+  if (!q) return true;
+  return [t, shortName(t), cleanTeamName(t), teamKoMap[t], ...(TEAM_ALIASES[t] || '').split(' ')].some(n => n && searchNorm(n).includes(q));
+}
+// 정렬용: 이름·줄임말과 똑같으면 0, 그걸로 시작하면 1, 중간에 들어 있으면 2("레알" → 레알 마드리드가 베티스·비야레알보다 먼저)
+function teamMatchRank(t, query) {
+  const q = searchNorm(query), ns = [t, shortName(t), cleanTeamName(t), teamKoMap[t], ...(TEAM_ALIASES[t] || '').split(' ')].filter(Boolean).map(searchNorm);
+  return ns.some(n => n === q) ? 0 : ns.some(n => n.startsWith(q)) ? 1 : 2;
+}
 function getAllTeamsForSearch() {
   const seen = new Set();
   const all = [];
@@ -5288,7 +5345,7 @@ function renderGlobalSearchResults(query) {
   const container = document.getElementById('team-search-results');
   const all = getAllTeamsForSearch();
   const q = query.trim().toLowerCase();
-  const filtered = q ? all.filter(t => t.toLowerCase().includes(q) || cleanTeamName(t).toLowerCase().includes(q)) : all;
+  const filtered = q ? all.filter(t => teamMatches(t, q)) : all;
   if (!filtered.length) { container.innerHTML = '<div class="ti-empty">검색 결과가 없어요.</div>'; return; }
   container.innerHTML = filtered.map(t => `
     <div class="team-search-item" onclick="selectGlobalSearchResult('${escJs(t)}')">
@@ -7135,16 +7192,14 @@ function renderTiTransfers() {
 function closeTeamInfoModal(e) { if (!e || e.target === document.getElementById('ti-modal')) document.getElementById('ti-modal').classList.remove('show'); }
 
 function getTeamLeague(team) { for (const [key,data] of Object.entries(LEAGUE_DATA)) { if (key!=='UCL'&&data.teams.includes(team)) return data; } return null; }
-// 검색어가 있으면 고른 리그만이 아니라 5대 리그·챔스 전체에서 찾음(영어·짧은·한국어 이름) — 리그 탭이 EPL인 채로 "바이에른"을 치면 안 나오던 것
-let popupKo = {};
-const popupNorm = v => String(v || '').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '');
+// 검색어가 있으면 고른 리그만이 아니라 5대 리그·챔스 전체에서 찾음(teamMatches — 영어·한국어 이름·줄임말) — 리그 탭이 EPL인 채로 "바이에른"을 치면 안 나오던 것
 function renderTeamGrid(side, leagueKey, search='') {
   const grid = document.getElementById(`${side}-team-grid`);
-  const q = popupNorm(search);
+  const q = searchNorm(search);
   let teams = q
-    ? [...new Set(Object.values(LEAGUE_DATA).flatMap(d => d.teams || []))].filter(t => [t, shortName(t), cleanTeamName(t), popupKo[t]?.ko].some(n => popupNorm(n).includes(q)))
+    ? [...new Set(Object.values(LEAGUE_DATA).flatMap(d => d.teams || []))].filter(t => teamMatches(t, q))
     : [...(LEAGUE_DATA[leagueKey]?.teams||[])];
-  teams.sort((a,b)=>cleanTeamName(a).localeCompare(cleanTeamName(b)));
+  teams.sort((a,b)=>(q ? teamMatchRank(a, q) - teamMatchRank(b, q) : 0) || cleanTeamName(a).localeCompare(cleanTeamName(b)));
   if (!teams.length) { grid.innerHTML = '<div class="ti-empty">검색 결과가 없어요.</div>'; return; }
   const lgIcon = t => q ? `<img class="popup-team-lg" alt="" src="${getTeamLeague(t)?.logo || 'logos/league/CL.png'}" onerror="this.style.display='none'">` : '';
   grid.innerHTML=teams.map(t=>`<div class="popup-team-row ${selectedTeams[side]===t?'selected':''}" onclick="selectTeamFromPopup('${side}','${t.replace(/'/g,"\\'")}')"><img alt="" src="${logos[t]||''}" onerror="this.style.display='none'"><span>${cleanTeamName(t)}</span>${lgIcon(t)}${unpredictableTeamsIn(t).length?'<span class="popup-team-nodata">예측 데이터 없음</span>':''}</div>`).join('');
@@ -7163,7 +7218,7 @@ function togglePopup(side) {
   renderPopupFav(side);
   openTeamPopup(side, popup);
   popupSide = side;
-  fetchTeamsMeta().then(m => { popupKo = m || {}; const v = document.getElementById(`${side}-search`).value; if (v) renderTeamGrid(side, currentLeagueTab[side], v); });
+  fetchTeamsMeta().then(() => { const v = document.getElementById(`${side}-search`).value; if (v) renderTeamGrid(side, currentLeagueTab[side], v); });
   // 검색창에 커서를 바로 두지 않음(2026-10-10 — 폰에서 원치 않을 때 키보드가 올라왔음). 넓은 화면은 그냥 글자를 치면 검색창으로 들어감(아래 keydown)
 }
 function popupSearchKey(e, side) {
@@ -8457,6 +8512,22 @@ function buildRadarSVG(homeVals, awayVals) {
   </svg>`;
 }
 // theme-a(2026-10-10): 레이더 대신 두 팀 비교 막대 — 가운데 항목, 양쪽으로 뻗는 막대, 밝은 숫자가 앞선 쪽. 공격·수비 칸 4개(#stat-boxes)도 여기로 합침
+// 두 팀 비교 줄(경기당 득점·실점·승률·맞대결 승) — 화면 막대(cmpBarsHtml)와 저장 이미지(drawShareCardA)가 같이 씀
+// 각 줄: { lb, sub, a, b, fa, fb(표시 글자), wa, wb(막대 길이 %), aw(홈이 낫나), bw }
+function cmpRowsData(data, h2h) {
+  const hs = data.home_stats, as = data.away_stats, rows = [];
+  const add = (lb, sub, a, b, hi, fmt) => {
+    const w = v => hi ? v / (Math.max(a, b) || 1) * 100 : (Math.min(a, b) || 0.01) / (v || 0.01) * 100;
+    rows.push({ lb, sub, a, b, fa: fmt(a), fb: fmt(b), wa: w(a), wb: w(b), aw: hi ? a >= b : a <= b, bw: hi ? b >= a : b <= a });
+  };
+  const rk = (a, b) => a && b ? `리그 ${a}위 · ${b}위` : '';
+  add('경기당 득점', rk(hs.attack_rank, as.attack_rank), hs.attack, as.attack, true, v => v.toFixed(2));
+  add('경기당 실점', rk(hs.defense_rank, as.defense_rank), hs.defense, as.defense, false, v => v.toFixed(2));
+  add('승률', '최근 38경기', hs.win_rate * 100, as.win_rate * 100, true, v => Math.round(v) + '%');
+  const sm = h2h && h2h.summary, tot = sm ? sm.home_wins + sm.draws + sm.away_wins : 0;
+  if (tot) add('맞대결 승', `${tot}경기 · 무 ${sm.draws}`, sm.home_wins, sm.away_wins, true, v => v);
+  return rows;
+}
 function cmpBarsHtml(data, h2h, home, away) {
   const hs = data.home_stats, as = data.away_stats;
   const row = (lb, sub, a, b, hi, fmt) => { const aw = hi ? a >= b : a <= b;
@@ -9343,6 +9414,236 @@ async function shareSimCard(kind, btn) {
   }
 }
 
+// ── 예측 결과 저장 이미지 · theme-a(2026-10-10) ── 앱 예측 결과와 같은 톤: 밤하늘 남색 + 위쪽 라벤더 빛 + 오로라 공,
+// 주인공 유리 패널(팀·예상 스코어·예측 알약·빅매치식 확률 막대) → 패널(예측 근거 — 오로라 막대) → 패널(두 팀 비교 막대, 레이더 대신).
+// 900 기준으로 설계하고 1.2배(1080px 폭)로 그림. 파랑·주황은 홈·원정 데이터에만
+const IRIS_STOPS_CSS = ['#9cc9ff', '#b9a8ff', '#ffbf98'];
+function irisGrad(ctx, x0, y0, x1, y1) { const g = ctx.createLinearGradient(x0, y0, x1, y1); IRIS_STOPS_CSS.forEach((c, i) => g.addColorStop(i / 2, c)); return g; }
+function drawLogoBall(ctx, x, y, size, stroke = 'iris') {   // 사이트 로고 공(viewBox 24). 'iris' = 오로라(그라데이션은 로고 좌표 안에서 만들어야 함)
+  const k = size / 24;
+  ctx.save(); ctx.translate(x, y); ctx.scale(k, k);
+  ctx.lineWidth = 1.5; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = stroke === 'iris' ? irisGrad(ctx, 3, 3, 21, 21) : stroke;
+  ctx.beginPath(); ctx.arc(12, 12, 9, 0, Math.PI * 2);
+  ctx.moveTo(12, 7.7); [[16.09, 10.67], [14.53, 15.48], [9.47, 15.48], [7.91, 10.67], [12, 7.7]].forEach(([a, b]) => ctx.lineTo(a, b));
+  [[[12, 7.7], [12, 3.8]], [[16.09, 10.67], [19.8, 9.47]], [[14.53, 15.48], [16.82, 18.63]], [[9.47, 15.48], [7.18, 18.63]], [[7.91, 10.67], [4.2, 9.47]]]
+    .forEach(([[a, b], [c, d]]) => { ctx.moveTo(a, b); ctx.lineTo(c, d); });
+  ctx.stroke(); ctx.restore();
+}
+// 엠블럼 평균 밝기(0~1, 투명한 곳 빼고) — share_card.py crest_luma와 같은 기준. 읽을 수 없으면(교차 출처) 1
+function crestLuma(img) {
+  try {
+    const c = document.createElement('canvas'); c.width = c.height = 48;
+    const x = c.getContext('2d', { willReadFrequently: true }); drawImageContain(x, img, 24, 24, 48);
+    const d = x.getImageData(0, 0, 48, 48).data; let sw = 0, sy = 0;
+    for (let i = 0; i < d.length; i += 4) { const w = d[i + 3] / 255; sw += w; sy += w * (0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2]) / 255; }
+    return sw < 1 ? 1 : sy / sw;
+  } catch (e) { return 1; }
+}
+// 엠블럼 그리기 — 어두우면(토트넘·유벤투스·PSG 등) 모양을 따라 살짝 넓힌 밝은 빛을 먼저 깔아 남색 바탕에 묻히지 않게
+function drawCrestLit(ctx, img, cx, cy, size) {
+  if (!img) return;
+  if (crestLuma(img) < 0.42) {
+    const k = Math.min(size / img.width, size / img.height), w = img.width * k, h = img.height * k, pad = 10;
+    const sil = document.createElement('canvas'); sil.width = Math.ceil(w + pad * 2); sil.height = Math.ceil(h + pad * 2);
+    const s = sil.getContext('2d'); s.drawImage(img, pad, pad, w, h);
+    s.globalCompositeOperation = 'source-in'; s.fillStyle = '#eceff6'; s.fillRect(0, 0, sil.width, sil.height);
+    ctx.save(); ctx.globalAlpha = 0.8;
+    for (let a = 0; a < 8; a++) ctx.drawImage(sil, cx - w / 2 - pad + Math.cos(a * Math.PI / 4) * 2, cy - h / 2 - pad + Math.sin(a * Math.PI / 4) * 2);   // 2px 넓힘
+    ctx.globalAlpha = 0.6; ctx.shadowColor = 'rgba(236,241,250,0.9)'; ctx.shadowBlur = 6; ctx.drawImage(sil, cx - w / 2 - pad, cy - h / 2 - pad);
+    ctx.restore();
+  }
+  drawImageContain(ctx, img, cx, cy, size);
+}
+async function drawShareCardA({ data, h2h, home, away, homeImg, awayImg, ballImg }) {
+  try { await Promise.all([document.fonts.load('700 60px "Barlow Condensed"'), document.fonts.load('800 40px "Pretendard Variable"')]); } catch (e) {}
+  const FONT = '"Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+  const NUM = `"Barlow Condensed", ${FONT}`;
+  const prob = data.probabilities, sp = data.score_prediction, factors = data.explanation || [];
+  const cmp = cmpRowsData(data, h2h);
+  const hN = shortName(home), aN = shortName(away);
+  const W = 900, K = 1.2;
+  const HERO_Y = 128, HERO_H = 530, GAP = 22;
+  const FAC_H = factors.length ? 74 + factors.length * 44 + 14 : 0;
+  const CMP_H = 92 + cmp.length * 66 - 14;
+  let y = HERO_Y + HERO_H + GAP;
+  const facY = y; if (FAC_H) y += FAC_H + GAP;
+  const cmpY = y; y += CMP_H;
+  const H = y + 76;
+  const canvas = document.createElement('canvas');
+  canvas.width = W * K; canvas.height = H * K;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(K, K);
+  const C = { ink: '#eef2f8', ink2: '#b9c3d4', ink3: '#7f8aa0', home: '#58a6ff', away: '#f0883e', draw: '#8e9ab3', homeTx: '#8fc1ff', awayTx: '#ffb889', line: 'rgba(255,255,255,0.065)' };
+  const text = (t, x, yy, font, color, align = 'left', base = 'alphabetic') => { ctx.font = font; ctx.fillStyle = color; ctx.textAlign = align; ctx.textBaseline = base; ctx.fillText(t, x, yy); };
+  const fitFont = (t, weight, size, maxW, fam = FONT) => { let s = size; ctx.font = `${weight} ${s}px ${fam}`; while (s > 12 && ctx.measureText(t).width > maxW) { s--; ctx.font = `${weight} ${s}px ${fam}`; } return ctx.font; };
+
+  // 배경: 남색 + 위쪽 라벤더 빛 + 홈 파랑·원정 주황 빛(아주 옅게) + 오로라 공
+  const bg = ctx.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#080c19'); bg.addColorStop(1, '#070b16');
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+  const glow = (x, yy, r, rgba) => { const g = ctx.createRadialGradient(x, yy, 0, x, yy, r); g.addColorStop(0, rgba); g.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); };
+  glow(W / 2, -140, 760, 'rgba(150,150,255,0.20)');
+  glow(W * 0.22, 300, 340, 'rgba(88,166,255,0.08)');
+  glow(W * 0.78, 300, 340, 'rgba(240,136,62,0.06)');
+  if (ballImg) {   // 배경 공(파랑 SVG)을 오로라로 물들여서
+    const off = document.createElement('canvas'); off.width = off.height = 640;
+    const o = off.getContext('2d'); o.drawImage(ballImg, 0, 0, 640, 640);
+    o.globalCompositeOperation = 'source-in'; o.fillStyle = irisGrad(o, 0, 0, 640, 640); o.fillRect(0, 0, 640, 640);
+    ctx.globalAlpha = 0.22; ctx.drawImage(off, W - 380, -150, 560, 560); ctx.globalAlpha = 1;
+  }
+
+  // 머리: 오로라 로고 공 + 흰 FotData · 오른쪽 "AI 경기 예측"
+  drawLogoBall(ctx, 48, 50, 46);
+  text('FotData', 106, 74, `800 32px ${FONT}`, C.ink, 'left', 'middle');
+  const now = new Date();
+  text(`${now.getMonth() + 1}월 ${now.getDate()}일 AI 경기 예측`, W - 48, 74, `600 16px ${FONT}`, C.ink3, 'right', 'middle');
+
+  // ① 주인공 유리 패널
+  const glass = (x, yy, w, h, r) => {
+    ctx.save();
+    ctx.shadowColor = 'rgba(0,0,0,0.55)'; ctx.shadowBlur = 40; ctx.shadowOffsetY = 18;
+    roundRectPath(ctx, x, yy, w, h, r); ctx.fillStyle = 'rgba(16,24,44,0.72)'; ctx.fill();
+    ctx.restore();
+    const g = ctx.createLinearGradient(x, yy, x + w * 0.5, yy + h);
+    g.addColorStop(0, 'rgba(255,255,255,0.10)'); g.addColorStop(0.45, 'rgba(255,255,255,0.025)'); g.addColorStop(1, 'rgba(255,255,255,0.045)');
+    roundRectPath(ctx, x, yy, w, h, r); ctx.fillStyle = g; ctx.fill();
+    ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(255,255,255,0.09)'; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x + r, yy + 0.75); ctx.lineTo(x + w - r, yy + 0.75); ctx.strokeStyle = 'rgba(255,255,255,0.22)'; ctx.stroke();
+  };
+  const panel = (x, yy, w, h, r) => {
+    const g = ctx.createLinearGradient(0, yy, 0, yy + h); g.addColorStop(0, 'rgba(255,255,255,0.045)'); g.addColorStop(1, 'rgba(255,255,255,0.018)');
+    roundRectPath(ctx, x, yy, w, h, r); ctx.fillStyle = g; ctx.fill();
+    ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(255,255,255,0.07)'; ctx.stroke();
+  };
+  const PX = 40, PW = W - 80;
+  glass(PX, HERO_Y, PW, HERO_H, 32);
+  // 원근 경기장 선(예측 결과 머리와 같은 그림)
+  ctx.save(); ctx.globalAlpha = 0.2; ctx.lineWidth = 1.6; ctx.lineCap = 'round';
+  const fx = PX + 20, fy = HERO_Y + 70, fw = PW - 40, fh = 250;
+  for (const [u1, v1, u2, v2, sd] of pitchPerspectiveSegments()) {
+    ctx.strokeStyle = sd === 'mid' ? '#c8c8f0' : PITCH_SIDE_COLOR[sd];
+    ctx.beginPath(); ctx.moveTo(fx + u1 * fw, fy + v1 * fh); ctx.lineTo(fx + u2 * fw, fy + v2 * fh); ctx.stroke();
+  }
+  ctx.restore();
+  // 위 머리말(오로라 글자)
+  ctx.font = `700 15px ${FONT}`; const kw = ctx.measureText('AI 예측 결과').width;
+  ctx.fillStyle = irisGrad(ctx, W / 2 - kw / 2, 0, W / 2 + kw / 2, 0); ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic'; ctx.fillText('AI 예측 결과', W / 2, HERO_Y + 46);
+  // 팀: 옅은 유리 원 + 팀 색 고리·빛 + 엠블럼(어두운 엠블럼만 모양을 따라 밝은 테두리 빛 — 공유 썸네일 share_card.py와 같은 방식), 이름, 홈/원정
+  const team = (cx, img, name, ring, tx, side) => {
+    const cy = HERO_Y + 186, r = 64;
+    const g = ctx.createRadialGradient(cx, cy, r * 0.4, cx, cy, r * 1.6); g.addColorStop(0, ring + '30'); g.addColorStop(1, ring + '00');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, r * 1.6, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,255,255,0.08)'; ctx.fill();
+    ctx.lineWidth = 2.5; ctx.strokeStyle = ring + 'cc'; ctx.stroke();
+    drawCrestLit(ctx, img, cx, cy, 84);
+    text(name, cx, cy + r + 40, fitFont(name, 700, 25, 240), C.ink, 'center');
+    text(side, cx, cy + r + 64, `600 14px ${FONT}`, tx, 'center');
+  };
+  team(W * 0.21, homeImg, hN, C.home, C.homeTx, '홈');
+  team(W * 0.79, awayImg, aN, C.away, C.awayTx, '원정');
+  // 가운데: 예상 스코어
+  text('예상 스코어', W / 2, HERO_Y + 132, `600 15px ${FONT}`, C.ink3, 'center');
+  text(sp ? sp.most_likely.replace('-', ' : ') : '- : -', W / 2, HERO_Y + 226, `700 96px ${NUM}`, '#fff', 'center');
+  if (sp) text(`기대 득점 ${sp.expected_goals.home} - ${sp.expected_goals.away}`, W / 2, HERO_Y + 260, `500 14px ${FONT}`, C.ink3, 'center');
+  // 예측 알약(유리 + 팀 색 안쪽 테두리 + 점)
+  const pred = data.prediction;
+  const pc = pred === 'home_win' ? C.home : pred === 'away_win' ? C.away : C.draw;
+  const pt = pred === 'home_win' ? C.homeTx : pred === 'away_win' ? C.awayTx : C.ink2;
+  const plabel = pred === 'home_win' ? `${hN} 승리 예측` : pred === 'away_win' ? `${aN} 승리 예측` : '무승부 예측';
+  ctx.font = `700 19px ${FONT}`;
+  const pw = ctx.measureText(plabel).width + 64, ph = 46, pX = W / 2 - pw / 2, pY = HERO_Y + 318;
+  const pg = ctx.createLinearGradient(0, pY, 0, pY + ph); pg.addColorStop(0, 'rgba(255,255,255,0.16)'); pg.addColorStop(1, 'rgba(255,255,255,0.05)');
+  roundRectPath(ctx, pX, pY, pw, ph, ph / 2); ctx.fillStyle = pg; ctx.fill();
+  ctx.lineWidth = 1.2; ctx.strokeStyle = pc + '80'; ctx.stroke();
+  ctx.beginPath(); ctx.arc(pX + 24, pY + ph / 2, 4.5, 0, Math.PI * 2); ctx.fillStyle = pc; ctx.fill();
+  text(plabel, pX + 38, pY + ph / 2 + 1, `700 19px ${FONT}`, pt, 'left', 'middle');
+  // 확률: 빅매치처럼 숫자(위)·이름(아래) + 둥근 세 조각 막대
+  const pct = [prob.home_win, prob.draw, prob.away_win].map(v => Math.round(v * 100));
+  const win = { home_win: 0, draw: 1, away_win: 2 }[pred] ?? 0;
+  const bx0 = PX + 40, bx1 = PX + PW - 40, by = HERO_Y + HERO_H - 52, bh = 12, gap = 6;
+  const tot = pct.reduce((a, b) => a + b, 0) || 1, usable = (bx1 - bx0) - gap * 2;
+  let x = bx0; const mids = [];
+  [C.home, '#788296', C.away].forEach((col, i) => {
+    const w = Math.max(bh, usable * pct[i] / tot);
+    roundRectPath(ctx, x, by, w, bh, bh / 2); ctx.fillStyle = col; ctx.fill();
+    mids.push(x + w / 2); x += w + gap;
+  });
+  const numCol = ['#78b4ff', '#c8ced8', '#ff965a'], labs = [`${hN} 승`, '무승부', `${aN} 승`];
+  const dx = Math.min(Math.max(mids[1], bx0 + 170), bx1 - 170);
+  [[bx0, 'left'], [dx, 'center'], [bx1, 'right']].forEach(([xx, al], i) => {
+    text(pct[i] + '%', xx, by - 38, `700 ${i === win ? 48 : 38}px ${NUM}`, numCol[i], al);
+    text(labs[i], xx, by - 16, `${i === win ? 700 : 500} 14px ${FONT}`, i === win ? C.ink : C.ink3, al);
+  });
+
+  // ② 예측 근거(오로라 막대)
+  const secTitle = (t, yy, sub) => { text(t, PX + 28, yy, `700 18px ${FONT}`, C.ink); if (sub) { ctx.font = `700 18px ${FONT}`; text(sub, PX + 28 + ctx.measureText(t).width + 10, yy, `500 13px ${FONT}`, C.ink3); } };
+  if (FAC_H) {
+    panel(PX, facY, PW, FAC_H, 26);
+    secTitle('예측 근거', facY + 44, '예측에 크게 작용한 요인');
+    const lx = PX + 28, tx0 = PX + 170, tx1 = PX + PW - 90;
+    factors.forEach((f, i) => {
+      const yy = facY + 82 + i * 44;
+      text(f.label, lx, yy + 5, `600 15px ${FONT}`, C.ink2, 'left', 'middle');
+      roundRectPath(ctx, tx0, yy - 1, tx1 - tx0, 10, 5); ctx.fillStyle = 'rgba(255,255,255,0.06)'; ctx.fill();
+      const fw2 = Math.max(10, (tx1 - tx0) * f.influence_pct / 100);
+      roundRectPath(ctx, tx0, yy - 1, fw2, 10, 5); ctx.fillStyle = irisGrad(ctx, tx0, 0, tx0 + Math.max(fw2, 60), 0); ctx.fill();
+      text(f.influence_pct + '%', PX + PW - 28, yy + 5, `700 20px ${NUM}`, C.ink, 'right', 'middle');
+    });
+  }
+
+  // ③ 두 팀 비교(앱 theme-a 비교 막대)
+  panel(PX, cmpY, PW, CMP_H, 26);
+  secTitle('두 팀 비교', cmpY + 44);
+  {   // 오른쪽 위 범례: ● 홈  ● 원정
+    ctx.font = `700 14px ${FONT}`;
+    const wa = ctx.measureText(aN).width, wh = ctx.measureText(hN).width, ly = cmpY + 39;
+    let lx = PX + PW - 28 - wa - 14 - 20 - wh - 14;
+    const dot = (xx, col) => { ctx.beginPath(); ctx.arc(xx + 4, ly, 4, 0, Math.PI * 2); ctx.fillStyle = col; ctx.fill(); };
+    dot(lx, C.home); text(hN, lx + 14, ly + 1, `700 14px ${FONT}`, C.ink2, 'left', 'middle');
+    lx += 14 + wh + 20;
+    dot(lx, C.away); text(aN, lx + 14, ly + 1, `700 14px ${FONT}`, C.ink2, 'left', 'middle');
+  }
+  const cx0 = PX + 28, cx1 = PX + PW - 28, mid = W / 2, labW = 150;
+  const hb0 = cx0 + 72, hb1 = mid - labW / 2, ab0 = mid + labW / 2, ab1 = cx1 - 72;
+  cmp.forEach((r, i) => {
+    const yy = cmpY + 92 + i * 66;
+    if (i) { ctx.beginPath(); ctx.moveTo(cx0, yy - 33); ctx.lineTo(cx1, yy - 33); ctx.strokeStyle = C.line; ctx.lineWidth = 1; ctx.stroke(); }
+    text(String(r.fa), cx0, yy + 8, `700 26px ${NUM}`, r.aw ? '#fff' : C.ink3, 'left', 'middle');
+    text(String(r.fb), cx1, yy + 8, `700 26px ${NUM}`, r.bw ? '#fff' : C.ink3, 'right', 'middle');
+    [[hb0, hb1, r.wa, C.home, true], [ab0, ab1, r.wb, C.away, false]].forEach(([x0, x1, w, col, rightAlign]) => {
+      roundRectPath(ctx, x0, yy + 4, x1 - x0, 8, 4); ctx.fillStyle = 'rgba(255,255,255,0.05)'; ctx.fill();
+      const ww = Math.max(8, (x1 - x0) * Math.min(100, w) / 100);
+      roundRectPath(ctx, rightAlign ? x1 - ww : x0, yy + 4, ww, 8, 4); ctx.fillStyle = col; ctx.fill();
+    });
+    text(r.lb, mid, yy + (r.sub ? 2 : 9), `600 14px ${FONT}`, C.ink2, 'center', 'middle');
+    if (r.sub) text(r.sub, mid, yy + 20, `500 11.5px ${FONT}`, '#58627a', 'center', 'middle');
+  });
+
+  text('fotdata-official.com · AI 예측은 참고용이에요', W / 2, H - 34, `600 15px ${FONT}`, '#66708a', 'center');
+  return canvas;
+}
+// 만든 이미지를 저장(넓은 화면) / 공유 시트(폰)
+function deliverShareCanvas(canvas, home, away, btn, origHtml) {
+  canvas.toBlob(async (blob) => {
+    btn.disabled = false; btn.innerHTML = origHtml;
+    if (!blob) { showToast('이미지 생성에 실패했어요'); return; }
+    const safeName = s => s.replace(/[^a-zA-Z0-9가-힣]/g, '_');
+    const filename = `fotdata_${safeName(home)}_vs_${safeName(away)}.png`;
+    const file = new File([blob], filename, { type: 'image/png' });
+    // 데스크톱(마우스 포인터)에서는 항상 바로 다운로드. 터치 기기에서만 카카오톡 등으로 바로 보낼 수 있는 공유 시트 —
+    // Web Share가 있다고 무조건 그걸 우선하면 데스크톱에서도 공유 창이 앞을 가려 "다운로드가 안 되는" 것처럼 보였음
+    const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+    if (isTouchDevice && navigator.canShare && navigator.canShare({ files: [file] })) {
+      try { await navigator.share({ files: [file], title: 'FotData 예측 결과', text: `${home} vs ${away} 예측 결과 · FotData` }); } catch (e) { /* 공유 취소 */ }
+    } else {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+      showToast('예측 결과 이미지가 저장됐어요');
+    }
+  }, 'image/png');
+}
 async function shareResultCard() {
   if (!lastPrediction) return;
   track('share_image');
@@ -9357,6 +9658,11 @@ async function shareResultCard() {
       loadImageForCanvas(proxiedLogo(logoLarge(logos[away]))),
       loadImageForCanvas('bg-ball.svg').catch(() => null),
     ]);
+    if (isThemeA()) {
+      const c = await drawShareCardA({ data, h2h, home, away, homeImg, awayImg, ballImg });
+      deliverShareCanvas(c, home, away, btn, origHtml);
+      return;
+    }
     await ensureTeamPrestigeLoaded();
     const radarVals = computeRadarValues(data, h2h, home, away);
 
@@ -10101,7 +10407,7 @@ const cbReduce = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 const cbAttr = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
 // 팀 이름 → {ko: 한국어 구단명, colors: 구단 색} (서버 /teams/meta, 한 번에)
 function fetchTeamsMeta() {
-  return teamsMetaP || (teamsMetaP = fetch(`${API}/teams/meta`).then(r => (r.ok ? r.json() : {})).then(m => (cb.meta = m)).catch(() => { teamsMetaP = null; return {}; }));
+  return teamsMetaP || (teamsMetaP = fetch(`${API}/teams/meta`).then(r => (r.ok ? r.json() : {})).then(m => { teamKoMap = Object.fromEntries(Object.entries(m || {}).map(([t, v]) => [t, v.ko])); return (cb.meta = m); }).catch(() => { teamsMetaP = null; return {}; }));
 }
 
 function maybeOnboard() {
@@ -10468,8 +10774,7 @@ async function cbSearch(q) {
   if (!q) { box.innerHTML = ''; box.classList.remove('open'); return; }
   const ko = Object.fromEntries(Object.entries(await fetchTeamsMeta()).map(([t, v]) => [t, v.ko]));
   const all = getAllTeamsForSearch().filter(t => cbLeagueOf(t));
-  const norm = s => String(s || '').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, '');
-  const hits = all.filter(t => [t, shortName(t), cleanTeamName(t), ko[t]].some(n => norm(n).includes(norm(q)))).slice(0, 5);
+  const hits = all.filter(t => teamMatches(t, q)).sort((a, b) => teamMatchRank(a, q) - teamMatchRank(b, q)).slice(0, 5);
   const seq = ++cbSearchSeq;
   const teamHtml = hits.map(t => `<button class="cb-res" data-team="${cbAttr(t)}" onclick="cbGoToTeam(this.dataset.team)"><img src="${logos[t] || ''}" alt="" onerror="this.style.visibility='hidden'"><b>${shortName(t)}</b><small>${ko[t] || ''}</small><em>${(CB_LEAGUES.find(l => l[0] === cbLeagueOf(t)) || [])[1] || ''}</em></button>`).join('');
   const paint = players => {

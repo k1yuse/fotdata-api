@@ -174,18 +174,18 @@
   <meta name="description" content="5대 리그+UCL 순위·일정, AI 경기 예측, 역대 맞대결 기록. 데이터로 보는 축구 인사이트를 무료로.">
   <meta property="og:title" content="FotData - AI 축구 분석 플랫폼">
   <meta property="og:description" content="5대 리그+UCL 순위·일정, AI 경기 예측, 역대 맞대결 기록. 데이터로 보는 축구 인사이트를 무료로.">
-  <meta property="og:image" content="https://www.fotdata-official.com/og-image.png?v=6">
+  <meta property="og:image" content="https://www.fotdata-official.com/og-image.png?v=7">
   <meta property="og:image:width" content="2400">
   <meta property="og:image:height" content="1260">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:alt" content="FotData — 축구를 데이터로 예측하다">
   <meta property="og:site_name" content="FotData">
-  <meta name="twitter:image" content="https://www.fotdata-official.com/og-image.png?v=6">
+  <meta name="twitter:image" content="https://www.fotdata-official.com/og-image.png?v=7">
   <meta property="og:url" content="https://www.fotdata-official.com">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#0a1020">
+  <meta name="theme-color" content="#070b16">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -244,6 +244,15 @@
       --red: #f85149;
     }
     html { scroll-behavior: smooth; }
+    /* 스크롤바(2026-10-10): 브라우저 기본(흰 바탕 막대)이 어두운 화면·유리 창 옆에 따로 떨어져 보였음 → 바탕 없이 얇은 반투명 손잡이.
+       창(.modal 등 둥근 모서리)에선 막대가 모서리 곡선 밖으로 삐져나오지 않게 위아래를 비움. 파이어폭스는 아래 @supports(표준 속성) */
+    :root { color-scheme: dark; }
+    ::-webkit-scrollbar { width: 12px; height: 12px; background: transparent; }
+    ::-webkit-scrollbar-track, ::-webkit-scrollbar-corner { background: transparent; }
+    ::-webkit-scrollbar-thumb { min-height: 40px; border: 4px solid transparent; border-radius: 99px; background-color: rgba(255,255,255,0.16); background-clip: padding-box; }
+    @media (hover: hover) and (pointer: fine) { ::-webkit-scrollbar-thumb:hover { background-color: rgba(255,255,255,0.28); } }
+    ::-webkit-scrollbar-thumb:active { background-color: rgba(255,255,255,0.36); }
+    @supports not selector(::-webkit-scrollbar) { :root { scrollbar-color: rgba(255,255,255,0.2) transparent; } }
     body { font-family: var(--font-ui); background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; word-break: keep-all; overflow-wrap: break-word; }
 
     /* 인트로(세션당 1회, v2): 경기장 선 + 데이터 점 → 돌아가는 3D 와이어프레임 공 → FotData → 다가오며 히어로 3D 공으로 */

@@ -140,7 +140,8 @@ Vercel 루트는 `index.html`. landing.html을 고치면 **반드시 `cp landing
 - 공유 링크 `/m/{홈}-vs-{원정}`, 앱 주소창은 `/app?match=`.
 - **뒤로가기 기록**(`navPush`): 앱 안에선 "홈(경기 예측) + 지금 화면" 두 칸만 — 홈에서 다른 화면으로 갈 때만 한 칸 쌓고(`fdDepth` 1) 그 뒤 화면·리그·탭·시즌 이동은 덮어씀, 홈으로 가면 그 칸을 되돌림 → 어디서든 뒤로 한 번 = 홈, 한 번 더 = 랜딩. 창(팀 정보 등)은 그 위 "창" 칸(`fdGuard`)으로 따로. **새로고침**은 지금 탭(주소 `#…`)은 그대로 두고 고른 경기(`?match=`)·열린 창만 초기화(공유 링크로 처음 들어온 건 그 경기 그대로), 로고 클릭도 같음(`fdReloadTab`). 주소에 탭이 있으면 `<head>`에서 `html.route-boot`로 화면을 숨겼다가 그 탭으로 바꾼 뒤 보여줌(경기 예측이 잠깐 보였다 넘어가던 깜빡임 제거). 새로고침 뒤에도 기록 칸 정보(`history.state`)를 이어 씀. 랜딩은 위 메뉴 "소개"·더보기 "FotData 소개"로(앱을 /app으로 바로 열면 뒤로가기로는 못 감). 메뉴에 화면 없는 링크를 넣을 땐 `data-page` 없이도 되게(`setActiveTab`).
 - 검색(⌘K·상단 검색·더보기 "구단·선수 검색"): 구단 둘러보기 검색창이 구단(바로) + 선수(`/players/search`, 0.18초 멈춘 뒤) — 선수를 누르면 선수 카드.
-- 경기 예측 팀 고르기 팝업: 맨 위 ★ 내 팀 줄, 검색어가 있으면 고른 리그가 아니라 전체(영어·짧은·한국어 이름). **열 때 검색창에 자동 포커스 금지**(폰 키보드가 원치 않게 올라옴) — 넓은 화면은 그냥 글자를 치면 검색창으로(keydown), Enter = 맨 위 팀. theme-a는 넓은 화면 = 팀 칸 바로 아래 유리 드롭다운, 폰 = 아래 시트(`teamPopupSheet()` — 열 때 body로 옮기고 닫히면 제자리, 뒤 막·스크롤 잠금 `tp-lock`, 한 번에 하나).
+- 구단 검색은 전부 `teamMatches()`/`teamMatchRank()` 하나로(팀 고르기·구단 둘러보기·예전 검색 창): 영어 정식·짧은 이름 + 한국어 이름(`/teams/meta`) + 줄임말·다른 표기 `TEAM_ALIASES`("맨시티"·"맨유"·"돌문"·"파생" — 새 줄임말은 여기에만 추가), 똑같은 이름·줄임말이 먼저.
+- 경기 예측 팀 고르기 팝업: 맨 위 ★ 내 팀 줄, 검색어가 있으면 고른 리그가 아니라 전체. **열 때 검색창에 자동 포커스 금지**(폰 키보드가 원치 않게 올라옴) — 넓은 화면은 그냥 글자를 치면 검색창으로(keydown), Enter = 맨 위 팀. theme-a는 넓은 화면 = 팀 칸 바로 아래 유리 드롭다운, 폰 = 아래 시트(`teamPopupSheet()` — 열 때 body로 옮기고 닫히면 제자리, 뒤 막·스크롤 잠금 `tp-lock`, 한 번에 하나).
 
 ### 8.2 디자인 규칙
 - **디자인 테마**(FotData.html 맨 위 스크립트 `theme` 기본값): **`theme-a`(기본, 2026-10-10)** = 유리 층(`<style id="glass-v2">`, `html.theme-glass`) 위에 `<style id="theme-a">`를 얹음. `?theme=glass`(유리)·`?theme=default`(유리 이전)로 비교, 되돌리기는 기본값 한 글자 또는 태그 `design-glass`. **새 디자인은 덮어쓰지 말고 테마 층으로 추가**.
@@ -148,6 +149,8 @@ Vercel 루트는 `index.html`. landing.html을 고치면 **반드시 `cp landing
   - 유리 층 토큰: 알약·배지 `--gp-{blue,org,grn,red,amb,neu}-{bg,bd,tx}`.
   - **랜딩**(landing.html)도 같은 스위치·같은 세션 값(`fotdataTheme`)으로 theme-a(구성은 그대로, `<style id="theme-a">` 색·표면만 — 알약 메뉴·유리 버튼·패널·오로라 강조). 인트로 캔버스·3D 이야기(landing-story.js) 색은 JS가 `html.theme-a`를 보고 오로라로(경기장 홈/원정 원형은 파랑·주황 그대로). 되돌리기는 `?theme=glass` 또는 태그 `landing-blue`.
 - **움직임**(`<style id="motion-v1">`, Emil Kowalski 기준): 곡선은 `--ease-out`(나타남·사라짐)·`--ease-in-out`(화면 안 이동)·`--ease-drawer`만, UI는 0.3초 안, 닫힘이 열림보다 빠르게(창 0.26/0.15초), 누르면 `scale: .97`(transform 말고 scale 속성 — translate로 자리 잡은 버튼이 안 튐), `transition: all` 금지, 탭 전환 6px·0.22초, 키보드(⌘K)로 여는 건 애니메이션 없이. 드물게 보는 순간(예측 결과 배지)만 튀는 연출.
+- **스크롤바**: 사이트 전체 `::-webkit-scrollbar`(바탕 없음 + 얇은 반투명 손잡이, `color-scheme: dark`, 파이어폭스는 `scrollbar-color`) — 앱·랜딩·legal.css 같은 규칙. 둥근 창(.modal 등) 안 스크롤은 track 위아래 여백으로 모서리를 피함. 브라우저 기본 흰 막대가 창 옆에 따로 떨어져 보였던 것.
+- **공유 이미지 3종(theme-a 톤)**: 예측 결과 "이미지 저장" `drawShareCardA()`(1080px 폭 — 주인공 유리 패널·예측 근거 오로라 막대·두 팀 비교 막대, 다른 테마는 예전 그림) · 경기 링크 썸네일 share_card.py(서버, 디자인 바꾸면 main.py `CARD_DESIGN` 글자도 바꿔 메신저가 새로 받게) · 대표 썸네일 og-image.png(generate_og_image.py, 바꾸면 meta `?v=` 올리기)·앱 아이콘(generate_icons.py, sw.js `CACHE_NAME` 올리기). 오로라·로고 그리는 도우미(`iris_paint`·`logo_mask`·`iris_text`)는 share_card.py 하나를 같이 씀, 글꼴은 fonts/FotDataCardSans(Pretendard). 엠블럼은 하얀 원 없이 옅은 유리 원 + 팀 색 고리, 어두운 엠블럼(평균 밝기 0.42 미만 — 토트넘·유벤투스·PSG)만 모양을 따라 밝은 테두리 빛(서버 `crest_luma`·`_crest_halo` / 앱 `crestLuma`·`drawCrestLit`, 기준 같게).
 - **마우스 올림(`:hover`)은 전부 `@media (hover: hover) and (pointer: fine)` 안에** — 폰에서 손 뗀 뒤 올림 효과가 남지 않게. 새 `:hover` 규칙도 반드시 이 안에.
 - 설명 문구는 짧게, 기준·방법 설명은 ⓘ(`TIPS`)로. "A · B · C" 식 긴 설명 줄 만들지 말 것.
 - 색은 `:root` 토큰(`--bg #0a1020` 밤하늘 남색, `--surface`, `--blue #58a6ff` …), 둥글기 `--r-*`, 그림자 `--shadow-*`, 글자 `--fs-*`. 템플릿 문자열·캔버스·SVG 속성만 hex 그대로.
