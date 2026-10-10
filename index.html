@@ -2,6 +2,14 @@
 <html lang="ko">
 <head>
   <script>if ('scrollRestoration' in history) history.scrollRestoration = 'manual';</script>
+  <script>
+    // 디자인 테마(앱 FotData.html과 같은 규칙·같은 세션 값): 기본 'a'(2026-10-10 — 앱 시안 A 톤에 맞춤). ?theme=glass(또는 default)면 예전 파랑 랜딩(태그 landing-blue)
+    (function () {
+      var theme = 'a';
+      try { var q = new URLSearchParams(location.search).get('theme'); if (q) sessionStorage.setItem('fotdataTheme', q); theme = q || sessionStorage.getItem('fotdataTheme') || 'a'; } catch (e) {}
+      if (theme === 'a') document.documentElement.classList.add('theme-a');
+    })();
+  </script>
 <script>
 // 인트로(2026-09-29 v2): 흐린 경기장 선 위로 데이터 점이 반짝이며 나타나고 → 점들이 소용돌이치며
 // 돌아가는 3D 와이어프레임 축구공(히어로 공과 같은 모양, ball-geometry.js)의 모서리로 모이고(그동안 경기 데이터 카운터가 오름) →
@@ -59,6 +67,15 @@
     const easeInOut = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
     const easeOut = t => 1 - Math.pow(1 - t, 3);
     const TILT = 0.38, ct = Math.cos(TILT), st = Math.sin(TILT);
+    // theme-a: 파랑 대신 오로라(왼쪽 위 하늘색 → 라벤더 → 오른쪽 아래 복숭아, 앱 로고 공과 같은 방향)
+    const IRIS = document.documentElement.classList.contains('theme-a');
+    const IRIS_STOPS = [[156, 201, 255], [185, 168, 255], [255, 191, 152]];
+    const tint = (x, y, rr) => {
+      if (!IRIS) return null;
+      const k = clamp(0.5 + ((x - CX) * 0.8 + (y - CY) * 0.6) / (2 * rr)) * 2, i = Math.min(1, Math.floor(k)), f = k - i, a = IRIS_STOPS[i], b = IRIS_STOPS[i + 1];
+      return `${Math.round(a[0] + (b[0] - a[0]) * f)},${Math.round(a[1] + (b[1] - a[1]) * f)},${Math.round(a[2] + (b[2] - a[2]) * f)}`;
+    };
+    const SOFT = IRIS ? '185,168,255' : '88,166,255', LINE = IRIS ? '196,186,255' : '120,184,255';
     // 3D → 화면: y축 회전(시간) + 앞으로 기울임 + 원근. 반환: [x, y, 깊이(-1 뒤 ~ 1 앞)]
     const proj = (q, rot, scale) => {
       const cr = Math.cos(rot), sr = Math.sin(rot);
@@ -80,7 +97,7 @@
       // ① 흐린 원근 경기장(가운데 원 + 하프라인) — 처음 0.8초에 그려짐
       const pd = easeOut(clamp(t / 0.9)), pa = 0.16 * (1 - clamp((t - 3.0) / 0.8)) * fadeAll;
       if (pa > 0.002) {
-        ctx.save(); ctx.strokeStyle = `rgba(88,166,255,${pa})`; ctx.lineWidth = 1;
+        ctx.save(); ctx.strokeStyle = `rgba(${SOFT},${pa})`; ctx.lineWidth = 1;
         const py = CY + R * 1.55, rx = R * 2.1, ry = R * 0.42;
         ctx.beginPath(); ctx.ellipse(CX, py, rx, ry, 0, Math.PI / 2, Math.PI / 2 + Math.PI * 2 * pd); ctx.stroke();
         ctx.beginPath(); ctx.moveTo(CX - W * 0.6 * pd, py); ctx.lineTo(CX + W * 0.6 * pd, py); ctx.stroke();
@@ -93,15 +110,15 @@
         for (const [a, b] of segs) {
           const p = proj(a, rot, scale), q = proj(b, rot, scale), z = (p[2] + q[2]) / 2;
           const shade = 0.12 + 0.88 * clamp((z + 0.25) / 0.65);
-          ctx.strokeStyle = `rgba(120,184,255,${(0.85 * shade * la).toFixed(3)})`;
+          ctx.strokeStyle = `rgba(${tint((p[0] + q[0]) / 2, (p[1] + q[1]) / 2, R * scale) || '120,184,255'},${(0.85 * shade * la).toFixed(3)})`;
           ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.lineTo(q[0], q[1]); ctx.stroke();
         }
         // 윤곽 원 + 은은한 빛
         const rr = R * scale * 3.4 / Math.sqrt(3.4 * 3.4 - 1);
-        ctx.strokeStyle = `rgba(120,184,255,${(0.55 * la).toFixed(3)})`; ctx.lineWidth = 1.2;
+        ctx.strokeStyle = `rgba(${LINE},${(0.55 * la).toFixed(3)})`; ctx.lineWidth = 1.2;
         ctx.beginPath(); ctx.arc(CX, CY, rr, 0, Math.PI * 2); ctx.stroke();
         const g = ctx.createRadialGradient(CX, CY, rr * 0.85, CX, CY, rr * 1.35);
-        g.addColorStop(0, `rgba(88,166,255,${0.12 * la})`); g.addColorStop(1, 'rgba(88,166,255,0)');
+        g.addColorStop(0, `rgba(${SOFT},${0.12 * la})`); g.addColorStop(1, `rgba(${SOFT},0)`);
         ctx.fillStyle = g; ctx.beginPath(); ctx.arc(CX, CY, rr * 1.35, 0, Math.PI * 2); ctx.fill();
       }
       // ③ 데이터 점: 반짝이며 나타남 → 소용돌이치며 공 모서리로 → 공이 완성되면 흐려짐(선이 이어받음)
@@ -123,7 +140,8 @@
         const depth = k > 0.9 ? 0.25 + 0.75 * clamp((tg[2] + 0.3) / 0.7) : 1;
         const twinkle = k < 0.05 ? 0.55 + 0.45 * Math.sin(t * 7 + p.tw) : 1;
         ctx.globalAlpha = clamp(appear * twinkle * depth * (p.face ? settleFace * 0.6 : settleEdge) * fadeAll * 0.95);
-        ctx.fillStyle = k > 0.97 ? '#a8d1ff' : '#58a6ff';
+        const tc = tint(x, y, R * scale);
+        ctx.fillStyle = tc ? `rgb(${tc})` : k > 0.97 ? '#a8d1ff' : '#58a6ff';
         ctx.beginPath(); ctx.arc(x, y, p.r * (0.8 + 0.4 * (1 - k)), 0, Math.PI * 2); ctx.fill();
       }
       ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
@@ -753,9 +771,121 @@
     .kofi-panel-body iframe { width: 100%; height: 100%; border: none; display: block; }
     @media (max-width: 480px) { .kofi-panel { left: 10px; } }
   </style>
+  <style id="theme-a">
+    /* ══ theme-a(2026-10-10): 앱(FotData.html theme-a)과 같은 톤 — 구성은 그대로, 색·표면만. 되돌리기: ?theme=glass 또는 맨 위 기본값, 태그 landing-blue
+       파랑·주황 = 홈·원정 데이터만(전광판 확률·막대·경기장 원형). 브랜드·강조 = 오로라(--iris), 링크·숫자 강조는 흰 계열. 버튼은 유리(주 버튼 = 오로라 테두리) */
+    html.theme-a {
+      --bg: #070b16; --bg2: #0b1120; --bg3: rgba(255,255,255,0.07); --border: rgba(255,255,255,0.08);
+      --iris: linear-gradient(115deg, #9cc9ff 0%, #b9a8ff 48%, #ffbf98 100%);
+      --a-line: rgba(255,255,255,0.065); --a-line-2: rgba(255,255,255,0.12);
+      --a-ink: #eef2f8; --a-ink-2: #b9c3d4; --a-ink-3: #7f8aa0;
+      --a-gb: linear-gradient(180deg, rgba(255,255,255,0.15), rgba(255,255,255,0.04));
+      --a-gb-sh: inset 0 1px 0 rgba(255,255,255,0.32), inset 0 0 0 1px rgba(255,255,255,0.12), 0 10px 28px -14px rgba(0,0,0,0.8);
+      --a-seg-on: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.06));
+      --a-seg-on-sh: inset 0 1px 0 rgba(255,255,255,0.3), inset 0 0 0 1px rgba(255,255,255,0.1), 0 4px 12px -4px rgba(0,0,0,0.6);
+      --a-panel: linear-gradient(180deg, rgba(255,255,255,0.038), rgba(255,255,255,0.016));
+      --a-panel-sh: inset 0 1px 0 rgba(255,255,255,0.06), inset 0 0 0 1px rgba(255,255,255,0.055);
+      --a-main: linear-gradient(180deg, rgba(64,72,104,0.96), rgba(28,34,58,0.96)) padding-box, var(--iris) border-box;
+      --a-main-sh: inset 0 1px 0 rgba(255,255,255,0.35), 0 12px 32px -12px rgba(150,140,255,0.6);
+    }
+    html.theme-a body::before { content: ''; position: fixed; inset: 0; z-index: -2; pointer-events: none;
+      background: radial-gradient(1100px 460px at 50% -200px, rgba(150,150,255,0.15), transparent 70%), radial-gradient(800px 520px at 100% 30%, rgba(88,166,255,0.06), transparent 70%), radial-gradient(800px 520px at 0% 70%, rgba(240,136,62,0.04), transparent 70%); }
+    html.theme-a .logo-bars, html.theme-a .ft-brand svg { stroke: url(#fdIris); }
+    html.theme-a :is(.nav-logo .brand-word span.b, .intro-brand .b) { color: #fff; }
+    html.theme-a .ft-brand span { color: var(--a-ink) !important; }
+    /* 글자 강조(제목 강조어·작은 머리말) = 오로라 */
+    html.theme-a :is(.hero h1 em, .story-step h2 em, .cta-section h2 em, .preview-label, .section-label, .story-kicker) { background: var(--iris); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+    html.theme-a :is(.preview-label, .section-label, .story-kicker) { width: fit-content; font-weight: 650; }
+
+    /* ── 인트로 ── */
+    html.theme-a .intro-overlay { background: radial-gradient(ellipse at 50% 42%, #11132a 0%, var(--bg) 62%); }
+    html.theme-a .intro-counter b { color: #d4cbff; }
+    html.theme-a .intro-skip { border: 0; background: rgba(255,255,255,0.06); box-shadow: inset 0 0 0 1px var(--a-line-2); color: var(--a-ink-2); }
+    html.theme-a .intro-skip:hover { color: #fff; }
+
+    /* ── 위 메뉴: 유리 줄 + 가운데 알약 메뉴(앱과 같은 모양) ── */
+    html.theme-a nav { background: rgba(6,9,18,0.62); backdrop-filter: blur(22px) saturate(160%); -webkit-backdrop-filter: blur(22px) saturate(160%); border-bottom: 1px solid var(--a-line); }
+    @media (min-width: 769px) {
+      html.theme-a nav { height: 68px; }
+      html.theme-a .nav-links { gap: 2px; padding: 4px; border-radius: 99px; background: rgba(255,255,255,0.04); box-shadow: inset 0 0 0 1px var(--a-line); }
+      html.theme-a .nav-links a { padding: 8px 18px; border-radius: 99px; font-weight: 600; color: var(--a-ink-3); transition: color .15s ease, background-color .15s ease; }
+      html.theme-a .nav-links a:hover { color: var(--a-ink); background: rgba(255,255,255,0.05); }
+    }
+    html.theme-a .nav-cta { padding: 9px 20px; border: 1px solid transparent; border-radius: 99px; color: #fff; background: var(--a-main); box-shadow: var(--a-main-sh); transition: filter .15s ease; }
+    html.theme-a .nav-cta:hover { opacity: 1; filter: brightness(1.15); }
+    html.theme-a .nav-donate-btn { border: 0; border-radius: 99px; background: rgba(255,255,255,0.045); box-shadow: inset 0 0 0 1px var(--a-line-2); color: var(--a-ink-2); }
+    html.theme-a .nav-donate-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
+
+    /* ── 히어로 ── */
+    html.theme-a .hero::before { background: radial-gradient(ellipse at center, rgba(160,150,255,0.11) 0%, transparent 70%); }
+    html.theme-a .hero-badge { border: 0; background: rgba(255,255,255,0.05); box-shadow: inset 0 0 0 1px var(--a-line-2); color: var(--a-ink-2); }
+    html.theme-a .hero-badge-dot { background: var(--iris); }
+    /* 전광판 = 앱 빅매치와 같은 주인공 유리 */
+    html.theme-a .hero-board { border: 0; border-radius: 28px;
+      background: linear-gradient(160deg, rgba(255,255,255,0.10), rgba(255,255,255,0.025) 45%, rgba(255,255,255,0.045)), rgba(16,24,44,0.55);
+      backdrop-filter: blur(30px) saturate(160%); -webkit-backdrop-filter: blur(30px) saturate(160%); box-shadow: inset 0 1px 0 rgba(255,255,255,0.17), 0 30px 70px -34px rgba(0,0,0,0.85); }
+    @media (max-width: 600px) { html.theme-a .hero-board { border-radius: 22px; } }
+    html.theme-a .hb-nav { border: 0; background: var(--a-gb); box-shadow: var(--a-gb-sh); color: var(--a-ink-2); }
+    html.theme-a .hb-nav:hover { color: #fff; filter: brightness(1.18); }
+    html.theme-a .hb-team:hover span { color: #fff; }
+    html.theme-a .hb-bar { gap: 3px; background: none; } html.theme-a .hb-bar i { border-radius: 99px; }
+    html.theme-a .hb-dots button { background: rgba(255,255,255,0.14); } html.theme-a .hb-dots button.on { background: rgba(255,255,255,0.14); }
+    html.theme-a .hb-dots button.on i { background: var(--iris); }
+    /* 버튼: 주 버튼 = 오로라 테두리 유리, 보조 = 흰 유리 */
+    html.theme-a .btn-primary { border: 1px solid transparent; border-radius: 99px; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.3); background: var(--a-main); box-shadow: var(--a-main-sh); }
+    html.theme-a .btn-primary:hover { opacity: 1; filter: brightness(1.15); }
+    html.theme-a .btn-secondary { border: 0; border-radius: 99px; color: #fff; background: var(--a-gb); box-shadow: var(--a-gb-sh); backdrop-filter: blur(18px) saturate(180%); -webkit-backdrop-filter: blur(18px) saturate(180%); }
+    html.theme-a .btn-secondary:hover { background: var(--a-gb); filter: brightness(1.18); }
+    html.theme-a .stats-row { border: 0; border-radius: 20px; background: var(--a-panel); box-shadow: var(--a-panel-sh); }
+    html.theme-a .stat-item { border-color: var(--a-line) !important; }
+    html.theme-a .stat-num { color: #fff; }
+    html.theme-a .stat-num.glint { animation-name: statGlintA; }
+    @keyframes statGlintA { 30% { text-shadow: 0 0 18px rgba(185,168,255,.85); transform: scale(1.04); } }
+    html.theme-a .leader-card { border: 0; border-radius: 16px; background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.07); }
+    html.theme-a .leader-card:hover { box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18); }
+    @media (prefers-reduced-motion: no-preference) { html.theme-a .leaders-strip.cards-on .team-crest { animation-name: crestPopA; } }
+    @keyframes crestPopA { from { transform: scale(.5); opacity: 0; filter: drop-shadow(0 0 0 rgba(185,168,255,0)); } 60% { filter: drop-shadow(0 0 8px rgba(185,168,255,.6)); } to { transform: none; opacity: 1; filter: none; } }
+
+    /* ── 스크롤 3D 이야기 ── */
+    html.theme-a .story-match { border: 0; border-radius: 18px; background: linear-gradient(160deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)), rgba(12,18,34,0.72); box-shadow: inset 0 1px 0 rgba(255,255,255,0.14), inset 0 0 0 1px rgba(255,255,255,0.07); }
+    html.theme-a .story-bars .bg { background: rgba(255,255,255,0.07); }
+    html.theme-a .story-sim-list .pc { color: #fff; }
+
+    /* ── 예측 화면 예시·순위표 예시 = 앱 창(진한 유리)·패널 ── */
+    html.theme-a .mock-card { border: 0; border-radius: 22px; background: linear-gradient(160deg, rgba(255,255,255,0.085), rgba(255,255,255,0.015) 40%), rgba(12,18,34,0.82);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), inset 0 0 0 1px rgba(255,255,255,0.08), 0 40px 90px -40px rgba(0,0,0,0.9); }
+    html.theme-a .mock-topbar { border-bottom-color: var(--a-line); }
+    html.theme-a .mock-dot { opacity: .5; }
+    html.theme-a .mock-team-logo { background: rgba(255,255,255,0.06); }
+    html.theme-a .mock-badge { color: #fff; background: var(--a-seg-on); box-shadow: var(--a-seg-on-sh); }
+    html.theme-a .mock-card .mock-badge.thinking { color: var(--a-ink-2); background: rgba(255,255,255,0.05); box-shadow: inset 0 0 0 1px var(--a-line-2); }
+    html.theme-a .standings-mock { border: 0; border-radius: 22px; background: var(--a-panel); box-shadow: var(--a-panel-sh); }
+    html.theme-a :is(.standings-mock-header, .standings-row) { border-bottom-color: var(--a-line); }
+    html.theme-a .standings-pts { color: #fff; }
+
+    /* ── 주요 기능: 앱 패널 + 유리 아이콘 칸(선은 오로라) ── */
+    html.theme-a .feat-card { border: 0; border-radius: 22px; background: var(--a-panel); box-shadow: var(--a-panel-sh); }
+    html.theme-a .feat-card:hover { box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), inset 0 0 0 1px rgba(255,255,255,0.18); }
+    html.theme-a .feat-icon { border-radius: 14px; background: var(--a-gb); box-shadow: var(--a-gb-sh); }
+    html.theme-a .feat-icon svg { stroke: url(#fdIrisU); }
+    html.theme-a .feat-icon svg [fill]:not([fill="none"]) { fill: #c9bfff; }
+    @media (prefers-reduced-motion: no-preference) { html.theme-a .feat-card.visible .feat-icon { animation-name: featGlowA; } }
+    @keyframes featGlowA { 40% { box-shadow: inset 0 1px 0 rgba(255,255,255,0.32), 0 0 0 1px rgba(185,168,255,.45), 0 0 18px rgba(185,168,255,.35); } }
+
+    /* ── 지원 리그 칩 = 앱 필터 칩 ── */
+    html.theme-a .league-pill { border: 0; background: rgba(255,255,255,0.045); box-shadow: inset 0 0 0 1px var(--a-line-2); color: var(--a-ink-2); }
+    html.theme-a .league-pill:hover { color: #fff; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.22); }
+    @media (prefers-reduced-motion: no-preference) { html.theme-a .league-pills.pills-on .league-pill::after { background: linear-gradient(100deg, transparent 30%, rgba(200,190,255,.2) 50%, transparent 70%); } }
+
+    /* ── 푸터·후원 ── */
+    html.theme-a :is(.ft-credits a, .ft-links a):hover { color: #fff; }
+    html.theme-a .kofi-float-btn { color: #fff; background: linear-gradient(180deg, rgba(255,255,255,0.15), rgba(255,255,255,0.04)), rgba(14,20,38,0.78); backdrop-filter: blur(18px) saturate(180%); -webkit-backdrop-filter: blur(18px) saturate(180%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), inset 0 0 0 1px rgba(255,255,255,0.12), 0 10px 28px -10px rgba(0,0,0,0.8); }
+  </style>
   <script src="analytics.js" defer></script>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="fdIris" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9cc9ff"/><stop offset=".5" stop-color="#b9a8ff"/><stop offset="1" stop-color="#ffbf98"/></linearGradient><linearGradient id="fdIrisU" gradientUnits="userSpaceOnUse" x1="3" y1="3" x2="21" y2="21"><stop offset="0" stop-color="#9cc9ff"/><stop offset=".5" stop-color="#b9a8ff"/><stop offset="1" stop-color="#ffbf98"/></linearGradient></defs></svg>
 
 <div class="intro-overlay" id="intro-overlay" aria-hidden="true">
   <canvas id="intro-canvas"></canvas>
@@ -1138,7 +1268,7 @@
 </section>
 
 <footer>
-  <div style="display:flex;align-items:center;gap:9px">
+  <div class="ft-brand" style="display:flex;align-items:center;gap:9px">
   <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#58a6ff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><polygon points="12,7.7 16.09,10.67 14.53,15.48 9.47,15.48 7.91,10.67"/><path d="M12 7.7L12 3.8M16.09 10.67L19.8 9.47M14.53 15.48L16.82 18.63M9.47 15.48L7.18 18.63M7.91 10.67L4.2 9.47"/></svg>
   <div style="display:flex">
     <span style="font-size:16px;font-weight:800;color:#ecf1fa">Fot</span>

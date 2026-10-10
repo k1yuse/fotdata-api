@@ -139,12 +139,14 @@ Vercel 루트는 `index.html`. landing.html을 고치면 **반드시 `cp landing
 - 실시간 경기 창(`openMatchLiveModal` — 진행 중 경기를 누르면): 점수 위 빨간 배지(전반/후반 N′·하프타임), 요약(타임라인 최신이 위)·라인업·통계, 경기 전 AI 예측 + "지금은 예측대로/다르게", 1분마다 `/match/live`(서버 45초 캐시) 다시 받고 끝나면 멈춤. 진행 중 점수는 API-Football `/fixtures?live=all`(1분 캐시)로 football-data 점수를 덮음(`_af_live_merge`).
 - 공유 링크 `/m/{홈}-vs-{원정}`, 앱 주소창은 `/app?match=`.
 - **뒤로가기 기록**(`navPush`): 앱 안에선 "홈(경기 예측) + 지금 화면" 두 칸만 — 홈에서 다른 화면으로 갈 때만 한 칸 쌓고(`fdDepth` 1) 그 뒤 화면·리그·탭·시즌 이동은 덮어씀, 홈으로 가면 그 칸을 되돌림 → 어디서든 뒤로 한 번 = 홈, 한 번 더 = 랜딩. 창(팀 정보 등)은 그 위 "창" 칸(`fdGuard`)으로 따로. **새로고침**은 지금 탭(주소 `#…`)은 그대로 두고 고른 경기(`?match=`)·열린 창만 초기화(공유 링크로 처음 들어온 건 그 경기 그대로), 로고 클릭도 같음(`fdReloadTab`). 주소에 탭이 있으면 `<head>`에서 `html.route-boot`로 화면을 숨겼다가 그 탭으로 바꾼 뒤 보여줌(경기 예측이 잠깐 보였다 넘어가던 깜빡임 제거). 새로고침 뒤에도 기록 칸 정보(`history.state`)를 이어 씀. 랜딩은 위 메뉴 "소개"·더보기 "FotData 소개"로(앱을 /app으로 바로 열면 뒤로가기로는 못 감). 메뉴에 화면 없는 링크를 넣을 땐 `data-page` 없이도 되게(`setActiveTab`).
-- 검색(⌘K·상단 검색·더보기 "구단·선수 검색"): 구단 둘러보기 검색창이 구단(바로) + 선수(`/players/search`, 0.18초 멈춘 뒤) — 선수를 누르면 선수 카드. 경기 예측 팀 선택 팝업 맨 위엔 ★ 내 팀 줄(즐겨찾기 바로 선택).
+- 검색(⌘K·상단 검색·더보기 "구단·선수 검색"): 구단 둘러보기 검색창이 구단(바로) + 선수(`/players/search`, 0.18초 멈춘 뒤) — 선수를 누르면 선수 카드.
+- 경기 예측 팀 고르기 팝업: 맨 위 ★ 내 팀 줄, 검색어가 있으면 고른 리그가 아니라 전체(영어·짧은·한국어 이름). **열 때 검색창에 자동 포커스 금지**(폰 키보드가 원치 않게 올라옴) — 넓은 화면은 그냥 글자를 치면 검색창으로(keydown), Enter = 맨 위 팀. theme-a는 넓은 화면 = 팀 칸 바로 아래 유리 드롭다운, 폰 = 아래 시트(`teamPopupSheet()` — 열 때 body로 옮기고 닫히면 제자리, 뒤 막·스크롤 잠금 `tp-lock`, 한 번에 하나).
 
 ### 8.2 디자인 규칙
 - **디자인 테마**(FotData.html 맨 위 스크립트 `theme` 기본값): **`theme-a`(기본, 2026-10-10)** = 유리 층(`<style id="glass-v2">`, `html.theme-glass`) 위에 `<style id="theme-a">`를 얹음. `?theme=glass`(유리)·`?theme=default`(유리 이전)로 비교, 되돌리기는 기본값 한 글자 또는 태그 `design-glass`. **새 디자인은 덮어쓰지 말고 테마 층으로 추가**.
   - theme-a 규칙: 파랑·주황은 홈·원정 **데이터만**, 브랜드·강조는 오로라(`--iris`, 로고 공·주 버튼 테두리·고른 메뉴 아이콘 — SVG는 `url(#fdIris)`), 링크·고른 항목은 흰 계열(`--blue-text`도 흰 계열로 덮음). 층은 ① 주인공 유리(빅매치·창·위 메뉴·폰 탭바) ② 패널(`.card` — 옅은 판 + 얇은 테두리, 흐림 없음) ③ 패널 안은 상자 대신 줄. 버튼은 유리(주 버튼 = 오로라 테두리), 탭·세그먼트·칩은 어두운 홈 안에 고른 칸만 뜬 유리 알약(`--a-seg-on`). 평점 배지는 초록 단계(파랑 금지). 레이더 대신 두 팀 비교 막대(`cmpBarsHtml`, 공격·수비 칸 `#stat-boxes`는 숨김). 폰 탭바는 떠 있는 유리 알약(`--tabbar-h` 84px+안전 영역).
   - 유리 층 토큰: 알약·배지 `--gp-{blue,org,grn,red,amb,neu}-{bg,bd,tx}`.
+  - **랜딩**(landing.html)도 같은 스위치·같은 세션 값(`fotdataTheme`)으로 theme-a(구성은 그대로, `<style id="theme-a">` 색·표면만 — 알약 메뉴·유리 버튼·패널·오로라 강조). 인트로 캔버스·3D 이야기(landing-story.js) 색은 JS가 `html.theme-a`를 보고 오로라로(경기장 홈/원정 원형은 파랑·주황 그대로). 되돌리기는 `?theme=glass` 또는 태그 `landing-blue`.
 - **움직임**(`<style id="motion-v1">`, Emil Kowalski 기준): 곡선은 `--ease-out`(나타남·사라짐)·`--ease-in-out`(화면 안 이동)·`--ease-drawer`만, UI는 0.3초 안, 닫힘이 열림보다 빠르게(창 0.26/0.15초), 누르면 `scale: .97`(transform 말고 scale 속성 — translate로 자리 잡은 버튼이 안 튐), `transition: all` 금지, 탭 전환 6px·0.22초, 키보드(⌘K)로 여는 건 애니메이션 없이. 드물게 보는 순간(예측 결과 배지)만 튀는 연출.
 - **마우스 올림(`:hover`)은 전부 `@media (hover: hover) and (pointer: fine)` 안에** — 폰에서 손 뗀 뒤 올림 효과가 남지 않게. 새 `:hover` 규칙도 반드시 이 안에.
 - 설명 문구는 짧게, 기준·방법 설명은 ⓘ(`TIPS`)로. "A · B · C" 식 긴 설명 줄 만들지 말 것.
@@ -164,6 +166,7 @@ Vercel 루트는 `index.html`. landing.html을 고치면 **반드시 `cp landing
 - `backdrop-filter` 카드 안 절대 위치 팝업은 아래 카드에 가려질 수 있음 → 부모 카드에 z-index.
 - 카드 `::before`(빛 테두리)가 inset -1px라 `scrollHeight`가 1px 커짐 — 넘침 판정은 여유(+2px)를 둘 것("다른 경기" 카드가 안 뜨던 전례). 예측 결과 두 열 맞춤은 `fitMoreCard` + ResizeObserver(열 안 내용만 관찰).
 - flex 부모 밑 `margin: auto` 중앙 정렬 요소는 `width: 100%` 필요.
+- 폰 입력창 글자가 16px보다 작으면 iOS가 누를 때 화면을 확대함 — 폰에서 자주 쓰는 입력창은 16px.
 - 로고 `<img>`가 빈 src로 먼저 그려지면 onerror로 숨은 채 굳음 → `logosReady`를 기다렸다 그림.
 - `onerror="..."`에 HTML 문자열을 넣지 말 것(따옴표 충돌) — 함수 호출로.
 - 좁은 그리드 열은 `minmax(0, 1fr)`(긴 팀 이름 가로 넘침).

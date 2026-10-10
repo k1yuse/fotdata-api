@@ -1055,7 +1055,10 @@
     .popup-header { padding: 12px 14px; border-bottom: 0.5px solid var(--border); display: flex; align-items: center; gap: 8px; }
     .popup-search-input { flex: 1; padding: 7px 12px; background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 6px; color: var(--text); font-size: 13px; }
     .popup-search-input:focus { outline: none; border-color: var(--blue); }
-    .popup-close { color: var(--muted); cursor: pointer; font-size: 16px; padding: 4px 8px; }
+    .popup-close { color: var(--muted); cursor: pointer; font-size: 16px; padding: 4px 8px; background: none; border: 0; font-family: inherit; line-height: inherit; }
+    .popup-sheet-h, .popup-search-ic { display: none; }
+    .popup-team-lg { margin-left: auto; width: 16px; height: 16px; object-fit: contain; opacity: .7; }
+    .popup-team-lg + .popup-team-nodata { margin-left: 8px; }
     @media (hover: hover) and (pointer: fine) { .popup-close:hover { color: var(--text); } }
     .popup-fav { display: flex; align-items: center; gap: 6px; padding: 10px 12px 0; overflow-x: auto; scrollbar-width: none; } .popup-fav::-webkit-scrollbar { display: none; }
     .popup-fav-h { font-size: 12px; font-weight: 700; color: var(--gold); flex-shrink: 0; margin-right: 2px; }
@@ -3092,6 +3095,65 @@ html.theme-a .bigmatch-label { background: var(--iris); -webkit-background-clip:
 html.theme-a { --blue-text: #cfd7e6; }
 html.theme-a .lg-item { border-radius: 12px; }
 html.theme-a .lg-item.active { color: #fff; background: var(--a-seg-on); box-shadow: inset 0 1px 0 rgba(255,255,255,0.22), inset 0 0 0 1px rgba(255,255,255,0.07); }
+
+/* ── 팀 고르기 팝업: 넓은 화면은 팀 칸 바로 아래 유리 드롭다운, 폰은 아래에서 올라오는 시트(togglePopup이 .sheet로 body에 옮김) ── */
+html.theme-a .team-popup { width: 440px; max-width: calc(100vw - 24px); border: 0; border-radius: 22px;
+  background: linear-gradient(160deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02) 42%), rgba(12,18,34,0.94);
+  backdrop-filter: blur(30px) saturate(160%); -webkit-backdrop-filter: blur(30px) saturate(160%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), inset 0 0 0 1px rgba(255,255,255,0.08), 0 32px 80px -24px rgba(0,0,0,0.9);
+  transform-origin: top left; transform: translateY(-6px) scale(.98); transition: opacity .12s var(--ease-out), transform .12s var(--ease-out); }
+html.theme-a .team-popup.show { transform: none; transition: opacity .2s var(--ease-out), transform .24s var(--ease-out); }
+html.theme-a .team-popup .popup-inner { transform: none !important; transition: none; }
+html.theme-a .popup-header { position: relative; padding: 14px 14px 10px; border-bottom: 0; gap: 10px; }
+html.theme-a .popup-search-ic { display: block; position: absolute; left: 28px; top: 50%; margin-top: 2px; width: 16px; height: 16px; transform: translateY(-50%); fill: none; stroke: var(--a-ink-3); stroke-width: 2; stroke-linecap: round; pointer-events: none; }
+html.theme-a .popup-search-input { height: 42px; padding: 0 14px 0 38px; border: 0; border-radius: 99px; background: rgba(0,0,0,0.3); box-shadow: inset 0 1px 2px rgba(0,0,0,0.35), inset 0 0 0 1px var(--a-line-2); color: var(--a-ink); font-size: 14px; font-family: inherit; transition: box-shadow .15s var(--ease-out); }
+html.theme-a .popup-search-input::placeholder { color: var(--a-ink-3); }
+html.theme-a .popup-search-input:focus { border: 0; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.3), 0 0 0 4px rgba(185,168,255,0.14); }
+html.theme-a .popup-close { flex-shrink: 0; width: 36px; height: 36px; padding: 0; display: grid; place-items: center; border-radius: 50%; font-size: 13px; color: var(--a-ink-2); background: var(--a-gb); box-shadow: var(--a-gb-sh); }
+@media (hover: hover) and (pointer: fine) { html.theme-a .popup-close:hover { color: #fff; filter: brightness(1.18); } }
+html.theme-a .popup-fav { padding: 2px 14px 10px; gap: 6px; }
+html.theme-a .popup-fav-chip { border: 0; padding: 6px 12px 6px 8px; background: rgba(255,255,255,0.045); box-shadow: inset 0 0 0 1px var(--a-line-2); color: var(--a-ink-2); }
+html.theme-a .popup-fav-chip.selected { color: #fff; background: var(--a-seg-on); box-shadow: var(--a-seg-on-sh); }
+@media (hover: hover) and (pointer: fine) { html.theme-a .popup-fav-chip:not(.selected):hover { color: var(--a-ink); box-shadow: inset 0 0 0 1px rgba(255,255,255,0.22); } }
+/* 리그: 어두운 홈 안의 한 줄 세그먼트(고른 리그만 뜬 유리 알약) */
+html.theme-a .popup-league-grid { display: flex; gap: 2px; margin: 0 14px 6px; padding: 4px; border: 0; border-radius: 99px; background: rgba(0,0,0,0.28); box-shadow: inset 0 1px 2px rgba(0,0,0,0.4), inset 0 0 0 1px var(--a-line); overflow-x: auto; scrollbar-width: none; }
+html.theme-a .popup-league-grid::-webkit-scrollbar { display: none; }
+html.theme-a .popup-league-grid .popup-league-btn { flex: 1 0 auto; gap: 5px; padding: 7px 9px; font-size: 12px; transition: color .15s ease, background-color .15s ease; }
+html.theme-a .popup-league-grid .popup-league-btn:not(.active) { background: transparent; box-shadow: none; color: var(--a-ink-3); }
+@media (hover: hover) and (pointer: fine) { html.theme-a .popup-league-grid .popup-league-btn:not(.active):hover { color: var(--a-ink); } }
+/* 팀 목록: 상자 없는 줄, 고른 팀만 유리 알약 */
+html.theme-a .popup-team-list { padding: 6px 8px 10px; max-height: 340px; gap: 0; }
+html.theme-a .popup-team-row { gap: 12px; min-height: 44px; padding: 0 12px; border-radius: 12px; font-size: 14px; color: var(--a-ink-2); transition: background-color .12s ease; }
+html.theme-a .popup-team-row img { width: 22px; height: 22px; }
+html.theme-a .popup-team-row img.popup-team-lg { width: 16px; height: 16px; }
+@media (hover: hover) and (pointer: fine) { html.theme-a .popup-team-row:not(.selected):hover { background: rgba(255,255,255,0.05); color: var(--a-ink); } }
+html.theme-a .popup-team-row.selected { color: #fff; font-weight: 650; background: var(--a-seg-on); box-shadow: var(--a-seg-on-sh); }
+html.theme-a .popup-team-nodata { border: 0; border-radius: 99px; padding: 2px 8px; font-size: 11px; background: rgba(255,255,255,0.05); color: var(--a-ink-3); }
+html.theme-a .popup-team-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.14); }
+html.theme-a .popup-team-list .ti-empty { padding: 28px 0; text-align: center; font-size: 13px; color: var(--a-ink-3); }
+html.theme-a .tp-scrim { position: fixed; inset: 0; z-index: 605; background: rgba(3,6,14,0.55); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); opacity: 0; pointer-events: none; transition: opacity .2s var(--ease-out); }
+html.theme-a .tp-scrim.show { opacity: 1; pointer-events: auto; }
+html.tp-lock, html.tp-lock body { overflow: hidden; }
+@media (max-width: 768px) {
+  html.theme-a .team-popup.sheet { position: fixed; left: 0; right: 0; top: auto; bottom: 0; width: auto; max-width: none; z-index: 610; opacity: 1; border-radius: 28px 28px 0 0;
+    transform: translateY(100%); transition: transform .2s var(--ease-out); }
+  html.theme-a .team-popup.sheet.show { transform: none; transition: transform .36s var(--ease-drawer); }
+  html.theme-a .team-popup.sheet .popup-inner { display: flex; flex-direction: column; height: min(80dvh, 700px); }
+  html.theme-a .team-popup.sheet .popup-sheet-h { display: block; position: relative; padding: 24px 20px 4px; font-size: 17px; font-weight: 700; color: var(--a-ink); }
+  html.theme-a .team-popup.sheet .popup-sheet-h::before { content: ''; position: absolute; left: 50%; top: 9px; width: 38px; height: 5px; margin-left: -19px; border-radius: 99px; background: rgba(255,255,255,0.2); }
+  html.theme-a .team-popup.sheet .popup-header { padding: 10px 16px 12px; }
+  html.theme-a .team-popup.sheet .popup-search-ic { left: 30px; margin-top: 0; }
+  html.theme-a .team-popup.sheet .popup-search-input { height: 44px; font-size: 16px; }   /* 16px 밑이면 iOS가 누를 때 화면을 확대함 */
+  html.theme-a .team-popup.sheet .popup-fav { padding: 0 16px 12px; }
+  html.theme-a .team-popup.sheet .popup-league-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); margin: 0 16px 8px; border-radius: 18px; }
+  html.theme-a .team-popup.sheet .popup-league-grid .popup-league-btn { border-radius: 14px; padding: 9px 6px; font-size: 13px; }
+  html.theme-a .team-popup.sheet .popup-team-list { flex: 1; min-height: 0; max-height: none; overscroll-behavior: contain; padding: 4px 8px calc(16px + env(safe-area-inset-bottom)); }
+  html.theme-a .team-popup.sheet .popup-team-row { min-height: 50px; font-size: 15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.theme-a .team-popup, html.theme-a .team-popup.sheet { transform: none; opacity: 0; transition: opacity .15s ease; }
+  html.theme-a .team-popup.show, html.theme-a .team-popup.sheet.show { transform: none; opacity: 1; transition: opacity .15s ease; }
+}
 </style>
 <style id="theme-a-layout">
 /* ══ theme-a 배치(2026-10-10, 시안 A 구조) ══ 화면 배치·부품 모양. 색·표면은 위 <style id="theme-a"> */
@@ -3610,9 +3672,11 @@ html.theme-a .resA-p .cmpx-wrap { flex: 1; display: flex; flex-direction: column
             </div>
             <div class="team-popup" id="home-popup">
              <div class="popup-inner">
+              <div class="popup-sheet-h">홈팀 고르기</div>
               <div class="popup-header">
-                <input class="popup-search-input" id="home-search" placeholder="팀 검색..." oninput="filterTeams('home', this.value)">
-                <span class="popup-close" onclick="closePopup('home')">✕</span>
+                <svg class="popup-search-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                <input class="popup-search-input" id="home-search" placeholder="팀 검색..." autocomplete="off" enterkeyhint="search" oninput="filterTeams('home', this.value)" onkeydown="popupSearchKey(event, 'home')">
+                <button type="button" class="popup-close" onclick="closePopup('home')" aria-label="닫기">✕</button>
               </div>
               <div class="popup-fav" id="home-fav" hidden></div>
               <div class="popup-league-grid">
@@ -3644,9 +3708,11 @@ html.theme-a .resA-p .cmpx-wrap { flex: 1; display: flex; flex-direction: column
             </div>
             <div class="team-popup" id="away-popup">
              <div class="popup-inner">
+              <div class="popup-sheet-h">원정팀 고르기</div>
               <div class="popup-header">
-                <input class="popup-search-input" id="away-search" placeholder="팀 검색..." oninput="filterTeams('away', this.value)">
-                <span class="popup-close" onclick="closePopup('away')">✕</span>
+                <svg class="popup-search-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                <input class="popup-search-input" id="away-search" placeholder="팀 검색..." autocomplete="off" enterkeyhint="search" oninput="filterTeams('away', this.value)" onkeydown="popupSearchKey(event, 'away')">
+                <button type="button" class="popup-close" onclick="closePopup('away')" aria-label="닫기">✕</button>
               </div>
               <div class="popup-fav" id="away-fav" hidden></div>
               <div class="popup-league-grid">
@@ -7069,25 +7135,59 @@ function renderTiTransfers() {
 function closeTeamInfoModal(e) { if (!e || e.target === document.getElementById('ti-modal')) document.getElementById('ti-modal').classList.remove('show'); }
 
 function getTeamLeague(team) { for (const [key,data] of Object.entries(LEAGUE_DATA)) { if (key!=='UCL'&&data.teams.includes(team)) return data; } return null; }
+// 검색어가 있으면 고른 리그만이 아니라 5대 리그·챔스 전체에서 찾음(영어·짧은·한국어 이름) — 리그 탭이 EPL인 채로 "바이에른"을 치면 안 나오던 것
+let popupKo = {};
+const popupNorm = v => String(v || '').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '');
 function renderTeamGrid(side, leagueKey, search='') {
   const grid = document.getElementById(`${side}-team-grid`);
-  let teams = [...(LEAGUE_DATA[leagueKey]?.teams||[])].sort((a,b)=>cleanTeamName(a).localeCompare(cleanTeamName(b)));
-  if (search) teams=teams.filter(t=>t.toLowerCase().includes(search.toLowerCase()));
+  const q = popupNorm(search);
+  let teams = q
+    ? [...new Set(Object.values(LEAGUE_DATA).flatMap(d => d.teams || []))].filter(t => [t, shortName(t), cleanTeamName(t), popupKo[t]?.ko].some(n => popupNorm(n).includes(q)))
+    : [...(LEAGUE_DATA[leagueKey]?.teams||[])];
+  teams.sort((a,b)=>cleanTeamName(a).localeCompare(cleanTeamName(b)));
   if (!teams.length) { grid.innerHTML = '<div class="ti-empty">검색 결과가 없어요.</div>'; return; }
-  grid.innerHTML=teams.map(t=>`<div class="popup-team-row ${selectedTeams[side]===t?'selected':''}" onclick="selectTeamFromPopup('${side}','${t.replace(/'/g,"\\'")}')"><img alt="" src="${logos[t]||''}" onerror="this.style.display='none'"><span>${cleanTeamName(t)}</span>${unpredictableTeamsIn(t).length?'<span class="popup-team-nodata">예측 데이터 없음</span>':''}</div>`).join('');
+  const lgIcon = t => q ? `<img class="popup-team-lg" alt="" src="${getTeamLeague(t)?.logo || 'logos/league/CL.png'}" onerror="this.style.display='none'">` : '';
+  grid.innerHTML=teams.map(t=>`<div class="popup-team-row ${selectedTeams[side]===t?'selected':''}" onclick="selectTeamFromPopup('${side}','${t.replace(/'/g,"\\'")}')"><img alt="" src="${logos[t]||''}" onerror="this.style.display='none'"><span>${cleanTeamName(t)}</span>${lgIcon(t)}${unpredictableTeamsIn(t).length?'<span class="popup-team-nodata">예측 데이터 없음</span>':''}</div>`).join('');
 }
 const teamPopupCloseTimers = {};
+let popupSide = null;   // 마지막에 연 쪽 — 넓은 화면에서 글자를 치면 이쪽 검색창으로
+const teamPopupSheet = () => isThemeA() && isPhone();   // theme-a 폰: 아래에서 올라오는 시트
 function togglePopup(side) {
-  // home/away 팝업을 서로 독립적으로 열고 닫을 수 있게 함 (한쪽을 열어도 다른
-  // 쪽을 자동으로 닫지 않음 — 둘 다 동시에 열어서 각각 선택 가능)
+  // 넓은 화면은 home/away 팝업을 서로 독립적으로 열고 닫음(둘 다 열어 각각 선택 가능), 폰 시트는 한 번에 하나
   const popup=document.getElementById(`${side}-popup`);
-  const wasOpen = popup.classList.contains('show');
-  document.getElementById(`${side}-trigger`).classList.toggle('active');
-  if (wasOpen) { closePopup(side); return; }
+  if (popup.classList.contains('show')) { closePopup(side); return; }
+  if (teamPopupSheet()) closePopup(side === 'home' ? 'away' : 'home', true);
+  document.getElementById(`${side}-trigger`).classList.add('active');
+  document.getElementById(`${side}-search`).value = '';
   renderTeamGrid(side,currentLeagueTab[side]);
   renderPopupFav(side);
   openTeamPopup(side, popup);
-  document.getElementById(`${side}-search`).focus({ preventScroll: true });
+  popupSide = side;
+  fetchTeamsMeta().then(m => { popupKo = m || {}; const v = document.getElementById(`${side}-search`).value; if (v) renderTeamGrid(side, currentLeagueTab[side], v); });
+  // 검색창에 커서를 바로 두지 않음(2026-10-10 — 폰에서 원치 않을 때 키보드가 올라왔음). 넓은 화면은 그냥 글자를 치면 검색창으로 들어감(아래 keydown)
+}
+function popupSearchKey(e, side) {
+  if (e.key === 'Escape') { e.stopPropagation(); if (e.target.value) { e.target.value = ''; filterTeams(side, ''); } else closePopup(side); }
+  else if (e.key === 'Enter' && !e.isComposing) {
+    e.preventDefault();
+    if (isPhone()) { e.target.blur(); return; }   // 폰: 키보드만 내려 결과를 보게
+    document.querySelector(`#${side}-team-grid .popup-team-row`)?.click();   // 넓은 화면: 맨 위 팀 고르기
+  }
+}
+document.addEventListener('keydown', e => {
+  const side = popupSide, popup = side && document.getElementById(`${side}-popup`);
+  if (!popup || !popup.classList.contains('show') || popup.classList.contains('sheet')) return;
+  if (e.key.length !== 1 || e.key === ' ' || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) || e.target.isContentEditable) return;
+  document.getElementById(`${side}-search`).focus({ preventScroll: true });   // 이 글자부터 검색창에 들어감
+});
+// 시트 뒤 어두운 막 + 뒤 화면 스크롤 잠금
+function syncPopupScrim() {
+  const open = ['home', 'away'].some(sd => { const p = document.getElementById(`${sd}-popup`); return p.classList.contains('show') && p.classList.contains('sheet'); });
+  let sc = document.getElementById('tp-scrim');
+  if (!sc && open) { sc = document.createElement('div'); sc.id = 'tp-scrim'; sc.className = 'tp-scrim'; document.body.appendChild(sc); void sc.offsetWidth; }
+  if (sc) sc.classList.toggle('show', open);
+  document.documentElement.classList.toggle('tp-lock', open);
 }
 // 팝업 가로 위치: 트리거 버튼 기준 가운데가 기본이지만, 화면 끝을 넘으면 안쪽으로 밀고 화면보다 넓으면 화면
 // 가운데로. CSS만으로 버튼 기준 가운데(translateX(-50%))에 고정했더니 769~1000px 폭에선 팝업(480px)이
@@ -7095,16 +7195,33 @@ function togglePopup(side) {
 function placeTeamPopup(side) {
   const popup = document.getElementById(`${side}-popup`), trigger = document.getElementById(`${side}-trigger`);
   if (!popup || popup.style.display !== 'block') return;
+  if (popup.classList.contains('sheet')) { popup.style.left = popup.style.top = popup.style.transform = ''; return; }
   const M = 12, vw = document.documentElement.clientWidth, w = popup.offsetWidth;
   const t = trigger.getBoundingClientRect(), parent = popup.offsetParent.getBoundingClientRect();
+  if (isThemeA()) {   // 팀 칸(로고·이름 상자) 왼쪽 끝에 맞춰 바로 아래
+    const box = trigger.closest('.team-box').getBoundingClientRect();
+    popup.style.left = (Math.min(Math.max(box.left, M), vw - M - w) - parent.left) + 'px';
+    popup.style.top = (box.bottom - parent.top + 8) + 'px';
+    popup.style.transform = '';
+    return;
+  }
   let left = t.left + t.width / 2 - w / 2;
   left = w > vw - M * 2 ? (vw - w) / 2 : Math.min(Math.max(left, M), vw - M - w);
   popup.style.transform = 'none';
   popup.style.left = (left - parent.left) + 'px';
 }
-window.addEventListener('resize', () => { placeTeamPopup('home'); placeTeamPopup('away'); });
+window.addEventListener('resize', () => ['home', 'away'].forEach(side => {
+  const p = document.getElementById(`${side}-popup`);
+  if (p.classList.contains('show') && p.classList.contains('sheet') !== teamPopupSheet()) closePopup(side, true);   // 폰 ↔ 넓은 화면을 넘나들면 닫음
+  else placeTeamPopup(side);
+}));
 function openTeamPopup(side, popup) {
   if (teamPopupCloseTimers[side]) { clearTimeout(teamPopupCloseTimers[side]); teamPopupCloseTimers[side] = null; }
+  // 시트는 body로 옮겨서 띄움(카드의 쌓임 순서·transform 안에선 position: fixed가 화면 기준이 아니게 됨), 닫히면 제자리로
+  const sheet = teamPopupSheet();
+  popup._home = popup._home || popup.parentNode;
+  if (sheet) document.body.appendChild(popup); else if (popup.parentNode !== popup._home) popup._home.appendChild(popup);
+  popup.classList.toggle('sheet', sheet);
   popup.style.display = 'block';
   placeTeamPopup(side);
   // transition을 잠깐 껐다가(시작 위치 강제 확정) 다시 켜야 첫 오픈부터 항상
@@ -7116,15 +7233,27 @@ function openTeamPopup(side, popup) {
   inner.style.transition = '';
   popup.classList.add('show');
   inner.style.transform = '';
-  // 팝업 전체가 자연스럽게 화면에 들어오도록 살짝 스크롤
-  popup.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  syncPopupScrim();
+  if (sheet) return;
+  // 팝업 아래가 화면 밖이면 그만큼만 살짝 스크롤(이미 다 보이면 그대로)
+  const over = popup.getBoundingClientRect().bottom - (innerHeight - 16);
+  if (over > 0) scrollBy({ top: over, behavior: 'smooth' });
 }
-function closePopup(side){
+function closePopup(side, instant){
   const popup = document.getElementById(`${side}-popup`);
+  if (!popup) return;
+  if (!popup.classList.contains('show') && instant !== true) return;   // 이미 닫혔거나 닫히는 중
   popup.classList.remove('show');
   document.getElementById(`${side}-trigger`).classList.remove('active');
+  if (popupSide === side) popupSide = null;
+  syncPopupScrim();
   if (teamPopupCloseTimers[side]) clearTimeout(teamPopupCloseTimers[side]);
-  teamPopupCloseTimers[side] = setTimeout(() => { popup.style.display = 'none'; teamPopupCloseTimers[side] = null; }, 340);
+  const done = () => {
+    popup.style.display = 'none'; teamPopupCloseTimers[side] = null;
+    if (popup._home && popup.parentNode !== popup._home) popup._home.appendChild(popup);   // 시트였으면 제자리로
+    popup.classList.remove('sheet');
+  };
+  if (instant === true) done(); else teamPopupCloseTimers[side] = setTimeout(done, 340);
 }
 function selectLeagueTab(side,leagueKey,el){currentLeagueTab[side]=leagueKey;el.closest('.popup-league-grid').querySelectorAll('.popup-league-btn').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.getElementById(`${side}-search`).value='';renderTeamGrid(side,leagueKey);}
 // 팀 선택 팝업 맨 위 "★ 내 팀" — 즐겨찾기 팀을 한 번에 고름(예측할 수 있는 팀만)

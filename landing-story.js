@@ -15,6 +15,13 @@ const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module
 const LEAGUE_KO = { PL: 'EPL', PD: '라리가', BL1: '분데스리가', SA: '세리에A', FL1: '리그앙', CL: 'UCL' };
 const SIM_LEAGUES = new Set(['PL', 'PD', 'BL1', 'SA', 'FL1']);
 const COLORS = { blue: [0.345, 0.651, 1.0], orange: [0.941, 0.533, 0.243], gold: [0.941, 0.753, 0.251], line: [0.55, 0.72, 1.0], dim: [0.35, 0.5, 0.75], face: [0.5, 0.7, 1.0] };
+// theme-a(2026-10-10, 앱 시안 A 톤): 브랜드 = 오로라(하늘색 → 라벤더 → 복숭아). 파랑·주황은 홈·원정 데이터(경기장 원형)에만
+const IRIS = document.documentElement.classList.contains('theme-a');
+const IRIS_STOPS = [[0.612, 0.788, 1.0], [0.725, 0.659, 1.0], [1.0, 0.749, 0.596]];
+const iris = t => { const k = Math.min(1, Math.max(0, t)) * 2, i = Math.min(1, Math.floor(k)), f = k - i, a = IRIS_STOPS[i], b = IRIS_STOPS[i + 1]; return [0, 1, 2].map(j => a[j] + (b[j] - a[j]) * f); };
+const lighten = (c, w) => c.map(v => v + (1 - v) * w);
+const irisAt = (p, R) => iris(0.5 + (p[0] * 0.8 - p[1] * 0.6) / (1.3 * R));   // 왼쪽 위 → 오른쪽 아래(로고 공과 같은 방향)
+if (IRIS) { COLORS.line = [0.78, 0.79, 1.0]; COLORS.bar = [0.725, 0.659, 1.0]; }
 const TOPK = 5;
 
 const story = document.getElementById('story');
@@ -168,11 +175,11 @@ function buildTargets(N) {
     seed[i] = Math.random();
     if (i < nFace) {
       set(P[0], i, pointInPenta(pentas[i % 12], R));
-      set(C[0], i, COLORS.face);
+      set(C[0], i, IRIS ? lighten(irisAt(P[0].subarray(i * 3, i * 3 + 3), R), 0.25) : COLORS.face);
     } else {
       const e = edges[i % edges.length], t = Math.random();
       set(P[0], i, onSphere(e[0], e[1], t, R));
-      set(C[0], i, COLORS.blue);
+      set(C[0], i, IRIS ? irisAt(P[0].subarray(i * 3, i * 3 + 3), R) : COLORS.blue);
     }
   }
   // 1 구름: 납작한 가우시안 은하
@@ -180,7 +187,7 @@ function buildTargets(N) {
     const r = 0.7 + Math.abs(gauss()) * 1.15, th = Math.random() * Math.PI * 2;
     set(P[1], i, [Math.cos(th) * r * 1.3 + gauss() * 0.2, gauss() * 0.45, Math.sin(th) * r * 0.9 + gauss() * 0.2]);
     const k = Math.random();
-    set(C[1], i, k < 0.82 ? COLORS.blue : k < 0.91 ? COLORS.line : COLORS.orange);
+    set(C[1], i, IRIS ? iris(Math.random()) : k < 0.82 ? COLORS.blue : k < 0.91 ? COLORS.line : COLORS.orange);
   }
   // 2 경기장: 라인 88% + 홈/원정 원형 6%씩
   const segs = pitchSegments(), lens = segs.map(g => Math.hypot(g[2] - g[0], g[3] - g[1])), total = lens.reduce((a, b) => a + b, 0);
@@ -216,7 +223,7 @@ function fillBars(P, C, N) {
       P[i * 3] = b.x + (Math.random() - 0.5) * 0.46;
       P[i * 3 + 1] = b.base + Math.random() * b.h;
       P[i * 3 + 2] = (Math.random() - 0.5) * 0.46;
-      const c = k === 0 ? COLORS.gold : COLORS.blue;
+      const c = k === 0 ? COLORS.gold : (COLORS.bar || COLORS.blue);
       C[i * 3] = c[0]; C[i * 3 + 1] = c[1]; C[i * 3 + 2] = c[2];
     }
   });
@@ -299,7 +306,7 @@ function initScene(THREE) {
   // 공 와이어(선) — 공 장면에서만 보임. 점과 같이 뒷면은 흐리게
   const wireGeo = new THREE.BufferGeometry(); wireGeo.setAttribute('position', new THREE.Float32BufferAttribute(wirePositions(BALL_R), 3));
   const wireMat = new THREE.ShaderMaterial({
-    uniforms: { uOp: { value: 0.55 }, uColor: { value: new THREE.Color(0x58a6ff) } },
+    uniforms: { uOp: { value: 0.55 }, uColor: { value: new THREE.Color(IRIS ? 0xb4a8ff : 0x58a6ff) } },
     transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
     vertexShader: WIRE_VERTEX,
     fragmentShader: WIRE_FRAGMENT,
@@ -310,13 +317,14 @@ function initScene(THREE) {
   const ringPts = [];
   for (let k = 0; k <= 160; k++) { const a = k / 160 * Math.PI * 2; ringPts.push(Math.cos(a), Math.sin(a), 0); }
   const ringGeo = new THREE.BufferGeometry(); ringGeo.setAttribute('position', new THREE.Float32BufferAttribute(ringPts, 3));
-  const ringMat = new THREE.LineBasicMaterial({ color: 0x78b8ff, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending, depthWrite: false });
+  const ringMat = new THREE.LineBasicMaterial({ color: IRIS ? 0xc4baff : 0x78b8ff, transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending, depthWrite: false });
   const ring = new THREE.Line(ringGeo, ringMat); scene.add(ring);
   const glowCanvas = document.createElement('canvas'); glowCanvas.width = glowCanvas.height = 256;
   const gctx = glowCanvas.getContext('2d'), grad = gctx.createRadialGradient(128, 128, 0, 128, 128, 128);
   // 가운데는 거의 비우고 테두리 바로 바깥만 은은하게(넓고 진하면 공 뒤에 회색 원판이 깔린 것처럼 보임)
-  grad.addColorStop(0, 'rgba(88,166,255,0.05)'); grad.addColorStop(0.72, 'rgba(88,166,255,0.05)');
-  grad.addColorStop(0.83, 'rgba(88,166,255,0.13)'); grad.addColorStop(1, 'rgba(88,166,255,0)');
+  const gc = IRIS ? '185,168,255' : '88,166,255';
+  grad.addColorStop(0, `rgba(${gc},0.05)`); grad.addColorStop(0.72, `rgba(${gc},0.05)`);
+  grad.addColorStop(0.83, `rgba(${gc},0.13)`); grad.addColorStop(1, `rgba(${gc},0)`);
   gctx.fillStyle = grad; gctx.fillRect(0, 0, 256, 256);
   const glow = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(glowCanvas), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
   scene.add(glow);
