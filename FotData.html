@@ -4348,11 +4348,13 @@ function loMatchList(list, code) {
 function renderLoNext(code, ms) {
   const el = document.querySelector('#lo-next .lo-body'); if (!el) return;
   const now = Date.now();
-  const up = ms.filter(m => !isDone(m) && (isLive(m) || new Date(m.date).getTime() > now - 3 * 3600e3)).sort((a, b) => new Date(a.date) - new Date(b.date));
+  const byDate = (a, b) => new Date(a.date) - new Date(b.date);
+  const up = ms.filter(m => !isDone(m) && (isLive(m) || new Date(m.date).getTime() > now - 3 * 3600e3)).sort(byDate);
   if (!up.length) { el.innerHTML = '<div class="ti-empty">남은 경기가 없어요.</div>'; return; }
-  // 리그는 다음 라운드 전체, 챔스는 가까운 8경기
+  // 리그는 다음 라운드 전체(이미 끝난 그 라운드 경기도 결과로 — 끝나자마자 목록에서 사라지던 것), 챔스는 오늘 끝난 경기 + 가까운 8경기
   const md = up[0].matchday;
-  const list = code !== 'CL' && md ? up.filter(m => m.matchday === md).slice(0, 12) : up.slice(0, 8);
+  const list = code !== 'CL' && md ? ms.filter(m => m.matchday === md && m.status !== 'POSTPONED').sort(byDate).slice(0, 12)
+    : ms.filter(m => up.includes(m) || (isDone(m) && m.live)).sort(byDate).slice(0, 8);
   const h = document.querySelector('#lo-next .lo-card-h b');
   if (h) h.textContent = code !== 'CL' && md ? `${md}라운드 · AI 예측` : '다음 경기 · AI 예측';
   el.innerHTML = loMatchList(list, code); koStart();
@@ -4695,7 +4697,7 @@ function liveMinute(m) {
 }
 function liveChip(m) {
   const min = liveMinute(m);
-  const t = m.status === 'PAUSED' ? '하프타임' : m.status === 'PENALTY_SHOOTOUT' ? '승부차기' : m.status === 'EXTRA_TIME' ? `연장전${min ? ' ' + min : ''}` : min ? `진행 중 ${min}` : '진행 중';
+  const t = m.af_status === 'INT' || m.af_status === 'SUSP' ? '경기 중단' : m.status === 'PAUSED' ? '하프타임' : m.status === 'PENALTY_SHOOTOUT' ? '승부차기' : m.status === 'EXTRA_TIME' ? `연장전${min ? ' ' + min : ''}` : min ? `진행 중 ${min}` : '진행 중';
   return `<span class="live-chip"><i></i>${t}</span>`;
 }
 let windowMatchesList = null, liveTimer = null;
@@ -4721,15 +4723,17 @@ function applyLive(rows) {
   const upd = (m, lg) => {
     const v = map.get(liveKey(m));
     if (!v || (isDone(m) && !m.live)) return;   // 새벽 업데이트로 확정된 경기는 그대로
-    if (v.status === m.status && v.home_goals === m.home_goals && v.away_goals === m.away_goals && v.minute === m.minute && v.injury_time === m.injury_time) return;
+    if (v.status === m.status && v.af_status === m.af_status && v.home_goals === m.home_goals && v.away_goals === m.away_goals && v.minute === m.minute && v.injury_time === m.injury_time) return;
     const was = isDone(m);
-    Object.assign(m, { status: v.status, home_goals: v.home_goals, away_goals: v.away_goals, minute: v.minute, injury_time: v.injury_time, penalties: v.penalties, live: true });
+    Object.assign(m, { status: v.status, af_status: v.af_status, home_goals: v.home_goals, away_goals: v.away_goals, minute: v.minute, injury_time: v.injury_time, penalties: v.penalties, live: true });
     changed = true;
     if (isDone(m) && !was) ended.add(lg || m.league);
   };
   (windowMatchesList || []).forEach(m => upd(m, m.league));
   Object.entries(scheduleData).forEach(([lg, l]) => (l || []).forEach(m => upd(m, lg)));
   if (!changed) return;
+  // 리그 개요 "N라운드 · AI 예측" 카드도 점수·상태를 바로(일정 배열을 같이 씀)
+  if (lgPanelOn('overview') && lgState.season === 'current' && scheduleData[lgState.code]) renderLoNext(lgState.code, scheduleData[lgState.code]);
   // 끝난 경기가 생기면 그 리그 예측을 다시 받아 "AI 적중/빗나감"을 바로 붙임(경기 전에 기록된 예측이 있는 경기만)
   ended.forEach(lg => { delete schedulePreds[lg]; delete schedulePredsP[lg]; });
   Promise.all([...ended].map(ensureSchedulePreds)).then(() => {

@@ -1183,6 +1183,19 @@ def get_track_record():
     요약 + 최근 완료 경기 목록 + 채점 예정 경기"""
     log = _load_json("prediction_log.json") or {}
     now = pd.Timestamp.utcnow().tz_localize(None)
+    # 오늘 끝난 경기: 새벽 업데이트 전이라도 실시간 결과로 바로 채점(캐시된 로그는 건드리지 않고 복사본에)
+    live = _live_overlay()
+    if live:
+        log = dict(log)
+        for k, e in log.items():
+            if e.get("actual") is not None or e.get("predicted") is None:
+                continue
+            v = live.get(_live_key(e["home_team"], e["away_team"], e["date"]))
+            if not v or v["status"] not in DONE_STATUSES or v.get("home_goals") is None:
+                continue
+            hg, ag = v["home_goals"], v["away_goals"]
+            actual = "home_win" if hg > ag else "away_win" if hg < ag else "draw"
+            log[k] = {**e, "actual": actual, "actual_score": f"{hg}-{ag}", "correct": actual == e["predicted"]}
 
     def _row(e):
         return {k: e.get(k) for k in ("league", "home_team", "away_team", "date", "predicted", "home_win_prob",
@@ -1490,10 +1503,38 @@ def _live_needed(now):
                 return True
     return False
 
-def _live_overlay():
-    """{홈|원정|날짜: {status, home_goals, away_goals, penalties?, minute?}} — 오늘 경기 최신 상태(없으면 빈 dict)"""
-    key = os.environ.get("FOOTBALL_API_KEY")
+def _fd_today(key, now):
+    """football-data 오늘 경기 → ({키: 상태}, None) 또는 (None, 실패 이유 — 상태 코드·오류 이름)"""
     if not key:
+        return None, "no-key"
+    try:
+        r = requests.get("https://api.football-data.org/v4/matches", headers={"X-Auth-Token": key}, timeout=8, params={
+            "competitions": "PL,PD,BL1,SA,FL1,CL",
+            "dateFrom": (now - pd.Timedelta(days=2)).strftime("%Y-%m-%d"), "dateTo": (now + pd.Timedelta(days=1)).strftime("%Y-%m-%d")})
+        if r.status_code != 200:
+            return None, r.status_code
+        data = {}
+        for m in r.json().get("matches", []):
+            hg, ag, pens = _live_goals(m)
+            row = {"status": m["status"], "home_goals": hg, "away_goals": ag}
+            if pens:
+                row["penalties"] = pens
+            if m.get("minute"):   # 경기 분(무료 플랜은 안 올 때가 많음 — 그땐 API-Football 값)
+                row["minute"] = m["minute"]
+            if m.get("injuryTime"):   # 추가시간(45+2 → 화면 "45+2분")
+                row["injury_time"] = m["injuryTime"]
+            row["utc"] = m["utcDate"]
+            data[_live_key(m["homeTeam"]["name"], m["awayTeam"]["name"], m["utcDate"])] = row
+        return data, None
+    except Exception as e:
+        return None, type(e).__name__
+
+def _live_overlay():
+    """{홈|원정|날짜: {status, home_goals, away_goals, penalties?, minute?}} — 오늘 경기 최신 상태(없으면 빈 dict).
+    football-data(무료, 몇 분 늦음) 위에 API-Football(진행 중 = live=all, 막 끝난 경기 = ids)을 덮음.
+    둘은 따로 — 2026-10-10 Render에서 football-data가 실패하자 API-Football까지 건너뛰어 그날 실시간이 통째로 비었음"""
+    key = os.environ.get("FOOTBALL_API_KEY")
+    if not key and not AF_KEY:
         return {}
     import time as _t
     now_s = _t.time()
@@ -1508,26 +1549,18 @@ def _live_overlay():
         if not _live_needed(now):
             _live.update(at=_t.time(), data={}, quiet=True)
             return {}
-        r = requests.get("https://api.football-data.org/v4/matches", headers={"X-Auth-Token": key}, timeout=8, params={
-            "competitions": "PL,PD,BL1,SA,FL1,CL",
-            "dateFrom": (now - pd.Timedelta(days=2)).strftime("%Y-%m-%d"), "dateTo": (now + pd.Timedelta(days=1)).strftime("%Y-%m-%d")})
-        if r.status_code != 200:
-            print(f"경기 당일 결과 받기 실패: {r.status_code}")
-            _live["at"] = _t.time()   # 실패해도 1분은 다시 안 부름(직전 값 유지)
-            return _live["data"]
-        data = {}
-        for m in r.json().get("matches", []):
-            hg, ag, pens = _live_goals(m)
-            row = {"status": m["status"], "home_goals": hg, "away_goals": ag}
-            if pens:
-                row["penalties"] = pens
-            if m.get("minute"):   # 경기 분(무료 플랜에서도 오는지는 10/10 첫 경기에서 확인 예정 — 없으면 화면엔 "진행 중"만)
-                row["minute"] = m["minute"]
-            if m.get("injuryTime"):   # 추가시간(45+2 → 화면 "45+2분")
-                row["injury_time"] = m["injuryTime"]
-            row["utc"] = m["utcDate"]
-            data[_live_key(m["homeTeam"]["name"], m["awayTeam"]["name"], m["utcDate"])] = row
-        _af_live_merge(data)
+        fd, err = _fd_today(key, now)
+        _live["fd"] = err or "ok"   # /matches/live에 그대로(진단용 — 키 값은 안 내보냄)
+        if fd is None:
+            print(f"경기 당일 결과(football-data) 실패: {err}")
+            fd = _live.get("fd_data") or {}   # 직전에 받은 값 위에 API-Football만 새로
+        else:
+            _live["fd_data"] = fd
+        data = dict(fd)
+        try:
+            _af_live_merge(data, now)
+        except Exception as e:
+            print(f"경기 당일 결과(API-Football) 오류: {e}")
         quiet = not any(v["status"] in LIVE_STATUSES for v in data.values()) and _all_started_done(data, now)
         _live.update(at=_t.time(), data=data, quiet=quiet)
         return data
@@ -1539,26 +1572,73 @@ def _live_overlay():
         _live_lock.release()
 
 # ── 실시간(2026-10-09): API-Football /fixtures?live=all 한 번(전 세계 진행 중 경기, 1분 캐시)으로 우리 경기의 점수·분을 덮음.
-# football-data 무료 점수는 몇 분 늦고 추가시간·하프타임 구분이 약했음. 키가 없거나 실패하면 football-data 값 그대로
+# football-data 무료 점수는 몇 분 늦고 추가시간·하프타임 구분이 약했음. 키가 없거나 실패하면 football-data 값 그대로.
+# 끝난 경기는 live=all에서 빠지므로, 킥오프가 지났는데 아직 '끝남'이 없는 우리 경기는 /fixtures?ids=(20개씩)로 결과를 받아 둠
+# — 끝난 결과는 프로세스가 살아 있는 동안 기억(새벽 업데이트 뒤엔 일정이 '끝남'이라 다시 안 찾음), 아직이면 5분 뒤 다시
 AF_LIVE_MAP = {"1H": "IN_PLAY", "2H": "IN_PLAY", "ET": "EXTRA_TIME", "BT": "EXTRA_TIME", "P": "PENALTY_SHOOTOUT", "HT": "PAUSED", "LIVE": "IN_PLAY", "INT": "PAUSED",
-               "FT": "FINISHED", "AET": "FINISHED", "PEN": "FINISHED"}
-def _af_live_merge(data):
-    rows = _af_live_get("/fixtures", 55, live="all")
-    if not rows:
-        return
-    by_id = {e["id"]: e for e in (_load_json("af_fixtures.json") or {}).get("fixtures", [])}
-    for fx in rows:
-        e = by_id.get((fx.get("fixture") or {}).get("id"))
-        if not e:
-            continue
-        st = fx["fixture"]["status"]
-        k = _live_key(e["home_team"], e["away_team"], e["date"])
-        row = {**data.get(k, {}), "status": AF_LIVE_MAP.get(st.get("short"), "IN_PLAY"), "af_status": st.get("short"),
-               "home_goals": (fx.get("goals") or {}).get("home"), "away_goals": (fx.get("goals") or {}).get("away"), "utc": e["kickoff"], "source": "api-football"}
+               "SUSP": "PAUSED", "FT": "FINISHED", "AET": "FINISHED", "PEN": "FINISHED", "AWD": "AWARDED", "WO": "AWARDED"}
+_af_final = {}   # API-Football 경기 ID → (확인한 시각, 끝난 결과 row 또는 None)
+
+def _af_live_row(fx, e, base):
+    st = (fx.get("fixture") or {}).get("status") or {}
+    status = AF_LIVE_MAP.get(st.get("short"))
+    if not status:   # 연기·취소·중단·시작 전 — 덮지 않음
+        return None
+    g = fx.get("goals") or {}
+    row = {**base, "status": status, "af_status": st.get("short"), "home_goals": g.get("home"), "away_goals": g.get("away"),
+           "utc": e["kickoff"], "source": "api-football"}
+    if status in DONE_STATUSES:
+        row.pop("minute", None); row.pop("injury_time", None)
+    else:
         if st.get("elapsed") is not None:
             row["minute"] = st["elapsed"]
         row["injury_time"] = st.get("extra") or None
-        data[k] = row
+    pen = (fx.get("score") or {}).get("penalty") or {}
+    if pen.get("home") is not None and pen.get("away") is not None:
+        row["penalties"] = [pen["home"], pen["away"]]
+    return row
+
+def _af_live_merge(data, now):
+    by_key = _af_index()[0]
+    seen = set()
+    rows = _af_live_get("/fixtures", 55, live="all") or []
+    if rows:
+        by_id = {e["id"]: e for e in by_key.values()}
+        for fx in rows:
+            e = by_id.get((fx.get("fixture") or {}).get("id"))
+            if not e:
+                continue
+            k = _live_key(e["home_team"], e["away_team"], e["date"])
+            row = _af_live_row(fx, e, data.get(k, {}))
+            if row:
+                data[k] = row
+                seen.add(e["id"])
+    # 막 끝난 경기(live=all에서 빠짐): 킥오프 5분 뒤 ~ 30시간 안, 일정·football-data 둘 다 아직 '끝남'이 아닌 것
+    lo, hi = now - pd.Timedelta(hours=30), now - pd.Timedelta(minutes=5)
+    need = []
+    for ms in (_load_json("schedule.json") or {}).values():
+        for m in ms:
+            if m.get("status") in DONE_STATUSES | {"CANCELLED", "POSTPONED"} or not lo <= pd.Timestamp(m["date"]) <= hi:
+                continue
+            k = _live_key(m["home_team"], m["away_team"], m["date"])
+            e = by_key.get(k)
+            if not e or e["id"] in seen or (data.get(k) or {}).get("status") in DONE_STATUSES:
+                continue
+            hit = _af_final.get(e["id"])
+            if hit and (hit[1] is not None or _time.time() - hit[0] < 300):
+                if hit[1]:
+                    data[k] = {**data.get(k, {}), **hit[1]}
+                continue
+            need.append((k, e))
+    for i in range(0, len(need), 20):
+        chunk = need[i:i + 20]
+        got = {(fx.get("fixture") or {}).get("id"): fx for fx in
+               (_af_live_get("/fixtures", 55, ids="-".join(str(e["id"]) for _, e in chunk)) or [])}
+        for k, e in chunk:
+            row = _af_live_row(got[e["id"]], e, {}) if e["id"] in got else None
+            _af_final[e["id"]] = (_time.time(), row if row and row["status"] in DONE_STATUSES else None)
+            if row:
+                data[k] = {**data.get(k, {}), **row}
 
 def _next_kickoff(now):
     ts = [pd.Timestamp(m["date"]) for ms in (_load_json("schedule.json") or {}).values() for m in ms
@@ -2291,7 +2371,8 @@ def get_matches_live():
     live = _live_overlay()
     return {"matches": [{"home_team": k.split("|")[0], "away_team": k.split("|")[1], **v} for k, v in live.items()],
             "enabled": bool(os.environ.get("FOOTBALL_API_KEY")),
-            "af_enabled": bool(os.environ.get("API_FOOTBALL_KEY"))}   # API-Football 요청 때 받기(확정 라인업·선수 경력)가 켜졌는지 — 값은 안 내보냄
+            "af_enabled": bool(os.environ.get("API_FOOTBALL_KEY")),   # API-Football 요청 때 받기(확정 라인업·선수 경력)가 켜졌는지 — 값은 안 내보냄
+            "fd_status": _live.get("fd")}   # football-data 마지막 응답(ok·상태 코드·오류 이름) — 실시간이 비면 이것부터
 
 @app.get("/matches/window")
 def get_matches_window():
