@@ -9,6 +9,10 @@ import { BALL_R, ballGeometry, onSphere, pointInPenta, wirePositions, WIRE_VERTE
 
 const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js';
 const root = document.documentElement;
+// theme-a(2026-10-10): 파랑 대신 오로라(하늘색 → 라벤더 → 복숭아, 왼쪽 위 → 오른쪽 아래) — 랜딩 공·로고와 같은 색
+const IRIS = root.classList.contains('theme-a');
+const IRIS_STOPS = [[0.612, 0.788, 1.0], [0.725, 0.659, 1.0], [1.0, 0.749, 0.596]];
+const iris = t => { const k = Math.min(1, Math.max(0, t)) * 2, i = Math.min(1, Math.floor(k)), f = k - i, a = IRIS_STOPS[i], b = IRIS_STOPS[i + 1]; return [0, 1, 2].map(j => a[j] + (b[j] - a[j]) * f); };
 const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const webgl = (() => { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch (e) { return false; } })();
 
@@ -39,7 +43,8 @@ function init(THREE) {
   for (let i = 0; i < N; i++) {
     const p = i < nFace ? pointInPenta(pentas[i % 12], BALL_R) : (e => onSphere(e[0], e[1], Math.random(), BALL_R))(edges[i % edges.length]);
     pos.set(p, i * 3);
-    col.set(i < nFace ? [0.5, 0.7, 1.0] : [0.345, 0.651, 1.0], i * 3);
+    if (IRIS) { const c = iris(0.5 + (p[0] * 0.8 - p[1] * 0.6) / (1.3 * BALL_R)); col.set(i < nFace ? c.map(v => v + (1 - v) * 0.25) : c, i * 3); }
+    else col.set(i < nFace ? [0.5, 0.7, 1.0] : [0.345, 0.651, 1.0], i * 3);
     // 흩어질 방향: 바깥(법선) 쪽 + 약간의 무작위
     const l = Math.hypot(...p), r = [Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5];
     dir.set([p[0] / l + r[0] * 0.8, p[1] / l + r[1] * 0.8, p[2] / l + r[2] * 0.8], i * 3);
@@ -77,7 +82,7 @@ function init(THREE) {
 
   const wireGeo = new THREE.BufferGeometry(); wireGeo.setAttribute('position', new THREE.Float32BufferAttribute(wirePositions(BALL_R), 3));
   const wireMat = new THREE.ShaderMaterial({
-    uniforms: { uOp: { value: 0.5 }, uColor: { value: new THREE.Color(0x58a6ff) } },
+    uniforms: { uOp: { value: 0.5 }, uColor: { value: new THREE.Color(IRIS ? 0xb4a8ff : 0x58a6ff) } },
     transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, vertexShader: WIRE_VERTEX, fragmentShader: WIRE_FRAGMENT,
   });
   group.add(new THREE.LineSegments(wireGeo, wireMat));
@@ -86,7 +91,7 @@ function init(THREE) {
   const ringPts = [];
   for (let k = 0; k <= 160; k++) { const a = k / 160 * Math.PI * 2; ringPts.push(Math.cos(a), Math.sin(a), 0); }
   const ringGeo = new THREE.BufferGeometry(); ringGeo.setAttribute('position', new THREE.Float32BufferAttribute(ringPts, 3));
-  const ring = new THREE.Line(ringGeo, new THREE.LineBasicMaterial({ color: 0x78b8ff, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending, depthWrite: false }));
+  const ring = new THREE.Line(ringGeo, new THREE.LineBasicMaterial({ color: IRIS ? 0xc4baff : 0x78b8ff, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending, depthWrite: false }));
   const rimR = rimRadius(BALL_R, D);
   ring.scale.setScalar(rimR); scene.add(ring);
 
