@@ -366,10 +366,20 @@ def predict_schedule(league_code: str):
     code = league_code.upper()
     base = _schedule_predictions(code)
     live = _live_overlay()
+    log = _load_json("prediction_log.json") or {}
+    # 킥오프가 지난 경기(진행 중·중단): "경기 전 AI 예측"은 지금 모델 값이 아니라 경기 전에 기록해 둔 예측(나중에 채점되는 그 예측)으로.
+    # 지금 모델 값을 보여주면 화면 예측과 채점 기준이 달라짐(10/10 라요–아틀레틱: 화면 홈 46%, 기록 원정 37%)
+    now = pd.Timestamp.now(tz="UTC")
+    locked = []
+    for x in base["predictions"]:
+        e = log.get(f"{code}|{x['home_team']}|{x['away_team']}|{x['date'][:10]}") if pd.Timestamp(x["date"]) <= now else None
+        locked.append({**x, "p": [e["home_win_prob"], e["draw_prob"], e["away_win_prob"]], "predicted": e["predicted"]}
+                      if e and e.get("predicted") else x)
+    base = {**base, "predictions": locked}
     if not live:
         return base
     # 오늘 끝난 경기: 새벽 업데이트 전이라도 경기 전에 기록해둔 예측(prediction_log)으로 바로 적중 여부를 매김
-    log, extra, done = _load_json("prediction_log.json") or {}, [], set()
+    extra, done = [], set()
     for m in (_load_json("schedule.json") or {}).get(code, []):
         v = live.get(_live_key(m["home_team"], m["away_team"], m["date"]))
         if m.get("status") in DONE_STATUSES or not v or v["status"] not in DONE_STATUSES or v["home_goals"] is None:
@@ -1399,7 +1409,10 @@ def _champion(code: str):
                          "points": r["points"], "gd": r["gd"]} for r in table}
 
     schedule = (_load_json("schedule.json") or {}).get(code, [])
-    remaining = [m for m in schedule if m.get("status") not in ("FINISHED", "AWARDED", "CANCELLED")]
+    cur = df_matches_all[(df_matches_all['league'] == code) & (df_matches_all['season'] == CURRENT_SEASON_YEAR)]
+    played = set(zip(cur['date'].dt.strftime('%Y-%m-%d'), cur['home_team'], cur['away_team']))   # 오늘 끝나 실시간 반영된 경기(일정 파일엔 아직 '예정')
+    remaining = [m for m in schedule if m.get("status") not in ("FINISHED", "AWARDED", "CANCELLED")
+                 and (m["date"][:10], m["home_team"], m["away_team"]) not in played]
     for m in remaining:   # 시즌 초 아직 경기가 없는 팀도 포함
         for t in (m["home_team"], m["away_team"]):
             teams.setdefault(t, {"team": t, "logo": team_logos_cache.get(t, ''), "played": 0, "points": 0, "gd": 0})
@@ -1563,6 +1576,10 @@ def _live_overlay():
             print(f"경기 당일 결과(API-Football) 오류: {e}")
         quiet = not any(v["status"] in LIVE_STATUSES for v in data.values()) and _all_started_done(data, now)
         _live.update(at=_t.time(), data=data, quiet=quiet)
+        try:
+            _live_sync_check(data, now)
+        except Exception as e:
+            print(f"끝난 경기 반영 확인 오류: {e}")
         return data
     except Exception as e:
         print(f"경기 당일 결과 오류: {e}")
@@ -1594,7 +1611,7 @@ def _af_live_row(fx, e, base):
             row["minute"] = st["elapsed"]
         row["injury_time"] = st.get("extra") or None
     pen = (fx.get("score") or {}).get("penalty") or {}
-    if pen.get("home") is not None and pen.get("away") is not None:
+    if st.get("short") in ("P", "PEN") and pen.get("home") is not None and pen.get("away") is not None:   # 중단된 경기도 0:0이 와서
         row["penalties"] = [pen["home"], pen["away"]]
     return row
 
@@ -1639,6 +1656,116 @@ def _af_live_merge(data, now):
             _af_final[e["id"]] = (_time.time(), row)
             if row:
                 data[k] = {**data.get(k, {}), **row}
+
+# ── 끝난 경기 실시간 반영(2026-10-10) ──
+# 경기 데이터(all_matches.csv)·팀 상태(team_state.json)·경기 상세(match_details/)는 새벽 업데이트 때만 바뀌어서, 낮에 끝난 경기가
+# 맞대결·최근 폼·순위표·순위 예측·예측 입력(ELO·폼)·선수 시즌 기록에 다음 날까지 안 들어갔음(10/10 아스날–리즈 맞대결 누락).
+# 실시간 점수(_live_overlay)에서 '끝남'이 된 경기를 서버 메모리의 경기 데이터에 붙이고, 팀 상태는 새벽 계산과 같은 규칙(model_features)으로
+# 그 경기만큼 이어서 계산, 경기 상세(선수 기록)도 받아 둔 뒤 계산 캐시를 비우고 다시 데움 — 요청은 기다리지 않음(뒤에서).
+# 파일은 안 바꿈: 새벽 업데이트 뒤 재배포되면 파일(같은 결과)로 다시 시작. 모델 재학습·블렌딩 전력(team_stats.csv)은 새벽에만.
+from model_features import _team_snapshot as _mf_snapshot, elo_change as _mf_elo_change, RESULT_PTS as _MF_PTS, ELO_TRAIL_N as _MF_TRAIL_N, STATS_N as _MF_STATS_N
+_sync = {"rows": set(), "md": set()}   # 반영한 경기(홈|원정|날짜) — 경기 데이터 / 경기 상세
+_sync_lock = threading.Lock()
+
+def _live_sync_check(data, now):
+    todo = []
+    for code, ms in (_load_json("schedule.json") or {}).items():
+        for m in ms:
+            if m.get("status") in DONE_STATUSES:   # 이미 파일(새벽 업데이트)에 있음
+                continue
+            k = _live_key(m["home_team"], m["away_team"], m["date"])
+            v = data.get(k)
+            if not v or v["status"] not in DONE_STATUSES or v.get("home_goals") is None or v.get("away_goals") is None:
+                continue
+            need_md = k not in _sync["md"] and now < pd.Timestamp(m["date"]) + pd.Timedelta(hours=6)   # 상세는 킥오프 6시간 뒤까지만 다시 시도
+            if k not in _sync["rows"] or need_md:
+                todo.append((code, m, v))
+    if todo and _sync_lock.acquire(blocking=False):
+        threading.Thread(target=_live_sync_apply, args=(todo,), daemon=True).start()
+
+def _sync_team_state(ts, all_, r):
+    """경기 r 하나만큼 팀 상태를 이어서 계산(update_data.build_point_in_time_features의 마지막 단계와 같은 규칙)"""
+    h, a = r["home_team"], r["away_team"]
+    if h not in ts or a not in ts:   # 처음 나온 팀(첫 출전 UCL 팀 등)의 시작 ELO는 새벽 계산에 맡김
+        return
+    ch = _mf_elo_change(ts[h]["elo"], ts[a]["elo"], r["result"])   # 두 팀 모두 경기 전 ELO로
+    day = r["date"].strftime("%Y-%m-%d")
+    for i, (t, delta) in enumerate(((h, ch), (a, -ch))):
+        tm = all_[((all_['home_team'] == t) | (all_['away_team'] == t)) & (all_['date'] <= r["date"])].sort_values('date', kind='mergesort').tail(_MF_STATS_N)
+        hist = [{'gf': x.home_goals if x.home_team == t else x.away_goals, 'ga': x.away_goals if x.home_team == t else x.home_goals,
+                 'pts': _MF_PTS[x.result][0 if x.home_team == t else 1]} for x in tm.itertuples()]
+        elo = ts[t]["elo"] + delta
+        ts[t] = {**ts[t], "elo": round(elo, 2), "games": ts[t].get("games", 0) + 1,
+                 **{k: round(v, 4) for k, v in _mf_snapshot(hist).items()},
+                 "elo_history": (list(ts[t].get("elo_history") or []) + [[day, round(elo, 1)]])[-_MF_TRAIL_N:]}
+
+def _clear_data_caches():
+    """경기 데이터·팀 상태·경기 상세로 계산한 캐시 전부(파일 읽기·로고·이름 표 같은 건 그대로)"""
+    for f in (_schedule_predictions, _team_league_map, _league_display_ranks, _standings_view, _standings, _team_insight,
+              _league_season_stats, _season_rank_progress, _team_season_league, _team_stats, _leaders, _team_players, _champion,
+              _rank_movement, _cur_details, _league_rows, _player_search_index, _league_players_compact, _round_xi_cached,
+              _share_data, _share_jpg):
+        f.cache_clear()
+
+def _live_sync_apply(todo):
+    global df_matches_all, df_seasons, team_state, ucl_only_teams, _h2h_cache
+    try:
+        changed, rows = set(), []
+        todo.sort(key=lambda x: (x[1]["date"], x[0], x[1]["home_team"]))   # 새벽 계산과 같은 순서(날짜 → 리그 → 홈팀)
+        have = set(zip(df_matches_all['date'].dt.strftime('%Y-%m-%d'), df_matches_all['home_team'], df_matches_all['away_team']))
+        for code, m, v in todo:
+            k = _live_key(m["home_team"], m["away_team"], m["date"])
+            if k in _sync["rows"]:
+                continue
+            _sync["rows"].add(k)
+            if (m["date"][:10], m["home_team"], m["away_team"]) in have:
+                continue
+            hg, ag = int(v["home_goals"]), int(v["away_goals"])
+            rows.append({"match_id": pd.NA, "date": pd.Timestamp(m["date"][:10]), "league": code, "home_team": m["home_team"],
+                         "away_team": m["away_team"], "home_goals": hg, "away_goals": ag, "matchday": m.get("matchday"),
+                         "result": "H" if hg > ag else "A" if hg < ag else "D", "season": float(CURRENT_SEASON_YEAR)})
+        if rows:
+            all_ = pd.concat([df_matches_all, pd.DataFrame(rows)], ignore_index=True)
+            ts = dict(team_state)
+            for r in rows:
+                _sync_team_state(ts, all_, r)
+            # 새 객체로 한 번에 바꿔 끼움(읽던 요청은 예전 것을 끝까지 씀)
+            df_matches_all = all_
+            df_seasons = pd.concat([df_history, all_], ignore_index=True)
+            team_state = ts
+            _h2h_cache = None
+            ucl_only_teams = _load_ucl_only_teams()
+            changed.update(r["league"] for r in rows)
+        # 선수 기록: 끝난 경기 상세(API-Football, 킥오프 110분 뒤부터) — 못 받으면 다음 확인 때 다시
+        by_key = _af_index()[0]
+        for code, m, v in todo:
+            k = _live_key(m["home_team"], m["away_team"], m["date"])
+            if k in _sync["md"]:
+                continue
+            e = by_key.get(k)
+            if not e or e.get("has_detail"):
+                _sync["md"].add(k)
+            elif _md_of(e):
+                _sync["md"].add(k)
+                changed.add(code)
+        if not changed:
+            return
+        _clear_data_caches()
+        print(f"✅ 끝난 경기 실시간 반영: 경기 {len(rows)}개, 리그 {sorted(changed)}")
+        warm = [lambda c=c: _league_rows(c, CURRENT_SEASON_YEAR) for c in sorted(changed)]
+        warm += [lambda c=c: _standings(c, "current") for c in sorted(changed)]
+        warm += [lambda c=c: _schedule_predictions(c) for c in ("PL", "PD", "BL1", "SA", "FL1", "CL")]   # 팀 상태가 바뀌어 모든 리그 예측이 달라짐
+        warm += [_player_search_index, _team_season_league]
+        for f in warm:
+            try:
+                f()
+            except Exception:
+                pass
+            _warm_yield()
+    except Exception as e:
+        print(f"⚠️ 끝난 경기 실시간 반영 실패: {e}")
+    finally:
+        _sync_lock.release()
 
 def _next_kickoff(now):
     ts = [pd.Timestamp(m["date"]) for ms in (_load_json("schedule.json") or {}).values() for m in ms
@@ -1769,22 +1896,29 @@ def _md_file(name):
     p = os.path.join(MD_DIR, name)
     return md_read(p) if os.path.exists(p) else None
 
+_live_md = {}   # API-Football 경기 ID → 요청 때 받은 끝난 경기 상세(새벽 수집 전 — 선수 시즌 합산 _cur_details에도 들어감)
+AF_FINAL = ("FT", "AET", "PEN", "AWD", "WO")
+
 def _md_of(e):
     """경기 상세: 저장된 파일 → 없으면(새벽 수집 전에 막 끝난 경기) 요청 때 받기"""
     d = _md_file(e["file"])
     if d:
         return d
+    if e["id"] in _live_md:
+        return _live_md[e["id"]]
     ko = pd.Timestamp(e["kickoff"])
     if pd.Timestamp.now(tz="UTC") < ko + pd.Timedelta(minutes=110):
         return None   # 아직 안 끝났을 시각
+    fin = lambda r: bool(r) and (r[0].get("fixture") or {}).get("status", {}).get("short") in AF_FINAL
     r = _af_live_get("/fixtures", 3600, id=e["id"])
-    if not r:
+    if r and not fin(r):   # 실시간 창(같은 요청, 45초 캐시)이 경기 중에 받아 둔 응답이면 1분 지난 것만 새로
+        r = _af_live_get("/fixtures", 60, id=e["id"])
+    if not fin(r):
         return None
     fx = r[0]
-    if (fx.get("fixture") or {}).get("status", {}).get("short") not in ("FT", "AET", "PEN", "AWD", "WO"):
-        return None
-    det = af_match_detail(fx)
-    return {**det, **{k: e[k] for k in ("league", "home_team", "away_team", "date")}, "home_goals": fx["goals"]["home"], "away_goals": fx["goals"]["away"]}
+    det = {**af_match_detail(fx), **{k: e[k] for k in ("league", "home_team", "away_team", "date")}, "home_goals": fx["goals"]["home"], "away_goals": fx["goals"]["away"]}
+    _live_md[e["id"]] = det
+    return det
 
 # ── 주장 표시(2026-10-08): 끝난 경기·예상 라인업 = 그 경기에서 실제로 완장을 찬 선수(경기 기록 cap),
 # 확정 라인업(경기 전 — API에 주장 정보 없음)·구단 베스트 11 = 이번 시즌 완장을 가장 많이 찬 선수 → 없으면 두 번째(부주장) → 둘 다 없으면 표시 안 함
@@ -1865,8 +1999,8 @@ def _cur_details(code):
     """이번 시즌 이 대회의 끝난 경기 상세(날짜순, 라운드 포함)"""
     out = []
     for e in sorted((_load_json("af_fixtures.json") or {}).get("fixtures", []), key=lambda e: e["date"]):
-        if e["league"] == code and e.get("has_detail"):
-            d = _md_file(e["file"])
+        if e["league"] == code and (e.get("has_detail") or e["id"] in _live_md):
+            d = _md_file(e["file"]) if e.get("has_detail") else _live_md[e["id"]]
             if d:
                 out.append({**d, "round": _af_round_of(e)})
     return out

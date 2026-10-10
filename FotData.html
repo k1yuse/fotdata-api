@@ -2583,6 +2583,8 @@
     /* 등번호: 이름 앞 회색(이름은 흰색이라 구분) — 경기장 위 이름·스쿼드 목록 공용 */
     .md-pn i, .pl-num { font-style: normal; font-weight: 700; color: var(--muted); margin-right: 3px; font-variant-numeric: tabular-nums; }
     .md-pl { width: 78px; } .md-pn { max-width: 78px; }
+    /* 사진이 들어가는 세로 경기장은 더 길게 — 사진·이름·평점 배지가 위아래 줄과 겹치던 것(2026-10-10) */
+    .md-pitch.ph { aspect-ratio: 68 / 132; }
     .md-pn .nm-s { display: none; }
     @media (max-width: 480px) { .md-pl { width: 56px; } .md-pn { max-width: 56px; } .md-pn .nm-f { display: none; } .md-pn .nm-s { display: inline; } }
     .pl-num { display: inline-block; min-width: 20px; margin-right: 6px; text-align: right; }
@@ -5740,7 +5742,8 @@ function mdScorersHtml(d, hg, ag) {
 }
 function mdSummaryHtml(d, home, away, hg, ag) {
   const og = mdOwnGoalFor(d, hg, ag);
-  const ev = [...d.events].sort((a, b) => (a.min - b.min) || ((a.extra || 0) - (b.extra || 0)));
+  // 선수 없는 골은 제공처 오류(10/10 중단된 라요–아틀레틱: 점수 0-0인데 7분 '골'만 남아 1-0으로 셈)
+  const ev = d.events.filter(e => e.player || !['goal', 'pen_goal', 'own_goal'].includes(e.type)).sort((a, b) => (a.min - b.min) || ((a.extra || 0) - (b.extra || 0)));
   const st = d.live ? (d.status?.short || '') : '';
   let h = 0, a = 0, html = '', htShown = false;
   const chunks = [];   // 순서를 뒤집어 최신이 위로(끝난 경기도 — 사용자 결정 2026-10-10: 결과부터 거꾸로 읽음)
@@ -5767,7 +5770,7 @@ function mdSummaryHtml(d, home, away, hg, ag) {
     push(`<div class="md-ev ${e.side}${big}"><div class="md-ev-body">${mdIcon(e.type)}<span class="md-ev-txt">${main}</span>${sc}</div><span class="md-ev-min">${mdMin(e)}</span></div>`);
   });
   if (d.live) {
-    if (!htShown && !['1H', 'NS', 'TBD', ''].includes(st)) push(`<div class="md-mark">하프타임 <b>${h} - ${a}</b></div>`);
+    if (!htShown && ['HT', '2H', 'ET', 'BT', 'P'].includes(st)) push(`<div class="md-mark">하프타임 <b>${h} - ${a}</b></div>`);   // 중단(INT·SUSP)은 전반에도 올 수 있어 빼고
     chunks.reverse();
     html = `<div class="md-mark live"><span class="live-chip"><i></i>${mdLiveLabel(d.status)}</span><b>${hg} - ${ag}</b></div>` + (chunks.length ? chunks.join('') : '<div class="md-empty">아직 득점·카드·교체가 없어요</div>');
   } else {
@@ -5815,7 +5818,7 @@ function mdLineupHtml(d, home, away, opts = {}) {   // opts.bench === false → 
       ${used.map(p => `<div class="md-sub"><span class="md-in-m">${p.on}'</span><span class="md-sub-n">${mdShortName(p.name)}</span>${mdRating(p.rating)}</div>`).join('') || '<div class="md-sub none">교체 없음</div>'}
       ${rest ? `<div class="md-sub none">벤치 ${rest}명</div>` : ''}${lu.coach ? `<div class="md-coach">감독 ${lu.coach}</div>` : ''}</div>`;
   };
-  return `<div class="md-pitch${opts.horizontal ? ' h' : ''}">${opts.horizontal ? PITCH_SVG.h : '<div class="md-lines"><i class="half"></i><i class="circle"></i><i class="box t"></i><i class="box b"></i><i class="six t"></i><i class="six b"></i></div>'}
+  return `<div class="md-pitch${opts.horizontal ? ' h' : opts.photos ? ' ph' : ''}">${opts.horizontal ? PITCH_SVG.h : '<div class="md-lines"><i class="half"></i><i class="circle"></i><i class="box t"></i><i class="box b"></i><i class="six t"></i><i class="six b"></i></div>'}
       <span class="md-form ${opts.horizontal ? 'l' : 't'}">${formLbl(opts.horizontal ? 'home' : 'away')}</span><span class="md-form ${opts.horizontal ? 'r' : 'b'}">${formLbl(opts.horizontal ? 'away' : 'home')}</span>
       ${dots('away')}${dots('home')}</div>
     ${opts.bench === false ? '' : `<div class="md-rt-legend"><span>평점</span>${[['r8', '8.0+'], ['r7', '7.0+'], ['r6', '6.0+'], ['r5', '6.0 미만']].map(([c, t]) => `<i class="md-rt ${c}">${t}</i>`).join('')}</div>
@@ -6336,7 +6339,8 @@ async function openMatchLiveModal(home, away, date, league) {
     const x = schedPredOf(m, league), box = document.getElementById('mr-pred');
     if (!box || !x) return;
     const [h, d, a] = x.p.map(v => Math.round(v * 100)), top = Math.max(h, d, a), tc = v => v === top ? ' top' : '';
-    const pick = x.predicted === 'home_win' ? `${shortTeamName(home)} 승` : x.predicted === 'away_win' ? `${shortTeamName(away)} 승` : '무승부';
+    const pk = x.predicted || ['home_win', 'draw', 'away_win'][x.p.indexOf(Math.max(...x.p))];   // 기록된 예측이 없으면 가장 높은 확률(예전엔 무조건 '무승부'로 찍혔음)
+    const pick = pk === 'home_win' ? `${shortTeamName(home)} 승` : pk === 'away_win' ? `${shortTeamName(away)} 승` : '무승부';
     box.innerHTML = `<div class="mp-sec"><div class="mp-sec-t">경기 전 AI 예측</div>
       <div class="mp-bar"><i class="h" style="width:${h}%"></i><i class="d" style="width:${d}%"></i><i class="a" style="width:${a}%"></i></div>
       <div class="mp-probs"><div class="h${tc(h)}"><b>${h}%</b><span>${shortTeamName(home)} 승</span></div><div class="d${tc(d)}"><b>${d}%</b><span>무승부</span></div><div class="a${tc(a)}"><b>${a}%</b><span>${shortTeamName(away)} 승</span></div></div>

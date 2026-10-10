@@ -47,6 +47,7 @@ af_transform.py       API-Football 응답 → 화면용 변환(update_data·main
 FotData.html          앱 (/app) — 9,500줄 단일 파일
 landing.html          랜딩 원본 → index.html은 사본 (4.1)
 landing-story.js · ball-geometry.js · bg-ball.js · bg-ball.svg   랜딩 3D 연출·배경 공(Three.js, 공 모양 공유)
+model_features.py     예측 피처 규칙(ELO·폼·_team_snapshot) — update_data(새벽 학습)와 main(끝난 경기 실시간 반영)이 같이 씀
 share_card.py · fonts/   경기별 공유 썸네일(1200×630) — 폰트는 Pretendard 서브셋 "FotData Card Sans"(OFL)
 vercel.json           /app 리라이트, /m/*·/og/m/*·/cal/* → Render, 옛 주소 리다이렉트, 보안 헤더, 캐시
 privacy.html · terms.html · legal.css · 404.html · README.md · sitemap.xml · robots.txt · manifest.json · sw.js
@@ -104,7 +105,9 @@ Vercel 루트는 `index.html`. landing.html을 고치면 **반드시 `cp landing
 ## 7. 서버 (main.py)
 
 - 끝난 시즌 순위표 = 공식 순서·구역·감점(`season_zones.json` → 없으면 `history_standings.json`), 시즌은 날짜가 아니라 시즌 값으로 자름. `df_seasons`(과거+현재)는 순위표·일정·팀 통계·역대 맞대결·라이벌용, **`df_matches_all`(4시즌)만 모델·최근 폼용 — 섞지 말 것**.
-- 경기 당일 점수: Render가 football-data를 직접 받아 일정 위에 덮음(`_live_overlay`, 서버 전체 1분 1회, Render 환경변수 `FOOTBALL_API_KEY` 필요). 무료 플랜은 몇 분 늦어서 "LIVE" 대신 "진행 중 N분".
+- 경기 당일 점수(`_live_overlay`, 서버 전체 1분 1회): football-data(`_fd_today`) 위에 API-Football(진행 중 = `live=all`, 막 끝난 경기 = `ids=` 20개씩, 끝난 결과는 기억)을 덮음. **둘은 따로** — 한쪽이 실패해도 다른 쪽은 반영(10/10 football-data 실패로 API-Football까지 건너뛰어 실시간이 통째로 비었던 사고). `/matches/live`의 `fd_status`로 football-data 상태 확인. 표기는 "전반 7분"·하프타임·경기 중단(INT·SUSP).
+- **끝난 경기 실시간 반영**(`_live_sync_check`→`_live_sync_apply`, 뒤에서): 실시간 '끝남'이 된 경기를 메모리의 `df_matches_all`·`df_seasons`에 붙이고, 팀 상태(ELO·폼·득실)는 `model_features.py`(새벽 `build_point_in_time_features`와 같은 규칙 — 전체 재계산과 같은 값 확인)로 그 경기만큼 이어서, 경기 상세는 `_live_md`(선수 시즌 합산 `_cur_details`에 포함) → `_clear_data_caches()` 후 다시 데움. 맞대결·폼·순위표·순위 예측(반영된 경기는 남은 경기에서 뺌)·예측 입력·선수 기록·트랙레코드가 새벽 전에 바뀜. 파일은 안 바꿈(재배포되면 새벽 파일로), 재학습·블렌딩 전력은 새벽에만. **새 계산 캐시를 만들면 경기 데이터에 기대는 건 `_clear_data_caches` 목록에 추가**. 피처 규칙은 `model_features.py` 하나(서버가 update_data를 import하지 않게).
+- 킥오프가 지난 경기의 "경기 전 AI 예측"(`/predict/schedule`)은 지금 모델 값이 아니라 트랙레코드에 기록된 예측(채점 기준과 같게).
 - API-Football 요청 때 받기(Render 환경변수 `API_FOOTBALL_KEY` 필요): 끝난 경기 상세(파일 없으면 킥오프 110분 뒤부터), 확정 라인업(킥오프 90분 전~), 프로필 미수집 선수 경력. 동시 16개(`_AF_SEM`) + 재시도.
 - 선수 시즌 기록: 이번 시즌 = `match_details` 합산(`_af_league_squads`, 시작 때 계산), 지난 시즌 = `af_seasons`. 세부 포지션은 22-23 시즌부터만 믿을 수 있음(`GRID_FROM`).
 - 공유: `/share/match/{slug}`(og 태그, 사람은 앱으로) · `/og/match/{slug}.jpg`(share_card, 카드 캐시) — slug 규칙은 JS `teamSlug`와 서버 `_team_slug`가 같아야 함, 짧은 이름은 FotData.html `SHORT_NAMES` 표 하나만 관리(서버가 읽음).
@@ -137,7 +140,8 @@ Vercel 루트는 `index.html`. landing.html을 고치면 **반드시 `cp landing
 - 예측 결과(유리·기본 테마): 두 독립 세로 열(`.predict-col`) — `fitMoreCard()`가 짧은 열에 "다른 경기" 카드를 넣거나 간격을 넓혀 두 열 끝을 맞춤. 폰은 `display: contents` + `order`.
 - 리그 개요: 넓은 화면 두 열 끝 맞춤 `fitLoCols()`(차이 220px 이하일 때만 `.fit`).
 - theme-a 그 밖: 순위 예측 탭은 들어오면 0.7초 뒤 자동으로 1,000회(`runSimulation(true)` — 통계 이벤트 안 셈, 이미 돌린 데이터면 다시 안 돌림) · 내 팀 페이지 카드 아래 "내 팀 일정"(`renderMyTeamsSched` — 다가오는 경기 + `/form` 최근 결과) · 선수 검색은 넓은 화면에서 표(순번·출전 시간·90분당 공격P) · 내 팀 경기 줄은 금색 왼쪽 막대(`.tdA-row.fav`) · 설치 배너는 넓은 화면 오른쪽 아래.
-- 실시간 경기 창(`openMatchLiveModal` — 진행 중 경기를 누르면): 점수 위 빨간 배지(전반/후반 N′·하프타임), 요약(타임라인 최신이 위)·라인업·통계, 경기 전 AI 예측 + "지금은 예측대로/다르게", 1분마다 `/match/live`(서버 45초 캐시) 다시 받고 끝나면 멈춤. 진행 중 점수는 API-Football `/fixtures?live=all`(1분 캐시)로 football-data 점수를 덮음(`_af_live_merge`).
+- 실시간 경기 창(`openMatchLiveModal` — 진행 중 경기를 누르면)·경기 결과 창 공용(`renderMatchDetail`): 점수 아래 득점자 명단(`mdScorersHtml`), 경기 기록은 최신(경기 종료)부터 거꾸로, 라인업은 선수 사진(등번호 없이 — 사진 세로 경기장은 `.md-pitch.ph` 68:132로 길게), 최우수 선수 누르면 선수 카드. 실시간 창은 1분마다 `/match/live`(서버 45초 캐시, 서비스 워커 저장 안 함), 경기 전 AI 예측만(맞았는지 표시 안 함 — 사용자 결정). 선수 없는 골 이벤트는 제공처 오류로 보고 뺌.
+- 트랙레코드 창: 넓은 화면 760px(기준선·리그별 | 누적 추이 두 칸 — 추이 그림은 칸 크기로 1:1 `drawTrendChart`), 목록은 날짜 머리글 + 고정 폭 알약.
 - 공유 링크 `/m/{홈}-vs-{원정}`, 앱 주소창은 `/app?match=`.
 - **뒤로가기 기록**(`navPush`): 앱 안에선 "홈(경기 예측) + 지금 화면" 두 칸만 — 홈에서 다른 화면으로 갈 때만 한 칸 쌓고(`fdDepth` 1) 그 뒤 화면·리그·탭·시즌 이동은 덮어씀, 홈으로 가면 그 칸을 되돌림 → 어디서든 뒤로 한 번 = 홈, 한 번 더 = 랜딩. 창(팀 정보 등)은 그 위 "창" 칸(`fdGuard`)으로 따로. **새로고침**은 지금 탭(주소 `#…`)은 그대로 두고 고른 경기(`?match=`)·열린 창만 초기화(공유 링크로 처음 들어온 건 그 경기 그대로), 로고 클릭도 같음(`fdReloadTab`). 주소에 탭이 있으면 `<head>`에서 `html.route-boot`로 화면을 숨겼다가 그 탭으로 바꾼 뒤 보여줌(경기 예측이 잠깐 보였다 넘어가던 깜빡임 제거). 새로고침 뒤에도 기록 칸 정보(`history.state`)를 이어 씀. 랜딩은 위 메뉴 "소개"·더보기 "FotData 소개"로(앱을 /app으로 바로 열면 뒤로가기로는 못 감). 메뉴에 화면 없는 링크를 넣을 땐 `data-page` 없이도 되게(`setActiveTab`).
 - 검색(⌘K·상단 검색·더보기 "구단·선수 검색"): 구단 둘러보기 검색창이 구단(바로) + 선수(`/players/search`, 0.18초 멈춘 뒤) — 선수를 누르면 선수 카드.
@@ -183,7 +187,7 @@ Vercel 루트는 `index.html`. landing.html을 고치면 **반드시 `cp landing
 - 대부분의 API 0.2~0.6초, 팀 정보 개요 첫 표시 0.4초·전부 1초 안, 리그 개요 0.5초, 경기 미리보기 0.5초, 선수 카드 0.6초.
 - 느린 곳: 선수 경력·트로피 탭(새벽 수집 전 선수 5~7초 — 6절), Render가 잠들었다 깨는 첫 요청(~50초, cron-job.org 핑으로 대부분 방지), 재배포 직후 계산 캐시가 빈 동안.
 - 원칙: 한 화면이 쓰는 요청은 처음에 **동시에** 시작(앞 요청 결과를 기다렸다 다음을 부르지 말 것), 같은 요청은 promise 캐시로 한 번만, 누를 가능성이 큰 곳은 마우스 올림·손가락 댐에 미리 받기, 서버는 계산 결과 lru_cache + 시작 때 warm.
-- 서비스 워커(`sw.js`)가 API GET 응답을 저장해 두고 다음엔 바로 보여준 뒤 뒤에서 새로 받음(stale-while-revalidate, 20시간까지 — 진행 중 점수·라인업·검색·공유는 제외) → 두 번째 방문부터 로딩 화면이 거의 없음. 서비스 워커를 바꾸면 `CACHE_NAME` 올리기.
+- 서비스 워커(`sw.js`)가 API GET 응답을 저장해 두고 다음엔 바로 보여준 뒤 뒤에서 새로 받음(stale-while-revalidate, 20시간까지 — 진행 중 점수·실시간 창·라인업·검색·공유는 제외). 경기 날 바뀌는 것(`API_FRESH` — 일정·예측·맞대결·폼·순위·리그·경기 상세)은 2분 지난 저장분이면 새로 받기 우선(4초 안에 안 오면 저장분) — 끝난 경기 실시간 반영이 바로 보이게. 서비스 워커를 바꾸면 `CACHE_NAME` 올리기.
 - 측정: 헤드리스 크롬으로 화면 요소가 나타날 때까지 시간 + `performance.getEntriesByType('resource')`(요청 시작→끝)를 같이 봄.
 
 ## 9. 배포 · 환경

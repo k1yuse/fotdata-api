@@ -235,26 +235,9 @@ FEATURES = [
     'h2h_home_rate'
 ]
 
-ELO_K = 20
-ELO_HOME_ADVANTAGE = 70
-FORM_N, GOALS_N, STATS_N, H2H_N = 5, 10, 38, 10
-ELO_TRAIL_N = 20   # 예측 결과 화면 "파워 레이팅 추이" 그래프용으로 저장하는 최근 경기 수
+# 피처 규칙(ELO·폼·최근 득실·_team_snapshot)은 model_features.py 하나 — 서버의 끝난 경기 실시간 반영(main._live_sync)과 같이 씀
+from model_features import ELO_K, ELO_HOME_ADVANTAGE, FORM_N, GOALS_N, STATS_N, H2H_N, ELO_TRAIL_N, RESULT_PTS, _team_snapshot, elo_change  # noqa: F401
 MIN_HISTORY = 5   # 이보다 경기 기록이 적은 팀이 낀 경기는 학습에서 제외
-
-def _team_snapshot(history):
-    """팀의 "지금까지" 경기 기록으로 피처 값 계산 — 학습(경기 직전 시점)과
-    서빙(team_state.json, 오늘 시점)이 반드시 이 함수 하나를 같이 써야 함"""
-    form = history[-FORM_N:]
-    recent = history[-GOALS_N:]
-    season = history[-STATS_N:]
-    return {
-        'form':         sum(x['pts'] for x in form),
-        'avg_scored':   float(np.mean([x['gf'] for x in recent])),
-        'avg_conceded': float(np.mean([x['ga'] for x in recent])),
-        'attack':       float(np.mean([x['gf'] for x in season])),
-        'defense':      float(np.mean([x['ga'] for x in season])),
-        'win_rate':     float(np.mean([x['pts'] == 3 for x in season])),
-    }
 
 def build_point_in_time_features(df):
     """경기를 시간순으로 훑으면서 "그 경기 직전까지의 기록"만으로 피처를 만든다.
@@ -319,13 +302,10 @@ def build_point_in_time_features(df):
             })
 
         # 결과 반영 (ELO: 홈 어드밴티지 포함 기대승률 대비 실제 결과)
-        expected_home = 1 / (1 + 10 ** ((elo[away] - (elo[home] + ELO_HOME_ADVANTAGE)) / 400))
-        actual_home = {'H': 1.0, 'D': 0.5, 'A': 0.0}[m['result']]
-        change = ELO_K * (actual_home - expected_home)
+        change = elo_change(elo[home], elo[away], m['result'])
         elo[home] += change
         elo[away] -= change
-        home_pts = {'H': 3, 'D': 1, 'A': 0}[m['result']]
-        away_pts = {'A': 3, 'D': 1, 'H': 0}[m['result']]
+        home_pts, away_pts = RESULT_PTS[m['result']]
         history[home].append({'gf': m['home_goals'], 'ga': m['away_goals'], 'pts': home_pts, 'league': league})
         history[away].append({'gf': m['away_goals'], 'ga': m['home_goals'], 'pts': away_pts, 'league': league})
         winner = home if m['result'] == 'H' else (away if m['result'] == 'A' else None)
