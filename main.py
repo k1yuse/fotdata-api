@@ -12,7 +12,23 @@ import os
 import json
 import math
 import re
-from functools import lru_cache
+from functools import lru_cache, wraps
+
+def keyed_cache(fn):
+    """lru_cache처럼 쓰되 일부 키만 지울 수 있는 캐시(2026-10-10) — 끝난 경기 실시간 반영 때 그 리그·팀 것만 지우려고.
+    예전엔 경기가 끝날 때마다 계산 캐시를 전부 비워, 경기가 줄줄이 끝나는 시간대엔 Render 무료 CPU가 다시 계산하느라 앱 전체가 느려졌음.
+    인자는 위치 인자로만 부를 것(키 = 인자 튜플). 예외는 저장 안 함"""
+    store = {}
+    @wraps(fn)
+    def w(*a):
+        if a in store:
+            return store[a]
+        v = fn(*a)
+        store[a] = v
+        return v
+    w.cache_clear = store.clear
+    w.invalidate = lambda pred: [store.pop(k, None) for k in [k for k in list(store) if pred(k)]]
+    return w
 
 app = FastAPI(title="FotData API", version="1.0.0")
 
@@ -398,7 +414,7 @@ def predict_schedule(league_code: str):
     return {**base, "predictions": [x for x in base["predictions"] if (x["home_team"], x["away_team"], x["date"]) not in done],
             "results": base["results"] + extra}
 
-@lru_cache(maxsize=8)
+@keyed_cache
 def _schedule_predictions(code):
     matches = (_load_json("schedule.json") or {}).get(code)
     if matches is None:
@@ -605,7 +621,7 @@ def get_standings(league_code: str, season: str = "current", view: str = "all"):
         return _standings_view(league_code.upper(), season, view)
     return _standings(league_code.upper(), season)
 
-@lru_cache(maxsize=64)
+@keyed_cache
 def _standings_view(league_code, season, view):
     """순위표 보기 전환(2026-09-29): home = 홈 경기만, away = 원정 경기만, form = 팀마다 최근 5경기만으로 낸 순위표.
     공식 순서·구역·감점은 전체 순위표에만 해당해서 여기선 안 씀(승점 → 득실차 → 득점 순)"""
@@ -641,7 +657,7 @@ def _standings_view(league_code, season, view):
         r["rank"] = i + 1
     return {"league": base["league"], "standings": rows, "official": False, "view": view}
 
-@lru_cache(maxsize=32)
+@keyed_cache
 def _standings(league_code: str, season: str):
     league_name = LEAGUE_MAP.get(league_code.upper())
     if not league_name:
@@ -927,7 +943,7 @@ def _team_current_league(team):
         return None
     return league_matches.sort_values('date').iloc[-1]['league']
 
-@lru_cache(maxsize=512)
+@keyed_cache
 def _team_insight(team, venue):
     league = _team_current_league(team)
 
@@ -1024,7 +1040,7 @@ def _table(long_df):
     t['rank'] = range(1, len(t) + 1)
     return t
 
-@lru_cache(maxsize=None)   # 5대 리그 × 17시즌 = 85개 — 예전 64개 한도로는 과거 시즌을 넣은 뒤 캐시가 계속 밀려나 팀 통계 첫 호출이 20초 걸렸음
+@keyed_cache   # 5대 리그 × 17시즌 = 85개 — 예전 64개 한도로는 과거 시즌을 넣은 뒤 캐시가 계속 밀려나 팀 통계 첫 호출이 20초 걸렸음
 def _league_season_stats(league, season):
     df = df_seasons[(df_seasons['league'] == league) & (df_seasons['season'] == season)]
     df = df.dropna(subset=['home_goals', 'away_goals'])
@@ -1068,7 +1084,7 @@ def _league_season_stats(league, season):
             ranks[t][key] = 1 + sum(1 for o in vals.values() if (o > v if higher else o < v))
     return {"rows": rows, "ranks": ranks, "avg": avg, "teams": n, "long": L}
 
-@lru_cache(maxsize=None)
+@keyed_cache
 def _season_rank_progress(league, season):
     """리그·시즌 전체 팀의 "경기를 치를 때마다의 순위"를 한 번에 — 날짜순으로 승점·득실·득점을 누적하며 그날 경기가 끝난
     뒤의 순위를 기록(예전엔 팀마다 경기 날짜마다 순위표를 새로 계산해서 팀 통계 첫 호출이 ~0.3초 걸렸음)"""
@@ -1142,7 +1158,7 @@ def _team_season_league():
         out.setdefault((r.team, int(r.season)), r.league)
     return out
 
-@lru_cache(maxsize=256)
+@keyed_cache
 def _team_stats(team):
     league = _team_current_league(team)
     state = team_state.get(team)
@@ -1326,7 +1342,7 @@ def _done_matchday(code, upto=None):
           if m.get("status") in DONE_STATUSES and m.get("matchday") and (not upto or str(m.get("date", ""))[:10] <= upto)]
     return max((m["matchday"] for m in ms), default=None)
 
-@lru_cache(maxsize=8)
+@keyed_cache
 def _leaders(code):
     """이번 시즌 득점·도움 순위(scorers.json — update_data.fetch_scorers). 도움 순위는 football-data가
     득점 순으로 준 상위 100명 안에서 다시 정렬한 것(득점 없이 도움만 많은 선수는 빠질 수 있음 — 화면에 안내)"""
@@ -1399,7 +1415,7 @@ SIM_LEAGUES = ("PL", "PD", "BL1", "SA", "FL1")
 def get_champion_prediction(league_code: str):
     return _champion(league_code.upper())
 
-@lru_cache(maxsize=8)
+@keyed_cache
 def _champion(code: str):
     if code not in SIM_LEAGUES:
         raise HTTPException(status_code=404, detail="해당 리그 데이터 없음")
@@ -1664,7 +1680,8 @@ def _af_live_merge(data, now):
 # 그 경기만큼 이어서 계산, 경기 상세(선수 기록)도 받아 둔 뒤 계산 캐시를 비우고 다시 데움 — 요청은 기다리지 않음(뒤에서).
 # 파일은 안 바꿈: 새벽 업데이트 뒤 재배포되면 파일(같은 결과)로 다시 시작. 모델 재학습·블렌딩 전력(team_stats.csv)은 새벽에만.
 from model_features import _team_snapshot as _mf_snapshot, elo_change as _mf_elo_change, RESULT_PTS as _MF_PTS, ELO_TRAIL_N as _MF_TRAIL_N, STATS_N as _MF_STATS_N
-_sync = {"rows": set(), "md": set()}   # 반영한 경기(홈|원정|날짜) — 경기 데이터 / 경기 상세
+_sync = {"rows": set(), "md": set(), "at": 0.0}   # 반영한 경기(홈|원정|날짜) — 경기 데이터 / 경기 상세, at: 마지막 반영 시작
+SYNC_GAP = 120   # 반영은 2분에 한 번으로 묶음 — 경기가 줄줄이 끝날 때 매번 다시 계산하지 않게
 _sync_lock = threading.Lock()
 
 def _live_sync_check(data, now):
@@ -1680,7 +1697,8 @@ def _live_sync_check(data, now):
             need_md = k not in _sync["md"] and now < pd.Timestamp(m["date"]) + pd.Timedelta(hours=6)   # 상세는 킥오프 6시간 뒤까지만 다시 시도
             if k not in _sync["rows"] or need_md:
                 todo.append((code, m, v))
-    if todo and _sync_lock.acquire(blocking=False):
+    if todo and _time.time() - _sync["at"] >= SYNC_GAP and _sync_lock.acquire(blocking=False):
+        _sync["at"] = _time.time()
         threading.Thread(target=_live_sync_apply, args=(todo,), daemon=True).start()
 
 def _sync_team_state(ts, all_, r):
@@ -1699,18 +1717,39 @@ def _sync_team_state(ts, all_, r):
                  **{k: round(v, 4) for k, v in _mf_snapshot(hist).items()},
                  "elo_history": (list(ts[t].get("elo_history") or []) + [[day, round(elo, 1)]])[-_MF_TRAIL_N:]}
 
-def _clear_data_caches():
-    """경기 데이터·팀 상태·경기 상세로 계산한 캐시 전부(파일 읽기·로고·이름 표 같은 건 그대로)"""
-    for f in (_schedule_predictions, _team_league_map, _league_display_ranks, _standings_view, _standings, _team_insight,
-              _league_season_stats, _season_rank_progress, _team_season_league, _team_stats, _leaders, _team_players, _champion,
-              _rank_movement, _cur_details, _league_rows, _player_search_index, _league_players_compact, _round_xi_cached,
-              _share_data, _share_jpg):
-        f.cache_clear()
+def _clear_data_caches(leagues=None, teams=None, md_leagues=None):
+    """경기 데이터·팀 상태·경기 상세로 계산한 캐시를 지움. 인자가 없으면 전부, 있으면 바뀐 리그·팀 것만(keyed_cache)
+    leagues = 경기가 붙은 리그(순위·통계), teams = 그 경기 두 팀(팀 상태·팀 통계), md_leagues = 경기 상세가 붙은 리그(선수 기록)"""
+    if leagues is None:
+        for f in (_schedule_predictions, _standings_view, _standings, _team_insight, _league_season_stats, _season_rank_progress,
+                  _team_stats, _leaders, _champion, _cur_details, _league_rows, _league_players_compact, _round_xi_cached,
+                  _player_search_index, _share_data, _share_jpg):
+            f.cache_clear()
+        return
+    leagues, teams, md_leagues = set(leagues), set(teams or ()), set(md_leagues or ())
+    lm = _team_league_map()
+    pred_lg = leagues | {lm.get(t) for t in teams} | ({"CL"} if teams else set())   # 이 팀들이 낀 남은 경기 예측이 바뀌는 리그
+    cur = lambda yr: str(yr) in ("current", str(CURRENT_SEASON_YEAR))   # 지난 시즌 캐시는 그대로(다시 계산하면 느림)
+    for f in (_standings, _standings_view, _league_season_stats, _season_rank_progress):
+        f.invalidate(lambda k: k[0] in leagues and cur(k[1]))
+    for f in (_schedule_predictions, _champion):
+        f.invalidate(lambda k: k[0] in pred_lg)
+    for f in (_team_stats, _team_insight):
+        f.invalidate(lambda k: k[0] in teams)
+    if md_leagues:
+        for f in (_cur_details, _leaders, _round_xi_cached):
+            f.invalidate(lambda k: k[0] in md_leagues)
+        for f in (_league_rows, _league_players_compact):
+            f.invalidate(lambda k: k[0] in md_leagues and cur(k[1]))
+        _player_search_index.cache_clear()
+    if teams:
+        _share_data.cache_clear()
+        _share_jpg.cache_clear()
 
 def _live_sync_apply(todo):
     global df_matches_all, df_seasons, team_state, ucl_only_teams, _h2h_cache
     try:
-        changed, rows = set(), []
+        rows, md_changed = [], set()
         todo.sort(key=lambda x: (x[1]["date"], x[0], x[1]["home_team"]))   # 새벽 계산과 같은 순서(날짜 → 리그 → 홈팀)
         have = set(zip(df_matches_all['date'].dt.strftime('%Y-%m-%d'), df_matches_all['home_team'], df_matches_all['away_team']))
         for code, m, v in todo:
@@ -1735,7 +1774,6 @@ def _live_sync_apply(todo):
             team_state = ts
             _h2h_cache = None
             ucl_only_teams = _load_ucl_only_teams()
-            changed.update(r["league"] for r in rows)
         # 선수 기록: 끝난 경기 상세(API-Football, 킥오프 110분 뒤부터) — 못 받으면 다음 확인 때 다시
         by_key = _af_index()[0]
         for code, m, v in todo:
@@ -1747,15 +1785,18 @@ def _live_sync_apply(todo):
                 _sync["md"].add(k)
             elif _md_of(e):
                 _sync["md"].add(k)
-                changed.add(code)
-        if not changed:
+                md_changed.add(code)
+        if not rows and not md_changed:
             return
-        _clear_data_caches()
-        print(f"✅ 끝난 경기 실시간 반영: 경기 {len(rows)}개, 리그 {sorted(changed)}")
-        warm = [lambda c=c: _league_rows(c, CURRENT_SEASON_YEAR) for c in sorted(changed)]
-        warm += [lambda c=c: _standings(c, "current") for c in sorted(changed)]
-        warm += [lambda c=c: _schedule_predictions(c) for c in ("PL", "PD", "BL1", "SA", "FL1", "CL")]   # 팀 상태가 바뀌어 모든 리그 예측이 달라짐
-        warm += [_player_search_index, _team_season_league]
+        leagues = {r["league"] for r in rows}
+        teams = {t for r in rows for t in (r["home_team"], r["away_team"])}
+        _clear_data_caches(leagues, teams, md_changed)
+        print(f"✅ 끝난 경기 실시간 반영: 경기 {len(rows)}개 {sorted(leagues)} · 경기 상세 {sorted(md_changed)}")
+        # 지운 것만 다시 데움(요청이 먼저 오면 그 요청이 계산 — 같은 결과)
+        warm = [lambda c=c: _league_rows(c, CURRENT_SEASON_YEAR) for c in sorted(md_changed)]
+        warm += [lambda c=c: _standings(c, "current") for c in sorted(leagues)]
+        warm += [lambda c=c: _schedule_predictions(c) for c in ("PL", "PD", "BL1", "SA", "FL1", "CL")]   # 지워진 리그만 계산됨(나머진 캐시)
+        warm += [_player_search_index] if md_changed else []
         for f in warm:
             try:
                 f()
@@ -1994,7 +2035,7 @@ def _af_round_of(e):
             return m.get("matchday")
     return None
 
-@lru_cache(maxsize=8)
+@keyed_cache
 def _cur_details(code):
     """이번 시즌 이 대회의 끝난 경기 상세(날짜순, 라운드 포함)"""
     out = []
@@ -2005,7 +2046,7 @@ def _cur_details(code):
                 out.append({**d, "round": _af_round_of(e)})
     return out
 
-@lru_cache(maxsize=48)
+@keyed_cache
 def _league_rows(code, yr):
     """(팀, 선수)별 시즌 기록 목록 — 이번 시즌은 경기 상세 합산 + 프로필, 지난 시즌은 af_seasons 파일. 없으면 None"""
     if yr == CURRENT_SEASON_YEAR:
@@ -2194,7 +2235,7 @@ def get_team_squad(team_name: str, season: int = None):
 _LP_KEYS = ("id", "team", "full_name", "name", "photo", "pos", "apps", "starts", "minutes", "goals", "assists", "rating", "rated", "shots", "shots_on",
             "key_passes", "dribbles_won", "tackles", "interceptions", "blocks", "duels_won", "clean_sheets", "saves", "yellow", "red", "pen_scored", "number", "nationality")
 
-@lru_cache(maxsize=48)
+@keyed_cache
 def _league_players_compact(code, yr):
     rows = _league_rows(code, yr)
     if not rows:
@@ -2260,7 +2301,7 @@ def get_league_bestxi(league_code: str, season: int = None, round: str = None):
         return Response(status_code=204)
     return {"league": code, "season": yr, "mode": "season", "rounds": [], "xi": _xi_out(_season_xi(rows))}
 
-@lru_cache(maxsize=128)
+@keyed_cache
 def _round_xi_cached(code, r):
     return _xi_out(round_xi([d for d in _cur_details(code) if d.get("round") == r]))
 

@@ -4032,7 +4032,10 @@ function track(name, data) { if (window.fdTrack) window.fdTrack(name, data); els
 // Render 무료 플랜은 한동안 안 쓰면 서버가 잠들었다가, 요청이 오면 깨어나는 데
 // 최대 1분 가까이 걸릴 수 있다. 그동안 나는 타임아웃/네트워크 에러를 재시도로
 // 흡수하고, 재시도 중임을 onRetry 콜백으로 화면에 알려준다.
+// apiFreshUntil 전까지는 서비스 워커 저장분을 건너뛰고 서버에서 새로(끝난 경기 반영 뒤 열린 화면을 다시 받을 때 — refreshAfterEnded)
+let apiFreshUntil = 0;
 async function fetchWithRetry(url, options = {}, { retries = 4, timeoutMs = 15000, onRetry } = {}) {
+  if (Date.now() < apiFreshUntil && !options.method) options = { cache: 'reload', ...options };
   let lastErr;
   for (let attempt = 1; attempt <= retries; attempt++) {
     const controller = new AbortController();
@@ -4750,11 +4753,32 @@ function applyLive(rows) {
   if (lgPanelOn('overview') && lgState.season === 'current' && scheduleData[lgState.code]) renderLoNext(lgState.code, scheduleData[lgState.code]);
   // 끝난 경기가 생기면 그 리그 예측을 다시 받아 "AI 적중/빗나감"을 바로 붙임(경기 전에 기록된 예측이 있는 경기만)
   ended.forEach(lg => { delete schedulePreds[lg]; delete schedulePredsP[lg]; });
+  if (ended.size) refreshAfterEnded(ended);
   Promise.all([...ended].map(ensureSchedulePreds)).then(() => {
     if (document.getElementById('page-predict').classList.contains('active')) loadTodayMatches({ quiet: true });
     if (lgPanelOn('schedule') && currentScheduleMonth && scheduleData[currentScheduleLeague])
       renderScheduleContent(currentScheduleLeague, currentScheduleMonth);
   });
+}
+
+// 경기가 끝나면 서버가 2분 안에 맞대결·순위·트랙레코드·선수 기록에 반영(main._live_sync — 2분에 한 번으로 묶음) →
+// 2분 30초 뒤 열려 있는 순위표·홈 트랙레코드·내 팀 카드를 서버에서 새로 받음(예전엔 새로고침해야 바뀌었음, 2026-10-10)
+let endedRefreshTimer = null;
+function refreshAfterEnded(leagues) {
+  clearTimeout(endedRefreshTimer);
+  const lgs = new Set(leagues);
+  endedRefreshTimer = setTimeout(async () => {
+    apiFreshUntil = Date.now() + 15000;
+    trackRecordP = null; loadTrackStrip();
+    loadMyTeamWidget();
+    const code = lgState.code;
+    if (lgState.season !== 'current' || !lgs.has(code)) return;
+    if (lgPanelOn('standings')) loadStandings(code);
+    else if (lgPanelOn('overview')) {
+      const rows = await fetchWithRetry(`${API}/standings/${code}?season=current`).then(r => r.json()).then(d => d.standings || []).catch(() => null);
+      if (rows && lgPanelOn('overview') && lgState.code === code && lgState.season === 'current') renderLoTable(code, rows, 'current');
+    }
+  }, 150000);
 }
 
 // ── 용어 도움말 ⓘ(2026-10-04): data-tip 버튼을 누르면 말풍선 1개(다시 누르거나 바깥·스크롤·Esc면 닫힘) ──
@@ -6367,7 +6391,11 @@ async function openMatchLiveModal(home, away, date, league) {
     let d = null;
     try { const r = await fetch(`${API}/match/live?home_team=${encodeURIComponent(home)}&away_team=${encodeURIComponent(away)}&date=${date.slice(0, 10)}`); d = r.ok && r.status !== 204 ? await r.json() : null; } catch (e) { /* 다음 번에 */ }
     if (seq !== mpSeq) return;
-    if (!d) { ensureSchedulePreds(league).then(() => seq === mpSeq && paintPred(m.home_goals ?? 0, m.away_goals ?? 0)); return; }
+    if (!d) {
+      const sm = document.getElementById('md-summary');
+      if (sm && sm.querySelector('.mp-skel')) sm.innerHTML = `<div class="md-empty">${m.af_status === 'INT' || m.af_status === 'SUSP' ? '경기가 중단됐어요. 재개나 결과가 정해지면 바뀌어요' : '경기 기록을 아직 받지 못했어요'}</div>`;   // 예전엔 로딩 표시가 계속 남았음
+      ensureSchedulePreds(league).then(() => seq === mpSeq && paintPred(m.home_goals ?? 0, m.away_goals ?? 0)); return;
+    }
     const done = ['FT', 'AET', 'PEN'].includes(d.status?.short);
     setScore(d.home_goals, d.away_goals, mdLiveLabel(d.status), done);
     const tabNow = document.querySelector('#md-tabs button.active')?.dataset.p || 'summary';
