@@ -2269,16 +2269,17 @@ def fetch_full_schedule():
 def update_prediction_log(schedule):
     """
     AI 예측 트랙레코드용 로그 갱신 (fotdata_model/prediction_log.json).
-    - 모델 예측 로직을 여기서 재구현하지 않고, 그 시점에 실제 서빙 중인 라이브
-      /predict를 그대로 호출해서 예정 경기들의 예측을 미리 스냅샷으로 저장해둔다.
-      main.py와 별도로 예측 로직을 두 군데 관리하면 언젠가 반드시 어긋나서
-      "기록된 예측"과 "그때 사용자가 실제로 본 예측"이 달라지는 문제가 생기므로,
-      항상 라이브 API 응답을 그대로 기록하는 방식으로 그 문제 자체를 없앤다.
+    - 모델 예측 로직을 여기서 재구현하지 않고, 서빙 코드(main.py)의 /predict 함수를 그대로 불러
+      이번 실행에서 새로 만든 모델·팀 상태 파일로 예측한다 — 실행이 끝나 재배포된 서버가 그날 사용자에게
+      보여줄 예측과 같은 값. 예전엔 Render의 라이브 /predict를 불렀는데, 그 시점의 Render는 아직
+      전날 모델이라 하루 늦은 예측이 기록됐고 Render에 요청도 수백 번 갔음(2026-10-10).
+    - 킥오프 전 경기는 매일 밤 다시 기록(사용자 결정 2026-10-10) — 처음 기록한 날(최대 25일 전)의 예측으로 채점하면
+      경기 당일 화면 예측과 달랐음(라요–아틀레틱: 화면 홈 46%, 기록 원정 37%). 킥오프가 지나면 그대로 고정.
     - 이미 기록된 예측 중 경기가 끝난 것들은 실제 결과와 대조해 적중 여부를 채운다.
     """
     import json
     print("\n[예측 트랙레코드] 갱신 중...")
-    API_BASE = "https://fotdata-api.onrender.com"
+    import main as serving   # 이 실행에서 저장한 fotdata_model/ 파일을 읽음(모델 학습 뒤에 불러야 함)
     log_path = f"{MODEL_DIR}/prediction_log.json"
 
     log = {}
@@ -2307,13 +2308,13 @@ def update_prediction_log(schedule):
     if filled:
         print(f"  ✅ {filled}건 결과 대조 완료")
 
-    # 2) 새로 예정된 경기들 미리 예측해서 기록 (앞으로 25일 내, 아직 안 찍힌 것만)
+    # 2) 예정 경기 예측 기록 (앞으로 25일 내, 킥오프 전이면 이미 기록된 것도 새로)
     # 2026-09-22에 발견: 국제 A매치 기간처럼 5대 리그+UCL이 동시에 2주 이상
     # 쉬는 구간이 있으면 10일 윈도우 안에 걸리는 경기가 하나도 없어서 트랙레코드가
     # 계속 텅 비는 문제가 있었음(코드 버그가 아니라 윈도우가 실제 리그 휴식기보다
     # 짧았던 것) — 어떤 휴식기에도 다음 라운드가 걸리도록 25일로 넉넉하게 늘림.
     horizon = now + pd.Timedelta(days=25)
-    logged = 0
+    logged = renewed = 0
     for code, rows in schedule.items():
         for m in rows:
             if m["status"] not in ("SCHEDULED", "TIMED"):
@@ -2325,17 +2326,14 @@ def update_prediction_log(schedule):
             if not (now < match_dt <= horizon):
                 continue
             key = f"{code}|{m['home_team']}|{m['away_team']}|{m['date'][:10]}"
-            if key in log:
+            if log.get(key, {}).get("actual") is not None:
                 continue
             try:
-                resp = requests.post(
-                    f"{API_BASE}/predict",
-                    json={"home_team": m["home_team"], "away_team": m["away_team"]},
-                    timeout=60,
-                )
-                if resp.status_code != 200:
+                try:
+                    pred = serving.predict_match(serving.MatchRequest(home_team=m["home_team"], away_team=m["away_team"]))
+                except serving.HTTPException:   # 예측할 수 없는 팀(첫 출전 UCL 팀 등)
                     continue
-                pred = resp.json()
+                renewed += key in log
                 log[key] = {
                     "league": code,
                     "home_team": m["home_team"],
@@ -2346,17 +2344,16 @@ def update_prediction_log(schedule):
                     "draw_prob": pred["probabilities"]["draw"],
                     "away_win_prob": pred["probabilities"]["away_win"],
                     "predicted_score": (pred.get("score_prediction") or {}).get("most_likely"),
-                    "logged_at": now.isoformat(),
+                    "logged_at": now.isoformat(),   # 마지막으로 기록한 때(킥오프 전 마지막 밤)
                     "actual": None,
                     "actual_score": None,
                     "correct": None,
                 }
                 logged += 1
-                time.sleep(1)
             except Exception as e:
                 print(f"  ⚠️ 예측 기록 실패 ({m['home_team']} vs {m['away_team']}): {e}")
     if logged:
-        print(f"  ✅ {logged}건 신규 예측 기록")
+        print(f"  ✅ 예측 {logged}건 기록(새 경기 {logged - renewed} · 킥오프 전 다시 기록 {renewed})")
 
     # 3) 로그 크기 관리 — 결과가 확정된 것 중 오래된 건 정리(최근 500건만 유지), 미확정 건은 계속 보관
     resolved_keys = sorted(
@@ -2672,9 +2669,8 @@ def main():
     # 전체 일정 (일정 탭용)
     schedule = step("전체 일정", fetch_full_schedule)
 
-    # AI 예측 트랙레코드 (라이브 /predict를 호출하므로 반드시 위 모델 학습 이후,
-    # 그리고 아직 이번 실행분 커밋을 push하기 전에 실행 — 그래야 "그 시점에 실제
-    # 서빙 중이던 모델"의 예측을 기록하게 됨). 실패해도 다음 실행에서 재시도(경고만)
+    # AI 예측 트랙레코드 (서빙 코드 main.py를 불러 이번 실행에서 저장한 모델·팀 상태·일정으로 예측하므로
+    # 반드시 위 모델 학습·일정 저장 이후 — 재배포된 서버가 보여줄 예측과 같은 값). 실패해도 다음 실행에서 재시도(경고만)
     if schedule:
         try:
             update_prediction_log(schedule)
